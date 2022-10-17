@@ -47,7 +47,8 @@
   },
   // The files TypeScript should type check
   "include": [
-    "src"
+    "src",
+    "mui.d.ts"
   ],
   // The files to not type check
   "exclude": [
