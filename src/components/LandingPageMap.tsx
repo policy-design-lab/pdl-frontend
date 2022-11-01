@@ -3,6 +3,7 @@ import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
 
+import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
 import summary from '../data/summary.json';
 
@@ -35,7 +36,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         Payments:
                                         <br />
                                         {records.map((record) => (
-                                            <div>
+                                            <div key={record.State + record.Title + record['Fiscal Year']}>
                                                 {record['Fiscal Year']}: ${Number(record.Amount).toFixed(2)}
                                             </div>
                                         ))}
@@ -106,6 +107,11 @@ const MapChart = ({ setTooltipContent, title }) => {
     );
 };
 
+MapChart.propTypes = {
+    setTooltipContent: PropTypes.func,
+    title: PropTypes.string
+};
+
 const LandingPageMap = ({ programTitle }) => {
     const [content, setContent] = useState('');
     return (
@@ -114,6 +120,10 @@ const LandingPageMap = ({ programTitle }) => {
             <ReactTooltip>{content}</ReactTooltip>
         </div>
     );
+};
+
+LandingPageMap.propTypes = {
+    programTitle: PropTypes.string
 };
 
 export default LandingPageMap;
