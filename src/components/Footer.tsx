@@ -71,7 +71,6 @@ export default function Footer() {
                         </Box>
                     </Grid>
                     <Grid item xs={4} sx={{ mt: 1 }}>
-                        <UIUCLogo />
                         <NCSALogo />
                     </Grid>
                 </Grid>
