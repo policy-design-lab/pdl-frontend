@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Button, CardMedia, Grid } from '@mui/material';
+import { CardMedia, Grid } from '@mui/material';
 import uiuc from '../images/uiuc.png';
 import ncsa from '../images/ncsa.png';
 

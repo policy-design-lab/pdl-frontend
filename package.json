@@ -21,8 +21,11 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
     "@types/node": "^18.8.2",
+    "d3-geo": "^3.0.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^4.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

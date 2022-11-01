@@ -6,6 +6,7 @@ import forest from './images/forest.png';
 import News from './components/News';
 import Footer from './components/Footer';
 import LandingDisplay from './components/LandingDisplay';
+import LandingPageMap from './components/LandingPageMap';
 
 export default function LandingPage() {
     return (
@@ -25,6 +26,10 @@ export default function LandingPage() {
                     process.
                 </Typography>
             </div>
+            <LandingPageMap programTitle="Title I: Commodities" />
+            <LandingPageMap programTitle="Title II: Conservation" />
+            <LandingPageMap programTitle="Crop Insurance" />
+            <LandingPageMap programTitle="Supplemental Nutrition Assistance Program (SNAP)" />
             <LandingDisplay />
             <News />
             <Footer />

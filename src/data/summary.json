@@ -1,0 +1,6002 @@
+[
+ {
+  "Title": "Title I: Commodities",
+  "State": "AL",
+  "Fiscal Year": 2018,
+  "Amount": 143270556.1
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AL",
+  "Fiscal Year": 2019,
+  "Amount": 8603465.53000002
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AL",
+  "Fiscal Year": 2020,
+  "Amount": 1546002.67
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AL",
+  "Fiscal Year": 2021,
+  "Amount": 1483609.1
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AL",
+  "Fiscal Year": 2022,
+  "Amount": 244434332.979998
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AK",
+  "Fiscal Year": 2018,
+  "Amount": 340737.339999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AK",
+  "Fiscal Year": 2019,
+  "Amount": 386937791.4
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AK",
+  "Fiscal Year": 2020,
+  "Amount": 4015574.17
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AK",
+  "Fiscal Year": 2021,
+  "Amount": 10755378.0399999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AK",
+  "Fiscal Year": 2022,
+  "Amount": 15620789.17
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AZ",
+  "Fiscal Year": 2018,
+  "Amount": 33683100.79
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AZ",
+  "Fiscal Year": 2019,
+  "Amount": 142396.12
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AZ",
+  "Fiscal Year": 2020,
+  "Amount": 5576199.58999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AZ",
+  "Fiscal Year": 2021,
+  "Amount": 5949959.46
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AZ",
+  "Fiscal Year": 2022,
+  "Amount": 43266881.0099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AR",
+  "Fiscal Year": 2018,
+  "Amount": 534665456.58
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AR",
+  "Fiscal Year": 2019,
+  "Amount": 1111835.25
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AR",
+  "Fiscal Year": 2020,
+  "Amount": 15546546.5999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AR",
+  "Fiscal Year": 2021,
+  "Amount": 28142090.3099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "AR",
+  "Fiscal Year": 2022,
+  "Amount": 1347592.11
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CA",
+  "Fiscal Year": 2018,
+  "Amount": 158595962.029999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CA",
+  "Fiscal Year": 2019,
+  "Amount": 1018673.54999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CA",
+  "Fiscal Year": 2020,
+  "Amount": 35782380.45
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CA",
+  "Fiscal Year": 2021,
+  "Amount": 3924015.89999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CA",
+  "Fiscal Year": 2022,
+  "Amount": 25517472.4499999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CO",
+  "Fiscal Year": 2018,
+  "Amount": 176194518.119999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CO",
+  "Fiscal Year": 2019,
+  "Amount": 845548.43
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CO",
+  "Fiscal Year": 2020,
+  "Amount": 1199281.1
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CO",
+  "Fiscal Year": 2021,
+  "Amount": 14612.36
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CO",
+  "Fiscal Year": 2022,
+  "Amount": 2325525.89
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CT",
+  "Fiscal Year": 2018,
+  "Amount": 1629404
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CT",
+  "Fiscal Year": 2019,
+  "Amount": 159066.46
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CT",
+  "Fiscal Year": 2020,
+  "Amount": 397857.609999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CT",
+  "Fiscal Year": 2021,
+  "Amount": 266570.72
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "CT",
+  "Fiscal Year": 2022,
+  "Amount": 1271266.94
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "DE",
+  "Fiscal Year": 2018,
+  "Amount": 12572589.83
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "DE",
+  "Fiscal Year": 2019,
+  "Amount": 2160678.96
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "DE",
+  "Fiscal Year": 2020,
+  "Amount": 3105164.14999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "DE",
+  "Fiscal Year": 2021,
+  "Amount": 261286.599999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "DE",
+  "Fiscal Year": 2022,
+  "Amount": 32511708.87
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "FL",
+  "Fiscal Year": 2018,
+  "Amount": 86753513.86
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "FL",
+  "Fiscal Year": 2019,
+  "Amount": 135322017.75
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "FL",
+  "Fiscal Year": 2020,
+  "Amount": 207350613.06
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "FL",
+  "Fiscal Year": 2021,
+  "Amount": 107965576.92
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "FL",
+  "Fiscal Year": 2022,
+  "Amount": 57585260.4899999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "GA",
+  "Fiscal Year": 2018,
+  "Amount": 321643288.819999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "GA",
+  "Fiscal Year": 2019,
+  "Amount": 180295122.099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "GA",
+  "Fiscal Year": 2020,
+  "Amount": 55485090.16
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "GA",
+  "Fiscal Year": 2021,
+  "Amount": 120883871.269999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "GA",
+  "Fiscal Year": 2022,
+  "Amount": 20302847.08
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "HI",
+  "Fiscal Year": 2018,
+  "Amount": 8139086.05
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "HI",
+  "Fiscal Year": 2019,
+  "Amount": 73022397.98
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "HI",
+  "Fiscal Year": 2020,
+  "Amount": 348330178.599999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "HI",
+  "Fiscal Year": 2021,
+  "Amount": 388854173.640001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "HI",
+  "Fiscal Year": 2022,
+  "Amount": 155656227.25
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ID",
+  "Fiscal Year": 2018,
+  "Amount": 117170130.95
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ID",
+  "Fiscal Year": 2019,
+  "Amount": 140233736.44
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ID",
+  "Fiscal Year": 2020,
+  "Amount": 433077285.289999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ID",
+  "Fiscal Year": 2021,
+  "Amount": 245604210.35
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ID",
+  "Fiscal Year": 2022,
+  "Amount": 307568195.17
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IL",
+  "Fiscal Year": 2018,
+  "Amount": 395768129.84
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IL",
+  "Fiscal Year": 2019,
+  "Amount": 207259397.5
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IL",
+  "Fiscal Year": 2020,
+  "Amount": 135498883.86
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IL",
+  "Fiscal Year": 2021,
+  "Amount": 852300769.400004
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IL",
+  "Fiscal Year": 2022,
+  "Amount": 22850721.26
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IN",
+  "Fiscal Year": 2018,
+  "Amount": 300935201.89
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IN",
+  "Fiscal Year": 2019,
+  "Amount": 276616401.569999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IN",
+  "Fiscal Year": 2020,
+  "Amount": 11071394.0499999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IN",
+  "Fiscal Year": 2021,
+  "Amount": 94973872.0900004
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IN",
+  "Fiscal Year": 2022,
+  "Amount": 534726719.079999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IA",
+  "Fiscal Year": 2018,
+  "Amount": 264209789.57
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IA",
+  "Fiscal Year": 2019,
+  "Amount": 13593088.0699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IA",
+  "Fiscal Year": 2020,
+  "Amount": 8970535.05
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IA",
+  "Fiscal Year": 2021,
+  "Amount": 60417961.7699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "IA",
+  "Fiscal Year": 2022,
+  "Amount": 79053241.8000005
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KS",
+  "Fiscal Year": 2018,
+  "Amount": 501028432.17
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KS",
+  "Fiscal Year": 2019,
+  "Amount": 5342857.9
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KS",
+  "Fiscal Year": 2020,
+  "Amount": 286380380.830001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KS",
+  "Fiscal Year": 2021,
+  "Amount": 17042888.47
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KS",
+  "Fiscal Year": 2022,
+  "Amount": 76010987.1899999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KY",
+  "Fiscal Year": 2018,
+  "Amount": 101037674.84
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KY",
+  "Fiscal Year": 2019,
+  "Amount": 78922739.2599999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KY",
+  "Fiscal Year": 2020,
+  "Amount": 157815825.409999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KY",
+  "Fiscal Year": 2021,
+  "Amount": 2435071.49
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "KY",
+  "Fiscal Year": 2022,
+  "Amount": 17905568.72
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "LA",
+  "Fiscal Year": 2018,
+  "Amount": 209987654.719999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "LA",
+  "Fiscal Year": 2019,
+  "Amount": 353184755.44
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "LA",
+  "Fiscal Year": 2020,
+  "Amount": 49603801
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "LA",
+  "Fiscal Year": 2021,
+  "Amount": 24678241.0799999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "LA",
+  "Fiscal Year": 2022,
+  "Amount": 1703092.83
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ME",
+  "Fiscal Year": 2018,
+  "Amount": 4059275.52
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ME",
+  "Fiscal Year": 2019,
+  "Amount": 206565017.29
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ME",
+  "Fiscal Year": 2020,
+  "Amount": 109260416.39
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ME",
+  "Fiscal Year": 2021,
+  "Amount": 65253426.0699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ME",
+  "Fiscal Year": 2022,
+  "Amount": 917401.88
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MD",
+  "Fiscal Year": 2018,
+  "Amount": 36386605.4
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MD",
+  "Fiscal Year": 2019,
+  "Amount": 232362076.409999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MD",
+  "Fiscal Year": 2020,
+  "Amount": 97827756.96
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MD",
+  "Fiscal Year": 2021,
+  "Amount": 146998245.2
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MD",
+  "Fiscal Year": 2022,
+  "Amount": 88390567.97
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MA",
+  "Fiscal Year": 2018,
+  "Amount": 3480753.69
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MA",
+  "Fiscal Year": 2019,
+  "Amount": 118846781.58
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MA",
+  "Fiscal Year": 2020,
+  "Amount": 41673722.35
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MA",
+  "Fiscal Year": 2021,
+  "Amount": 336543543.52
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MA",
+  "Fiscal Year": 2022,
+  "Amount": 5447453.07
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MI",
+  "Fiscal Year": 2018,
+  "Amount": 174581729.95
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MI",
+  "Fiscal Year": 2019,
+  "Amount": 39967139.2999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MI",
+  "Fiscal Year": 2020,
+  "Amount": 6300377.44
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MI",
+  "Fiscal Year": 2021,
+  "Amount": 14752227.41
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MI",
+  "Fiscal Year": 2022,
+  "Amount": 64441943.19
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MN",
+  "Fiscal Year": 2018,
+  "Amount": 253064989.19
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MN",
+  "Fiscal Year": 2019,
+  "Amount": 802493.35
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MN",
+  "Fiscal Year": 2020,
+  "Amount": 1775754.67999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MN",
+  "Fiscal Year": 2021,
+  "Amount": 48086457.63
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MN",
+  "Fiscal Year": 2022,
+  "Amount": 25029689.64
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MS",
+  "Fiscal Year": 2018,
+  "Amount": 178567852.89
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MS",
+  "Fiscal Year": 2019,
+  "Amount": 11925341.41
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MS",
+  "Fiscal Year": 2020,
+  "Amount": 1190643.14
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MS",
+  "Fiscal Year": 2021,
+  "Amount": 51741959.0000001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MS",
+  "Fiscal Year": 2022,
+  "Amount": 11275703.91
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MO",
+  "Fiscal Year": 2018,
+  "Amount": 303463644.409999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MO",
+  "Fiscal Year": 2019,
+  "Amount": 659443102.7
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MO",
+  "Fiscal Year": 2020,
+  "Amount": 88419095.4399999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MO",
+  "Fiscal Year": 2021,
+  "Amount": 115017283.599999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MO",
+  "Fiscal Year": 2022,
+  "Amount": 4007480.23999985
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MT",
+  "Fiscal Year": 2018,
+  "Amount": 332273004.659999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MT",
+  "Fiscal Year": 2019,
+  "Amount": 145774002.699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MT",
+  "Fiscal Year": 2020,
+  "Amount": 817421497.51
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MT",
+  "Fiscal Year": 2021,
+  "Amount": 44289329.52
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "MT",
+  "Fiscal Year": 2022,
+  "Amount": 19958740.25
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NE",
+  "Fiscal Year": 2018,
+  "Amount": 658525492.579999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NE",
+  "Fiscal Year": 2019,
+  "Amount": 54518516.32
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NE",
+  "Fiscal Year": 2020,
+  "Amount": 72067201.8399999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NE",
+  "Fiscal Year": 2021,
+  "Amount": 140509318.72
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NE",
+  "Fiscal Year": 2022,
+  "Amount": 100654380.42
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NV",
+  "Fiscal Year": 2018,
+  "Amount": 2740766
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NV",
+  "Fiscal Year": 2019,
+  "Amount": 6248430.91
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NV",
+  "Fiscal Year": 2020,
+  "Amount": 48660494.96
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NV",
+  "Fiscal Year": 2021,
+  "Amount": 62823347.43
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NV",
+  "Fiscal Year": 2022,
+  "Amount": 64215654.5899999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NH",
+  "Fiscal Year": 2018,
+  "Amount": 1657430
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NH",
+  "Fiscal Year": 2019,
+  "Amount": 21120820.41
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NH",
+  "Fiscal Year": 2020,
+  "Amount": 71724446.46
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NH",
+  "Fiscal Year": 2021,
+  "Amount": 25100143.1699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NH",
+  "Fiscal Year": 2022,
+  "Amount": 859115419.78
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NJ",
+  "Fiscal Year": 2018,
+  "Amount": 6864734.22
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NJ",
+  "Fiscal Year": 2019,
+  "Amount": 42360212.1099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NJ",
+  "Fiscal Year": 2020,
+  "Amount": 227854402.06
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NJ",
+  "Fiscal Year": 2021,
+  "Amount": 5302856.20999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NJ",
+  "Fiscal Year": 2022,
+  "Amount": 31831186.8699999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NM",
+  "Fiscal Year": 2018,
+  "Amount": 61033023.85
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NM",
+  "Fiscal Year": 2019,
+  "Amount": 13122097.22
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NM",
+  "Fiscal Year": 2020,
+  "Amount": 815706.149999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NM",
+  "Fiscal Year": 2021,
+  "Amount": 3253812.63
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NM",
+  "Fiscal Year": 2022,
+  "Amount": 25464123.1499999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NY",
+  "Fiscal Year": 2018,
+  "Amount": 77753577.93
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NY",
+  "Fiscal Year": 2019,
+  "Amount": 26499378.39
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NY",
+  "Fiscal Year": 2020,
+  "Amount": 109090433.16
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NY",
+  "Fiscal Year": 2021,
+  "Amount": 1860539.33
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NY",
+  "Fiscal Year": 2022,
+  "Amount": 235108163.82
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NC",
+  "Fiscal Year": 2018,
+  "Amount": 128645230.11
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NC",
+  "Fiscal Year": 2019,
+  "Amount": 669548406.06
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NC",
+  "Fiscal Year": 2020,
+  "Amount": 372955473.91
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NC",
+  "Fiscal Year": 2021,
+  "Amount": 63077546.2099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "NC",
+  "Fiscal Year": 2022,
+  "Amount": 185282686.31
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ND",
+  "Fiscal Year": 2018,
+  "Amount": 435037921.73
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ND",
+  "Fiscal Year": 2019,
+  "Amount": 470515816.52
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ND",
+  "Fiscal Year": 2020,
+  "Amount": 397031545.83
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ND",
+  "Fiscal Year": 2021,
+  "Amount": 142588470.149999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "ND",
+  "Fiscal Year": 2022,
+  "Amount": 49272987.01
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OH",
+  "Fiscal Year": 2018,
+  "Amount": 299683089.729999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OH",
+  "Fiscal Year": 2019,
+  "Amount": 120688705.339999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OH",
+  "Fiscal Year": 2020,
+  "Amount": 322194.339999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OH",
+  "Fiscal Year": 2021,
+  "Amount": 18543
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OH",
+  "Fiscal Year": 2022,
+  "Amount": 15147244.79
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OK",
+  "Fiscal Year": 2018,
+  "Amount": 271746702.919999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OK",
+  "Fiscal Year": 2019,
+  "Amount": 6263033.05
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OK",
+  "Fiscal Year": 2020,
+  "Amount": 1876053
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OK",
+  "Fiscal Year": 2021,
+  "Amount": 11475748.93
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OK",
+  "Fiscal Year": 2022,
+  "Amount": 105694382.02
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OR",
+  "Fiscal Year": 2018,
+  "Amount": 51275912.37
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OR",
+  "Fiscal Year": 2019,
+  "Amount": 33638327.9
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OR",
+  "Fiscal Year": 2020,
+  "Amount": 2255621
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OR",
+  "Fiscal Year": 2021,
+  "Amount": 1225132.69
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "OR",
+  "Fiscal Year": 2022,
+  "Amount": 17384412.65
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "PA",
+  "Fiscal Year": 2018,
+  "Amount": 63126231.54
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "PA",
+  "Fiscal Year": 2019,
+  "Amount": 1600484
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "PA",
+  "Fiscal Year": 2020,
+  "Amount": 5264250.22
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "PA",
+  "Fiscal Year": 2021,
+  "Amount": 26130218.33
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "PA",
+  "Fiscal Year": 2022,
+  "Amount": 34902805.5199999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "RI",
+  "Fiscal Year": 2018,
+  "Amount": 324549
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "RI",
+  "Fiscal Year": 2019,
+  "Amount": 7846802
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "RI",
+  "Fiscal Year": 2020,
+  "Amount": 49651535.3
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "RI",
+  "Fiscal Year": 2021,
+  "Amount": 10913897.5
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "RI",
+  "Fiscal Year": 2022,
+  "Amount": 101827308.559999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SC",
+  "Fiscal Year": 2018,
+  "Amount": 51415895.23
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SC",
+  "Fiscal Year": 2019,
+  "Amount": 406728788.58
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SC",
+  "Fiscal Year": 2020,
+  "Amount": 9457726.06
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SC",
+  "Fiscal Year": 2021,
+  "Amount": 142004056.819999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SC",
+  "Fiscal Year": 2022,
+  "Amount": 1824465868.13999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SD",
+  "Fiscal Year": 2018,
+  "Amount": 370496160.88
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SD",
+  "Fiscal Year": 2019,
+  "Amount": 1984316.79
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SD",
+  "Fiscal Year": 2020,
+  "Amount": 11858849.82
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SD",
+  "Fiscal Year": 2021,
+  "Amount": 74427210.6200001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "SD",
+  "Fiscal Year": 2022,
+  "Amount": 95908287.7300003
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TN",
+  "Fiscal Year": 2018,
+  "Amount": 82001170.3
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TN",
+  "Fiscal Year": 2019,
+  "Amount": 130886390.779999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TN",
+  "Fiscal Year": 2020,
+  "Amount": 4827247.42999999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TN",
+  "Fiscal Year": 2021,
+  "Amount": 373567347.31
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TN",
+  "Fiscal Year": 2022,
+  "Amount": 17611147.4899999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TX",
+  "Fiscal Year": 2018,
+  "Amount": 876868549.969999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TX",
+  "Fiscal Year": 2019,
+  "Amount": 1438910493.33999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TX",
+  "Fiscal Year": 2020,
+  "Amount": 393357005.640002
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TX",
+  "Fiscal Year": 2021,
+  "Amount": 394719214.36
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "TX",
+  "Fiscal Year": 2022,
+  "Amount": 29872553.81
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "UT",
+  "Fiscal Year": 2018,
+  "Amount": 27394489.72
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "UT",
+  "Fiscal Year": 2019,
+  "Amount": 637773139.9
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "UT",
+  "Fiscal Year": 2020,
+  "Amount": 688601410.229999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "UT",
+  "Fiscal Year": 2021,
+  "Amount": 156100324.809999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "UT",
+  "Fiscal Year": 2022,
+  "Amount": 282571713.299999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VT",
+  "Fiscal Year": 2018,
+  "Amount": 8461961.78
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VT",
+  "Fiscal Year": 2019,
+  "Amount": 163238923.509999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VT",
+  "Fiscal Year": 2020,
+  "Amount": 674400596.690001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VT",
+  "Fiscal Year": 2021,
+  "Amount": 1729120129.71
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VT",
+  "Fiscal Year": 2022,
+  "Amount": 510764906
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VA",
+  "Fiscal Year": 2018,
+  "Amount": 57498337.3
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VA",
+  "Fiscal Year": 2019,
+  "Amount": 591544425.870003
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VA",
+  "Fiscal Year": 2020,
+  "Amount": 1899292274.38997
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VA",
+  "Fiscal Year": 2021,
+  "Amount": 412873512.809999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "VA",
+  "Fiscal Year": 2022,
+  "Amount": 995278281.669994
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WA",
+  "Fiscal Year": 2018,
+  "Amount": 112741206.059999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WA",
+  "Fiscal Year": 2019,
+  "Amount": 146443716.12
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WA",
+  "Fiscal Year": 2020,
+  "Amount": 1260853929.63999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WA",
+  "Fiscal Year": 2021,
+  "Amount": 341557598.069999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WA",
+  "Fiscal Year": 2022,
+  "Amount": 2257873325.12996
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WV",
+  "Fiscal Year": 2018,
+  "Amount": 4219172
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WV",
+  "Fiscal Year": 2019,
+  "Amount": 46684459.1099999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WV",
+  "Fiscal Year": 2020,
+  "Amount": 258151288.409999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WV",
+  "Fiscal Year": 2021,
+  "Amount": 3141617.93
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WV",
+  "Fiscal Year": 2022,
+  "Amount": 68372664.1500001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WI",
+  "Fiscal Year": 2018,
+  "Amount": 125659782.77
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WI",
+  "Fiscal Year": 2019,
+  "Amount": 2710417.71
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WI",
+  "Fiscal Year": 2020,
+  "Amount": 2807895.35
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WI",
+  "Fiscal Year": 2021,
+  "Amount": 21630812.1
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WI",
+  "Fiscal Year": 2022,
+  "Amount": 44614211.4900001
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WY",
+  "Fiscal Year": 2018,
+  "Amount": 19839649.54
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WY",
+  "Fiscal Year": 2019,
+  "Amount": 91672115.8399999
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WY",
+  "Fiscal Year": 2020,
+  "Amount": 8145354.37
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WY",
+  "Fiscal Year": 2021,
+  "Amount": 107608036.44
+ },
+ {
+  "Title": "Title I: Commodities",
+  "State": "WY",
+  "Fiscal Year": 2022,
+  "Amount": 23548562.82
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AL",
+  "Fiscal Year": 2018,
+  "Amount": 58722713.35
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AL",
+  "Fiscal Year": 2019,
+  "Amount": 65825583.67
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AL",
+  "Fiscal Year": 2020,
+  "Amount": 66750225.54
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AL",
+  "Fiscal Year": 2021,
+  "Amount": 85294362.99000001
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AL",
+  "Fiscal Year": 2022,
+  "Amount": 7139568.01
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AK",
+  "Fiscal Year": 2018,
+  "Amount": 13401498
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AK",
+  "Fiscal Year": 2019,
+  "Amount": 14984109
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AK",
+  "Fiscal Year": 2020,
+  "Amount": 12893715
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AK",
+  "Fiscal Year": 2021,
+  "Amount": 12277225
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AK",
+  "Fiscal Year": 2022,
+  "Amount": 224326
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AZ",
+  "Fiscal Year": 2018,
+  "Amount": 37872600
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AZ",
+  "Fiscal Year": 2019,
+  "Amount": 61868700
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AZ",
+  "Fiscal Year": 2020,
+  "Amount": 25556700
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AZ",
+  "Fiscal Year": 2021,
+  "Amount": 31446600
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AZ",
+  "Fiscal Year": 2022,
+  "Amount": 0
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AR",
+  "Fiscal Year": 2018,
+  "Amount": 184636056.75
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AR",
+  "Fiscal Year": 2019,
+  "Amount": 175201142.59
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AR",
+  "Fiscal Year": 2020,
+  "Amount": 306135664.61
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AR",
+  "Fiscal Year": 2021,
+  "Amount": 155495645.7399999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "AR",
+  "Fiscal Year": 2022,
+  "Amount": 15612450.04
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CA",
+  "Fiscal Year": 2018,
+  "Amount": 142654667
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CA",
+  "Fiscal Year": 2019,
+  "Amount": 151441715.92000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CA",
+  "Fiscal Year": 2020,
+  "Amount": 169302588
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CA",
+  "Fiscal Year": 2021,
+  "Amount": 168936805
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CA",
+  "Fiscal Year": 2022,
+  "Amount": 1784264
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CO",
+  "Fiscal Year": 2018,
+  "Amount": 152416634.0199999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CO",
+  "Fiscal Year": 2019,
+  "Amount": 169393937.39
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CO",
+  "Fiscal Year": 2020,
+  "Amount": 161126104.5
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CO",
+  "Fiscal Year": 2021,
+  "Amount": 154877488.59
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CO",
+  "Fiscal Year": 2022,
+  "Amount": 48649255.53
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CT",
+  "Fiscal Year": 2018,
+  "Amount": 11046634
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CT",
+  "Fiscal Year": 2019,
+  "Amount": 10244577
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CT",
+  "Fiscal Year": 2020,
+  "Amount": 11848507
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CT",
+  "Fiscal Year": 2021,
+  "Amount": 13913594
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "CT",
+  "Fiscal Year": 2022,
+  "Amount": 94
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "DE",
+  "Fiscal Year": 2018,
+  "Amount": 14655642.32
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "DE",
+  "Fiscal Year": 2019,
+  "Amount": 14038334.67
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "DE",
+  "Fiscal Year": 2020,
+  "Amount": 17122401
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "DE",
+  "Fiscal Year": 2021,
+  "Amount": 13298298
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "DE",
+  "Fiscal Year": 2022,
+  "Amount": 498615.86
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "FL",
+  "Fiscal Year": 2018,
+  "Amount": 64730334
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "FL",
+  "Fiscal Year": 2019,
+  "Amount": 62726334
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "FL",
+  "Fiscal Year": 2020,
+  "Amount": 80461332.49000001
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "FL",
+  "Fiscal Year": 2021,
+  "Amount": 62513145
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "FL",
+  "Fiscal Year": 2022,
+  "Amount": 687167
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "GA",
+  "Fiscal Year": 2018,
+  "Amount": 132798652.58
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "GA",
+  "Fiscal Year": 2019,
+  "Amount": 153775453.36
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "GA",
+  "Fiscal Year": 2020,
+  "Amount": 162971340.23000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "GA",
+  "Fiscal Year": 2021,
+  "Amount": 107331342.42
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "GA",
+  "Fiscal Year": 2022,
+  "Amount": 12197142.6499999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "HI",
+  "Fiscal Year": 2018,
+  "Amount": 13958014
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "HI",
+  "Fiscal Year": 2019,
+  "Amount": 19291748
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "HI",
+  "Fiscal Year": 2020,
+  "Amount": 17497972
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "HI",
+  "Fiscal Year": 2021,
+  "Amount": 16423774
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "HI",
+  "Fiscal Year": 2022,
+  "Amount": 30919
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ID",
+  "Fiscal Year": 2018,
+  "Amount": 64427893.8
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ID",
+  "Fiscal Year": 2019,
+  "Amount": 67799146.89
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ID",
+  "Fiscal Year": 2020,
+  "Amount": 81062151.8499999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ID",
+  "Fiscal Year": 2021,
+  "Amount": 70561655.61
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ID",
+  "Fiscal Year": 2022,
+  "Amount": 22331454.98
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IL",
+  "Fiscal Year": 2018,
+  "Amount": 235186322.06
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IL",
+  "Fiscal Year": 2019,
+  "Amount": 250331380.4
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IL",
+  "Fiscal Year": 2020,
+  "Amount": 295091340.38
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IL",
+  "Fiscal Year": 2021,
+  "Amount": 248156869.399999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IL",
+  "Fiscal Year": 2022,
+  "Amount": 163723517.67
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IN",
+  "Fiscal Year": 2018,
+  "Amount": 95743914.2
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IN",
+  "Fiscal Year": 2019,
+  "Amount": 106423085.83
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IN",
+  "Fiscal Year": 2020,
+  "Amount": 117960025.92
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IN",
+  "Fiscal Year": 2021,
+  "Amount": 106634335.1
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IN",
+  "Fiscal Year": 2022,
+  "Amount": 38058251.93
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IA",
+  "Fiscal Year": 2018,
+  "Amount": 460805417.869999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IA",
+  "Fiscal Year": 2019,
+  "Amount": 513922513.4
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IA",
+  "Fiscal Year": 2020,
+  "Amount": 514123731.37
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IA",
+  "Fiscal Year": 2021,
+  "Amount": 486286454.69
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "IA",
+  "Fiscal Year": 2022,
+  "Amount": 377367063.97
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KS",
+  "Fiscal Year": 2018,
+  "Amount": 192616009.42000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KS",
+  "Fiscal Year": 2019,
+  "Amount": 202218854.93
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KS",
+  "Fiscal Year": 2020,
+  "Amount": 218149833.41
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KS",
+  "Fiscal Year": 2021,
+  "Amount": 167625273.06
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KS",
+  "Fiscal Year": 2022,
+  "Amount": 74066896.8999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KY",
+  "Fiscal Year": 2018,
+  "Amount": 92120399.31
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KY",
+  "Fiscal Year": 2019,
+  "Amount": 89975047.8399999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KY",
+  "Fiscal Year": 2020,
+  "Amount": 105360299.42
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KY",
+  "Fiscal Year": 2021,
+  "Amount": 89322383.45
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "KY",
+  "Fiscal Year": 2022,
+  "Amount": 31171136.59
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "LA",
+  "Fiscal Year": 2018,
+  "Amount": 119104665.7999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "LA",
+  "Fiscal Year": 2019,
+  "Amount": 143277555.37
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "LA",
+  "Fiscal Year": 2020,
+  "Amount": 159642116.73000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "LA",
+  "Fiscal Year": 2021,
+  "Amount": 111612386.97
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "LA",
+  "Fiscal Year": 2022,
+  "Amount": 22953027.97
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ME",
+  "Fiscal Year": 2018,
+  "Amount": 21107816
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ME",
+  "Fiscal Year": 2019,
+  "Amount": 19724552
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ME",
+  "Fiscal Year": 2020,
+  "Amount": 18061589.85
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ME",
+  "Fiscal Year": 2021,
+  "Amount": 19761893
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ME",
+  "Fiscal Year": 2022,
+  "Amount": 220050
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MD",
+  "Fiscal Year": 2018,
+  "Amount": 33433443.86
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MD",
+  "Fiscal Year": 2019,
+  "Amount": 36048524.59
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MD",
+  "Fiscal Year": 2020,
+  "Amount": 31555418.509999998
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MD",
+  "Fiscal Year": 2021,
+  "Amount": 33839278.01
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MD",
+  "Fiscal Year": 2022,
+  "Amount": 10000836.04
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MA",
+  "Fiscal Year": 2018,
+  "Amount": 9432452
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MA",
+  "Fiscal Year": 2019,
+  "Amount": 9741152
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MA",
+  "Fiscal Year": 2020,
+  "Amount": 12577736
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MA",
+  "Fiscal Year": 2021,
+  "Amount": 11090617
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MA",
+  "Fiscal Year": 2022,
+  "Amount": 864
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MI",
+  "Fiscal Year": 2018,
+  "Amount": 58778527.83
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MI",
+  "Fiscal Year": 2019,
+  "Amount": 69987740.27
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MI",
+  "Fiscal Year": 2020,
+  "Amount": 71966956.95
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MI",
+  "Fiscal Year": 2021,
+  "Amount": 58274256.0599999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MI",
+  "Fiscal Year": 2022,
+  "Amount": 13900469.91
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MN",
+  "Fiscal Year": 2018,
+  "Amount": 244582170.09
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MN",
+  "Fiscal Year": 2019,
+  "Amount": 232977946.62
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MN",
+  "Fiscal Year": 2020,
+  "Amount": 349874995.289999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MN",
+  "Fiscal Year": 2021,
+  "Amount": 210555885.2
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MN",
+  "Fiscal Year": 2022,
+  "Amount": 136246248.84
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MS",
+  "Fiscal Year": 2018,
+  "Amount": 213617057.73
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MS",
+  "Fiscal Year": 2019,
+  "Amount": 233229635.82
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MS",
+  "Fiscal Year": 2020,
+  "Amount": 300163025.03
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MS",
+  "Fiscal Year": 2021,
+  "Amount": 167261207.4399999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MS",
+  "Fiscal Year": 2022,
+  "Amount": 39987516.18
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MO",
+  "Fiscal Year": 2018,
+  "Amount": 209637013.94
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MO",
+  "Fiscal Year": 2019,
+  "Amount": 230511282.479999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MO",
+  "Fiscal Year": 2020,
+  "Amount": 225418503.70999998
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MO",
+  "Fiscal Year": 2021,
+  "Amount": 185261947.6999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MO",
+  "Fiscal Year": 2022,
+  "Amount": 95949278.55
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MT",
+  "Fiscal Year": 2018,
+  "Amount": 126092562.53
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MT",
+  "Fiscal Year": 2019,
+  "Amount": 134573595.04
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MT",
+  "Fiscal Year": 2020,
+  "Amount": 179629644.35
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MT",
+  "Fiscal Year": 2021,
+  "Amount": 116175939.67
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "MT",
+  "Fiscal Year": 2022,
+  "Amount": 23906023.81
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NE",
+  "Fiscal Year": 2018,
+  "Amount": 176421044.28
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NE",
+  "Fiscal Year": 2019,
+  "Amount": 200888040.74
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NE",
+  "Fiscal Year": 2020,
+  "Amount": 216380545.44
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NE",
+  "Fiscal Year": 2021,
+  "Amount": 149825244.1199999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NE",
+  "Fiscal Year": 2022,
+  "Amount": 71133060.4
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NV",
+  "Fiscal Year": 2018,
+  "Amount": 13138956
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NV",
+  "Fiscal Year": 2019,
+  "Amount": 12511086
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NV",
+  "Fiscal Year": 2020,
+  "Amount": 11280886
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NV",
+  "Fiscal Year": 2021,
+  "Amount": 11793886
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NV",
+  "Fiscal Year": 2022,
+  "Amount": 11683
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NH",
+  "Fiscal Year": 2018,
+  "Amount": 12173665
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NH",
+  "Fiscal Year": 2019,
+  "Amount": 13347052
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NH",
+  "Fiscal Year": 2020,
+  "Amount": 12642052
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NH",
+  "Fiscal Year": 2021,
+  "Amount": 12732500
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NH",
+  "Fiscal Year": 2022,
+  "Amount": 0
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NJ",
+  "Fiscal Year": 2018,
+  "Amount": 14538257
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NJ",
+  "Fiscal Year": 2019,
+  "Amount": 10946528
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NJ",
+  "Fiscal Year": 2020,
+  "Amount": 10999332
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NJ",
+  "Fiscal Year": 2021,
+  "Amount": 13330954
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NJ",
+  "Fiscal Year": 2022,
+  "Amount": 163165
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NM",
+  "Fiscal Year": 2018,
+  "Amount": 91787120.82
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NM",
+  "Fiscal Year": 2019,
+  "Amount": 72712538.42
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NM",
+  "Fiscal Year": 2020,
+  "Amount": 81640183.19
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NM",
+  "Fiscal Year": 2021,
+  "Amount": 77099290.28999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NM",
+  "Fiscal Year": 2022,
+  "Amount": 12423119
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NY",
+  "Fiscal Year": 2018,
+  "Amount": 33890633.17
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NY",
+  "Fiscal Year": 2019,
+  "Amount": 33766324.35
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NY",
+  "Fiscal Year": 2020,
+  "Amount": 32741610.6
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NY",
+  "Fiscal Year": 2021,
+  "Amount": 37927430.99
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NY",
+  "Fiscal Year": 2022,
+  "Amount": 1612474
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NC",
+  "Fiscal Year": 2018,
+  "Amount": 44649316.56
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NC",
+  "Fiscal Year": 2019,
+  "Amount": 49991124
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NC",
+  "Fiscal Year": 2020,
+  "Amount": 60523524.1
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NC",
+  "Fiscal Year": 2021,
+  "Amount": 53686072.41
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "NC",
+  "Fiscal Year": 2022,
+  "Amount": 2380051.46999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ND",
+  "Fiscal Year": 2018,
+  "Amount": 181477976.73000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ND",
+  "Fiscal Year": 2019,
+  "Amount": 146766951.59
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ND",
+  "Fiscal Year": 2020,
+  "Amount": 250404508.19
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ND",
+  "Fiscal Year": 2021,
+  "Amount": 117994067.21000001
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "ND",
+  "Fiscal Year": 2022,
+  "Amount": 62797063.5299999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OH",
+  "Fiscal Year": 2018,
+  "Amount": 98347419.65
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OH",
+  "Fiscal Year": 2019,
+  "Amount": 102323320.53
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OH",
+  "Fiscal Year": 2020,
+  "Amount": 102423775.37
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OH",
+  "Fiscal Year": 2021,
+  "Amount": 96414627.6999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OH",
+  "Fiscal Year": 2022,
+  "Amount": 43960279.72
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OK",
+  "Fiscal Year": 2018,
+  "Amount": 116784973.78
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OK",
+  "Fiscal Year": 2019,
+  "Amount": 130575119.52
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OK",
+  "Fiscal Year": 2020,
+  "Amount": 126944408.33
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OK",
+  "Fiscal Year": 2021,
+  "Amount": 79440076.11
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OK",
+  "Fiscal Year": 2022,
+  "Amount": 15257599.67
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OR",
+  "Fiscal Year": 2018,
+  "Amount": 105371156.11
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OR",
+  "Fiscal Year": 2019,
+  "Amount": 102947213.74
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OR",
+  "Fiscal Year": 2020,
+  "Amount": 121081544.36
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OR",
+  "Fiscal Year": 2021,
+  "Amount": 101509808.07
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "OR",
+  "Fiscal Year": 2022,
+  "Amount": 28193264.3
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "PA",
+  "Fiscal Year": 2018,
+  "Amount": 74202667.13
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "PA",
+  "Fiscal Year": 2019,
+  "Amount": 74146819.94
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "PA",
+  "Fiscal Year": 2020,
+  "Amount": 70560114.99000001
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "PA",
+  "Fiscal Year": 2021,
+  "Amount": 65195633.83
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "PA",
+  "Fiscal Year": 2022,
+  "Amount": 13542193.01
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "RI",
+  "Fiscal Year": 2018,
+  "Amount": 6864387
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "RI",
+  "Fiscal Year": 2019,
+  "Amount": 5235165
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "RI",
+  "Fiscal Year": 2020,
+  "Amount": 8573865
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "RI",
+  "Fiscal Year": 2021,
+  "Amount": 9281665
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "RI",
+  "Fiscal Year": 2022,
+  "Amount": 2065
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SC",
+  "Fiscal Year": 2018,
+  "Amount": 55043391.5
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SC",
+  "Fiscal Year": 2019,
+  "Amount": 56503181.71999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SC",
+  "Fiscal Year": 2020,
+  "Amount": 67362742.36
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SC",
+  "Fiscal Year": 2021,
+  "Amount": 66382712.69
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SC",
+  "Fiscal Year": 2022,
+  "Amount": 1718349
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SD",
+  "Fiscal Year": 2018,
+  "Amount": 215764245.63
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SD",
+  "Fiscal Year": 2019,
+  "Amount": 211879774.47
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SD",
+  "Fiscal Year": 2020,
+  "Amount": 341458224.999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SD",
+  "Fiscal Year": 2021,
+  "Amount": 178853192.4199999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "SD",
+  "Fiscal Year": 2022,
+  "Amount": 100670192.55
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TN",
+  "Fiscal Year": 2018,
+  "Amount": 74699312.12
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TN",
+  "Fiscal Year": 2019,
+  "Amount": 88160712
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TN",
+  "Fiscal Year": 2020,
+  "Amount": 90881462.73999989
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TN",
+  "Fiscal Year": 2021,
+  "Amount": 94394623.03999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TN",
+  "Fiscal Year": 2022,
+  "Amount": 10542870
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TX",
+  "Fiscal Year": 2018,
+  "Amount": 320246193.53
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TX",
+  "Fiscal Year": 2019,
+  "Amount": 333759107.5
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TX",
+  "Fiscal Year": 2020,
+  "Amount": 320895333.25999904
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TX",
+  "Fiscal Year": 2021,
+  "Amount": 261125477.51999998
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "TX",
+  "Fiscal Year": 2022,
+  "Amount": 77850257.22
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "UT",
+  "Fiscal Year": 2018,
+  "Amount": 47157998
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "UT",
+  "Fiscal Year": 2019,
+  "Amount": 52355409
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "UT",
+  "Fiscal Year": 2020,
+  "Amount": 61126057.66
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "UT",
+  "Fiscal Year": 2021,
+  "Amount": 63337065
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "UT",
+  "Fiscal Year": 2022,
+  "Amount": 3541750
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VT",
+  "Fiscal Year": 2018,
+  "Amount": 25873800.759999998
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VT",
+  "Fiscal Year": 2019,
+  "Amount": 26102558
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VT",
+  "Fiscal Year": 2020,
+  "Amount": 25336602.490000002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VT",
+  "Fiscal Year": 2021,
+  "Amount": 24395180.98
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VT",
+  "Fiscal Year": 2022,
+  "Amount": 247036.919999999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VA",
+  "Fiscal Year": 2018,
+  "Amount": 51551285.19
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VA",
+  "Fiscal Year": 2019,
+  "Amount": 56204448.42
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VA",
+  "Fiscal Year": 2020,
+  "Amount": 59293887.019999996
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VA",
+  "Fiscal Year": 2021,
+  "Amount": 52649212.56
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "VA",
+  "Fiscal Year": 2022,
+  "Amount": 2132766
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WA",
+  "Fiscal Year": 2018,
+  "Amount": 122113283.62
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WA",
+  "Fiscal Year": 2019,
+  "Amount": 124360344.68
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WA",
+  "Fiscal Year": 2020,
+  "Amount": 145766148.19
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WA",
+  "Fiscal Year": 2021,
+  "Amount": 124467197.63
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WA",
+  "Fiscal Year": 2022,
+  "Amount": 56715678.29
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WV",
+  "Fiscal Year": 2018,
+  "Amount": 25239862
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WV",
+  "Fiscal Year": 2019,
+  "Amount": 23790148
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WV",
+  "Fiscal Year": 2020,
+  "Amount": 27068241
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WV",
+  "Fiscal Year": 2021,
+  "Amount": 26721986
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WV",
+  "Fiscal Year": 2022,
+  "Amount": 431715
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WI",
+  "Fiscal Year": 2018,
+  "Amount": 101986321.84
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WI",
+  "Fiscal Year": 2019,
+  "Amount": 125895860.68999991
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WI",
+  "Fiscal Year": 2020,
+  "Amount": 139889381.97
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WI",
+  "Fiscal Year": 2021,
+  "Amount": 102465629.7599999
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WI",
+  "Fiscal Year": 2022,
+  "Amount": 30034726.85
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WY",
+  "Fiscal Year": 2018,
+  "Amount": 37421012
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WY",
+  "Fiscal Year": 2019,
+  "Amount": 41904242
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WY",
+  "Fiscal Year": 2020,
+  "Amount": 39571002
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WY",
+  "Fiscal Year": 2021,
+  "Amount": 36180385
+ },
+ {
+  "Title": "Title II: Conservation",
+  "State": "WY",
+  "Fiscal Year": 2022,
+  "Amount": 3099081.94
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AL",
+  "Fiscal Year": 2018,
+  "Amount": 28828307
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AL",
+  "Fiscal Year": 2019,
+  "Amount": 40706533
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AL",
+  "Fiscal Year": 2020,
+  "Amount": 52928542
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AL",
+  "Fiscal Year": 2021,
+  "Amount": 17648330
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AL",
+  "Fiscal Year": 2022,
+  "Amount": -25533008
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AK",
+  "Fiscal Year": 2018,
+  "Amount": 81177
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AK",
+  "Fiscal Year": 2019,
+  "Amount": -7124
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AK",
+  "Fiscal Year": 2020,
+  "Amount": 3153
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AK",
+  "Fiscal Year": 2021,
+  "Amount": 49757
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AK",
+  "Fiscal Year": 2022,
+  "Amount": 109702
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AZ",
+  "Fiscal Year": 2018,
+  "Amount": 98351588
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AZ",
+  "Fiscal Year": 2019,
+  "Amount": 17616300
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AZ",
+  "Fiscal Year": 2020,
+  "Amount": 115754560
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AZ",
+  "Fiscal Year": 2021,
+  "Amount": 87197180
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AZ",
+  "Fiscal Year": 2022,
+  "Amount": 62411425
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AR",
+  "Fiscal Year": 2018,
+  "Amount": 83510790
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AR",
+  "Fiscal Year": 2019,
+  "Amount": 268429452
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AR",
+  "Fiscal Year": 2020,
+  "Amount": 217683831
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AR",
+  "Fiscal Year": 2021,
+  "Amount": 163924187
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "AR",
+  "Fiscal Year": 2022,
+  "Amount": 44006341
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CA",
+  "Fiscal Year": 2018,
+  "Amount": 165878273
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CA",
+  "Fiscal Year": 2019,
+  "Amount": 216978747
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CA",
+  "Fiscal Year": 2020,
+  "Amount": 481957948
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CA",
+  "Fiscal Year": 2021,
+  "Amount": 353771733
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CA",
+  "Fiscal Year": 2022,
+  "Amount": 278552950
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CO",
+  "Fiscal Year": 2018,
+  "Amount": 80740474
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CO",
+  "Fiscal Year": 2019,
+  "Amount": 27592564
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CO",
+  "Fiscal Year": 2020,
+  "Amount": 193383985
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CO",
+  "Fiscal Year": 2021,
+  "Amount": 98546081
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CO",
+  "Fiscal Year": 2022,
+  "Amount": 132703764
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CT",
+  "Fiscal Year": 2018,
+  "Amount": -336400
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CT",
+  "Fiscal Year": 2019,
+  "Amount": -2188565
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CT",
+  "Fiscal Year": 2020,
+  "Amount": 1277761
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CT",
+  "Fiscal Year": 2021,
+  "Amount": 17014145
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "CT",
+  "Fiscal Year": 2022,
+  "Amount": -2895544
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "DE",
+  "Fiscal Year": 2018,
+  "Amount": 4202733
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "DE",
+  "Fiscal Year": 2019,
+  "Amount": -233121
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "DE",
+  "Fiscal Year": 2020,
+  "Amount": -1150653
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "DE",
+  "Fiscal Year": 2021,
+  "Amount": -2555328
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "DE",
+  "Fiscal Year": 2022,
+  "Amount": -5348510
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "FL",
+  "Fiscal Year": 2018,
+  "Amount": 3504132511
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "FL",
+  "Fiscal Year": 2019,
+  "Amount": 17744976
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "FL",
+  "Fiscal Year": 2020,
+  "Amount": 43018039
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "FL",
+  "Fiscal Year": 2021,
+  "Amount": 40000469
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "FL",
+  "Fiscal Year": 2022,
+  "Amount": 103176714
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "GA",
+  "Fiscal Year": 2018,
+  "Amount": 319121830
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "GA",
+  "Fiscal Year": 2019,
+  "Amount": 145004907
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "GA",
+  "Fiscal Year": 2020,
+  "Amount": 77391344
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "GA",
+  "Fiscal Year": 2021,
+  "Amount": 71545586
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "GA",
+  "Fiscal Year": 2022,
+  "Amount": -47712411
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "HI",
+  "Fiscal Year": 2018,
+  "Amount": 1459100
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "HI",
+  "Fiscal Year": 2019,
+  "Amount": 1621234
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "HI",
+  "Fiscal Year": 2020,
+  "Amount": 1683941
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "HI",
+  "Fiscal Year": 2021,
+  "Amount": 1338984
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "HI",
+  "Fiscal Year": 2022,
+  "Amount": -520575
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ID",
+  "Fiscal Year": 2018,
+  "Amount": -428582
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ID",
+  "Fiscal Year": 2019,
+  "Amount": 13547210
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ID",
+  "Fiscal Year": 2020,
+  "Amount": 12004667
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ID",
+  "Fiscal Year": 2021,
+  "Amount": 147214646
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ID",
+  "Fiscal Year": 2022,
+  "Amount": -8659027
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IL",
+  "Fiscal Year": 2018,
+  "Amount": -173182034
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IL",
+  "Fiscal Year": 2019,
+  "Amount": 407068470
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IL",
+  "Fiscal Year": 2020,
+  "Amount": -92414811
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IL",
+  "Fiscal Year": 2021,
+  "Amount": -284673114
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IL",
+  "Fiscal Year": 2022,
+  "Amount": -458009161
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IN",
+  "Fiscal Year": 2018,
+  "Amount": -75854034
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IN",
+  "Fiscal Year": 2019,
+  "Amount": 286136260
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IN",
+  "Fiscal Year": 2020,
+  "Amount": -378868012
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IN",
+  "Fiscal Year": 2021,
+  "Amount": -156382232
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IN",
+  "Fiscal Year": 2022,
+  "Amount": -252385877
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IA",
+  "Fiscal Year": 2018,
+  "Amount": 37686975
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IA",
+  "Fiscal Year": 2019,
+  "Amount": -14487267
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IA",
+  "Fiscal Year": 2020,
+  "Amount": 338640690
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IA",
+  "Fiscal Year": 2021,
+  "Amount": -373331476
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "IA",
+  "Fiscal Year": 2022,
+  "Amount": -611255260
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KS",
+  "Fiscal Year": 2018,
+  "Amount": 114016334
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KS",
+  "Fiscal Year": 2019,
+  "Amount": 34725564
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KS",
+  "Fiscal Year": 2020,
+  "Amount": 12361148
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KS",
+  "Fiscal Year": 2021,
+  "Amount": -39401329
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KS",
+  "Fiscal Year": 2022,
+  "Amount": -347795792
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KY",
+  "Fiscal Year": 2018,
+  "Amount": 60513361
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KY",
+  "Fiscal Year": 2019,
+  "Amount": 86551072
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KY",
+  "Fiscal Year": 2020,
+  "Amount": 47956352
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KY",
+  "Fiscal Year": 2021,
+  "Amount": 2358114
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "KY",
+  "Fiscal Year": 2022,
+  "Amount": -76667570
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "LA",
+  "Fiscal Year": 2018,
+  "Amount": 60866534
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "LA",
+  "Fiscal Year": 2019,
+  "Amount": 106685910
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "LA",
+  "Fiscal Year": 2020,
+  "Amount": 95647813
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "LA",
+  "Fiscal Year": 2021,
+  "Amount": 88141226
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "LA",
+  "Fiscal Year": 2022,
+  "Amount": -18184340
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ME",
+  "Fiscal Year": 2018,
+  "Amount": 1748844
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ME",
+  "Fiscal Year": 2019,
+  "Amount": 5963232
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ME",
+  "Fiscal Year": 2020,
+  "Amount": 5852104
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ME",
+  "Fiscal Year": 2021,
+  "Amount": 1400538
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ME",
+  "Fiscal Year": 2022,
+  "Amount": -3535192
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MD",
+  "Fiscal Year": 2018,
+  "Amount": 9947269
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MD",
+  "Fiscal Year": 2019,
+  "Amount": 1315502
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MD",
+  "Fiscal Year": 2020,
+  "Amount": 550875
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MD",
+  "Fiscal Year": 2021,
+  "Amount": -5782187
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MD",
+  "Fiscal Year": 2022,
+  "Amount": -14925338
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MA",
+  "Fiscal Year": 2018,
+  "Amount": 422804
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MA",
+  "Fiscal Year": 2019,
+  "Amount": 574868
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MA",
+  "Fiscal Year": 2020,
+  "Amount": 1506046
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MA",
+  "Fiscal Year": 2021,
+  "Amount": 8633955
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MA",
+  "Fiscal Year": 2022,
+  "Amount": -1805098
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MI",
+  "Fiscal Year": 2018,
+  "Amount": 37224092
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MI",
+  "Fiscal Year": 2019,
+  "Amount": 248401214
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MI",
+  "Fiscal Year": 2020,
+  "Amount": 26265371
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MI",
+  "Fiscal Year": 2021,
+  "Amount": -2666800
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MI",
+  "Fiscal Year": 2022,
+  "Amount": -70967692
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MN",
+  "Fiscal Year": 2018,
+  "Amount": 145349310
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MN",
+  "Fiscal Year": 2019,
+  "Amount": 584151868
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MN",
+  "Fiscal Year": 2020,
+  "Amount": 8246905
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MN",
+  "Fiscal Year": 2021,
+  "Amount": 205158392
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MN",
+  "Fiscal Year": 2022,
+  "Amount": -251464307
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MS",
+  "Fiscal Year": 2018,
+  "Amount": 49543316
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MS",
+  "Fiscal Year": 2019,
+  "Amount": 176379000
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MS",
+  "Fiscal Year": 2020,
+  "Amount": 108131312
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MS",
+  "Fiscal Year": 2021,
+  "Amount": 84690521
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MS",
+  "Fiscal Year": 2022,
+  "Amount": -21763084
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MO",
+  "Fiscal Year": 2018,
+  "Amount": 133131081
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MO",
+  "Fiscal Year": 2019,
+  "Amount": 320402670
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MO",
+  "Fiscal Year": 2020,
+  "Amount": 35500539
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MO",
+  "Fiscal Year": 2021,
+  "Amount": 67479344
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MO",
+  "Fiscal Year": 2022,
+  "Amount": -120525092
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MT",
+  "Fiscal Year": 2018,
+  "Amount": 47512795
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MT",
+  "Fiscal Year": 2019,
+  "Amount": 52412424
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MT",
+  "Fiscal Year": 2020,
+  "Amount": -3043962
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MT",
+  "Fiscal Year": 2021,
+  "Amount": 491038730
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "MT",
+  "Fiscal Year": 2022,
+  "Amount": 53140577
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NE",
+  "Fiscal Year": 2018,
+  "Amount": -42741193
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NE",
+  "Fiscal Year": 2019,
+  "Amount": 31403249
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NE",
+  "Fiscal Year": 2020,
+  "Amount": 2624707
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NE",
+  "Fiscal Year": 2021,
+  "Amount": -109473645
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NE",
+  "Fiscal Year": 2022,
+  "Amount": -173859004
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NV",
+  "Fiscal Year": 2018,
+  "Amount": 20307500
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NV",
+  "Fiscal Year": 2019,
+  "Amount": 17740477
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NV",
+  "Fiscal Year": 2020,
+  "Amount": 116217021
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NV",
+  "Fiscal Year": 2021,
+  "Amount": 65581379
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NV",
+  "Fiscal Year": 2022,
+  "Amount": 121591573
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NH",
+  "Fiscal Year": 2018,
+  "Amount": 122086
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NH",
+  "Fiscal Year": 2019,
+  "Amount": 78355
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NH",
+  "Fiscal Year": 2020,
+  "Amount": 102222
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NH",
+  "Fiscal Year": 2021,
+  "Amount": 62539
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NH",
+  "Fiscal Year": 2022,
+  "Amount": -171436
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NJ",
+  "Fiscal Year": 2018,
+  "Amount": 8045227
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NJ",
+  "Fiscal Year": 2019,
+  "Amount": 4418463
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NJ",
+  "Fiscal Year": 2020,
+  "Amount": 708060
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NJ",
+  "Fiscal Year": 2021,
+  "Amount": -579885
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NJ",
+  "Fiscal Year": 2022,
+  "Amount": -2283151
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NM",
+  "Fiscal Year": 2018,
+  "Amount": 40322109
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NM",
+  "Fiscal Year": 2019,
+  "Amount": 26887565
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NM",
+  "Fiscal Year": 2020,
+  "Amount": 103596957
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NM",
+  "Fiscal Year": 2021,
+  "Amount": 87330368
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NM",
+  "Fiscal Year": 2022,
+  "Amount": 96444426
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NY",
+  "Fiscal Year": 2018,
+  "Amount": 6768332
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NY",
+  "Fiscal Year": 2019,
+  "Amount": 60834890
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NY",
+  "Fiscal Year": 2020,
+  "Amount": 16601470
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NY",
+  "Fiscal Year": 2021,
+  "Amount": 9691609
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NY",
+  "Fiscal Year": 2022,
+  "Amount": -14599745
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NC",
+  "Fiscal Year": 2018,
+  "Amount": 303659125
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NC",
+  "Fiscal Year": 2019,
+  "Amount": 185121520
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NC",
+  "Fiscal Year": 2020,
+  "Amount": 266690560
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NC",
+  "Fiscal Year": 2021,
+  "Amount": 76602186
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "NC",
+  "Fiscal Year": 2022,
+  "Amount": -90621730
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ND",
+  "Fiscal Year": 2018,
+  "Amount": 54437195
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ND",
+  "Fiscal Year": 2019,
+  "Amount": 664630753
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ND",
+  "Fiscal Year": 2020,
+  "Amount": 764547696
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ND",
+  "Fiscal Year": 2021,
+  "Amount": 1456936232
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "ND",
+  "Fiscal Year": 2022,
+  "Amount": 271325862
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OH",
+  "Fiscal Year": 2018,
+  "Amount": -36603266
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OH",
+  "Fiscal Year": 2019,
+  "Amount": 422971181
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OH",
+  "Fiscal Year": 2020,
+  "Amount": -10185217
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OH",
+  "Fiscal Year": 2021,
+  "Amount": -103543489
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OH",
+  "Fiscal Year": 2022,
+  "Amount": -131569040
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OK",
+  "Fiscal Year": 2018,
+  "Amount": 139974746
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OK",
+  "Fiscal Year": 2019,
+  "Amount": 64489977
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OK",
+  "Fiscal Year": 2020,
+  "Amount": 50768490
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OK",
+  "Fiscal Year": 2021,
+  "Amount": 32772121
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OK",
+  "Fiscal Year": 2022,
+  "Amount": 264070658
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OR",
+  "Fiscal Year": 2018,
+  "Amount": 13857033
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OR",
+  "Fiscal Year": 2019,
+  "Amount": 22053205
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OR",
+  "Fiscal Year": 2020,
+  "Amount": 60256264
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OR",
+  "Fiscal Year": 2021,
+  "Amount": 127004161
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "OR",
+  "Fiscal Year": 2022,
+  "Amount": -12480311
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "PA",
+  "Fiscal Year": 2018,
+  "Amount": 25672164
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "PA",
+  "Fiscal Year": 2019,
+  "Amount": 18941807
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "PA",
+  "Fiscal Year": 2020,
+  "Amount": 48559594
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "PA",
+  "Fiscal Year": 2021,
+  "Amount": 4807370
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "PA",
+  "Fiscal Year": 2022,
+  "Amount": -23980597
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "RI",
+  "Fiscal Year": 2018,
+  "Amount": 94061
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "RI",
+  "Fiscal Year": 2019,
+  "Amount": 81376
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "RI",
+  "Fiscal Year": 2020,
+  "Amount": 300652
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "RI",
+  "Fiscal Year": 2021,
+  "Amount": 129176
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "RI",
+  "Fiscal Year": 2022,
+  "Amount": -43135
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SC",
+  "Fiscal Year": 2018,
+  "Amount": 71711220
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SC",
+  "Fiscal Year": 2019,
+  "Amount": 70132670
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SC",
+  "Fiscal Year": 2020,
+  "Amount": 66730834
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SC",
+  "Fiscal Year": 2021,
+  "Amount": -8694129
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SC",
+  "Fiscal Year": 2022,
+  "Amount": -26168668
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SD",
+  "Fiscal Year": 2018,
+  "Amount": 101968937
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SD",
+  "Fiscal Year": 2019,
+  "Amount": 902398630
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SD",
+  "Fiscal Year": 2020,
+  "Amount": -71789044
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SD",
+  "Fiscal Year": 2021,
+  "Amount": 460065063
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "SD",
+  "Fiscal Year": 2022,
+  "Amount": 26237975
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TN",
+  "Fiscal Year": 2018,
+  "Amount": 23766702
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TN",
+  "Fiscal Year": 2019,
+  "Amount": 34468105
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TN",
+  "Fiscal Year": 2020,
+  "Amount": 32795792
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TN",
+  "Fiscal Year": 2021,
+  "Amount": 4049920
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TN",
+  "Fiscal Year": 2022,
+  "Amount": -30847933
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TX",
+  "Fiscal Year": 2018,
+  "Amount": 1278955149
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TX",
+  "Fiscal Year": 2019,
+  "Amount": 891001954
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TX",
+  "Fiscal Year": 2020,
+  "Amount": 1190294692
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TX",
+  "Fiscal Year": 2021,
+  "Amount": 814230544
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "TX",
+  "Fiscal Year": 2022,
+  "Amount": 2075285764
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "UT",
+  "Fiscal Year": 2018,
+  "Amount": 11752982
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "UT",
+  "Fiscal Year": 2019,
+  "Amount": 7524106
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "UT",
+  "Fiscal Year": 2020,
+  "Amount": 43647832
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "UT",
+  "Fiscal Year": 2021,
+  "Amount": 38600702
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "UT",
+  "Fiscal Year": 2022,
+  "Amount": 39940354
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VT",
+  "Fiscal Year": 2018,
+  "Amount": 332498
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VT",
+  "Fiscal Year": 2019,
+  "Amount": 2351171
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VT",
+  "Fiscal Year": 2020,
+  "Amount": 1183679
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VT",
+  "Fiscal Year": 2021,
+  "Amount": 852828
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VT",
+  "Fiscal Year": 2022,
+  "Amount": -1405180
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VA",
+  "Fiscal Year": 2018,
+  "Amount": 25139219
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VA",
+  "Fiscal Year": 2019,
+  "Amount": 25916632
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VA",
+  "Fiscal Year": 2020,
+  "Amount": 43094730
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VA",
+  "Fiscal Year": 2021,
+  "Amount": 8829035
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "VA",
+  "Fiscal Year": 2022,
+  "Amount": -29385795
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WA",
+  "Fiscal Year": 2018,
+  "Amount": 59038287
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WA",
+  "Fiscal Year": 2019,
+  "Amount": 168471399
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WA",
+  "Fiscal Year": 2020,
+  "Amount": 100289113
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WA",
+  "Fiscal Year": 2021,
+  "Amount": 355169539
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WA",
+  "Fiscal Year": 2022,
+  "Amount": -77711220
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WV",
+  "Fiscal Year": 2018,
+  "Amount": 1034799
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WV",
+  "Fiscal Year": 2019,
+  "Amount": 130799
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WV",
+  "Fiscal Year": 2020,
+  "Amount": 1577602
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WV",
+  "Fiscal Year": 2021,
+  "Amount": 1153104
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WV",
+  "Fiscal Year": 2022,
+  "Amount": -1099030
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WI",
+  "Fiscal Year": 2018,
+  "Amount": 40720853
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WI",
+  "Fiscal Year": 2019,
+  "Amount": 171653559
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WI",
+  "Fiscal Year": 2020,
+  "Amount": 254368
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WI",
+  "Fiscal Year": 2021,
+  "Amount": -36329273
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WI",
+  "Fiscal Year": 2022,
+  "Amount": -122455361
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WY",
+  "Fiscal Year": 2018,
+  "Amount": 3756488
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WY",
+  "Fiscal Year": 2019,
+  "Amount": 10217590
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WY",
+  "Fiscal Year": 2020,
+  "Amount": 19911975
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WY",
+  "Fiscal Year": 2021,
+  "Amount": 17467451
+ },
+ {
+  "Title": "Crop Insurance",
+  "State": "WY",
+  "Fiscal Year": 2022,
+  "Amount": 18209128
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AL",
+  "Fiscal Year": 2018,
+  "Amount": 1084563290
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AL",
+  "Fiscal Year": 2019,
+  "Amount": 1032064886
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AL",
+  "Fiscal Year": 2020,
+  "Amount": 1359495890
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AL",
+  "Fiscal Year": 2021,
+  "Amount": 1974053519
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AL",
+  "Fiscal Year": 2022,
+  "Amount": 1630521042
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AK",
+  "Fiscal Year": 2018,
+  "Amount": 187357117
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AK",
+  "Fiscal Year": 2019,
+  "Amount": 171091672
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AK",
+  "Fiscal Year": 2020,
+  "Amount": 198298992
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AK",
+  "Fiscal Year": 2021,
+  "Amount": 288045258
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AK",
+  "Fiscal Year": 2022,
+  "Amount": 259341628
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AZ",
+  "Fiscal Year": 2018,
+  "Amount": 1210429898
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AZ",
+  "Fiscal Year": 2019,
+  "Amount": 1146712214
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AZ",
+  "Fiscal Year": 2020,
+  "Amount": 1469174725
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AZ",
+  "Fiscal Year": 2021,
+  "Amount": 2175824745
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AZ",
+  "Fiscal Year": 2022,
+  "Amount": 1540400693
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AR",
+  "Fiscal Year": 2018,
+  "Amount": 480472657
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AR",
+  "Fiscal Year": 2019,
+  "Amount": 460333605
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AR",
+  "Fiscal Year": 2020,
+  "Amount": 660915016
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AR",
+  "Fiscal Year": 2021,
+  "Amount": 765794046
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "AR",
+  "Fiscal Year": 2022,
+  "Amount": 416532641
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CA",
+  "Fiscal Year": 2018,
+  "Amount": 6332717643
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CA",
+  "Fiscal Year": 2019,
+  "Amount": 5977281299
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CA",
+  "Fiscal Year": 2020,
+  "Amount": 7818586485
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CA",
+  "Fiscal Year": 2021,
+  "Amount": 11243441465
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CA",
+  "Fiscal Year": 2022,
+  "Amount": 10673503815
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CO",
+  "Fiscal Year": 2018,
+  "Amount": 668610833
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CO",
+  "Fiscal Year": 2019,
+  "Amount": 639000457
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CO",
+  "Fiscal Year": 2020,
+  "Amount": 912978201
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CO",
+  "Fiscal Year": 2021,
+  "Amount": 1304761706
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CO",
+  "Fiscal Year": 2022,
+  "Amount": 1120062243
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CT",
+  "Fiscal Year": 2018,
+  "Amount": 614967955
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CT",
+  "Fiscal Year": 2019,
+  "Amount": 584718600
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CT",
+  "Fiscal Year": 2020,
+  "Amount": 721754999
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CT",
+  "Fiscal Year": 2021,
+  "Amount": 980157323
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "CT",
+  "Fiscal Year": 2022,
+  "Amount": 866394478
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "DE",
+  "Fiscal Year": 2018,
+  "Amount": 196899033
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "DE",
+  "Fiscal Year": 2019,
+  "Amount": 178138585
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "DE",
+  "Fiscal Year": 2020,
+  "Amount": 215100949
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "DE",
+  "Fiscal Year": 2021,
+  "Amount": 288020710
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "DE",
+  "Fiscal Year": 2022,
+  "Amount": 246500635
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "FL",
+  "Fiscal Year": 2018,
+  "Amount": 5763762595
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "FL",
+  "Fiscal Year": 2019,
+  "Amount": 4035386245
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "FL",
+  "Fiscal Year": 2020,
+  "Amount": 6007542066
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "FL",
+  "Fiscal Year": 2021,
+  "Amount": 7924263325
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "FL",
+  "Fiscal Year": 2022,
+  "Amount": 3860207198
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "GA",
+  "Fiscal Year": 2018,
+  "Amount": 2336788286
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "GA",
+  "Fiscal Year": 2019,
+  "Amount": 2115101241
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "GA",
+  "Fiscal Year": 2020,
+  "Amount": 2906208820
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "GA",
+  "Fiscal Year": 2021,
+  "Amount": 4085504054
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "GA",
+  "Fiscal Year": 2022,
+  "Amount": 3386489702
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "HI",
+  "Fiscal Year": 2018,
+  "Amount": 469433045
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "HI",
+  "Fiscal Year": 2019,
+  "Amount": 448431408
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "HI",
+  "Fiscal Year": 2020,
+  "Amount": 563931492
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "HI",
+  "Fiscal Year": 2021,
+  "Amount": 944131080
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "HI",
+  "Fiscal Year": 2022,
+  "Amount": 684284375
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ID",
+  "Fiscal Year": 2018,
+  "Amount": 199514037
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ID",
+  "Fiscal Year": 2019,
+  "Amount": 192918233
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ID",
+  "Fiscal Year": 2020,
+  "Amount": 194520346
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ID",
+  "Fiscal Year": 2021,
+  "Amount": 258380769
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ID",
+  "Fiscal Year": 2022,
+  "Amount": 165414580
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IL",
+  "Fiscal Year": 2018,
+  "Amount": 2777948512
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IL",
+  "Fiscal Year": 2019,
+  "Amount": 2646035880
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IL",
+  "Fiscal Year": 2020,
+  "Amount": 3381674266
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IL",
+  "Fiscal Year": 2021,
+  "Amount": 5099888484
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IL",
+  "Fiscal Year": 2022,
+  "Amount": 4278348791
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IN",
+  "Fiscal Year": 2018,
+  "Amount": 867533147
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IN",
+  "Fiscal Year": 2019,
+  "Amount": 819644875
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IN",
+  "Fiscal Year": 2020,
+  "Amount": 1091236875
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IN",
+  "Fiscal Year": 2021,
+  "Amount": 1619482719
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IN",
+  "Fiscal Year": 2022,
+  "Amount": 1226153509
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IA",
+  "Fiscal Year": 2018,
+  "Amount": 446259982
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IA",
+  "Fiscal Year": 2019,
+  "Amount": 429315218
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IA",
+  "Fiscal Year": 2020,
+  "Amount": 545552128
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IA",
+  "Fiscal Year": 2021,
+  "Amount": 727003312
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "IA",
+  "Fiscal Year": 2022,
+  "Amount": 482247224
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KS",
+  "Fiscal Year": 2018,
+  "Amount": 293539988
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KS",
+  "Fiscal Year": 2019,
+  "Amount": 265322548
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KS",
+  "Fiscal Year": 2020,
+  "Amount": 336631296
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KS",
+  "Fiscal Year": 2021,
+  "Amount": 488517358
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KS",
+  "Fiscal Year": 2022,
+  "Amount": 419892517
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KY",
+  "Fiscal Year": 2018,
+  "Amount": 853986982
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KY",
+  "Fiscal Year": 2019,
+  "Amount": 739297747
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KY",
+  "Fiscal Year": 2020,
+  "Amount": 997788980
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KY",
+  "Fiscal Year": 2021,
+  "Amount": 1610391177
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "KY",
+  "Fiscal Year": 2022,
+  "Amount": 1017207481
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "LA",
+  "Fiscal Year": 2018,
+  "Amount": 1297321641
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "LA",
+  "Fiscal Year": 2019,
+  "Amount": 1214657938
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "LA",
+  "Fiscal Year": 2020,
+  "Amount": 1576364622
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "LA",
+  "Fiscal Year": 2021,
+  "Amount": 2462801412
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "LA",
+  "Fiscal Year": 2022,
+  "Amount": 1839596606
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ME",
+  "Fiscal Year": 2018,
+  "Amount": 218217647
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ME",
+  "Fiscal Year": 2019,
+  "Amount": 203630527
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ME",
+  "Fiscal Year": 2020,
+  "Amount": 277026746
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ME",
+  "Fiscal Year": 2021,
+  "Amount": 409705765
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ME",
+  "Fiscal Year": 2022,
+  "Amount": 383053536
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MD",
+  "Fiscal Year": 2018,
+  "Amount": 910098604
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MD",
+  "Fiscal Year": 2019,
+  "Amount": 878649666
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MD",
+  "Fiscal Year": 2020,
+  "Amount": 1270867930
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MD",
+  "Fiscal Year": 2021,
+  "Amount": 2146479444
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MD",
+  "Fiscal Year": 2022,
+  "Amount": 1677699095
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MA",
+  "Fiscal Year": 2018,
+  "Amount": 1159118509
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MA",
+  "Fiscal Year": 2019,
+  "Amount": 1131148466
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MA",
+  "Fiscal Year": 2020,
+  "Amount": 1472070728
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MA",
+  "Fiscal Year": 2021,
+  "Amount": 2350041332
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MA",
+  "Fiscal Year": 2022,
+  "Amount": 2368956777.5371
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MI",
+  "Fiscal Year": 2018,
+  "Amount": 1894038446
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MI",
+  "Fiscal Year": 2019,
+  "Amount": 1701430344
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MI",
+  "Fiscal Year": 2020,
+  "Amount": 2296880243
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MI",
+  "Fiscal Year": 2021,
+  "Amount": 3246391707
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MI",
+  "Fiscal Year": 2022,
+  "Amount": 2925977848
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MN",
+  "Fiscal Year": 2018,
+  "Amount": 544420005
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MN",
+  "Fiscal Year": 2019,
+  "Amount": 509464759
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MN",
+  "Fiscal Year": 2020,
+  "Amount": 959125365
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MN",
+  "Fiscal Year": 2021,
+  "Amount": 1985655426
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MN",
+  "Fiscal Year": 2022,
+  "Amount": 1133283549
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MS",
+  "Fiscal Year": 2018,
+  "Amount": 679722657
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MS",
+  "Fiscal Year": 2019,
+  "Amount": 605780127
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MS",
+  "Fiscal Year": 2020,
+  "Amount": 772290269
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MS",
+  "Fiscal Year": 2021,
+  "Amount": 1066435430
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MS",
+  "Fiscal Year": 2022,
+  "Amount": 687691191
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MO",
+  "Fiscal Year": 2018,
+  "Amount": 1061334229
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MO",
+  "Fiscal Year": 2019,
+  "Amount": 996212141
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MO",
+  "Fiscal Year": 2020,
+  "Amount": 1324976208
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MO",
+  "Fiscal Year": 2021,
+  "Amount": 1734889161
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MO",
+  "Fiscal Year": 2022,
+  "Amount": 965179521
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MT",
+  "Fiscal Year": 2018,
+  "Amount": 158389738
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MT",
+  "Fiscal Year": 2019,
+  "Amount": 146944184
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MT",
+  "Fiscal Year": 2020,
+  "Amount": 192530803
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MT",
+  "Fiscal Year": 2021,
+  "Amount": 228795841
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "MT",
+  "Fiscal Year": 2022,
+  "Amount": 119821087
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NE",
+  "Fiscal Year": 2018,
+  "Amount": 229206174
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NE",
+  "Fiscal Year": 2019,
+  "Amount": 221960791
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NE",
+  "Fiscal Year": 2020,
+  "Amount": 254347798
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NE",
+  "Fiscal Year": 2021,
+  "Amount": 356554249
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NE",
+  "Fiscal Year": 2022,
+  "Amount": 200879585
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NV",
+  "Fiscal Year": 2018,
+  "Amount": 614241940
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NV",
+  "Fiscal Year": 2019,
+  "Amount": 587953503
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NV",
+  "Fiscal Year": 2020,
+  "Amount": 903103249
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NV",
+  "Fiscal Year": 2021,
+  "Amount": 1234696544
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NV",
+  "Fiscal Year": 2022,
+  "Amount": 1075678260
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NH",
+  "Fiscal Year": 2018,
+  "Amount": 101469828
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NH",
+  "Fiscal Year": 2019,
+  "Amount": 92889191
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NH",
+  "Fiscal Year": 2020,
+  "Amount": 116852942
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NH",
+  "Fiscal Year": 2021,
+  "Amount": 174557213
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NH",
+  "Fiscal Year": 2022,
+  "Amount": 150205628
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NJ",
+  "Fiscal Year": 2018,
+  "Amount": 1012654300
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NJ",
+  "Fiscal Year": 2019,
+  "Amount": 953558696
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NJ",
+  "Fiscal Year": 2020,
+  "Amount": 1288738288
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NJ",
+  "Fiscal Year": 2021,
+  "Amount": 2169432714
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NJ",
+  "Fiscal Year": 2022,
+  "Amount": 1979717206
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NM",
+  "Fiscal Year": 2018,
+  "Amount": 638421821
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NM",
+  "Fiscal Year": 2019,
+  "Amount": 632907856
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NM",
+  "Fiscal Year": 2020,
+  "Amount": 903755521
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NM",
+  "Fiscal Year": 2021,
+  "Amount": 1339883626
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NM",
+  "Fiscal Year": 2022,
+  "Amount": 1124011465
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NY",
+  "Fiscal Year": 2018,
+  "Amount": 4526970965
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NY",
+  "Fiscal Year": 2019,
+  "Amount": 4339617966
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NY",
+  "Fiscal Year": 2020,
+  "Amount": 5118950034
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NY",
+  "Fiscal Year": 2021,
+  "Amount": 7311543597
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NY",
+  "Fiscal Year": 2022,
+  "Amount": 6748101689
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NC",
+  "Fiscal Year": 2018,
+  "Amount": 1919051873
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NC",
+  "Fiscal Year": 2019,
+  "Amount": 1863656810
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NC",
+  "Fiscal Year": 2020,
+  "Amount": 2391518239
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NC",
+  "Fiscal Year": 2021,
+  "Amount": 3994650815
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "NC",
+  "Fiscal Year": 2022,
+  "Amount": 3637047482
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ND",
+  "Fiscal Year": 2018,
+  "Amount": 75391175
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ND",
+  "Fiscal Year": 2019,
+  "Amount": 68485818
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ND",
+  "Fiscal Year": 2020,
+  "Amount": 84360845
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ND",
+  "Fiscal Year": 2021,
+  "Amount": 113160074
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "ND",
+  "Fiscal Year": 2022,
+  "Amount": 68121886
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OH",
+  "Fiscal Year": 2018,
+  "Amount": 2078237006
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OH",
+  "Fiscal Year": 2019,
+  "Amount": 2020497444
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OH",
+  "Fiscal Year": 2020,
+  "Amount": 3099962149
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OH",
+  "Fiscal Year": 2021,
+  "Amount": 3865203855
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OH",
+  "Fiscal Year": 2022,
+  "Amount": 3235257448
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OK",
+  "Fiscal Year": 2018,
+  "Amount": 832653493
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OK",
+  "Fiscal Year": 2019,
+  "Amount": 819546294
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OK",
+  "Fiscal Year": 2020,
+  "Amount": 1056260544
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OK",
+  "Fiscal Year": 2021,
+  "Amount": 1472962209
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OK",
+  "Fiscal Year": 2022,
+  "Amount": 1370649965
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OR",
+  "Fiscal Year": 2018,
+  "Amount": 937798988
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OR",
+  "Fiscal Year": 2019,
+  "Amount": 884189650
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OR",
+  "Fiscal Year": 2020,
+  "Amount": 1170543331
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OR",
+  "Fiscal Year": 2021,
+  "Amount": 1847403478
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "OR",
+  "Fiscal Year": 2022,
+  "Amount": 1580867356
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "PA",
+  "Fiscal Year": 2018,
+  "Amount": 2592183684
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "PA",
+  "Fiscal Year": 2019,
+  "Amount": 2513696584
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "PA",
+  "Fiscal Year": 2020,
+  "Amount": 3249170462
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "PA",
+  "Fiscal Year": 2021,
+  "Amount": 5170214891
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "PA",
+  "Fiscal Year": 2022,
+  "Amount": 3700916539
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "RI",
+  "Fiscal Year": 2018,
+  "Amount": 259191919
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "RI",
+  "Fiscal Year": 2019,
+  "Amount": 244223564
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "RI",
+  "Fiscal Year": 2020,
+  "Amount": 278985653
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "RI",
+  "Fiscal Year": 2021,
+  "Amount": 378689563
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "RI",
+  "Fiscal Year": 2022,
+  "Amount": 318398356
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SC",
+  "Fiscal Year": 2018,
+  "Amount": 943922431
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SC",
+  "Fiscal Year": 2019,
+  "Amount": 854652751
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SC",
+  "Fiscal Year": 2020,
+  "Amount": 1101611441
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SC",
+  "Fiscal Year": 2021,
+  "Amount": 1550266093
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SC",
+  "Fiscal Year": 2022,
+  "Amount": 1356671596
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SD",
+  "Fiscal Year": 2018,
+  "Amount": 131112641
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SD",
+  "Fiscal Year": 2019,
+  "Amount": 121995672
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SD",
+  "Fiscal Year": 2020,
+  "Amount": 143860091
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SD",
+  "Fiscal Year": 2021,
+  "Amount": 177819200
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "SD",
+  "Fiscal Year": 2022,
+  "Amount": 107853508
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TN",
+  "Fiscal Year": 2018,
+  "Amount": 1424890904
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TN",
+  "Fiscal Year": 2019,
+  "Amount": 1307248122
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TN",
+  "Fiscal Year": 2020,
+  "Amount": 1774499562
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TN",
+  "Fiscal Year": 2021,
+  "Amount": 3094821635
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TN",
+  "Fiscal Year": 2022,
+  "Amount": 1449170424
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TX",
+  "Fiscal Year": 2018,
+  "Amount": 5525177455
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TX",
+  "Fiscal Year": 2019,
+  "Amount": 4767112796
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TX",
+  "Fiscal Year": 2020,
+  "Amount": 6300171765
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TX",
+  "Fiscal Year": 2021,
+  "Amount": 8751945285
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "TX",
+  "Fiscal Year": 2022,
+  "Amount": 7442848027
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "UT",
+  "Fiscal Year": 2018,
+  "Amount": 258536027
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "UT",
+  "Fiscal Year": 2019,
+  "Amount": 234552832
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "UT",
+  "Fiscal Year": 2020,
+  "Amount": 279594698
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "UT",
+  "Fiscal Year": 2021,
+  "Amount": 412957155
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "UT",
+  "Fiscal Year": 2022,
+  "Amount": 312580464
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VT",
+  "Fiscal Year": 2018,
+  "Amount": 106782062
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VT",
+  "Fiscal Year": 2019,
+  "Amount": 100248674
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VT",
+  "Fiscal Year": 2020,
+  "Amount": 117478730
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VT",
+  "Fiscal Year": 2021,
+  "Amount": 169353925
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VT",
+  "Fiscal Year": 2022,
+  "Amount": 148443497
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VA",
+  "Fiscal Year": 2018,
+  "Amount": 1051800978
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VA",
+  "Fiscal Year": 2019,
+  "Amount": 1002380166
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VA",
+  "Fiscal Year": 2020,
+  "Amount": 1331022987
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VA",
+  "Fiscal Year": 2021,
+  "Amount": 1901832165
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "VA",
+  "Fiscal Year": 2022,
+  "Amount": 1740898088
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WA",
+  "Fiscal Year": 2018,
+  "Amount": 1268734555
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WA",
+  "Fiscal Year": 2019,
+  "Amount": 1192380309
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WA",
+  "Fiscal Year": 2020,
+  "Amount": 1598425639
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WA",
+  "Fiscal Year": 2021,
+  "Amount": 2359661930
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WA",
+  "Fiscal Year": 2022,
+  "Amount": 1852775373
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WV",
+  "Fiscal Year": 2018,
+  "Amount": 440298715
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WV",
+  "Fiscal Year": 2019,
+  "Amount": 397899950
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WV",
+  "Fiscal Year": 2020,
+  "Amount": 518346256
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WV",
+  "Fiscal Year": 2021,
+  "Amount": 772297950
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WV",
+  "Fiscal Year": 2022,
+  "Amount": 653031865
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WI",
+  "Fiscal Year": 2018,
+  "Amount": 816882114
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WI",
+  "Fiscal Year": 2019,
+  "Amount": 778373061
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WI",
+  "Fiscal Year": 2020,
+  "Amount": 1104399935
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WI",
+  "Fiscal Year": 2021,
+  "Amount": 1964034853
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WI",
+  "Fiscal Year": 2022,
+  "Amount": 1568526275
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WY",
+  "Fiscal Year": 2018,
+  "Amount": 40676283
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WY",
+  "Fiscal Year": 2019,
+  "Amount": 36277115
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WY",
+  "Fiscal Year": 2020,
+  "Amount": 45870674
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WY",
+  "Fiscal Year": 2021,
+  "Amount": 73313685
+ },
+ {
+  "Title": "Supplemental Nutrition Assistance Program (SNAP)",
+  "State": "WY",
+  "Fiscal Year": 2022,
+  "Amount": 60617957
+ }
+]
