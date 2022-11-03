@@ -6,7 +6,7 @@ import forest from './images/forest.png';
 import News from './components/News';
 import Footer from './components/Footer';
 import LandingDisplay from './components/LandingDisplay';
-import LandingPageMap from './components/LandingPageMap';
+import LandingPageMapTab from './components/LandingPageMapTab';
 
 export default function LandingPage() {
     return (
@@ -14,6 +14,39 @@ export default function LandingPage() {
             <NavBar />
             <div style={{ position: 'relative' }}>
                 <CardMedia component="img" src={forest} sx={{ maxHeight: '500px' }} />
+                <Typography
+                    variant="h4"
+                    sx={{
+                        position: 'absolute',
+                        color: 'white',
+                        top: '20%',
+                        left: '10%'
+                    }}
+                >
+                    Using Existing Public Data To
+                </Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        position: 'absolute',
+                        color: 'white',
+                        top: '30%',
+                        left: '10%'
+                    }}
+                >
+                    Visualize Agricultural And
+                </Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        position: 'absolute',
+                        color: 'white',
+                        top: '40%',
+                        left: '10%'
+                    }}
+                >
+                    Conservation Policies
+                </Typography>
                 <Typography
                     sx={{
                         position: 'absolute',
@@ -23,13 +56,10 @@ export default function LandingPage() {
                     }}
                 >
                     In support of policy design efforts in the forthcoming 2023 Congressional Farm Bill reauthorization
-                    process.
+                    process
                 </Typography>
             </div>
-            <LandingPageMap programTitle="Title I: Commodities" />
-            <LandingPageMap programTitle="Title II: Conservation" />
-            <LandingPageMap programTitle="Crop Insurance" />
-            <LandingPageMap programTitle="Supplemental Nutrition Assistance Program (SNAP)" />
+            <LandingPageMapTab />
             <LandingDisplay />
             <News />
             <Footer />
