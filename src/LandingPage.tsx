@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 import LandingDisplay from './components/LandingDisplay';
 import LandingPageMapTab from './components/LandingPageMapTab';
 
-export default function LandingPage() {
+export default function LandingPage(): JSX.Element {
     return (
         <Box sx={{ width: '100%' }}>
             <NavBar />

@@ -21,7 +21,7 @@ function NCSALogo() {
     );
 }
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
     return (
         <Box>
             <Box

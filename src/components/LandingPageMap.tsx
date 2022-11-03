@@ -112,7 +112,7 @@ MapChart.propTypes = {
     title: PropTypes.string
 };
 
-const LandingPageMap = ({ programTitle }) => {
+const LandingPageMap = ({ programTitle }: { programTitle: string }): JSX.Element => {
     const [content, setContent] = useState('');
     return (
         <div>
@@ -120,10 +120,6 @@ const LandingPageMap = ({ programTitle }) => {
             <ReactTooltip>{content}</ReactTooltip>
         </div>
     );
-};
-
-LandingPageMap.propTypes = {
-    programTitle: PropTypes.string
 };
 
 export default LandingPageMap;

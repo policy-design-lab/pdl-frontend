@@ -34,7 +34,7 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-export default function LandingPageMapTab() {
+export default function LandingPageMapTab(): JSX.Element {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {

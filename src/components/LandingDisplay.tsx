@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import library from '../images/library.png';
 
-export default function LandingDisplay() {
+export default function LandingDisplay(): JSX.Element {
     return (
         <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
             <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>

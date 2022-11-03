@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { Button, Card, CardActions, CardContent, CardMedia } from '@mui/material';
 import forest from '../images/forest.png';
 
-export default function News() {
+export default function News(): JSX.Element {
     return (
         <Box sx={{ my: '10px' }}>
             <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>

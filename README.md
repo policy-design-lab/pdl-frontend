@@ -10,7 +10,7 @@ Use `npm start` to start the dev server.
 
 Use `npm run build` to create production build.
 
-- The dev server runs on port 8080.
+- The dev server runs on port 3000.
 - The bundle is put in `build` folder.
 - Babel presets are configured in `babel.config.json`.
 - The main entrypoint is `src/app.tsx`.
