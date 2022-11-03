@@ -6,9 +6,9 @@ import forest from '../images/forest.png';
 
 export default function News() {
     return (
-        <Box sx={{ my: '40px' }}>
-            <Typography variant="h4" display="block" align="center" sx={{ m: '20px' }}>
-                Related News
+        <Box sx={{ my: '10px' }}>
+            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>
+                <strong>Related News</strong>
             </Typography>
             <Box
                 sx={{

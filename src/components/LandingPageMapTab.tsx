@@ -14,20 +14,30 @@ function TabPanel(props: TabPanelProps) {
     const { value, index, title, ...other } = props;
 
     return (
-        <div role="tabpanel" hidden={value !== index} {...other}>
+        <Box role="tabpanel" hidden={value !== index} {...other} sx={{ mt: 3 }}>
             {value === index && (
-                <Box sx={{ width: '75%', m: 'auto' }}>
+                <Box
+                    sx={{
+                        width: '85%',
+                        m: 'auto',
+                        borderRight: 40,
+                        borderLeft: 40,
+                        borderTop: 20,
+                        borderBottom: 20,
+                        borderColor: 'grey.200'
+                    }}
+                >
                     <LandingPageMap programTitle={title} />
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }
 
 export default function LandingPageMapTab() {
     const [value, setValue] = React.useState(0);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 

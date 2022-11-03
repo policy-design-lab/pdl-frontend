@@ -29,9 +29,9 @@ export default function LandingPage() {
                     variant="h4"
                     sx={{
                         position: 'absolute',
-                        color: 'white',
                         top: '30%',
-                        left: '10%'
+                        left: '10%',
+                        color: 'warning.main'
                     }}
                 >
                     Visualize Agricultural And
@@ -40,7 +40,7 @@ export default function LandingPage() {
                     variant="h4"
                     sx={{
                         position: 'absolute',
-                        color: 'white',
+                        color: 'warning.main',
                         top: '40%',
                         left: '10%'
                     }}
