@@ -156,5 +156,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: ${{ env.TAGS }}
+          push: ${NCSAHUB_PUSH}
           build-args: |
             NPM_TOKEN=${{ secrets.GITHUB_TOKEN }}
