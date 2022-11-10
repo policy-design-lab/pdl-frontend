@@ -56,6 +56,9 @@
     }
   },
   "rules": {
+    "prettier/prettier": ["error",{
+      "endOfLine": "auto"}
+    ],
     "brace-style": [
       "error",
       "1tbs",
