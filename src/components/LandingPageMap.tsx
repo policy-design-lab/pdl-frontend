@@ -37,7 +37,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         <br />
                                         {records.map((record) => (
                                             <div key={record.State + record.Title + record['Fiscal Year']}>
-                                                {record['Fiscal Year']}: ${Number(record.Amount).toFixed(2)}
+                                                {record['Fiscal Year']}: ${Number(record.Amount/1000000.0).toFixed(2)}M
                                             </div>
                                         ))}
                                     </div>

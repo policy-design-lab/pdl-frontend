@@ -37,11 +37,11 @@ const MapChart = ({setTooltipContent}) => {
                                         <br />
                                         {records.map((record) => (
                                             <div key={record.State}>
-                                                2018: ${Number(record['2018 All Programs Total']).toFixed(2)}<br />
-                                                2019: ${Number(record['2019 All Programs Total']).toFixed(2)}<br />
-                                                2020: ${Number(record['2020 All Programs Total']).toFixed(2)}<br />
-                                                2021: ${Number(record['2021 All Programs Total']).toFixed(2)}<br />
-                                                2022: ${Number(record['2022 All Programs Total']).toFixed(2)}<br />
+                                                2018: ${Number(record['2018 All Programs Total']/1000000.0).toFixed(2)}M<br />
+                                                2019: ${Number(record['2019 All Programs Total']/1000000.0).toFixed(2)}M<br />
+                                                2020: ${Number(record['2020 All Programs Total']/1000000.0).toFixed(2)}M<br />
+                                                2021: ${Number(record['2021 All Programs Total']/1000000.0).toFixed(2)}M<br />
+                                                2022: ${Number(record['2022 All Programs Total']/1000000.0).toFixed(2)}M<br />
                                             </div>
                                         ))}
                                     </div>
