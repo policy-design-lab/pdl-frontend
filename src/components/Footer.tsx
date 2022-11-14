@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Button, CardMedia, Grid } from '@mui/material';
+import { CardMedia, Grid } from '@mui/material';
 import uiuc from '../images/uiuc.png';
 import ncsa from '../images/ncsa.png';
 
@@ -21,7 +21,7 @@ function NCSALogo() {
     );
 }
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
     return (
         <Box>
             <Box
@@ -71,7 +71,6 @@ export default function Footer() {
                         </Box>
                     </Grid>
                     <Grid item xs={4} sx={{ mt: 1 }}>
-                        <UIUCLogo />
                         <NCSALogo />
                     </Grid>
                 </Grid>

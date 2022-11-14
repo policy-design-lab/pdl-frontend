@@ -10,7 +10,8 @@ module.exports = merge(commonConfig, {
     devServer: {
         hot: true,
         host: 'localhost',
-        port: 8080,
+        port: 3000,
+        open: true,
         inline: true,
         stats: 'minimal',
         historyApiFallback: true,

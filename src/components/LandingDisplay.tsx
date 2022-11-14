@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import library from '../images/library.png';
 
-export default function LandingDisplay() {
+export default function LandingDisplay(): JSX.Element {
     return (
-        <Box sx={{ my: '40px' }}>
-            <Typography variant="h4" display="block" align="center" sx={{ m: '20px' }}>
-                About Us - Design Policy Lab
+        <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
+            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>
+                <strong>About Us - Design Policy Lab</strong>
             </Typography>
             <Box
                 sx={{
@@ -52,7 +52,12 @@ export default function LandingDisplay() {
                                 engagement.
                             </Typography>
 
-                            <Button size="large" variant="contained" href="/about-us" sx={{ borderRadius: 16, mt: 5 }}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                href="/about-us"
+                                sx={{ borderRadius: 16, mt: 5, backgroundColor: 'success.main' }}
+                            >
                                 Learn more
                             </Button>
                         </Box>

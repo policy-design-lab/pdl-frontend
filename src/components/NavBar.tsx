@@ -27,7 +27,7 @@ const theme = createTheme({
     }
 });
 
-export default function NavBar() {
+export default function NavBar(): JSX.Element {
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
