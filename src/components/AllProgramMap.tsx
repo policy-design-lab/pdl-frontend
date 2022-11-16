@@ -78,6 +78,7 @@ const MapChart = ({ setTooltipContent }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
+                                            default: { outline: 'none' },
                                             hover: {
                                                 fill: '#34b7eb',
                                                 outline: 'none'
