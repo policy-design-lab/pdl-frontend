@@ -84,11 +84,11 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         stroke="#FFF"
                                         style={{
                                             hover: {
-                                                fill: '#F53',
+                                                fill: '#34b7eb',
                                                 outline: 'none'
                                             },
                                             pressed: {
-                                                fill: '#E42',
+                                                fill: '#345feb',
                                                 outline: 'none'
                                             }
                                         }}
