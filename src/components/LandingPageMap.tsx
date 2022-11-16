@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
+import { scaleQuantile } from 'd3-scale';
 
 import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
 import summary from '../data/summary.json';
+import allPrograms from '../data/allPrograms.json';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -22,6 +24,27 @@ const offsets = {
 };
 
 const MapChart = ({ setTooltipContent, title }) => {
+    let searchKey = '';
+
+    switch (title) {
+        case 'Title I: Commodities':
+            searchKey = 'Title I Total';
+            break;
+        case 'Title II: Conservation':
+            searchKey = 'Title II Total';
+            break;
+        case 'Crop Insurance':
+            searchKey = 'Crop Insurance Total';
+            break;
+        case 'Supplemental Nutrition Assistance Program (SNAP)':
+            searchKey = 'SNAP Total';
+            break;
+    }
+
+    const colorScale = scaleQuantile()
+        .domain(allPrograms.map((d) => d[searchKey]))
+        .range(['#FFF9D8', '#E1F2C4', '#9FD9BA', '#1B9577', '#005A45']);
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -31,6 +54,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                             {geographies.map((geo) => {
                                 const cur = allStates.find((s) => s.val === geo.id);
                                 const records = summary.filter((s) => s.State === cur.id && s.Title === title);
+                                let total = 0;
+                                records.forEach((record) => {
+                                    total += record.Amount;
+                                });
                                 const hoverContent = (
                                     <div>
                                         Payments:
@@ -53,13 +80,9 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent('');
                                         }}
-                                        fill="#DDD"
+                                        fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: {
-                                                fill: '#D6D6DA',
-                                                outline: 'none'
-                                            },
                                             hover: {
                                                 fill: '#F53',
                                                 outline: 'none'
