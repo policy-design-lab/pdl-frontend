@@ -7,7 +7,7 @@ import forest from '../images/forest.png';
 export default function News(): JSX.Element {
     return (
         <Box sx={{ my: '10px' }}>
-            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>
+            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: '#2F7164' }}>
                 <strong>Related News</strong>
             </Typography>
             <Box
@@ -23,7 +23,7 @@ export default function News(): JSX.Element {
                 <Card sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
                             News
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
@@ -38,7 +38,7 @@ export default function News(): JSX.Element {
                 <Card sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
                             News
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
@@ -53,7 +53,7 @@ export default function News(): JSX.Element {
                 <Card sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
                             News
                         </Typography>
                         <Typography variant="body2" color="text.secondary">

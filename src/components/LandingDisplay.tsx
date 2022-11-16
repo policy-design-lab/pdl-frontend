@@ -6,7 +6,7 @@ import library from '../images/library.png';
 export default function LandingDisplay(): JSX.Element {
     return (
         <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
-            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: 'success.dark' }}>
+            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: '#2F7164' }}>
                 <strong>About Us - Design Policy Lab</strong>
             </Typography>
             <Box
@@ -34,7 +34,7 @@ export default function LandingDisplay(): JSX.Element {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Box sx={{ mx: 'auto', my: '10%', width: '80%' }}>
-                            <Typography sx={{ mt: 1 }}>
+                            <Typography sx={{ mt: 1, color: '#242424' }}>
                                 {/* eslint-disable-next-line max-len */}
                                 The Policy Design Lab is a collaboration with ACES Office of Research, iSEE, and NCSA,
                                 that will develop unique capabilities to translate, apply and integrate research from
@@ -43,7 +43,7 @@ export default function LandingDisplay(): JSX.Element {
                                 sustainability and climate change through the Farm Bill Mapping Initiative.
                             </Typography>
 
-                            <Typography display="block" sx={{ mt: 1 }}>
+                            <Typography display="block" sx={{ mt: 1, color: '#242424' }}>
                                 {/* eslint-disable-next-line max-len */}
                                 This Initiative will make use of computational simulation and optimization modeling,
                                 research and technology applied to federal policy design. It will develop functional and

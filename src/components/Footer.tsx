@@ -47,8 +47,7 @@ export default function Footer(): JSX.Element {
                 py: 3,
                 px: 2,
                 mt: 'auto',
-                backgroundColor: (theme) =>
-                    theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800]
+                backgroundColor: '#ECF0EE'
             }}
         >
             <Grid container>
@@ -62,28 +61,28 @@ export default function Footer(): JSX.Element {
                         }}
                     >
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2 }}>
+                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
                                 Farm Bill
                             </Typography>
-                            <Typography sx={{ mx: 2 }}>Farm Bill</Typography>
-                            <Typography sx={{ mx: 2 }}>Farm Bill</Typography>
-                            <Typography sx={{ mx: 2 }}>Farm Bill</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2 }}>
+                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
                                 Data Resources
                             </Typography>
-                            <Typography sx={{ mx: 2 }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2 }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2 }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2 }}>Data Resources</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2 }}>
+                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
                                 About Us
                             </Typography>
-                            <Typography sx={{ mx: 2 }}>About Us</Typography>
-                            <Typography sx={{ mx: 2 }}>About Us</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>About Us</Typography>
+                            <Typography sx={{ mx: 2, color: '#242424' }}>About Us</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
                             <ACESLogo />
