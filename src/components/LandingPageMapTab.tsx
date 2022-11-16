@@ -15,17 +15,12 @@ function TabPanel(props: TabPanelProps) {
     const { value, index, title, ...other } = props;
 
     return (
-        <Box role="tabpanel" hidden={value !== index} {...other} sx={{ mt: 3 }}>
+        <Box role="tabpanel" hidden={value !== index} {...other}>
             {value === index && (
                 <Box
                     sx={{
-                        width: '85%',
-                        m: 'auto',
-                        borderRight: 40,
-                        borderLeft: 40,
-                        borderTop: 20,
-                        borderBottom: 20,
-                        borderColor: 'grey.200'
+                        width: '70%',
+                        m: 'auto'
                     }}
                 >
                     {title === 'All Programs' ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
