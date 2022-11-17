@@ -44,7 +44,8 @@ export default function Footer(): JSX.Element {
         <Box
             component="footer"
             sx={{
-                mt: 'auto',
+                mt: 12,
+                pt: 3,
                 backgroundColor: '#ECF0EE'
             }}
         >
