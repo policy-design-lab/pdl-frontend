@@ -44,8 +44,6 @@ export default function Footer(): JSX.Element {
         <Box
             component="footer"
             sx={{
-                py: 3,
-                px: 2,
                 mt: 'auto',
                 backgroundColor: '#ECF0EE'
             }}
@@ -94,6 +92,19 @@ export default function Footer(): JSX.Element {
                         </Box>
                     </Box>
                 </Grid>
+            </Grid>
+            <Grid sx={{ display: 'flex', p: 1, bgcolor: '#2F7164' }}>
+                <Box sx={{ flexGrow: 1, ml: 10 }}>
+                    <Typography sx={{ color: '#FFFFFF' }}>
+                        COPYRIGHT © 2022 UNIVERSITY OF ILLINOIS. ALL RIGHTS RESERVED
+                    </Typography>
+                </Box>
+                <Box sx={{ mr: 3 }}>
+                    <Typography sx={{ color: '#FFFFFF' }}>PRIVACY STATEMENT & TERMS OF USE</Typography>
+                </Box>
+                <Box sx={{ mr: 3 }}>
+                    <Typography sx={{ color: '#FFFFFF' }}>IMAGE ATTRIBUTION</Typography>
+                </Box>
             </Grid>
         </Box>
     );
