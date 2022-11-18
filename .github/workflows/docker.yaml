@@ -92,7 +92,7 @@ jobs:
               push_tags="${push_tags}hub.ncsa.illinois.edu/farmdoc/pdl-frontend:${tag},"
             fi
             if [ "${GITHUB_PUSH}" == "true" ]; then
-              push_tags="${push_tags}ghcr.io/${OWNER}/farmdoc-pdl-frontend:${tag},"
+              push_tags="${push_tags}ghcr.io/${OWNER}/pdl-frontend:${tag},"
             fi
           done
 
