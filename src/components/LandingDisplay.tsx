@@ -33,7 +33,16 @@ export default function LandingDisplay(): JSX.Element {
                         <CardMedia component="img" src={library} />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Box sx={{ mx: 'auto', my: '10%', width: '80%' }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                mx: 'auto',
+                                my: 0,
+                                width: '80%',
+                                alignContent: 'center'
+                            }}
+                        >
                             <Typography sx={{ mt: 1, color: '#242424' }}>
                                 {/* eslint-disable-next-line max-len */}
                                 The Policy Design Lab is a collaboration with ACES Office of Research, iSEE, and NCSA,
@@ -56,7 +65,7 @@ export default function LandingDisplay(): JSX.Element {
                                 size="large"
                                 variant="contained"
                                 href="/about-us"
-                                sx={{ borderRadius: 16, mt: 5, backgroundColor: 'success.main' }}
+                                sx={{ borderRadius: 16, mt: 5, backgroundColor: 'success.main', maxWidth: 200 }}
                             >
                                 Learn more
                             </Button>
