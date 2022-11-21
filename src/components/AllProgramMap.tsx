@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
+import { scaleQuantile } from 'd3-scale';
 
 import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
@@ -22,6 +23,10 @@ const offsets = {
 };
 
 const MapChart = ({ setTooltipContent }) => {
+    const colorScale = scaleQuantile()
+        .domain(allPrograms.map((d) => d['18-22 All Programs Total']))
+        .range(['#FFF9D8', '#E1F2C4', '#9FD9BA', '#1B9577', '#005A45']);
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -31,6 +36,10 @@ const MapChart = ({ setTooltipContent }) => {
                             {geographies.map((geo) => {
                                 const cur = allStates.find((s) => s.val === geo.id);
                                 const records = allPrograms.filter((s) => s.State === cur.id);
+                                let total = 0;
+                                records.forEach((record) => {
+                                    total += record['18-22 All Programs Total'];
+                                });
                                 const hoverContent = (
                                     <div>
                                         Payments:
@@ -66,19 +75,16 @@ const MapChart = ({ setTooltipContent }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent('');
                                         }}
-                                        fill="#DDD"
+                                        fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: {
-                                                fill: '#D6D6DA',
-                                                outline: 'none'
-                                            },
+                                            default: { outline: 'none' },
                                             hover: {
-                                                fill: '#F53',
+                                                fill: '#34b7eb',
                                                 outline: 'none'
                                             },
                                             pressed: {
-                                                fill: '#E42',
+                                                fill: '#345feb',
                                                 outline: 'none'
                                             }
                                         }}

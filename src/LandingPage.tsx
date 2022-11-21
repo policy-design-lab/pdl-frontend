@@ -31,7 +31,7 @@ export default function LandingPage(): JSX.Element {
                         position: 'absolute',
                         top: '30%',
                         left: '10%',
-                        color: 'warning.main'
+                        color: '#FF8C22'
                     }}
                 >
                     Visualize Agricultural And
@@ -40,7 +40,7 @@ export default function LandingPage(): JSX.Element {
                     variant="h4"
                     sx={{
                         position: 'absolute',
-                        color: 'warning.main',
+                        color: '#FF8C22',
                         top: '40%',
                         left: '10%'
                     }}

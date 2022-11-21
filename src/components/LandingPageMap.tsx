@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
+import { scaleQuantile } from 'd3-scale';
 
 import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
 import summary from '../data/summary.json';
+import allPrograms from '../data/allPrograms.json';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -22,6 +24,52 @@ const offsets = {
 };
 
 const MapChart = ({ setTooltipContent, title }) => {
+    let searchKey = '';
+    let color1 = '';
+    let color2 = '';
+    let color3 = '';
+    let color4 = '';
+    let color5 = '';
+
+    switch (title) {
+        case 'Title I: Commodities':
+            searchKey = 'Title I Total';
+            color1 = '#F1EEF6';
+            color2 = '#BDC9E1';
+            color3 = '#74A9CF';
+            color4 = '#2B8CBE';
+            color5 = '#045A8D';
+            break;
+        case 'Title II: Conservation':
+            searchKey = 'Title II Total';
+            color1 = '#F0F9E8';
+            color2 = '#BAE4BC';
+            color3 = '#7BCCC4';
+            color4 = '#43A2CA';
+            color5 = '#0868AC';
+            break;
+        case 'Crop Insurance':
+            searchKey = 'Crop Insurance Total';
+            color1 = '#FFFFD3';
+            color2 = '#CCE8A9';
+            color3 = '#75CD76';
+            color4 = '#1A9940';
+            color5 = '#006837';
+            break;
+        case 'Supplemental Nutrition Assistance Program (SNAP)':
+            searchKey = 'SNAP Total';
+            color1 = '#F9F9D3';
+            color2 = '#F9D48B';
+            color3 = '#F59020';
+            color4 = '#D95F0E';
+            color5 = '#993404';
+            break;
+    }
+
+    const colorScale = scaleQuantile()
+        .domain(allPrograms.map((d) => d[searchKey]))
+        .range([color1, color2, color3, color4, color5]);
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -31,6 +79,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                             {geographies.map((geo) => {
                                 const cur = allStates.find((s) => s.val === geo.id);
                                 const records = summary.filter((s) => s.State === cur.id && s.Title === title);
+                                let total = 0;
+                                records.forEach((record) => {
+                                    total += record.Amount;
+                                });
                                 const hoverContent = (
                                     <div>
                                         Payments:
@@ -53,19 +105,16 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent('');
                                         }}
-                                        fill="#DDD"
+                                        fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: {
-                                                fill: '#D6D6DA',
-                                                outline: 'none'
-                                            },
+                                            default: { outline: 'none' },
                                             hover: {
-                                                fill: '#F53',
+                                                fill: '#34b7eb',
                                                 outline: 'none'
                                             },
                                             pressed: {
-                                                fill: '#E42',
+                                                fill: '#345feb',
                                                 outline: 'none'
                                             }
                                         }}
