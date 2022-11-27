@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 const drawerWidth = 240;
-const navItems = ['FARM BILL', 'MAP DATA SOURCE', 'ABOUT US'];
+const navItems = ['HOME', 'EXPLORE FARM BILL DATA', 'ABOUT PDL'];
 const theme = createTheme({
     components: {
         MuiAppBar: {
@@ -55,7 +55,7 @@ export default function NavBar(): JSX.Element {
     return (
         <Box sx={{ display: 'flex' }}>
             <ThemeProvider theme={theme}>
-                <AppBar component="nav" sx={{ position: 'relative' }}>
+                <AppBar variant="outlined" component="nav" sx={{ position: 'relative' }}>
                     <Toolbar>
                         <IconButton
                             color="inherit"

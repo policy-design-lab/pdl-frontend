@@ -20,7 +20,7 @@ export default function News(): JSX.Element {
                     borderRadius: 1
                 }}
             >
-                <Card sx={{ maxWidth: 345 }}>
+                <Card variant="outlined" sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
@@ -35,7 +35,7 @@ export default function News(): JSX.Element {
                         <Button size="small">Learn More</Button>
                     </CardActions>
                 </Card>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card variant="outlined" sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
@@ -50,7 +50,7 @@ export default function News(): JSX.Element {
                         <Button size="small">Learn More</Button>
                     </CardActions>
                 </Card>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card variant="outlined" sx={{ maxWidth: 345 }}>
                     <CardMedia component="img" height="140" image={forest} />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>

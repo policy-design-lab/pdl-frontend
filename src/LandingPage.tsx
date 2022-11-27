@@ -13,7 +13,7 @@ export default function LandingPage(): JSX.Element {
         <Box sx={{ width: '100%' }}>
             <NavBar />
             <div style={{ position: 'relative' }}>
-                <CardMedia component="img" src={forest} sx={{ maxHeight: '500px' }} />
+                <CardMedia component="img" src={forest} sx={{ maxHeight: '650px' }} />
                 <Typography
                     variant="h4"
                     sx={{
