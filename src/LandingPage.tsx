@@ -15,39 +15,43 @@ export default function LandingPage(): JSX.Element {
             <div style={{ position: 'relative' }}>
                 <CardMedia component="img" src={forest} sx={{ maxHeight: '650px' }} />
                 <Typography
-                    variant="h4"
+                    variant="h3"
                     sx={{
                         position: 'absolute',
                         color: 'white',
-                        top: '20%',
-                        left: '10%'
-                    }}
-                >
-                    Using Existing Public Data To
-                </Typography>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        position: 'absolute',
                         top: '30%',
-                        left: '10%',
-                        color: '#FF8C22'
-                    }}
-                >
-                    Visualize Agricultural And
-                </Typography>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        position: 'absolute',
-                        color: '#FF8C22',
-                        top: '40%',
                         left: '10%'
                     }}
                 >
-                    Conservation Policies
+                    <strong>Visualizing Policy</strong>
                 </Typography>
                 <Typography
+                    variant="h3"
+                    sx={{
+                        position: 'absolute',
+                        top: '40%',
+                        left: '10%',
+                        color: 'white'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row'
+                        }}
+                    >
+                        <Box>
+                            <Typography variant="h3" sx={{ mr: 1 }}>
+                                <strong>Design:</strong>
+                            </Typography>
+                        </Box>
+                        <Box sx={{ color: '#FF8C22' }}>
+                            <strong>The Farm Bill</strong>
+                        </Box>
+                    </Box>
+                </Typography>
+                <Typography
+                    variant="h6"
                     sx={{
                         position: 'absolute',
                         color: 'white',
@@ -55,8 +59,18 @@ export default function LandingPage(): JSX.Element {
                         left: '10%'
                     }}
                 >
-                    In support of policy design efforts in the forthcoming 2023 Congressional Farm Bill reauthorization
-                    process
+                    Using public data and computational resources to understand federal
+                </Typography>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        position: 'absolute',
+                        color: 'white',
+                        top: '55%',
+                        left: '10%'
+                    }}
+                >
+                    agricultural, conservation and food policies
                 </Typography>
             </div>
             <LandingPageMapTab />
