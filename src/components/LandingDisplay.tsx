@@ -1,14 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import library from '../images/library.png';
+import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
     return (
         <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
-            <Typography variant="h4" display="block" align="center" sx={{ m: '20px', color: '#2F7164' }}>
-                <strong>About Us - Design Policy Lab</strong>
-            </Typography>
             <Box
                 sx={{
                     display: 'flex',
@@ -43,22 +42,20 @@ export default function LandingDisplay(): JSX.Element {
                                 alignContent: 'center'
                             }}
                         >
-                            <Typography sx={{ mt: 1, color: '#242424' }}>
+                            <Typography variant="h6" className="allSmallCaps">
+                                <strong>Learn more about</strong>
+                            </Typography>
+                            <Typography variant="h4" className="smallCaps">
+                                <strong>Policy Design Lab</strong>
+                            </Typography>
+                            <Divider />
+                            <Typography display="block" sx={{ mt: 1, color: '#242424' }}>
                                 {/* eslint-disable-next-line max-len */}
                                 The Policy Design Lab is a collaboration with ACES Office of Research, iSEE, and NCSA,
                                 that will develop unique capabilities to translate, apply and integrate research from
                                 multiple disciplines to the evaluation of existing federal policy and to the development
                                 of federal policy concepts or ideas, beginning with agricultural conservation,
                                 sustainability and climate change through the Farm Bill Mapping Initiative.
-                            </Typography>
-
-                            <Typography display="block" sx={{ mt: 1, color: '#242424' }}>
-                                {/* eslint-disable-next-line max-len */}
-                                This Initiative will make use of computational simulation and optimization modeling,
-                                research and technology applied to federal policy design. It will develop functional and
-                                adaptable models for policy decision making by transdisciplinary teams of scholars to
-                                maximize the University of Illinois System’s impacts on policy scholarship and public
-                                engagement.
                             </Typography>
 
                             <Button
