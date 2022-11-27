@@ -2,6 +2,7 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 import LandingPageMap from './LandingPageMap';
 import AllProgramMap from './AllProgramMap';
 import ColorLegend from './ColorLegend';
@@ -86,6 +87,14 @@ export default function LandingPageMapTab(): JSX.Element {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} centered>
+                    <Box>
+                        <Typography variant="inherit" className="allSmallCaps" sx={{ mt: 1 }}>
+                            Map visualization
+                        </Typography>
+                        <Typography variant="h5" className="smallCaps">
+                            <strong>Farm Bill Data</strong>
+                        </Typography>
+                    </Box>
                     <Tab label="All Programs" />
                     <Tab label="Title I: Commodities" />
                     <Tab label="Title II: Conservation" />
@@ -94,10 +103,11 @@ export default function LandingPageMapTab(): JSX.Element {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0} title="All Programs" />
-            <TabPanel value={value} index={1} title="Title I: Commodities" />
-            <TabPanel value={value} index={2} title="Title II: Conservation" />
-            <TabPanel value={value} index={3} title="Crop Insurance" />
-            <TabPanel value={value} index={4} title="Supplemental Nutrition Assistance Program (SNAP)" />
+            <TabPanel value={value} index={1} title="All Programs" />
+            <TabPanel value={value} index={2} title="Title I: Commodities" />
+            <TabPanel value={value} index={3} title="Title II: Conservation" />
+            <TabPanel value={value} index={4} title="Crop Insurance" />
+            <TabPanel value={value} index={5} title="Supplemental Nutrition Assistance Program (SNAP)" />
         </Box>
     );
 }

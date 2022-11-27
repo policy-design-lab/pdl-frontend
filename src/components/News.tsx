@@ -70,6 +70,21 @@ export default function News(): JSX.Element {
                         <Button size="small">Learn More</Button>
                     </CardActions>
                 </Card>
+                <Card variant="outlined" sx={{ maxWidth: 345 }}>
+                    <CardMedia component="img" height="140" image={forest} />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div" sx={{ color: '#242424' }}>
+                            News
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            placeholder
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small">Share</Button>
+                        <Button size="small">Learn More</Button>
+                    </CardActions>
+                </Card>
             </Box>
         </Box>
     );
