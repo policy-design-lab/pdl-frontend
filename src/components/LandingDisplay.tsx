@@ -2,12 +2,66 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import library from '../images/library.png';
 import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
     return (
         <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
+            <div style={{ position: 'relative' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        p: 1,
+                        m: 1,
+                        bgcolor: '#ECF0EE',
+                        my: 15
+                    }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: -15,
+                            left: '70%'
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 40, borderRadius: 0 }}
+                            disableElevation
+                        >
+                            Explore Maps of Total Farm Bill <ArrowForwardIcon />
+                        </Button>
+                    </div>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '85%'
+                        }}
+                    >
+                        <Box sx={{ mt: 5 }}>
+                            <Typography>
+                                <strong>What is Farm Bill?</strong>
+                            </Typography>
+                        </Box>
+                        <Box sx={{ width: '100%' }}>
+                            <Typography sx={{ my: 5 }}>
+                                Federal agricultural, conservation and food assistance policy is periodically
+                                reauthorized in omnibus legislation commonly known as the Farm Bill, with federal
+                                mandatory outlays exceeding $100 billion annually. The Farm Bill authorizes 4 major
+                                categories of mandatory spending programs: programs: commodities; conservation
+                                assistance; crop insurance; and the Supplemental Nutrition Nutrition Program (SNAP)
+                                which provides food assistance to low income families. The most recent reauthorization
+                                was the Agricultural Improvement Act of 2018 and is scheduled to expire in 2023,
+                                requiring a reauthorization debate in Congress.
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </div>
             <Box
                 sx={{
                     display: 'flex',
@@ -37,7 +91,7 @@ export default function LandingDisplay(): JSX.Element {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 mx: 'auto',
-                                my: 0,
+                                my: '5%',
                                 width: '80%',
                                 alignContent: 'center'
                             }}
@@ -48,7 +102,7 @@ export default function LandingDisplay(): JSX.Element {
                             <Typography variant="h4" className="smallCaps">
                                 <strong>Policy Design Lab</strong>
                             </Typography>
-                            <Divider />
+                            <Divider sx={{ my: 2 }} />
                             <Typography display="block" sx={{ mt: 1, color: '#242424' }}>
                                 {/* eslint-disable-next-line max-len */}
                                 The Policy Design Lab is a collaboration with ACES Office of Research, iSEE, and NCSA,
@@ -61,8 +115,8 @@ export default function LandingDisplay(): JSX.Element {
                             <Button
                                 size="large"
                                 variant="contained"
-                                href="/about-us"
-                                sx={{ borderRadius: 16, mt: 5, backgroundColor: 'success.main', maxWidth: 200 }}
+                                sx={{ bgcolor: '#2F7164', borderRadius: 0, maxWidth: 300, my: 4 }}
+                                disableElevation
                             >
                                 Learn more
                             </Button>
