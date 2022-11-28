@@ -85,8 +85,8 @@ export default function LandingPageMapTab(): JSX.Element {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} centered>
+            <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs variant="scrollable" value={value} onChange={handleChange} centered>
                     <Box>
                         <Typography variant="inherit" className="allSmallCaps" sx={{ mt: 1 }}>
                             Map visualization

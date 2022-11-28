@@ -6,7 +6,7 @@ import forest from '../images/forest.png';
 
 export default function News(): JSX.Element {
     return (
-        <Box sx={{ m: 'auto', width: '90%', my: '10px' }}>
+        <Box sx={{ m: 'auto', width: '90%', my: '20px' }}>
             <Box sx={{ p: 1, m: 1 }}>
                 <Typography variant="h4" className="smallCaps">
                     <strong>Related News</strong>
