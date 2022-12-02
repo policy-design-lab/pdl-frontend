@@ -3,11 +3,16 @@ import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
 import { scaleQuantile } from 'd3-scale';
+import Divider from '@mui/material/Divider';
 
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import allStates from '../data/allstates.json';
 import summary from '../data/summary.json';
 import allPrograms from '../data/allPrograms.json';
+import stateCodes from '../data/stateCodes.json';
+import '../styles/map.css';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -84,16 +89,35 @@ const MapChart = ({ setTooltipContent, title }) => {
                                     total += record.Amount;
                                 });
                                 const hoverContent = (
-                                    <div>
-                                        Payments:
-                                        <br />
-                                        {records.map((record) => (
-                                            <div key={record.State + record.Title + record['Fiscal Year']}>
-                                                {record['Fiscal Year']}: ${Number(record.Amount / 1000000.0).toFixed(2)}
-                                                M
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            bgcolor: '#ECF0ED',
+                                            borderRadius: 1
+                                        }}
+                                    >
+                                        <Box>
+                                            <Typography sx={{ color: '#2F7164' }}>{stateCodes[cur.id]}</Typography>
+                                            <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
+                                            <Typography sx={{ color: '#3F3F3F' }}>
+                                                ${Number(total / 1000000.0).toFixed(2)}M
+                                            </Typography>
+                                        </Box>
+                                        <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+                                        <Box>
+                                            <Typography sx={{ color: '#3F3F3F' }}>
+                                                Payments:
+                                                <br />
+                                                {records.map((record) => (
+                                                    <div key={record.State + record.Title + record['Fiscal Year']}>
+                                                        {record['Fiscal Year']}: $
+                                                        {Number(record.Amount / 1000000.0).toFixed(2)}M
+                                                    </div>
+                                                ))}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
                                 );
                                 return (
                                     <Geography
@@ -167,7 +191,11 @@ const LandingPageMap = ({ programTitle }: { programTitle: string }): JSX.Element
     return (
         <div>
             <MapChart setTooltipContent={setContent} title={programTitle} />
-            <ReactTooltip>{content}</ReactTooltip>
+            <div className="tooltip-container">
+                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                    {content}
+                </ReactTooltip>
+            </div>
         </div>
     );
 };

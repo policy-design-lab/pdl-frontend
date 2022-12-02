@@ -1,0 +1,7 @@
+.tooltip {
+  padding: 20px 8px !important;
+  border-style: none !important;
+}
+
+.tooltip-container .tooltip .tooltip-arrow {
+}
