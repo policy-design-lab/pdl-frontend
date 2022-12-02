@@ -34,11 +34,11 @@ const MapChart = ({ setTooltipContent, title }) => {
     switch (title) {
         case 'Title I: Commodities':
             searchKey = 'Title I Total';
-            color1 = '#F1EEF6';
-            color2 = '#BDC9E1';
-            color3 = '#74A9CF';
-            color4 = '#2B8CBE';
-            color5 = '#045A8D';
+            color1 = '#F9F9D3';
+            color2 = '#F9D48B';
+            color3 = '#F59020';
+            color4 = '#D95F0E';
+            color5 = '#993404';
             break;
         case 'Title II: Conservation':
             searchKey = 'Title II Total';
@@ -50,19 +50,19 @@ const MapChart = ({ setTooltipContent, title }) => {
             break;
         case 'Crop Insurance':
             searchKey = 'Crop Insurance Total';
-            color1 = '#FFFFD3';
-            color2 = '#CCE8A9';
-            color3 = '#75CD76';
-            color4 = '#1A9940';
-            color5 = '#006837';
+            color1 = '#A1622F';
+            color2 = '#DCC287';
+            color3 = '#f5f5f5';
+            color4 = '#89CBC1';
+            color5 = '#2C8472';
             break;
         case 'Supplemental Nutrition Assistance Program (SNAP)':
             searchKey = 'SNAP Total';
-            color1 = '#F9F9D3';
-            color2 = '#F9D48B';
-            color3 = '#F59020';
-            color4 = '#D95F0E';
-            color5 = '#993404';
+            color1 = '#F1EEF6';
+            color2 = '#BDC9E1';
+            color3 = '#74A9CF';
+            color4 = '#2B8CBE';
+            color5 = '#045A8D';
             break;
     }
 
