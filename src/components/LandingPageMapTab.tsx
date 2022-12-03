@@ -3,6 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import LandingPageMap from './LandingPageMap';
 import AllProgramMap from './AllProgramMap';
 import ColorLegend from './ColorLegend';
@@ -77,7 +78,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function LandingPageMapTab(): JSX.Element {
-    const [value, setValue] = React.useState(1);
+    const [value, setValue] = React.useState(2);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -88,26 +89,31 @@ export default function LandingPageMapTab(): JSX.Element {
             <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs variant="scrollable" value={value} onChange={handleChange} centered>
                     <Box>
-                        <Typography variant="inherit" className="allSmallCaps" sx={{ mt: 1 }}>
-                            Map visualization
-                        </Typography>
                         <Typography variant="h5" className="smallCaps">
                             <strong>Farm Bill Data</strong>
                         </Typography>
+                        <Typography variant="inherit" className="allSmallCaps" sx={{ mt: 1 }}>
+                            Map visualization
+                        </Typography>
                     </Box>
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <Tab label="All Programs" />
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <Tab label="Title I: Commodities" />
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <Tab label="Title II: Conservation" />
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <Tab label="Crop Insurance" />
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <Tab label="Supplemental Nutrition Assistance Program (SNAP)" />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0} title="All Programs" />
-            <TabPanel value={value} index={1} title="All Programs" />
-            <TabPanel value={value} index={2} title="Title I: Commodities" />
-            <TabPanel value={value} index={3} title="Title II: Conservation" />
-            <TabPanel value={value} index={4} title="Crop Insurance" />
-            <TabPanel value={value} index={5} title="Supplemental Nutrition Assistance Program (SNAP)" />
+            <TabPanel value={value} index={2} title="All Programs" />
+            <TabPanel value={value} index={4} title="Title I: Commodities" />
+            <TabPanel value={value} index={6} title="Title II: Conservation" />
+            <TabPanel value={value} index={8} title="Crop Insurance" />
+            <TabPanel value={value} index={10} title="Supplemental Nutrition Assistance Program (SNAP)" />
         </Box>
     );
 }
