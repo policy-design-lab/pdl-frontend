@@ -2,11 +2,12 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+import { styled, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import LandingPageMap from './LandingPageMap';
 import AllProgramMap from './AllProgramMap';
 import ColorLegend from './ColorLegend';
+import allPrograms from '../data/allPrograms.json';
 
 interface TabPanelProps {
     index: number;
@@ -84,11 +85,26 @@ export default function LandingPageMapTab(): JSX.Element {
         setValue(newValue);
     };
 
+    interface StyledTabProps {
+        label: JSX.Element;
+    }
+
+    const CustomTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)({
+        textTransform: 'none'
+    });
+
+    const cur = allPrograms.find((s) => s.State === 'Total');
+    const allProgramTotal = cur['18-22 All Programs Total'];
+    const titleITotal = cur['Title I Total'];
+    const titleIITotal = cur['Title II Total'];
+    const cropTotal = cur['Crop Insurance Total'];
+    const snapTotal = cur['SNAP Total'];
+
     return (
         <Box sx={{ width: '100%', mt: 5 }}>
             <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs variant="scrollable" value={value} onChange={handleChange} centered>
-                    <Box>
+                    <Box sx={{ mt: 1 }}>
                         <Typography variant="h5" className="smallCaps">
                             <strong>Farm Bill Data</strong>
                         </Typography>
@@ -97,15 +113,55 @@ export default function LandingPageMapTab(): JSX.Element {
                         </Typography>
                     </Box>
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <Tab label="All Programs" />
+                    <CustomTab
+                        label={
+                            <Box>
+                                <Typography>All Programs</Typography>
+                                <br />
+                                <Typography>${Number(allProgramTotal / 1000000000.0).toFixed(2)}B</Typography>
+                            </Box>
+                        }
+                    />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <Tab label="Title I: Commodities" />
+                    <CustomTab
+                        label={
+                            <Box>
+                                <Typography>Title I: Commodities</Typography>
+                                <br />
+                                <Typography>${Number(titleITotal / 1000000000.0).toFixed(2)}B</Typography>
+                            </Box>
+                        }
+                    />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <Tab label="Title II: Conservation" />
+                    <CustomTab
+                        label={
+                            <Box>
+                                <Typography>Title II: Conservation</Typography>
+                                <br />
+                                <Typography>${Number(titleIITotal / 1000000000.0).toFixed(2)}B</Typography>
+                            </Box>
+                        }
+                    />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <Tab label="Crop Insurance" />
+                    <CustomTab
+                        label={
+                            <Box>
+                                <Typography>Crop Insurance</Typography>
+                                <br />
+                                <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
+                            </Box>
+                        }
+                    />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <Tab label="Supplemental Nutrition Assistance Program (SNAP)" />
+                    <CustomTab
+                        label={
+                            <Box>
+                                <Typography>Supplemental Nutrition Assistance Program</Typography>
+                                <br />
+                                <Typography>${Number(snapTotal / 1000000000.0).toFixed(2)}B</Typography>
+                            </Box>
+                        }
+                    />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0} title="All Programs" />
