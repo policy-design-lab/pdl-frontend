@@ -96,15 +96,19 @@ export default function Footer(): JSX.Element {
             </Grid>
             <Grid sx={{ display: 'flex', p: 1, bgcolor: '#2F7164' }}>
                 <Box sx={{ flexGrow: 1, ml: 10 }}>
-                    <Typography sx={{ color: '#FFFFFF' }}>
+                    <Typography variant="body2" sx={{ color: '#FFFFFF' }}>
                         COPYRIGHT © 2022 UNIVERSITY OF ILLINOIS. ALL RIGHTS RESERVED
                     </Typography>
                 </Box>
                 <Box sx={{ mr: 3 }}>
-                    <Typography sx={{ color: '#FFFFFF' }}>PRIVACY STATEMENT & TERMS OF USE</Typography>
+                    <Typography variant="body2" sx={{ color: '#FFFFFF' }}>
+                        PRIVACY STATEMENT & TERMS OF USE
+                    </Typography>
                 </Box>
                 <Box sx={{ mr: 3 }}>
-                    <Typography sx={{ color: '#FFFFFF' }}>IMAGE ATTRIBUTION</Typography>
+                    <Typography variant="body2" sx={{ color: '#FFFFFF' }}>
+                        IMAGE ATTRIBUTION
+                    </Typography>
                 </Box>
             </Grid>
         </Box>

@@ -3,10 +3,15 @@ import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
 import { scaleQuantile } from 'd3-scale';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
 import allPrograms from '../data/allPrograms.json';
+import stateCodes from '../data/stateCodes.json';
+import '../styles/map.css';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -41,29 +46,63 @@ const MapChart = ({ setTooltipContent }) => {
                                     total += record['18-22 All Programs Total'];
                                 });
                                 const hoverContent = (
-                                    <div>
-                                        Payments:
-                                        <br />
-                                        {records.map((record) => (
-                                            <div key={record.State}>
-                                                2018: $
-                                                {Number(record['2018 All Programs Total'] / 1000000.0).toFixed(2)}M
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            bgcolor: '#ECF0ED',
+                                            borderRadius: 1
+                                        }}
+                                    >
+                                        <Box>
+                                            <Typography sx={{ color: '#2F7164' }}>{stateCodes[cur.id]}</Typography>
+                                            <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
+                                            <Typography sx={{ color: '#3F3F3F' }}>
+                                                ${Number(total / 1000000.0).toFixed(2)}M
+                                            </Typography>
+                                        </Box>
+                                        <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+                                        <Box>
+                                            <Typography sx={{ color: '#3F3F3F' }}>
+                                                Payments:
                                                 <br />
-                                                2019: $
-                                                {Number(record['2019 All Programs Total'] / 1000000.0).toFixed(2)}M
-                                                <br />
-                                                2020: $
-                                                {Number(record['2020 All Programs Total'] / 1000000.0).toFixed(2)}M
-                                                <br />
-                                                2021: $
-                                                {Number(record['2021 All Programs Total'] / 1000000.0).toFixed(2)}M
-                                                <br />
-                                                2022: $
-                                                {Number(record['2022 All Programs Total'] / 1000000.0).toFixed(2)}M
-                                                <br />
-                                            </div>
-                                        ))}
-                                    </div>
+                                                {records.map((record) => (
+                                                    <div key={record.State}>
+                                                        2018: $
+                                                        {Number(record['2018 All Programs Total'] / 1000000.0).toFixed(
+                                                            2
+                                                        )}
+                                                        M
+                                                        <br />
+                                                        2019: $
+                                                        {Number(record['2019 All Programs Total'] / 1000000.0).toFixed(
+                                                            2
+                                                        )}
+                                                        M
+                                                        <br />
+                                                        2020: $
+                                                        {Number(record['2020 All Programs Total'] / 1000000.0).toFixed(
+                                                            2
+                                                        )}
+                                                        M
+                                                        <br />
+                                                        2021: $
+                                                        {Number(record['2021 All Programs Total'] / 1000000.0).toFixed(
+                                                            2
+                                                        )}
+                                                        M
+                                                        <br />
+                                                        2022: $
+                                                        {Number(record['2022 All Programs Total'] / 1000000.0).toFixed(
+                                                            2
+                                                        )}
+                                                        M
+                                                        <br />
+                                                    </div>
+                                                ))}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
                                 );
                                 return (
                                     <Geography
@@ -136,7 +175,11 @@ const AllProgramMap = (): JSX.Element => {
     return (
         <div>
             <MapChart setTooltipContent={setContent} />
-            <ReactTooltip>{content}</ReactTooltip>
+            <div className="tooltip-container">
+                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                    {content}
+                </ReactTooltip>
+            </div>
         </div>
     );
 };
