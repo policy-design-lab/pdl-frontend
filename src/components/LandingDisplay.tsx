@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import library from '../images/library.png';
+import gov from '../images/gov.png';
 import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
@@ -83,7 +83,7 @@ export default function LandingDisplay(): JSX.Element {
                     }}
                 >
                     <Grid item xs={12} md={6} sx={{ mx: 'auto' }}>
-                        <CardMedia component="img" src={library} />
+                        <CardMedia component="img" src={gov} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Box
