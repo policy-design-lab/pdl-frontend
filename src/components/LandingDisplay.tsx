@@ -24,7 +24,7 @@ export default function LandingDisplay(): JSX.Element {
                         style={{
                             position: 'absolute',
                             top: -15,
-                            left: '70%'
+                            right: 8
                         }}
                     >
                         <Button
