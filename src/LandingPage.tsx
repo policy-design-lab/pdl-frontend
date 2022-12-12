@@ -1,14 +1,42 @@
 import * as React from 'react';
-import { CardMedia, Typography } from '@mui/material';
+import { CardMedia, createTheme, CssBaseline, ThemeProvider, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import ComputerIcon from '@mui/icons-material/Computer';
 import NavBar from './components/NavBar';
 import forest from './images/forest.png';
 import News from './components/News';
 import Footer from './components/Footer';
 import LandingDisplay from './components/LandingDisplay';
 import LandingPageMapTab from './components/LandingPageMapTab';
+import useWindowDimensions from './hooks/useWindowDimensions';
+
+const theme = createTheme({
+    palette: {
+        background: {
+            default: '#e4f0e2'
+        }
+    }
+});
 
 export default function LandingPage(): JSX.Element {
+    const { height, width } = useWindowDimensions();
+
+    if (width < 1280 && height > 0) {
+        return (
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Box sx={{ mt: '30%', mx: 2 }}>
+                    <Typography variant="h4" textAlign="center">
+                        <strong>
+                            <ComputerIcon sx={{ pt: 1 }} fontSize="large" /> For better viewing experience, please
+                            access this website with computer
+                        </strong>
+                    </Typography>
+                </Box>
+            </ThemeProvider>
+        );
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <NavBar />
