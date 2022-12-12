@@ -4,6 +4,8 @@ import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import gov from '../images/gov.png';
+import teamButton from '../images/buttons/PDL Team Button.png';
+import resourceButton from '../images/buttons/Data Resource Button.png';
 import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
@@ -112,14 +114,10 @@ export default function LandingDisplay(): JSX.Element {
                                 sustainability and climate change through the Farm Bill Mapping Initiative.
                             </Typography>
 
-                            <Button
-                                size="large"
-                                variant="contained"
-                                sx={{ bgcolor: '#2F7164', borderRadius: 0, maxWidth: 300, my: 4 }}
-                                disableElevation
-                            >
-                                Learn more
-                            </Button>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 8 }}>
+                                <CardMedia component="img" src={resourceButton} sx={{ maxWidth: 250, mr: 4 }} />
+                                <CardMedia component="img" src={teamButton} sx={{ maxWidth: 250 }} />
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
