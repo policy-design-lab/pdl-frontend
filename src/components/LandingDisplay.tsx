@@ -10,7 +10,7 @@ import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
     return (
-        <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
+        <Box sx={{ mx: 'auto', width: '90%', mt: 0 }}>
             <div style={{ position: 'relative' }}>
                 <Box
                     sx={{

@@ -2,12 +2,16 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { styled, Typography } from '@mui/material';
+import { CardMedia, styled, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import LandingPageMap from './LandingPageMap';
 import AllProgramMap from './AllProgramMap';
-import ColorLegend from './ColorLegend';
 import allPrograms from '../data/allPrograms.json';
+import commodities from '../images/legends/Commodities benefits 2018 - 2022.png';
+import conservation from '../images/legends/conservation programs benefits 2018 - 2022.png';
+import crop from '../images/legends/crop insurance 2018 - 2022.png';
+import snap from '../images/legends/SNAP programs benefits 2018 - 2022.png';
+import total from '../images/legends/total farm bill benefits 2018 - 2022.png';
 
 interface TabPanelProps {
     index: number;
@@ -17,47 +21,23 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
     const { value, index, title, ...other } = props;
-    let color1 = '';
-    let color2 = '';
-    let color3 = '';
-    let color4 = '';
-    let color5 = '';
+    let colorLegend = null;
 
     switch (title) {
         case 'Title I: Commodities':
-            color1 = '#F9F9D3';
-            color2 = '#F9D48B';
-            color3 = '#F59020';
-            color4 = '#D95F0E';
-            color5 = '#993404';
+            colorLegend = commodities;
             break;
         case 'Title II: Conservation':
-            color1 = '#F0F9E8';
-            color2 = '#BAE4BC';
-            color3 = '#7BCCC4';
-            color4 = '#43A2CA';
-            color5 = '#0868AC';
+            colorLegend = conservation;
             break;
         case 'Crop Insurance':
-            color1 = '#A1622F';
-            color2 = '#DCC287';
-            color3 = '#f5f5f5';
-            color4 = '#89CBC1';
-            color5 = '#2C8472';
+            colorLegend = crop;
             break;
         case 'Supplemental Nutrition Assistance Program (SNAP)':
-            color1 = '#F1EEF6';
-            color2 = '#BDC9E1';
-            color3 = '#74A9CF';
-            color4 = '#2B8CBE';
-            color5 = '#045A8D';
+            colorLegend = snap;
             break;
         case 'All Programs':
-            color1 = '#FFF9D8';
-            color2 = '#E1F2C4';
-            color3 = '#9FD9BA';
-            color4 = '#1B9577';
-            color5 = '#005A45';
+            colorLegend = total;
             break;
     }
 
@@ -67,11 +47,13 @@ function TabPanel(props: TabPanelProps) {
                 <Box
                     sx={{
                         width: '60%',
-                        m: 'auto'
+                        mx: 'auto'
                     }}
                 >
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <CardMedia sx={{ maxWidth: 720, mt: 3 }} component="img" src={colorLegend} />
+                    </Box>
                     {title === 'All Programs' ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
-                    <ColorLegend color1={color1} color2={color2} color3={color3} color4={color4} color5={color5} />
                 </Box>
             )}
         </Box>
