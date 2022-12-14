@@ -16,8 +16,8 @@ export default function LandingDisplay(): JSX.Element {
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        p: 1,
-                        m: 1,
+                        p: 2,
+                        m: 2,
                         bgcolor: '#ECF0EE',
                         my: 15
                     }}
@@ -26,7 +26,7 @@ export default function LandingDisplay(): JSX.Element {
                         style={{
                             position: 'absolute',
                             top: -15,
-                            right: 8
+                            right: 16
                         }}
                     >
                         <Button
@@ -78,7 +78,7 @@ export default function LandingDisplay(): JSX.Element {
                     container
                     sx={{
                         display: 'flex',
-                        p: 1,
+                        p: 0,
                         my: 1,
                         borderRadius: 1,
                         width: '100%'
