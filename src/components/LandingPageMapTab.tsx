@@ -86,12 +86,12 @@ export default function LandingPageMapTab(): JSX.Element {
         <Box sx={{ width: '100%', mt: 5 }}>
             <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs variant="scrollable" value={value} onChange={handleChange} centered>
-                    <Box sx={{ mt: 1 }}>
-                        <Typography variant="h5" className="smallCaps">
+                    <Box sx={{ mt: 1.5, pb: 0, mr: 8 }}>
+                        <Typography variant="h4" className="smallCaps">
                             <strong>Farm Bill Data</strong>
                         </Typography>
-                        <Typography variant="inherit" className="allSmallCaps" sx={{ mt: 1 }}>
-                            Map visualization
+                        <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
+                            <strong>Map visualization</strong>
                         </Typography>
                     </Box>
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
