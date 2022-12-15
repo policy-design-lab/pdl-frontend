@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { CardMedia, styled, Typography } from '@mui/material';
+import { CardMedia, createTheme, styled, Typography, ThemeProvider } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import LandingPageMap from './LandingPageMap';
 import AllProgramMap from './AllProgramMap';
@@ -12,6 +12,14 @@ import conservation from '../images/legends/conservation programs benefits 2018 
 import crop from '../images/legends/crop insurance 2018 - 2022.png';
 import snap from '../images/legends/SNAP programs benefits 2018 - 2022.png';
 import total from '../images/legends/total farm bill benefits 2018 - 2022.png';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#2F7164'
+        }
+    }
+});
 
 interface TabPanelProps {
     index: number;
@@ -85,66 +93,75 @@ export default function LandingPageMapTab(): JSX.Element {
     return (
         <Box sx={{ width: '100%', mt: 5 }}>
             <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs variant="scrollable" value={value} onChange={handleChange} centered>
-                    <Box sx={{ mt: 1.5, pb: 0, mr: 8 }}>
-                        <Typography variant="h4" className="smallCaps">
-                            <strong>Farm Bill Data</strong>
-                        </Typography>
-                        <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
-                            <strong>Map visualization</strong>
-                        </Typography>
-                    </Box>
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab
-                        label={
-                            <Box>
-                                <Typography>All Programs</Typography>
-                                <br />
-                                <Typography>${Number(allProgramTotal / 1000000000.0).toFixed(2)}B</Typography>
-                            </Box>
-                        }
-                    />
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab
-                        label={
-                            <Box>
-                                <Typography>Title I: Commodities</Typography>
-                                <br />
-                                <Typography>${Number(titleITotal / 1000000000.0).toFixed(2)}B</Typography>
-                            </Box>
-                        }
-                    />
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab
-                        label={
-                            <Box>
-                                <Typography>Title II: Conservation</Typography>
-                                <br />
-                                <Typography>${Number(titleIITotal / 1000000000.0).toFixed(2)}B</Typography>
-                            </Box>
-                        }
-                    />
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab
-                        label={
-                            <Box>
-                                <Typography>Crop Insurance</Typography>
-                                <br />
-                                <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
-                            </Box>
-                        }
-                    />
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab
-                        label={
-                            <Box>
-                                <Typography>Supplemental Nutrition Assistance Program</Typography>
-                                <br />
-                                <Typography>${Number(snapTotal / 1000000000.0).toFixed(2)}B</Typography>
-                            </Box>
-                        }
-                    />
-                </Tabs>
+                <ThemeProvider theme={theme}>
+                    <Tabs
+                        TabIndicatorProps={{ style: { background: '#2F7164' } }}
+                        variant="scrollable"
+                        value={value}
+                        onChange={handleChange}
+                        centered
+                        className="tab"
+                    >
+                        <Box sx={{ mt: 1.5, pb: 0, mr: 8 }}>
+                            <Typography variant="h4" className="smallCaps">
+                                <strong>Farm Bill Data</strong>
+                            </Typography>
+                            <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
+                                <strong>Map visualization</strong>
+                            </Typography>
+                        </Box>
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>All Programs</Typography>
+                                    <br />
+                                    <Typography>${Number(allProgramTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>Title I: Commodities</Typography>
+                                    <br />
+                                    <Typography>${Number(titleITotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>Title II: Conservation</Typography>
+                                    <br />
+                                    <Typography>${Number(titleIITotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>Crop Insurance</Typography>
+                                    <br />
+                                    <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>Supplemental Nutrition Assistance Program</Typography>
+                                    <br />
+                                    <Typography>${Number(snapTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
+                    </Tabs>
+                </ThemeProvider>
             </Box>
             <TabPanel value={value} index={0} title="All Programs" />
             <TabPanel value={value} index={2} title="All Programs" />
