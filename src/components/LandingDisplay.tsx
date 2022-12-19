@@ -25,16 +25,16 @@ export default function LandingDisplay(): JSX.Element {
                     <div
                         style={{
                             position: 'absolute',
-                            top: -15,
+                            top: -40,
                             right: 16
                         }}
                     >
                         <Button
                             variant="contained"
-                            sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 40, borderRadius: 0 }}
+                            sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 80, borderRadius: 0 }}
                             disableElevation
                         >
-                            Explore Maps of Total Farm Bill <ArrowForwardIcon />
+                            Explore Maps of Total Farm Bill <ArrowForwardIcon sx={{ mx: 2 }} />
                         </Button>
                     </div>
                     <Box
