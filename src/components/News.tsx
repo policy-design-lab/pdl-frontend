@@ -42,7 +42,9 @@ export default function News(): JSX.Element {
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ mt: 'auto' }}>
-                        <Button size="small">Learn More</Button>
+                        <Button href="https://www.agriculture.senate.gov/" size="small" target="_blank">
+                            Learn More
+                        </Button>
                     </CardActions>
                 </Card>
                 <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
@@ -56,7 +58,9 @@ export default function News(): JSX.Element {
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ mt: 'auto' }}>
-                        <Button size="small">Learn More</Button>
+                        <Button href="https://agriculture.house.gov/" size="small" target="_blank">
+                            Learn More
+                        </Button>
                     </CardActions>
                 </Card>
                 <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
@@ -73,7 +77,9 @@ export default function News(): JSX.Element {
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ mt: 'auto' }}>
-                        <Button size="small">Learn More</Button>
+                        <Button href="https://www.usda.gov/" size="small" target="_blank">
+                            Learn More
+                        </Button>
                     </CardActions>
                 </Card>
                 <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
@@ -84,7 +90,9 @@ export default function News(): JSX.Element {
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ mt: 'auto' }}>
-                        <Button size="small">Learn More</Button>
+                        <Button href="https://farmdocdaily.illinois.edu/" size="small" target="_blank">
+                            Learn More
+                        </Button>
                     </CardActions>
                 </Card>
             </Box>
