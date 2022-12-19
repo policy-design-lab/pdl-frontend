@@ -28,8 +28,9 @@ export default function LandingPage(): JSX.Element {
                 <Box sx={{ mt: '30%', mx: 2 }}>
                     <Typography variant="h4" textAlign="center">
                         <strong>
-                            <ComputerIcon sx={{ pt: 1 }} fontSize="large" /> For better viewing experience, please
-                            access this website with computer
+                            <ComputerIcon sx={{ pt: 1 }} fontSize="large" /> This website has not been optimized for
+                            viewing on a mobile device. For a better viewing experience, please access this website with
+                            a computer or similar device.
                         </strong>
                     </Typography>
                 </Box>
