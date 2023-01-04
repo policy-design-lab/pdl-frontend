@@ -29,7 +29,7 @@ export default function News(): JSX.Element {
                     borderRadius: 1
                 }}
             >
-                <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
+                <Card variant="outlined" sx={{ minWidth: 300, display: 'flex', flexDirection: 'column' }}>
                     <CardMedia component="img" height="140" image={senate} />
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
@@ -48,7 +48,7 @@ export default function News(): JSX.Element {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
+                <Card variant="outlined" sx={{ minWidth: 300, display: 'flex', flexDirection: 'column' }}>
                     <CardMedia component="img" height="140" image={house} />
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
@@ -64,7 +64,7 @@ export default function News(): JSX.Element {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
+                <Card variant="outlined" sx={{ minWidth: 300, display: 'flex', flexDirection: 'column' }}>
                     <CardMedia component="img" height="140" image={department} />
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
@@ -83,7 +83,7 @@ export default function News(): JSX.Element {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card variant="outlined" sx={{ minWidth: 280, display: 'flex', flexDirection: 'column' }}>
+                <Card variant="outlined" sx={{ minWidth: 300, display: 'flex', flexDirection: 'column' }}>
                     <CardMedia component="img" height="140" image={farmdoc} />
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
