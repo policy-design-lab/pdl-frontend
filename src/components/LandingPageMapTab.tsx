@@ -58,7 +58,7 @@ function TabPanel(props: TabPanelProps) {
                         mx: 'auto'
                     }}
                 >
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                         <CardMedia sx={{ maxWidth: 720, mt: 3 }} component="img" src={colorLegend} />
                     </Box>
                     {title === 'All Programs' ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
