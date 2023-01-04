@@ -23,7 +23,7 @@ export default function LandingPage(): JSX.Element {
                         left: '10%'
                     }}
                 >
-                    <strong>Visualizing Policy</strong>
+                    <strong>Understanding</strong>
                 </Typography>
                 <Typography
                     variant="h3"
@@ -34,20 +34,8 @@ export default function LandingPage(): JSX.Element {
                         color: 'white'
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row'
-                        }}
-                    >
-                        <Box>
-                            <Typography variant="h3" sx={{ mr: 1 }}>
-                                <strong>Design:</strong>
-                            </Typography>
-                        </Box>
-                        <Box sx={{ color: '#FF8C22' }}>
-                            <strong>The Farm Bill</strong>
-                        </Box>
+                    <Box sx={{ color: '#FF8C22' }}>
+                        <strong>Policy Design:</strong>
                     </Box>
                 </Typography>
                 <Typography
@@ -59,7 +47,7 @@ export default function LandingPage(): JSX.Element {
                         left: '10%'
                     }}
                 >
-                    Using public data and computational resources to understand federal
+                    Applying Public Data and Computational Resources to
                 </Typography>
                 <Typography
                     variant="h6"
@@ -70,7 +58,7 @@ export default function LandingPage(): JSX.Element {
                         left: '10%'
                     }}
                 >
-                    agricultural, conservation and food policies
+                    Visualize Federal Agricultural, Conservation and Food Policies
                 </Typography>
             </div>
             <LandingPageMapTab />

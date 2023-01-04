@@ -3,19 +3,21 @@ import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import library from '../images/library.png';
+import gov from '../images/gov.png';
+import teamButton from '../images/buttons/PDL Team Button.png';
+import resourceButton from '../images/buttons/Data Resource Button.png';
 import '../styles/fonts.css';
 
 export default function LandingDisplay(): JSX.Element {
     return (
-        <Box sx={{ m: 'auto', width: '90%', mt: '60px' }}>
+        <Box sx={{ mx: 'auto', width: '90%', mt: 0 }}>
             <div style={{ position: 'relative' }}>
                 <Box
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        p: 1,
-                        m: 1,
+                        p: 2,
+                        m: 2,
                         bgcolor: '#ECF0EE',
                         my: 15
                     }}
@@ -23,16 +25,19 @@ export default function LandingDisplay(): JSX.Element {
                     <div
                         style={{
                             position: 'absolute',
-                            top: -15,
-                            left: '70%'
+                            top: -40,
+                            right: 16
                         }}
                     >
                         <Button
                             variant="contained"
-                            sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 40, borderRadius: 0 }}
+                            sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 80, borderRadius: 0 }}
                             disableElevation
                         >
-                            Explore Maps of Total Farm Bill <ArrowForwardIcon />
+                            <Typography variant="subtitle1">
+                                <strong>Explore Maps of Total Farm Bill</strong>
+                            </Typography>{' '}
+                            <ArrowForwardIcon sx={{ mx: 2 }} />
                         </Button>
                     </div>
                     <Box
@@ -76,14 +81,14 @@ export default function LandingDisplay(): JSX.Element {
                     container
                     sx={{
                         display: 'flex',
-                        p: 1,
+                        p: 0,
                         my: 1,
                         borderRadius: 1,
                         width: '100%'
                     }}
                 >
                     <Grid item xs={12} md={6} sx={{ mx: 'auto' }}>
-                        <CardMedia component="img" src={library} />
+                        <CardMedia component="img" src={gov} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Box
@@ -112,14 +117,10 @@ export default function LandingDisplay(): JSX.Element {
                                 sustainability and climate change through the Farm Bill Mapping Initiative.
                             </Typography>
 
-                            <Button
-                                size="large"
-                                variant="contained"
-                                sx={{ bgcolor: '#2F7164', borderRadius: 0, maxWidth: 300, my: 4 }}
-                                disableElevation
-                            >
-                                Learn more
-                            </Button>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 8 }}>
+                                <CardMedia component="img" src={resourceButton} sx={{ maxWidth: 250, mr: 4 }} />
+                                <CardMedia component="img" src={teamButton} sx={{ maxWidth: 250 }} />
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
