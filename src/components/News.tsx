@@ -51,10 +51,10 @@ export default function News(): JSX.Element {
                     <CardMedia component="img" height="140" image={house} />
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
-                            House Agriculture
+                            House Committee
                         </Typography>
                         <Typography gutterBottom variant="h6" component="div" sx={{ color: '#242424' }}>
-                            Committee
+                            on Agriculture
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing sx={{ mt: 'auto' }}>
