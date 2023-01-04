@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Card, CardActions, CardContent, CardMedia } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardMedia, Divider } from '@mui/material';
 import senate from '../images/resources/Senate Committee on Agriculture, Nutrition, and Forestry.png';
 import house from '../images/resources/House Agriculture Committee.png';
 import department from '../images/resources/United States Department of Agriculture.png';
@@ -18,6 +18,7 @@ export default function News(): JSX.Element {
                     <strong>Updated on DECEMBER 2022</strong>
                 </Typography>
             </Box>
+            <Divider sx={{ mb: 3 }} />
             <Box
                 sx={{
                     display: 'flex',
