@@ -34,7 +34,10 @@ export default function LandingDisplay(): JSX.Element {
                             sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 80, borderRadius: 0 }}
                             disableElevation
                         >
-                            Explore Maps of Total Farm Bill <ArrowForwardIcon sx={{ mx: 2 }} />
+                            <Typography variant="subtitle1">
+                                <strong>Explore Maps of Total Farm Bill</strong>
+                            </Typography>{' '}
+                            <ArrowForwardIcon sx={{ mx: 2 }} />
                         </Button>
                     </div>
                     <Box
