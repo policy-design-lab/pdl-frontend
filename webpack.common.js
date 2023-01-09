@@ -13,7 +13,7 @@ module.exports = {
     entry: {
         polyfill: './src/polyfill.js',
         style: './src/styles/main.css',
-        app: './src/app.tsx'
+        app: './src/index.tsx'
     },
 
     output: {

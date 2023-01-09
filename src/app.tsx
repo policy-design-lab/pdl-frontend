@@ -1,5 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import LandingPage from './LandingPage';
+import Main from './main';
 
-ReactDOM.render(<LandingPage />, document.getElementById('root'));
+export default function App(): JSX.Element {
+    return (
+        <div>
+            <Main />
+        </div>
+    );
+}
