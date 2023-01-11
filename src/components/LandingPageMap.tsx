@@ -101,7 +101,11 @@ const MapChart = ({ setTooltipContent, title }) => {
                                             <Typography sx={{ color: '#2F7164' }}>{stateCodes[cur.id]}</Typography>
                                             <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
                                             <Typography sx={{ color: '#3F3F3F' }}>
-                                                ${Number(total / 1000000.0).toFixed(2)}M
+                                                $
+                                                {Number(total / 1000000.0).toLocaleString(undefined, {
+                                                    maximumFractionDigits: 2
+                                                })}
+                                                M
                                             </Typography>
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -112,7 +116,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                                                 {records.map((record) => (
                                                     <div key={record.State + record.Title + record['Fiscal Year']}>
                                                         {record['Fiscal Year']}: $
-                                                        {Number(record.Amount / 1000000.0).toFixed(2)}M
+                                                        {Number(record.Amount / 1000000.0).toLocaleString(undefined, {
+                                                            maximumFractionDigits: 2
+                                                        })}
+                                                        M
                                                     </div>
                                                 ))}
                                             </Typography>
