@@ -123,8 +123,8 @@ const MapChart = ({ setTooltipContent }) => {
                                         style={{
                                             default: { stroke: '#607D8B', strokeWidth: 0.75, outline: 'none' },
                                             hover: {
-                                                stroke: '#232323',
-                                                strokeWidth: 2,
+                                                stroke: '#F0F0F0',
+                                                strokeWidth: 3.5,
                                                 outline: 'none'
                                             },
                                             pressed: {
