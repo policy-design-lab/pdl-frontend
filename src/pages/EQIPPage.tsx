@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
 import AllProgramMap from '../components/AllProgramMap';
+import HorizontalStackedBar from '../components/HorizontalStackedBar';
+import SemiDonutChart from '../components/SemiDonutChart';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -17,6 +19,8 @@ export default function EQIPPage(): JSX.Element {
                 <Drawer />
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <AllProgramMap />
+                    <HorizontalStackedBar />
+                    <SemiDonutChart />
                 </Box>
             </Box>
         </ThemeProvider>
