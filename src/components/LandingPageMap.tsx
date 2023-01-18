@@ -57,7 +57,7 @@ const MapChart = ({ setTooltipContent, title }) => {
             searchKey = 'Crop Insurance Total';
             color1 = '#A1622F';
             color2 = '#DCC287';
-            color3 = '#f5f5f5';
+            color3 = '#E3E3E3';
             color4 = '#89CBC1';
             color5 = '#2C8472';
             break;
@@ -139,10 +139,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#607D8B', strokeWidth: 0.75, outline: 'none' },
+                                            default: { stroke: '#F0F0F0', strokeWidth: 1, outline: 'none' },
                                             hover: {
-                                                stroke: '#F0F0F0',
-                                                strokeWidth: 3.5,
+                                                stroke: '#232323',
+                                                strokeWidth: 2,
                                                 outline: 'none'
                                             },
                                             pressed: {
