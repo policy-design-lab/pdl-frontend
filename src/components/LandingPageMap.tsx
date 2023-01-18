@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
-import { scaleQuantile } from 'd3-scale';
+import { scaleQuantile, scaleThreshold } from 'd3-scale';
 import Divider from '@mui/material/Divider';
 
 import PropTypes from 'prop-types';
@@ -71,9 +71,17 @@ const MapChart = ({ setTooltipContent, title }) => {
             break;
     }
 
-    const colorScale = scaleQuantile()
-        .domain(allPrograms.map((d) => d[searchKey]))
-        .range([color1, color2, color3, color4, color5]);
+    let colorScale = null;
+
+    if (title !== 'Crop Insurance') {
+        colorScale = scaleQuantile()
+            .domain(allPrograms.map((d) => d[searchKey]))
+            .range([color1, color2, color3, color4, color5]);
+    } else {
+        colorScale = scaleThreshold()
+            .domain([-500000000, 0, 500000000, 1000000000])
+            .range([color1, color2, color3, color4, color5]);
+    }
 
     return (
         <div data-tip="">
@@ -139,7 +147,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#FAFAFA', strokeWidth: 1, outline: 'none' },
+                                            default: { stroke: '#FAFAFA', strokeWidth: 0.75, outline: 'none' },
                                             hover: {
                                                 stroke: '#232323',
                                                 strokeWidth: 2,
