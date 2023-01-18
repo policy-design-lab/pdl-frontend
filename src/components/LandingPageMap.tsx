@@ -64,7 +64,7 @@ const MapChart = ({ setTooltipContent, title }) => {
         case 'Supplemental Nutrition Assistance Program (SNAP)':
             searchKey = 'SNAP Total';
             color1 = '#F1EEF6';
-            color2 = '#BDC9E1';
+            color2 = '#CBD9F4';
             color3 = '#74A9CF';
             color4 = '#2B8CBE';
             color5 = '#045A8D';
@@ -139,7 +139,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#F0F0F0', strokeWidth: 1, outline: 'none' },
+                                            default: { stroke: '#FAFAFA', strokeWidth: 1, outline: 'none' },
                                             hover: {
                                                 stroke: '#232323',
                                                 strokeWidth: 2,
