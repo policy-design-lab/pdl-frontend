@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
@@ -6,11 +6,12 @@ import { scaleQuantile } from 'd3-scale';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import {config} from '../app.config';
 
 import PropTypes from 'prop-types';
 import allStates from '../data/allstates.json';
-import allPrograms from '../data/allPrograms.json';
-import stateCodes from '../data/stateCodes.json';
+// import allPrograms from '../data/allPrograms.json';
+// import stateCodes from '../data/stateCodes.json';
 import '../styles/map.css';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
@@ -27,7 +28,10 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent }) => {
+// const MapChart = ({ setTooltipContent }) => {
+const MapChart = (props) => {
+    const { setTooltipContent, stateCodes, allPrograms } = props;
+    console.log(allPrograms);
     const colorScale = scaleQuantile()
         .domain(allPrograms.map((d) => d['18-22 All Programs Total']))
         .range(['#FFF9D8', '#E1F2C4', '#9FD9BA', '#1B9577', '#005A45']);
@@ -172,9 +176,68 @@ MapChart.propTypes = {
 
 const AllProgramMap = (): JSX.Element => {
     const [content, setContent] = useState('');
+    const [stateCodesData, setStateCodesData] = useState([]);
+    const [allProgramsData, setAllProgramsData] = useState([]);
+
+    // useEffect(async () => {
+    //         let response = fetch(`https://localhost:5000/pdl/states`, {
+    //             method: 'GET',
+    //             mode: 'cors'
+    //         });
+    //
+    //     if (response.status === 200) {
+    //         setStateCodes(response.text());
+    //     } else if (response.status === 401) {
+    //         // TODO handle error, maybe print out error message
+    //         setStateCodes([]);
+    //     } else {
+    //         // TODO handle error
+    //         return null;
+    //     }
+    // }, []);
+
+
+    useEffect(() => {
+        fetch(`${config.apiUrl}/states`, {
+            method: "GET",
+            mode: "cors"
+        }).then((response) => {
+            setStateCodesData(response.text());
+        });
+        fetch(`${config.apiUrl}/allprograms`, {
+            method: "GET",
+            mode: "cors"
+        }).then((response) => {
+            setAllProgramsData(response.text());
+        });
+    },[]);
+
+    // useEffect(async () => {
+    //     let response = await fetch(`${config.apiUrl}/allprograms`, {
+    //         method: "GET",
+    //         mode: "cors"
+    //     });
+    //
+    //     if (response.status === 200) {
+    //         setAllPrograms(response.text());
+    //     } else {
+    //         // TODO handle error, maybe print out error message
+    //         setAllPrograms([]);
+    //     }
+    // }, []);
+
+    // useEffect(() => {
+    //     let response = fetch(`${config.apiUrl}/allprograms`, {
+    //         method: "GET",
+    //         mode: "cors"
+    //     }).then((response) => {
+    //         setStateCodes(response.text());
+    //     })},[]);
+
     return (
         <div>
-            <MapChart setTooltipContent={setContent} />
+            <MapChart setTooltipContent={setContent} stateCodes={stateCodesData} allPrograms={allProgramsData} />
+            {/*<MapChart setTooltipContent={setContent} />*/}
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}
