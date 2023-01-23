@@ -121,7 +121,7 @@ const MapChart = ({ setTooltipContent }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#FAFAFA', strokeWidth: 0.75, outline: 'none' },
+                                            default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
                                             hover: {
                                                 stroke: '#232323',
                                                 strokeWidth: 2,
