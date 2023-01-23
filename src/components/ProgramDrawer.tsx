@@ -2,10 +2,25 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
+import { Popper } from '@mui/material';
 
 const drawerWidth = 240;
 
 export default function ProgramDrawer(): JSX.Element {
+    const [eqipOpen, setEqipOpen] = React.useState(false);
+    const eqipRef = React.useRef<HTMLLIElement>(null);
+    const handleEqipClick = () => {
+        setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+    };
+    const prevEqipOpen = React.useRef(eqipOpen);
+    React.useEffect(() => {
+        if (prevEqipOpen.current === true && eqipOpen === false) {
+            eqipRef.current!.focus();
+        }
+
+        prevEqipOpen.current = eqipOpen;
+    }, [eqipOpen]);
+
     return (
         <Drawer
             variant="permanent"
@@ -19,9 +34,14 @@ export default function ProgramDrawer(): JSX.Element {
             <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
                 Total Conservation Programs Benefits
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
-                EQIP: Environmental Quality Incentives Program
-            </MenuItem>
+            <Box>
+                <MenuItem ref={eqipRef} style={{ whiteSpace: 'normal' }} sx={{ my: 1 }} onClick={handleEqipClick}>
+                    EQIP: Environmental Quality Incentives Program
+                </MenuItem>
+                <Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start">
+                    <Box>test test test</Box>
+                </Popper>
+            </Box>
             <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
                 CSP: Conservation Stewardship Program
             </MenuItem>
