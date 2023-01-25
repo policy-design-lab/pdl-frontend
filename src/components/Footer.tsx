@@ -56,32 +56,57 @@ export default function Footer(): JSX.Element {
                             display: 'flex',
                             alignItems: 'flex-start',
                             flexDirection: 'row',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            px: 6
                         }}
                     >
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
-                                Farm Bill
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 0.5, flexDirection: 'column' }}>
+                            <Typography variant="h6" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                <strong>FARM BILL MAP DATA</strong>
                             </Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Farm Bill</Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Total Farm Bill Benefits
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Conservation Programs (Title II)
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Commodities Programs (Title I)
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Crop Insurance
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Supplemental Nutrition Assistance Program (SNAP)
+                            </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
-                                Data Resources
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 0.5, flexDirection: 'column' }}>
+                            <Typography variant="h6" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                <strong>RELATED RESOURCES</strong>
                             </Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>Data Resources</Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Senate Committee on Agriculture, Nutrition, and Forestry
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                House Agriculture Committee
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                U.S. Department of Agriculture
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                farmdoc
+                            </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
-                            <Typography variant="h5" sx={{ mx: 2, color: '#242424' }}>
-                                About Us
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 0.5, flexDirection: 'column' }}>
+                            <Typography variant="h6" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                <strong>ABOUT US</strong>
                             </Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>About Us</Typography>
-                            <Typography sx={{ mx: 2, color: '#242424' }}>About Us</Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                Data Resource
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ mx: 2, my: 1, color: '#242424' }}>
+                                PDL Team
+                            </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', m: 2, flexDirection: 'column' }}>
                             <ACESLogo />
