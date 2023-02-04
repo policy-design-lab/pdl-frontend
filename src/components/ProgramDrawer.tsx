@@ -15,7 +15,7 @@ export default function ProgramDrawer(): JSX.Element {
     const prevEqipOpen = React.useRef(eqipOpen);
     React.useEffect(() => {
         if (prevEqipOpen.current === true && eqipOpen === false) {
-            eqipRef.current!.focus();
+            eqipRef.current.focus();
         }
 
         prevEqipOpen.current = eqipOpen;
