@@ -5,9 +5,45 @@ import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
 import AllProgramMap from '../components/AllProgramMap';
 import SemiDonutChart from '../components/SemiDonutChart';
+import eqipSummary from '../data/eqipSummary.json';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
+    let structuralTotal = 0;
+    let landManagementTotal = 0;
+    let vegetativeTotal = 0;
+    let forestManagementTotal = 0;
+    let soilRemediationTotal = 0;
+    let other6ATotal = 0;
+
+    Object.entries(eqipSummary).forEach((entry) => {
+        const [key, value] = entry;
+        const totalYearsCur = eqipSummary[key].find((s) => s.years === '2018-2022');
+        const ACur = totalYearsCur.statutes.find((s) => s.statuteName === '(6)(A) Practices');
+
+        const structuralCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Structural');
+        const landManagementCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Land management');
+        const vegetativeCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Vegetative');
+        const forestManagementCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Forest management');
+        const soilRemediationCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Soil remediation');
+        const other6ACur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Other improvement');
+
+        structuralTotal += Number(structuralCur.paymentInDollars);
+        landManagementTotal += Number(landManagementCur.paymentInDollars);
+        vegetativeTotal += Number(vegetativeCur.paymentInDollars);
+        forestManagementTotal += Number(forestManagementCur.paymentInDollars);
+        soilRemediationTotal += Number(soilRemediationCur.paymentInDollars);
+        other6ATotal += Number(other6ACur.paymentInDollars);
+    });
+
+    const pieChartData = [
+        { name: 'Structural', value: structuralTotal, color: '#2F7164' },
+        { name: 'Land management', value: landManagementTotal, color: '#4D847A' },
+        { name: 'Vegetative', value: vegetativeTotal, color: '#749F97' },
+        { name: 'Forest management', value: forestManagementTotal, color: '#9CBAB4' },
+        { name: 'Soil remediation', value: soilRemediationTotal, color: '#B9CDC9' },
+        { name: 'Other improvement', value: other6ATotal, color: '#CDDBD8' }
+    ];
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -18,7 +54,7 @@ export default function EQIPPage(): JSX.Element {
                 <Drawer />
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <AllProgramMap />
-                    <SemiDonutChart />
+                    <SemiDonutChart data={pieChartData} />
                 </Box>
             </Box>
         </ThemeProvider>

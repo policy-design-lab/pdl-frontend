@@ -1,0 +1,550 @@
+{
+  "Alabama":[
+    {
+      "years":"2018-2022",
+      "totalPaymentInDollars":"90951662.35",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"20394631.98"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"27636357.08"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"11198074.04"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"27474481.76"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"25319.34"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"3832907.45"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"154017.74"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"235872.96"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2018",
+      "totalPaymentInDollars":"18006907.12",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"4078781.4"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6255685.64"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"1970500.76"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"4444296.21"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"4078781.4"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"1120090.06"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"70692.11"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"61704.73"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2019",
+      "totalPaymentInDollars":"20027427.91",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"4821093.42"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6298832.24"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"2001522.24"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"5670209.22"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"1122776.78"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"65209.85"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"47784.16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2020",
+      "totalPaymentInDollars":"19300798.67",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"4394990.66"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6016884.91"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"2376797.44"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"6036767.1"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"4872.5"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"414399.32"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"8204.73"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"47882.01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2021",
+      "totalPaymentInDollars":"21756585.43",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"5214075.28"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6047604.23"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"3949239.02"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"5718562.33"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"15290.63"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"751368.58"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"60445.36"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2022",
+      "totalPaymentInDollars":"11859943.22",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"1885691.22"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"3017350.06"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"900014.58"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"5604646.9"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"424272.71"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"9911.05"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"18056.7"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Alaska":[
+    {
+      "years":"2018-2022",
+      "totalPaymentInDollars":"33720989.09",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"13290536.59"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"14470065.28"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"20892.17"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"28018.24"
+            },
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"5287232.47"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"603194.28"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"21050.06"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2018",
+      "totalPaymentInDollars":"6763185.39",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"2079772.68"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"2597273.89"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"4636.96"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"9772.63"
+            },
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"1925884.61"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"145844.62"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2019",
+      "totalPaymentInDollars":"5853127.45",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"3393162.67"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"1000180.65"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"8851.23"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"9772.63"
+            },
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"1299661.05"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"135471.81"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"6027.41"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2020",
+      "totalPaymentInDollars":"19300798.67",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"4394990.66"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6016884.91"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"2376797.44"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"6036767.1"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"4872.5"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"414399.32"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"8204.73"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"47882.01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2021",
+      "totalPaymentInDollars":"21756585.43",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"5214075.28"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"6047604.23"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"3949239.02"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"5718562.33"
+            },
+            {
+              "statueCategoryName":"Soil remediation",
+              "paymentInDollars":"15290.63"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"751368.58"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"60445.36"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "years":"2022",
+      "totalPaymentInDollars":"11859943.22",
+      "statutes":[
+        {
+          "statuteName":"(6)(A) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Structural",
+              "paymentInDollars":"1885691.22"
+            },
+            {
+              "statueCategoryName":"Land management",
+              "paymentInDollars":"3017350.06"
+            },
+            {
+              "statueCategoryName":"Vegetative",
+              "paymentInDollars":"900014.58"
+            },
+            {
+              "statueCategoryName":"Forest management",
+              "paymentInDollars":"5604646.9"
+            },
+            {
+              "statueCategoryName":"Other improvement",
+              "paymentInDollars":"424272.71"
+            }
+          ]
+        },
+        {
+          "statuteName":"(6)(B) Practices",
+          "statueCategories":[
+            {
+              "statueCategoryName":"Conservating planning assessment",
+              "paymentInDollars":"9911.05"
+            },
+            {
+              "statueCategoryName":"Other planning",
+              "paymentInDollars":"18056.7"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+
