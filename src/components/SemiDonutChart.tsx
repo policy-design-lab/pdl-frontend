@@ -28,7 +28,7 @@ export default function SemiDonutChart({ data }: any): JSX.Element {
     };
 
     return (
-        <Box>
+        <Box display="flex" justifyContent="center">
             <PieChart width={1000} height={400}>
                 <Pie
                     dataKey="value"
