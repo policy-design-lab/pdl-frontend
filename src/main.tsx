@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import LandingPage from './LandingPage';
+import LandingPage from './pages/LandingPage';
 import EQIPPage from './pages/EQIPPage';
 
 export default function Main(): JSX.Element {

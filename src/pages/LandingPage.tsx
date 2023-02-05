@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { CardMedia, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import NavBar from './components/NavBar';
-import forest from './images/forest.png';
-import News from './components/News';
-import Footer from './components/Footer';
-import LandingDisplay from './components/LandingDisplay';
-import LandingPageMapTab from './components/LandingPageMapTab';
+import NavBar from '../components/NavBar';
+import forest from '../images/forest.png';
+import News from '../components/News';
+import Footer from '../components/Footer';
+import LandingDisplay from '../components/LandingDisplay';
+import LandingPageMapTab from '../components/LandingPageMapTab';
 
 export default function LandingPage(): JSX.Element {
     return (
