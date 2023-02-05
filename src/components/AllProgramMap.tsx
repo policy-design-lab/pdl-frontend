@@ -58,7 +58,11 @@ const MapChart = ({ setTooltipContent }) => {
                                             <Typography sx={{ color: '#2F7164' }}>{stateCodes[cur.id]}</Typography>
                                             <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
                                             <Typography sx={{ color: '#3F3F3F' }}>
-                                                ${Number(total / 1000000.0).toFixed(2)}M
+                                                $
+                                                {Number(total / 1000000.0).toLocaleString(undefined, {
+                                                    maximumFractionDigits: 2
+                                                })}
+                                                M
                                             </Typography>
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -69,33 +73,33 @@ const MapChart = ({ setTooltipContent }) => {
                                                 {records.map((record) => (
                                                     <div key={record.State}>
                                                         2018: $
-                                                        {Number(record['2018 All Programs Total'] / 1000000.0).toFixed(
-                                                            2
-                                                        )}
+                                                        {Number(
+                                                            record['2018 All Programs Total'] / 1000000.0
+                                                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                         M
                                                         <br />
                                                         2019: $
-                                                        {Number(record['2019 All Programs Total'] / 1000000.0).toFixed(
-                                                            2
-                                                        )}
+                                                        {Number(
+                                                            record['2019 All Programs Total'] / 1000000.0
+                                                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                         M
                                                         <br />
                                                         2020: $
-                                                        {Number(record['2020 All Programs Total'] / 1000000.0).toFixed(
-                                                            2
-                                                        )}
+                                                        {Number(
+                                                            record['2020 All Programs Total'] / 1000000.0
+                                                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                         M
                                                         <br />
                                                         2021: $
-                                                        {Number(record['2021 All Programs Total'] / 1000000.0).toFixed(
-                                                            2
-                                                        )}
+                                                        {Number(
+                                                            record['2021 All Programs Total'] / 1000000.0
+                                                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                         M
                                                         <br />
                                                         2022: $
-                                                        {Number(record['2022 All Programs Total'] / 1000000.0).toFixed(
-                                                            2
-                                                        )}
+                                                        {Number(
+                                                            record['2022 All Programs Total'] / 1000000.0
+                                                        ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                         M
                                                         <br />
                                                     </div>
@@ -117,9 +121,10 @@ const MapChart = ({ setTooltipContent }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { outline: 'none' },
+                                            default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
                                             hover: {
-                                                fill: '#34b7eb',
+                                                stroke: '#232323',
+                                                strokeWidth: 2,
                                                 outline: 'none'
                                             },
                                             pressed: {

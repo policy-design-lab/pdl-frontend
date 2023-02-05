@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
-import { scaleQuantile } from 'd3-scale';
+import { scaleQuantile, scaleThreshold } from 'd3-scale';
 import Divider from '@mui/material/Divider';
 
 import PropTypes from 'prop-types';
@@ -57,23 +57,31 @@ const MapChart = ({ setTooltipContent, title }) => {
             searchKey = 'Crop Insurance Total';
             color1 = '#A1622F';
             color2 = '#DCC287';
-            color3 = '#f5f5f5';
+            color3 = '#E3E3E3';
             color4 = '#89CBC1';
             color5 = '#2C8472';
             break;
         case 'Supplemental Nutrition Assistance Program (SNAP)':
             searchKey = 'SNAP Total';
             color1 = '#F1EEF6';
-            color2 = '#BDC9E1';
+            color2 = '#CBD9F4';
             color3 = '#74A9CF';
             color4 = '#2B8CBE';
             color5 = '#045A8D';
             break;
     }
 
-    const colorScale = scaleQuantile()
-        .domain(allPrograms.map((d) => d[searchKey]))
-        .range([color1, color2, color3, color4, color5]);
+    let colorScale = null;
+
+    if (title !== 'Crop Insurance') {
+        colorScale = scaleQuantile()
+            .domain(allPrograms.map((d) => d[searchKey]))
+            .range([color1, color2, color3, color4, color5]);
+    } else {
+        colorScale = scaleThreshold()
+            .domain([-500000000, 0, 500000000, 1000000000])
+            .range([color1, color2, color3, color4, color5]);
+    }
 
     return (
         <div data-tip="">
@@ -101,7 +109,11 @@ const MapChart = ({ setTooltipContent, title }) => {
                                             <Typography sx={{ color: '#2F7164' }}>{stateCodes[cur.id]}</Typography>
                                             <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
                                             <Typography sx={{ color: '#3F3F3F' }}>
-                                                ${Number(total / 1000000.0).toFixed(2)}M
+                                                $
+                                                {Number(total / 1000000.0).toLocaleString(undefined, {
+                                                    maximumFractionDigits: 2
+                                                })}
+                                                M
                                             </Typography>
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -112,7 +124,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                                                 {records.map((record) => (
                                                     <div key={record.State + record.Title + record['Fiscal Year']}>
                                                         {record['Fiscal Year']}: $
-                                                        {Number(record.Amount / 1000000.0).toFixed(2)}M
+                                                        {Number(record.Amount / 1000000.0).toLocaleString(undefined, {
+                                                            maximumFractionDigits: 2
+                                                        })}
+                                                        M
                                                     </div>
                                                 ))}
                                             </Typography>
@@ -132,9 +147,10 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         fill={colorScale(total)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { outline: 'none' },
+                                            default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
                                             hover: {
-                                                fill: '#34b7eb',
+                                                stroke: '#232323',
+                                                strokeWidth: 2,
                                                 outline: 'none'
                                             },
                                             pressed: {
