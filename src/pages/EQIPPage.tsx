@@ -1,11 +1,12 @@
 import Box from '@mui/material/Box';
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider, Typography } from '@mui/material';
 import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
 import AllProgramMap from '../components/AllProgramMap';
 import SemiDonutChart from '../components/SemiDonutChart';
 import eqipSummary from '../data/eqipSummary.json';
+import DataTable from '../components/DataTable';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -53,8 +54,30 @@ export default function EQIPPage(): JSX.Element {
                 </Box>
                 <Drawer />
                 <Box sx={{ pl: 50, pr: 20 }}>
-                    <AllProgramMap />
+                    <Box sx={{ m: 'auto', pt: 8 }}>
+                        <AllProgramMap />
+                    </Box>
+                    <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
+                        <Box display="flex" justifyContent="center">
+                            <Typography variant="h5">
+                                <strong>Performance of Each Statute’s in EQIP</strong>
+                            </Typography>
+                        </Box>
+                        <Typography sx={{ mt: 2 }}>
+                            There are 7 categories of EQIP. There are 7 categories of EQIP. There are 7 categories of
+                            EQIP. There are 7 categories of EQIP. There are 7 categories of EQIP. There are 7 categories
+                            of EQIP. There are 7 categories of EQIP. There are 7 categories of EQIP. There are 7
+                            categories of EQIP. There are 7 categories of EQIP. There are 7 categories of EQIP. There
+                            are 7 categories of EQIP. There are 7 categories of EQIP. There are 7 categories of EQIP.
+                        </Typography>
+                    </Box>
                     <SemiDonutChart data={pieChartData} />
+                    <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
+                        <Typography variant="h5">
+                            <strong>States Performance</strong>
+                        </Typography>
+                    </Box>
+                    <DataTable />
                 </Box>
             </Box>
         </ThemeProvider>

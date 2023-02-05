@@ -43,7 +43,8 @@
     // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
     "incremental": true,
     // Report errors for fallthrough cases in switch statement
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false
   },
   // The files TypeScript should type check
   "include": [
