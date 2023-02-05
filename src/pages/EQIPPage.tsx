@@ -18,6 +18,7 @@ export default function EQIPPage(): JSX.Element {
     let other6ATotal = 0;
 
     Object.entries(eqipSummary).forEach((entry) => {
+        // eslint-disable-next-line
         const [key, value] = entry;
         const totalYearsCur = eqipSummary[key].find((s) => s.years === '2018-2022');
         const ACur = totalYearsCur.statutes.find((s) => s.statuteName === '(6)(A) Practices');

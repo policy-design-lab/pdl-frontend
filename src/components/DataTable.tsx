@@ -35,6 +35,7 @@ const Styles = styled.div`
     }
 `;
 
+// eslint-disable-next-line
 function Table({ columns, data }: { columns: any; data: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
@@ -70,20 +71,23 @@ function Table({ columns, data }: { columns: any; data: any }) {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {firstPageRows.map((row, i) => {
-                        prepareRow(row);
-                        return (
-                            <tr key={row.id} {...row.getRowProps()}>
-                                {row.cells.map((cell) => {
-                                    return (
-                                        <td key={cell.id} {...cell.getCellProps()}>
-                                            {cell.render('Cell')}
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        );
-                    })}
+                    {
+                        // eslint-disable-next-line
+                        firstPageRows.map((row, i) => {
+                            prepareRow(row);
+                            return (
+                                <tr key={row.id} {...row.getRowProps()}>
+                                    {row.cells.map((cell) => {
+                                        return (
+                                            <td key={cell.id} {...cell.getCellProps()}>
+                                                {cell.render('Cell')}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })
+                    }
                 </tbody>
             </table>
             <br />
@@ -94,7 +98,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App() {
+function App(): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
