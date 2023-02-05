@@ -9,7 +9,9 @@ const Styles = styled.div`
 
     table {
         border-spacing: 0;
-        border: 1px solid black;
+        border: 1px solid #e4ebe7;
+        border-left: none;
+        border-right: none;
 
         tr {
             :last-child {
@@ -19,14 +21,18 @@ const Styles = styled.div`
             }
         }
 
-        th,
+        th {
+            background-color: #f1f1f1;
+            padding: 1rem;
+        }
+
         td {
             margin: 0;
             padding: 1rem;
             padding-left: 5rem;
             padding-right: 5rem;
-            border-bottom: 1px solid black;
-            border-right: 1px solid black;
+            border-bottom: 1px solid #e4ebe7;
+            border-right: none;
 
             :last-child {
                 border-right: 0;
@@ -55,7 +61,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                         <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
                                 // Add the sorting props to control sorting.
-                                <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                <th
+                                    key={column.id}
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    {...column.getHeaderProps({
+                                        style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+                                    })}
+                                >
                                     {column.render('Header')}
                                     {/* Add a sort direction indicator */}
                                     <span>
@@ -103,7 +115,9 @@ function App(): JSX.Element {
         () => [
             {
                 Header: 'STATES',
-                accessor: 'state'
+                accessor: 'state',
+                paddingLeft: '5rem',
+                paddingRight: '32rem'
             },
             {
                 Header: 'EQIP BENEFITS',
