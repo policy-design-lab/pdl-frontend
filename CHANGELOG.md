@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-- Initial EQIP page and data visualization demos [#19](https://github.com/policy-design-lab/pdl-frontend/pull/19)
+- Initial EQIP page and data visualization demos [#18](https://github.com/policy-design-lab/pdl-frontend/issues/18)
 ### Fixed
 - Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
 
