@@ -1,0 +1,12 @@
+[
+  {
+    "state": "Alaska",
+    "eqipBenefit": 2000,
+    "percentage": "20%"
+  },
+  {
+    "state": "California",
+    "eqipBenefit": 8000,
+    "percentage": "80%"
+  }
+]
