@@ -4,9 +4,9 @@ import { createTheme, ThemeProvider, Typography } from '@mui/material';
 import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
 import SemiDonutChart from '../components/SemiDonutChart';
-import eqipSummary from '../data/eqipSummary.json';
 import DataTable from '../components/DataTable';
 import EqipMap from '../components/eqip/EqipMap';
+import chartData from '../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -16,35 +16,36 @@ export default function EQIPPage(): JSX.Element {
     let forestManagementTotal = 0;
     let soilRemediationTotal = 0;
     let other6ATotal = 0;
+    let soilTestingTotal = 0;
 
-    Object.entries(eqipSummary).forEach((entry) => {
-        // eslint-disable-next-line
-        const [key, value] = entry;
-        const totalYearsCur = eqipSummary[key].find((s) => s.years === '2018-2022');
-        const ACur = totalYearsCur.statutes.find((s) => s.statuteName === '(6)(A) Practices');
+    // eslint-disable-next-line
+        const cur = chartData.statutes.find((s) => s.statuteName === '(6)(A) Practices');
+    const ACur = cur.practiceCategories;
 
-        const structuralCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Structural');
-        const landManagementCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Land management');
-        const vegetativeCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Vegetative');
-        const forestManagementCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Forest management');
-        const soilRemediationCur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Soil remediation');
-        const other6ACur = ACur.statueCategories.find((s) => s.statueCategoryName === 'Other improvement');
+    const structuralCur = ACur.find((s) => s.practiceCategoryName === 'Structural');
+    const landManagementCur = ACur.find((s) => s.practiceCategoryName === 'Land management');
+    const vegetativeCur = ACur.find((s) => s.practiceCategoryName === 'Vegetative');
+    const forestManagementCur = ACur.find((s) => s.practiceCategoryName === 'Forest management');
+    const soilRemediationCur = ACur.find((s) => s.practiceCategoryName === 'Soil remediation');
+    const other6ACur = ACur.find((s) => s.practiceCategoryName === 'Other improvement');
+    const soilTestingCur = ACur.find((s) => s.practiceCategoryName === 'Soil testing');
 
-        structuralTotal += Number(structuralCur.paymentInDollars);
-        landManagementTotal += Number(landManagementCur.paymentInDollars);
-        vegetativeTotal += Number(vegetativeCur.paymentInDollars);
-        forestManagementTotal += Number(forestManagementCur.paymentInDollars);
-        soilRemediationTotal += Number(soilRemediationCur.paymentInDollars);
-        other6ATotal += Number(other6ACur.paymentInDollars);
-    });
+    structuralTotal += Number(structuralCur.totalPaymentInDollars);
+    landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
+    vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
+    forestManagementTotal += Number(forestManagementCur.totalPaymentInDollars);
+    soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
+    other6ATotal += Number(other6ACur.totalPaymentInDollars);
+    soilTestingTotal += Number(soilTestingCur.totalPaymentInDollars);
 
     const pieChartData = [
         { name: 'Structural', value: structuralTotal, color: '#2F7164' },
         { name: 'Land management', value: landManagementTotal, color: '#4D847A' },
         { name: 'Vegetative', value: vegetativeTotal, color: '#749F97' },
         { name: 'Forest management', value: forestManagementTotal, color: '#9CBAB4' },
-        { name: 'Soil remediation', value: soilRemediationTotal, color: '#B9CDC9' },
-        { name: 'Other improvement', value: other6ATotal, color: '#CDDBD8' }
+        { name: 'Other improvement', value: other6ATotal, color: '#B9CDC9' },
+        { name: 'Soil remediation', value: soilRemediationTotal, color: '#CDDBD8' },
+        { name: 'Soil testing', value: soilTestingTotal, color: '#E2E8E7' }
     ];
 
     return (
