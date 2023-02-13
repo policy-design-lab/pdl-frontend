@@ -3,10 +3,10 @@ import * as React from 'react';
 import { createTheme, ThemeProvider, Typography } from '@mui/material';
 import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
-import AllProgramMap from '../components/AllProgramMap';
 import SemiDonutChart from '../components/SemiDonutChart';
 import eqipSummary from '../data/eqipSummary.json';
 import DataTable from '../components/DataTable';
+import EqipMap from '../components/eqip/EqipMap';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -56,7 +56,7 @@ export default function EQIPPage(): JSX.Element {
                 <Drawer />
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <Box sx={{ m: 'auto', pt: 8 }}>
-                        <AllProgramMap />
+                        <EqipMap />
                     </Box>
                     <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                         <Box display="flex" justifyContent="center">
