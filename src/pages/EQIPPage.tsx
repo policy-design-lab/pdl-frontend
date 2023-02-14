@@ -7,6 +7,7 @@ import SemiDonutChart from '../components/SemiDonutChart';
 import DataTable from '../components/DataTable';
 import EqipMap from '../components/eqip/EqipMap';
 import chartData from '../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json';
+import CategoryTable from '../components/eqip/CategoryTable';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -78,6 +79,42 @@ export default function EQIPPage(): JSX.Element {
                         <Typography variant="h5">
                             <strong>States Performance</strong>
                         </Typography>
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Land management" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Forest management" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Structural" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Soil remediation" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Vegetative" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Other improvement" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Soil testing" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Other planning" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Conservation planning assessment" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Resource-conserving crop rotation" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Soil health" />
+                    </Box>
+                    <Box component="div" sx={{ display: 'none' }}>
+                        <CategoryTable category="Comprehensive Nutrient Mgt." />
                     </Box>
                     <DataTable />
                 </Box>
