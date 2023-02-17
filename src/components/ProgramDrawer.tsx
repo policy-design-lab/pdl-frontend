@@ -13,6 +13,14 @@ import PropTypes from 'prop-types';
 
 const drawerWidth = 240;
 
+EQIPCheckboxList.propTypes = {
+    setEQIPChecked: PropTypes.func
+};
+
+ProgramDrawer.propTypes = {
+    setEQIPChecked: PropTypes.func
+};
+
 function EQIPCheckboxList({ setEQIPChecked }) {
     const [checked, setChecked] = React.useState(-1);
 
@@ -43,7 +51,7 @@ function EQIPCheckboxList({ setEQIPChecked }) {
                 const labelId = `checkbox-list-label-${value}`;
 
                 return (
-                    <ListItem key={value} disablePadding>
+                    <ListItem key={category} disablePadding>
                         <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                             <ListItemIcon>
                                 <Checkbox
