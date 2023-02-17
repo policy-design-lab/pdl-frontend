@@ -4,8 +4,8 @@ import { createTheme, ThemeProvider, Typography } from '@mui/material';
 import NavBar from '../components/NavBar';
 import Drawer from '../components/ProgramDrawer';
 import SemiDonutChart from '../components/SemiDonutChart';
-import DataTable from '../components/DataTable';
-import EqipMap from '../components/eqip/EqipMap';
+import DataTable from '../components/eqip/EQIPTotalTable';
+import EqipTotalMap from '../components/eqip/EqipTotalMap';
 import chartData from '../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json';
 import CategoryTable from '../components/eqip/CategoryTable';
 import CategoryMap from '../components/eqip/CategoryMap';
@@ -61,7 +61,7 @@ export default function EQIPPage(): JSX.Element {
                 <Drawer setEQIPChecked={setChecked} />
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 0 ? 'none' : 'block' }}>
-                        <EqipMap />
+                        <EqipTotalMap />
                     </Box>
                     <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 1 ? 'none' : 'block' }}>
                         <CategoryMap category="Land management" />

@@ -146,7 +146,7 @@ MapChart.propTypes = {
     setTooltipContent: PropTypes.func
 };
 
-const EqipMap = (): JSX.Element => {
+const EqipTotalMap = (): JSX.Element => {
     const [content, setContent] = useState('');
     return (
         <div>
@@ -160,4 +160,4 @@ const EqipMap = (): JSX.Element => {
     );
 };
 
-export default EqipMap;
+export default EqipTotalMap;
