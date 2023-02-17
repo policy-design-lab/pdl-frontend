@@ -8,6 +8,7 @@ import DataTable from '../components/DataTable';
 import EqipMap from '../components/eqip/EqipMap';
 import chartData from '../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json';
 import CategoryTable from '../components/eqip/CategoryTable';
+import CategoryMap from '../components/eqip/CategoryMap';
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -57,8 +58,44 @@ export default function EQIPPage(): JSX.Element {
                 </Box>
                 <Drawer />
                 <Box sx={{ pl: 50, pr: 20 }}>
-                    <Box sx={{ m: 'auto', pt: 8 }}>
+                    <Box component="div" sx={{ m: 'auto', pt: 8 }}>
                         <EqipMap />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Land management" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Forest management" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Structural" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Soil remediation" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Vegetative" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Other improvement" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Soil testing" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Other planning" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Conservation planning assessment" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Resource-conserving crop rotation" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Soil health" />
+                    </Box>
+                    <Box component="div" sx={{ m: 'auto', pt: 8, display: 'none' }}>
+                        <CategoryMap category="Comprehensive Nutrient Mgt." />
                     </Box>
                     <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                         <Box display="flex" justifyContent="center">
