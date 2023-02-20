@@ -21,12 +21,14 @@ ProgramDrawer.propTypes = {
     setEQIPChecked: PropTypes.func
 };
 
+let currentChecked = -1;
 function EQIPCheckboxList({ setEQIPChecked }) {
-    const [checked, setChecked] = React.useState(-1);
+    const [checked, setChecked] = React.useState(currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
         setEQIPChecked(value);
+        currentChecked = value;
     };
 
     const EQIPList = [
