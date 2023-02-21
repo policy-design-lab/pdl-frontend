@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import allStates from '../../data/allstates.json';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 import '../../styles/map.css';
+import HorizontalStackedBar from '../HorizontalStackedBar';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
 
@@ -164,8 +165,24 @@ MapChart.propTypes = {
 
 const CategoryMap = ({ category }: { category: string }): JSX.Element => {
     const [content, setContent] = useState('');
+    const title = `${category} Benefits`;
     return (
         <div>
+            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                <HorizontalStackedBar
+                    title={title}
+                    color1="#FFF9D8"
+                    color2="#E1F2C4"
+                    color3="#9FD9BA"
+                    color4="#1B9577"
+                    color5="#005A45"
+                    label1="0"
+                    label2="20%"
+                    label3="40%"
+                    label4="60%"
+                    label5="80%"
+                />
+            </Box>
             <MapChart setTooltipContent={setContent} category={category} />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">

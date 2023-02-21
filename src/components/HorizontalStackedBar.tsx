@@ -1,41 +1,68 @@
 import React from 'react';
 import HSBar from 'react-horizontal-stacked-bar-chart';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-export default function HorizontalStackedBar(): JSX.Element {
+export default function HorizontalStackedBar({
+    title,
+    color1,
+    color2,
+    color3,
+    color4,
+    color5,
+    label1,
+    label2,
+    label3,
+    label4,
+    label5
+}: {
+    title: string;
+    color1: string;
+    color2: string;
+    color3: string;
+    color4: string;
+    color5: string;
+    label1: string;
+    label2: string;
+    label3: string;
+    label4: string;
+    label5: string;
+}): JSX.Element {
     return (
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                minWidth: 560
             }}
         >
+            <Box display="flex" justifyContent="center">
+                <Typography variant="h5" sx={{ mb: 1 }}>
+                    <strong>{title}</strong>
+                </Typography>
+            </Box>
             <HSBar
-                showValueUp
-                height={0}
+                height={10}
                 data={[
-                    { value: 10000, description: '(i) structure practices', color: '#2F7164' },
-                    { value: 5000, description: '(ii) land management practices', color: '#4E867A' },
-                    { value: 3000, description: '(iii) vegetative practices', color: '#78A39A' },
-                    { value: 3000, description: '(iv) forest management', color: '#A1BFB9' },
-                    { value: 3000, description: '(v) soil testing', color: '#C1D4D1' },
-                    { value: 3000, description: '(vi) Soil Remediation', color: '#D5E3E0' },
-                    { value: 3000, description: '(viii) other', color: '#F2F5F4' }
+                    { value: 20, color: color1 },
+                    { value: 20, color: color2 },
+                    { value: 20, color: color3 },
+                    { value: 20, color: color4 },
+                    { value: 20, color: color5 }
                 ]}
             />
-            <HSBar
-                showValueIn
-                height={80}
-                data={[
-                    { value: 10000, color: '#2F7164' },
-                    { value: 5000, color: '#4E867A' },
-                    { value: 3000, color: '#78A39A' },
-                    { value: 3000, color: '#A1BFB9' },
-                    { value: 3000, color: '#C1D4D1' },
-                    { value: 3000, color: '#D5E3E0' },
-                    { value: 3000, color: '#F2F5F4' }
-                ]}
-            />
+            <Box sx={{ mt: 2 }}>
+                <HSBar
+                    showValueUp
+                    height={0}
+                    data={[
+                        { value: 18, description: label1 },
+                        { value: 19, description: label2 },
+                        { value: 19.5, description: label3 },
+                        { value: 19, description: label4 },
+                        { value: 21, description: label5 }
+                    ]}
+                />
+            </Box>
         </Box>
     );
 }

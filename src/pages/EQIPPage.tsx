@@ -60,43 +60,43 @@ export default function EQIPPage(): JSX.Element {
                 </Box>
                 <Drawer setEQIPChecked={setChecked} />
                 <Box sx={{ pl: 50, pr: 20 }}>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 0 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 0 ? 'none' : 'block' }}>
                         <EqipTotalMap />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 1 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 1 ? 'none' : 'block' }}>
                         <CategoryMap category="Land management" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 2 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 2 ? 'none' : 'block' }}>
                         <CategoryMap category="Forest management" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 3 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 3 ? 'none' : 'block' }}>
                         <CategoryMap category="Structural" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 4 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 4 ? 'none' : 'block' }}>
                         <CategoryMap category="Soil remediation" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 5 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 5 ? 'none' : 'block' }}>
                         <CategoryMap category="Vegetative" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 6 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 6 ? 'none' : 'block' }}>
                         <CategoryMap category="Other improvement" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 7 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 7 ? 'none' : 'block' }}>
                         <CategoryMap category="Soil testing" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 8 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 8 ? 'none' : 'block' }}>
                         <CategoryMap category="Other planning" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 9 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 9 ? 'none' : 'block' }}>
                         <CategoryMap category="Conservation planning assessment" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 10 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 10 ? 'none' : 'block' }}>
                         <CategoryMap category="Resource-conserving crop rotation" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 11 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 11 ? 'none' : 'block' }}>
                         <CategoryMap category="Soil health" />
                     </Box>
-                    <Box component="div" sx={{ m: 'auto', pt: 8, display: checked !== 12 ? 'none' : 'block' }}>
+                    <Box component="div" sx={{ width: '85%', m: 'auto', display: checked !== 12 ? 'none' : 'block' }}>
                         <CategoryMap category="Comprehensive Nutrient Mgt." />
                     </Box>
                     <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
