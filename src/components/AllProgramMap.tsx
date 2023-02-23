@@ -42,15 +42,14 @@ const MapChart = (props) => {
                             <>
                                 {geographies.map((geo) => {
                                     let records = [];
+                                    let total = 0;
                                     const cur = allStates.find((s) => s.val === geo.id);
                                     if (cur !== undefined) {
                                         records = allPrograms.filter((s) => s.State === cur.id);
+                                        records.forEach((record) => {
+                                            total += record['18-22 All Programs Total'];
+                                        });
                                     }
-                                    records = allPrograms.filter((s) => s.State === cur.id);
-                                    let total = 0;
-                                    records.forEach((record) => {
-                                        total += record['18-22 All Programs Total'];
-                                    });
                                     const hoverContent = (
                                         <Box
                                             sx={{

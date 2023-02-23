@@ -3,12 +3,12 @@ const baseConfig = {
 };
 
 const prodConfig = {
-	apiUrl: "https://pdl.ncsa.illinois.edu/pdl",
+	apiUrl: "https://api.policydesignlab.ncsa.illinois.edu/pdl",
 	...baseConfig
 };
 
 const devConfig = {
-	apiUrl: "https://pdl-dev.ncsa.illinois.edu/pdl",
+	apiUrl: "https://api.policydesignlab-dev.ncsa.illinois.edu/pdl",
 	...baseConfig
 };
 
@@ -21,11 +21,11 @@ const localConfig = {
 export const config = getConfig();
 
 function getConfig() {
-	// if (process.env.REACT_APP_ENV === 'production') {
-	//     return prodConfig;
-	// }
-	// if (process.env.REACT_APP_ENV === 'development') {
-	//     return devConfig;
-	// }
+	if (process.env.APP_ENV === 'production') {
+	    return prodConfig;
+	}
+	if (process.env.APP_ENV === 'development') {
+	    return devConfig;
+	}
 	return localConfig;
 }
