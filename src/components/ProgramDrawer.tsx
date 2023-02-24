@@ -14,7 +14,8 @@ import PropTypes from 'prop-types';
 const drawerWidth = 240;
 
 EQIPCheckboxList.propTypes = {
-    setEQIPChecked: PropTypes.func
+    setEQIPChecked: PropTypes.func,
+    setShowPopUp: PropTypes.func
 };
 
 ProgramDrawer.propTypes = {
@@ -22,13 +23,14 @@ ProgramDrawer.propTypes = {
 };
 
 let currentChecked = -1;
-function EQIPCheckboxList({ setEQIPChecked }) {
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
         setEQIPChecked(value);
         currentChecked = value;
+        setShowPopUp(false);
     };
 
     const EQIPList = [
@@ -107,7 +109,7 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                 </MenuItem>
                 <Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start">
                     <Box>
-                        <EQIPCheckboxList setEQIPChecked={setEQIPChecked} />
+                        <EQIPCheckboxList setEQIPChecked={setEQIPChecked} setShowPopUp={setEqipOpen} />
                     </Box>
                 </Popper>
             </Box>
