@@ -41,7 +41,7 @@ const MapChart = ({ setTooltipContent, category }) => {
                 return categoryRecord.paymentInDollars;
             })
         )
-        .range(['#FFF9D8', '#E1F2C4', '#9FD9BA', '#1B9577', '#005A45']);
+        .range(['#F0F9E8', '#BAE4BC', '#7BCCC4', '#43A2CA', '#0868AC']);
 
     return (
         <div data-tip="">
@@ -171,11 +171,11 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
             <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
                 <HorizontalStackedBar
                     title={title}
-                    color1="#FFF9D8"
-                    color2="#E1F2C4"
-                    color3="#9FD9BA"
-                    color4="#1B9577"
-                    color5="#005A45"
+                    color1="#F0F9E8"
+                    color2="#BAE4BC"
+                    color3="#7BCCC4"
+                    color4="#43A2CA"
+                    color5="#0868AC"
                     label1="0"
                     label2="20%"
                     label3="40%"
