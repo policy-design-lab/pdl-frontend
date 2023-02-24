@@ -2,7 +2,7 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
-import { Popper } from '@mui/material';
+import { Popper, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -53,22 +53,89 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
-
+                if (
+                    category !== 'Land management' &&
+                    category !== 'Other planning' &&
+                    category !== 'Total EQIP Benefits'
+                ) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === 'Total EQIP Benefits') {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === 'Land management') {
+                    return (
+                        <Box>
+                            <Typography sx={{ pl: 8 }}>
+                                <strong>(6)(A) Practices</strong>
+                            </Typography>
+                            <ListItem key={category} disablePadding>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                    <ListItemIcon>
+                                        <Checkbox
+                                            edge="start"
+                                            checked={checked === value}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ 'aria-labelledby': labelId }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText id={labelId} primary={category} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Box>
+                    );
+                }
                 return (
-                    <ListItem key={category} disablePadding>
-                        <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                            <ListItemIcon>
-                                <Checkbox
-                                    edge="start"
-                                    checked={checked === value}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText id={labelId} primary={category} />
-                        </ListItemButton>
-                    </ListItem>
+                    <Box key={category}>
+                        <Typography sx={{ pl: 8 }}>
+                            <strong>(6)(B) Practices</strong>
+                        </Typography>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
                 );
             })}
         </List>
