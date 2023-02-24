@@ -124,9 +124,13 @@ function App({ category }: { category: string }): JSX.Element {
         const newRecord = () => {
             return {
                 state: key,
-                categoryBenefit: `$${categoryRecord.paymentInDollars.toString()}`,
+                categoryBenefit: `$${categoryRecord.paymentInDollars.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                })}`,
                 categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                eqipBenefit: `$${value[0].totalPaymentInDollars.toString()}`,
+                eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                })}`,
                 percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
             };
         };

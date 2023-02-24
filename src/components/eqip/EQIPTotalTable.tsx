@@ -117,7 +117,9 @@ for (const [key, value] of Object.entries(statePerformance)) {
     const newRecord = () => {
         return {
             state: key,
-            eqipBenefit: `$${value[0].totalPaymentInDollars.toString()}`,
+            eqipBenefit: `$${value[0].totalPaymentInDollars
+                .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                .toString()}`,
             percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
         };
     };
