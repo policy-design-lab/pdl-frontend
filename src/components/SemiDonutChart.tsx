@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 const RADIAN = Math.PI / 180;
 
 // eslint-disable-next-line
-export default function SemiDonutChart({ data }: any): JSX.Element {
+export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Element {
     const data01 = data;
     // eslint-disable-next-line
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
@@ -30,21 +30,21 @@ export default function SemiDonutChart({ data }: any): JSX.Element {
 
     return (
         <Box display="flex" justifyContent="center">
-            <PieChart width={1000} height={450}>
+            <PieChart width={2000} height={450}>
                 <Pie
                     dataKey="value"
                     data={data01}
                     startAngle={180}
                     endAngle={0}
-                    cx={500}
+                    cx={1000}
                     cy={400}
                     innerRadius={150}
                     outerRadius={300}
                     fill="#82ca9d"
                     label={renderCustomizedLabel}
                 >
-                    <Label value="test test" position="center" dy={-75} />
-                    <Label value="test test" position="center" dy={-15} />
+                    <Label value={`$${label1}`} position="center" dy={-75} />
+                    <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
                         <Cell key={entry.id} fill={entry.color} />
                     ))}
@@ -54,7 +54,7 @@ export default function SemiDonutChart({ data }: any): JSX.Element {
                     data={data01}
                     startAngle={180}
                     endAngle={0}
-                    cx={500}
+                    cx={1000}
                     cy={400}
                     innerRadius={150}
                     outerRadius={300}

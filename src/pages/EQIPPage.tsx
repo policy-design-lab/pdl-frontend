@@ -22,9 +22,19 @@ export default function EQIPPage(): JSX.Element {
     let other6ATotal = 0;
     let soilTestingTotal = 0;
 
+    let otherPlanningTotal = 0;
+    let conservationPlanningAssessmentTotal = 0;
+    let comprehensiveNutrientMgtTotal = 0;
+    let resourceConservingCropRotationTotal = 0;
+    let soilHealthTotal = 0;
+
     // eslint-disable-next-line
-        const cur = chartData.statutes.find((s) => s.statuteName === '(6)(A) Practices');
-    const ACur = cur.practiceCategories;
+    const cur1 = chartData.statutes.find((s) => s.statuteName === '(6)(A) Practices');
+    const cur2 = chartData.statutes.find((s) => s.statuteName === '(6)(B) Practices');
+    const sixATotal = cur1.totalPaymentInDollars;
+    const sixBTotal = cur2.totalPaymentInDollars;
+    const ACur = cur1.practiceCategories;
+    const BCur = cur2.practiceCategories;
 
     const structuralCur = ACur.find((s) => s.practiceCategoryName === 'Structural');
     const landManagementCur = ACur.find((s) => s.practiceCategoryName === 'Land management');
@@ -34,6 +44,16 @@ export default function EQIPPage(): JSX.Element {
     const other6ACur = ACur.find((s) => s.practiceCategoryName === 'Other improvement');
     const soilTestingCur = ACur.find((s) => s.practiceCategoryName === 'Soil testing');
 
+    const otherPlanningCur = BCur.find((s) => s.practiceCategoryName === 'Other planning');
+    const conservationPlanningAssessmentCur = BCur.find(
+        (s) => s.practiceCategoryName === 'Conservation planning assessment'
+    );
+    const comprehensiveNutrientMgtCur = BCur.find((s) => s.practiceCategoryName === 'Comprehensive Nutrient Mgt.');
+    const resourceConservingCropRotationCur = BCur.find(
+        (s) => s.practiceCategoryName === 'Resource-conserving crop rotation'
+    );
+    const soilHealthCur = BCur.find((s) => s.practiceCategoryName === 'Soil health');
+
     structuralTotal += Number(structuralCur.totalPaymentInDollars);
     landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
     vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
@@ -42,7 +62,13 @@ export default function EQIPPage(): JSX.Element {
     other6ATotal += Number(other6ACur.totalPaymentInDollars);
     soilTestingTotal += Number(soilTestingCur.totalPaymentInDollars);
 
-    const pieChartData = [
+    otherPlanningTotal += Number(otherPlanningCur.totalPaymentInDollars);
+    conservationPlanningAssessmentTotal += Number(conservationPlanningAssessmentCur.totalPaymentInDollars);
+    comprehensiveNutrientMgtTotal += Number(comprehensiveNutrientMgtCur.totalPaymentInDollars);
+    resourceConservingCropRotationTotal += Number(resourceConservingCropRotationCur.totalPaymentInDollars);
+    soilHealthTotal += Number(soilHealthCur.totalPaymentInDollars);
+
+    const sixAChartData = [
         { name: 'Structural', value: structuralTotal, color: '#2F7164' },
         { name: 'Land management', value: landManagementTotal, color: '#4D847A' },
         { name: 'Vegetative', value: vegetativeTotal, color: '#749F97' },
@@ -50,6 +76,19 @@ export default function EQIPPage(): JSX.Element {
         { name: 'Other improvement', value: other6ATotal, color: '#B9CDC9' },
         { name: 'Soil remediation', value: soilRemediationTotal, color: '#CDDBD8' },
         { name: 'Soil testing', value: soilTestingTotal, color: '#E2E8E7' }
+    ];
+
+    const sixBChartData = [
+        { name: 'Other planning', value: otherPlanningTotal, color: '#2F7164' },
+        { name: 'Conservation planning assessment', value: conservationPlanningAssessmentTotal, color: '#4D847A' },
+        { name: 'Comprehensive Nutrient Mgt.', value: comprehensiveNutrientMgtTotal, color: '#749F97' },
+        { name: 'Resource-conserving crop rotation', value: resourceConservingCropRotationTotal, color: '#9CBAB4' },
+        { name: 'Soil health', value: soilHealthTotal, color: '#B9CDC9' }
+    ];
+
+    const totalChartData = [
+        { name: '6 (A)', value: sixATotal, color: '#2F7164' },
+        { name: '6 (B)', value: sixBTotal, color: '#9CBAB4' }
     ];
 
     return (
@@ -119,7 +158,27 @@ export default function EQIPPage(): JSX.Element {
                             including integrated pest management, dust control, and energy improvements.
                         </Typography>
                     </Box>
-                    <SemiDonutChart data={pieChartData} />
+                    <Box component="div" sx={{ display: checked !== 0 ? 'none' : 'block' }}>
+                        <SemiDonutChart
+                            data={totalChartData}
+                            label1={(sixATotal + sixBTotal).toString()}
+                            label2="EQIP TOTAL BENEFITS"
+                        />
+                    </Box>
+                    <Box component="div" sx={{ display: checked >= 1 && checked <= 7 ? 'block' : 'none' }}>
+                        <SemiDonutChart
+                            data={sixAChartData}
+                            label1={sixATotal.toString()}
+                            label2="6(A) TOTAL BENEFITS"
+                        />
+                    </Box>
+                    <Box component="div" sx={{ display: checked >= 8 ? 'block' : 'none' }}>
+                        <SemiDonutChart
+                            data={sixBChartData}
+                            label1={sixBTotal.toString()}
+                            label2="6(B) TOTAL BENEFITS"
+                        />
+                    </Box>
                     <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                         <Typography variant="h5">
                             <strong>Performance by State</strong>
