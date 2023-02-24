@@ -106,17 +106,17 @@ export default function EQIPPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Typography sx={{ mt: 2 }}>
-                            EQIP provides cost-share assistance for improvements to eligible land through seven
-                            categories of conservation practices: (1) structural practices, such as for irrigation and
-                            livestock manure management or abatement; (2) land management practices, such as for
-                            fencing, drainage water management, grazing, prescribed burning, and wildlife habitat; (3)
-                            vegetative practices, such as planting filter strips, cover crops, grassed waterways, field
-                            borders, windbreaks, and shelterbelts; (4) forest management practices, which include
-                            planting trees and shrubs, improving forest stands, planting riparian forest buffers, and
-                            treating residues; (5) soil testing practices; (6) soil remediation practices, such as
-                            residue and tillage management (no-till, mulch-till, or strip-till), and amendments for
-                            treating agricultural wastes, ; and (7) other practices, including integrated pest
-                            management, dust control, and energy improvements.
+                            EQIP provides cost-share assistance for improvements to eligible land. In the statute,
+                            Congress defined seven categories of conservation practices: (1) structural practices, such
+                            as for irrigation and livestock manure management or abatement; (2) land management
+                            practices, such as for fencing, drainage water management, grazing, prescribed burning, and
+                            wildlife habitat; (3) vegetative practices, such as planting filter strips, cover crops,
+                            grassed waterways, field borders, windbreaks, and shelterbelts; (4) forest management
+                            practices, which include planting trees and shrubs, improving forest stands, planting
+                            riparian forest buffers, and treating residues; (5) soil testing practices; (6) soil
+                            remediation practices, such as residue and tillage management (no-till, mulch-till, or
+                            strip-till), and amendments for treating agricultural wastes, ; and (7) other practices,
+                            including integrated pest management, dust control, and energy improvements.
                         </Typography>
                     </Box>
                     <SemiDonutChart data={pieChartData} />
