@@ -122,7 +122,7 @@ export default function EQIPPage(): JSX.Element {
                     <SemiDonutChart data={pieChartData} />
                     <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                         <Typography variant="h5">
-                            <strong>States Performance</strong>
+                            <strong>Performance by State</strong>
                         </Typography>
                     </Box>
                     <Box component="div" sx={{ display: checked !== 0 ? 'none' : 'block' }}>
