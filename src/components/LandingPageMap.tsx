@@ -134,8 +134,8 @@ const MapChart = ({ setTooltipContent, title }) => {
                                             {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
                                                 <Typography sx={{ color: '#2F7164' }}>
                                                     Avg. Monthly Participation
-                                                </Typography>)
-                                            }
+                                                </Typography>
+                                            )}
                                             {/* Average SNAP monthly participation for the current years */}
                                             {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
                                                 <Typography sx={{ color: '#3F3F3F' }}>
@@ -144,8 +144,8 @@ const MapChart = ({ setTooltipContent, title }) => {
                                                     ).toLocaleString(undefined, {
                                                         maximumFractionDigits: 0
                                                     })}
-                                                </Typography>)
-                                            }
+                                                </Typography>
+                                            )}
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                         <Box>
