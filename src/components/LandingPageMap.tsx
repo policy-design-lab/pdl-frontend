@@ -129,20 +129,21 @@ const MapChart = ({ setTooltipContent, title }) => {
                                                 })}
                                                 M
                                             </Typography>
-                                            <br/>
-                                            {/*Show additional data on hover for SNAP*/}
-                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' &&
-                                                <Typography sx={{ color: '#2F7164' }}>Avg. Monthly Participation
-                                                </Typography>
+                                            <br />
+                                            {/* Show additional data on hover for SNAP */}
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
+                                                <Typography sx={{ color: '#2F7164' }}>
+                                                    Avg. Monthly Participation
+                                                </Typography>)
                                             }
-                                            {/*Average SNAP monthly participation for the current years*/}
-                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' &&
+                                            {/* Average SNAP monthly participation for the current years */}
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
                                                 <Typography sx={{ color: '#3F3F3F' }}>
                                                     {Number(totalAverageMonthlyParticipation / yearList.length).
                                                     toLocaleString(undefined, {
                                                         maximumFractionDigits: 0
                                                     })}
-                                                </Typography>
+                                                </Typography>)
                                             }
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
