@@ -84,7 +84,8 @@ const MapChart = ({ setTooltipContent, title }) => {
     }
 
     // Get list of unique years
-    const yearList = summary.map((item) => item['Fiscal Year'])
+    const yearList = summary
+        .map((item) => item['Fiscal Year'])
         .filter((value, index, self) => self.indexOf(value) === index);
 
     return (
@@ -103,7 +104,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                     total += record.Amount;
                                 });
 
-                                if (title == "Supplemental Nutrition Assistance Program (SNAP)") {
+                                if (title === 'Supplemental Nutrition Assistance Program (SNAP)') {
                                     records.forEach((record) => {
                                         totalAverageMonthlyParticipation += record['Average Monthly Participation'];
                                     });
@@ -130,12 +131,12 @@ const MapChart = ({ setTooltipContent, title }) => {
                                             </Typography>
                                             <br/>
                                             {/*Show additional data on hover for SNAP*/}
-                                            {title == "Supplemental Nutrition Assistance Program (SNAP)" &&
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' &&
                                                 <Typography sx={{ color: '#2F7164' }}>Avg. Monthly Participation
                                                 </Typography>
                                             }
                                             {/*Average SNAP monthly participation for the current years*/}
-                                            {title == "Supplemental Nutrition Assistance Program (SNAP)" &&
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' &&
                                                 <Typography sx={{ color: '#3F3F3F' }}>
                                                     {Number(totalAverageMonthlyParticipation / yearList.length).
                                                     toLocaleString(undefined, {
