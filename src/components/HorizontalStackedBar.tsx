@@ -13,7 +13,8 @@ export default function HorizontalStackedBar({
     label2,
     label3,
     label4,
-    label5
+    label5,
+    label6
 }: {
     title: string;
     color1: string;
@@ -26,6 +27,7 @@ export default function HorizontalStackedBar({
     label3: string;
     label4: string;
     label5: string;
+    label6: string;
 }): JSX.Element {
     return (
         <Box
@@ -59,7 +61,8 @@ export default function HorizontalStackedBar({
                         { value: 19, description: label2 },
                         { value: 19.5, description: label3 },
                         { value: 19, description: label4 },
-                        { value: 21, description: label5 }
+                        { value: 21, description: label5 },
+                        { value: 2, description: label6 }
                     ]}
                 />
             </Box>
