@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Button, CardMedia, Grid, Typography } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Link } from 'react-router-dom';
 import gov from '../images/gov.png';
 import teamButton from '../images/buttons/PDL Team Button.png';
 import resourceButton from '../images/buttons/Data Resource Button.png';
@@ -33,6 +34,8 @@ export default function LandingDisplay(): JSX.Element {
                             variant="contained"
                             sx={{ bgcolor: '#2F7164', minWidth: 400, minHeight: 80, borderRadius: 0 }}
                             disableElevation
+                            component={Link}
+                            to="/eqip"
                         >
                             <Typography variant="subtitle1">
                                 <strong>Explore Maps of Total Farm Bill</strong>
