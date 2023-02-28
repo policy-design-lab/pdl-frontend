@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
-import { scaleQuantile } from 'd3-scale';
+import { scaleQuantile, scaleQuantize } from "d3-scale";
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -27,20 +27,9 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, category }) => {
-    const colorScale = scaleQuantile()
-        .domain(
-            Object.values(statePerformance).map((value) => {
-                const statuteRecord = value[0].statutes;
-                const ACur = statuteRecord.find((s) => s.statuteName === '(6)(A) Practices');
-                const AArray = ACur.practiceCategories;
-                const BCur = statuteRecord.find((s) => s.statuteName === '(6)(B) Practices');
-                const BArray = BCur.practiceCategories;
-                const TotalArray = AArray.concat(BArray);
-                const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-                return categoryRecord.paymentInDollars;
-            })
-        )
+const MapChart = ({ setTooltipContent, category, maxValue }) => {
+    const colorScale = scaleQuantize()
+        .domain([0, maxValue])
         .range(['#F0F9E8', '#BAE4BC', '#7BCCC4', '#43A2CA', '#0868AC']);
 
     return (
@@ -160,12 +149,31 @@ const MapChart = ({ setTooltipContent, category }) => {
 
 MapChart.propTypes = {
     setTooltipContent: PropTypes.func,
-    category: PropTypes.string
+    category: PropTypes.string,
+    maxValue: PropTypes.number
 };
 
 const CategoryMap = ({ category }: { category: string }): JSX.Element => {
     const [content, setContent] = useState('');
     const title = `${category} Benefits`;
+    const quantizeArray: number[] = [];
+    Object.values(statePerformance).map((value) => {
+        const statuteRecord = value[0].statutes;
+        const ACur = statuteRecord.find((s) => s.statuteName === '(6)(A) Practices');
+        const AArray = ACur.practiceCategories;
+        const BCur = statuteRecord.find((s) => s.statuteName === '(6)(B) Practices');
+        const BArray = BCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray);
+        const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+        quantizeArray.push(categoryRecord.paymentInDollars);
+        return null;
+    });
+    const maxValue = Math.max(...quantizeArray);
+    const label1 = (maxValue / 5) * 0;
+    const label2 = (maxValue / 5) * 1;
+    const label3 = (maxValue / 5) * 2;
+    const label4 = (maxValue / 5) * 3;
+    const label5 = (maxValue / 5) * 4;
     return (
         <div>
             <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
@@ -176,14 +184,27 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
                     color3="#7BCCC4"
                     color4="#43A2CA"
                     color5="#0868AC"
-                    label1="0"
-                    label2="20%"
-                    label3="40%"
-                    label4="60%"
-                    label5="80%"
+                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
+                    label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
+                    label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
+                    label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
+                    label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
+                    label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`}
                 />
             </Box>
-            <MapChart setTooltipContent={setContent} category={category} />
+            <MapChart setTooltipContent={setContent} category={category} maxValue={maxValue}/>
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}
