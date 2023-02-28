@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { geoCentroid } from 'd3-geo';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import ReactTooltip from 'react-tooltip';
-import { scaleQuantile, scaleQuantize } from "d3-scale";
+import { scaleQuantile, scaleQuantize } from 'd3-scale';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -204,7 +204,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
                     })}M`}
                 />
             </Box>
-            <MapChart setTooltipContent={setContent} category={category} maxValue={maxValue}/>
+            <MapChart setTooltipContent={setContent} category={category} maxValue={maxValue} />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}
