@@ -83,6 +83,11 @@ const MapChart = ({ setTooltipContent, title }) => {
             .range([color1, color2, color3, color4, color5]);
     }
 
+    // Get list of unique years
+    const yearList = summary
+        .map((item) => item['Fiscal Year'])
+        .filter((value, index, self) => self.indexOf(value) === index);
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -93,9 +98,18 @@ const MapChart = ({ setTooltipContent, title }) => {
                                 const cur = allStates.find((s) => s.val === geo.id);
                                 const records = summary.filter((s) => s.State === cur.id && s.Title === title);
                                 let total = 0;
+                                let totalAverageMonthlyParticipation = 0;
+
                                 records.forEach((record) => {
                                     total += record.Amount;
                                 });
+
+                                if (title === 'Supplemental Nutrition Assistance Program (SNAP)') {
+                                    records.forEach((record) => {
+                                        totalAverageMonthlyParticipation += record['Average Monthly Participation'];
+                                    });
+                                }
+
                                 const hoverContent = (
                                     <Box
                                         sx={{
@@ -115,6 +129,23 @@ const MapChart = ({ setTooltipContent, title }) => {
                                                 })}
                                                 M
                                             </Typography>
+                                            <br />
+                                            {/* Show additional data on hover for SNAP */}
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
+                                                <Typography sx={{ color: '#2F7164' }}>
+                                                    Avg. Monthly Participation
+                                                </Typography>
+                                            )}
+                                            {/* Average SNAP monthly participation for the current years */}
+                                            {title === 'Supplemental Nutrition Assistance Program (SNAP)' && (
+                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                    {Number(
+                                                        totalAverageMonthlyParticipation / yearList.length
+                                                    ).toLocaleString(undefined, {
+                                                        maximumFractionDigits: 0
+                                                    })}
+                                                </Typography>
+                                            )}
                                         </Box>
                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                         <Box>
