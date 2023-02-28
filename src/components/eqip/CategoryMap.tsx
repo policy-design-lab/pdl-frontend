@@ -186,22 +186,52 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
                     color5="#0868AC"
                     label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
                         maximumFractionDigits: 0
-                    })}M`}
-                    label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
+                    })}`}
+                    label2={
+                        label2 >= 1000000
+                            ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label3={
+                        label3 >= 1000000
+                            ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label4={
+                        label4 >= 1000000
+                            ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label5={
+                        label5 >= 1000000
+                            ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label6={
+                        maxValue >= 1000000
+                            ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
                 />
             </Box>
             <MapChart setTooltipContent={setContent} category={category} maxValue={maxValue} />
