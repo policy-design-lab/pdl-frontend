@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
-import eqipTableData from '../data/eqipTableData.json';
+import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 
 const Styles = styled.div`
     padding: 1rem;
@@ -108,6 +108,22 @@ function Table({ columns, data }: { columns: any; data: any }) {
             </div>
         </>
     );
+}
+
+const eqipTableData: any[] = [];
+
+// eslint-disable-next-line no-restricted-syntax
+for (const [key, value] of Object.entries(statePerformance)) {
+    const newRecord = () => {
+        return {
+            state: key,
+            eqipBenefit: `$${value[0].totalPaymentInDollars
+                .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                .toString()}`,
+            percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+        };
+    };
+    eqipTableData.push(newRecord());
 }
 
 function App(): JSX.Element {

@@ -2,11 +2,147 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
-import { Popper } from '@mui/material';
+import { Popper, Typography } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import PropTypes from 'prop-types';
 
 const drawerWidth = 240;
 
-export default function ProgramDrawer(): JSX.Element {
+EQIPCheckboxList.propTypes = {
+    setEQIPChecked: PropTypes.func,
+    setShowPopUp: PropTypes.func
+};
+
+ProgramDrawer.propTypes = {
+    setEQIPChecked: PropTypes.func
+};
+
+let currentChecked = -1;
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
+    const [checked, setChecked] = React.useState(currentChecked);
+
+    const handleToggle = (value: number) => () => {
+        setChecked(value);
+        setEQIPChecked(value);
+        currentChecked = value;
+        setShowPopUp(false);
+    };
+
+    const EQIPList = [
+        'Total EQIP Benefits',
+        'Land management',
+        'Forest management',
+        'Structural',
+        'Soil remediation',
+        'Vegetative',
+        'Other improvement',
+        'Soil testing',
+        'Other planning',
+        'Conservation planning assessment',
+        'Resource-conserving crop rotation',
+        'Soil health',
+        'Comprehensive Nutrient Mgt.'
+    ];
+
+    return (
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {EQIPList.map((category, value) => {
+                const labelId = `checkbox-list-label-${value}`;
+                if (
+                    category !== 'Land management' &&
+                    category !== 'Other planning' &&
+                    category !== 'Total EQIP Benefits'
+                ) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === 'Total EQIP Benefits') {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === 'Land management') {
+                    return (
+                        <Box>
+                            <Typography sx={{ pl: 8 }}>
+                                <strong>(6)(A) Practices</strong>
+                            </Typography>
+                            <ListItem key={category} disablePadding>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                    <ListItemIcon>
+                                        <Checkbox
+                                            edge="start"
+                                            checked={checked === value}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{ 'aria-labelledby': labelId }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText id={labelId} primary={category} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Box>
+                    );
+                }
+                return (
+                    <Box key={category}>
+                        <Typography sx={{ pl: 8 }}>
+                            <strong>(6)(B) Practices</strong>
+                        </Typography>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
+}
+
+export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
     const [eqipOpen, setEqipOpen] = React.useState(false);
     const eqipRef = React.useRef<HTMLLIElement>(null);
     const handleEqipClick = () => {
@@ -39,7 +175,9 @@ export default function ProgramDrawer(): JSX.Element {
                     EQIP: Environmental Quality Incentives Program
                 </MenuItem>
                 <Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start">
-                    <Box>test test test</Box>
+                    <Box>
+                        <EQIPCheckboxList setEQIPChecked={setEQIPChecked} setShowPopUp={setEqipOpen} />
+                    </Box>
                 </Popper>
             </Box>
             <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>

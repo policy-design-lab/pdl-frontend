@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Initial EQIP page and data visualization demos [#18](https://github.com/policy-design-lab/pdl-frontend/issues/18)
+- EQIP maps and functional semi-donut charts, and data tables [#27](https://github.com/policy-design-lab/pdl-frontend/issues/27)
 - Average monthly participation data to SNAP map hover. [#28](https://github.com/policy-design-lab/pdl-frontend/issues/28)
 
 ### Fixed
