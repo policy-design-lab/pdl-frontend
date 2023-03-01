@@ -15,7 +15,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
 
         return (
             <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
+                {`${(percent * 100).toFixed(1)}%`}
             </text>
         );
     };
@@ -38,8 +38,8 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     endAngle={0}
                     cx={1000}
                     cy={400}
-                    innerRadius={150}
-                    outerRadius={300}
+                    innerRadius={165}
+                    outerRadius={330}
                     fill="#82ca9d"
                     label={renderCustomizedLabel}
                 >
@@ -62,8 +62,8 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     endAngle={0}
                     cx={1000}
                     cy={400}
-                    innerRadius={150}
-                    outerRadius={300}
+                    innerRadius={165}
+                    outerRadius={330}
                     nameKey="name"
                     label={renderCustomizedLabel2}
                 >

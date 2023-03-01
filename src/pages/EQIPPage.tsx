@@ -74,16 +74,18 @@ export default function EQIPPage(): JSX.Element {
         { name: 'Vegetative', value: vegetativeTotal, color: '#749F97' },
         { name: 'Forest management', value: forestManagementTotal, color: '#9CBAB4' },
         { name: 'Other improvement', value: other6ATotal, color: '#B9CDC9' },
-        { name: 'Soil remediation', value: soilRemediationTotal, color: '#CDDBD8' },
-        { name: 'Soil testing', value: soilTestingTotal, color: '#E2E8E7' }
+        { name: 'Soil remediation; Soil testing', value: soilRemediationTotal + soilTestingTotal, color: '#CDDBD8' }
     ];
 
     const sixBChartData = [
         { name: 'Other planning', value: otherPlanningTotal, color: '#2F7164' },
         { name: 'Conservation planning assessment', value: conservationPlanningAssessmentTotal, color: '#4D847A' },
         { name: 'Comprehensive Nutrient Mgt.', value: comprehensiveNutrientMgtTotal, color: '#749F97' },
-        { name: 'Resource-conserving crop rotation', value: resourceConservingCropRotationTotal, color: '#9CBAB4' },
-        { name: 'Soil health', value: soilHealthTotal, color: '#B9CDC9' }
+        {
+            name: 'Resource-conserving crop rotation; Soil health',
+            value: resourceConservingCropRotationTotal + soilHealthTotal,
+            color: '#9CBAB4'
+        }
     ];
 
     const totalChartData = [
@@ -154,7 +156,7 @@ export default function EQIPPage(): JSX.Element {
                             practices, which include planting trees and shrubs, improving forest stands, planting
                             riparian forest buffers, and treating residues; (5) soil testing practices; (6) soil
                             remediation practices, such as residue and tillage management (no-till, mulch-till, or
-                            strip-till), and amendments for treating agricultural wastes, ; and (7) other practices,
+                            strip-till), and amendments for treating agricultural wastes; and (7) other practices,
                             including integrated pest management, dust control, and energy improvements.
                         </Typography>
                     </Box>
