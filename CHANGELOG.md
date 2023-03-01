@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Average monthly participation data to SNAP map hover. [#28](https://github.com/policy-design-lab/pdl-frontend/issues/28)
 - Navigation for HOME button [#42](https://github.com/policy-design-lab/pdl-frontend/issues/42)
 
+### Changed
+- Pop-up menu styles [#36](https://github.com/policy-design-lab/pdl-frontend/issues/36)
+
 ### Fixed
 - Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
 - Format of the semi-donut EQIP benefits number [#38](https://github.com/policy-design-lab/pdl-frontend/issues/38)
