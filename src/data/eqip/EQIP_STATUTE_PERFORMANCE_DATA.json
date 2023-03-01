@@ -1,76 +1,76 @@
 {
-    "statutes": [
+  "statutes": [
+    {
+      "statuteName": "(6)(A) Practices",
+      "practiceCategories": [
         {
-            "statuteName": "(6)(A) Practices",
-            "practiceCategories": [
-                {
-                    "practiceCategoryName": "Structural",
-                    "totalPaymentInDollars": 2045710812.49,
-                    "totalPaymentInPercentage": 48.28
-                },
-                {
-                    "practiceCategoryName": "Land management",
-                    "totalPaymentInDollars": 979991244.71,
-                    "totalPaymentInPercentage": 23.13
-                },
-                {
-                    "practiceCategoryName": "Vegetative",
-                    "totalPaymentInDollars": 636217234.15,
-                    "totalPaymentInPercentage": 15.02
-                },
-                {
-                    "practiceCategoryName": "Forest management",
-                    "totalPaymentInDollars": 392800174.82,
-                    "totalPaymentInPercentage": 9.27
-                },
-                {
-                    "practiceCategoryName": "Other improvement",
-                    "totalPaymentInDollars": 127388095.61,
-                    "totalPaymentInPercentage": 3.01
-                },
-                {
-                    "practiceCategoryName": "Soil remediation",
-                    "totalPaymentInDollars": 55034013.93,
-                    "totalPaymentInPercentage": 1.3
-                },
-                {
-                    "practiceCategoryName": "Soil testing",
-                    "totalPaymentInDollars": 3022.69,
-                    "totalPaymentInPercentage": 0.0
-                }
-            ],
-            "totalPaymentInDollars": 4237144598.4
+          "practiceCategoryName": "Structural",
+          "totalPaymentInDollars": 2045710812.49,
+          "totalPaymentInPercentage": 48.28
         },
         {
-            "statuteName": "(6)(B) Practices",
-            "practiceCategories": [
-                {
-                    "practiceCategoryName": "Other planning",
-                    "totalPaymentInDollars": 23943035.37,
-                    "totalPaymentInPercentage": 54.51
-                },
-                {
-                    "practiceCategoryName": "Conservation planning assessment",
-                    "totalPaymentInDollars": 15917611.86,
-                    "totalPaymentInPercentage": 36.24
-                },
-                {
-                    "practiceCategoryName": "Comprehensive Nutrient Mgt.",
-                    "totalPaymentInDollars": 3570003.1,
-                    "totalPaymentInPercentage": 8.13
-                },
-                {
-                    "practiceCategoryName": "Resource-conserving crop rotation",
-                    "totalPaymentInDollars": 491522.25,
-                    "totalPaymentInPercentage": 1.12
-                },
-                {
-                    "practiceCategoryName": "Soil health",
-                    "totalPaymentInDollars": 4412.86,
-                    "totalPaymentInPercentage": 0.01
-                }
-            ],
-            "totalPaymentInDollars": 43926585.44
+          "practiceCategoryName": "Land management",
+          "totalPaymentInDollars": 979991244.71,
+          "totalPaymentInPercentage": 23.13
+        },
+        {
+          "practiceCategoryName": "Vegetative",
+          "totalPaymentInDollars": 636217234.15,
+          "totalPaymentInPercentage": 15.02
+        },
+        {
+          "practiceCategoryName": "Forest management",
+          "totalPaymentInDollars": 392800174.82,
+          "totalPaymentInPercentage": 9.27
+        },
+        {
+          "practiceCategoryName": "Other improvement",
+          "totalPaymentInDollars": 127388095.61,
+          "totalPaymentInPercentage": 3.01
+        },
+        {
+          "practiceCategoryName": "Soil remediation",
+          "totalPaymentInDollars": 55034013.93,
+          "totalPaymentInPercentage": 1.3
+        },
+        {
+          "practiceCategoryName": "Soil testing",
+          "totalPaymentInDollars": 3022.69,
+          "totalPaymentInPercentage": 0.0
         }
-    ]
+      ],
+      "totalPaymentInDollars": 4237144598.4
+    },
+    {
+      "statuteName": "(6)(B) Practices",
+      "practiceCategories": [
+        {
+          "practiceCategoryName": "Other planning",
+          "totalPaymentInDollars": 23943035.37,
+          "totalPaymentInPercentage": 54.51
+        },
+        {
+          "practiceCategoryName": "Conservation planning assessment",
+          "totalPaymentInDollars": 15917611.86,
+          "totalPaymentInPercentage": 36.24
+        },
+        {
+          "practiceCategoryName": "Comprehensive Nutrient Mgt.",
+          "totalPaymentInDollars": 3570003.1,
+          "totalPaymentInPercentage": 8.13
+        },
+        {
+          "practiceCategoryName": "Resource-conserving crop rotation",
+          "totalPaymentInDollars": 491522.25,
+          "totalPaymentInPercentage": 1.12
+        },
+        {
+          "practiceCategoryName": "Soil health",
+          "totalPaymentInDollars": 4412.86,
+          "totalPaymentInPercentage": 0.01
+        }
+      ],
+      "totalPaymentInDollars": 43926585.44
+    }
+  ]
 }
