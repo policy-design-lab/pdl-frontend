@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - EQIP maps and functional semi-donut charts, and data tables [#27](https://github.com/policy-design-lab/pdl-frontend/issues/27)
 - Average monthly participation data to SNAP map hover. [#28](https://github.com/policy-design-lab/pdl-frontend/issues/28)
 
+### Changed
+- Update SNAP data in summary and allPrograms JSON files based on latest data and recalculate total dollar amounts. [#44](https://github.com/policy-design-lab/pdl-frontend/issues/44)
+
 ### Fixed
 - Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
 
