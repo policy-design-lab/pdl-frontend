@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
 
+### Changed
+- option text styles [#40](https://github.com/policy-design-lab/pdl-frontend/issues/40)
+
 ## [0.1.0] - 2023-01-23
 
 ### Added
