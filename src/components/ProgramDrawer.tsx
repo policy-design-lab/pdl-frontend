@@ -2,7 +2,7 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
-import { Popper, Typography } from '@mui/material';
+import { Popper, Radio, Typography } from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -62,7 +62,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
                                 <ListItemIcon>
-                                    <Checkbox
+                                    <Radio
                                         edge="start"
                                         checked={checked === value}
                                         tabIndex={-1}
@@ -80,7 +80,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                                 <ListItemIcon>
-                                    <Checkbox
+                                    <Radio
                                         edge="start"
                                         checked={checked === value}
                                         tabIndex={-1}
@@ -102,7 +102,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
                                     <ListItemIcon>
-                                        <Checkbox
+                                        <Radio
                                             edge="start"
                                             checked={checked === value}
                                             tabIndex={-1}
@@ -124,7 +124,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
                                 <ListItemIcon>
-                                    <Checkbox
+                                    <Radio
                                         edge="start"
                                         checked={checked === value}
                                         tabIndex={-1}
