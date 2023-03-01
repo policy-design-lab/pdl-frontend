@@ -81,7 +81,11 @@ export default function EQIPPage(): JSX.Element {
         { name: 'Other planning', value: otherPlanningTotal, color: '#2F7164' },
         { name: 'Conservation planning assessment', value: conservationPlanningAssessmentTotal, color: '#4D847A' },
         { name: 'Comprehensive Nutrient Mgt.', value: comprehensiveNutrientMgtTotal, color: '#749F97' },
-        { name: 'Resource-conserving crop rotation; Soil health', value: resourceConservingCropRotationTotal + soilHealthTotal, color: '#9CBAB4' }
+        {
+            name: 'Resource-conserving crop rotation; Soil health',
+            value: resourceConservingCropRotationTotal + soilHealthTotal,
+            color: '#9CBAB4'
+        }
     ];
 
     const totalChartData = [
