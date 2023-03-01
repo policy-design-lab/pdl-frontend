@@ -206,9 +206,9 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
             </MenuItem>
             <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
                 {location.pathname === '/eqip' ? (
-                    <Typography color="gray">ACEP: Argriculture Conservation Easement Program</Typography>
+                    <Typography color="gray">ACEP: Agriculture Conservation Easement Program</Typography>
                 ) : (
-                    <Typography>ACEP: Argriculture Conservation Easement Program</Typography>
+                    <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
                 )}
             </MenuItem>
             <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
