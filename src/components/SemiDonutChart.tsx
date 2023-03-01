@@ -43,7 +43,13 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     fill="#82ca9d"
                     label={renderCustomizedLabel}
                 >
-                    <Label value={`$${label1}`} position="center" dy={-75} />
+                    <Label
+                        value={`$${Number(label1).toLocaleString(undefined, {
+                            minimumFractionDigits: 2
+                        })}`}
+                        position="center"
+                        dy={-75}
+                    />
                     <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
                         <Cell key={entry.id} fill={entry.color} />
