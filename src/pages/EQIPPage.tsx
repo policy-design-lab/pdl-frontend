@@ -156,7 +156,7 @@ export default function EQIPPage(): JSX.Element {
                             practices, which include planting trees and shrubs, improving forest stands, planting
                             riparian forest buffers, and treating residues; (5) soil testing practices; (6) soil
                             remediation practices, such as residue and tillage management (no-till, mulch-till, or
-                            strip-till), and amendments for treating agricultural wastes, ; and (7) other practices,
+                            strip-till), and amendments for treating agricultural wastes; and (7) other practices,
                             including integrated pest management, dust control, and energy improvements.
                         </Typography>
                     </Box>
