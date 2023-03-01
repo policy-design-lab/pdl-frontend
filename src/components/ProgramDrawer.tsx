@@ -8,7 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
 import PropTypes from 'prop-types';
 
 const drawerWidth = 240;
@@ -22,7 +21,7 @@ ProgramDrawer.propTypes = {
     setEQIPChecked: PropTypes.func
 };
 
-let currentChecked = -1;
+let currentChecked = 0;
 function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
