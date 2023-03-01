@@ -15,7 +15,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
 
         return (
             <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
+                {`${(percent * 100).toFixed(1)}%`}
             </text>
         );
     };
