@@ -5,13 +5,13 @@
       "practiceCategories": [
         {
           "practiceCategoryName": "Structural",
-          "totalPaymentInDollars": 2045710812.49,
-          "totalPaymentInPercentage": 48.28
+          "totalPaymentInDollars": 1986192698.89,
+          "totalPaymentInPercentage": 46.88
         },
         {
           "practiceCategoryName": "Land management",
-          "totalPaymentInDollars": 979991244.71,
-          "totalPaymentInPercentage": 23.13
+          "totalPaymentInDollars": 1039509358.31,
+          "totalPaymentInPercentage": 24.53
         },
         {
           "practiceCategoryName": "Vegetative",
@@ -39,7 +39,8 @@
           "totalPaymentInPercentage": 0.0
         }
       ],
-      "totalPaymentInDollars": 4237144598.4
+      "totalPaymentInDollars": 4237144598.4,
+      "totalPaymentInPercentage": 98.97
     },
     {
       "statuteName": "(6)(B) Practices",
@@ -70,7 +71,8 @@
           "totalPaymentInPercentage": 0.01
         }
       ],
-      "totalPaymentInDollars": 43926585.44
+      "totalPaymentInDollars": 43926585.44,
+      "totalPaymentInPercentage": 1.03
     }
   ]
 }
