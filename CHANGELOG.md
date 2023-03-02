@@ -14,17 +14,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Pop-up menu styles [#36](https://github.com/policy-design-lab/pdl-frontend/issues/36)
-
-### Changed
+- Option text styles [#40](https://github.com/policy-design-lab/pdl-frontend/issues/40)
 - Update SNAP data in summary and allPrograms JSON files based on latest data and recalculate total dollar amounts. [#44](https://github.com/policy-design-lab/pdl-frontend/issues/44)
+- Update EQIP JSON files with the latest data. [#31](https://github.com/policy-design-lab/pdl-frontend/issues/31) 
 
 ### Fixed
 - Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
-- semi donut 6a display with the overlapping text [#34](https://github.com/policy-design-lab/pdl-frontend/issues/34)
+- Semi donut 6a display with the overlapping text [#34](https://github.com/policy-design-lab/pdl-frontend/issues/34)
 - Format of the semi-donut EQIP benefits number [#38](https://github.com/policy-design-lab/pdl-frontend/issues/38)
-
-### Changed
-- option text styles [#40](https://github.com/policy-design-lab/pdl-frontend/issues/40)
 
 ## [0.1.0] - 2023-01-23
 
