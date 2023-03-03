@@ -12,6 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 const navItems = ['HOME', 'EXPLORE FARM BILL DATA', 'ABOUT PDL'];
@@ -72,11 +73,20 @@ export default function NavBar(): JSX.Element {
                             Policy Design Lab
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item) => (
-                                <Button key={item} sx={{ color: '#fff' }}>
-                                    {item}
-                                </Button>
-                            ))}
+                            {navItems.map((item) => {
+                                if (item === 'HOME') {
+                                    return (
+                                        <Button component={Link} to="/" key={item} sx={{ color: '#fff' }}>
+                                            {item}
+                                        </Button>
+                                    );
+                                }
+                                return (
+                                    <Button key={item} sx={{ color: '#fff' }}>
+                                        {item}
+                                    </Button>
+                                );
+                            })}
                         </Box>
                     </Toolbar>
                 </AppBar>
