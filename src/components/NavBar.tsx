@@ -65,13 +65,16 @@ export default function NavBar(): JSX.Element {
                             onClick={handleDrawerToggle}
                             sx={{ mr: 2, display: { sm: 'none' } }}
                         />
-                        <Typography
-                            variant="h6"
-                            component="div"
-                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                        <Button
+                            disableRipple
+                            component={Link}
+                            to="/"
+                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', color: '#fff' } }}
                         >
-                            Policy Design Lab
-                        </Typography>
+                            <Typography variant="h6" component="div">
+                                Policy Design Lab
+                            </Typography>
+                        </Button>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => {
                                 if (item === 'HOME') {
