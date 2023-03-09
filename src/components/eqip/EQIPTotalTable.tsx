@@ -127,6 +127,22 @@ for (const [key, value] of Object.entries(statePerformance)) {
 }
 
 function App(): JSX.Element {
+    function compareWithDollarSign(rowA, rowB, id, desc) {
+        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(',', ''));
+        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(',', ''));
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+
+    function compareWithPercentSign(rowA, rowB, id, desc) {
+        const a = Number.parseFloat(rowA.values[id].replaceAll('%', ''));
+        const b = Number.parseFloat(rowB.values[id].replaceAll('%', ''));
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+
     const columns = React.useMemo(
         () => [
             {
@@ -137,11 +153,13 @@ function App(): JSX.Element {
             },
             {
                 Header: 'EQIP BENEFITS',
-                accessor: 'eqipBenefit'
+                accessor: 'eqipBenefit',
+                sortType: compareWithDollarSign
             },
             {
                 Header: 'PCT. NATIONWIDE',
-                accessor: 'percentage'
+                accessor: 'percentage',
+                sortType: compareWithPercentSign
             }
         ],
         []
