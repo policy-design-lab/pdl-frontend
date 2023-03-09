@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 
 const Styles = styled.div`
@@ -73,8 +75,9 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     <span>
                                         {(() => {
                                             if (!column.isSorted) return '';
-                                            if (column.isSortedDesc) return ' 🔽';
-                                            return ' 🔼';
+                                            if (column.isSortedDesc)
+                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
+                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
                                         })()}
                                     </span>
                                 </th>
