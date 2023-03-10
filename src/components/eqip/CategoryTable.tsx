@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 
 const Styles = styled.div`
@@ -73,8 +75,9 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     <span>
                                         {(() => {
                                             if (!column.isSorted) return '';
-                                            if (column.isSortedDesc) return ' 🔽';
-                                            return ' 🔼';
+                                            if (column.isSortedDesc)
+                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
+                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
                                         })()}
                                     </span>
                                 </th>
@@ -137,6 +140,22 @@ function App({ category }: { category: string }): JSX.Element {
         eqipTableData.push(newRecord());
     }
 
+    function compareWithDollarSign(rowA, rowB, id, desc) {
+        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(',', ''));
+        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(',', ''));
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+
+    function compareWithPercentSign(rowA, rowB, id, desc) {
+        const a = Number.parseFloat(rowA.values[id].replaceAll('%', ''));
+        const b = Number.parseFloat(rowB.values[id].replaceAll('%', ''));
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+
     const columns = React.useMemo(
         () => [
             {
@@ -147,19 +166,23 @@ function App({ category }: { category: string }): JSX.Element {
             },
             {
                 Header: `${category} Benefit`,
-                accessor: 'categoryBenefit'
+                accessor: 'categoryBenefit',
+                sortType: compareWithDollarSign
             },
             {
                 Header: `${category} Percentage Within State`,
-                accessor: 'categoryPercentage'
+                accessor: 'categoryPercentage',
+                sortType: compareWithPercentSign
             },
             {
                 Header: 'EQIP BENEFITS',
-                accessor: 'eqipBenefit'
+                accessor: 'eqipBenefit',
+                sortType: compareWithDollarSign
             },
             {
                 Header: 'PCT. NATIONWIDE',
-                accessor: 'percentage'
+                accessor: 'percentage',
+                sortType: compareWithPercentSign
             }
         ],
         []
