@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
+- Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
