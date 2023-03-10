@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-- Navigation from PDL title [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
+- Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
 
 ## [0.2.0] - 2023-03-03
 

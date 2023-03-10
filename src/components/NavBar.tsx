@@ -11,8 +11,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { CardMedia, createTheme, ThemeProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
+import PDLLogo from './PDLLogo';
 
 const drawerWidth = 240;
 const navItems = ['HOME', 'EXPLORE FARM BILL DATA', 'ABOUT PDL'];
@@ -71,9 +72,12 @@ export default function NavBar(): JSX.Element {
                             to="/"
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', color: '#fff' } }}
                         >
-                            <Typography variant="h6" component="div">
-                                Policy Design Lab
-                            </Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'horizontal' }}>
+                                <PDLLogo width="60" height="60" />
+                                <Typography variant="h6" component="div" sx={{ pt: 1.6, ml: 1 }}>
+                                    Policy Design Lab
+                                </Typography>
+                            </Box>
                         </Button>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => {
