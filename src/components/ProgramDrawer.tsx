@@ -10,6 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const drawerWidth = 240;
 
@@ -168,7 +169,7 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
             PaperProps={{
                 sx: {
                     backgroundColor: '#ecf0ee',
-                    color: "#2f7164"
+                    color: '#2f7164'
                 }
             }}
             open
@@ -185,11 +186,34 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                 <MenuItem
                     ref={eqipRef}
                     style={{ whiteSpace: 'normal' }}
-                    sx={{ my: 1, ml: 1 }}
+                    sx={{ my: 1, ml: 1, pr: 0, py: 0 }}
                     onClick={handleEqipClick}
                 >
                     {location.pathname === '/eqip' ? (
-                        <strong>EQIP: Environmental Quality Incentives Program</strong>
+                        <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
+                            <Typography>
+                                <strong>EQIP: Environmental Quality Incentives Program</strong>
+                            </Typography>
+                            <Box
+                                sx={{
+                                    maxWidth: 40,
+                                    py: 3,
+                                    color: '#ffffff',
+                                    backgroundColor: '#2f7164',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
+                                    maxHeight: 48
+                                }}
+                            >
+                                <Typography variant="subtitle2" sx={{ rotate: '270deg', pt: 6, pb: 0 }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal' }}>
+                                        <strong>STATUTE</strong>
+                                        <KeyboardArrowDownIcon />
+                                    </Box>
+                                </Typography>
+                            </Box>
+                        </Box>
                     ) : (
                         <Typography>EQIP: Environmental Quality Incentives Program</Typography>
                     )}

@@ -30,13 +30,13 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
 
     return (
         <Box display="flex" justifyContent="center">
-            <PieChart width={2000} height={450}>
+            <PieChart width={1400} height={450}>
                 <Pie
                     dataKey="value"
                     data={data01}
                     startAngle={180}
                     endAngle={0}
-                    cx={1000}
+                    cx={700}
                     cy={400}
                     innerRadius={165}
                     outerRadius={330}
@@ -60,7 +60,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     data={data01}
                     startAngle={180}
                     endAngle={0}
-                    cx={1000}
+                    cx={700}
                     cy={400}
                     innerRadius={165}
                     outerRadius={330}
