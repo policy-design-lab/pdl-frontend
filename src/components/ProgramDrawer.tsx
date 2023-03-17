@@ -165,10 +165,16 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                 'display': { xs: 'none', sm: 'block' },
                 '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
             }}
+            PaperProps={{
+                sx: {
+                    backgroundColor: '#ecf0ee',
+                    color: "#2f7164"
+                }
+            }}
             open
         >
             <Box sx={{ height: 100 }} />
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">Total Conservation Programs Benefits</Typography>
                 ) : (
@@ -176,7 +182,12 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                 )}
             </MenuItem>
             <Box>
-                <MenuItem ref={eqipRef} style={{ whiteSpace: 'normal' }} sx={{ my: 1 }} onClick={handleEqipClick}>
+                <MenuItem
+                    ref={eqipRef}
+                    style={{ whiteSpace: 'normal' }}
+                    sx={{ my: 1, ml: 1 }}
+                    onClick={handleEqipClick}
+                >
                     {location.pathname === '/eqip' ? (
                         <strong>EQIP: Environmental Quality Incentives Program</strong>
                     ) : (
@@ -189,35 +200,35 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">CSP: Conservation Stewardship Program</Typography>
                 ) : (
                     <Typography>CSP: Conservation Stewardship Program</Typography>
                 )}
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">CRP: Conservation Reserve Program</Typography>
                 ) : (
                     <Typography>CRP: Conservation Reserve Program</Typography>
                 )}
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">ACEP: Agriculture Conservation Easement Program</Typography>
                 ) : (
                     <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
                 )}
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">RCPP: Regional Conservation Partnership Program</Typography>
                 ) : (
                     <Typography>RCPP: Regional Conservation Partnership Program</Typography>
                 )}
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1 }}>
+            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, ml: 1 }}>
                 {location.pathname === '/eqip' ? (
                     <Typography color="gray">Other Conservation</Typography>
                 ) : (
