@@ -6,7 +6,6 @@ import { Popper, Radio, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
@@ -50,7 +49,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     ];
 
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#ecf0ee' }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
                 if (
@@ -61,15 +60,18 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-                                <ListItemIcon>
-                                    <Radio
-                                        edge="start"
-                                        checked={checked === value}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
-                                    />
-                                </ListItemIcon>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                            color: '#2f7164'
+                                        }
+                                    }}
+                                />
                                 <ListItemText id={labelId} primary={category} />
                             </ListItemButton>
                         </ListItem>
@@ -79,15 +81,18 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                                <ListItemIcon>
-                                    <Radio
-                                        edge="start"
-                                        checked={checked === value}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
-                                    />
-                                </ListItemIcon>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                            color: '#2f7164'
+                                        }
+                                    }}
+                                />
                                 <ListItemText id={labelId} primary={category} />
                             </ListItemButton>
                         </ListItem>
@@ -101,15 +106,18 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                             </Typography>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-                                    <ListItemIcon>
-                                        <Radio
-                                            edge="start"
-                                            checked={checked === value}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': labelId }}
-                                        />
-                                    </ListItemIcon>
+                                    <Radio
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                        sx={{
+                                            '&.Mui-checked': {
+                                                color: '#2f7164'
+                                            }
+                                        }}
+                                    />
                                     <ListItemText id={labelId} primary={category} />
                                 </ListItemButton>
                             </ListItem>
@@ -123,15 +131,18 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         </Typography>
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-                                <ListItemIcon>
-                                    <Radio
-                                        edge="start"
-                                        checked={checked === value}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
-                                    />
-                                </ListItemIcon>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    sx={{
+                                        '&.Mui-checked': {
+                                            color: '#2f7164'
+                                        }
+                                    }}
+                                />
                                 <ListItemText id={labelId} primary={category} />
                             </ListItemButton>
                         </ListItem>
