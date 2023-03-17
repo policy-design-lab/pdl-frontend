@@ -44,9 +44,9 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     label={renderCustomizedLabel}
                 >
                     <Label
-                        value={`$${Number(label1).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`}
+                        value={`$${Number(Number(label1) / 1000000000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 2
+                        })}B`}
                         position="center"
                         dy={-75}
                     />
