@@ -1,7 +1,9 @@
 ame: CI Pull Requests
 on:
-  pull_request:
-    branches: [master]
+  push:
+    branches:
+      - main
+      - develop
 jobs:
   build:
     runs-on: ubuntu-latest
