@@ -95,7 +95,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                 }
                 if (category === 'Land management') {
                     return (
-                        <Box>
+                        <Box key={category}>
                             <Typography sx={{ pl: 8 }}>
                                 <strong>(6)(A) Practices</strong>
                             </Typography>
