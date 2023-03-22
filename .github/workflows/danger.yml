@@ -1,4 +1,5 @@
-ame: CI Pull Requests
+name: danger
+
 on:
   push:
     branches:
