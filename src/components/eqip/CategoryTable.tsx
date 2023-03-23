@@ -30,7 +30,7 @@ const Styles = styled.div`
 
         td {
             margin: 0;
-            padding: 1rem;
+            padding: 0rem;
             padding-left: 5rem;
             padding-right: 5rem;
             border-bottom: 1px solid #e4ebe7;
@@ -167,12 +167,22 @@ function App({ category }: { category: string }): JSX.Element {
             {
                 Header: `${category} Benefit`,
                 accessor: 'categoryBenefit',
-                sortType: compareWithDollarSign
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                }
             },
             {
                 Header: `${category} Percentage Within State`,
                 accessor: 'categoryPercentage',
-                sortType: compareWithPercentSign
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                }
             },
             {
                 Header: 'EQIP BENEFITS',
