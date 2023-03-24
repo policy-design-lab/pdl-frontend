@@ -55,6 +55,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         }
                         position="center"
                         dy={-75}
+                        style={{ textAnchor: 'middle', fontSize: '200%', fill: 'rgba(0, 0, 0, 0.87)' }}
                     />
                     <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
