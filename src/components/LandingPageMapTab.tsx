@@ -12,6 +12,7 @@ import conservation from '../images/legends/conservation programs benefits 2018 
 import crop from '../images/legends/crop insurance 2018 - 2022.png';
 import snap from '../images/legends/SNAP programs benefits 2018 - 2022.png';
 import total from '../images/legends/total farm bill benefits 2018 - 2022.png';
+import LandingDisplay from './LandingDisplay';
 
 const theme = createTheme({
     palette: {
@@ -62,6 +63,12 @@ function TabPanel(props: TabPanelProps) {
                         <CardMedia sx={{ maxWidth: 720, mt: 3 }} component="img" src={colorLegend} />
                     </Box>
                     {title === 'All Programs' ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
+                </Box>
+            )}
+            {value === index && (
+                <Box sx={{ width: '100%' }}>
+                    {' '}
+                    <LandingDisplay programTitle={title} />{' '}
                 </Box>
             )}
         </Box>

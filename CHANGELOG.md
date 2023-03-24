@@ -5,8 +5,41 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+- Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
+- Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
+- Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
+
 ### Changed
 - Landing page uses the api endpoint for AllProgram Maps [#20](https://github.com/policy-design-lab/pdl-frontend/issues/20)
+
+### Fixed
+- Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
+
+### Changed
+- Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
+- Landing page text display for each different tab selection [#53](https://github.com/policy-design-lab/pdl-frontend/issues/53)
+- Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
+
+## [0.2.0] - 2023-03-03
+
+### Added
+- Initial EQIP page and data visualization demos [#18](https://github.com/policy-design-lab/pdl-frontend/issues/18)
+- EQIP maps and functional semi-donut charts, and data tables [#27](https://github.com/policy-design-lab/pdl-frontend/issues/27)
+- Average monthly participation data to SNAP map hover. [#28](https://github.com/policy-design-lab/pdl-frontend/issues/28)
+- Navigation for HOME button [#42](https://github.com/policy-design-lab/pdl-frontend/issues/42)
+
+### Changed
+- Pop-up menu styles [#36](https://github.com/policy-design-lab/pdl-frontend/issues/36)
+- Option text styles [#40](https://github.com/policy-design-lab/pdl-frontend/issues/40)
+- Update SNAP data in summary and allPrograms JSON files based on latest data and recalculate total dollar amounts. [#44](https://github.com/policy-design-lab/pdl-frontend/issues/44)
+- Update EQIP JSON files with the latest data. [#31](https://github.com/policy-design-lab/pdl-frontend/issues/31) 
+
+### Fixed
+- Debugger was not evaluating breakpoints because a configuration was missing [#24](https://github.com/policy-design-lab/pdl-frontend/issues/24)
+- Semi donut 6a display with the overlapping text [#34](https://github.com/policy-design-lab/pdl-frontend/issues/34)
+- Format of the semi-donut EQIP benefits number [#38](https://github.com/policy-design-lab/pdl-frontend/issues/38)
 
 ## [0.1.0] - 2023-01-23
 
