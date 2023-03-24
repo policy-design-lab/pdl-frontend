@@ -165,7 +165,7 @@ function App({ category }: { category: string }): JSX.Element {
                 paddingRight: '10rem'
             },
             {
-                Header: `${category} Benefit`,
+                Header: `${category} Benefit`.toUpperCase(),
                 accessor: 'categoryBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
@@ -175,7 +175,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: `${category} Percentage Within State`,
+                Header: `${category} Percentage Within State`.toUpperCase(),
                 accessor: 'categoryPercentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
