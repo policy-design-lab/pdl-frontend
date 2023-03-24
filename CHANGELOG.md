@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
 - Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
+- Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
 - Landing page text display for each different tab selection [#53](https://github.com/policy-design-lab/pdl-frontend/issues/53)
 - Number style for semi-donut chart [#64](https://github.com/policy-design-lab/pdl-frontend/issues/64)
+- Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
 
 ## [0.2.0] - 2023-03-03
 
