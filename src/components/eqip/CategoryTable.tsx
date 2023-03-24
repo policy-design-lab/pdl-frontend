@@ -159,13 +159,13 @@ function App({ category }: { category: string }): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'STATES',
+                Header: <Box sx={{ fontWeight: 'light' }}>STATES</Box>,
                 accessor: 'state',
                 paddingLeft: '5rem',
                 paddingRight: '10rem'
             },
             {
-                Header: `${category} Benefit`.toUpperCase(),
+                Header: <Box sx={{ fontWeight: 'light' }}>{`${category} Benefit`.toUpperCase()}</Box>,
                 accessor: 'categoryBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
@@ -179,7 +179,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: `${category} Percentage Within State`.toUpperCase(),
+                Header: <Box sx={{ fontWeight: 'light' }}>{`${category} Percentage Within State`.toUpperCase()}</Box>,
                 accessor: 'categoryPercentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
@@ -193,7 +193,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: 'EQIP BENEFITS',
+                Header: <Box sx={{ fontWeight: 'light' }}>EQIP BENEFITS</Box>,
                 accessor: 'eqipBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
@@ -201,7 +201,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: 'PCT. NATIONWIDE',
+                Header: <Box sx={{ fontWeight: 'light' }}>PCT. NATIONWIDE</Box>,
                 accessor: 'percentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {
