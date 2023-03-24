@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
 - Landing page text display for each different tab selection [#53](https://github.com/policy-design-lab/pdl-frontend/issues/53)
 - Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
+- Table styles [#76](https://github.com/policy-design-lab/pdl-frontend/issues/76)
 
 ## [0.2.0] - 2023-03-03
 
