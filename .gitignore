@@ -9,3 +9,6 @@ node_modules/
 
 .env
 .huskyrc*.DS_Store
+
+# database data folder
+*src/data*

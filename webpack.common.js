@@ -95,7 +95,6 @@ module.exports = {
         }),
         new Webpack.DefinePlugin({
             "process.env": {
-                // "NODE_ENV": JSON.stringify("development"),
                 "APP_ENV": JSON.stringify(process.env.APP_ENV)
             },
             PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH || '/')   // The base path for the app. It must end with a slash.
