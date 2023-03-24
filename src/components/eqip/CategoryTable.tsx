@@ -171,7 +171,11 @@ function App({ category }: { category: string }): JSX.Element {
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
-                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                    return (
+                        <div style={{ textAlign: 'right' }}>
+                            <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>
+                        </div>
+                    );
                 }
             },
             {
@@ -181,18 +185,28 @@ function App({ category }: { category: string }): JSX.Element {
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
-                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                    return (
+                        <div style={{ textAlign: 'right' }}>
+                            <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>
+                        </div>
+                    );
                 }
             },
             {
                 Header: 'EQIP BENEFITS',
                 accessor: 'eqipBenefit',
-                sortType: compareWithDollarSign
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             },
             {
                 Header: 'PCT. NATIONWIDE',
                 accessor: 'percentage',
-                sortType: compareWithPercentSign
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             }
         ],
         []

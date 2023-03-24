@@ -157,12 +157,18 @@ function App(): JSX.Element {
             {
                 Header: 'EQIP BENEFITS',
                 accessor: 'eqipBenefit',
-                sortType: compareWithDollarSign
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             },
             {
                 Header: 'PCT. NATIONWIDE',
                 accessor: 'percentage',
-                sortType: compareWithPercentSign
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             }
         ],
         []
