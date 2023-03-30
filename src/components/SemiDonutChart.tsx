@@ -44,11 +44,18 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     label={renderCustomizedLabel}
                 >
                     <Label
-                        value={`$${Number(label1).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`}
+                        value={
+                            Number(label1) >= 1000000000
+                                ? `$${Number(Number(label1) / 1000000000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 2
+                                  })}B`
+                                : `$${Number(Number(label1) / 1000000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 2
+                                  })}M`
+                        }
                         position="center"
                         dy={-75}
+                        style={{ textAnchor: 'middle', fontSize: '200%', fill: 'rgba(0, 0, 0, 0.87)' }}
                     />
                     <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
