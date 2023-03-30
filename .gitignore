@@ -8,7 +8,7 @@ node_modules/
 # IDEA:
 .idea/
 **.iml
-**.iml
 
 .env
-.huskyrc*.DS_Store
+.huskyrc
+*.DS_Store
