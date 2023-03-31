@@ -25,19 +25,20 @@ const Styles = styled.div`
 
         th {
             background-color: #f1f1f1;
-            padding: 1rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         td {
             margin: 0;
             padding: 0rem;
-            padding-left: 5rem;
-            padding-right: 5rem;
+            padding-left: 3rem;
+            padding-right: 3rem;
             border-bottom: 1px solid #e4ebe7;
             border-right: none;
 
             :last-child {
-                border-right: 0;
+                border-right: 2rem;
             }
         }
     }
@@ -161,11 +162,27 @@ function App({ category }: { category: string }): JSX.Element {
             {
                 Header: <Box className="tableHeader">STATES</Box>,
                 accessor: 'state',
-                paddingLeft: '5rem',
-                paddingRight: '10rem'
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return (
+                        <div style={{ textAlign: 'left' }}>
+                            <Box sx={{ py: 2, pl: 6, display: 'flex', justifyContent: 'flex-start' }}>
+                                {props.value}
+                            </Box>
+                        </div>
+                    );
+                }
             },
             {
-                Header: <Box className="tableHeader">{`${category} Benefit`.toUpperCase()}</Box>,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                    >
+                        {`${category} Benefit`.toUpperCase()}
+                    </Box>
+                ),
                 accessor: 'categoryBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
@@ -173,13 +190,30 @@ function App({ category }: { category: string }): JSX.Element {
                 }) {
                     return (
                         <div style={{ textAlign: 'right' }}>
-                            <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff0e2',
+                                    py: 3,
+                                    width: 240,
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Box sx={{ textAlign: 'right', width: 120 }}>{props.value}</Box>
+                            </Box>
                         </div>
                     );
                 }
             },
             {
-                Header: <Box className="tableHeader">{`${category} Percentage Within State`.toUpperCase()}</Box>,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                    >
+                        {`${category} Percentage Within State`.toUpperCase()}
+                    </Box>
+                ),
                 accessor: 'categoryPercentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
@@ -187,7 +221,17 @@ function App({ category }: { category: string }): JSX.Element {
                 }) {
                     return (
                         <div style={{ textAlign: 'right' }}>
-                            <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff0e2',
+                                    py: 3,
+                                    width: 240,
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Box sx={{ textAlign: 'right', width: 80 }}>{props.value}</Box>
+                            </Box>
                         </div>
                     );
                 }
