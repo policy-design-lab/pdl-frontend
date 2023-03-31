@@ -94,6 +94,9 @@ module.exports = {
             template: 'src/index.html'
         }),
         new Webpack.DefinePlugin({
+            "process.env": {
+                "APP_ENV": JSON.stringify(process.env.APP_ENV)
+            },
             PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH || '/')   // The base path for the app. It must end with a slash.
         }),
         new FaviconsWebpackPlugin({

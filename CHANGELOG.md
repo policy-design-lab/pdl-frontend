@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Icon for left menu [#62](https://github.com/policy-design-lab/pdl-frontend/issues/62)
 - Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
 
+### Changed
+- Landing page uses the api endpoint for AllProgram Maps [#20](https://github.com/policy-design-lab/pdl-frontend/issues/20)
+
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
 
