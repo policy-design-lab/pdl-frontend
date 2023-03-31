@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
+import '../../styles/table.css';
 
 const Styles = styled.div`
     padding: 1rem;
