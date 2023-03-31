@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 
 const Styles = styled.div`
@@ -71,16 +69,16 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
                                     })}
                                 >
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {(() => {
-                                            if (!column.isSorted) return '';
-                                            if (column.isSortedDesc)
-                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
-                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
-                                        })()}
-                                    </span>
+                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
+                                        {column.render('Header')}
+                                        <div>
+                                            {(() => {
+                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{'\u{2B83}'}</Box>;
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{'\u{25BC}'}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{'\u{25B2}'}</Box>;
+                                            })()}
+                                        </div>
+                                    </Box>
                                 </th>
                             ))}
                         </tr>
@@ -160,7 +158,14 @@ function App({ category }: { category: string }): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: <Box className="tableHeader">STATES</Box>,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 12, display: 'flex', justifyContent: 'center' }}
+                    >
+                        STATES
+                    </Box>
+                ),
                 accessor: 'state',
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
@@ -225,7 +230,7 @@ function App({ category }: { category: string }): JSX.Element {
                                 sx={{
                                     backgroundColor: '#fff0e2',
                                     py: 3,
-                                    width: 240,
+                                    width: 280,
                                     display: 'flex',
                                     justifyContent: 'center'
                                 }}
@@ -237,7 +242,14 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: <Box className="tableHeader">EQIP BENEFITS</Box>,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 7, display: 'flex', justifyContent: 'center' }}
+                    >
+                        EQIP BENEFITS
+                    </Box>
+                ),
                 accessor: 'eqipBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
