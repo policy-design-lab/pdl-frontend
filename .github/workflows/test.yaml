@@ -9,15 +9,15 @@ jobs:
 
     steps:
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
           node-version: 14.x
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
