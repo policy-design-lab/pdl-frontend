@@ -159,13 +159,13 @@ function App({ category }: { category: string }): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>STATES</Box>,
+                Header: <Box className="tableHeader">STATES</Box>,
                 accessor: 'state',
                 paddingLeft: '5rem',
                 paddingRight: '10rem'
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>{`${category} Benefit`.toUpperCase()}</Box>,
+                Header: <Box className="tableHeader">{`${category} Benefit`.toUpperCase()}</Box>,
                 accessor: 'categoryBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
@@ -179,7 +179,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>{`${category} Percentage Within State`.toUpperCase()}</Box>,
+                Header: <Box className="tableHeader">{`${category} Percentage Within State`.toUpperCase()}</Box>,
                 accessor: 'categoryPercentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
@@ -193,7 +193,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>EQIP BENEFITS</Box>,
+                Header: <Box className="tableHeader">EQIP BENEFITS</Box>,
                 accessor: 'eqipBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
@@ -201,7 +201,7 @@ function App({ category }: { category: string }): JSX.Element {
                 }
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>PCT. NATIONWIDE</Box>,
+                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
                 accessor: 'percentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {

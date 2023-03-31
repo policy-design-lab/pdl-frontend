@@ -149,13 +149,13 @@ function App(): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>STATES</Box>,
+                Header: <Box className="tableHeader">STATES</Box>,
                 accessor: 'state',
                 paddingLeft: '5rem',
                 paddingRight: '32rem'
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>EQIP BENEFITS</Box>,
+                Header: <Box className="tableHeader">EQIP BENEFITS</Box>,
                 accessor: 'eqipBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
@@ -163,7 +163,7 @@ function App(): JSX.Element {
                 }
             },
             {
-                Header: <Box sx={{ fontWeight: 'light' }}>PCT. NATIONWIDE</Box>,
+                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
                 accessor: 'percentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {
