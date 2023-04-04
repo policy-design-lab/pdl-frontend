@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
+import '../../styles/table.css';
 
 const Styles = styled.div`
     padding: 1rem;
@@ -70,16 +69,16 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
                                     })}
                                 >
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {(() => {
-                                            if (!column.isSorted) return '';
-                                            if (column.isSortedDesc)
-                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
-                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
-                                        })()}
-                                    </span>
+                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
+                                        {column.render('Header')}
+                                        <div>
+                                            {(() => {
+                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{'\u{2B83}'}</Box>;
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{'\u{25BC}'}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{'\u{25B2}'}</Box>;
+                                            })()}
+                                        </div>
+                                    </Box>
                                 </th>
                             ))}
                         </tr>
@@ -149,20 +148,33 @@ function App(): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'STATES',
+                Header: <Box className="tableHeader">STATES</Box>,
                 accessor: 'state',
                 paddingLeft: '5rem',
                 paddingRight: '32rem'
             },
             {
-                Header: 'EQIP BENEFITS',
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 9, display: 'flex', justifyContent: 'center' }}
+                    >
+                        EQIP BENEFITS
+                    </Box>
+                ),
                 accessor: 'eqipBenefit',
-                sortType: compareWithDollarSign
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             },
             {
-                Header: 'PCT. NATIONWIDE',
+                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
                 accessor: 'percentage',
-                sortType: compareWithPercentSign
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             }
         ],
         []

@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The left menu margin and background color [#61](https://github.com/policy-design-lab/pdl-frontend/issues/61)
 - Number style for semi-donut chart [#64](https://github.com/policy-design-lab/pdl-frontend/issues/64)
 - Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
+- Table styles [#76](https://github.com/policy-design-lab/pdl-frontend/issues/76)
 
 ## [0.2.0] - 2023-03-03
 

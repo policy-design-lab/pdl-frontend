@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTable, useSortBy } from 'react-table';
 import Box from '@mui/material/Box';
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
+import '../../styles/table.css';
 
 const Styles = styled.div`
     padding: 1rem;
@@ -25,19 +24,20 @@ const Styles = styled.div`
 
         th {
             background-color: #f1f1f1;
-            padding: 1rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         td {
             margin: 0;
             padding: 0rem;
-            padding-left: 5rem;
-            padding-right: 5rem;
+            padding-left: 3rem;
+            padding-right: 3rem;
             border-bottom: 1px solid #e4ebe7;
             border-right: none;
 
             :last-child {
-                border-right: 0;
+                border-right: 2rem;
             }
         }
     }
@@ -70,16 +70,16 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
                                     })}
                                 >
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {(() => {
-                                            if (!column.isSorted) return '';
-                                            if (column.isSortedDesc)
-                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
-                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
-                                        })()}
-                                    </span>
+                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
+                                        {column.render('Header')}
+                                        <div>
+                                            {(() => {
+                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{'\u{2B83}'}</Box>;
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{'\u{25BC}'}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{'\u{25B2}'}</Box>;
+                                            })()}
+                                        </div>
+                                    </Box>
                                 </th>
                             ))}
                         </tr>
@@ -159,40 +159,111 @@ function App({ category }: { category: string }): JSX.Element {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'STATES',
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 12, display: 'flex', justifyContent: 'center' }}
+                    >
+                        STATES
+                    </Box>
+                ),
                 accessor: 'state',
-                paddingLeft: '5rem',
-                paddingRight: '10rem'
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return (
+                        <div style={{ textAlign: 'left' }}>
+                            <Box sx={{ py: 2, pl: 6, display: 'flex', justifyContent: 'flex-start' }}>
+                                {props.value}
+                            </Box>
+                        </div>
+                    );
+                }
             },
             {
-                Header: `${category} Benefit`,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                    >
+                        {`${category} Benefit`.toUpperCase()}
+                    </Box>
+                ),
                 accessor: 'categoryBenefit',
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
-                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                    return (
+                        <div style={{ textAlign: 'right' }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff0e2',
+                                    py: 3,
+                                    width: 240,
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Box sx={{ textAlign: 'right', width: 120 }}>{props.value}</Box>
+                            </Box>
+                        </div>
+                    );
                 }
             },
             {
-                Header: `${category} Percentage Within State`,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                    >
+                        {`${category} Percentage Within State`.toUpperCase()}
+                    </Box>
+                ),
                 accessor: 'categoryPercentage',
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
-                    return <Box sx={{ backgroundColor: '#fff0e2', padding: 2 }}>{props.value}</Box>;
+                    return (
+                        <div style={{ textAlign: 'right' }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff0e2',
+                                    py: 3,
+                                    width: 280,
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Box sx={{ textAlign: 'right', width: 80 }}>{props.value}</Box>
+                            </Box>
+                        </div>
+                    );
                 }
             },
             {
-                Header: 'EQIP BENEFITS',
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 7, display: 'flex', justifyContent: 'center' }}
+                    >
+                        EQIP BENEFITS
+                    </Box>
+                ),
                 accessor: 'eqipBenefit',
-                sortType: compareWithDollarSign
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             },
             {
-                Header: 'PCT. NATIONWIDE',
+                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
                 accessor: 'percentage',
-                sortType: compareWithPercentSign
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                }
             }
         ],
         []
