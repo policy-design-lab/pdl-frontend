@@ -1,5 +1,7 @@
+let config = {};
+
 const baseConfig = {
-	// put any unchaging configuration information in here
+	// put any unchanging configuration information in here
 };
 
 const prodConfig = {
@@ -18,7 +20,9 @@ const localConfig = {
 };
 
 // eslint-disable-next-line no-unused-vars
-export const config = getConfig();
+config = getConfig();
+
+export default config;
 
 function getConfig() {
 	if (process.env.APP_ENV === 'production') {
