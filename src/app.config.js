@@ -10,12 +10,12 @@ const baseConfig = {
 };
 
 const deployConfig = {
-    apiUrl: `https://${hostname}/pdl`,
+    apiUrl: `/pdl`,
 	...baseConfig
 };
 
 const localConfig = {
-	apiUrl: `http://${hostname}:5000/pdl`,
+	apiUrl: `http://localhost:5000/pdl`,
 	...baseConfig
 };
 
