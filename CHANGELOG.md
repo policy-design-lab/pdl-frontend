@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
-
+- Dynamic api uri creation [#78](https://github.com/policy-design-lab/pdl-frontend/issues/78)
 ### Changed
 - Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
 - Landing page text display for each different tab selection [#53](https://github.com/policy-design-lab/pdl-frontend/issues/53)
