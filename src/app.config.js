@@ -21,11 +21,12 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-    if (process.env.APP_ENV === 'deployment') {
-        return deployConfig;
+    if (process.env.APP_ENV !== 'deployment') {
+        console.log("ENV is not deployment")
+        return localConfig;
     }
 
-    return localConfig;
+    return deployConfig;
 }
 
 export const config = getConfig();
