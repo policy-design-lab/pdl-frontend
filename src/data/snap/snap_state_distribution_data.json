@@ -1,0 +1,1940 @@
+{
+    "California": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 6332717643.0,
+            "totalPaymentInPercentageNationwide": 10.43,
+            "averageMonthlyParticipation": 3949535
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 5977281299.0,
+            "totalPaymentInPercentageNationwide": 10.77,
+            "averageMonthlyParticipation": 3529470
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 7818586485.0,
+            "totalPaymentInPercentageNationwide": 10.58,
+            "averageMonthlyParticipation": 4312002
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 11243441465.0,
+            "totalPaymentInPercentageNationwide": 10.38,
+            "averageMonthlyParticipation": 4327062
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 14424776610.0,
+            "totalPaymentInPercentageNationwide": 12.71,
+            "averageMonthlyParticipation": 4627744
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 45796803502.0,
+            "totalPaymentInPercentageNationwide": 11.12,
+            "averageMonthlyParticipation": 4149163
+        }
+    ],
+    "Texas": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 5525177455.0,
+            "totalPaymentInPercentageNationwide": 9.1,
+            "averageMonthlyParticipation": 3895207
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 4767112796.0,
+            "totalPaymentInPercentageNationwide": 8.59,
+            "averageMonthlyParticipation": 3187238
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 6300171765.0,
+            "totalPaymentInPercentageNationwide": 8.52,
+            "averageMonthlyParticipation": 3551011
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 8751945285.0,
+            "totalPaymentInPercentageNationwide": 8.08,
+            "averageMonthlyParticipation": 3408385
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 9882113180.0,
+            "totalPaymentInPercentageNationwide": 8.71,
+            "averageMonthlyParticipation": 3440726
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 35226520481.0,
+            "totalPaymentInPercentageNationwide": 8.55,
+            "averageMonthlyParticipation": 3496513
+        }
+    ],
+    "New York": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 4526970965.0,
+            "totalPaymentInPercentageNationwide": 7.46,
+            "averageMonthlyParticipation": 2796620
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 4339617966.0,
+            "totalPaymentInPercentageNationwide": 7.82,
+            "averageMonthlyParticipation": 2661700
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 5118950034.0,
+            "totalPaymentInPercentageNationwide": 6.92,
+            "averageMonthlyParticipation": 2658439
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 7311543597.0,
+            "totalPaymentInPercentageNationwide": 6.75,
+            "averageMonthlyParticipation": 2780714
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 8699495581.0,
+            "totalPaymentInPercentageNationwide": 7.66,
+            "averageMonthlyParticipation": 2839326
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 29996578143.0,
+            "totalPaymentInPercentageNationwide": 7.28,
+            "averageMonthlyParticipation": 2747360
+        }
+    ],
+    "Florida": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 5763762595.0,
+            "totalPaymentInPercentageNationwide": 9.49,
+            "averageMonthlyParticipation": 3347518
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 4035386245.0,
+            "totalPaymentInPercentageNationwide": 7.27,
+            "averageMonthlyParticipation": 2649741
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 6007542066.0,
+            "totalPaymentInPercentageNationwide": 8.13,
+            "averageMonthlyParticipation": 3177286
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 7924263325.0,
+            "totalPaymentInPercentageNationwide": 7.32,
+            "averageMonthlyParticipation": 3356215
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 4975285574.0,
+            "totalPaymentInPercentageNationwide": 4.38,
+            "averageMonthlyParticipation": 2847086
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 28706239805.0,
+            "totalPaymentInPercentageNationwide": 6.97,
+            "averageMonthlyParticipation": 3075569
+        }
+    ],
+    "Illinois": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 2777948512.0,
+            "totalPaymentInPercentageNationwide": 4.57,
+            "averageMonthlyParticipation": 1826011
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 2646035880.0,
+            "totalPaymentInPercentageNationwide": 4.77,
+            "averageMonthlyParticipation": 1639396
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 3381674266.0,
+            "totalPaymentInPercentageNationwide": 4.57,
+            "averageMonthlyParticipation": 1865896
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 5104129949.0,
+            "totalPaymentInPercentageNationwide": 4.71,
+            "averageMonthlyParticipation": 1985791
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 5678772072.0,
+            "totalPaymentInPercentageNationwide": 5.0,
+            "averageMonthlyParticipation": 1981714
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 19588560679.0,
+            "totalPaymentInPercentageNationwide": 4.76,
+            "averageMonthlyParticipation": 1859761
+        }
+    ],
+    "Pennsylvania": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 2592183684.0,
+            "totalPaymentInPercentageNationwide": 4.27,
+            "averageMonthlyParticipation": 1818589
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 2513696584.0,
+            "totalPaymentInPercentageNationwide": 4.53,
+            "averageMonthlyParticipation": 1627640
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 3249170462.0,
+            "totalPaymentInPercentageNationwide": 4.39,
+            "averageMonthlyParticipation": 1794613
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 5170214891.0,
+            "totalPaymentInPercentageNationwide": 4.77,
+            "averageMonthlyParticipation": 1766450
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 5017489465.0,
+            "totalPaymentInPercentageNationwide": 4.42,
+            "averageMonthlyParticipation": 1845636
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 18542755086.0,
+            "totalPaymentInPercentageNationwide": 4.5,
+            "averageMonthlyParticipation": 1770585
+        }
+    ],
+    "Georgia": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 2336788286.0,
+            "totalPaymentInPercentageNationwide": 3.85,
+            "averageMonthlyParticipation": 1556452
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 2115101241.0,
+            "totalPaymentInPercentageNationwide": 3.81,
+            "averageMonthlyParticipation": 1332536
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 2906208820.0,
+            "totalPaymentInPercentageNationwide": 3.93,
+            "averageMonthlyParticipation": 1565935
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 4085504054.0,
+            "totalPaymentInPercentageNationwide": 3.77,
+            "averageMonthlyParticipation": 1640617
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 4093404907.0,
+            "totalPaymentInPercentageNationwide": 3.61,
+            "averageMonthlyParticipation": 1608203
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 15537007308.0,
+            "totalPaymentInPercentageNationwide": 3.77,
+            "averageMonthlyParticipation": 1540749
+        }
+    ],
+    "Ohio": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 2078237006.0,
+            "totalPaymentInPercentageNationwide": 3.42,
+            "averageMonthlyParticipation": 1421366
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 2020497444.0,
+            "totalPaymentInPercentageNationwide": 3.64,
+            "averageMonthlyParticipation": 1273257
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 3099962149.0,
+            "totalPaymentInPercentageNationwide": 4.19,
+            "averageMonthlyParticipation": 1396860
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 3865203855.0,
+            "totalPaymentInPercentageNationwide": 3.57,
+            "averageMonthlyParticipation": 1509438
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 4299141255.0,
+            "totalPaymentInPercentageNationwide": 3.79,
+            "averageMonthlyParticipation": 1491294
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 15363041709.0,
+            "totalPaymentInPercentageNationwide": 3.73,
+            "averageMonthlyParticipation": 1418443
+        }
+    ],
+    "North Carolina": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1919051873.0,
+            "totalPaymentInPercentageNationwide": 3.16,
+            "averageMonthlyParticipation": 1344485
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1863656810.0,
+            "totalPaymentInPercentageNationwide": 3.36,
+            "averageMonthlyParticipation": 1228424
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 2391518239.0,
+            "totalPaymentInPercentageNationwide": 3.23,
+            "averageMonthlyParticipation": 1317566
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 3994650815.0,
+            "totalPaymentInPercentageNationwide": 3.69,
+            "averageMonthlyParticipation": 1541661
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 4737610255.0,
+            "totalPaymentInPercentageNationwide": 4.17,
+            "averageMonthlyParticipation": 1599930
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 14906487992.0,
+            "totalPaymentInPercentageNationwide": 3.62,
+            "averageMonthlyParticipation": 1406413
+        }
+    ],
+    "Michigan": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1894038446.0,
+            "totalPaymentInPercentageNationwide": 3.12,
+            "averageMonthlyParticipation": 1281862
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1701430344.0,
+            "totalPaymentInPercentageNationwide": 3.07,
+            "averageMonthlyParticipation": 1181972
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 2296880243.0,
+            "totalPaymentInPercentageNationwide": 3.11,
+            "averageMonthlyParticipation": 1254475
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 3246391707.0,
+            "totalPaymentInPercentageNationwide": 3.0,
+            "averageMonthlyParticipation": 1278213
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 3941434011.0,
+            "totalPaymentInPercentageNationwide": 3.47,
+            "averageMonthlyParticipation": 1349321
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 13080174751.0,
+            "totalPaymentInPercentageNationwide": 3.18,
+            "averageMonthlyParticipation": 1269168
+        }
+    ],
+    "Tennessee": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1424890904.0,
+            "totalPaymentInPercentageNationwide": 2.35,
+            "averageMonthlyParticipation": 970875
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1307248122.0,
+            "totalPaymentInPercentageNationwide": 2.36,
+            "averageMonthlyParticipation": 832130
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1774499562.0,
+            "totalPaymentInPercentageNationwide": 2.4,
+            "averageMonthlyParticipation": 868936
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 3094821635.0,
+            "totalPaymentInPercentageNationwide": 2.86,
+            "averageMonthlyParticipation": 881344
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1800936365.0,
+            "totalPaymentInPercentageNationwide": 1.59,
+            "averageMonthlyParticipation": 825340
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 9402396588.0,
+            "totalPaymentInPercentageNationwide": 2.28,
+            "averageMonthlyParticipation": 875725
+        }
+    ],
+    "Massachusetts": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1159118509.0,
+            "totalPaymentInPercentageNationwide": 1.91,
+            "averageMonthlyParticipation": 770566
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1131148466.0,
+            "totalPaymentInPercentageNationwide": 2.04,
+            "averageMonthlyParticipation": 703516
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1472070728.0,
+            "totalPaymentInPercentageNationwide": 1.99,
+            "averageMonthlyParticipation": 821254
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2350041332.0,
+            "totalPaymentInPercentageNationwide": 2.17,
+            "averageMonthlyParticipation": 929029
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 3135942192.0,
+            "totalPaymentInPercentageNationwide": 2.76,
+            "averageMonthlyParticipation": 1024442
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 9248321227.0,
+            "totalPaymentInPercentageNationwide": 2.25,
+            "averageMonthlyParticipation": 849761
+        }
+    ],
+    "Louisiana": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1297321641.0,
+            "totalPaymentInPercentageNationwide": 2.14,
+            "averageMonthlyParticipation": 867342
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1214657938.0,
+            "totalPaymentInPercentageNationwide": 2.19,
+            "averageMonthlyParticipation": 749560
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1576364622.0,
+            "totalPaymentInPercentageNationwide": 2.13,
+            "averageMonthlyParticipation": 830750
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2462801412.0,
+            "totalPaymentInPercentageNationwide": 2.27,
+            "averageMonthlyParticipation": 924723
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2388597365.0,
+            "totalPaymentInPercentageNationwide": 2.1,
+            "averageMonthlyParticipation": 822649
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 8939742978.0,
+            "totalPaymentInPercentageNationwide": 2.17,
+            "averageMonthlyParticipation": 839005
+        }
+    ],
+    "Washington": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1268734555.0,
+            "totalPaymentInPercentageNationwide": 2.09,
+            "averageMonthlyParticipation": 877244
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1192380309.0,
+            "totalPaymentInPercentageNationwide": 2.15,
+            "averageMonthlyParticipation": 833128
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1598425639.0,
+            "totalPaymentInPercentageNationwide": 2.16,
+            "averageMonthlyParticipation": 870997
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2359661930.0,
+            "totalPaymentInPercentageNationwide": 2.18,
+            "averageMonthlyParticipation": 927999
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2527621418.0,
+            "totalPaymentInPercentageNationwide": 2.23,
+            "averageMonthlyParticipation": 874543
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 8946823851.0,
+            "totalPaymentInPercentageNationwide": 2.17,
+            "averageMonthlyParticipation": 876782
+        }
+    ],
+    "New Jersey": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1012654300.0,
+            "totalPaymentInPercentageNationwide": 1.67,
+            "averageMonthlyParticipation": 760303
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 953558696.0,
+            "totalPaymentInPercentageNationwide": 1.72,
+            "averageMonthlyParticipation": 649128
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1288738288.0,
+            "totalPaymentInPercentageNationwide": 1.74,
+            "averageMonthlyParticipation": 700538
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2169432714.0,
+            "totalPaymentInPercentageNationwide": 2.0,
+            "averageMonthlyParticipation": 825664
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2576443628.0,
+            "totalPaymentInPercentageNationwide": 2.27,
+            "averageMonthlyParticipation": 857304
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 8000827626.0,
+            "totalPaymentInPercentageNationwide": 1.94,
+            "averageMonthlyParticipation": 758587
+        }
+    ],
+    "Arizona": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1210429898.0,
+            "totalPaymentInPercentageNationwide": 1.99,
+            "averageMonthlyParticipation": 845733
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1146712214.0,
+            "totalPaymentInPercentageNationwide": 2.07,
+            "averageMonthlyParticipation": 736883
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1469174725.0,
+            "totalPaymentInPercentageNationwide": 1.99,
+            "averageMonthlyParticipation": 833448
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2175824745.0,
+            "totalPaymentInPercentageNationwide": 2.01,
+            "averageMonthlyParticipation": 879123
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1912395634.0,
+            "totalPaymentInPercentageNationwide": 1.68,
+            "averageMonthlyParticipation": 825666
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 7914537216.0,
+            "totalPaymentInPercentageNationwide": 1.92,
+            "averageMonthlyParticipation": 824171
+        }
+    ],
+    "Virginia": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1051800978.0,
+            "totalPaymentInPercentageNationwide": 1.73,
+            "averageMonthlyParticipation": 736221
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1002380166.0,
+            "totalPaymentInPercentageNationwide": 1.81,
+            "averageMonthlyParticipation": 654882
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1331022987.0,
+            "totalPaymentInPercentageNationwide": 1.8,
+            "averageMonthlyParticipation": 730370
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1901832165.0,
+            "totalPaymentInPercentageNationwide": 1.76,
+            "averageMonthlyParticipation": 750785
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2324190266.0,
+            "totalPaymentInPercentageNationwide": 2.05,
+            "averageMonthlyParticipation": 794646
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 7611226562.0,
+            "totalPaymentInPercentageNationwide": 1.85,
+            "averageMonthlyParticipation": 733381
+        }
+    ],
+    "Alabama": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1084563290.0,
+            "totalPaymentInPercentageNationwide": 1.79,
+            "averageMonthlyParticipation": 766681
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 1032064886.0,
+            "totalPaymentInPercentageNationwide": 1.86,
+            "averageMonthlyParticipation": 667043
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1359495890.0,
+            "totalPaymentInPercentageNationwide": 1.84,
+            "averageMonthlyParticipation": 730708
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1974053519.0,
+            "totalPaymentInPercentageNationwide": 1.82,
+            "averageMonthlyParticipation": 769606
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2161908716.0,
+            "totalPaymentInPercentageNationwide": 1.9,
+            "averageMonthlyParticipation": 761074
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 7612086301.0,
+            "totalPaymentInPercentageNationwide": 1.85,
+            "averageMonthlyParticipation": 739022
+        }
+    ],
+    "Maryland": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 910098604.0,
+            "totalPaymentInPercentageNationwide": 1.5,
+            "averageMonthlyParticipation": 646483
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 878649666.0,
+            "totalPaymentInPercentageNationwide": 1.58,
+            "averageMonthlyParticipation": 570444
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1270867930.0,
+            "totalPaymentInPercentageNationwide": 1.72,
+            "averageMonthlyParticipation": 700979
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 2146479444.0,
+            "totalPaymentInPercentageNationwide": 1.98,
+            "averageMonthlyParticipation": 823501
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2117227174.0,
+            "totalPaymentInPercentageNationwide": 1.87,
+            "averageMonthlyParticipation": 772731
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 7323322818.0,
+            "totalPaymentInPercentageNationwide": 1.78,
+            "averageMonthlyParticipation": 702828
+        }
+    ],
+    "Oregon": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 937798988.0,
+            "totalPaymentInPercentageNationwide": 1.54,
+            "averageMonthlyParticipation": 633970
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 884189650.0,
+            "totalPaymentInPercentageNationwide": 1.59,
+            "averageMonthlyParticipation": 554927
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1170543331.0,
+            "totalPaymentInPercentageNationwide": 1.58,
+            "averageMonthlyParticipation": 635485
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1847403478.0,
+            "totalPaymentInPercentageNationwide": 1.71,
+            "averageMonthlyParticipation": 706294
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2094359050.0,
+            "totalPaymentInPercentageNationwide": 1.85,
+            "averageMonthlyParticipation": 718580
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 6934294497.0,
+            "totalPaymentInPercentageNationwide": 1.68,
+            "averageMonthlyParticipation": 649851
+        }
+    ],
+    "Wisconsin": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 816882114.0,
+            "totalPaymentInPercentageNationwide": 1.35,
+            "averageMonthlyParticipation": 652885
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 778373061.0,
+            "totalPaymentInPercentageNationwide": 1.4,
+            "averageMonthlyParticipation": 572323
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1104399935.0,
+            "totalPaymentInPercentageNationwide": 1.49,
+            "averageMonthlyParticipation": 647376
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1964034853.0,
+            "totalPaymentInPercentageNationwide": 1.81,
+            "averageMonthlyParticipation": 762395
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 2073817767.0,
+            "totalPaymentInPercentageNationwide": 1.83,
+            "averageMonthlyParticipation": 708238
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 6737507730.0,
+            "totalPaymentInPercentageNationwide": 1.64,
+            "averageMonthlyParticipation": 668643
+        }
+    ],
+    "Missouri": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 1061334229.0,
+            "totalPaymentInPercentageNationwide": 1.75,
+            "averageMonthlyParticipation": 736590
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 996212141.0,
+            "totalPaymentInPercentageNationwide": 1.8,
+            "averageMonthlyParticipation": 639338
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1324976208.0,
+            "totalPaymentInPercentageNationwide": 1.79,
+            "averageMonthlyParticipation": 715447
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1734889161.0,
+            "totalPaymentInPercentageNationwide": 1.6,
+            "averageMonthlyParticipation": 698720
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1298301743.0,
+            "totalPaymentInPercentageNationwide": 1.14,
+            "averageMonthlyParticipation": 657870
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 6415713482.0,
+            "totalPaymentInPercentageNationwide": 1.56,
+            "averageMonthlyParticipation": 689593
+        }
+    ],
+    "South Carolina": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 943922431.0,
+            "totalPaymentInPercentageNationwide": 1.55,
+            "averageMonthlyParticipation": 658119
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 854652751.0,
+            "totalPaymentInPercentageNationwide": 1.54,
+            "averageMonthlyParticipation": 558722
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1101611441.0,
+            "totalPaymentInPercentageNationwide": 1.49,
+            "averageMonthlyParticipation": 596161
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1550266093.0,
+            "totalPaymentInPercentageNationwide": 1.43,
+            "averageMonthlyParticipation": 608107
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1719271318.0,
+            "totalPaymentInPercentageNationwide": 1.51,
+            "averageMonthlyParticipation": 618978
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 6169724034.0,
+            "totalPaymentInPercentageNationwide": 1.5,
+            "averageMonthlyParticipation": 608017
+        }
+    ],
+    "Oklahoma": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 832653493.0,
+            "totalPaymentInPercentageNationwide": 1.37,
+            "averageMonthlyParticipation": 585064
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 819546294.0,
+            "totalPaymentInPercentageNationwide": 1.48,
+            "averageMonthlyParticipation": 531728
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1056260544.0,
+            "totalPaymentInPercentageNationwide": 1.43,
+            "averageMonthlyParticipation": 596705
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1472962209.0,
+            "totalPaymentInPercentageNationwide": 1.36,
+            "averageMonthlyParticipation": 619149
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1802791838.0,
+            "totalPaymentInPercentageNationwide": 1.59,
+            "averageMonthlyParticipation": 650640
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 5984214378.0,
+            "totalPaymentInPercentageNationwide": 1.45,
+            "averageMonthlyParticipation": 596657
+        }
+    ],
+    "Indiana": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 867533147.0,
+            "totalPaymentInPercentageNationwide": 1.43,
+            "averageMonthlyParticipation": 617032
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 819644875.0,
+            "totalPaymentInPercentageNationwide": 1.48,
+            "averageMonthlyParticipation": 530384
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 1091236875.0,
+            "totalPaymentInPercentageNationwide": 1.48,
+            "averageMonthlyParticipation": 601417
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1619482719.0,
+            "totalPaymentInPercentageNationwide": 1.5,
+            "averageMonthlyParticipation": 645754
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1523624552.0,
+            "totalPaymentInPercentageNationwide": 1.34,
+            "averageMonthlyParticipation": 617630
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 5921522168.0,
+            "totalPaymentInPercentageNationwide": 1.44,
+            "averageMonthlyParticipation": 602444
+        }
+    ],
+    "Minnesota": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 544420005.0,
+            "totalPaymentInPercentageNationwide": 0.9,
+            "averageMonthlyParticipation": 428986
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 509464759.0,
+            "totalPaymentInPercentageNationwide": 0.92,
+            "averageMonthlyParticipation": 381779
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 959125365.0,
+            "totalPaymentInPercentageNationwide": 1.3,
+            "averageMonthlyParticipation": 409275
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1985655426.0,
+            "totalPaymentInPercentageNationwide": 1.83,
+            "averageMonthlyParticipation": 452652
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1558162188.0,
+            "totalPaymentInPercentageNationwide": 1.37,
+            "averageMonthlyParticipation": 435910
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 5556827743.0,
+            "totalPaymentInPercentageNationwide": 1.35,
+            "averageMonthlyParticipation": 421720
+        }
+    ],
+    "Kentucky": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 853986982.0,
+            "totalPaymentInPercentageNationwide": 1.41,
+            "averageMonthlyParticipation": 615305
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 739297747.0,
+            "totalPaymentInPercentageNationwide": 1.33,
+            "averageMonthlyParticipation": 502241
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 997788980.0,
+            "totalPaymentInPercentageNationwide": 1.35,
+            "averageMonthlyParticipation": 555425
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1610391177.0,
+            "totalPaymentInPercentageNationwide": 1.49,
+            "averageMonthlyParticipation": 597747
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1265479724.0,
+            "totalPaymentInPercentageNationwide": 1.11,
+            "averageMonthlyParticipation": 541623
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 5466944610.0,
+            "totalPaymentInPercentageNationwide": 1.33,
+            "averageMonthlyParticipation": 562468
+        }
+    ],
+    "New Mexico": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 638421821.0,
+            "totalPaymentInPercentageNationwide": 1.05,
+            "averageMonthlyParticipation": 456251
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 632907856.0,
+            "totalPaymentInPercentageNationwide": 1.14,
+            "averageMonthlyParticipation": 415161
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 903755521.0,
+            "totalPaymentInPercentageNationwide": 1.22,
+            "averageMonthlyParticipation": 468745
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1339883626.0,
+            "totalPaymentInPercentageNationwide": 1.24,
+            "averageMonthlyParticipation": 520494
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1486850924.0,
+            "totalPaymentInPercentageNationwide": 1.31,
+            "averageMonthlyParticipation": 518799
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 5001819748.0,
+            "totalPaymentInPercentageNationwide": 1.21,
+            "averageMonthlyParticipation": 475890
+        }
+    ],
+    "Colorado": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 668610833.0,
+            "totalPaymentInPercentageNationwide": 1.1,
+            "averageMonthlyParticipation": 449824
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 639000457.0,
+            "totalPaymentInPercentageNationwide": 1.15,
+            "averageMonthlyParticipation": 415289
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 912978201.0,
+            "totalPaymentInPercentageNationwide": 1.23,
+            "averageMonthlyParticipation": 483097
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1304761706.0,
+            "totalPaymentInPercentageNationwide": 1.2,
+            "averageMonthlyParticipation": 513945
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1473934886.0,
+            "totalPaymentInPercentageNationwide": 1.3,
+            "averageMonthlyParticipation": 540303
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 4999286083.0,
+            "totalPaymentInPercentageNationwide": 1.21,
+            "averageMonthlyParticipation": 480492
+        }
+    ],
+    "Nevada": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 614241940.0,
+            "totalPaymentInPercentageNationwide": 1.01,
+            "averageMonthlyParticipation": 439941
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 587953503.0,
+            "totalPaymentInPercentageNationwide": 1.06,
+            "averageMonthlyParticipation": 391569
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 806791228.0,
+            "totalPaymentInPercentageNationwide": 1.09,
+            "averageMonthlyParticipation": 448688
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1085383815.0,
+            "totalPaymentInPercentageNationwide": 1.0,
+            "averageMonthlyParticipation": 453250
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1281156203.0,
+            "totalPaymentInPercentageNationwide": 1.13,
+            "averageMonthlyParticipation": 455231
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 4375526689.0,
+            "totalPaymentInPercentageNationwide": 1.06,
+            "averageMonthlyParticipation": 437736
+        }
+    ],
+    "Connecticut": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 614967955.0,
+            "totalPaymentInPercentageNationwide": 1.01,
+            "averageMonthlyParticipation": 387329
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 584718600.0,
+            "totalPaymentInPercentageNationwide": 1.05,
+            "averageMonthlyParticipation": 340447
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 721754999.0,
+            "totalPaymentInPercentageNationwide": 0.98,
+            "averageMonthlyParticipation": 372305
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 980157323.0,
+            "totalPaymentInPercentageNationwide": 0.91,
+            "averageMonthlyParticipation": 371632
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 1115512850.0,
+            "totalPaymentInPercentageNationwide": 0.98,
+            "averageMonthlyParticipation": 375361
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 4017111727.0,
+            "totalPaymentInPercentageNationwide": 0.98,
+            "averageMonthlyParticipation": 369415
+        }
+    ],
+    "Mississippi": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 679722657.0,
+            "totalPaymentInPercentageNationwide": 1.12,
+            "averageMonthlyParticipation": 505308
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 605780127.0,
+            "totalPaymentInPercentageNationwide": 1.09,
+            "averageMonthlyParticipation": 420873
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 772290269.0,
+            "totalPaymentInPercentageNationwide": 1.04,
+            "averageMonthlyParticipation": 429568
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 1066435430.0,
+            "totalPaymentInPercentageNationwide": 0.98,
+            "averageMonthlyParticipation": 418451
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 851232937.0,
+            "totalPaymentInPercentageNationwide": 0.75,
+            "averageMonthlyParticipation": 413651
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 3975461420.0,
+            "totalPaymentInPercentageNationwide": 0.97,
+            "averageMonthlyParticipation": 437570
+        }
+    ],
+    "Hawaii": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 469433045.0,
+            "totalPaymentInPercentageNationwide": 0.77,
+            "averageMonthlyParticipation": 163618
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 448431408.0,
+            "totalPaymentInPercentageNationwide": 0.81,
+            "averageMonthlyParticipation": 144922
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 563931492.0,
+            "totalPaymentInPercentageNationwide": 0.76,
+            "averageMonthlyParticipation": 165418
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 944131080.0,
+            "totalPaymentInPercentageNationwide": 0.87,
+            "averageMonthlyParticipation": 195834
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 900720734.0,
+            "totalPaymentInPercentageNationwide": 0.79,
+            "averageMonthlyParticipation": 169014
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 3326647759.0,
+            "totalPaymentInPercentageNationwide": 0.81,
+            "averageMonthlyParticipation": 167761
+        }
+    ],
+    "West Virginia": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 440298715.0,
+            "totalPaymentInPercentageNationwide": 0.73,
+            "averageMonthlyParticipation": 321009
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 397899950.0,
+            "totalPaymentInPercentageNationwide": 0.72,
+            "averageMonthlyParticipation": 282662
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 518346256.0,
+            "totalPaymentInPercentageNationwide": 0.7,
+            "averageMonthlyParticipation": 306218
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 772297950.0,
+            "totalPaymentInPercentageNationwide": 0.71,
+            "averageMonthlyParticipation": 302444
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 884685288.0,
+            "totalPaymentInPercentageNationwide": 0.78,
+            "averageMonthlyParticipation": 310879
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 3013528159.0,
+            "totalPaymentInPercentageNationwide": 0.73,
+            "averageMonthlyParticipation": 304642
+        }
+    ],
+    "Arkansas": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 480472657.0,
+            "totalPaymentInPercentageNationwide": 0.79,
+            "averageMonthlyParticipation": 372451
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 460333605.0,
+            "totalPaymentInPercentageNationwide": 0.83,
+            "averageMonthlyParticipation": 354917
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 660915016.0,
+            "totalPaymentInPercentageNationwide": 0.89,
+            "averageMonthlyParticipation": 371265
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 765794046.0,
+            "totalPaymentInPercentageNationwide": 0.71,
+            "averageMonthlyParticipation": 346176
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 509596270.0,
+            "totalPaymentInPercentageNationwide": 0.45,
+            "averageMonthlyParticipation": 281112
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 2877111594.0,
+            "totalPaymentInPercentageNationwide": 0.7,
+            "averageMonthlyParticipation": 345184
+        }
+    ],
+    "Iowa": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 446259982.0,
+            "totalPaymentInPercentageNationwide": 0.73,
+            "averageMonthlyParticipation": 345406
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 429315218.0,
+            "totalPaymentInPercentageNationwide": 0.77,
+            "averageMonthlyParticipation": 295682
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 545552128.0,
+            "totalPaymentInPercentageNationwide": 0.74,
+            "averageMonthlyParticipation": 310564
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 727003312.0,
+            "totalPaymentInPercentageNationwide": 0.67,
+            "averageMonthlyParticipation": 286050
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 596714651.0,
+            "totalPaymentInPercentageNationwide": 0.53,
+            "averageMonthlyParticipation": 278827
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 2744845291.0,
+            "totalPaymentInPercentageNationwide": 0.67,
+            "averageMonthlyParticipation": 303306
+        }
+    ],
+    "Kansas": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 293539988.0,
+            "totalPaymentInPercentageNationwide": 0.48,
+            "averageMonthlyParticipation": 217420
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 265322548.0,
+            "totalPaymentInPercentageNationwide": 0.48,
+            "averageMonthlyParticipation": 185329
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 336631296.0,
+            "totalPaymentInPercentageNationwide": 0.46,
+            "averageMonthlyParticipation": 200443
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 488517358.0,
+            "totalPaymentInPercentageNationwide": 0.45,
+            "averageMonthlyParticipation": 200344
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 558884067.0,
+            "totalPaymentInPercentageNationwide": 0.49,
+            "averageMonthlyParticipation": 195799
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1942895257.0,
+            "totalPaymentInPercentageNationwide": 0.47,
+            "averageMonthlyParticipation": 199867
+        }
+    ],
+    "Rhode Island": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 259191919.0,
+            "totalPaymentInPercentageNationwide": 0.43,
+            "averageMonthlyParticipation": 158986
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 244223564.0,
+            "totalPaymentInPercentageNationwide": 0.44,
+            "averageMonthlyParticipation": 141232
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 278985653.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 146183
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 378689563.0,
+            "totalPaymentInPercentageNationwide": 0.35,
+            "averageMonthlyParticipation": 142149
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 424913309.0,
+            "totalPaymentInPercentageNationwide": 0.37,
+            "averageMonthlyParticipation": 139362
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1586004008.0,
+            "totalPaymentInPercentageNationwide": 0.39,
+            "averageMonthlyParticipation": 145582
+        }
+    ],
+    "Utah": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 258536027.0,
+            "totalPaymentInPercentageNationwide": 0.43,
+            "averageMonthlyParticipation": 189093
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 234552832.0,
+            "totalPaymentInPercentageNationwide": 0.42,
+            "averageMonthlyParticipation": 160829
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 279594698.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 164041
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 412957155.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 163010
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 426939679.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 156291
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1612580391.0,
+            "totalPaymentInPercentageNationwide": 0.39,
+            "averageMonthlyParticipation": 166653
+        }
+    ],
+    "Maine": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 218217647.0,
+            "totalPaymentInPercentageNationwide": 0.36,
+            "averageMonthlyParticipation": 167858
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 203630527.0,
+            "totalPaymentInPercentageNationwide": 0.37,
+            "averageMonthlyParticipation": 144433
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 277026746.0,
+            "totalPaymentInPercentageNationwide": 0.37,
+            "averageMonthlyParticipation": 159995
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 409705765.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 157595
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 475481836.0,
+            "totalPaymentInPercentageNationwide": 0.42,
+            "averageMonthlyParticipation": 161815
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1584062521.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 158339
+        }
+    ],
+    "District of Columbia": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 188433398.0,
+            "totalPaymentInPercentageNationwide": 0.31,
+            "averageMonthlyParticipation": 112282
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 172078913.0,
+            "totalPaymentInPercentageNationwide": 0.31,
+            "averageMonthlyParticipation": 101230
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 225271943.0,
+            "totalPaymentInPercentageNationwide": 0.3,
+            "averageMonthlyParticipation": 116406
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 381121744.0,
+            "totalPaymentInPercentageNationwide": 0.35,
+            "averageMonthlyParticipation": 140115
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 467476645.0,
+            "totalPaymentInPercentageNationwide": 0.41,
+            "averageMonthlyParticipation": 145805
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1434382643.0,
+            "totalPaymentInPercentageNationwide": 0.35,
+            "averageMonthlyParticipation": 123168
+        }
+    ],
+    "Nebraska": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 229206174.0,
+            "totalPaymentInPercentageNationwide": 0.38,
+            "averageMonthlyParticipation": 169811
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 221960791.0,
+            "totalPaymentInPercentageNationwide": 0.4,
+            "averageMonthlyParticipation": 148768
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 254347798.0,
+            "totalPaymentInPercentageNationwide": 0.34,
+            "averageMonthlyParticipation": 157091
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 356554249.0,
+            "totalPaymentInPercentageNationwide": 0.33,
+            "averageMonthlyParticipation": 157273
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 265904110.0,
+            "totalPaymentInPercentageNationwide": 0.23,
+            "averageMonthlyParticipation": 155550
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1327973122.0,
+            "totalPaymentInPercentageNationwide": 0.32,
+            "averageMonthlyParticipation": 157698
+        }
+    ],
+    "Delaware": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 196899033.0,
+            "totalPaymentInPercentageNationwide": 0.32,
+            "averageMonthlyParticipation": 140298
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 178138585.0,
+            "totalPaymentInPercentageNationwide": 0.32,
+            "averageMonthlyParticipation": 119787
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 215100949.0,
+            "totalPaymentInPercentageNationwide": 0.29,
+            "averageMonthlyParticipation": 120416
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 288020710.0,
+            "totalPaymentInPercentageNationwide": 0.27,
+            "averageMonthlyParticipation": 115484
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 323485761.0,
+            "totalPaymentInPercentageNationwide": 0.28,
+            "averageMonthlyParticipation": 118842
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1201645038.0,
+            "totalPaymentInPercentageNationwide": 0.29,
+            "averageMonthlyParticipation": 122965
+        }
+    ],
+    "Alaska": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 187357117.0,
+            "totalPaymentInPercentageNationwide": 0.31,
+            "averageMonthlyParticipation": 91995
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 171091672.0,
+            "totalPaymentInPercentageNationwide": 0.31,
+            "averageMonthlyParticipation": 78932
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 198298992.0,
+            "totalPaymentInPercentageNationwide": 0.27,
+            "averageMonthlyParticipation": 83194
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 288045258.0,
+            "totalPaymentInPercentageNationwide": 0.27,
+            "averageMonthlyParticipation": 82888
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 348717900.0,
+            "totalPaymentInPercentageNationwide": 0.31,
+            "averageMonthlyParticipation": 92119
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1193510939.0,
+            "totalPaymentInPercentageNationwide": 0.29,
+            "averageMonthlyParticipation": 85826
+        }
+    ],
+    "Idaho": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 199514037.0,
+            "totalPaymentInPercentageNationwide": 0.33,
+            "averageMonthlyParticipation": 157858
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 192918233.0,
+            "totalPaymentInPercentageNationwide": 0.35,
+            "averageMonthlyParticipation": 135922
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 241192232.0,
+            "totalPaymentInPercentageNationwide": 0.33,
+            "averageMonthlyParticipation": 146497
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 258375969.0,
+            "totalPaymentInPercentageNationwide": 0.24,
+            "averageMonthlyParticipation": 132607
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 220405707.0,
+            "totalPaymentInPercentageNationwide": 0.19,
+            "averageMonthlyParticipation": 124078
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 1112406178.0,
+            "totalPaymentInPercentageNationwide": 0.27,
+            "averageMonthlyParticipation": 139392
+        }
+    ],
+    "Montana": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 158389738.0,
+            "totalPaymentInPercentageNationwide": 0.26,
+            "averageMonthlyParticipation": 115223
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 146944184.0,
+            "totalPaymentInPercentageNationwide": 0.26,
+            "averageMonthlyParticipation": 99368
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 192530803.0,
+            "totalPaymentInPercentageNationwide": 0.26,
+            "averageMonthlyParticipation": 104391
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 228795841.0,
+            "totalPaymentInPercentageNationwide": 0.21,
+            "averageMonthlyParticipation": 97186
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 155175590.0,
+            "totalPaymentInPercentageNationwide": 0.14,
+            "averageMonthlyParticipation": 89167
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 881836156.0,
+            "totalPaymentInPercentageNationwide": 0.21,
+            "averageMonthlyParticipation": 101067
+        }
+    ],
+    "New Hampshire": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 101469828.0,
+            "totalPaymentInPercentageNationwide": 0.17,
+            "averageMonthlyParticipation": 86502
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 92889191.0,
+            "totalPaymentInPercentageNationwide": 0.17,
+            "averageMonthlyParticipation": 70412
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 116852942.0,
+            "totalPaymentInPercentageNationwide": 0.16,
+            "averageMonthlyParticipation": 72505
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 174557213.0,
+            "totalPaymentInPercentageNationwide": 0.16,
+            "averageMonthlyParticipation": 69116
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 200380711.0,
+            "totalPaymentInPercentageNationwide": 0.18,
+            "averageMonthlyParticipation": 69343
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 686149885.0,
+            "totalPaymentInPercentageNationwide": 0.17,
+            "averageMonthlyParticipation": 73575
+        }
+    ],
+    "Vermont": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 106782062.0,
+            "totalPaymentInPercentageNationwide": 0.18,
+            "averageMonthlyParticipation": 73058
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 100248674.0,
+            "totalPaymentInPercentageNationwide": 0.18,
+            "averageMonthlyParticipation": 68277
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 117478730.0,
+            "totalPaymentInPercentageNationwide": 0.16,
+            "averageMonthlyParticipation": 68568
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 169354925.0,
+            "totalPaymentInPercentageNationwide": 0.16,
+            "averageMonthlyParticipation": 67790
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 205688345.0,
+            "totalPaymentInPercentageNationwide": 0.18,
+            "averageMonthlyParticipation": 69483
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 699552736.0,
+            "totalPaymentInPercentageNationwide": 0.17,
+            "averageMonthlyParticipation": 69435
+        }
+    ],
+    "South Dakota": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 131112641.0,
+            "totalPaymentInPercentageNationwide": 0.22,
+            "averageMonthlyParticipation": 87410
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 121995672.0,
+            "totalPaymentInPercentageNationwide": 0.22,
+            "averageMonthlyParticipation": 75020
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 143860091.0,
+            "totalPaymentInPercentageNationwide": 0.19,
+            "averageMonthlyParticipation": 78245
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 177819200.0,
+            "totalPaymentInPercentageNationwide": 0.16,
+            "averageMonthlyParticipation": 74627
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 143211449.0,
+            "totalPaymentInPercentageNationwide": 0.13,
+            "averageMonthlyParticipation": 71012
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 717999053.0,
+            "totalPaymentInPercentageNationwide": 0.17,
+            "averageMonthlyParticipation": 77263
+        }
+    ],
+    "North Dakota": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 75391175.0,
+            "totalPaymentInPercentageNationwide": 0.12,
+            "averageMonthlyParticipation": 52621
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 68485818.0,
+            "totalPaymentInPercentageNationwide": 0.12,
+            "averageMonthlyParticipation": 45312
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 84360845.0,
+            "totalPaymentInPercentageNationwide": 0.11,
+            "averageMonthlyParticipation": 46092
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 113160074.0,
+            "totalPaymentInPercentageNationwide": 0.1,
+            "averageMonthlyParticipation": 50377
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 90503186.0,
+            "totalPaymentInPercentageNationwide": 0.08,
+            "averageMonthlyParticipation": 47417
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 431901098.0,
+            "totalPaymentInPercentageNationwide": 0.1,
+            "averageMonthlyParticipation": 48364
+        }
+    ],
+    "Wyoming": [
+        {
+            "years": "2018",
+            "totalPaymentInDollars": 40676283.0,
+            "totalPaymentInPercentageNationwide": 0.07,
+            "averageMonthlyParticipation": 29330
+        },
+        {
+            "years": "2019",
+            "totalPaymentInDollars": 36277115.0,
+            "totalPaymentInPercentageNationwide": 0.07,
+            "averageMonthlyParticipation": 24309
+        },
+        {
+            "years": "2020",
+            "totalPaymentInDollars": 45870674.0,
+            "totalPaymentInPercentageNationwide": 0.06,
+            "averageMonthlyParticipation": 26928
+        },
+        {
+            "years": "2021",
+            "totalPaymentInDollars": 73313685.0,
+            "totalPaymentInPercentageNationwide": 0.07,
+            "averageMonthlyParticipation": 29118
+        },
+        {
+            "years": "2022",
+            "totalPaymentInDollars": 68566524.0,
+            "totalPaymentInPercentageNationwide": 0.06,
+            "averageMonthlyParticipation": 30178
+        },
+        {
+            "years": "2018-2022",
+            "totalPaymentInDollars": 264704281.0,
+            "totalPaymentInPercentageNationwide": 0.06,
+            "averageMonthlyParticipation": 27973
+        }
+    ]
+}

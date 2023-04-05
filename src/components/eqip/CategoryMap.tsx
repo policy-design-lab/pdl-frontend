@@ -52,6 +52,7 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                 const categoryPayment = categoryRecord.paymentInDollars;
                                 const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
                                 const withinStatePercentage = categoryRecord.paymentInPercentageWithinState;
+                                console.log(categoryRecord);
                                 const hoverContent = (
                                     <Box
                                         sx={{
