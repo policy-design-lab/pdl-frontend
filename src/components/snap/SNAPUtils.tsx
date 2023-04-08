@@ -1,24 +1,18 @@
-import React from 'react';
-import state_distribution from '../../data/snap/snap_state_distribution_data.json';
+export function ShortFormat(labelValue) 
+  {
+  // Nine Zeroes for Billions
+  return Math.abs(Number(labelValue)) >= 1.0e+9
 
+       ? Math.abs(Number(labelValue)) / 1.0e+9 + "B"
+       // Six Zeroes for Millions 
+       : Math.abs(Number(labelValue)) >= 1.0e+6
 
-/**
- * 
- * @param state_distribution 
- * @returns ["2018":[{"California":[...]},{"Texas":[...]}]]
- */
-export function year_transpose(state_distribution){
-  const year_keys = [
-    "2018",
-    "2019",
-    "2020",
-    "2021",
-    "2022",
-    "2018-2022"
-  ]
-  const result_data = [];
-  Object.keys(state_distribution).forEach(state => {
-    console.log(bigObject[key])
-  })
-  return result_data;
-}
+       ? Math.abs(Number(labelValue)) / 1.0e+6 + "M"
+       // Three Zeroes for Thousands
+       : Math.abs(Number(labelValue)) >= 1.0e+3
+
+       ? Math.abs(Number(labelValue)) / 1.0e+3 + "K"
+
+       : Math.abs(Number(labelValue));
+
+   }

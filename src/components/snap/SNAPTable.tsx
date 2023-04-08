@@ -73,9 +73,6 @@ function Table({ columns, data, initialState }: { columns: any; data: any, initi
         useSortBy,
         usePagination
     );
-
-    console.log(page);
-
     return (
         <>
             <table {...getTableProps()}>
