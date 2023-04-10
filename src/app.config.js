@@ -1,31 +1,23 @@
 const baseConfig = {
-	// put any unchaging configuration information in here
+	// put any unchanging configuration information in here
 };
 
-const prodConfig = {
-	apiUrl: "https://api.policydesignlab.ncsa.illinois.edu/pdl",
-	...baseConfig
-};
-
-const devConfig = {
-	apiUrl: "https://api.policydesignlab-dev.ncsa.illinois.edu/pdl",
-	...baseConfig
+const deployConfig = {
+	apiUrl: "/pdl",
+	...baseConfig,
 };
 
 const localConfig = {
 	apiUrl: "http://localhost:5000/pdl",
-	...baseConfig
+	...baseConfig,
 };
 
 // eslint-disable-next-line no-unused-vars
-export const config = getConfig();
-
 function getConfig() {
-	if (process.env.APP_ENV === 'production') {
-	    return prodConfig;
+	if (process.env.APP_ENV === "local") {
+		return localConfig;
 	}
-	if (process.env.APP_ENV === 'development') {
-	    return devConfig;
-	}
-	return localConfig;
+	return deployConfig;
 }
+
+export const config = getConfig();
