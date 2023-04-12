@@ -28,6 +28,25 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
         );
     };
 
+    const CustomTooltip = ({ active, payload, label }: any) => {
+        if (active && payload && payload.length) {
+            return (
+                        <div style={{
+                            backgroundColor: '#f5f5f5',
+                            padding: '20px',
+                            borderRadius: '10px',
+                            boxShadow: 'rgba(0, 0, 0, 0.1)',
+                            textAlign: 'center'
+                        }}>
+                            <h2 style={{ margin: '0' }}>Payment:</h2>
+                            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{payload[0].value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                        </div>
+            );
+        }
+
+        return null;
+    };
+
     return (
         <Box display="flex" justifyContent="center">
             <PieChart width={1400} height={450}>
@@ -78,7 +97,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         <Cell key={entry.id} fillOpacity={0} />
                     ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}/>
             </PieChart>
         </Box>
     );
