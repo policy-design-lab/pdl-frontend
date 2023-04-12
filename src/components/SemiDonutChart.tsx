@@ -35,7 +35,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                             backgroundColor: '#f5f5f5',
                             padding: '20px',
                             borderRadius: '10px',
-                            boxShadow: 'rgba(0, 0, 0, 0.1)',
+                            boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
                             textAlign: 'center'
                         }}>
                             <h2 style={{ margin: '0' }}>Payment:</h2>
@@ -97,7 +97,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         <Cell key={entry.id} fillOpacity={0} />
                     ))}
                 </Pie>
-                <Tooltip content={<CustomTooltip />} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}/>
+                <Tooltip content={<CustomTooltip />} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge" }}/>
             </PieChart>
         </Box>
     );
