@@ -1,7 +1,3 @@
-// let config = {};
-
-let hostname = window.location.hostname;
-
 // for local test to connect dev api server
 // const hostname = process.env.APP_ENV === "development" ? "policydesignlab-dev.ncsa.illinois.edu" : window.location.hostname;
 
@@ -10,23 +6,23 @@ const baseConfig = {
 };
 
 const deployConfig = {
-    apiUrl: `/pdl`,
+	apiUrl: "/pdl",
 	...baseConfig
 };
 
 const localConfig = {
-	apiUrl: `http://localhost:5000/pdl`,
+	apiUrl: "http://localhost:5000/pdl",
 	...baseConfig
 };
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-    if (process.env.APP_ENV === 'local') {
-        console.log("ENV is local")
-        return localConfig;
-    }
-    console.log("ENV is deployment")
-    return deployConfig;
+	if (process.env.APP_ENV === "local") {
+		// console.log("ENV is local");
+		return localConfig;
+	}
+	// console.log("ENV is deployment");
+	return deployConfig;
 }
 
 export const config = getConfig();
