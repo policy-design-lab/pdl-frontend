@@ -38,8 +38,8 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
                             textAlign: 'center'
                         }}>
-                            <h2 style={{ margin: '0' }}>Payment:</h2>
-                            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{payload[0].value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                            <h2 style={{ margin: '0' }}>{payload[0].name} Payment:</h2>
+                            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{payload[0].value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
             );
         }
