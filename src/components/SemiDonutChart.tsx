@@ -97,7 +97,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         <Cell key={entry.id} fillOpacity={0} />
                     ))}
                 </Pie>
-                <Tooltip content={<CustomTooltip />} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge" }}/>
+                <Tooltip content={<CustomTooltip />} wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", outline: "none", borderRadius: '10px' }}/>
             </PieChart>
         </Box>
     );
