@@ -1,6 +1,3 @@
-// for local test to connect dev api server
-// const hostname = process.env.APP_ENV === "development" ? "policydesignlab-dev.ncsa.illinois.edu" : window.location.hostname;
-
 const baseConfig = {
 	// put any unchanging configuration information in here
 };
