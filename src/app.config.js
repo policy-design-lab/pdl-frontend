@@ -15,10 +15,8 @@ const localConfig = {
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
 	if (process.env.APP_ENV === "local") {
-		// console.log("ENV is local");
 		return localConfig;
 	}
-	// console.log("ENV is deployment");
 	return deployConfig;
 }
 
