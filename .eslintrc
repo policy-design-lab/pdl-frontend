@@ -26,6 +26,8 @@
     "no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
     "eqeqeq": ["warn", "smart"],
     "no-eval": "warn",
+    "quotes": ["warn", "double"],
+    "indent": ["warn", "tab"],
     "no-console": 1,
     "no-debugger": 1,
     "no-var": "error",
