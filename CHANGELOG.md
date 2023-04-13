@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
 - Dynamic api uri creation [#78](https://github.com/policy-design-lab/pdl-frontend/issues/78)
+- Errors in the EQIP JSON data files. [#87](https://github.com/policy-design-lab/pdl-frontend/issues/87)
 
 ## [0.2.0] - 2023-03-03
 
