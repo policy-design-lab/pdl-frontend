@@ -63,14 +63,13 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                                 }}
                                             >
                                                 <Typography sx={{ color: '#3F3F3F' }}>
-                                                    $
-                                                    {Number(totalPaymentInDollars / 1000000.0).toLocaleString(
-                                                        undefined,
-                                                        {
+                                                    {Number(totalPaymentInDollars) < 1000000
+                                                        ? `$${Number(Number(totalPaymentInDollars) / 1000.0).toLocaleString(undefined, {
                                                             maximumFractionDigits: 2
-                                                        }
-                                                    )}
-                                                    M
+                                                        })}K`
+                                                        : `$${Number(Number(totalPaymentInDollars) / 1000000.0).toLocaleString(undefined, {
+                                                            maximumFractionDigits: 2
+                                                        })}M`}
                                                 </Typography>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                 <Typography sx={{ color: '#3F3F3F' }}>
