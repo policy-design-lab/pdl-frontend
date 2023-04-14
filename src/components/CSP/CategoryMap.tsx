@@ -27,7 +27,7 @@ const offsets = {
 	DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, maxValue }) => {
+const MapChart = ({ setTooltipContent, category, maxValue }) => {
 	const colorScale = scaleQuantize()
 		.domain([0, maxValue])
 		.range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
@@ -42,9 +42,18 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
 								if (!Object.keys(statePerformance).includes(geo.properties.name)) {
 									return null;
 								}
-								const record = statePerformance[geo.properties.name][0];
-								const totalPaymentInDollars = record.totalPaymentInDollars;
-								const totalPaymentInPercentageNationwide = record.totalPaymentInPercentageNationwide;
+								const statuteRecord = statePerformance[geo.properties.name][0].statutes;
+								const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+								const AArray = ACur.practiceCategories;
+								const BCur = statuteRecord.find((s) => s.statuteName === "2014 CSP");
+								const BArray = BCur.practiceCategories;
+								const CCur = statuteRecord.find((s) => s.statuteName === "Other");
+								const CArray = CCur.practiceCategories;
+								const TotalArray = AArray.concat(BArray).concat(CArray);
+								const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+								const categoryPayment = categoryRecord.paymentInDollars;
+								const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
+								const withinStatePercentage = categoryRecord.paymentInPercentageWithinState;
 								const hoverContent = (
 									<Box
 										sx={{
@@ -63,17 +72,17 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
 												}}
 											>
 												<Typography sx={{ color: "#3F3F3F" }}>
-													{Number(totalPaymentInDollars) < 1000000
-														? `$${Number(Number(totalPaymentInDollars) / 1000.0).toLocaleString(undefined, {
+													{Number(categoryPayment) < 1000000
+														? `$${Number(Number(categoryPayment) / 1000.0).toLocaleString(undefined, {
 															maximumFractionDigits: 2
 														})}K`
-														: `$${Number(Number(totalPaymentInDollars) / 1000000.0).toLocaleString(undefined, {
+														: `$${Number(Number(categoryPayment) / 1000000.0).toLocaleString(undefined, {
 															maximumFractionDigits: 2
 														})}M`}
 												</Typography>
 												<Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
 												<Typography sx={{ color: "#3F3F3F" }}>
-													{totalPaymentInPercentageNationwide ? `${ totalPaymentInPercentageNationwide } %` : "0%"}
+													{nationwidePercentage ? `${ nationwidePercentage } %` : "0%"}
 												</Typography>
 											</Box>
 										</Box>
@@ -89,7 +98,7 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
 										onMouseLeave={() => {
 											setTooltipContent("");
 										}}
-										fill={colorScale(totalPaymentInDollars)}
+										fill={colorScale(categoryPayment)}
 										stroke="#FFF"
 										style={{
 											default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
@@ -144,24 +153,38 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
 
 MapChart.propTypes = {
 	setTooltipContent: PropTypes.func,
+	category: PropTypes.string,
 	maxValue: PropTypes.number
 };
 
-const CSPTotalMap = (): JSX.Element => {
+const CategoryMap = ({ category }: { category: string }): JSX.Element => {
+	const [content, setContent] = useState("");
+	const title = `${category} Benefits`;
 	const quantizeArray: number[] = [];
-	Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
+	Object.values(statePerformance).map((value) => {
+		const statuteRecord = value[0].statutes;
+		const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+		const AArray = ACur.practiceCategories;
+		const BCur = statuteRecord.find((s) => s.statuteName === "2014 CSP");
+		const BArray = BCur.practiceCategories;
+		const CCur = statuteRecord.find((s) => s.statuteName === "Other");
+		const CArray = CCur.practiceCategories;
+		const TotalArray = AArray.concat(BArray).concat(CArray);
+		const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+		quantizeArray.push(categoryRecord.paymentInDollars);
+		return null;
+	});
 	const maxValue = Math.max(...quantizeArray);
 	const label1 = (maxValue / 5) * 0;
 	const label2 = (maxValue / 5) * 1;
 	const label3 = (maxValue / 5) * 2;
 	const label4 = (maxValue / 5) * 3;
 	const label5 = (maxValue / 5) * 4;
-	const [content, setContent] = useState("");
 	return (
 		<div>
 			<Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
 				<HorizontalStackedBar
-					title="Total CSP Benefits"
+					title={title}
 					color1="#F0F9E8"
 					color2="#BAE4BC"
 					color3="#7BCCC4"
@@ -169,25 +192,55 @@ const CSPTotalMap = (): JSX.Element => {
 					color5="#0868AC"
 					label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
 						maximumFractionDigits: 0
-					})}M`}
-					label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
-						maximumFractionDigits: 0
-					})}M`}
-					label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
-						maximumFractionDigits: 0
-					})}M`}
-					label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
-						maximumFractionDigits: 0
-					})}M`}
-					label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
-						maximumFractionDigits: 0
-					})}M`}
-					label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
-						maximumFractionDigits: 0
-					})}M`}
+					})}`}
+					label2={
+						label2 >= 1000000
+							? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label3={
+						label3 >= 1000000
+							? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label4={
+						label4 >= 1000000
+							? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label5={
+						label5 >= 1000000
+							? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label6={
+						maxValue >= 1000000
+							? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
 				/>
 			</Box>
-			<MapChart setTooltipContent={setContent} maxValue={maxValue} />
+			<MapChart setTooltipContent={setContent} category={category} maxValue={maxValue} />
 			<div className="tooltip-container">
 				<ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
 					{content}
@@ -197,4 +250,4 @@ const CSPTotalMap = (): JSX.Element => {
 	);
 };
 
-export default CSPTotalMap;
+export default CategoryMap;
