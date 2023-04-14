@@ -33,6 +33,11 @@ if (!git.modified_files.include?('CHANGELOG.md') && !declared_trivial){
   )
 }
 
+//Detect .eslintrc changes and set warnings
+if (git.modified_files.include?('.eslintrc')) {
+    warn('Changes were made to .eslintrc. Please ensure that the you have notified team to change the existing ESLine rule.')
+}
+
 // In the future: make sure non-trivial amounts of code changes come with corresponding tests
 /*
 const has_test_changes = !git.modified_files.grep(/spec/).empty
