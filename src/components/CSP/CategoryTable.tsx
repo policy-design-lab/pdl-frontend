@@ -122,8 +122,8 @@ function App({ category }: { category: string }): JSX.Element {
 		const AArray = ACur.practiceCategories;
 		const BCur = value[0].statutes.find((s) => s.statuteName === "2014 CSP");
 		const BArray = BCur.practiceCategories;
-        const CCur = value[0].statutes.find((s) => s.statuteName === "Other");
-        const CArray = CCur.practiceCategories;
+		const CCur = value[0].statutes.find((s) => s.statuteName === "Other");
+		const CArray = CCur.practiceCategories;
 		const TotalArray = AArray.concat(BArray).concat(CArray);
 		const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
 		const newRecord = () => {
