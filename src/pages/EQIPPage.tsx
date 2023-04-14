@@ -4,11 +4,11 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
-import DataTable from "../components/eqip/EQIPTotalTable";
-import EqipTotalMap from "../components/eqip/EqipTotalMap";
-import chartData from "../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json";
-import CategoryTable from "../components/eqip/CategoryTable";
-import CategoryMap from "../components/eqip/CategoryMap";
+import DataTable from "../components/EQIP/EQIPTotalTable";
+import EQIPTotalMap from "../components/EQIP/EQIPTotalMap";
+import chartData from "../data/EQIP/EQIP_STATUTE_PERFORMANCE_DATA.json";
+import CategoryTable from "../components/EQIP/CategoryTable";
+import CategoryMap from "../components/EQIP/CategoryMap";
 
 export default function EQIPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -93,60 +93,61 @@ export default function EQIPPage(): JSX.Element {
         { name: "6 (B)", value: sixBTotal, color: "#9CBAB4" }
     ];
 
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Box sx={{ width: "100%" }}>
-                <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar />
-                </Box>
-                <Drawer setEQIPChecked={setChecked} />
-                <Box sx={{ pl: 50, pr: 20 }}>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
-                        <EqipTotalMap />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}>
-                        <CategoryMap category="Land management" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}>
-                        <CategoryMap category="Forest management" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}>
-                        <CategoryMap category="Structural" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}>
-                        <CategoryMap category="Soil remediation" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}>
-                        <CategoryMap category="Vegetative" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}>
-                        <CategoryMap category="Other improvement" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 7 ? "none" : "block" }}>
-                        <CategoryMap category="Soil testing" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 8 ? "none" : "block" }}>
-                        <CategoryMap category="Other planning" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 9 ? "none" : "block" }}>
-                        <CategoryMap category="Conservation planning assessment" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 10 ? "none" : "block" }}>
-                        <CategoryMap category="Resource-conserving crop rotation" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 11 ? "none" : "block" }}>
-                        <CategoryMap category="Soil health" />
-                    </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 12 ? "none" : "block" }}>
-                        <CategoryMap category="Comprehensive Nutrient Mgt." />
-                    </Box>
-                    <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
-                        <Box display="flex" justifyContent="center">
-                            <Typography variant="h5">
-                                <strong>EQIP: State Performance by Category of Practices</strong>
-                            </Typography>
-                        </Box>
-                        <Typography sx={{ mt: 2 }}>
+
+	return (
+		<ThemeProvider theme={defaultTheme}>
+			<Box sx={{ width: "100%" }}>
+				<Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
+					<NavBar />
+				</Box>
+				<Drawer setEQIPChecked={setChecked} />
+				<Box sx={{ pl: 50, pr: 20 }}>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
+						<EQIPTotalMap />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}>
+						<CategoryMap category="Land management" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}>
+						<CategoryMap category="Forest management" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}>
+						<CategoryMap category="Structural" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}>
+						<CategoryMap category="Soil remediation" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}>
+						<CategoryMap category="Vegetative" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}>
+						<CategoryMap category="Other improvement" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 7 ? "none" : "block" }}>
+						<CategoryMap category="Soil testing" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 8 ? "none" : "block" }}>
+						<CategoryMap category="Other planning" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 9 ? "none" : "block" }}>
+						<CategoryMap category="Conservation planning assessment" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 10 ? "none" : "block" }}>
+						<CategoryMap category="Resource-conserving crop rotation" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 11 ? "none" : "block" }}>
+						<CategoryMap category="Soil health" />
+					</Box>
+					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 12 ? "none" : "block" }}>
+						<CategoryMap category="Comprehensive Nutrient Mgt." />
+					</Box>
+					<Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
+						<Box display="flex" justifyContent="center">
+							<Typography variant="h5">
+								<strong>EQIP: State Performance by Category of Practices</strong>
+							</Typography>
+						</Box>
+						<Typography sx={{ mt: 2 }}>
                             EQIP provides cost-share assistance for improvements to eligible land. In the statute,
                             Congress defined seven categories of conservation practices: (1) structural practices, such
                             as for irrigation and livestock manure management or abatement; (2) land management

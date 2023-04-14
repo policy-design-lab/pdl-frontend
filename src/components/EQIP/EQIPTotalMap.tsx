@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 
 import PropTypes from "prop-types";
 import allStates from "../../data/allstates.json";
-import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
 
@@ -153,54 +153,55 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const EqipTotalMap = (): JSX.Element => {
-    const quantizeArray: number[] = [];
-    Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
-    const maxValue = Math.max(...quantizeArray);
-    const label1 = (maxValue / 5) * 0;
-    const label2 = (maxValue / 5) * 1;
-    const label3 = (maxValue / 5) * 2;
-    const label4 = (maxValue / 5) * 3;
-    const label5 = (maxValue / 5) * 4;
-    const [content, setContent] = useState("");
-    return (
-        <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
-                <HorizontalStackedBar
-                    title="Total EQIP Benefits"
-                    color1="#F0F9E8"
-                    color2="#BAE4BC"
-                    color3="#7BCCC4"
-                    color4="#43A2CA"
-                    color5="#0868AC"
-                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                />
-            </Box>
-            <MapChart setTooltipContent={setContent} maxValue={maxValue} />
-            <div className="tooltip-container">
-                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
-                    {content}
-                </ReactTooltip>
-            </div>
-        </div>
-    );
+
+const EQIPTotalMap = (): JSX.Element => {
+	const quantizeArray: number[] = [];
+	Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
+	const maxValue = Math.max(...quantizeArray);
+	const label1 = (maxValue / 5) * 0;
+	const label2 = (maxValue / 5) * 1;
+	const label3 = (maxValue / 5) * 2;
+	const label4 = (maxValue / 5) * 3;
+	const label5 = (maxValue / 5) * 4;
+	const [content, setContent] = useState("");
+	return (
+		<div>
+			<Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+				<HorizontalStackedBar
+					title="Total EQIP Benefits"
+					color1="#F0F9E8"
+					color2="#BAE4BC"
+					color3="#7BCCC4"
+					color4="#43A2CA"
+					color5="#0868AC"
+					label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+					label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+					label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+					label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+					label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+					label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
+						maximumFractionDigits: 0
+					})}M`}
+				/>
+			</Box>
+			<MapChart setTooltipContent={setContent} maxValue={maxValue} />
+			<div className="tooltip-container">
+				<ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+					{content}
+				</ReactTooltip>
+			</div>
+		</div>
+	);
 };
 
-export default EqipTotalMap;
+export default EQIPTotalMap;
