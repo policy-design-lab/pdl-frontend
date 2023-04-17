@@ -399,7 +399,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 						</Box>
 					</Box>
 				</MenuItem>
-				<Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start">
+				<Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start" sx={{ height: "50%", overflowY: "scroll", width: "20%" }}>
 					<Box>
 						<EQIPCheckboxList setEQIPChecked={setEQIPChecked} setShowPopUp={setEqipOpen} />
 					</Box>
@@ -441,7 +441,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 						</Box>
 					</Box>
 				</MenuItem>
-				<Popper open={cspOpen} anchorEl={cspRef.current} role={undefined} placement="right-start">
+				<Popper open={cspOpen} anchorEl={cspRef.current} role={undefined} placement="right-start" sx={{ height: "50%", overflowY: "scroll", width: "20%" }}>
 					<Box>
 						<CSPCheckboxList setCSPChecked={setCSPChecked} setShowPopUp={setCspOpen} />
 					</Box>
