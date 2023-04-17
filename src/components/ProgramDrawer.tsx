@@ -8,7 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const drawerWidth = 240;
@@ -315,10 +315,17 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
 }
 
 export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.Element {
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [eqipOpen, setEqipOpen] = React.useState(false);
 	const eqipRef = React.useRef<HTMLLIElement>(null);
 	const handleEqipClick = () => {
-		setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+		if (location.pathname !== "/eqip") {
+			navigate("/eqip");
+		} else {
+			setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+		}
 	};
 	const prevEqipOpen = React.useRef(eqipOpen);
 	React.useEffect(() => {
@@ -333,7 +340,11 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 	const [cspOpen, setCspOpen] = React.useState(false);
 	const cspRef = React.useRef<HTMLLIElement>(null);
 	const handleCspClick = () => {
-		setCspOpen((prevCspOpen) => !prevCspOpen);
+		if (location.pathname !== "/csp") {
+			navigate("/csp");
+		} else {
+			setCspOpen((prevCspOpen) => !prevCspOpen);
+		}
 	};
 	const prevCspOpen = React.useRef(cspOpen);
 	React.useEffect(() => {
@@ -371,7 +382,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 					onClick={handleEqipClick}
 				>
 					<Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
-						{eqipOpen ? (
+						{location.pathname === "/eqip" ? (
 							<Typography sx={{ color: "#2f7164" }}>
 								<strong>EQIP: Environmental Quality Incentives Program</strong>
 							</Typography>
@@ -413,7 +424,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 					onClick={handleCspClick}
 				>
 					<Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
-						{cspOpen ? (
+						{location.pathname === "/csp" ? (
 							<Typography sx={{ color: "#2f7164" }}>
 								<strong>CSP: Conservation Stewardship Program</strong>
 							</Typography>
