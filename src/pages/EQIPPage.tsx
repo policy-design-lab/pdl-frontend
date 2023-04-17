@@ -100,7 +100,7 @@ export default function EQIPPage(): JSX.Element {
 				<Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
 					<NavBar />
 				</Box>
-				<Drawer setEQIPChecked={setChecked} />
+				<Drawer setEQIPChecked={setChecked} setCSPChecked={null}/>
 				<Box sx={{ pl: 50, pr: 20 }}>
 					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
 						<EQIPTotalMap />

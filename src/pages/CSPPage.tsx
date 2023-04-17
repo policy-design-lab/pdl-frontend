@@ -108,6 +108,7 @@ export default function CSPPage(): JSX.Element {
 				<Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
 					<NavBar />
 				</Box>
+				<Drawer setCSPChecked={setChecked} setEQIPChecked={null}/>
 				<Box sx={{ pl: 50, pr: 20 }}>
 					<Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
 						<CSPTotalMap />
@@ -233,7 +234,7 @@ export default function CSPPage(): JSX.Element {
 					<Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
 						<CategoryTable category="Other Payments" />
 					</Box>
-					<Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
+					<Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
 						<CategoryTable category="Bundles" />
 					</Box>
 				</Box>
