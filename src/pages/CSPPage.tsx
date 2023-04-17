@@ -159,7 +159,7 @@ export default function CSPPage(): JSX.Element {
 							</Typography>
 						</Box>
 						<Typography sx={{ mt: 2 }}>
-                            CSP placeholder
+                            CSP provides five-year annual contract payments to farmers in return for increasing, improving or advancing conservation across the entire farm operation.
 						</Typography>
 					</Box>
 					<Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
