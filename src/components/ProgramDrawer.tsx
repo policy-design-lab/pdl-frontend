@@ -323,6 +323,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 	const handleEqipClick = () => {
 		if (location.pathname !== "/eqip") {
 			navigate("/eqip");
+			window.location.reload(false);
 		} else {
 			setEqipOpen((prevEqipOpen) => !prevEqipOpen);
 		}
@@ -342,6 +343,7 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
 	const handleCspClick = () => {
 		if (location.pathname !== "/csp") {
 			navigate("/csp");
+			window.location.reload(false);
 		} else {
 			setCspOpen((prevCspOpen) => !prevCspOpen);
 		}
