@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile } from "d3-scale";
+import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,6 +10,7 @@ import { config } from "../app.config";
 
 import PropTypes from "prop-types";
 import "../styles/map.css";
+import summary from "../data/summary.json";
 import { getJsonDataFromUrl} from "../utils/apiutil";
 import {convertAllState} from "../utils/apiutil";
 
@@ -29,8 +30,24 @@ const offsets = {
 
 const MapChart = (props) => {
 	const { setTooltipContent, stateCodes, allPrograms, allStates } = props;
-	const colorScale = scaleQuantile()
-		.domain(allPrograms.map((d) => d["18-22 All Programs Total"]))
+
+	const minValue = 0;
+
+	const hashmap = new Map([]);
+	summary.forEach(
+		(item) => {
+			const state = item.State;
+			if(!hashmap.has(state)) {
+				hashmap.set(state, 0);
+			}
+			hashmap.set(state, hashmap.get(state) + item.Amount);
+		}
+	);
+
+	const maxValue = Math.max(...hashmap.values());
+
+	const colorScale = scaleQuantize()
+		.domain([minValue, maxValue])
 		.range(["#FFF9D8", "#E1F2C4", "#9FD9BA", "#1B9577", "#005A45"]);
 
 	return (

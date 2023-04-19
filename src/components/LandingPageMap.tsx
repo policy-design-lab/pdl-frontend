@@ -51,9 +51,7 @@ const MapChart = ({ setTooltipContent, title }) => {
 		}
 	);
 
-	console.log(hashmap);
 	maxValue = Math.max(...hashmap.values());
-	console.log(maxValue);
 
 	switch (title) {
 	case "Title I: Commodities":
