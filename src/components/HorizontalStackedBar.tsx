@@ -34,7 +34,8 @@ export default function HorizontalStackedBar({
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				minWidth: 560
+				minWidth: 560,
+				maxWidth: "50px"
 			}}
 		>
 			<Box display="flex" justifyContent="center">

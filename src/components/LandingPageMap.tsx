@@ -100,72 +100,74 @@ const MapChart = ({ setTooltipContent, title }) => {
 		.map((item) => item["Fiscal Year"])
 		.filter((value, index, self) => self.indexOf(value) === index);
 
-    const label1 = (maxValue-minValue) / 5 * 0 + minValue;
-    const label2 = (maxValue-minValue) / 5 * 1 + minValue;
-    const label3 = (maxValue-minValue) / 5 * 2 + minValue;
-    const label4 = (maxValue-minValue) / 5 * 3 + minValue;
-    const label5 = (maxValue-minValue) / 5 * 4 + minValue;
+	const label1 = (maxValue-minValue) / 5 * 0 + minValue;
+	const label2 = (maxValue-minValue) / 5 * 1 + minValue;
+	const label3 = (maxValue-minValue) / 5 * 2 + minValue;
+	const label4 = (maxValue-minValue) / 5 * 3 + minValue;
+	const label5 = (maxValue-minValue) / 5 * 4 + minValue;
 
 	return (
 		<div data-tip="">
-            <HorizontalStackedBar
-                title={title + "Benefits from 2018-2022"}
-                color1={color1}
-                color2={color2}
-                color3={color3}
-                color4={color4}
-                color5={color5}
-                label1={
-                    `$${Number(label1 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                }
-                label2={
-                    label2 >= 1000000
-                        ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                        : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-                            maximumFractionDigits: 1
-                        })}K`
-                }
-                label3={
-                    label3 >= 1000000
-                        ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                        : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-                            maximumFractionDigits: 1
-                        })}K`
-                }
-                label4={
-                    label4 >= 1000000
-                        ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                        : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-                            maximumFractionDigits: 1
-                        })}K`
-                }
-                label5={
-                    label5 >= 1000000
-                        ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                        : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-                            maximumFractionDigits: 1
-                        })}K`
-                }
-                label6={
-                    maxValue >= 1000000
-                        ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}M`
-                        : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-                            maximumFractionDigits: 1
-                        })}K`
-                }
-            />
+			<Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+				<HorizontalStackedBar
+					title={`${title  }Benefits from 2018-2022`}
+					color1={color1}
+					color2={color2}
+					color3={color3}
+					color4={color4}
+					color5={color5}
+					label1={
+						`$${Number(label1 / 1000000).toLocaleString(undefined, {
+							maximumFractionDigits: 0
+						})}M`
+					}
+					label2={
+						label2 >= 1000000
+							? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label3={
+						label3 >= 1000000
+							? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label4={
+						label4 >= 1000000
+							? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label5={
+						label5 >= 1000000
+							? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+					label6={
+						maxValue >= 1000000
+							? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+								maximumFractionDigits: 0
+							})}M`
+							: `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+								maximumFractionDigits: 1
+							})}K`
+					}
+				/>
+			</Box>
 			<ComposableMap projection="geoAlbersUsa">
 				<Geographies geography={geoUrl}>
 					{({ geographies }) => (
