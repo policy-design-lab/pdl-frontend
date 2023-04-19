@@ -13,6 +13,7 @@ import "../styles/map.css";
 import summary from "../data/summary.json";
 import { getJsonDataFromUrl} from "../utils/apiutil";
 import {convertAllState} from "../utils/apiutil";
+import HorizontalStackedBar from "./HorizontalStackedBar";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -50,8 +51,72 @@ const MapChart = (props) => {
 		.domain([minValue, maxValue])
 		.range(["#FFF9D8", "#E1F2C4", "#9FD9BA", "#1B9577", "#005A45"]);
 
-	return (
-		<div data-tip="">
+    const label1 = (maxValue-minValue) / 5 * 0 + minValue;
+    const label2 = (maxValue-minValue) / 5 * 1 + minValue;
+    const label3 = (maxValue-minValue) / 5 * 2 + minValue;
+    const label4 = (maxValue-minValue) / 5 * 3 + minValue;
+    const label5 = (maxValue-minValue) / 5 * 4 + minValue;
+
+    return (
+        <div data-tip="">
+            <HorizontalStackedBar
+                title={"Total Farm Bill Benefits from 2018-2022"}
+                color1="#FFF9D8"
+                color2="#E1F2C4"
+                color3="#9FD9BA"
+                color4="#1B9577"
+                color5="#005A45"
+                label1={
+                    `$${Number(label1 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}M`
+                }
+                label2={
+                    label2 >= 1000000
+                        ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`
+                        : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 1
+                        })}K`
+                }
+                label3={
+                    label3 >= 1000000
+                        ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`
+                        : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 1
+                        })}K`
+                }
+                label4={
+                    label4 >= 1000000
+                        ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`
+                        : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 1
+                        })}K`
+                }
+                label5={
+                    label5 >= 1000000
+                        ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`
+                        : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 1
+                        })}K`
+                }
+                label6={
+                    maxValue >= 1000000
+                        ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`
+                        : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+                            maximumFractionDigits: 1
+                        })}K`
+                }
+            />
 			{allPrograms.length === 0 ? null :
 				<ComposableMap projection="geoAlbersUsa">
 					<Geographies geography={geoUrl}>
