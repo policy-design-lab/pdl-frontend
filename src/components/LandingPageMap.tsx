@@ -38,6 +38,7 @@ const MapChart = ({ setTooltipContent, title }) => {
 	let color5 = "";
 	let minValue = 0;
 	let maxValue = 0;
+	let legendTitle = <div />;
 
 	const hashmap = new Map([]);
 	summary.forEach(
@@ -62,6 +63,9 @@ const MapChart = ({ setTooltipContent, title }) => {
 		color3 = "#F59020";
 		color4 = "#D95F0E";
 		color5 = "#993404";
+		legendTitle = (<Typography noWrap={true} variant={"h6"}>
+            Total Commodities Programs (Title I) Benefits from <strong>2018 - 2022</strong>
+		</Typography>);
 		break;
 	case "Title II: Conservation":
 		searchKey = "Title II Total";
@@ -70,6 +74,9 @@ const MapChart = ({ setTooltipContent, title }) => {
 		color3 = "#7BCCC4";
 		color4 = "#43A2CA";
 		color5 = "#0868AC";
+		legendTitle = (<Typography noWrap={true} variant={"h6"}>
+            Total Conservation Programs (Title II) Benefits from <strong>2018 - 2022</strong>
+		</Typography>);
 		break;
 	case "Crop Insurance":
 		searchKey = "Crop Insurance Total";
@@ -79,6 +86,15 @@ const MapChart = ({ setTooltipContent, title }) => {
 		color4 = "#89CBC1";
 		color5 = "#2C8472";
 		minValue = -1000000000;
+		legendTitle = (<div>
+			<Box display="flex" flexDirection="column">
+				<Typography noWrap={true} variant={"h6"} sx={{ pl: "10rem" }}>
+            Total Net Farmer Benefits from <strong>2018 - 2022</strong>
+				</Typography></Box>
+			<Box>
+				<Typography noWrap={true} variant={"h6"}>Net Farmer Benefit = Total Indemnities - (Total Premium - Total Premium Subsidy)</Typography>
+			</Box>
+		</div>);
 		break;
 	case "Supplemental Nutrition Assistance Program (SNAP)":
 		searchKey = "SNAP Total";
@@ -87,6 +103,9 @@ const MapChart = ({ setTooltipContent, title }) => {
 		color3 = "#74A9CF";
 		color4 = "#2B8CBE";
 		color5 = "#045A8D";
+		legendTitle = (<Typography noWrap={true} variant={"h6"}>
+            Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
+		</Typography>);
 		break;
 	}
 
@@ -110,7 +129,7 @@ const MapChart = ({ setTooltipContent, title }) => {
 		<div data-tip="">
 			<Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
 				<HorizontalStackedBar
-					title={`${title  }Benefits from 2018-2022`}
+					title={legendTitle}
 					color1={color1}
 					color2={color2}
 					color3={color3}

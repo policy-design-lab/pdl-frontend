@@ -61,7 +61,9 @@ const MapChart = (props) => {
 		<div data-tip="">
 			<Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
 				<HorizontalStackedBar
-					title={"Total Farm Bill Benefits from 2018-2022"}
+					title={<Typography noWrap={true} variant={"h6"}>
+                        Total Farm Bill Benefits from <strong>2018 - 2022</strong>
+					</Typography>}
 					color1="#FFF9D8"
 					color2="#E1F2C4"
 					color3="#9FD9BA"
