@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleThreshold } from "d3-scale";
+import { scaleQuantile, scaleQuantize, scaleThreshold } from "d3-scale";
 import Divider from "@mui/material/Divider";
 
 import PropTypes from "prop-types";
@@ -35,6 +35,25 @@ const MapChart = ({ setTooltipContent, title }) => {
 	let color3 = "";
 	let color4 = "";
 	let color5 = "";
+	let minValue = 0;
+	let maxValue = 0;
+
+	const hashmap = new Map([]);
+	summary.forEach(
+		(item) => {
+			if(item.Title === title){
+				const state = item.State;
+				if(!hashmap.has(state)) {
+					hashmap.set(state, 0);
+				}
+				hashmap.set(state, hashmap.get(state) + item.Amount);
+			}
+		}
+	);
+
+	console.log(hashmap);
+	maxValue = Math.max(...hashmap.values());
+	console.log(maxValue);
 
 	switch (title) {
 	case "Title I: Commodities":
@@ -60,6 +79,7 @@ const MapChart = ({ setTooltipContent, title }) => {
 		color3 = "#E3E3E3";
 		color4 = "#89CBC1";
 		color5 = "#2C8472";
+		minValue = -1000000000;
 		break;
 	case "Supplemental Nutrition Assistance Program (SNAP)":
 		searchKey = "SNAP Total";
@@ -71,17 +91,10 @@ const MapChart = ({ setTooltipContent, title }) => {
 		break;
 	}
 
-	let colorScale = null;
 
-	if (title !== "Crop Insurance") {
-		colorScale = scaleQuantile()
-			.domain(allPrograms.map((d) => d[searchKey]))
-			.range([color1, color2, color3, color4, color5]);
-	} else {
-		colorScale = scaleThreshold()
-			.domain([-500000000, 0, 500000000, 1000000000])
-			.range([color1, color2, color3, color4, color5]);
-	}
+	const colorScale = scaleQuantize()
+		.domain([minValue, maxValue])
+		.range([color1, color2, color3, color4, color5]);
 
 	// Get list of unique years
 	const yearList = summary
