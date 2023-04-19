@@ -128,7 +128,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
 				return (
 					<Box key={category}>
 						<Typography sx={{ pl: 8 }}>
-							<strong>(6)(B) Plannings</strong>
+							<strong>(6)(B) Planning</strong>
 						</Typography>
 						<ListItem key={category} disablePadding>
 							<ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
