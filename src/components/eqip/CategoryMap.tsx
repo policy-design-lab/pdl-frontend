@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 import PropTypes from 'prop-types';
 import allStates from '../../data/allstates.json';
-import statePerformance from '../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json';
+import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
 import '../../styles/map.css';
 import HorizontalStackedBar from '../HorizontalStackedBar';
 
