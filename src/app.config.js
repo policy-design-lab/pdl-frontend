@@ -4,7 +4,7 @@ const baseConfig = {
 
 const deployConfig = {
 	apiUrl: "/pdl",
-	...baseConfig,
+  ...baseConfig
 };
 
 const localConfig = {

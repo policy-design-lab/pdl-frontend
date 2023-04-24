@@ -54,6 +54,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     	useSortBy
     );
 
+
 	const firstPageRows = rows.slice(0, 50);
 
 	return (
@@ -88,6 +89,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
 													return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
 												if (column.isSortedDesc)
 													return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+
 												return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
 											})()}
 										</div>
@@ -101,6 +103,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
 					{
 						// eslint-disable-next-line
             firstPageRows.map((row, i) => {
+
 							prepareRow(row);
 							return (
 								<tr key={row.id} {...row.getRowProps()}>
@@ -197,6 +200,7 @@ function App({ category }: { category: string }): JSX.Element {
 						}}
 					>
             STATES
+
 					</Box>
 				),
 				accessor: "state",
@@ -219,11 +223,13 @@ function App({ category }: { category: string }): JSX.Element {
 									justifyContent: "flex-start",
 								}}
 							>
+
 								{props.value}
 							</Box>
 						</div>
 					);
 				},
+
 			},
 			{
 				Header: (
@@ -259,6 +265,7 @@ function App({ category }: { category: string }): JSX.Element {
 									width: 240,
 									display: "flex",
 									justifyContent: "center",
+
 								}}
 							>
 								<Box sx={{ textAlign: "right", width: 120 }}>{props.value}</Box>
@@ -266,6 +273,7 @@ function App({ category }: { category: string }): JSX.Element {
 						</div>
 					);
 				},
+
 			},
 			{
 				Header: (

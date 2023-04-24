@@ -69,7 +69,6 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                   categoryRecord.paymentInPercentageNationwide;
 								const withinStatePercentage =
                   categoryRecord.paymentInPercentageWithinState;
-								console.log(categoryRecord);
 								const hoverContent = (
 									<Box
 										sx={{
@@ -106,6 +105,7 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
 												/>
 												<Typography sx={{ color: "#3F3F3F" }}>
 													{nationwidePercentage}%
+
 												</Typography>
 											</Box>
 										</Box>
@@ -167,6 +167,7 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                       		</text>
                       	</Annotation>
                       ))}
+
 									</g>
 								);
 							})}
@@ -223,6 +224,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
 					color5="#0868AC"
 					label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
 						maximumFractionDigits: 0,
+
 					})}`}
 					label2={
 						label2 >= 1000000
@@ -231,6 +233,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
 							})}M`
 							: `$${Number(label2 / 1000.0).toLocaleString(undefined, {
 								maximumFractionDigits: 1,
+
 							})}K`
 					}
 					label3={
@@ -249,6 +252,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
 							})}M`
 							: `$${Number(label4 / 1000.0).toLocaleString(undefined, {
 								maximumFractionDigits: 1,
+
 							})}K`
 					}
 					label5={
@@ -258,6 +262,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
 							})}M`
 							: `$${Number(label5 / 1000.0).toLocaleString(undefined, {
 								maximumFractionDigits: 1,
+
 							})}K`
 					}
 					label6={
@@ -267,6 +272,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
 							})}M`
 							: `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
 								maximumFractionDigits: 1,
+
 							})}K`
 					}
 				/>

@@ -137,6 +137,7 @@ export default function EQIPPage(): JSX.Element {
 	const totalChartData = [
 		{ name: "6 (A)", value: sixATotal, color: "#2F7164" },
 		{ name: "6 (B)", value: sixBTotal, color: "#9CBAB4" },
+
 	];
 
 	return (
@@ -312,6 +313,7 @@ export default function EQIPPage(): JSX.Element {
 						component="div"
 						sx={{ display: checked !== 0 ? "none" : "block" }}
 					>
+
 						<SemiDonutChart
 							data={totalChartData}
 							label1={(sixATotal + sixBTotal).toString()}
@@ -322,6 +324,7 @@ export default function EQIPPage(): JSX.Element {
 						component="div"
 						sx={{ display: checked >= 1 && checked <= 7 ? "block" : "none" }}
 					>
+
 						<SemiDonutChart
 							data={sixAChartData}
 							label1={sixATotal.toString()}

@@ -45,6 +45,7 @@ export default function LandingDisplay({
 		boldText = "What are commodity programs in the farm bill?";
 		bodyText =
         "Title I, Commodities cover price and income support for the farmers who raise widely-produced and traded non-perishable crops, like corn, soybeans, wheat, cotton and rice – as well as dairy and sugar. The title also includes agricultural disaster assistance. The map shows the total benefits paid to farmers from of the commodities programs by state from 2018-2022.";
+
 		route = "/";
 		buttonText = "Explore Maps of Commodities Programs";
 		button = (
@@ -96,6 +97,7 @@ export default function LandingDisplay({
 		boldText = "What is CROP INSURANCE?";
 		bodyText =
         "Crop Insurance provides farmers with the option to purchase insurance policies on the acres of crops they plant to help manage the risks of farming, including to indemnify against losses in yields, crop or whole farm revenue, crop margins and other risks. The program also offsets the cost of the insurance policies through premium subsidies. In addition, the program provides Administrative and Operating (A&O) subsidies to the private crop insurance companies who provide federal crop insurance to farmers. The map shows the total farmer net benefitbenefit of the crop insurance program by state from 2018-2022.";
+
 		route = "/";
 		buttonText = "Explore Maps of Crop Insurance";
 		button = (
@@ -141,6 +143,7 @@ export default function LandingDisplay({
 					<ArrowForwardIcon sx={{ mx: 2 }} />
 				</Button>
 			</Link>
+
 		);
 		break;
 	case "All Programs":
