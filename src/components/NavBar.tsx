@@ -17,7 +17,6 @@ import PDLLogo from "./PDLLogo";
 
 const drawerWidth = 240;
 const navItems = ["HOME", "EXPLORE FARM BILL DATA", "ABOUT PDL"];
-
 export default function NavBar({
 	bkColor = "rgba(255, 255, 255, 1)",
 	ftColor = "rgba(255, 255, 255, 1)",
