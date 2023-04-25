@@ -21,7 +21,7 @@ export default function SNAPBar({
   heightPercentage,
 }: {
   SnapData: any;
-  status: string;
+  status: number;
   yearKey: string;
   margin: { top: number; right: number; bottom: number; left: number };
   topSpace: number;
@@ -103,7 +103,7 @@ export default function SNAPBar({
   const renderBar = (status) => {
     const data = SnapData[yearKey];
     data.sort(function (a, b) {
-      if (a["totalPaymentInDollars"] == b["totalPaymentInDollars"]) return 0;
+      if (a["totalPaymentInDollars"] === b["totalPaymentInDollars"]) return 0;
       if (a["totalPaymentInDollars"] > b["totalPaymentInDollars"]) return -1;
       if (a["totalPaymentInDollars"] < b["totalPaymentInDollars"]) return 1;
     });
@@ -115,7 +115,7 @@ export default function SNAPBar({
       .domain(["totalPaymentInDollars", "averageMonthlyParticipation"])
       .range([color1, color2]);
     const purpleLabel = (purpleBar, state, status) => {
-      if (status == 0 || status == 2) {
+      if (status === 0 || status === 2) {
         d3.select(rn.current)
           .select(`.x.axis`)
           .selectAll("text")
@@ -203,7 +203,7 @@ export default function SNAPBar({
         .select("text")
         .style("font-weight", 600)
         .style("opacity", 1);
-      if (status == 0 || status == 1) {
+      if (status === 0 || status === 1) {
         d3.select(rn.current)
           .selectAll(".barChart")
           .selectAll("rect")
@@ -297,7 +297,7 @@ export default function SNAPBar({
               .select(d)
               .attr("id")
               .match(/^.*Purple$/) &&
-            status == 1
+            status === 1
           ) {
             d3.select(d).style("opacity", 0.1);
           } else if (
@@ -305,7 +305,7 @@ export default function SNAPBar({
               .select(d)
               .attr("id")
               .match(/^.*Blue$/) &&
-            status == 2
+            status === 2
           ) {
             d3.select(d).style("opacity", 0.1);
           } else {
@@ -438,7 +438,7 @@ export default function SNAPBar({
       .style("fill", function (d) {
         return color("totalPaymentInDollars");
       });
-    if (status == 0 || status == 1) {
+    if (status === 0 || status === 1) {
       blues
         .on("mouseover", function (e) {
           blueLabel(
@@ -469,7 +469,7 @@ export default function SNAPBar({
       .style("fill", function (d) {
         return color("averageMonthlyParticipation");
       });
-    if (status == 0 || status == 2) {
+    if (status === 0 || status === 2) {
       purples
         .on("mouseover", function (e) {
           purpleLabel(
@@ -496,21 +496,21 @@ export default function SNAPBar({
           .selectAll("rect")
           .style("opacity", 0.1);
         const state = d3.select(this).data();
-        if (status == 0 || status == 1) {
+        if (status === 0 || status === 1) {
           blueLabel(
             d3.select(rn.current).selectAll(`#${state}Blue`),
             state,
             status
           );
         }
-        if (status == 0 || status == 2) {
+        if (status === 0 || status === 2) {
           purpleLabel(
             d3.select(rn.current).selectAll(`#${state}Purple`),
             state,
             status
           );
         }
-        if (status == 0 || status == 1) {
+        if (status === 0 || status === 1) {
           d3.select(rn.current).selectAll(`#${state}Blue`).style("opacity", 1);
           blueText(
             d3.select(rn.current).selectAll(`#${state}Blue`),
@@ -518,7 +518,7 @@ export default function SNAPBar({
             status
           );
         }
-        if (status == 0 || status == 2) {
+        if (status === 0 || status === 2) {
           purpleText(
             d3.select(rn.current).selectAll(`#${state}Purple`),
             state,
@@ -576,9 +576,9 @@ export default function SNAPBar({
     barColorRecover(status);
   };
   return (
-    <div id="SNAPBarChart">
+    <div>
       <Styles>
-        <svg ref={rn} />
+        <svg ref={rn} id="SNAPBarChart" />
         <div ref={tooltipRn} />
       </Styles>
     </div>

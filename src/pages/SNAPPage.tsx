@@ -29,7 +29,7 @@ export default function SNAPPage(): JSX.Element {
   const paddingLR = 40;
   const paddingTB = 40;
   const snapDiv = React.useRef(null);
-  const [barStatus, setBarStatus] = React.useState(false);
+  const [barStatus, setBarStatus] = React.useState(0);
   const [tab, setTab] = React.useState(0);
   const color1 = "#1f78b4";
   const color2 = "#ba68c8";
@@ -57,12 +57,10 @@ export default function SNAPPage(): JSX.Element {
       setBarStatus(selectItem);
     }
   };
-
-  function downloadSVG(status): void {
-    if (snapDiv.current.length > 0 && status) {
+  const downloadSVG = (status) => {
+    if (snapDiv.current != undefined && status) {
       const svgElement = snapDiv.current.querySelector("#SNAPBarChart");
       const svgData = new XMLSerializer().serializeToString(svgElement);
-
       const blob = new Blob([svgData], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
 
@@ -74,9 +72,8 @@ export default function SNAPPage(): JSX.Element {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     }
-  }
-
-  function DownloadIcon(props) {
+  };
+  const DownloadIcon = (props) => {
     return (
       <SvgIcon {...props}>
         <svg
@@ -92,7 +89,7 @@ export default function SNAPPage(): JSX.Element {
         </svg>
       </SvgIcon>
     );
-  }
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ width: "100%" }}>
