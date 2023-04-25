@@ -10,7 +10,7 @@ import LandingPageMapTab from "../components/LandingPageMapTab";
 export default function LandingPage(): JSX.Element {
 	return (
 		<Box sx={{ width: "100%" }}>
-			<NavBar />
+			<NavBar bkColor="#2F7164" ftColor="rgba(255, 255, 255, 1)" logo="Dark" />
 			<div style={{ position: "relative" }}>
 				<CardMedia component="img" src={forest} sx={{ maxHeight: "650px" }} />
 				<Typography

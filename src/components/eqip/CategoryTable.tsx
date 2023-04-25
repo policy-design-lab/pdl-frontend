@@ -6,52 +6,54 @@ import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`
-    padding: 1rem;
+  padding: 1rem;
 
-    table {
-        border-spacing: 0;
-        border: 1px solid #e4ebe7;
-        border-left: none;
-        border-right: none;
+  table {
+    border-spacing: 0;
+    border: 1px solid #e4ebe7;
+    border-left: none;
+    border-right: none;
 
-        tr {
-            :last-child {
-                td {
-                    border-bottom: 0;
-                }
-            }
-        }
-
-        th {
-            background-color: #f1f1f1;
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-
+    tr {
+      :last-child {
         td {
-            margin: 0;
-            padding: 0rem;
-            padding-left: 3rem;
-            padding-right: 3rem;
-            border-bottom: 1px solid #e4ebe7;
-            border-right: none;
-
-            :last-child {
-                border-right: 2rem;
-            }
+          border-bottom: 0;
         }
+      }
     }
+
+    th {
+      background-color: #f1f1f1;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    td {
+      margin: 0;
+      padding: 0rem;
+      padding-left: 3rem;
+      padding-right: 3rem;
+      border-bottom: 1px solid #e4ebe7;
+      border-right: none;
+
+      :last-child {
+        border-right: 2rem;
+      }
+    }
+  }
 `;
 
 // eslint-disable-next-line
 function Table({ columns, data }: { columns: any; data: any }) {
-	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
-		{
-			columns,
-			data
-		},
-		useSortBy
-	);
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+    	{
+    		columns,
+    		data,
+    	},
+    	useSortBy
+    );
+
 
 	const firstPageRows = rows.slice(0, 50);
 
@@ -67,15 +69,27 @@ function Table({ columns, data }: { columns: any; data: any }) {
 									key={column.id}
 									{...column.getHeaderProps(column.getSortByToggleProps())}
 									{...column.getHeaderProps({
-										style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+										style: {
+											paddingLeft: column.paddingLeft,
+											paddingRight: column.paddingRight,
+										},
 									})}
 								>
-									<Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "horizontal",
+											alignItems: "center",
+										}}
+									>
 										{column.render("Header")}
 										<div>
 											{(() => {
-												if (!column.isSorted) return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
-												if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+												if (!column.isSorted)
+													return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
+												if (column.isSortedDesc)
+													return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+
 												return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
 											})()}
 										</div>
@@ -88,7 +102,8 @@ function Table({ columns, data }: { columns: any; data: any }) {
 				<tbody {...getTableBodyProps()}>
 					{
 						// eslint-disable-next-line
-                    firstPageRows.map((row, i) => {
+            firstPageRows.map((row, i) => {
+
 							prepareRow(row);
 							return (
 								<tr key={row.id} {...row.getRowProps()}>
@@ -107,7 +122,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
 			</table>
 			<br />
 			<div>
-                Showing the first {rows.length} results of {rows.length} rows
+        Showing the first {rows.length} results of {rows.length} rows
 			</div>
 		</>
 	);
@@ -118,31 +133,46 @@ function App({ category }: { category: string }): JSX.Element {
 
 	// eslint-disable-next-line no-restricted-syntax
 	for (const [key, value] of Object.entries(statePerformance)) {
-		const ACur = value[0].statutes.find((s) => s.statuteName === "(6)(A) Practices");
+		const ACur = value[0].statutes.find(
+			(s) => s.statuteName === "(6)(A) Practices"
+		);
 		const AArray = ACur.practiceCategories;
-		const BCur = value[0].statutes.find((s) => s.statuteName === "(6)(B) Practices");
+		const BCur = value[0].statutes.find(
+			(s) => s.statuteName === "(6)(B) Practices"
+		);
 		const BArray = BCur.practiceCategories;
 		const TotalArray = AArray.concat(BArray);
-		const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+		const categoryRecord = TotalArray.find(
+			(s) => s.practiceCategoryName === category
+		);
 		const newRecord = () => {
 			return {
 				state: key,
-				categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
-					minimumFractionDigits: 2
+				categoryBenefit: `$${Number(
+					categoryRecord.paymentInDollars
+				).toLocaleString(undefined, {
+					minimumFractionDigits: 2,
 				})}`,
 				categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-				eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-					minimumFractionDigits: 2
-				})}`,
-				percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+				eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(
+					undefined,
+					{
+						minimumFractionDigits: 2,
+					}
+				)}`,
+				percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`,
 			};
 		};
 		eqipTableData.push(newRecord());
 	}
 
 	function compareWithDollarSign(rowA, rowB, id, desc) {
-		const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-		const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
+		const a = Number.parseFloat(
+			rowA.values[id].substring(1).replaceAll(",", "")
+		);
+		const b = Number.parseFloat(
+			rowB.values[id].substring(1).replaceAll(",", "")
+		);
 		if (a > b) return 1;
 		if (a < b) return -1;
 		return 0;
@@ -162,29 +192,55 @@ function App({ category }: { category: string }): JSX.Element {
 				Header: (
 					<Box
 						className="tableHeader"
-						sx={{ maxWidth: 240, pl: 12, display: "flex", justifyContent: "center" }}
+						sx={{
+							maxWidth: 240,
+							pl: 12,
+							display: "flex",
+							justifyContent: "center",
+						}}
 					>
-                        STATES
+            STATES
+
 					</Box>
 				),
 				accessor: "state",
 				Cell: function styleCells(props: {
-                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
-                }) {
+          value:
+            | boolean
+            | React.ReactChild
+            | React.ReactFragment
+            | React.ReactPortal
+            | null
+            | undefined;
+        }) {
 					return (
 						<div style={{ textAlign: "left" }}>
-							<Box sx={{ py: 2, pl: 6, display: "flex", justifyContent: "flex-start" }}>
+							<Box
+								sx={{
+									py: 2,
+									pl: 6,
+									display: "flex",
+									justifyContent: "flex-start",
+								}}
+							>
+
 								{props.value}
 							</Box>
 						</div>
 					);
-				}
+				},
+
 			},
 			{
 				Header: (
 					<Box
 						className="tableHeader"
-						sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
+						sx={{
+							maxWidth: 240,
+							pl: 6,
+							display: "flex",
+							justifyContent: "center",
+						}}
 					>
 						{`${category} Benefit`.toUpperCase()}
 					</Box>
@@ -192,8 +248,14 @@ function App({ category }: { category: string }): JSX.Element {
 				accessor: "categoryBenefit",
 				sortType: compareWithDollarSign,
 				Cell: function styleCells(props: {
-                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
-                }) {
+          value:
+            | boolean
+            | React.ReactChild
+            | React.ReactFragment
+            | React.ReactPortal
+            | null
+            | undefined;
+        }) {
 					return (
 						<div style={{ textAlign: "right" }}>
 							<Box
@@ -202,20 +264,27 @@ function App({ category }: { category: string }): JSX.Element {
 									py: 3,
 									width: 240,
 									display: "flex",
-									justifyContent: "center"
+									justifyContent: "center",
+
 								}}
 							>
 								<Box sx={{ textAlign: "right", width: 120 }}>{props.value}</Box>
 							</Box>
 						</div>
 					);
-				}
+				},
+
 			},
 			{
 				Header: (
 					<Box
 						className="tableHeader"
-						sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
+						sx={{
+							maxWidth: 240,
+							pl: 6,
+							display: "flex",
+							justifyContent: "center",
+						}}
 					>
 						{`${category} Percentage Within State`.toUpperCase()}
 					</Box>
@@ -223,8 +292,14 @@ function App({ category }: { category: string }): JSX.Element {
 				accessor: "categoryPercentage",
 				sortType: compareWithPercentSign,
 				Cell: function styleCells(props: {
-                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
-                }) {
+          value:
+            | boolean
+            | React.ReactChild
+            | React.ReactFragment
+            | React.ReactPortal
+            | null
+            | undefined;
+        }) {
 					return (
 						<div style={{ textAlign: "right" }}>
 							<Box
@@ -233,29 +308,34 @@ function App({ category }: { category: string }): JSX.Element {
 									py: 3,
 									width: 280,
 									display: "flex",
-									justifyContent: "center"
+									justifyContent: "center",
 								}}
 							>
 								<Box sx={{ textAlign: "right", width: 80 }}>{props.value}</Box>
 							</Box>
 						</div>
 					);
-				}
+				},
 			},
 			{
 				Header: (
 					<Box
 						className="tableHeader"
-						sx={{ maxWidth: 240, pl: 7, display: "flex", justifyContent: "center" }}
+						sx={{
+							maxWidth: 240,
+							pl: 7,
+							display: "flex",
+							justifyContent: "center",
+						}}
 					>
-                        EQIP BENEFITS
+            EQIP BENEFITS
 					</Box>
 				),
 				accessor: "eqipBenefit",
 				sortType: compareWithDollarSign,
 				Cell: function styleCells(row) {
 					return <div style={{ textAlign: "right" }}>{row.value}</div>;
-				}
+				},
 			},
 			{
 				Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
@@ -263,8 +343,8 @@ function App({ category }: { category: string }): JSX.Element {
 				sortType: compareWithPercentSign,
 				Cell: function styleCells(row) {
 					return <div style={{ textAlign: "right" }}>{row.value}</div>;
-				}
-			}
+				},
+			},
 		],
 		[]
 	);

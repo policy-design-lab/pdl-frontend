@@ -6,9 +6,7 @@
     "plugin:react/recommended",
     "plugin:react/jsx-runtime"
   ],
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "settings": {
     "react": {
       "version": "detect"
@@ -40,12 +38,15 @@
     "no-unused-vars": "warn",
     "prefer-template": "warn",
     "jsx-quotes": 1,
-    "prefer-const": ["warn", {
-      "destructuring": "any",
-      "ignoreReadBeforeAssign": false
-    }],
-    "react/display-name": [ 1, {"ignoreTranspilerName": false }],
-    "react/forbid-prop-types": [1, {"forbid": ["any"]}],
+    "prefer-const": [
+      "warn",
+      {
+        "destructuring": "any",
+        "ignoreReadBeforeAssign": false
+      }
+    ],
+    "react/display-name": [1, { "ignoreTranspilerName": false }],
+    "react/forbid-prop-types": [1, { "forbid": ["any"] }],
     "react/jsx-boolean-value": 0,
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-curly-spacing": 1,
@@ -75,6 +76,5 @@
     "react/sort-comp": 1,
     "react/jsx-wrap-multilines": 1
   },
-  "globals": {
-  }
+  "globals": {}
 }

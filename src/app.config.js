@@ -4,12 +4,12 @@ const baseConfig = {
 
 const deployConfig = {
 	apiUrl: "/pdl",
-	...baseConfig
+  ...baseConfig
 };
 
 const localConfig = {
 	apiUrl: "http://localhost:5000/pdl",
-	...baseConfig
+	...baseConfig,
 };
 
 // eslint-disable-next-line no-unused-vars
