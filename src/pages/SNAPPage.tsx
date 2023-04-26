@@ -102,10 +102,11 @@ export default function SNAPPage(): JSX.Element {
           <NavSearchBar
             bkColor="rgba(255, 255, 255, 1)"
             brColor="rgba(205, 205, 205, 0.3)"
+            text="Supplemental Nutrition ... (SNAP)"
           />
         </Box>
         <Box
-          className="MainContent"
+          className="fullWidthMainContent"
           sx={{
             position: "relative",
             top: 0,
