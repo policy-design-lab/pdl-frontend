@@ -85,22 +85,22 @@ export default function SNAPBar({
     const tooltipRn = React.useRef(null);
     const [width, setWidth] = React.useState(w);
     const [height, setHeight] = React.useState(h);
-
+    const handleResize: () => void = () => {
+        setWidth(window.innerWidth * widthPercentage);
+        setHeight(window.innerWidth * heightPercentage);
+    };
     React.useEffect(() => {
-        renderBar(status);
-        function handleResize() {
-            setWidth(window.innerWidth * widthPercentage), setHeight(window.innerWidth * heightPercentage);
-        }
+        renderBar();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     });
 
-    const renderBar = (status) => {
+    const renderBar = () => {
         const data = SnapData[yearKey];
         data.sort(function (a, b) {
-            if (a["totalPaymentInDollars"] === b["totalPaymentInDollars"]) return 0;
-            if (a["totalPaymentInDollars"] > b["totalPaymentInDollars"]) return -1;
-            if (a["totalPaymentInDollars"] < b["totalPaymentInDollars"]) return 1;
+            if (a.totalPaymentInDollars === b.totalPaymentInDollars) return 0;
+            if (a.totalPaymentInDollars > b.totalPaymentInDollars) return -1;
+            return 1;
         });
 
         const graphWidth = width - margin.left - margin.right;
@@ -109,9 +109,9 @@ export default function SNAPBar({
             .scaleOrdinal()
             .domain(["totalPaymentInDollars", "averageMonthlyParticipation"])
             .range([color1, color2]);
-        const purpleLabel = (purpleBar, state, status) => {
+        const purpleLabel = (purpleBar, state) => {
             if (status === 0 || status === 2) {
-                d3.select(rn.current).select(`.x.axis`).selectAll("text").style("opacity", 0.1);
+                d3.select(rn.current).select(".x.axis").selectAll("text").style("opacity", 0.1);
                 d3.select(rn.current)
                     .select(`.x-${state}`)
                     .select("text")
@@ -119,7 +119,9 @@ export default function SNAPBar({
                     .style("opacity", 1);
                 d3.select(rn.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 purpleBar.style("opacity", 1);
+                // eslint-disable-next-line no-restricted-globals
                 const mousePos = d3.pointer(event, d3.select(rn.current).select(".y1.axis").node());
+                // eslint-disable-next-line no-restricted-globals
                 const minusMouse = d3.pointer(event, purpleBar.node());
                 const rightLineData = [
                     {
@@ -137,11 +139,11 @@ export default function SNAPBar({
                     .attr("fill", "none");
             }
         };
-        const purpleText = (purpleBar, state, status) => {
+        const purpleText = (purpleBar, state) => {
             const rightTextContent = `Participation: ${ToDollarString(
-                purpleBar.data()[0]["averageMonthlyParticipation"],
+                purpleBar.data()[0].averageMonthlyParticipation,
                 0
-            )}  |  ${ToPercentageString(purpleBar.data()[0]["averageMonthlyParticipationInPercentageNationwide"])}`;
+            )}  |  ${ToPercentageString(purpleBar.data()[0].averageMonthlyParticipationInPercentageNationwide)}`;
             const rightText = d3
                 .select(rn.current)
                 .append("text")
@@ -150,7 +152,7 @@ export default function SNAPBar({
                 .attr("y", -1000)
                 .text(rightTextContent);
             const rightBox = rightText.node().getBBox();
-            rightText.remove;
+            rightText.remove();
             d3.select(rn.current)
                 .append("rect")
                 .attr("class", "rightInfo")
@@ -172,13 +174,15 @@ export default function SNAPBar({
                 .style("font-size", "0.81rem")
                 .style("fill", "white");
         };
-        const blueLabel = (blueBar, state, status) => {
-            d3.select(rn.current).select(`.x.axis`).selectAll("text").style("opacity", 0.1);
+        const blueLabel = (blueBar, state) => {
+            d3.select(rn.current).select(".x.axis").selectAll("text").style("opacity", 0.1);
             d3.select(rn.current).select(`.x-${state}`).select("text").style("font-weight", 600).style("opacity", 1);
             if (status === 0 || status === 1) {
                 d3.select(rn.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 blueBar.style("opacity", 1);
+                // eslint-disable-next-line no-restricted-globals
                 const mousePos = d3.pointer(event, d3.select(rn.current).select(".y0.axis").node());
+                // eslint-disable-next-line no-restricted-globals
                 const minusMouse = d3.pointer(event, blueBar.node());
                 const leftLineData = [
                     {
@@ -196,11 +200,11 @@ export default function SNAPBar({
                     .attr("fill", "none");
             }
         };
-        const blueText = (blueBar, state, status) => {
+        const blueText = (blueBar, state) => {
             const leftTextContent = `Costs: $${ToDollarString(
-                blueBar.data()[0]["totalPaymentInDollars"],
+                blueBar.data()[0].totalPaymentInDollars,
                 0
-            )}  |  ${ToPercentageString(blueBar.data()[0]["totalPaymentInPercentageNationwide"])}`;
+            )}  |  ${ToPercentageString(blueBar.data()[0].totalPaymentInPercentageNationwide)}`;
             const leftText = d3
                 .select(rn.current)
                 .append("text")
@@ -209,7 +213,7 @@ export default function SNAPBar({
                 .attr("y", -1000)
                 .text(leftTextContent);
             const leftBox = leftText.node().getBBox();
-            leftText.remove;
+            leftText.remove();
             d3.select(rn.current)
                 .append("rect")
                 .attr("class", "leftInfo")
@@ -231,14 +235,14 @@ export default function SNAPBar({
                 .style("font-size", "0.81rem")
                 .style("fill", "white");
         };
-        const barColorRecover = (status) => {
+        const barColorRecover = () => {
             d3.select(rn.current).selectAll(".leftLine").remove();
             d3.select(rn.current).selectAll(".leftText").remove();
             d3.select(rn.current).selectAll(".leftInfo").remove();
             d3.select(rn.current).selectAll(".rightLine").remove();
             d3.select(rn.current).selectAll(".rightText").remove();
             d3.select(rn.current).selectAll(".rightInfo").remove();
-            d3.select(rn.current).select(`.x.axis`).selectAll("text").style("opacity", 1);
+            d3.select(rn.current).select(".x.axis").selectAll("text").style("opacity", 1);
             d3.select(rn.current).select(".x.axis").selectAll(".tick").select("text").style("font-weight", 400);
             d3.select(rn.current)
                 .selectAll(".barChart")
@@ -274,13 +278,13 @@ export default function SNAPBar({
         const yAxisLeft = d3
             .axisLeft(y0)
             .tickFormat(function (d) {
-                return `$${ShortFormat(parseInt(d))}`;
+                return `$${ShortFormat(parseInt(d, 10))}`;
             })
             .tickSizeOuter(0);
         const yAxisRight = d3
             .axisRight(y1)
             .tickFormat(function (d) {
-                return ShortFormat(parseInt(d));
+                return ShortFormat(parseInt(d, 10));
             })
             .tickSizeOuter(0);
         x0.domain(
@@ -292,13 +296,13 @@ export default function SNAPBar({
         y0.domain([
             0,
             d3.max(data, function (d) {
-                return d["totalPaymentInDollars"] * 1.11;
+                return d.totalPaymentInDollars * 1.11;
             })
         ]);
         y1.domain([
             0,
             d3.max(data, function (d) {
-                return d["averageMonthlyParticipation"] * 1.11;
+                return d.averageMonthlyParticipation * 1.11;
             })
         ]);
         d3.select(rn.current).attr("width", width).attr("height", height).append("g");
@@ -359,10 +363,10 @@ export default function SNAPBar({
                 return x1("totalPaymentInDollars");
             })
             .attr("y", function (d) {
-                return y0(d["totalPaymentInDollars"]) + topSpace + margin.top;
+                return y0(d.totalPaymentInDollars) + topSpace + margin.top;
             })
             .attr("height", function (d) {
-                return graphHeight - y0(d["totalPaymentInDollars"]);
+                return graphHeight - y0(d.totalPaymentInDollars);
             })
             .style("fill", function (d) {
                 return color("totalPaymentInDollars");
@@ -370,11 +374,11 @@ export default function SNAPBar({
         if (status === 0 || status === 1) {
             blues
                 .on("mouseover", function (e) {
-                    blueLabel(d3.select(this), d3.select(this).data()[0]["state"], status);
-                    blueText(d3.select(this), d3.select(this).data()[0]["state"], status);
+                    blueLabel(d3.select(this), d3.select(this).data()[0].state);
+                    blueText(d3.select(this), d3.select(this).data()[0].state);
                 })
                 .on("mouseleave", function (e) {
-                    barColorRecover(status);
+                    barColorRecover();
                 });
         }
         const purples = base
@@ -386,10 +390,10 @@ export default function SNAPBar({
                 return x1("averageMonthlyParticipation");
             })
             .attr("y", function (d) {
-                return y1(d["averageMonthlyParticipation"]) + topSpace + margin.top;
+                return y1(d.averageMonthlyParticipation) + topSpace + margin.top;
             })
             .attr("height", function (d) {
-                return graphHeight - y1(d["averageMonthlyParticipation"]);
+                return graphHeight - y1(d.averageMonthlyParticipation);
             })
             .style("fill", function (d) {
                 return color("averageMonthlyParticipation");
@@ -397,11 +401,11 @@ export default function SNAPBar({
         if (status === 0 || status === 2) {
             purples
                 .on("mouseover", function (e) {
-                    purpleLabel(d3.select(this), d3.select(this).data()[0]["state"], status);
-                    purpleText(d3.select(this), d3.select(this).data()[0]["state"], status);
+                    purpleLabel(d3.select(this), d3.select(this).data()[0].state);
+                    purpleText(d3.select(this), d3.select(this).data()[0].state);
                 })
                 .on("mouseleave", function (e) {
-                    barColorRecover(status);
+                    barColorRecover();
                 });
         }
         d3.select(rn.current)
@@ -425,7 +429,7 @@ export default function SNAPBar({
                 }
             })
             .on("mouseleave", function () {
-                barColorRecover(status);
+                barColorRecover();
             });
         const y0_g = d3.scaleLinear().range([graphHeight, 0]);
         const y1_g = d3.scaleLinear().range([graphHeight, 0]);
@@ -468,7 +472,7 @@ export default function SNAPBar({
             .selectAll(".tick")
             .style("opacity", 0.1);
 
-        barColorRecover(status);
+        barColorRecover();
     };
     return (
         <div>

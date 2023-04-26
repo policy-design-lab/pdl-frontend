@@ -13,13 +13,13 @@ import {
     Radio,
     SvgIcon
 } from "@mui/material";
-import NavBar from "../components/NavBar";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import InsertChartIcon from "@mui/icons-material/InsertChart";
 import LandingPageMap from "../components/LandingPageMap";
 import snap from "../images/legends/SNAP programs benefits 2018 - 2022.png";
 import SnapTable from "../components/snap/SNAPTable";
 import SNAPBar from "../components/snap/SNAPBar";
-import TableChartIcon from "@mui/icons-material/TableChart";
-import InsertChartIcon from "@mui/icons-material/InsertChart";
+import NavBar from "../components/NavBar";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import { hexToRGB } from "../components/shared/StyleFunctions";
 import "../styles/snap.css";
@@ -41,7 +41,7 @@ export default function SNAPPage(): JSX.Element {
     React.useEffect(() => {
         fetch(`${config.apiUrl}/programs/snap/state-distribution`)
             .then((response) => response.json())
-            .then((data) => setData(data))
+            .then((d) => setData(d))
             .catch((error) => console.error(error));
     }, []);
     const defaultTheme = createTheme({
@@ -58,7 +58,7 @@ export default function SNAPPage(): JSX.Element {
         }
     };
     const downloadSVG = (status) => {
-        if (snapDiv.current != undefined && status) {
+        if (snapDiv.current !== undefined && status) {
             const svgElement = snapDiv.current.querySelector("#SNAPBarChart");
             const svgData = new XMLSerializer().serializeToString(svgElement);
             const blob = new Blob([svgData], { type: "image/svg+xml" });
