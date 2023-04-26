@@ -4,20 +4,20 @@ import LandingPage from "./pages/LandingPage";
 import EQIPPage from "./pages/EQIPPage";
 
 const ScrollToTop = (props: any) => {
-	const location = useLocation();
-	useEffect(() => {
-		window.scrollTo(0, 0);
-	}, [location]);
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
 
-	return <>{props.children}</>;
+    return <>{props.children}</>;
 };
 export default function Main(): JSX.Element {
-	return (
-		<ScrollToTop>
-			<Routes>
-				<Route path="/" element={<LandingPage />} />
-				<Route path="/eqip" element={<EQIPPage />} />
-			</Routes>
-		</ScrollToTop>
-	);
+    return (
+        <ScrollToTop>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/eqip" element={<EQIPPage />} />
+            </Routes>
+        </ScrollToTop>
+    );
 }
