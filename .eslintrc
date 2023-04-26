@@ -3,7 +3,10 @@
     "airbnb",
     "prettier",
     "plugin:prettier/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "plugins": [
     "prettier",
@@ -42,15 +45,15 @@
   "settings": {
     "import/resolver": {
       "node": {
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js", ".ts", ".d.ts", ".tsx", ".jsx"
+        ],
         "moduleDirectory": [
           "src",
           "node_modules"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
         ]
       }
     }
