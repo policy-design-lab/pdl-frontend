@@ -13,24 +13,13 @@ const ScrollToTop = (props: any) => {
     return <>{props.children}</>;
 };
 export default function Main(): JSX.Element {
-<<<<<<< HEAD
-	return (
-		<ScrollToTop>
-			<Routes>
-				<Route path="/" element={<LandingPage />} />
-				<Route path="/eqip" element={<EQIPPage />} />
-				<Route path="/snap" element={<SNAPPage />} />
-			</Routes>
-		</ScrollToTop>
-	);
-=======
     return (
         <ScrollToTop>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/eqip" element={<EQIPPage />} />
+                <Route path="/snap" element={<SNAPPage />} />
             </Routes>
         </ScrollToTop>
     );
->>>>>>> develop
 }
