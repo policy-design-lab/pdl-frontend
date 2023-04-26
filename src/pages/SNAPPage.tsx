@@ -287,7 +287,7 @@ export default function SNAPPage(): JSX.Element {
                     {data ? (
                       <SNAPBar
                         SnapData={data}
-                        status={barStatus}
+                        status={Number(barStatus)}
                         yearKey={yearKey}
                         margin={{
                           top: paddingTB,
