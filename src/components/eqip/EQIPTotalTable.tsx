@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useTable, useSortBy } from 'react-table';
-import Box from '@mui/material/Box';
-import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
-import '../../styles/table.css';
+import React from "react";
+import styled from "styled-components";
+import { useTable, useSortBy } from "react-table";
+import Box from "@mui/material/Box";
+import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import "../../styles/table.css";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -69,13 +69,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
                                     })}
                                 >
-                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
-                                        {column.render('Header')}
+                                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                                        {column.render("Header")}
                                         <div>
                                             {(() => {
-                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{'\u{2B83}'}</Box>;
-                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{'\u{25BC}'}</Box>;
-                                                return <Box sx={{ ml: 1 }}>{'\u{25B2}'}</Box>;
+                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
                                             })()}
                                         </div>
                                     </Box>
@@ -94,7 +94,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     {row.cells.map((cell) => {
                                         return (
                                             <td key={cell.id} {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
+                                                {cell.render("Cell")}
                                             </td>
                                         );
                                     })}
@@ -130,16 +130,16 @@ for (const [key, value] of Object.entries(statePerformance)) {
 
 function App(): JSX.Element {
     function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(',', ''));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(',', ''));
+        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
+        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
     }
 
     function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll('%', ''));
-        const b = Number.parseFloat(rowB.values[id].replaceAll('%', ''));
+        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
+        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
@@ -149,31 +149,31 @@ function App(): JSX.Element {
         () => [
             {
                 Header: <Box className="tableHeader">STATES</Box>,
-                accessor: 'state',
-                paddingLeft: '5rem',
-                paddingRight: '32rem'
+                accessor: "state",
+                paddingLeft: "5rem",
+                paddingRight: "32rem"
             },
             {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: 'flex', justifyContent: 'center' }}
+                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
                     >
                         EQIP BENEFITS
                     </Box>
                 ),
-                accessor: 'eqipBenefit',
+                accessor: "eqipBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
-                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
             },
             {
                 Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
-                accessor: 'percentage',
+                accessor: "percentage",
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {
-                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
             }
         ],

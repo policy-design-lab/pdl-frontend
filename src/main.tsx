@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import LandingPage from './pages/LandingPage';
-import EQIPPage from './pages/EQIPPage';
+import React, { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import EQIPPage from "./pages/EQIPPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();

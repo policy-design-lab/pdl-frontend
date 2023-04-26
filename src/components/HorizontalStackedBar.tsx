@@ -1,6 +1,6 @@
-import React from 'react';
-import HSBar from 'react-horizontal-stacked-bar-chart';
-import { Box, Typography } from '@mui/material';
+import React from "react";
+import HSBar from "react-horizontal-stacked-bar-chart";
+import { Box, Typography } from "@mui/material";
 
 export default function HorizontalStackedBar({
     title,
@@ -32,8 +32,8 @@ export default function HorizontalStackedBar({
     return (
         <Box
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                display: "flex",
+                flexDirection: "column",
                 minWidth: 560
             }}
         >

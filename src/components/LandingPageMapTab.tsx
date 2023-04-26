@@ -1,23 +1,23 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { CardMedia, createTheme, styled, Typography, ThemeProvider } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import LandingPageMap from './LandingPageMap';
-import AllProgramMap from './AllProgramMap';
-import allPrograms from '../data/allPrograms.json';
-import commodities from '../images/legends/Commodities benefits 2018 - 2022.png';
-import conservation from '../images/legends/conservation programs benefits 2018 - 2022.png';
-import crop from '../images/legends/crop insurance 2018 - 2022.png';
-import snap from '../images/legends/SNAP programs benefits 2018 - 2022.png';
-import total from '../images/legends/total farm bill benefits 2018 - 2022.png';
-import LandingDisplay from './LandingDisplay';
+import * as React from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import { CardMedia, createTheme, styled, Typography, ThemeProvider } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import LandingPageMap from "./LandingPageMap";
+import AllProgramMap from "./AllProgramMap";
+import allPrograms from "../data/allPrograms.json";
+import commodities from "../images/legends/Commodities benefits 2018 - 2022.png";
+import conservation from "../images/legends/conservation programs benefits 2018 - 2022.png";
+import crop from "../images/legends/crop insurance 2018 - 2022.png";
+import snap from "../images/legends/SNAP programs benefits 2018 - 2022.png";
+import total from "../images/legends/total farm bill benefits 2018 - 2022.png";
+import LandingDisplay from "./LandingDisplay";
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#2F7164'
+            main: "#2F7164"
         }
     }
 });
@@ -33,19 +33,19 @@ function TabPanel(props: TabPanelProps) {
     let colorLegend = null;
 
     switch (title) {
-        case 'Title I: Commodities':
+        case "Title I: Commodities":
             colorLegend = commodities;
             break;
-        case 'Title II: Conservation':
+        case "Title II: Conservation":
             colorLegend = conservation;
             break;
-        case 'Crop Insurance':
+        case "Crop Insurance":
             colorLegend = crop;
             break;
-        case 'Supplemental Nutrition Assistance Program (SNAP)':
+        case "Supplemental Nutrition Assistance Program (SNAP)":
             colorLegend = snap;
             break;
-        case 'All Programs':
+        case "All Programs":
             colorLegend = total;
             break;
     }
@@ -55,20 +55,20 @@ function TabPanel(props: TabPanelProps) {
             {value === index && (
                 <Box
                     sx={{
-                        width: '60%',
-                        mx: 'auto'
+                        width: "60%",
+                        mx: "auto"
                     }}
                 >
-                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                         <CardMedia sx={{ maxWidth: 720, mt: 3 }} component="img" src={colorLegend} />
                     </Box>
-                    {title === 'All Programs' ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
+                    {title === "All Programs" ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
                 </Box>
             )}
             {value === index && (
-                <Box sx={{ width: '100%' }}>
-                    {' '}
-                    <LandingDisplay programTitle={title} />{' '}
+                <Box sx={{ width: "100%" }}>
+                    {" "}
+                    <LandingDisplay programTitle={title} />{" "}
                 </Box>
             )}
         </Box>
@@ -87,22 +87,22 @@ export default function LandingPageMapTab(): JSX.Element {
     }
 
     const CustomTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)({
-        textTransform: 'none'
+        textTransform: "none"
     });
 
-    const cur = allPrograms.find((s) => s.State === 'Total');
-    const allProgramTotal = cur['18-22 All Programs Total'];
-    const titleITotal = cur['Title I Total'];
-    const titleIITotal = cur['Title II Total'];
-    const cropTotal = cur['Crop Insurance Total'];
-    const snapTotal = cur['SNAP Total'];
+    const cur = allPrograms.find((s) => s.State === "Total");
+    const allProgramTotal = cur["18-22 All Programs Total"];
+    const titleITotal = cur["Title I Total"];
+    const titleIITotal = cur["Title II Total"];
+    const cropTotal = cur["Crop Insurance Total"];
+    const snapTotal = cur["SNAP Total"];
 
     return (
-        <Box sx={{ width: '100%', mt: 5 }}>
-            <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ width: "100%", mt: 5 }}>
+            <Box display="flex" justifyContent="center" width="100%" sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <ThemeProvider theme={theme}>
                     <Tabs
-                        TabIndicatorProps={{ style: { background: '#2F7164' } }}
+                        TabIndicatorProps={{ style: { background: "#2F7164" } }}
                         variant="scrollable"
                         value={value}
                         onChange={handleChange}

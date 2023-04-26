@@ -1,15 +1,15 @@
-import React from 'react';
-import Drawer from '@mui/material/Drawer';
-import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
-import { Popper, Radio, Typography } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import React from "react";
+import Drawer from "@mui/material/Drawer";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
+import { Popper, Radio, Typography } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const drawerWidth = 240;
 
@@ -34,29 +34,29 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     };
 
     const EQIPList = [
-        'Total EQIP Benefits',
-        'Land management',
-        'Forest management',
-        'Structural',
-        'Soil remediation',
-        'Vegetative',
-        'Other improvement',
-        'Soil testing',
-        'Other planning',
-        'Conservation planning assessment',
-        'Resource-conserving crop rotation',
-        'Soil health',
-        'Comprehensive Nutrient Mgt.'
+        "Total EQIP Benefits",
+        "Land management",
+        "Forest management",
+        "Structural",
+        "Soil remediation",
+        "Vegetative",
+        "Other improvement",
+        "Soil testing",
+        "Other planning",
+        "Conservation planning assessment",
+        "Resource-conserving crop rotation",
+        "Soil health",
+        "Comprehensive Nutrient Mgt."
     ];
 
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#ecf0ee' }}>
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
                 if (
-                    category !== 'Land management' &&
-                    category !== 'Other planning' &&
-                    category !== 'Total EQIP Benefits'
+                    category !== "Land management" &&
+                    category !== "Other planning" &&
+                    category !== "Total EQIP Benefits"
                 ) {
                     return (
                         <ListItem key={category} disablePadding>
@@ -66,10 +66,10 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                                     checked={checked === value}
                                     tabIndex={-1}
                                     disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    inputProps={{ "aria-labelledby": labelId }}
                                     sx={{
-                                        '&.Mui-checked': {
-                                            color: '#2f7164'
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
                                         }
                                     }}
                                 />
@@ -78,7 +78,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         </ListItem>
                     );
                 }
-                if (category === 'Total EQIP Benefits') {
+                if (category === "Total EQIP Benefits") {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
@@ -87,10 +87,10 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                                     checked={checked === value}
                                     tabIndex={-1}
                                     disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    inputProps={{ "aria-labelledby": labelId }}
                                     sx={{
-                                        '&.Mui-checked': {
-                                            color: '#2f7164'
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
                                         }
                                     }}
                                 />
@@ -99,7 +99,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                         </ListItem>
                     );
                 }
-                if (category === 'Land management') {
+                if (category === "Land management") {
                     return (
                         <Box>
                             <Typography sx={{ pl: 8 }}>
@@ -112,10 +112,10 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                                         checked={checked === value}
                                         tabIndex={-1}
                                         disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
+                                        inputProps={{ "aria-labelledby": labelId }}
                                         sx={{
-                                            '&.Mui-checked': {
-                                                color: '#2f7164'
+                                            "&.Mui-checked": {
+                                                color: "#2f7164"
                                             }
                                         }}
                                     />
@@ -137,10 +137,10 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                                     checked={checked === value}
                                     tabIndex={-1}
                                     disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
+                                    inputProps={{ "aria-labelledby": labelId }}
                                     sx={{
-                                        '&.Mui-checked': {
-                                            color: '#2f7164'
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
                                         }
                                     }}
                                 />
@@ -174,31 +174,31 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
         <Drawer
             variant="permanent"
             sx={{
-                'display': { xs: 'none', sm: 'block' },
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+                "display": { xs: "none", sm: "block" },
+                "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth }
             }}
             PaperProps={{
                 sx: {
-                    backgroundColor: '#ffffff',
-                    color: 'gray'
+                    backgroundColor: "#ffffff",
+                    color: "gray"
                 }
             }}
             open
         >
             <Box sx={{ height: 100 }} />
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Total Conservation Programs Benefits</Typography>
             </MenuItem>
             <Box>
                 <MenuItem
                     ref={eqipRef}
-                    style={{ whiteSpace: 'normal' }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: eqipOpen ? '#ecf0ee' : 'grey' }}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: eqipOpen ? "#ecf0ee" : "grey" }}
                     onClick={handleEqipClick}
                 >
-                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
                         {eqipOpen ? (
-                            <Typography sx={{ color: '#2f7164' }}>
+                            <Typography sx={{ color: "#2f7164" }}>
                                 <strong>EQIP: Environmental Quality Incentives Program</strong>
                             </Typography>
                         ) : (
@@ -208,16 +208,16 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                             sx={{
                                 maxWidth: 40,
                                 py: 3,
-                                color: '#ffffff',
-                                backgroundColor: '#2f7164',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'flex-end',
+                                color: "#ffffff",
+                                backgroundColor: "#2f7164",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
                                 maxHeight: 48
                             }}
                         >
-                            <Typography variant="subtitle2" sx={{ rotate: '270deg', pt: 6, pb: 0 }}>
-                                <Box sx={{ display: 'flex', flexDirection: 'horizontal' }}>
+                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
                                     <strong>STATUTE</strong>
                                     <KeyboardArrowDownIcon />
                                 </Box>
@@ -231,19 +231,19 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>CSP: Conservation Stewardship Program</Typography>
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>CRP: Conservation Reserve Program</Typography>
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>RCPP: Regional Conservation Partnership Program</Typography>
             </MenuItem>
-            <MenuItem style={{ whiteSpace: 'normal' }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Other Conservation</Typography>
             </MenuItem>
         </Drawer>

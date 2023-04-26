@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { geoCentroid } from 'd3-geo';
-import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
-import ReactTooltip from 'react-tooltip';
-import { scaleQuantile } from 'd3-scale';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
-import { config } from '../app.config';
+import React, { useEffect, useState } from "react";
+import { geoCentroid } from "d3-geo";
+import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
+import { scaleQuantile } from "d3-scale";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import { config } from "../app.config";
 
-import '../styles/map.css';
-import { getJsonDataFromUrl, convertAllState } from '../utils/apiutil';
+import "../styles/map.css";
+import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const offsets = {
     VT: [50, -8],
@@ -29,8 +29,8 @@ const offsets = {
 const MapChart = (props) => {
     const { setTooltipContent, stateCodes, allPrograms, allStates } = props;
     const colorScale = scaleQuantile()
-        .domain(allPrograms.map((d) => d['18-22 All Programs Total']))
-        .range(['#FFF9D8', '#E1F2C4', '#9FD9BA', '#1B9577', '#005A45']);
+        .domain(allPrograms.map((d) => d["18-22 All Programs Total"]))
+        .range(["#FFF9D8", "#E1F2C4", "#9FD9BA", "#1B9577", "#005A45"]);
 
     return (
         <div data-tip="">
@@ -46,24 +46,24 @@ const MapChart = (props) => {
                                     if (cur !== undefined) {
                                         records = allPrograms.filter((s) => s.State === cur.id);
                                         records.forEach((record) => {
-                                            total += record['18-22 All Programs Total'];
+                                            total += record["18-22 All Programs Total"];
                                         });
                                     }
                                     const hoverContent = (
                                         <Box
                                             sx={{
-                                                display: 'flex',
-                                                flexDirection: 'row',
-                                                bgcolor: '#ECF0ED',
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                bgcolor: "#ECF0ED",
                                                 borderRadius: 1
                                             }}
                                         >
                                             <Box>
-                                                <Typography sx={{ color: '#2F7164' }}>
-                                                    {cur ? stateCodes[cur.id] : ''}
+                                                <Typography sx={{ color: "#2F7164" }}>
+                                                    {cur ? stateCodes[cur.id] : ""}
                                                 </Typography>
-                                                <Typography sx={{ color: '#2F7164' }}>Total Benefit</Typography>
-                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
+                                                <Typography sx={{ color: "#3F3F3F" }}>
                                                     $
                                                     {Number(total / 1000000.0).toLocaleString(undefined, {
                                                         maximumFractionDigits: 2
@@ -73,38 +73,38 @@ const MapChart = (props) => {
                                             </Box>
                                             <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                             <Box>
-                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                <Typography sx={{ color: "#3F3F3F" }}>
                                                     Payments:
                                                     <br />
                                                     {records.map((record) => (
                                                         <div key={record.State}>
                                                             2018: $
                                                             {Number(
-                                                                record['2018 All Programs Total'] / 1000000.0
+                                                                record["2018 All Programs Total"] / 1000000.0
                                                             ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                             M
                                                             <br />
                                                             2019: $
                                                             {Number(
-                                                                record['2019 All Programs Total'] / 1000000.0
+                                                                record["2019 All Programs Total"] / 1000000.0
                                                             ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                             M
                                                             <br />
                                                             2020: $
                                                             {Number(
-                                                                record['2020 All Programs Total'] / 1000000.0
+                                                                record["2020 All Programs Total"] / 1000000.0
                                                             ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                             M
                                                             <br />
                                                             2021: $
                                                             {Number(
-                                                                record['2021 All Programs Total'] / 1000000.0
+                                                                record["2021 All Programs Total"] / 1000000.0
                                                             ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                             M
                                                             <br />
                                                             2022: $
                                                             {Number(
-                                                                record['2022 All Programs Total'] / 1000000.0
+                                                                record["2022 All Programs Total"] / 1000000.0
                                                             ).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                             M
                                                             <br />
@@ -122,20 +122,20 @@ const MapChart = (props) => {
                                                 setTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent('');
+                                                setTooltipContent("");
                                             }}
                                             fill={colorScale(total)}
                                             stroke="#FFF"
                                             style={{
-                                                default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
+                                                default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
                                                 hover: {
-                                                    stroke: '#232323',
+                                                    stroke: "#232323",
                                                     strokeWidth: 2,
-                                                    outline: 'none'
+                                                    outline: "none"
                                                 },
                                                 pressed: {
-                                                    fill: '#345feb',
-                                                    outline: 'none'
+                                                    fill: "#345feb",
+                                                    outline: "none"
                                                 }
                                             }}
                                         />
@@ -183,7 +183,7 @@ MapChart.propTypes = {
 };
 
 const AllProgramMap = (): JSX.Element => {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState("");
     const [stateCodesData, setStateCodesData] = useState([]);
     const [allProgramsData, setAllProgramsData] = useState([]);
     const [allStatesData, setAllStatesData] = useState([]);

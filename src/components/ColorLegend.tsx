@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 export default function ColorLegend({
     color1,
@@ -16,15 +16,15 @@ export default function ColorLegend({
     color5: string;
 }): JSX.Element {
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: "100%" }}>
             <Box>
                 <Box
                     sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
+                        display: "flex",
+                        justifyContent: "flex-end",
                         p: 1,
                         m: 1,
-                        bgcolor: 'background.paper',
+                        bgcolor: "background.paper",
                         borderRadius: 1
                     }}
                 >

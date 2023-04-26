@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { geoCentroid } from 'd3-geo';
-import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
-import ReactTooltip from 'react-tooltip';
-import { scaleQuantile, scaleQuantize } from 'd3-scale';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import React, { useState } from "react";
+import { geoCentroid } from "d3-geo";
+import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
+import { scaleQuantile, scaleQuantize } from "d3-scale";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-import PropTypes from 'prop-types';
-import allStates from '../../data/allstates.json';
-import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
-import '../../styles/map.css';
-import HorizontalStackedBar from '../HorizontalStackedBar';
+import PropTypes from "prop-types";
+import allStates from "../../data/allstates.json";
+import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import "../../styles/map.css";
+import HorizontalStackedBar from "../HorizontalStackedBar";
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const offsets = {
     VT: [50, -8],
@@ -30,7 +30,7 @@ const offsets = {
 const MapChart = ({ setTooltipContent, category, maxValue }) => {
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
-        .range(['#F0F9E8', '#BAE4BC', '#7BCCC4', '#43A2CA', '#0868AC']);
+        .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
 
     return (
         <div data-tip="">
@@ -43,9 +43,9 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                     return null;
                                 }
                                 const statuteRecord = statePerformance[geo.properties.name][0].statutes;
-                                const ACur = statuteRecord.find((s) => s.statuteName === '(6)(A) Practices');
+                                const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
                                 const AArray = ACur.practiceCategories;
-                                const BCur = statuteRecord.find((s) => s.statuteName === '(6)(B) Practices');
+                                const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
                                 const BArray = BCur.practiceCategories;
                                 const TotalArray = AArray.concat(BArray);
                                 const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
@@ -55,21 +55,21 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                 const hoverContent = (
                                     <Box
                                         sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            bgcolor: '#ECF0ED',
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            bgcolor: "#ECF0ED",
                                             borderRadius: 1
                                         }}
                                     >
                                         <Box>
-                                            <Typography sx={{ color: '#2F7164' }}>{geo.properties.name}</Typography>
+                                            <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
                                             <Box
                                                 sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row'
+                                                    display: "flex",
+                                                    flexDirection: "row"
                                                 }}
                                             >
-                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                <Typography sx={{ color: "#3F3F3F" }}>
                                                     {Number(categoryPayment) < 1000000
                                                         ? `$${Number(Number(categoryPayment) / 1000.0).toLocaleString(
                                                               undefined,
@@ -84,8 +84,8 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                                           })}M`}
                                                 </Typography>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Typography sx={{ color: '#3F3F3F' }}>
-                                                    {nationwidePercentage ? `${nationwidePercentage} %` : '0%'}
+                                                <Typography sx={{ color: "#3F3F3F" }}>
+                                                    {nationwidePercentage ? `${nationwidePercentage} %` : "0%"}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -99,20 +99,20 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                             setTooltipContent(hoverContent);
                                         }}
                                         onMouseLeave={() => {
-                                            setTooltipContent('');
+                                            setTooltipContent("");
                                         }}
                                         fill={colorScale(categoryPayment)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
+                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
                                             hover: {
-                                                stroke: '#232323',
+                                                stroke: "#232323",
                                                 strokeWidth: 2,
-                                                outline: 'none'
+                                                outline: "none"
                                             },
                                             pressed: {
-                                                fill: '#345feb',
-                                                outline: 'none'
+                                                fill: "#345feb",
+                                                outline: "none"
                                             }
                                         }}
                                     />
@@ -161,14 +161,14 @@ MapChart.propTypes = {
 };
 
 const CategoryMap = ({ category }: { category: string }): JSX.Element => {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState("");
     const title = `${category} Benefits`;
     const quantizeArray: number[] = [];
     Object.values(statePerformance).map((value) => {
         const statuteRecord = value[0].statutes;
-        const ACur = statuteRecord.find((s) => s.statuteName === '(6)(A) Practices');
+        const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = statuteRecord.find((s) => s.statuteName === '(6)(B) Practices');
+        const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);

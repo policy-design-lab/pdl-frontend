@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useTable, useSortBy } from 'react-table';
-import Box from '@mui/material/Box';
-import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
-import '../../styles/table.css';
+import React from "react";
+import styled from "styled-components";
+import { useTable, useSortBy } from "react-table";
+import Box from "@mui/material/Box";
+import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import "../../styles/table.css";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -70,13 +70,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
                                     })}
                                 >
-                                    <Box sx={{ display: 'flex', flexDirection: 'horizontal', alignItems: 'center' }}>
-                                        {column.render('Header')}
+                                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                                        {column.render("Header")}
                                         <div>
                                             {(() => {
-                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{'\u{2B83}'}</Box>;
-                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{'\u{25BC}'}</Box>;
-                                                return <Box sx={{ ml: 1 }}>{'\u{25B2}'}</Box>;
+                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
                                             })()}
                                         </div>
                                     </Box>
@@ -95,7 +95,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     {row.cells.map((cell) => {
                                         return (
                                             <td key={cell.id} {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
+                                                {cell.render("Cell")}
                                             </td>
                                         );
                                     })}
@@ -118,9 +118,9 @@ function App({ category }: { category: string }): JSX.Element {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === '(6)(A) Practices');
+        const ACur = value[0].statutes.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === '(6)(B) Practices');
+        const BCur = value[0].statutes.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
@@ -141,16 +141,16 @@ function App({ category }: { category: string }): JSX.Element {
     }
 
     function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(',', ''));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(',', ''));
+        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
+        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
     }
 
     function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll('%', ''));
-        const b = Number.parseFloat(rowB.values[id].replaceAll('%', ''));
+        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
+        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
@@ -162,18 +162,18 @@ function App({ category }: { category: string }): JSX.Element {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 12, display: 'flex', justifyContent: 'center' }}
+                        sx={{ maxWidth: 240, pl: 12, display: "flex", justifyContent: "center" }}
                     >
                         STATES
                     </Box>
                 ),
-                accessor: 'state',
+                accessor: "state",
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
                     return (
-                        <div style={{ textAlign: 'left' }}>
-                            <Box sx={{ py: 2, pl: 6, display: 'flex', justifyContent: 'flex-start' }}>
+                        <div style={{ textAlign: "left" }}>
+                            <Box sx={{ py: 2, pl: 6, display: "flex", justifyContent: "flex-start" }}>
                                 {props.value}
                             </Box>
                         </div>
@@ -184,28 +184,28 @@ function App({ category }: { category: string }): JSX.Element {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
                     >
                         {`${category} Benefit`.toUpperCase()}
                     </Box>
                 ),
-                accessor: 'categoryBenefit',
+                accessor: "categoryBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
                     return (
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: "right" }}>
                             <Box
                                 sx={{
-                                    backgroundColor: '#fff0e2',
+                                    backgroundColor: "#fff0e2",
                                     py: 3,
                                     width: 240,
-                                    display: 'flex',
-                                    justifyContent: 'center'
+                                    display: "flex",
+                                    justifyContent: "center"
                                 }}
                             >
-                                <Box sx={{ textAlign: 'right', width: 120 }}>{props.value}</Box>
+                                <Box sx={{ textAlign: "right", width: 120 }}>{props.value}</Box>
                             </Box>
                         </div>
                     );
@@ -215,28 +215,28 @@ function App({ category }: { category: string }): JSX.Element {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 6, display: 'flex', justifyContent: 'center' }}
+                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
                     >
                         {`${category} Percentage Within State`.toUpperCase()}
                     </Box>
                 ),
-                accessor: 'categoryPercentage',
+                accessor: "categoryPercentage",
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(props: {
                     value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
                 }) {
                     return (
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: "right" }}>
                             <Box
                                 sx={{
-                                    backgroundColor: '#fff0e2',
+                                    backgroundColor: "#fff0e2",
                                     py: 3,
                                     width: 280,
-                                    display: 'flex',
-                                    justifyContent: 'center'
+                                    display: "flex",
+                                    justifyContent: "center"
                                 }}
                             >
-                                <Box sx={{ textAlign: 'right', width: 80 }}>{props.value}</Box>
+                                <Box sx={{ textAlign: "right", width: 80 }}>{props.value}</Box>
                             </Box>
                         </div>
                     );
@@ -246,23 +246,23 @@ function App({ category }: { category: string }): JSX.Element {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 7, display: 'flex', justifyContent: 'center' }}
+                        sx={{ maxWidth: 240, pl: 7, display: "flex", justifyContent: "center" }}
                     >
                         EQIP BENEFITS
                     </Box>
                 ),
-                accessor: 'eqipBenefit',
+                accessor: "eqipBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
-                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
             },
             {
                 Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
-                accessor: 'percentage',
+                accessor: "percentage",
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {
-                    return <div style={{ textAlign: 'right' }}>{row.value}</div>;
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
             }
         ],

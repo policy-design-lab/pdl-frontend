@@ -1,6 +1,6 @@
-import React from 'react';
-import { PieChart, Pie, Tooltip, Label, Cell } from 'recharts';
-import { Box } from '@mui/material';
+import React from "react";
+import { PieChart, Pie, Tooltip, Label, Cell } from "recharts";
+import { Box } from "@mui/material";
 
 const RADIAN = Math.PI / 180;
 
@@ -14,7 +14,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
         const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
         return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+            <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
                 {`${(percent * 100).toFixed(1)}%`}
             </text>
         );
@@ -22,7 +22,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
     // eslint-disable-next-line
     const renderCustomizedLabel2 = ({ x, cx, y, name }: any) => {
         return (
-            <text x={x} y={y} fill="#000000" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+            <text x={x} y={y} fill="#000000" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
                 {name}
             </text>
         );
@@ -33,16 +33,16 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
             return (
                 <div
                     style={{
-                        backgroundColor: '#f5f5f5',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
-                        textAlign: 'center'
+                        backgroundColor: "#f5f5f5",
+                        padding: "20px",
+                        borderRadius: "10px",
+                        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
+                        textAlign: "center"
                     }}
                 >
-                    <h2 style={{ margin: '0' }}>{payload[0].name} Payment:</h2>
-                    <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                        {payload[0].value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                    <h2 style={{ margin: "0" }}>{payload[0].name} Payment:</h2>
+                    <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+                        {payload[0].value.toLocaleString("en-US", { style: "currency", currency: "USD" })}
                     </p>
                 </div>
             );
@@ -78,7 +78,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         }
                         position="center"
                         dy={-75}
-                        style={{ textAnchor: 'middle', fontSize: '200%', fill: 'rgba(0, 0, 0, 0.87)' }}
+                        style={{ textAnchor: "middle", fontSize: "200%", fill: "rgba(0, 0, 0, 0.87)" }}
                     />
                     <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
@@ -104,10 +104,10 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                 <Tooltip
                     content={<CustomTooltip />}
                     wrapperStyle={{
-                        backgroundColor: 'white',
-                        borderStyle: 'ridge',
-                        outline: 'none',
-                        borderRadius: '10px'
+                        backgroundColor: "white",
+                        borderStyle: "ridge",
+                        outline: "none",
+                        borderRadius: "10px"
                     }}
                 />
             </PieChart>

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { geoCentroid } from 'd3-geo';
-import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
-import ReactTooltip from 'react-tooltip';
-import { scaleQuantile, scaleQuantize } from 'd3-scale';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import React, { useState } from "react";
+import { geoCentroid } from "d3-geo";
+import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
+import { scaleQuantile, scaleQuantize } from "d3-scale";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-import PropTypes from 'prop-types';
-import allStates from '../../data/allstates.json';
-import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
-import '../../styles/map.css';
-import HorizontalStackedBar from '../HorizontalStackedBar';
+import PropTypes from "prop-types";
+import allStates from "../../data/allstates.json";
+import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import "../../styles/map.css";
+import HorizontalStackedBar from "../HorizontalStackedBar";
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const offsets = {
     VT: [50, -8],
@@ -30,7 +30,7 @@ const offsets = {
 const MapChart = ({ setTooltipContent, maxValue }) => {
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
-        .range(['#F0F9E8', '#BAE4BC', '#7BCCC4', '#43A2CA', '#0868AC']);
+        .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
 
     return (
         <div data-tip="">
@@ -48,21 +48,21 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                 const hoverContent = (
                                     <Box
                                         sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            bgcolor: '#ECF0ED',
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            bgcolor: "#ECF0ED",
                                             borderRadius: 1
                                         }}
                                     >
                                         <Box>
-                                            <Typography sx={{ color: '#2F7164' }}>{geo.properties.name}</Typography>
+                                            <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
                                             <Box
                                                 sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'row'
+                                                    display: "flex",
+                                                    flexDirection: "row"
                                                 }}
                                             >
-                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                <Typography sx={{ color: "#3F3F3F" }}>
                                                     {Number(totalPaymentInDollars) < 1000000
                                                         ? `$${Number(
                                                               Number(totalPaymentInDollars) / 1000.0
@@ -76,10 +76,10 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                                           })}M`}
                                                 </Typography>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Typography sx={{ color: '#3F3F3F' }}>
+                                                <Typography sx={{ color: "#3F3F3F" }}>
                                                     {totalPaymentInPercentageNationwide
                                                         ? `${totalPaymentInPercentageNationwide} %`
-                                                        : '0%'}
+                                                        : "0%"}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -93,20 +93,20 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                             setTooltipContent(hoverContent);
                                         }}
                                         onMouseLeave={() => {
-                                            setTooltipContent('');
+                                            setTooltipContent("");
                                         }}
                                         fill={colorScale(totalPaymentInDollars)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: '#FFFFFF', strokeWidth: 0.75, outline: 'none' },
+                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
                                             hover: {
-                                                stroke: '#232323',
+                                                stroke: "#232323",
                                                 strokeWidth: 2,
-                                                outline: 'none'
+                                                outline: "none"
                                             },
                                             pressed: {
-                                                fill: '#345feb',
-                                                outline: 'none'
+                                                fill: "#345feb",
+                                                outline: "none"
                                             }
                                         }}
                                     />
@@ -162,7 +162,7 @@ const EqipTotalMap = (): JSX.Element => {
     const label3 = (maxValue / 5) * 2;
     const label4 = (maxValue / 5) * 3;
     const label5 = (maxValue / 5) * 4;
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState("");
     return (
         <div>
             <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
