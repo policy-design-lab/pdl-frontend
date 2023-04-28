@@ -29,7 +29,7 @@ export default function EQIPPage(): JSX.Element {
     let soilHealthTotal = 0;
 
     // eslint-disable-next-line
-    const cur1 = chartData.statutes.find((s) => s.statuteName === '(6)(A) Practices');
+    const cur1 = chartData.statutes.find((s) => s.statuteName === "(6)(A) Practices");
     const cur2 = chartData.statutes.find((s) => s.statuteName === "(6)(B) Practices");
     const sixATotal = cur1.totalPaymentInDollars;
     const sixBTotal = cur2.totalPaymentInDollars;
@@ -97,7 +97,7 @@ export default function EQIPPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar />
+                    <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                 </Box>
                 <Drawer setEQIPChecked={setChecked} />
                 <Box sx={{ pl: 50, pr: 20 }}>
