@@ -144,7 +144,11 @@ export default function EQIPPage(): JSX.Element {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ width: "100%" }}>
         <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-          <NavBar bkColor="#2F7164" />
+        <NavBar
+            bkColor="rgba(255, 255, 255, 1)"
+            ftColor="rgba(47, 113, 100, 1)"
+            logo="light"
+          />
           <NavSearchBar text="EQIP: Environmental Quality Incentives Program" />
         </Box>
         <Drawer setEQIPChecked={setChecked} />

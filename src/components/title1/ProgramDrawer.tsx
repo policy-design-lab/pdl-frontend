@@ -14,77 +14,37 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const drawerWidth = 240;
 
-EQIPCheckboxList.propTypes = {
-  setEQIPChecked: PropTypes.func,
+Title1CheckboxList.propTypes = {
+  setTitle1Checked: PropTypes.func,
   setShowPopUp: PropTypes.func,
 };
 
 ProgramDrawer.propTypes = {
-  setEQIPChecked: PropTypes.func,
+  setTitle1Checked: PropTypes.func,
 };
 
 let currentChecked = 0;
-function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
+function Title1CheckboxList({ setTitle1Checked, setShowPopUp }) {
   const [checked, setChecked] = React.useState(currentChecked);
 
   const handleToggle = (value: number) => () => {
     setChecked(value);
-    setEQIPChecked(value);
+    setTitle1Checked(value);
     currentChecked = value;
     setShowPopUp(false);
   };
 
-  const EQIPList = [
-    "Total EQIP Benefits",
-    "Land management",
-    "Forest management",
-    "Structural",
-    "Soil remediation",
-    "Vegetative",
-    "Other improvement",
-    "Soil testing",
-    "Other planning",
-    "Conservation planning assessment",
-    "Resource-conserving crop rotation",
-    "Soil health",
-    "Comprehensive Nutrient Mgt.",
+  const Title1List = [
+    "Agriculture Risk Coverage (ARC)",
+    "Agriculture Risk Coverage County Option (ARC-CO)",
+    "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
   ];
-
+  
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
-      {EQIPList.map((category, value) => {
+      {Title1List.map((category, value) => {
         const labelId = `checkbox-list-label-${value}`;
-        if (
-          category !== "Land management" &&
-          category !== "Other planning" &&
-          category !== "Total EQIP Benefits"
-        ) {
-          return (
-            <ListItem key={category} disablePadding>
-              <ListItemButton
-                role={undefined}
-                onClick={handleToggle(value)}
-                dense
-                sx={{ pl: 8 }}
-              >
-                <Radio
-                  edge="start"
-                  checked={checked === value}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                  sx={{
-                    "&.Mui-checked": {
-                      color: "#2f7164",
-                    },
-                  }}
-                />
-                <ListItemText id={labelId} primary={category} />
-              </ListItemButton>
-            </ListItem>
-          );
-        }
-        if (category === "Total EQIP Benefits") {
+        if (category === "Agriculture Risk Coverage (ARC)") {
           return (
             <ListItem key={category} disablePadding>
               <ListItemButton
@@ -107,44 +67,10 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                 <ListItemText id={labelId} primary={category} />
               </ListItemButton>
             </ListItem>
-          );
-        }
-        if (category === "Land management") {
-          return (
-            <Box>
-              <Typography sx={{ pl: 8 }}>
-                <strong>(6)(A) Practices</strong>
-              </Typography>
-              <ListItem key={category} disablePadding>
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleToggle(value)}
-                  dense
-                  sx={{ pl: 8 }}
-                >
-                  <Radio
-                    edge="start"
-                    checked={checked === value}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ "aria-labelledby": labelId }}
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#2f7164",
-                      },
-                    }}
-                  />
-                  <ListItemText id={labelId} primary={category} />
-                </ListItemButton>
-              </ListItem>
-            </Box>
           );
         }
         return (
           <Box key={category}>
-            <Typography sx={{ pl: 8 }}>
-              <strong>(6)(B) Practices</strong>
-            </Typography>
             <ListItem key={category} disablePadding>
               <ListItemButton
                 role={undefined}
@@ -174,21 +100,21 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
   );
 }
 
-export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
+export default function ProgramDrawer({ setTitle1Checked }): JSX.Element {
   const location = useLocation();
-  const [eqipOpen, setEqipOpen] = React.useState(false);
-  const eqipRef = React.useRef<HTMLLIElement>(null);
-  const handleEqipClick = () => {
-    setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+  const [Title1Open, setTitle1Open] = React.useState(false);
+  const Title1Ref = React.useRef<HTMLLIElement>(null);
+  const handleTitle1Click = () => {
+    setTitle1Open((prevTitle1Open) => !prevTitle1Open);
   };
-  const prevEqipOpen = React.useRef(eqipOpen);
+  const prevTitle1Open = React.useRef(Title1Open);
   React.useEffect(() => {
-    if (prevEqipOpen.current === true && eqipOpen === false) {
-      eqipRef.current.focus();
+    if (prevTitle1Open.current === true && Title1Open === false) {
+      Title1Ref.current.focus();
     }
 
-    prevEqipOpen.current = eqipOpen;
-  }, [eqipOpen]);
+    prevTitle1Open.current = Title1Open;
+  }, [Title1Open]);
 
   return (
     <Drawer
@@ -212,16 +138,16 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
       </MenuItem>
       <Box>
         <MenuItem
-          ref={eqipRef}
+          ref={Title1Ref}
           style={{ whiteSpace: "normal" }}
           sx={{
             my: 1,
             pl: 3,
             pr: 0,
             py: 0,
-            backgroundColor: eqipOpen ? "#ecf0ee" : "grey",
+            backgroundColor: Title1Open ? "#ecf0ee" : "grey",
           }}
-          onClick={handleEqipClick}
+          onClick={handleTitle1Click}
         >
           <Box
             sx={{
@@ -230,13 +156,13 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
               alignItems: "center",
             }}
           >
-            {eqipOpen ? (
+            {Title1Open ? (
               <Typography sx={{ color: "#2f7164" }}>
-                <strong>EQIP: Environmental Quality Incentives Program</strong>
+                <strong>Agriculture Risk Coverage (ARC)</strong>
               </Typography>
             ) : (
               <Typography>
-                EQIP: Environmental Quality Incentives Program
+                Agriculture Risk Coverage (ARC)
               </Typography>
             )}
             <Box
@@ -256,7 +182,7 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                 sx={{ rotate: "270deg", pt: 6, pb: 0 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                  <strong>STATUTE</strong>
+                  <strong>PROGRAM</strong>
                   <KeyboardArrowDownIcon />
                 </Box>
               </Typography>
@@ -264,33 +190,27 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
           </Box>
         </MenuItem>
         <Popper
-          open={eqipOpen}
-          anchorEl={eqipRef.current}
+          open={Title1Open}
+          anchorEl={Title1Ref.current}
           role={undefined}
           placement="right-start"
         >
           <Box>
-            <EQIPCheckboxList
-              setEQIPChecked={setEQIPChecked}
-              setShowPopUp={setEqipOpen}
+            <Title1CheckboxList
+              setTitle1Checked={setTitle1Checked}
+              setShowPopUp={setTitle1Open}
             />
           </Box>
         </Popper>
       </Box>
       <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-        <Typography>CSP: Conservation Stewardship Program</Typography>
+        <Typography>Price Loss Coverage (PLC)</Typography>
       </MenuItem>
       <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-        <Typography>CRP: Conservation Reserve Program</Typography>
+        <Typography>Dairy Margin Coverage Program (DMC)</Typography>
       </MenuItem>
       <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-        <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
-      </MenuItem>
-      <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-        <Typography>RCPP: Regional Conservation Partnership Program</Typography>
-      </MenuItem>
-      <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-        <Typography>Other Conservation</Typography>
+        <Typography>Disaster Assistance</Typography>
       </MenuItem>
     </Drawer>
   );

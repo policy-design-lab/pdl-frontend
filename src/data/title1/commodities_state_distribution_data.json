@@ -1,0 +1,3589 @@
+{
+  "Texas": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 219097560.93,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 212519700.43,
+              "paymentInPercentageNationwide": 3.23,
+              "paymentInPercentageWithinState": 7.36
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 6577860.5,
+              "paymentInPercentageNationwide": 1.62,
+              "paymentInPercentageWithinState": 0.23
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 2314114065.26,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 42050511.82,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 273451512.08,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 259862537.14,
+              "paymentInPercentageNationwide": 15.6,
+              "paymentInPercentageWithinState": 8.99
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 12837117.61,
+              "paymentInPercentageNationwide": 7.65,
+              "paymentInPercentageWithinState": 0.44
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 751857.33,
+              "paymentInPercentageNationwide": 1.57,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 11.4,
+      "totalPaymentInDollars": 2889144266.72
+    }
+  ],
+  "Kansas": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 529223081.73,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 523818157.73,
+              "paymentInPercentageNationwide": 7.95,
+              "paymentInPercentageWithinState": 31.31
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 5404924.0,
+              "paymentInPercentageNationwide": 1.33,
+              "paymentInPercentageWithinState": 0.32
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1044395120.03,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 14990635.1,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 82692058.9,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 67862612.9,
+              "paymentInPercentageNationwide": 4.08,
+              "paymentInPercentageWithinState": 4.06
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 14829446.0,
+              "paymentInPercentageNationwide": 8.84,
+              "paymentInPercentageWithinState": 0.89
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 6.6,
+      "totalPaymentInDollars": 1672820645.45
+    }
+  ],
+  "Arkansas": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 133816947.94,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 133657724.94,
+              "paymentInPercentageNationwide": 2.03,
+              "paymentInPercentageWithinState": 8.01
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 159223.0,
+              "paymentInPercentageNationwide": 0.04,
+              "paymentInPercentageWithinState": 0.01
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1514569127.39,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 2455965.49,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 14048855.03,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 10764268.03,
+              "paymentInPercentageNationwide": 0.65,
+              "paymentInPercentageWithinState": 0.65
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 3265294.0,
+              "paymentInPercentageNationwide": 1.95,
+              "paymentInPercentageWithinState": 0.2
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 19293.0,
+              "paymentInPercentageNationwide": 0.04,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 6.58,
+      "totalPaymentInDollars": 1668246709.0
+    }
+  ],
+  "North Dakota": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 468257132.36,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 444540010.09,
+              "paymentInPercentageNationwide": 6.75,
+              "paymentInPercentageWithinState": 27.66
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 23717122.27,
+              "paymentInPercentageNationwide": 5.84,
+              "paymentInPercentageWithinState": 1.48
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1006822398.01,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 4372977.91,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 117257276.35,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 114284302.35,
+              "paymentInPercentageNationwide": 6.86,
+              "paymentInPercentageWithinState": 7.11
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2972974.0,
+              "paymentInPercentageNationwide": 1.77,
+              "paymentInPercentageWithinState": 0.18
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 6.34,
+      "totalPaymentInDollars": 1607423898.61
+    }
+  ],
+  "Nebraska": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 676476794.4,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 661876982.58,
+              "paymentInPercentageNationwide": 10.05,
+              "paymentInPercentageWithinState": 56.76
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 14599811.82,
+              "paymentInPercentageNationwide": 3.59,
+              "paymentInPercentageWithinState": 1.25
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 416578483.24,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 11272399.71,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 55402604.69,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 28864965.11,
+              "paymentInPercentageNationwide": 17.2,
+              "paymentInPercentageWithinState": 2.48
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 26489140.58,
+              "paymentInPercentageNationwide": 1.59,
+              "paymentInPercentageWithinState": 2.27
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 48499.0,
+              "paymentInPercentageNationwide": 0.1,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 4.6,
+      "totalPaymentInDollars": 1166126140.6
+    }
+  ],
+  "Georgia": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 64174057.29,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 64172746.29,
+              "paymentInPercentageNationwide": 0.97,
+              "paymentInPercentageWithinState": 5.65
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1311.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1026619592.44,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 13409142.8,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 14650285.8,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 10421994.74,
+              "paymentInPercentageNationwide": 0.63,
+              "paymentInPercentageWithinState": 0.92
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 2970768.06,
+              "paymentInPercentageNationwide": 6.19,
+              "paymentInPercentageWithinState": 0.26
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 1257523.0,
+              "paymentInPercentageNationwide": 0.75,
+              "paymentInPercentageWithinState": 0.11
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 4.48,
+      "totalPaymentInDollars": 1135894394.94
+    }
+  ],
+  "South Dakota": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 564980323.67,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 475161428.16,
+              "paymentInPercentageNationwide": 7.21,
+              "paymentInPercentageWithinState": 46.41
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 89818895.51,
+              "paymentInPercentageNationwide": 22.11,
+              "paymentInPercentageWithinState": 8.77
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 278549895.44,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 15902865.32,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 151177681.77,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 123924842.77,
+              "paymentInPercentageNationwide": 7.44,
+              "paymentInPercentageWithinState": 12.11
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 27252839.0,
+              "paymentInPercentageNationwide": 16.24,
+              "paymentInPercentageWithinState": 2.66
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 4.04,
+      "totalPaymentInDollars": 1023741893.08
+    }
+  ],
+  "Minnesota": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 514637801.28,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 474027530.3,
+              "paymentInPercentageNationwide": 7.19,
+              "paymentInPercentageWithinState": 50.26
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 40610270.98,
+              "paymentInPercentageNationwide": 10.0,
+              "paymentInPercentageWithinState": 4.31
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 232414436.19,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 175271745.71,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 10418003.93,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 7345431.96,
+              "paymentInPercentageNationwide": 0.44,
+              "paymentInPercentageWithinState": 0.78
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2965149.97,
+              "paymentInPercentageNationwide": 1.77,
+              "paymentInPercentageWithinState": 0.31
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 107422.0,
+              "paymentInPercentageNationwide": 0.22,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 3.72,
+      "totalPaymentInDollars": 943170941.69
+    }
+  ],
+  "Montana": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 77920244.84,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 56881512.77,
+              "paymentInPercentageNationwide": 0.86,
+              "paymentInPercentageWithinState": 6.12
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 21038732.07,
+              "paymentInPercentageNationwide": 5.18,
+              "paymentInPercentageWithinState": 2.26
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 692270057.03,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 6227327.83,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 145673700.55,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 128937031.36,
+              "paymentInPercentageNationwide": 7.74,
+              "paymentInPercentageWithinState": 13.88
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 16736669.19,
+              "paymentInPercentageNationwide": 9.97,
+              "paymentInPercentageWithinState": 1.8
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 3.67,
+      "totalPaymentInDollars": 929151492.0
+    }
+  ],
+  "Illinois": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 612039802.98,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 551576668.98,
+              "paymentInPercentageNationwide": 8.37,
+              "paymentInPercentageWithinState": 59.98
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 60463134.0,
+              "paymentInPercentageNationwide": 14.88,
+              "paymentInPercentageWithinState": 6.57
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 269393803.54,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 37542634.06,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 184541.94,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 100673.0,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 79670.94,
+              "paymentInPercentageNationwide": 0.17,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 4198.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 3.63,
+      "totalPaymentInDollars": 919628984.62
+    }
+  ],
+  "Missouri": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 207042728.68,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 187948825.68,
+              "paymentInPercentageNationwide": 2.85,
+              "paymentInPercentageWithinState": 20.78
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 19093903.0,
+              "paymentInPercentageNationwide": 4.7,
+              "paymentInPercentageWithinState": 2.11
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 574744399.13,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 25505435.92,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 96281773.16,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 94659217.43,
+              "paymentInPercentageNationwide": 5.68,
+              "paymentInPercentageWithinState": 10.47
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 1613421.14,
+              "paymentInPercentageNationwide": 0.96,
+              "paymentInPercentageWithinState": 0.18
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 9134.59,
+              "paymentInPercentageNationwide": 0.02,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 3.57,
+      "totalPaymentInDollars": 904386308.53
+    }
+  ],
+  "Oklahoma": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 120240243.36,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 119225198.36,
+              "paymentInPercentageNationwide": 1.81,
+              "paymentInPercentageWithinState": 13.75
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1015045.0,
+              "paymentInPercentageNationwide": 0.25,
+              "paymentInPercentageWithinState": 0.12
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 535881513.86,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 7738987.81,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 201120782.43,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 195376759.45,
+              "paymentInPercentageNationwide": 11.73,
+              "paymentInPercentageWithinState": 22.53
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 5628871.87,
+              "paymentInPercentageNationwide": 3.35,
+              "paymentInPercentageWithinState": 0.65
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 115151.11,
+              "paymentInPercentageNationwide": 0.24,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 3.42,
+      "totalPaymentInDollars": 867017655.55
+    }
+  ],
+  "Iowa": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 353197937.93,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 333378224.96,
+              "paymentInPercentageNationwide": 5.06,
+              "paymentInPercentageWithinState": 45.48
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 19819712.97,
+              "paymentInPercentageNationwide": 4.88,
+              "paymentInPercentageWithinState": 2.7
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 270943059.62,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 75812160.98,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 30153830.29,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 26510231.68,
+              "paymentInPercentageNationwide": 1.59,
+              "paymentInPercentageWithinState": 3.62
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 3619165.0,
+              "paymentInPercentageNationwide": 2.16,
+              "paymentInPercentageWithinState": 0.49
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 24433.61,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.89,
+      "totalPaymentInDollars": 733000249.1
+    }
+  ],
+  "Louisiana": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 88299642.66,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 87846497.66,
+              "paymentInPercentageNationwide": 1.33,
+              "paymentInPercentageWithinState": 12.59
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 453145.0,
+              "paymentInPercentageNationwide": 0.11,
+              "paymentInPercentageWithinState": 0.06
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 591317769.43,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 5719086.05,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 4460880.26,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 3706217.86,
+              "paymentInPercentageNationwide": 0.22,
+              "paymentInPercentageWithinState": 0.53
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 718317.0,
+              "paymentInPercentageNationwide": 0.43,
+              "paymentInPercentageWithinState": 0.1
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 36345.4,
+              "paymentInPercentageNationwide": 0.08,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.75,
+      "totalPaymentInDollars": 697586743.78
+    }
+  ],
+  "Mississippi": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 93681650.19,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 92395025.11,
+              "paymentInPercentageNationwide": 1.4,
+              "paymentInPercentageWithinState": 14.82
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1286625.08,
+              "paymentInPercentageNationwide": 0.32,
+              "paymentInPercentageWithinState": 0.21
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 522220823.42,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 3658090.33,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 2551976.36,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 1625272.6,
+              "paymentInPercentageNationwide": 0.1,
+              "paymentInPercentageWithinState": 0.26
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 925138.0,
+              "paymentInPercentageNationwide": 0.55,
+              "paymentInPercentageWithinState": 0.15
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 1565.76,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.46,
+      "totalPaymentInDollars": 623364370.35
+    }
+  ],
+  "Ohio": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 431536006.8,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 390237551.06,
+              "paymentInPercentageNationwide": 5.92,
+              "paymentInPercentageWithinState": 64.1
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 41298455.74,
+              "paymentInPercentageNationwide": 10.16,
+              "paymentInPercentageWithinState": 6.78
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 102479456.13,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 73084604.67,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 611721.28,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 404885.0,
+              "paymentInPercentageNationwide": 0.24,
+              "paymentInPercentageWithinState": 0.07
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 206579.28,
+              "paymentInPercentageNationwide": 0.43,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 257.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.4,
+      "totalPaymentInDollars": 608805833.1
+    }
+  ],
+  "Indiana": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 459757463.94,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 436330504.52,
+              "paymentInPercentageNationwide": 6.62,
+              "paymentInPercentageWithinState": 72.21
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 23426959.42,
+              "paymentInPercentageNationwide": 5.77,
+              "paymentInPercentageWithinState": 3.88
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 117934591.03,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 25832118.04,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 524766.36,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 495614.0,
+              "paymentInPercentageNationwide": 0.3,
+              "paymentInPercentageWithinState": 0.08
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 29152.36,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.39,
+      "totalPaymentInDollars": 604293964.47
+    }
+  ],
+  "Wisconsin": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 92304365.44,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 88221464.15,
+              "paymentInPercentageNationwide": 1.34,
+              "paymentInPercentageWithinState": 14.65
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 4082901.29,
+              "paymentInPercentageNationwide": 1.0,
+              "paymentInPercentageWithinState": 0.68
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 69457119.71,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 434217862.87,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 1682146.46,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 1473257.0,
+              "paymentInPercentageNationwide": 0.88,
+              "paymentInPercentageWithinState": 0.24
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 130307.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.02
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 78582.46,
+              "paymentInPercentageNationwide": 0.16,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.38,
+      "totalPaymentInDollars": 602161803.74
+    }
+  ],
+  "California": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 45242643.85,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 43822997.85,
+              "paymentInPercentageNationwide": 0.67,
+              "paymentInPercentageWithinState": 8.47
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1419646.0,
+              "paymentInPercentageNationwide": 0.35,
+              "paymentInPercentageWithinState": 0.27
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 216474791.08,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 164809732.88,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 65409117.48,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 51043279.76,
+              "paymentInPercentageNationwide": 3.07,
+              "paymentInPercentageWithinState": 9.86
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 10036267.74,
+              "paymentInPercentageNationwide": 20.9,
+              "paymentInPercentageWithinState": 1.94
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 4329569.98,
+              "paymentInPercentageNationwide": 2.58,
+              "paymentInPercentageWithinState": 0.84
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.04,
+      "totalPaymentInDollars": 517573036.84
+    }
+  ],
+  "Colorado": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 85651245.83,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 82284672.49,
+              "paymentInPercentageNationwide": 1.25,
+              "paymentInPercentageWithinState": 16.01
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 3366573.34,
+              "paymentInPercentageNationwide": 0.83,
+              "paymentInPercentageWithinState": 0.66
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 323024957.61,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 14453054.05,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 88468130.86,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 85869225.87,
+              "paymentInPercentageNationwide": 5.16,
+              "paymentInPercentageWithinState": 16.71
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2463469.0,
+              "paymentInPercentageNationwide": 1.47,
+              "paymentInPercentageWithinState": 0.48
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 135435.99,
+              "paymentInPercentageNationwide": 0.28,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 2.03,
+      "totalPaymentInDollars": 513943825.35
+    }
+  ],
+  "Michigan": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 267612140.43,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 255591500.18,
+              "paymentInPercentageNationwide": 3.88,
+              "paymentInPercentageWithinState": 58.98
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 12020640.25,
+              "paymentInPercentageNationwide": 2.96,
+              "paymentInPercentageWithinState": 2.77
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 72159761.49,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 88186576.4,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 1305267.12,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 1206046.12,
+              "paymentInPercentageNationwide": 2.51,
+              "paymentInPercentageWithinState": 0.28
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 99221.0,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 0.02
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 1.71,
+      "totalPaymentInDollars": 433317229.06
+    }
+  ],
+  "Idaho": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 49181536.45,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 46413030.45,
+              "paymentInPercentageNationwide": 0.7,
+              "paymentInPercentageWithinState": 10.91
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 2768506.0,
+              "paymentInPercentageNationwide": 0.68,
+              "paymentInPercentageWithinState": 0.65
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 317303059.73,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 38126968.38,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 13553353.55,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 10846552.55,
+              "paymentInPercentageNationwide": 0.65,
+              "paymentInPercentageWithinState": 2.55
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2595061.0,
+              "paymentInPercentageNationwide": 1.55,
+              "paymentInPercentageWithinState": 0.61
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 111740.0,
+              "paymentInPercentageNationwide": 0.23,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 1.68,
+      "totalPaymentInDollars": 425447983.94
+    }
+  ],
+  "North Carolina": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 138676724.67,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 138097405.67,
+              "paymentInPercentageNationwide": 2.1,
+              "paymentInPercentageWithinState": 32.9
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 579319.0,
+              "paymentInPercentageNationwide": 0.14,
+              "paymentInPercentageWithinState": 0.14
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 260612211.47,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 12245917.44,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 5573587.18,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 3142863.39,
+              "paymentInPercentageNationwide": 6.55,
+              "paymentInPercentageWithinState": 0.75
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2326671.84,
+              "paymentInPercentageNationwide": 1.39,
+              "paymentInPercentageWithinState": 0.55
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 104051.95,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.02
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 1.66,
+      "totalPaymentInDollars": 419690669.59
+    }
+  ],
+  "Washington": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 116336860.66,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 112131970.79,
+              "paymentInPercentageNationwide": 1.7,
+              "paymentInPercentageWithinState": 27.81
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 4204889.87,
+              "paymentInPercentageNationwide": 1.03,
+              "paymentInPercentageWithinState": 1.04
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 231033436.42,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 36260295.49,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 15063373.51,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 7713624.6,
+              "paymentInPercentageNationwide": 0.46,
+              "paymentInPercentageWithinState": 1.91
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 6888793.78,
+              "paymentInPercentageNationwide": 4.11,
+              "paymentInPercentageWithinState": 1.71
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 460955.13,
+              "paymentInPercentageNationwide": 0.96,
+              "paymentInPercentageWithinState": 0.11
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 1.59,
+      "totalPaymentInDollars": 403230581.27
+    }
+  ],
+  "Alabama": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 29438122.97,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 29438122.97,
+              "paymentInPercentageNationwide": 0.45,
+              "paymentInPercentageWithinState": 7.5
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 307281424.37,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 1282947.36,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 54326788.62,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 53962371.09,
+              "paymentInPercentageNationwide": 3.24,
+              "paymentInPercentageWithinState": 13.75
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 343171.0,
+              "paymentInPercentageNationwide": 0.2,
+              "paymentInPercentageWithinState": 0.09
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 21246.53,
+              "paymentInPercentageNationwide": 0.04,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 1.55,
+      "totalPaymentInDollars": 392410871.32
+    }
+  ],
+  "New York": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 56142171.32,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 54642238.07,
+              "paymentInPercentageNationwide": 0.83,
+              "paymentInPercentageWithinState": 22.42
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1499933.25,
+              "paymentInPercentageNationwide": 0.37,
+              "paymentInPercentageWithinState": 0.62
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 16480047.11,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 167638446.75,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 758527.78,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 671708.83,
+              "paymentInPercentageNationwide": 1.4,
+              "paymentInPercentageWithinState": 0.28
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 83068.0,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 3750.95,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.96,
+      "totalPaymentInDollars": 243706285.14
+    }
+  ],
+  "Tennessee": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 87968476.89,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 87629084.89,
+              "paymentInPercentageNationwide": 1.33,
+              "paymentInPercentageWithinState": 37.13
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 339392.0,
+              "paymentInPercentageNationwide": 0.08,
+              "paymentInPercentageWithinState": 0.14
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 131032571.13,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 12366924.61,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 4422324.99,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 2169340.0,
+              "paymentInPercentageNationwide": 0.13,
+              "paymentInPercentageWithinState": 0.92
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 1855011.99,
+              "paymentInPercentageNationwide": 3.86,
+              "paymentInPercentageWithinState": 0.79
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 397973.0,
+              "paymentInPercentageNationwide": 0.24,
+              "paymentInPercentageWithinState": 0.17
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.93,
+      "totalPaymentInDollars": 236021604.01
+    }
+  ],
+  "Oregon": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 41948335.61,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 37348075.61,
+              "paymentInPercentageNationwide": 0.57,
+              "paymentInPercentageWithinState": 16.19
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 4600260.0,
+              "paymentInPercentageNationwide": 1.13,
+              "paymentInPercentageWithinState": 1.99
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 87716184.79,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 20394770.46,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 70883551.31,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 65873977.87,
+              "paymentInPercentageNationwide": 3.96,
+              "paymentInPercentageWithinState": 28.55
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 4209406.0,
+              "paymentInPercentageNationwide": 2.51,
+              "paymentInPercentageWithinState": 1.82
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 800167.44,
+              "paymentInPercentageNationwide": 1.67,
+              "paymentInPercentageWithinState": 0.35
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.91,
+      "totalPaymentInDollars": 230743412.27
+    }
+  ],
+  "Florida": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 3691607.26,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 3691607.26,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 1.66
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 138455078.73,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 7714602.97,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 34889936.45,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 23326181.84,
+              "paymentInPercentageNationwide": 48.58,
+              "paymentInPercentageWithinState": 10.49
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 10831290.61,
+              "paymentInPercentageNationwide": 0.65,
+              "paymentInPercentageWithinState": 4.87
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 732464.0,
+              "paymentInPercentageNationwide": 0.44,
+              "paymentInPercentageWithinState": 0.33
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.88,
+      "totalPaymentInDollars": 222303880.0
+    }
+  ],
+  "New Mexico": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 11773081.26,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 11621603.26,
+              "paymentInPercentageNationwide": 0.18,
+              "paymentInPercentageWithinState": 5.39
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 151478.0,
+              "paymentInPercentageNationwide": 0.04,
+              "paymentInPercentageWithinState": 0.07
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 92584760.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 14201102.78,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 85683919.59,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 83025897.46,
+              "paymentInPercentageNationwide": 4.99,
+              "paymentInPercentageWithinState": 38.48
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 2626607.04,
+              "paymentInPercentageNationwide": 1.57,
+              "paymentInPercentageWithinState": 1.22
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 31415.09,
+              "paymentInPercentageNationwide": 0.07,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.85,
+      "totalPaymentInDollars": 215786722.8
+    }
+  ],
+  "Pennsylvania": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 53816422.43,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 53621074.43,
+              "paymentInPercentageNationwide": 0.81,
+              "paymentInPercentageWithinState": 25.62
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 195348.0,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.09
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 12935709.65,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 139179644.37,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 438991.8,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 290026.8,
+              "paymentInPercentageNationwide": 0.6,
+              "paymentInPercentageWithinState": 0.14
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 148233.0,
+              "paymentInPercentageNationwide": 0.09,
+              "paymentInPercentageWithinState": 0.07
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 732.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.83,
+      "totalPaymentInDollars": 209316775.95
+    }
+  ],
+  "Kentucky": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 122450643.31,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 121031568.31,
+              "paymentInPercentageNationwide": 1.84,
+              "paymentInPercentageWithinState": 58.87
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 1419075.0,
+              "paymentInPercentageNationwide": 0.35,
+              "paymentInPercentageWithinState": 0.69
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 60735514.56,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 17835295.35,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 4261114.54,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 3442699.24,
+              "paymentInPercentageNationwide": 2.05,
+              "paymentInPercentageWithinState": 1.67
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 811586.3,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.39
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 6829.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.81,
+      "totalPaymentInDollars": 205579165.15
+    }
+  ],
+  "Virginia": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 50716269.83,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 50413101.83,
+              "paymentInPercentageNationwide": 0.77,
+              "paymentInPercentageWithinState": 27.47
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 303168.0,
+              "paymentInPercentageNationwide": 0.07,
+              "paymentInPercentageWithinState": 0.17
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 101686691.92,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 29723485.34,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 484588.18,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 315601.18,
+              "paymentInPercentageNationwide": 0.66,
+              "paymentInPercentageWithinState": 0.17
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 166011.0,
+              "paymentInPercentageNationwide": 0.1,
+              "paymentInPercentageWithinState": 0.09
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 2976.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.72,
+      "totalPaymentInDollars": 183497162.22
+    }
+  ],
+  "South Carolina": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 35415752.34,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 35415752.34,
+              "paymentInPercentageNationwide": 0.54,
+              "paymentInPercentageWithinState": 20.05
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 130954693.96,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 4051176.51,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 6016215.57,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 5657610.3,
+              "paymentInPercentageNationwide": 0.34,
+              "paymentInPercentageWithinState": 3.2
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 315471.27,
+              "paymentInPercentageNationwide": 0.19,
+              "paymentInPercentageWithinState": 0.18
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 43134.0,
+              "paymentInPercentageNationwide": 0.09,
+              "paymentInPercentageWithinState": 0.02
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.7,
+      "totalPaymentInDollars": 176635034.95
+    }
+  ],
+  "Arizona": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 234501.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 199895.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.12
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 34606.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.02
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 111551561.08,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 8708397.34,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 37777293.32,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 37755357.32,
+              "paymentInPercentageNationwide": 2.27,
+              "paymentInPercentageWithinState": 23.21
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 21936.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.64,
+      "totalPaymentInDollars": 162651936.37
+    }
+  ],
+  "Utah": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 3822819.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 3822819.0,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 2.88
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 32293527.98,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 18206233.02,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 74049091.1,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 73200443.1,
+              "paymentInPercentageNationwide": 4.4,
+              "paymentInPercentageWithinState": 55.21
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 848648.0,
+              "paymentInPercentageNationwide": 0.51,
+              "paymentInPercentageWithinState": 0.64
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.52,
+      "totalPaymentInDollars": 132595373.1
+    }
+  ],
+  "Wyoming": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 4744146.63,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 4537558.63,
+              "paymentInPercentageNationwide": 0.07,
+              "paymentInPercentageWithinState": 4.01
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 206588.0,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.18
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 32331602.19,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 745628.78,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 69416109.77,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 65587384.77,
+              "paymentInPercentageNationwide": 3.94,
+              "paymentInPercentageWithinState": 57.95
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 3828725.0,
+              "paymentInPercentageNationwide": 2.28,
+              "paymentInPercentageWithinState": 3.38
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.45,
+      "totalPaymentInDollars": 113184500.37
+    }
+  ],
+  "Maryland": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 45800893.53,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 45736668.53,
+              "paymentInPercentageNationwide": 0.69,
+              "paymentInPercentageWithinState": 52.53
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 64225.0,
+              "paymentInPercentageNationwide": 0.02,
+              "paymentInPercentageWithinState": 0.07
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 22506256.68,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 18563319.37,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 38968.35,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 37823.35,
+              "paymentInPercentageNationwide": 0.08,
+              "paymentInPercentageWithinState": 0.04
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 1145.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.34,
+      "totalPaymentInDollars": 87066730.82
+    }
+  ],
+  "Vermont": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 2133231.78,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 2120499.78,
+              "paymentInPercentageNationwide": 0.03,
+              "paymentInPercentageWithinState": 4.6
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 12732.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.03
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1148055.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 42191423.32,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 6756.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 6756.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.18,
+      "totalPaymentInDollars": 46096051.24
+    }
+  ],
+  "Nevada": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 405185.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 405185.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 1.2
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 3562673.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 3546453.04,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 25802655.3,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 25722665.3,
+              "paymentInPercentageNationwide": 1.54,
+              "paymentInPercentageWithinState": 75.96
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 79990.0,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 0.24
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.13,
+      "totalPaymentInDollars": 33864064.34
+    }
+  ],
+  "Delaware": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 17748175.85,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 17739760.85,
+              "paymentInPercentageNationwide": 0.27,
+              "paymentInPercentageWithinState": 64.02
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 8415.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.03
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 8505473.81,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 1454811.6,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 2905.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 2905.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.01
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.11,
+      "totalPaymentInDollars": 27711366.26
+    }
+  ],
+  "Puerto Rico": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 88734.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 88734.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.35
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 177875.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 17656272.91,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 5434004.55,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 4890538.72,
+              "paymentInPercentageNationwide": 2.91,
+              "paymentInPercentageWithinState": 19.05
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 535108.83,
+              "paymentInPercentageNationwide": 1.11,
+              "paymentInPercentageWithinState": 2.08
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 8357.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.03
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.1,
+      "totalPaymentInDollars": 25667318.58
+    }
+  ],
+  "Maine": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 3534170.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 3534170.0,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 19.7
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1105639.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 11552923.71,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 359736.12,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 336464.42,
+              "paymentInPercentageNationwide": 0.02,
+              "paymentInPercentageWithinState": 1.88
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 16719.7,
+              "paymentInPercentageNationwide": 0.03,
+              "paymentInPercentageWithinState": 0.09
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 6552.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.04
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.07,
+      "totalPaymentInDollars": 17936852.21
+    }
+  ],
+  "Hawaii": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 0.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 0.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 0.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 12933629.88,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 12319206.0,
+              "paymentInPercentageNationwide": 0.74,
+              "paymentInPercentageWithinState": 78.97
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 394347.0,
+              "paymentInPercentageNationwide": 0.24,
+              "paymentInPercentageWithinState": 2.53
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 220076.88,
+              "paymentInPercentageNationwide": 0.46,
+              "paymentInPercentageWithinState": 1.41
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.06,
+      "totalPaymentInDollars": 15599390.76
+    }
+  ],
+  "Massachusetts": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 982167.69,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 982167.69,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 7.68
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 209728.86,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 6793381.22,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 462683.87,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 282031.87,
+              "paymentInPercentageNationwide": 0.02,
+              "paymentInPercentageWithinState": 2.21
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 180652.0,
+              "paymentInPercentageNationwide": 0.38,
+              "paymentInPercentageWithinState": 1.41
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.05,
+      "totalPaymentInDollars": 12784346.09
+    }
+  ],
+  "New Jersey": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 7174443.37,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 7063228.37,
+              "paymentInPercentageNationwide": 0.11,
+              "paymentInPercentageWithinState": 57.83
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 111215.0,
+              "paymentInPercentageNationwide": 0.03,
+              "paymentInPercentageWithinState": 0.91
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 1451531.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 2609938.14,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 94991.6,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 52683.0,
+              "paymentInPercentageNationwide": 0.03,
+              "paymentInPercentageWithinState": 0.43
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 42308.6,
+              "paymentInPercentageNationwide": 0.09,
+              "paymentInPercentageWithinState": 0.35
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.05,
+      "totalPaymentInDollars": 12212853.11
+    }
+  ],
+  "Connecticut": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 635689.44,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 584842.44,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 8.02
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 50847.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.7
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 464418.72,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 5803799.29,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 108723.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 94471.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 1.3
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 12555.0,
+              "paymentInPercentageNationwide": 0.03,
+              "paymentInPercentageWithinState": 0.17
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 1697.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.02
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.03,
+      "totalPaymentInDollars": 7293713.45
+    }
+  ],
+  "New Hampshire": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 819388.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 819388.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 12.39
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 231343.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 5426912.16,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 91275.83,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 80898.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 1.22
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 10048.83,
+              "paymentInPercentageNationwide": 0.02,
+              "paymentInPercentageWithinState": 0.15
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 329.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.03,
+      "totalPaymentInDollars": 6612092.99
+    }
+  ],
+  "West Virginia": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 4134343.89,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 4086103.89,
+              "paymentInPercentageNationwide": 0.06,
+              "paymentInPercentageWithinState": 54.01
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 48240.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.64
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 550741.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 1773877.38,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 519672.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 519672.0,
+              "paymentInPercentageNationwide": 0.31,
+              "paymentInPercentageWithinState": 6.87
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.03,
+      "totalPaymentInDollars": 7565824.23
+    }
+  ],
+  "Alaska": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 18808.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 18808.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 1.1
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 577956.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 70590.83,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 14388.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 14388.0,
+              "paymentInPercentageNationwide": 0.01,
+              "paymentInPercentageWithinState": 0.84
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.01,
+      "totalPaymentInDollars": 1702979.99
+    }
+  ],
+  "Rhode Island": [
+    {
+      "years": "2018-2022",
+      "programs": [
+        {
+          "programName": "Agriculture Risk Coverage (ARC)",
+          "programPaymentInDollars": 35391.0,
+          "subPrograms": [
+            {
+              "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
+              "paymentInDollars": 35391.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 5.98
+            },
+            {
+              "subProgramName": "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        },
+        {
+          "programName": "Price Loss Coverage (PLC)",
+          "programPaymentInDollars": 173260.0,
+          "subPrograms": []
+        },
+        {
+          "programName": "Dairy Margin Coverage Program (DMC)",
+          "programPaymentInDollars": 301338.08,
+          "subPrograms": []
+        },
+        {
+          "programName": "Disaster Assistance",
+          "programPaymentInDollars": 72160.31,
+          "subPrograms": [
+            {
+              "subProgramName": "Livestock Forage Disaster Program (LFP)",
+              "paymentInDollars": 44879.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 7.58
+            },
+            {
+              "subProgramName": "Tree Assistance Program (TAP)",
+              "paymentInDollars": 22682.31,
+              "paymentInPercentageNationwide": 0.05,
+              "paymentInPercentageWithinState": 3.83
+            },
+            {
+              "subProgramName": "Livestock Indemnity Program (LIP)",
+              "paymentInDollars": 4599.0,
+              "paymentInPercentageNationwide": 0.0,
+              "paymentInPercentageWithinState": 0.78
+            },
+            {
+              "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            },
+            {
+              "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+              "paymentInDollars": 0.0,
+              "paymentInPercentageWithinState": 0.0
+            }
+          ]
+        }
+      ],
+      "totalPaymentInPercentageNationwide": 0.0,
+      "totalPaymentInDollars": 591980.39
+    }
+  ]
+}
