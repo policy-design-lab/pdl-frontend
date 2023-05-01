@@ -55,7 +55,8 @@
           "src",
           "node_modules"
         ]
-      }
+      },
+      "caseSensitive": false
     }
   },
   "rules": {
