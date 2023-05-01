@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -8,10 +8,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import PropTypes from "prop-types";
-import allStates from "../../data/allstates.json";
-import statePerformance from "../../data/CSP/csp_state_distribution_data.json";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
+import { config } from "../../app.config";
+import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -27,7 +27,8 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, maxValue }) => {
+const MapChart = (props) => {
+    const { setTooltipContent, maxValue, allStates, statePerformance } = props;
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
@@ -155,6 +156,22 @@ MapChart.propTypes = {
 
 const CSPTotalMap = (): JSX.Element => {
     const quantizeArray: number[] = [];
+    const [statePerformance, setStatePerformance] = useState([]);
+    const [allStates, setAllStates] = useState([]);
+
+    useEffect(() => {
+        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            console.log(allprograms_url);
+            console.log(response);
+            setStatePerformance(response);
+        });
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
+            setAllStates(response);
+        });
+    }, []);
+
     Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
     const label1 = (maxValue / 5) * 0;
@@ -193,7 +210,12 @@ const CSPTotalMap = (): JSX.Element => {
                     })}M`}
                 />
             </Box>
-            <MapChart setTooltipContent={setContent} maxValue={maxValue} />
+            <MapChart
+                setTooltipContent={setContent}
+                maxValue={maxValue}
+                statePerformance={statePerformance}
+                allStates={allStates}
+            />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}
