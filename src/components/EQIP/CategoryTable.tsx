@@ -88,7 +88,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                 <tbody {...getTableBodyProps()}>
                     {
                         // eslint-disable-next-line
-                    firstPageRows.map((row, i) => {
+                        firstPageRows.map((row, i) => {
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>

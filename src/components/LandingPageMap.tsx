@@ -4,7 +4,6 @@ import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react
 import ReactTooltip from "react-tooltip";
 import { scaleQuantile, scaleThreshold } from "d3-scale";
 import Divider from "@mui/material/Divider";
-
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";

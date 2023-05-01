@@ -11,28 +11,25 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { CardMedia, createTheme, ThemeProvider } from "@mui/material";
 import { Link } from "react-router-dom";
 import PDLLogo from "./PDLLogo";
 
 const drawerWidth = 240;
 const navItems = ["HOME", "EXPLORE FARM BILL DATA", "ABOUT PDL"];
-export default function NavBar({
-    bkColor = "rgba(255, 255, 255, 1)",
-    ftColor = "rgba(255, 255, 255, 1)",
-    logo = "Dark"
-}): JSX.Element {
-    const theme = createTheme({
-        components: {
-            MuiAppBar: {
-                styleOverrides: {
-                    colorPrimary: {
-                        backgroundColor: bkColor
-                    }
+const theme = createTheme({
+    components: {
+        MuiAppBar: {
+            styleOverrides: {
+                colorPrimary: {
+                    backgroundColor: "#2F7164"
                 }
             }
         }
-    });
+    }
+});
+
+export default function NavBar({ pageName }): JSX.Element {
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -41,7 +38,7 @@ export default function NavBar({
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-            <Typography variant="h6" sx={{ my: 2, color: ftColor }}>
+            <Typography variant="h6" sx={{ my: 2 }}>
                 Policy Design Lab
             </Typography>
             <Divider />
@@ -60,11 +57,7 @@ export default function NavBar({
     return (
         <Box sx={{ display: "flex" }}>
             <ThemeProvider theme={theme}>
-                <AppBar
-                    variant="outlined"
-                    component="nav"
-                    sx={{ position: "relative", border: "1px solid transparent" }}
-                >
+                <AppBar variant="outlined" component="nav" sx={{ position: "relative" }}>
                     <Toolbar>
                         <IconButton
                             color="inherit"
@@ -76,15 +69,11 @@ export default function NavBar({
                         <Button
                             disableRipple
                             component={Link}
-                            style={{ backgroundColor: "transparent" }}
                             to="/"
-                            sx={{
-                                flexGrow: 1,
-                                display: { xs: "none", sm: "block", color: ftColor }
-                            }}
+                            sx={{ flexGrow: 1, display: { xs: "none", sm: "block", color: "#fff" } }}
                         >
                             <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                <PDLLogo width="60" height="60" theme={logo} />
+                                <PDLLogo width="60" height="60" />
                                 <Typography variant="h6" component="div" sx={{ pt: 1.6, ml: 1 }}>
                                     Policy Design Lab
                                 </Typography>
@@ -94,13 +83,13 @@ export default function NavBar({
                             {navItems.map((item) => {
                                 if (item === "HOME") {
                                     return (
-                                        <Button component={Link} to="/" key={item} sx={{ color: ftColor }}>
+                                        <Button component={Link} to="/" key={item} sx={{ color: "#fff" }}>
                                             {item}
                                         </Button>
                                     );
                                 }
                                 return (
-                                    <Button key={item} sx={{ color: ftColor }}>
+                                    <Button key={item} sx={{ color: "#fff" }}>
                                         {item}
                                     </Button>
                                 );
@@ -118,10 +107,7 @@ export default function NavBar({
                         }}
                         sx={{
                             "display": { xs: "block", sm: "none" },
-                            "& .MuiDrawer-paper": {
-                                boxSizing: "border-box",
-                                width: drawerWidth
-                            }
+                            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth }
                         }}
                     >
                         {drawer}
