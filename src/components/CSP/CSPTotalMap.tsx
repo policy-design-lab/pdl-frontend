@@ -162,8 +162,6 @@ const CSPTotalMap = (): JSX.Element => {
     useEffect(() => {
         const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
         getJsonDataFromUrl(allprograms_url).then((response) => {
-            console.log(allprograms_url);
-            console.log(response);
             setStatePerformance(response);
         });
         const allstates_url = `${config.apiUrl}/states`;
