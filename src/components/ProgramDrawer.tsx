@@ -57,101 +57,101 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                     category !== "Land management" &&
                     category !== "Other planning" &&
                     category !== "Total EQIP Benefits"
-				) {
-					return (
-						<ListItem key={category} disablePadding>
-							<ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-								<Radio
-									edge="start"
-									checked={checked === value}
-									tabIndex={-1}
-									disableRipple
-									inputProps={{ "aria-labelledby": labelId }}
-									sx={{
-										"&.Mui-checked": {
-											color: "#2f7164"
-										}
-									}}
-								/>
-								<ListItemText id={labelId} primary={category} />
-							</ListItemButton>
-						</ListItem>
-					);
-				}
-				if (category === "Total EQIP Benefits") {
-					return (
-						<ListItem key={category} disablePadding>
-							<ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-								<Radio
-									edge="start"
-									checked={checked === value}
-									tabIndex={-1}
-									disableRipple
-									inputProps={{ "aria-labelledby": labelId }}
-									sx={{
-										"&.Mui-checked": {
-											color: "#2f7164"
-										}
-									}}
-								/>
-								<ListItemText id={labelId} primary={category} />
-							</ListItemButton>
-						</ListItem>
-					);
-				}
-				if (category === "Land management") {
-					return (
-						<Box>
-							<Typography sx={{ pl: 8 }}>
-								<strong>(6)(A) Improvements</strong>
-							</Typography>
-							<ListItem key={category} disablePadding>
-								<ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-									<Radio
-										edge="start"
-										checked={checked === value}
-										tabIndex={-1}
-										disableRipple
-										inputProps={{ "aria-labelledby": labelId }}
-										sx={{
-											"&.Mui-checked": {
-												color: "#2f7164"
-											}
-										}}
-									/>
-									<ListItemText id={labelId} primary={category} />
-								</ListItemButton>
-							</ListItem>
-						</Box>
-					);
-				}
-				return (
-					<Box key={category}>
-						<Typography sx={{ pl: 8 }}>
-							<strong>(6)(B) Planning</strong>
-						</Typography>
-						<ListItem key={category} disablePadding>
-							<ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-								<Radio
-									edge="start"
-									checked={checked === value}
-									tabIndex={-1}
-									disableRipple
-									inputProps={{ "aria-labelledby": labelId }}
-									sx={{
-										"&.Mui-checked": {
-											color: "#2f7164"
-										}
-									}}
-								/>
-								<ListItemText id={labelId} primary={category} />
-							</ListItemButton>
-						</ListItem>
-					</Box>
-				);
-			})}
-		</List>
-	);
+                ) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === "Total EQIP Benefits") {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === "Land management") {
+                    return (
+                        <Box>
+                            <Typography sx={{ pl: 8 }}>
+                                <strong>(6)(A) Improvements</strong>
+                            </Typography>
+                            <ListItem key={category} disablePadding>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                    <Radio
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ "aria-labelledby": labelId }}
+                                        sx={{
+                                            "&.Mui-checked": {
+                                                color: "#2f7164"
+                                            }
+                                        }}
+                                    />
+                                    <ListItemText id={labelId} primary={category} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Box>
+                    );
+                }
+                return (
+                    <Box key={category}>
+                        <Typography sx={{ pl: 8 }}>
+                            <strong>(6)(B) Planning</strong>
+                        </Typography>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
 }
 
 export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
