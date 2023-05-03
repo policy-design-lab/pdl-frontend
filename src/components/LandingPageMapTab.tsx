@@ -10,11 +10,11 @@ import allPrograms from "../data/allPrograms.json";
 import LandingDisplay from "./LandingDisplay";
 
 const theme = createTheme({
-	palette: {
-		primary: {
-			main: "#2F7164"
-		}
-	}
+    palette: {
+        primary: {
+            main: "#2F7164"
+        }
+    }
 });
 
 interface TabPanelProps {
@@ -49,18 +49,18 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function LandingPageMapTab(): JSX.Element {
-	const [value, setValue] = React.useState(2);
+    const [value, setValue] = React.useState(2);
 
-	const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-		setValue(newValue);
-	};
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
     interface StyledTabProps {
         label: JSX.Element;
     }
 
     const CustomTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)({
-    	textTransform: "none"
+        textTransform: "none"
     });
 
     const cur = allPrograms.find((s) => s.State === "Total");
