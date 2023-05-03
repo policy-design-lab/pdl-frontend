@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- SNAP page and connected to SNAP API Point [#59](https://github.com/policy-design-lab/pdl-frontend/issues/59)
+- Local development work environment to connect dev api server [#93](https://github.com/policy-design-lab/pdl-frontend/issues/93/)
+
+### Changed
+- eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
+
 ## [0.3.0] - 2023-05-03
 
 ### Added
@@ -11,8 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
 - Icon for left menu [#62](https://github.com/policy-design-lab/pdl-frontend/issues/62)
 - Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
-- SNAP page and connected to SNAP API Point [#59](https://github.com/policy-design-lab/pdl-frontend/issues/59)
-- Local development work envriont to connect dev api server [#93](https://github.com/policy-design-lab/pdl-frontend/issues/93/)
 
 ### Changed
 - Landing page uses the api endpoint for AllProgram Maps [#20](https://github.com/policy-design-lab/pdl-frontend/issues/20)- Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
@@ -24,7 +31,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated EQIP JSON data files. [#84](https://github.com/policy-design-lab/pdl-frontend/issues/84)
 - Map legends and EQIP popper text [#91](https://github.com/policy-design-lab/pdl-frontend/issues/91)
 - color schemes back and hid crop insurance tab for release 0.3.0 [#105](https://github.com/policy-design-lab/pdl-frontend/issues/105)
-- eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
