@@ -61,3 +61,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Landing page details(colors, etc) based on figma design [#9](https://github.com/policy-design-lab/pdl-frontend/issues/9)
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
+
+[0.3.0]: https://github.com/policy-design-lab/pdl-frontend/compare/release/0.2.0...release-0.3.0
