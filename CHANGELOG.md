@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2023-05-03
 
 ### Added
 - Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
@@ -61,3 +61,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Landing page details(colors, etc) based on figma design [#9](https://github.com/policy-design-lab/pdl-frontend/issues/9)
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
+
+[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.3.0
