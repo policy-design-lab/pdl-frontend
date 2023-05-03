@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
 - Table styles [#76](https://github.com/policy-design-lab/pdl-frontend/issues/76)
 - Updated EQIP JSON data files. [#84](https://github.com/policy-design-lab/pdl-frontend/issues/84)
+- Map legends and EQIP popper text [#91](https://github.com/policy-design-lab/pdl-frontend/issues/91)
+- color schemes back and hid crop insurance tab for release 0.3.0 [#105](https://github.com/policy-design-lab/pdl-frontend/issues/105)
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
