@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2023-05-03
+
+### Added
+- Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
+- Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
+- Icon for left menu [#62](https://github.com/policy-design-lab/pdl-frontend/issues/62)
+- Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
+
+### Changed
+- Landing page uses the api endpoint for AllProgram Maps [#20](https://github.com/policy-design-lab/pdl-frontend/issues/20)- Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
+- Landing page text display for each different tab selection [#53](https://github.com/policy-design-lab/pdl-frontend/issues/53)
+- The left menu margin and background color [#61](https://github.com/policy-design-lab/pdl-frontend/issues/61)
+- Number style for semi-donut chart [#64](https://github.com/policy-design-lab/pdl-frontend/issues/64)
+- Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
+- Table styles [#76](https://github.com/policy-design-lab/pdl-frontend/issues/76)
+- Updated EQIP JSON data files. [#84](https://github.com/policy-design-lab/pdl-frontend/issues/84)
+- Map legends and EQIP popper text [#91](https://github.com/policy-design-lab/pdl-frontend/issues/91)
+- color schemes back and hid crop insurance tab for release 0.3.0 [#105](https://github.com/policy-design-lab/pdl-frontend/issues/105)
+
+### Fixed
+- Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
+- Dynamic api uri creation [#78](https://github.com/policy-design-lab/pdl-frontend/issues/78)
+- Tooltip styles for semi donut chart [#80](https://github.com/policy-design-lab/pdl-frontend/issues/80)
+- Number format shown on map when hovering [#82](https://github.com/policy-design-lab/pdl-frontend/issues/82)
+- Errors in the EQIP JSON data files. [#87](https://github.com/policy-design-lab/pdl-frontend/issues/87)
+
 ## [0.2.0] - 2023-03-03
 
 ### Added
@@ -35,3 +61,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Landing page details(colors, etc) based on figma design [#9](https://github.com/policy-design-lab/pdl-frontend/issues/9)
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
+
+[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.3.0

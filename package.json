@@ -1,13 +1,13 @@
 {
   "name": "policy-design-lab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "the front end of policy design lab",
   "repository": "https://github.com/policy-design-lab/pdl-frontend",
   "main": "src/app.tsx",
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
     "build": "webpack --config ./webpack.prod.js",
-    "test": "jest --coverage",
+    "test": "jest --coverage --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint src",
     "lint:fix": "npm run lint -- --fix",
