@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantize } from "d3-scale";
+import { scaleQuantile, scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -47,8 +47,8 @@ const MapChart = (props) => {
 
 	const maxValue = Math.max(...hashmap.values());
 
-	const colorScale = scaleQuantize()
-		.domain([minValue, maxValue])
+	const colorScale = scaleQuantile()
+		.domain(allPrograms.map((d) => d["18-22 All Programs Total"]))
 		.range(["#FFF9D8", "#E1F2C4", "#9FD9BA", "#1B9577", "#005A45"]);
 
 	const label1 = (maxValue-minValue) / 5 * 0 + minValue;
@@ -69,56 +69,12 @@ const MapChart = (props) => {
 					color3="#9FD9BA"
 					color4="#1B9577"
 					color5="#005A45"
-					label1={
-						`$${Number(label1 / 1000000).toLocaleString(undefined, {
-							maximumFractionDigits: 0
-						})}M`
-					}
-					label2={
-						label2 >= 1000000
-							? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label3={
-						label3 >= 1000000
-							? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label4={
-						label4 >= 1000000
-							? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label5={
-						label5 >= 1000000
-							? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label6={
-						maxValue >= 1000000
-							? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
+					label1={"0"}
+					label2={"20%"}
+					label3={"40%"}
+					label4={"60%"}
+					label5={"80%"}
+					label6={"100%"}
 				/>
 			</Box>
 			{allPrograms.length === 0 ? null :

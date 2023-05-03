@@ -120,7 +120,7 @@ export default function LandingPageMapTab(): JSX.Element {
     							</Box>
     						}
     					/>
-    					<Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+    					{/* <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
     					<CustomTab
     						label={
     							<Box>
@@ -129,7 +129,7 @@ export default function LandingPageMapTab(): JSX.Element {
     								<Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
     							</Box>
     						}
-    					/>
+    					/> */}
     					<Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
     					<CustomTab
     						label={
@@ -147,8 +147,8 @@ export default function LandingPageMapTab(): JSX.Element {
     		<TabPanel value={value} index={2} title="All Programs" />
     		<TabPanel value={value} index={4} title="Title I: Commodities" />
     		<TabPanel value={value} index={6} title="Title II: Conservation" />
-    		<TabPanel value={value} index={8} title="Crop Insurance" />
-    		<TabPanel value={value} index={10} title="Supplemental Nutrition Assistance Program (SNAP)" />
+    		{/* <TabPanel value={value} index={8} title="Crop Insurance" />*/}
+    		<TabPanel value={value} index={8} title="Supplemental Nutrition Assistance Program (SNAP)" />
     	</Box>
     );
 }

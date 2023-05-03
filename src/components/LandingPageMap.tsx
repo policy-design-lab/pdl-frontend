@@ -110,8 +110,8 @@ const MapChart = ({ setTooltipContent, title }) => {
 	}
 
 
-	const colorScale = scaleQuantize()
-		.domain([minValue, maxValue])
+	const colorScale = scaleQuantile()
+		.domain(allPrograms.map((d) => d[searchKey]))
 		.range([color1, color2, color3, color4, color5]);
 
 	// Get list of unique years
@@ -135,56 +135,12 @@ const MapChart = ({ setTooltipContent, title }) => {
 					color3={color3}
 					color4={color4}
 					color5={color5}
-					label1={
-						`$${Number(label1 / 1000000).toLocaleString(undefined, {
-							maximumFractionDigits: 0
-						})}M`
-					}
-					label2={
-						label2 >= 1000000
-							? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label3={
-						label3 >= 1000000
-							? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label4={
-						label4 >= 1000000
-							? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label5={
-						label5 >= 1000000
-							? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
-					label6={
-						maxValue >= 1000000
-							? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-								maximumFractionDigits: 0
-							})}M`
-							: `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-								maximumFractionDigits: 1
-							})}K`
-					}
+					label1={"0"}
+					label2={"20%"}
+					label3={"40%"}
+					label4={"60%"}
+					label5={"80%"}
+					label6={"100%"}
 				/>
 			</Box>
 			<ComposableMap projection="geoAlbersUsa">
