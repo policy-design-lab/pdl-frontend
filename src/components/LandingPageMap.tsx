@@ -9,8 +9,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "../styles/map.css";
 import { config } from "../app.config";
-import { getJsonDataFromUrl} from "../utils/apiutil";
-import {convertAllState} from "../utils/apiutil";
+import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
