@@ -105,7 +105,7 @@ export default function CSPPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar />
+                    <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                 </Box>
                 <Drawer setCSPChecked={setChecked} setEQIPChecked={null} />
                 <Box sx={{ pl: 50, pr: 20 }}>
