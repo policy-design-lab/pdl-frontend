@@ -41,6 +41,12 @@
   },
   "settings": {
     "import/resolver": {
+      "alias" : {
+        "map" : [
+          ["@components","./src/components/"]
+        ],
+        "extensions": [".js"]
+      },
       "node": {
         "moduleDirectory": [
           "src",
@@ -50,8 +56,7 @@
           ".js",
           ".jsx",
           ".ts",
-          ".tsx",
-          ".json"
+          ".tsx"
         ]
       }
     }
