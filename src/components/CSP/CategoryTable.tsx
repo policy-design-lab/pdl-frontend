@@ -117,9 +117,9 @@ function App({ category, statePerformance }: { category: string; statePerformanc
 
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === "2014 Eligible Land");
+        const ACur = value[0].statutes.find((s) => s.statuteName === "2018 Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === "2018 Practices");
+        const BCur = value[0].statutes.find((s) => s.statuteName === "2014 Eligible Land");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);

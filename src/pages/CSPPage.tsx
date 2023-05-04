@@ -26,21 +26,22 @@ export default function CSPPage(): JSX.Element {
     let vegetativeTotal = 0;
     let forestManagementTotal = 0;
     let soilRemediationTotal = 0;
+    let existingAPTotal = 0;
     let structuralTotal = 0;
     let croplandTotal = 0;
     let rangelandTotal = 0;
     let bundlesTotal = 0;
-    let NPFTotal = 0;
+    let NIPFTotal = 0;
     let pasturelandTotal = 0;
     let SAOTotal = 0;
     let pasturedCroplandTotal = 0;
-    let chartData = [];
     let sixATotal = 0;
     let old2014Total = 0;
 
     React.useEffect(() => {
         const chartData_url = `${config.apiUrl}/programs/conservation/csp/practice-categories`;
         const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
+
         getJsonDataFromUrl(allprograms_url).then((response) => {
             setStatePerformance(response);
         });
@@ -50,12 +51,11 @@ export default function CSPPage(): JSX.Element {
         });
 
         getJsonDataFromUrl(chartData_url).then((response) => {
-            chartData = response;
-            processData(chartData);
+            processData(response);
         });
     }, []);
 
-    const processData = () => {
+    const processData = (chartData) => {
         if (chartData.statutes === undefined) return;
 
         // eslint-disable-next-line
@@ -70,6 +70,7 @@ export default function CSPPage(): JSX.Element {
 
         const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
         const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvement");
+        const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
         const vegetativeCur = ACur.find((s) => s.practiceCategoryName === "Vegetative");
         const forestManagementCur = ACur.find((s) => s.practiceCategoryName === "Forest management");
         const soilRemediationCur = ACur.find((s) => s.practiceCategoryName === "Soil remediation");
@@ -79,12 +80,13 @@ export default function CSPPage(): JSX.Element {
         const croplandCur = BCur.find((s) => s.practiceCategoryName === "Cropland");
         const rangelandCur = BCur.find((s) => s.practiceCategoryName === "Rangeland");
         const pasturelandCur = BCur.find((s) => s.practiceCategoryName === "Pastureland");
-        const NPFCur = BCur.find((s) => s.practiceCategoryName === "Other: supplemental, adjustment & other");
+        const SAOCur = BCur.find((s) => s.practiceCategoryName === "Other: supplemental, adjustment & other");
+        const NIPFCur = BCur.find((s) => s.practiceCategoryName === "Non-industrial private forestland");
         const pasturedCroplandCur = BCur.find((s) => s.practiceCategoryName === "Pastured Cropland");
-        const SAOCur = BCur.find((s) => s.practiceCategoryName === "Non-industrial private forestland");
 
         landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
         otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
+        existingAPTotal += Number(existingAPCur.totalPaymentInDollars);
         vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
         forestManagementTotal += Number(forestManagementCur.totalPaymentInDollars);
         soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
@@ -97,12 +99,12 @@ export default function CSPPage(): JSX.Element {
         SAOTotal += Number(SAOCur.totalPaymentInDollars);
         if (pasturedCroplandCur !== undefined)
             pasturedCroplandTotal += Number(pasturedCroplandCur.totalPaymentInDollars);
-        NPFTotal += Number(NPFCur.totalPaymentInDollars);
+        NIPFTotal += Number(NIPFCur.totalPaymentInDollars);
 
         setSixAChartData([
             { name: "Land management", value: landManagementTotal, color: "#2F7164" },
             { name: "Other Improvement", value: otherImprovementTotal, color: "#4D847A" },
-            { name: "Existing activity payments", value: soilRemediationTotal, color: "#869397" },
+            { name: "Existing activity payments", value: existingAPTotal, color: "#869397" },
             { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
             { name: "Forest management", value: forestManagementTotal, color: "#9CBAB4" },
             { name: "Soil remediation", value: soilRemediationTotal, color: "#B9CDC9" },
@@ -115,7 +117,7 @@ export default function CSPPage(): JSX.Element {
             { name: "Rangeland", value: rangelandTotal, color: "#4D847A" },
             { name: "Pastureland", value: pasturelandTotal, color: "#749F97" },
             { name: "Other: supplemental, adjustment & other", value: SAOTotal, color: "#869397" },
-            { name: "SAO", value: SAOTotal, color: "#9CBAB4" },
+            { name: "Non-industrial private forestland", value: NIPFTotal, color: "#9CBAB4" },
             { name: "Pastured Cropland", value: pasturedCroplandTotal, color: "#B9CDC9" }
         ]);
 
@@ -231,18 +233,18 @@ export default function CSPPage(): JSX.Element {
                                     label2="CSP TOTAL BENEFITS"
                                 />
                             </Box>
-                            <Box component="div" sx={{ display: checked >= 1 && checked <= 7 ? "block" : "none" }}>
+                            <Box component="div" sx={{ display: checked >= 1 && checked <= 8 ? "block" : "none" }}>
                                 <SemiDonutChart
                                     data={sixAChartData}
                                     label1={firstTotal.toString()}
-                                    label2="2014 TOTAL BENEFITS"
+                                    label2="2018 CSP TOTAL BENEFITS"
                                 />
                             </Box>
-                            <Box component="div" sx={{ display: checked >= 8 && checked <= 13 ? "block" : "none" }}>
+                            <Box component="div" sx={{ display: checked >= 9 && checked <= 15 ? "block" : "none" }}>
                                 <SemiDonutChart
                                     data={old2014ChartData}
                                     label1={secondTotal.toString()}
-                                    label2="2018 CSP TOTAL BENEFITS"
+                                    label2="2014 Eligible Land"
                                 />
                             </Box>
                         </div>

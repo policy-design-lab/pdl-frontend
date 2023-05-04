@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/CSP/csp_state_distribution_data.json";
 import "../../styles/table.css";
+import { config } from "../../app.config";
+import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -87,7 +88,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                 <tbody {...getTableBodyProps()}>
                     {
                         // eslint-disable-next-line
-                    firstPageRows.map((row, i) => {
+                        firstPageRows.map((row, i) => {
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>
@@ -112,23 +113,22 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-const cspTableData: any[] = [];
-
-// eslint-disable-next-line no-restricted-syntax
-for (const [key, value] of Object.entries(statePerformance)) {
-    const newRecord = () => {
-        return {
-            state: key,
-            cspBenefit: `$${value[0].totalPaymentInDollars
-                .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                .toString()}`,
-            percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-        };
-    };
-    cspTableData.push(newRecord());
-}
-
 function App(): JSX.Element {
+    const [statePerformance, setStatePerformance] = React.useState([]);
+    const [allStates, setAllStates] = React.useState([]);
+
+    // TBD: due to the time limited, leave this
+    React.useEffect(() => {
+        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            setStatePerformance(response);
+        });
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
+            setAllStates(response);
+        });
+    }, []);
+
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
         const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
@@ -143,6 +143,22 @@ function App(): JSX.Element {
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
+    }
+
+    const cspTableData: any[] = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(statePerformance)) {
+        const newRecord = () => {
+            return {
+                state: key,
+                cspBenefit: `$${value[0].totalPaymentInDollars
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}`,
+                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+            };
+        };
+        cspTableData.push(newRecord());
     }
 
     const columns = React.useMemo(
