@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-// import statePerformance from "../../data/CSP/csp_state_distribution_data.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`

@@ -5,7 +5,7 @@ import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
 import DataTable from "../components/eqip/EQIPTotalTable";
-import EqipTotalMap from "../components/eqip/EqipTotalMap";
+import EqipTotalMap from "../components/eqip/EQIPTotalMap";
 import chartData from "../data/EQIP/EQIP_STATUTE_PERFORMANCE_DATA.json";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";

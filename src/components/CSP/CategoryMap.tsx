@@ -10,8 +10,6 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
-import { config } from "../../app.config";
-import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
