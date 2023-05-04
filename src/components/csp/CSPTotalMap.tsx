@@ -186,35 +186,34 @@ const CSPTotalMap = (): JSX.Element => {
         <div>
             {allStates.length > 0 && statePerformance.Alabama !== undefined ? (
                 <div>
-
-            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
-                <HorizontalStackedBar
-                    title="Total CSP Benefits"
-                    color1="#F0F9E8"
-                    color2="#BAE4BC"
-                    color3="#7BCCC4"
-                    color4="#43A2CA"
-                    color5="#0868AC"
-                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                    label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}M`}
-                />
-            </Box>
+                    <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                        <HorizontalStackedBar
+                            title="Total CSP Benefits"
+                            color1="#F0F9E8"
+                            color2="#BAE4BC"
+                            color3="#7BCCC4"
+                            color4="#43A2CA"
+                            color5="#0868AC"
+                            label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                            label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                            label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                            label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                            label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                            label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                                maximumFractionDigits: 0
+                            })}M`}
+                        />
+                    </Box>
                     <MapChart
                         setTooltipContent={setContent}
                         maxValue={maxValue}
