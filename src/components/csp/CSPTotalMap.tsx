@@ -151,9 +151,7 @@ const MapChart = (props) => {
 
 MapChart.propTypes = {
     setTooltipContent: PropTypes.func,
-    maxValue: PropTypes.number,
-    allStates: PropTypes.array,
-    statePerformance: PropTypes.object
+    maxValue: PropTypes.number
 };
 
 const CSPTotalMap = (): JSX.Element => {
