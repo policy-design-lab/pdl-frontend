@@ -120,9 +120,11 @@ const MapChart = ({ setTooltipContent, title }) => {
                                     >
                                         <Box>
                                             <Typography sx={{ color: "#2F7164" }}>{stateCodes[cur.id]}</Typography>
-                                            (title === "Supplemental Nutrition Assistance Program (SNAP)" ?{" "}
-                                            <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>:
-                                            <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>)
+                                            {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
+                                            ) : (
+                                                <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
+                                            )}
                                             <Typography sx={{ color: "#3F3F3F" }}>
                                                 $
                                                 {Number(total / 1000000.0).toLocaleString(undefined, {

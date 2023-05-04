@@ -108,6 +108,9 @@ export default function SNAPPage(): JSX.Element {
                         pb: 5
                     }}
                 >
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <CardMedia sx={{ maxWidth: 720, mt: 3 }} component="img" src={snap} />
+                    </Box>
                     <div id="landingPageMapContainer">
                         <LandingPageMap programTitle="Supplemental Nutrition Assistance Program (SNAP)" />
                     </div>
