@@ -7,12 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+- SNAP page and connected to SNAP API Point [#59](https://github.com/policy-design-lab/pdl-frontend/issues/59)
+- Local development work environment to connect dev api server [#93](https://github.com/policy-design-lab/pdl-frontend/issues/93/)
+
+### Changed
+- eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
+
+## [0.3.0] - 2023-05-03
+
+### Added
 - Popup alert for unfinished programs [#58](https://github.com/policy-design-lab/pdl-frontend/issues/58)
 - Navigation from PDL title and PDL logo [#51](https://github.com/policy-design-lab/pdl-frontend/issues/51)
 - Icon for left menu [#62](https://github.com/policy-design-lab/pdl-frontend/issues/62)
 - Background color for selected columns in table [#68](https://github.com/policy-design-lab/pdl-frontend/issues/68)
-- SNAP page and connected to SNAP API Point [#59](https://github.com/policy-design-lab/pdl-frontend/issues/59)
-- Local development work envriont to connect dev api server [#93](https://github.com/policy-design-lab/pdl-frontend/issues/93/)
 
 ### Changed
 - Landing page uses the api endpoint for AllProgram Maps [#20](https://github.com/policy-design-lab/pdl-frontend/issues/20)- Table sorting icon [#55](https://github.com/policy-design-lab/pdl-frontend/issues/55)
@@ -22,11 +29,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Popup menu styles [#66](https://github.com/policy-design-lab/pdl-frontend/issues/66)
 - Table styles [#76](https://github.com/policy-design-lab/pdl-frontend/issues/76)
 - Updated EQIP JSON data files. [#84](https://github.com/policy-design-lab/pdl-frontend/issues/84)
-- eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
+- Map legends and EQIP popper text [#91](https://github.com/policy-design-lab/pdl-frontend/issues/91)
+- color schemes back and hid crop insurance tab for release 0.3.0 [#105](https://github.com/policy-design-lab/pdl-frontend/issues/105)
 
 ### Fixed
 - Table sorting functions [#49](https://github.com/policy-design-lab/pdl-frontend/issues/49)
 - Dynamic api uri creation [#78](https://github.com/policy-design-lab/pdl-frontend/issues/78)
+- Tooltip styles for semi donut chart [#80](https://github.com/policy-design-lab/pdl-frontend/issues/80)
+- Number format shown on map when hovering [#82](https://github.com/policy-design-lab/pdl-frontend/issues/82)
 - Errors in the EQIP JSON data files. [#87](https://github.com/policy-design-lab/pdl-frontend/issues/87)
 
 ## [0.2.0] - 2023-03-03
@@ -60,3 +70,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Landing page details(colors, etc) based on figma design [#9](https://github.com/policy-design-lab/pdl-frontend/issues/9)
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
+
+[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.3.0

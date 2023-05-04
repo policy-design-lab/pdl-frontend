@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleThreshold } from "d3-scale";
+import { scaleQuantile, scaleQuantize, scaleThreshold } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -12,6 +12,7 @@ import summary from "../data/summary.json";
 import allPrograms from "../data/allPrograms.json";
 import stateCodes from "../data/stateCodes.json";
 import "../styles/map.css";
+import HorizontalStackedBar from "./HorizontalStackedBar";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -34,6 +35,22 @@ const MapChart = ({ setTooltipContent, title }) => {
     let color3 = "";
     let color4 = "";
     let color5 = "";
+    let minValue = 0;
+    let maxValue = 0;
+    let legendTitle = <div />;
+
+    const hashmap = new Map([]);
+    summary.forEach((item) => {
+        if (item.Title === title) {
+            const state = item.State;
+            if (!hashmap.has(state)) {
+                hashmap.set(state, 0);
+            }
+            hashmap.set(state, hashmap.get(state) + item.Amount);
+        }
+    });
+
+    maxValue = Math.max(...hashmap.values());
 
     switch (title) {
         case "Title I: Commodities":
@@ -43,6 +60,11 @@ const MapChart = ({ setTooltipContent, title }) => {
             color3 = "#F59020";
             color4 = "#D95F0E";
             color5 = "#993404";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Commodities Programs (Title I) Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
             break;
         case "Title II: Conservation":
             searchKey = "Title II Total";
@@ -51,6 +73,11 @@ const MapChart = ({ setTooltipContent, title }) => {
             color3 = "#7BCCC4";
             color4 = "#43A2CA";
             color5 = "#0868AC";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Conservation Programs (Title II) Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
             break;
         case "Crop Insurance":
             searchKey = "Crop Insurance Total";
@@ -59,6 +86,21 @@ const MapChart = ({ setTooltipContent, title }) => {
             color3 = "#E3E3E3";
             color4 = "#89CBC1";
             color5 = "#2C8472";
+            minValue = -1000000000;
+            legendTitle = (
+                <div>
+                    <Box display="flex" flexDirection="column">
+                        <Typography noWrap variant="h6" sx={{ pl: "10rem" }}>
+                            Total Net Farmer Benefits from <strong>2018 - 2022</strong>
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography noWrap variant="h6">
+                            Net Farmer Benefit = Total Indemnities - (Total Premium - Total Premium Subsidy)
+                        </Typography>
+                    </Box>
+                </div>
+            );
             break;
         case "Supplemental Nutrition Assistance Program (SNAP)":
             searchKey = "SNAP Total";
@@ -67,28 +109,47 @@ const MapChart = ({ setTooltipContent, title }) => {
             color3 = "#74A9CF";
             color4 = "#2B8CBE";
             color5 = "#045A8D";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
             break;
     }
 
-    let colorScale = null;
-
-    if (title !== "Crop Insurance") {
-        colorScale = scaleQuantile()
-            .domain(allPrograms.map((d) => d[searchKey]))
-            .range([color1, color2, color3, color4, color5]);
-    } else {
-        colorScale = scaleThreshold()
-            .domain([-500000000, 0, 500000000, 1000000000])
-            .range([color1, color2, color3, color4, color5]);
-    }
+    const colorScale = scaleQuantile()
+        .domain(allPrograms.map((d) => d[searchKey]))
+        .range([color1, color2, color3, color4, color5]);
 
     // Get list of unique years
     const yearList = summary
         .map((item) => item["Fiscal Year"])
         .filter((value, index, self) => self.indexOf(value) === index);
 
+    const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
+    const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
+    const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
+    const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
+    const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
+
     return (
         <div data-tip="">
+            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+                <HorizontalStackedBar
+                    title={legendTitle}
+                    color1={color1}
+                    color2={color2}
+                    color3={color3}
+                    color4={color4}
+                    color5={color5}
+                    label1="0"
+                    label2="20%"
+                    label3="40%"
+                    label4="60%"
+                    label5="80%"
+                    label6="100%"
+                />
+            </Box>
             <ComposableMap projection="geoAlbersUsa">
                 <Geographies geography={geoUrl}>
                     {({ geographies }) => (
@@ -98,7 +159,6 @@ const MapChart = ({ setTooltipContent, title }) => {
                                 const records = summary.filter((s) => s.State === cur.id && s.Title === title);
                                 let total = 0;
                                 let totalAverageMonthlyParticipation = 0;
-
                                 records.forEach((record) => {
                                     total += record.Amount;
                                 });

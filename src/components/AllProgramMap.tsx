@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile } from "d3-scale";
+import { scaleQuantile, scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,7 +10,10 @@ import PropTypes from "prop-types";
 import { config } from "../app.config";
 
 import "../styles/map.css";
+import summary from "../data/summary.json";
 import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
+
+import HorizontalStackedBar from "./HorizontalStackedBar";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -28,12 +31,52 @@ const offsets = {
 
 const MapChart = (props) => {
     const { setTooltipContent, stateCodes, allPrograms, allStates } = props;
+
+    const minValue = 0;
+
+    const hashmap = new Map([]);
+    summary.forEach((item) => {
+        const state = item.State;
+        if (!hashmap.has(state)) {
+            hashmap.set(state, 0);
+        }
+        hashmap.set(state, hashmap.get(state) + item.Amount);
+    });
+
+    const maxValue = Math.max(...hashmap.values());
+
     const colorScale = scaleQuantile()
         .domain(allPrograms.map((d) => d["18-22 All Programs Total"]))
         .range(["#FFF9D8", "#E1F2C4", "#9FD9BA", "#1B9577", "#005A45"]);
 
+    const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
+    const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
+    const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
+    const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
+    const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
+
     return (
         <div data-tip="">
+            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+                <HorizontalStackedBar
+                    title={
+                        <Typography noWrap variant="h6">
+                            Total Farm Bill Benefits from <strong>2018 - 2022</strong>
+                        </Typography>
+                    }
+                    color1="#FFF9D8"
+                    color2="#E1F2C4"
+                    color3="#9FD9BA"
+                    color4="#1B9577"
+                    color5="#005A45"
+                    label1="0"
+                    label2="20%"
+                    label3="40%"
+                    label4="60%"
+                    label5="80%"
+                    label6="100%"
+                />
+            </Box>
             {allPrograms.length === 0 ? null : (
                 <ComposableMap projection="geoAlbersUsa">
                     <Geographies geography={geoUrl}>
