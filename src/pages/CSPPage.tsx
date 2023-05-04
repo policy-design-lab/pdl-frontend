@@ -133,6 +133,7 @@ export default function CSPPage(): JSX.Element {
                     <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                 </Box>
                 <Drawer setCSPChecked={setChecked} setEQIPChecked={null} />
+                {allStates.length > 0 && statePerformance.Alabama !== undefined ? (
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
                         <CSPTotalMap />
@@ -198,14 +199,14 @@ export default function CSPPage(): JSX.Element {
                             allStates={allStates}
                         />
                     </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 14 ? "none" : "block" }}>
+                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 13 ? "none" : "block" }}>
                         <CategoryMap
                             category="Non-industrial private forestland"
                             statePerformance={statePerformance}
                             allStates={allStates}
                         />
                     </Box>
-                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 15 ? "none" : "block" }}>
+                    <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 14 ? "none" : "block" }}>
                         <CategoryMap
                             category="Pastured cropland"
                             statePerformance={statePerformance}
@@ -240,7 +241,7 @@ export default function CSPPage(): JSX.Element {
                                     label2="2018 CSP TOTAL BENEFITS"
                                 />
                             </Box>
-                            <Box component="div" sx={{ display: checked >= 9 && checked <= 15 ? "block" : "none" }}>
+                            <Box component="div" sx={{ display: checked >= 9 && checked <= 14 ? "block" : "none" }}>
                                 <SemiDonutChart
                                     data={old2014ChartData}
                                     label1={secondTotal.toString()}
@@ -300,12 +301,12 @@ export default function CSPPage(): JSX.Element {
                         />
                     </Box>
                     <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
-                        <CategoryTable category="SAO" statePerformance={statePerformance} />
+                        <CategoryTable category="Non-industrial private forestland" statePerformance={statePerformance} />
                     </Box>
                     <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
                         <CategoryTable category="Pastured Cropland" statePerformance={statePerformance} />
                     </Box>
-                </Box>
+                </Box>):(<h1>Loading data...</h1>)}
             </Box>
         </ThemeProvider>
     );

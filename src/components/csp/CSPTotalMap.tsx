@@ -151,7 +151,9 @@ const MapChart = (props) => {
 
 MapChart.propTypes = {
     setTooltipContent: PropTypes.func,
-    maxValue: PropTypes.number
+    maxValue: PropTypes.number,
+    allStates: PropTypes.array,
+    statePerformance: PropTypes.object
 };
 
 const CSPTotalMap = (): JSX.Element => {
@@ -179,8 +181,12 @@ const CSPTotalMap = (): JSX.Element => {
     const label4 = (maxValue / 5) * 3;
     const label5 = (maxValue / 5) * 4;
     const [content, setContent] = useState("");
+
     return (
         <div>
+            {allStates.length > 0 && statePerformance.Alabama !== undefined ? (
+                <div>
+
             <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
                 <HorizontalStackedBar
                     title="Total CSP Benefits"
@@ -209,17 +215,21 @@ const CSPTotalMap = (): JSX.Element => {
                     })}M`}
                 />
             </Box>
-            <MapChart
-                setTooltipContent={setContent}
-                maxValue={maxValue}
-                statePerformance={statePerformance}
-                allStates={allStates}
-            />
-            <div className="tooltip-container">
-                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
-                    {content}
-                </ReactTooltip>
-            </div>
+                    <MapChart
+                        setTooltipContent={setContent}
+                        maxValue={maxValue}
+                        statePerformance={statePerformance}
+                        allStates={allStates}
+                    />
+                    <div className="tooltip-container">
+                        <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                            {content}
+                        </ReactTooltip>
+                    </div>
+                </div>
+            ) : (
+                <h1>Loading data...</h1>
+            )}
         </div>
     );
 };

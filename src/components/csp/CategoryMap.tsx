@@ -42,9 +42,9 @@ const MapChart = (props) => {
                                     return null;
                                 }
                                 const statuteRecord = statePerformance[geo.properties.name][0].statutes;
-                                const ACur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+                                const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
                                 const AArray = ACur.practiceCategories;
-                                const BCur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+                                const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
                                 const BArray = BCur.practiceCategories;
                                 const TotalArray = AArray.concat(BArray);
                                 const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
@@ -174,9 +174,9 @@ const CategoryMap = ({
 
     Object.values(statePerformance).map((value) => {
         const statuteRecord = value[0].statutes;
-        const ACur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+        const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+        const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
