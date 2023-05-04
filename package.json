@@ -1,6 +1,6 @@
 {
   "name": "policy-design-lab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "the front end of policy design lab",
   "repository": "https://github.com/policy-design-lab/pdl-frontend",
   "main": "src/app.tsx",
@@ -60,6 +60,7 @@
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^6.0.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",

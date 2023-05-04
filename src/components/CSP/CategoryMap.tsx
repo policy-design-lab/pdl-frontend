@@ -44,13 +44,11 @@ const MapChart = (props) => {
                                     return null;
                                 }
                                 const statuteRecord = statePerformance[geo.properties.name][0].statutes;
-                                const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+                                const ACur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
                                 const AArray = ACur.practiceCategories;
-                                const BCur = statuteRecord.find((s) => s.statuteName === "2014 CSP");
+                                const BCur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
                                 const BArray = BCur.practiceCategories;
-                                const CCur = statuteRecord.find((s) => s.statuteName === "Other");
-                                const CArray = CCur.practiceCategories;
-                                const TotalArray = AArray.concat(BArray).concat(CArray);
+                                const TotalArray = AArray.concat(BArray);
                                 const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
                                 const categoryPayment = categoryRecord.paymentInDollars;
                                 const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
@@ -163,35 +161,28 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const CategoryMap = ({ category }: { category: string }): JSX.Element => {
+const CategoryMap = ({
+    category,
+    statePerformance,
+    allStates
+}: {
+    category: string;
+    statePerformance: any;
+    allStates: any;
+}): JSX.Element => {
     const [content, setContent] = useState("");
     const title = `${category} Benefits`;
     const quantizeArray: number[] = [];
-    const [statePerformance, setStatePerformance] = useState([]);
-    const [allStates, setAllStates] = useState([]);
-
-    useEffect(() => {
-        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setStatePerformance(response);
-        });
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
-        });
-    }, []);
 
     Object.values(statePerformance).map((value) => {
         const statuteRecord = value[0].statutes;
-        const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+        const ACur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
         const AArray = ACur.practiceCategories;
-        const BCur = statuteRecord.find((s) => s.statuteName === "2014 CSP");
+        const BCur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
         const BArray = BCur.practiceCategories;
-        const CCur = statuteRecord.find((s) => s.statuteName === "Other");
-        const CArray = CCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray).concat(CArray);
+        const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        quantizeArray.push(categoryRecord.paymentInDollars);
+        if (categoryRecord !== undefined) quantizeArray.push(categoryRecord.paymentInDollars);
         return null;
     });
     const maxValue = Math.max(...quantizeArray);

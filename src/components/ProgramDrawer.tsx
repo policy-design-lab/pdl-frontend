@@ -103,7 +103,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                     return (
                         <Box>
                             <Typography sx={{ pl: 8 }}>
-                                <strong>(6)(A) Practices</strong>
+                                <strong>(6)(A) Improvements</strong>
                             </Typography>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -128,7 +128,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                 return (
                     <Box key={category}>
                         <Typography sx={{ pl: 8 }}>
-                            <strong>(6)(B) Practices</strong>
+                            <strong>(6)(B) Planning</strong>
                         </Typography>
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -168,29 +168,25 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
         "Total CSP Benefits",
         "Land management",
         "Other improvement",
+        "Existing activity payments",
         "Vegetative",
         "Forest management",
         "Soil remediation",
         "Structural",
+        "Bundles",
         "Cropland",
         "Rangeland",
         "Pastureland",
+        "Other: supplemental, adjustment & other",
         "NIPF",
-        "Pastured Cropland",
-        "Other Payments",
-        "Bundles"
+        "Pastured Cropland"
     ];
 
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {CSPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
-                if (
-                    category !== "Land management" &&
-                    category !== "Cropland" &&
-                    category !== "Other Payments" &&
-                    category !== "Total CSP Benefits"
-                ) {
+                if (category !== "Land management" && category !== "Cropland" && category !== "Total CSP Benefits") {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -236,7 +232,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
                     return (
                         <Box>
                             <Typography sx={{ pl: 8 }}>
-                                <strong>(6)(A) Practices</strong>
+                                <strong>2018 Practices</strong>
                             </Typography>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -262,7 +258,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
                     return (
                         <Box>
                             <Typography sx={{ pl: 8 }}>
-                                <strong>2014 CSP Practices</strong>
+                                <strong>2014 Eligible Land</strong>
                             </Typography>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>

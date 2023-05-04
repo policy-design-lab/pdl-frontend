@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/CSP/csp_state_distribution_data.json";
+// import statePerformance from "../../data/CSP/csp_state_distribution_data.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`
@@ -44,7 +44,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -88,7 +88,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                 <tbody {...getTableBodyProps()}>
                     {
                         // eslint-disable-next-line
-                    firstPageRows.map((row, i) => {
+                        firstPageRows.map((row, i) => {
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>
@@ -113,33 +113,33 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ category }: { category: string }): JSX.Element {
+function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
     const cspTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === "(6)(A) Practices");
+        const ACur = value[0].statutes.find((s) => s.statuteName === "2014 Eligible Land");
         const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === "2014 CSP");
+        const BCur = value[0].statutes.find((s) => s.statuteName === "2018 Practices");
         const BArray = BCur.practiceCategories;
-        const CCur = value[0].statutes.find((s) => s.statuteName === "Other");
-        const CArray = CCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray).concat(CArray);
+        const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        const newRecord = () => {
-            return {
-                state: key,
-                categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                })}`,
-                categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                })}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+        if (categoryRecord !== undefined) {
+            const newRecord = () => {
+                return {
+                    state: key,
+                    categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}`,
+                    categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
+                    cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}`,
+                    percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                };
             };
-        };
-        cspTableData.push(newRecord());
+            cspTableData.push(newRecord());
+        }
     }
 
     function compareWithDollarSign(rowA, rowB, id, desc) {
@@ -274,7 +274,7 @@ function App({ category }: { category: string }): JSX.Element {
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={cspTableData} />
+                <Table columns={columns} data={cspTableData} statePerformance={statePerformance} />
             </Styles>
         </Box>
     );

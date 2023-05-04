@@ -7,6 +7,11 @@ const deployConfig = {
     ...baseConfig
 };
 
+const developConfig = {
+    apiUrl: "https://policydesignlab-dev.ncsa.illinois.edu/pdl",
+    ...baseConfig
+};
+
 const localConfig = {
     apiUrl: "http://localhost:5000/pdl",
     ...baseConfig
@@ -16,6 +21,9 @@ const localConfig = {
 function getConfig() {
     if (process.env.APP_ENV === "local") {
         return localConfig;
+    }
+    if (process.env.APP_ENV === "development") {
+        return developConfig;
     }
     return deployConfig;
 }
