@@ -179,7 +179,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
         "Pastureland",
         "Other: supplemental, adjustment & other",
         "Non-industrial private forestland",
-        "Pastured Cropland"
+        "Pastured cropland"
     ];
 
     return (

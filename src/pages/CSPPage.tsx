@@ -82,7 +82,7 @@ export default function CSPPage(): JSX.Element {
         const pasturelandCur = BCur.find((s) => s.practiceCategoryName === "Pastureland");
         const SAOCur = BCur.find((s) => s.practiceCategoryName === "Other: supplemental, adjustment & other");
         const NIPFCur = BCur.find((s) => s.practiceCategoryName === "Non-industrial private forestland");
-        const pasturedCroplandCur = BCur.find((s) => s.practiceCategoryName === "Pastured Cropland");
+        const pasturedCroplandCur = BCur.find((s) => s.practiceCategoryName === "Pastured cropland");
 
         landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
         otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
@@ -118,7 +118,7 @@ export default function CSPPage(): JSX.Element {
             { name: "Pastureland", value: pasturelandTotal, color: "#749F97" },
             { name: "Other: supplemental, adjustment & other", value: SAOTotal, color: "#869397" },
             { name: "Non-industrial private forestland", value: NIPFTotal, color: "#9CBAB4" },
-            { name: "Pastured Cropland", value: pasturedCroplandTotal, color: "#B9CDC9" }
+            { name: "Pastured cropland", value: pasturedCroplandTotal, color: "#B9CDC9" }
         ]);
 
         setTotalChartData([
@@ -372,7 +372,7 @@ export default function CSPPage(): JSX.Element {
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
-                            <CategoryTable category="Pastured Cropland" statePerformance={statePerformance} />
+                            <CategoryTable category="Pastured cropland" statePerformance={statePerformance} />
                         </Box>
                     </Box>
                 ) : (
