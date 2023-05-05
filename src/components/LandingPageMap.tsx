@@ -42,8 +42,8 @@ const MapChart = (props) => {
     let maxValue = 0;
     let legendTitle = <div />;
 
-    if (summary.length !== 0) {
-        const hashmap = new Map([]);
+    let hashmap = new Map([]);
+    if (summary !== undefined) {
         summary.forEach((item) => {
             if (item.Title === title) {
                 const state = item.State;
@@ -53,211 +53,218 @@ const MapChart = (props) => {
                 hashmap.set(state, hashmap.get(state) + item.Amount);
             }
         });
-
         maxValue = Math.max(...hashmap.values());
+    }
 
-        switch (title) {
-            case "Title I: Commodities":
-                searchKey = "Title I Total";
-                color1 = "#F9F9D3";
-                color2 = "#F9D48B";
-                color3 = "#F59020";
-                color4 = "#D95F0E";
-                color5 = "#993404";
-                legendTitle = (
-                    <Typography noWrap variant="h6">
-                        Total Commodities Programs (Title I) Benefits from <strong>2018 - 2022</strong>
-                    </Typography>
-                );
-                break;
-            case "Title II: Conservation":
-                searchKey = "Title II Total";
-                color1 = "#F0F9E8";
-                color2 = "#BAE4BC";
-                color3 = "#7BCCC4";
-                color4 = "#43A2CA";
-                color5 = "#0868AC";
-                legendTitle = (
-                    <Typography noWrap variant="h6">
-                        Total Conservation Programs (Title II) Benefits from <strong>2018 - 2022</strong>
-                    </Typography>
-                );
-                break;
-            case "Crop Insurance":
-                searchKey = "Crop Insurance Total";
-                color1 = "#A1622F";
-                color2 = "#DCC287";
-                color3 = "#E3E3E3";
-                color4 = "#89CBC1";
-                color5 = "#2C8472";
-                minValue = -1000000000;
-                legendTitle = (
-                    <div>
-                        <Box display="flex" flexDirection="column">
-                            <Typography noWrap variant="h6" sx={{ pl: "10rem" }}>
-                                Total Net Farmer Benefits from <strong>2018 - 2022</strong>
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Typography noWrap variant="h6">
-                                Net Farmer Benefit = Total Indemnities - (Total Premium - Total Premium Subsidy)
-                            </Typography>
-                        </Box>
-                    </div>
-                );
-                break;
-            case "Supplemental Nutrition Assistance Program (SNAP)":
-                searchKey = "SNAP Total";
-                color1 = "#F1EEF6";
-                color2 = "#CBD9F4";
-                color3 = "#74A9CF";
-                color4 = "#2B8CBE";
-                color5 = "#045A8D";
-                legendTitle = (
-                    <Typography noWrap variant="h6">
-                        Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
-                    </Typography>
-                );
-                break;
-        }
+    switch (title) {
+        case "Title I: Commodities":
+            searchKey = "Title I Total";
+            color1 = "#F9F9D3";
+            color2 = "#F9D48B";
+            color3 = "#F59020";
+            color4 = "#D95F0E";
+            color5 = "#993404";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Commodities Programs (Title I) Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
+            break;
+        case "Title II: Conservation":
+            searchKey = "Title II Total";
+            color1 = "#F0F9E8";
+            color2 = "#BAE4BC";
+            color3 = "#7BCCC4";
+            color4 = "#43A2CA";
+            color5 = "#0868AC";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Conservation Programs (Title II) Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
+            break;
+        case "Crop Insurance":
+            searchKey = "Crop Insurance Total";
+            color1 = "#A1622F";
+            color2 = "#DCC287";
+            color3 = "#E3E3E3";
+            color4 = "#89CBC1";
+            color5 = "#2C8472";
+            minValue = -1000000000;
+            legendTitle = (
+                <div>
+                    <Box display="flex" flexDirection="column">
+                        <Typography noWrap variant="h6" sx={{ pl: "10rem" }}>
+                            Total Net Farmer Benefits from <strong>2018 - 2022</strong>
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography noWrap variant="h6">
+                            Net Farmer Benefit = Total Indemnities - (Total Premium - Total Premium Subsidy)
+                        </Typography>
+                    </Box>
+                </div>
+            );
+            break;
+        case "Supplemental Nutrition Assistance Program (SNAP)":
+            searchKey = "SNAP Total";
+            color1 = "#F1EEF6";
+            color2 = "#CBD9F4";
+            color3 = "#74A9CF";
+            color4 = "#2B8CBE";
+            color5 = "#045A8D";
+            legendTitle = (
+                <Typography noWrap variant="h6">
+                    Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
+                </Typography>
+            );
+            break;
+    }
 
-        const colorScale = scaleQuantile()
-            .domain(allPrograms.map((d) => d[searchKey]))
-            .range([color1, color2, color3, color4, color5]);
+    const colorScale = scaleQuantile()
+        .domain(allPrograms.map((d) => d[searchKey]))
+        .range([color1, color2, color3, color4, color5]);
 
-        // Get list of unique years
-        const yearList = summary
+    // Get list of unique years
+    let yearList = [];
+    if (summary !== undefined) {
+        yearList = summary
             .map((item) => item["Fiscal Year"])
             .filter((value, index, self) => self.indexOf(value) === index);
+    }
 
-        const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
-        const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
-        const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
-        const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
-        const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
+    const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
+    const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
+    const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
+    const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
+    const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
 
-        return (
-            <div data-tip="">
-                <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-                    <HorizontalStackedBar
-                        title={legendTitle}
-                        color1={color1}
-                        color2={color2}
-                        color3={color3}
-                        color4={color4}
-                        color5={color5}
-                        label1="0"
-                        label2="20%"
-                        label3="40%"
-                        label4="60%"
-                        label5="80%"
-                        label6="100%"
-                    />
-                </Box>
+    return (
+        <div data-tip="">
+            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+                <HorizontalStackedBar
+                    title={legendTitle}
+                    color1={color1}
+                    color2={color2}
+                    color3={color3}
+                    color4={color4}
+                    color5={color5}
+                    label1="0"
+                    label2="20%"
+                    label3="40%"
+                    label4="60%"
+                    label5="80%"
+                    label6="100%"
+                />
+            </Box>
+            {summary.length === 0 ? null : (
                 <ComposableMap projection="geoAlbersUsa">
                     <Geographies geography={geoUrl}>
                         {({ geographies }) => (
                             <>
                                 {geographies.map((geo) => {
-                                    const cur = allStates.find((s) => s.val === geo.id);
-                                    const records = summary.filter((s) => s.State === cur.id && s.Title === title);
+                                    let records = [];
                                     let total = 0;
                                     let totalAverageMonthlyParticipation = 0;
-                                    records.forEach((record) => {
-                                        total += record.Amount;
-                                    });
-
-                                    if (title === "Supplemental Nutrition Assistance Program (SNAP)") {
+                                    const cur = allStates.find((s) => s.val === geo.id);
+                                    if (cur !== undefined) {
+                                        records = summary.filter((s) => s.State === cur.id && s.Title === title);
                                         records.forEach((record) => {
-                                            totalAverageMonthlyParticipation += record["Average Monthly Participation"];
+                                            total += record.Amount;
                                         });
-                                    }
 
-                                    const hoverContent = (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                bgcolor: "#ECF0ED",
-                                                borderRadius: 1
-                                            }}
-                                        >
-                                            <Box>
-                                                <Typography sx={{ color: "#2F7164" }}>{stateCodes[cur.id]}</Typography>
-                                                {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
-                                                    <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
-                                                ) : (
-                                                    <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
-                                                )}
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    $
-                                                    {Number(total / 1000000.0).toLocaleString(undefined, {
-                                                        maximumFractionDigits: 2
-                                                    })}
-                                                    M
-                                                </Typography>
-                                                <br />
-                                                {/* Show additional data on hover for SNAP */}
-                                                {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
-                                                    <Typography sx={{ color: "#2F7164" }}>
-                                                        Avg. Monthly Participation
-                                                    </Typography>
-                                                )}
-                                                {/* Average SNAP monthly participation for the current years */}
-                                                {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
+                                        if (title === "Supplemental Nutrition Assistance Program (SNAP)") {
+                                            records.forEach((record) => {
+                                                totalAverageMonthlyParticipation += record["Average Monthly Participation"];
+                                            });
+                                        }
+
+                                        const hoverContent = (
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "row",
+                                                    bgcolor: "#ECF0ED",
+                                                    borderRadius: 1
+                                                }}
+                                            >
+                                                <Box>
+                                                    <Typography sx={{ color: "#2F7164" }}>{stateCodes[cur.id]}</Typography>
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                        <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
+                                                    ) : (
+                                                        <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
+                                                    )}
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        {Number(
-                                                            totalAverageMonthlyParticipation / yearList.length
-                                                        ).toLocaleString(undefined, {
-                                                            maximumFractionDigits: 0
+                                                        $
+                                                        {Number(total / 1000000.0).toLocaleString(undefined, {
+                                                            maximumFractionDigits: 2
                                                         })}
+                                                        M
                                                     </Typography>
-                                                )}
-                                            </Box>
-                                            <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                            <Box>
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    Payments:
                                                     <br />
-                                                    {records.map((record) => (
-                                                        <div key={record.State + record.Title + record["Fiscal Year"]}>
-                                                            {record["Fiscal Year"]}: $
-                                                            {Number(record.Amount / 1000000.0).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 2
+                                                    {/* Show additional data on hover for SNAP */}
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
+                                                        <Typography sx={{ color: "#2F7164" }}>
+                                                            Avg. Monthly Participation
+                                                        </Typography>
+                                                    )}
+                                                    {/* Average SNAP monthly participation for the current years */}
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
+                                                        <Typography sx={{ color: "#3F3F3F" }}>
+                                                            {Number(
+                                                                totalAverageMonthlyParticipation / yearList.length
+                                                            ).toLocaleString(undefined, {
+                                                                maximumFractionDigits: 0
                                                             })}
-                                                            M
-                                                        </div>
-                                                    ))}
-                                                </Typography>
+                                                        </Typography>
+                                                    )}
+                                                </Box>
+                                                <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+                                                <Box>
+                                                    <Typography sx={{ color: "#3F3F3F" }}>
+                                                        Payments:
+                                                        <br />
+                                                        {records.map((record) => (
+                                                            <div key={record.State + record.Title + record["Fiscal Year"]}>
+                                                                {record["Fiscal Year"]}: $
+                                                                {Number(record.Amount / 1000000.0).toLocaleString(
+                                                                  undefined, { maximumFractionDigits: 2
+                                                                })}
+                                                                M
+                                                            </div>
+                                                        ))}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                    );
-                                    return (
-                                        <Geography
-                                            key={geo.rsmKey}
-                                            geography={geo}
-                                            onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
-                                            }}
-                                            onMouseLeave={() => {
-                                                setTooltipContent("");
-                                            }}
-                                            fill={colorScale(total)}
-                                            stroke="#FFF"
-                                            style={{
-                                                default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
-                                                hover: {
-                                                    stroke: "#232323",
-                                                    strokeWidth: 2,
-                                                    outline: "none"
-                                                },
-                                                pressed: {
-                                                    fill: "#345feb",
-                                                    outline: "none"
-                                                }
-                                            }}
-                                        />
-                                    );
+                                        );
+                                        return (
+                                            <Geography
+                                                key={geo.rsmKey}
+                                                geography={geo}
+                                                onMouseEnter={() => {
+                                                    setTooltipContent(hoverContent);
+                                                }}
+                                                onMouseLeave={() => {
+                                                    setTooltipContent("");
+                                                }}
+                                                fill={colorScale(total)}
+                                                stroke="#FFF"
+                                                style={{
+                                                    default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
+                                                    hover: {
+                                                        stroke: "#232323",
+                                                        strokeWidth: 2,
+                                                        outline: "none"
+                                                    },
+                                                    pressed: {
+                                                        fill: "#345feb",
+                                                        outline: "none"
+                                                    }
+                                                }}
+                                            />
+                                        );
+                                    }
                                 })}
                                 {geographies.map((geo) => {
                                     const centroid = geoCentroid(geo);
@@ -291,9 +298,9 @@ const MapChart = (props) => {
                         )}
                     </Geographies>
                 </ComposableMap>
-            </div>
-        );
-    }
+            )}
+        </div>
+    );
 };
 
 MapChart.propTypes = {
