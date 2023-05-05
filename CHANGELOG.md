@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
+- Landing page maps and tabs uses api enpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
 
 ## [0.3.0] - 2023-05-03
 
