@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import { config } from "../app.config";
 
 import "../styles/map.css";
-// import summary from "../data/summary.json";
 import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
 
 import HorizontalStackedBar from "./HorizontalStackedBar";
