@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { config } from "../app.config";
 
 import "../styles/map.css";
-import summary from "../data/summary.json";
+// import summary from "../data/summary.json";
 import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
 
 import HorizontalStackedBar from "./HorizontalStackedBar";
@@ -30,20 +30,22 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, stateCodes, allPrograms, allStates } = props;
+    const { setTooltipContent, stateCodes, allPrograms, allStates, summary } = props;
 
     const minValue = 0;
+    let maxValue = 0;
 
     const hashmap = new Map([]);
-    summary.forEach((item) => {
-        const state = item.State;
-        if (!hashmap.has(state)) {
-            hashmap.set(state, 0);
-        }
-        hashmap.set(state, hashmap.get(state) + item.Amount);
-    });
-
-    const maxValue = Math.max(...hashmap.values());
+    if (summary !== undefined) {
+        summary.forEach((item) => {
+            const state = item.State;
+            if (!hashmap.has(state)) {
+                hashmap.set(state, 0);
+            }
+            hashmap.set(state, hashmap.get(state) + item.Amount);
+        });
+        maxValue = Math.max(...hashmap.values());
+    }
 
     const colorScale = scaleQuantile()
         .domain(allPrograms.map((d) => d["18-22 All Programs Total"]))
@@ -230,7 +232,7 @@ const AllProgramMap = (): JSX.Element => {
     const [stateCodesData, setStateCodesData] = useState([]);
     const [allProgramsData, setAllProgramsData] = useState([]);
     const [allStatesData, setAllStatesData] = useState([]);
-
+    const [summaryData, setSummaryData] = useState([]);
     useEffect(() => {
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
@@ -245,6 +247,10 @@ const AllProgramMap = (): JSX.Element => {
         getJsonDataFromUrl(allstates_url).then((response) => {
             setAllStatesData(response);
         });
+        const summary_url = `${config.apiUrl}/summary`;
+        getJsonDataFromUrl(summary_url).then((response) => {
+            setSummaryData(response);
+        });
     }, []);
 
     return (
@@ -254,6 +260,7 @@ const AllProgramMap = (): JSX.Element => {
                 stateCodes={stateCodesData}
                 allPrograms={allProgramsData}
                 allStates={allStatesData}
+                summary={summaryData}
             />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">

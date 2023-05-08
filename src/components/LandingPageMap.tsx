@@ -38,7 +38,7 @@ const MapChart = (props) => {
     let maxValue = 0;
     let legendTitle = <div />;
 
-    let hashmap = new Map([]);
+    const hashmap = new Map([]);
     if (summary !== undefined) {
         summary.forEach((item) => {
             if (item.Title === title) {
@@ -185,7 +185,9 @@ const MapChart = (props) => {
                                                 }}
                                             >
                                                 <Box>
-                                                    <Typography sx={{ color: "#2F7164" }}>{stateCodes[cur.id]}</Typography>
+                                                    <Typography sx={{ color: "#2F7164" }}>
+                                                        {stateCodes[cur.id]}
+                                                    </Typography>
                                                     {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
                                                         <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
                                                     ) : (
