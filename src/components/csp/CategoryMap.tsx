@@ -6,7 +6,6 @@ import { scaleQuantile, scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
 import PropTypes from "prop-types";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
@@ -30,7 +29,7 @@ const MapChart = (props) => {
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
-
+    let categoryRecord;
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -47,10 +46,25 @@ const MapChart = (props) => {
                                 const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
                                 const BArray = BCur.practiceCategories;
                                 const TotalArray = AArray.concat(BArray);
-                                const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-                                const categoryPayment = categoryRecord.paymentInDollars;
-                                const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
-                                const withinStatePercentage = categoryRecord.paymentInPercentageWithinState;
+                                if (category === "2018 Practices") {
+                                    categoryRecord = statuteRecord[0];
+                                } else if (category === "2014 Eligible Land") {
+                                    categoryRecord = statuteRecord[1];
+                                } else {
+                                    categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+                                }
+                                const categoryPayment =
+                                    category === "2018 Practices" || category === "2014 Eligible Land"
+                                        ? categoryRecord.statutePaymentInDollars
+                                        : categoryRecord.paymentInDollars;
+                                const nationwidePercentage =
+                                    category === "2018 Practices" || category === "2014 Eligible Land"
+                                        ? categoryRecord.statutePaymentInPercentageNationwide
+                                        : categoryRecord.paymentInPercentageNationwide;
+                                const withinStatePercentage =
+                                    category === "2018 Practices" || category === "2014 Eligible Land"
+                                        ? categoryRecord.statutePaymentInPercentageWithinState
+                                        : categoryRecord.paymentInPercentageWithinState;
                                 const hoverContent = (
                                     <Box
                                         sx={{
@@ -100,8 +114,8 @@ const MapChart = (props) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(categoryPayment)}
-                                        stroke="#FFF"
+                                        fill={colorScale(categoryPayment || { value: 0 }) || "#D2D2D2"}
+                                        stroke="#FFFFFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
                                             hover: {
@@ -171,16 +185,28 @@ const CategoryMap = ({
     const [content, setContent] = useState("");
     const title = `${category} Benefits`;
     const quantizeArray: number[] = [];
-
+    let categoryRecord = {};
     Object.values(statePerformance).map((value) => {
-        const statuteRecord = value[0].statutes;
-        const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-        const AArray = ACur.practiceCategories;
-        const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-        const BArray = BCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray);
-        const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        if (categoryRecord !== undefined) quantizeArray.push(categoryRecord.paymentInDollars);
+        if (Array.isArray(value)) {
+            const statuteRecord = value[0].statutes;
+            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+            const AArray = ACur.practiceCategories;
+            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+            const BArray = BCur.practiceCategories;
+            const TotalArray = AArray.concat(BArray);
+            if (category === "2018 Practices") {
+                categoryRecord = statuteRecord[0];
+            } else if (category === "2014 Eligible Land") {
+                categoryRecord = statuteRecord[1];
+            } else {
+                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+            }
+            if (categoryRecord !== undefined) {
+                if (category === "2018 Practices" || category === "2014 Eligible Land")
+                    quantizeArray.push(categoryRecord.statutePaymentInDollars);
+                else quantizeArray.push(categoryRecord.paymentInDollars);
+            }
+        }
         return null;
     });
     const maxValue = Math.max(...quantizeArray);
@@ -191,64 +217,86 @@ const CategoryMap = ({
     const label5 = (maxValue / 5) * 4;
     return (
         <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
-                <HorizontalStackedBar
-                    title={title}
-                    color1="#F0F9E8"
-                    color2="#BAE4BC"
-                    color3="#7BCCC4"
-                    color4="#43A2CA"
-                    color5="#0868AC"
-                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}`}
-                    label2={
-                        label2 >= 1000000
-                            ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label3={
-                        label3 >= 1000000
-                            ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label4={
-                        label4 >= 1000000
-                            ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label5={
-                        label5 >= 1000000
-                            ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label6={
-                        maxValue >= 1000000
-                            ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                />
-            </Box>
+            {maxValue !== 0 ? (
+                <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                    <HorizontalStackedBar
+                        title={title}
+                        color1="#F0F9E8"
+                        color2="#BAE4BC"
+                        color3="#7BCCC4"
+                        color4="#43A2CA"
+                        color5="#0868AC"
+                        label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}`}
+                        label2={
+                            label2 >= 1000000
+                                ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+                                      maximumFractionDigits: 0
+                                  })}M`
+                                : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 1
+                                  })}K`
+                        }
+                        label3={
+                            label3 >= 1000000
+                                ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+                                      maximumFractionDigits: 0
+                                  })}M`
+                                : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 1
+                                  })}K`
+                        }
+                        label4={
+                            label4 >= 1000000
+                                ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+                                      maximumFractionDigits: 0
+                                  })}M`
+                                : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 1
+                                  })}K`
+                        }
+                        label5={
+                            label5 >= 1000000
+                                ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+                                      maximumFractionDigits: 0
+                                  })}M`
+                                : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 1
+                                  })}K`
+                        }
+                        label6={
+                            maxValue >= 1000000
+                                ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                                      maximumFractionDigits: 0
+                                  })}M`
+                                : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+                                      maximumFractionDigits: 1
+                                  })}K`
+                        }
+                    />
+                </Box>
+            ) : (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        minWidth: 560,
+                        pt: 12
+                    }}
+                >
+                    <Box display="flex" justifyContent="center" sx={{ mb: 1 }}>
+                        <Typography variant="h5">
+                            <strong>{title}</strong>
+                        </Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="center">
+                        <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                            {title} data is unavailable for all states.
+                        </Typography>
+                    </Box>
+                </Box>
+            )}
             <MapChart
                 setTooltipContent={setContent}
                 category={category}

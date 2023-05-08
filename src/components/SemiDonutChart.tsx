@@ -66,7 +66,6 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     label={renderCustomizedLabel}
                 >
                     <Label
-                        id="mainSemiDonutLabel"
                         value={
                             Number(label1) >= 1000000000
                                 ? `$${Number(Number(label1) / 1000000000.0).toLocaleString(undefined, {

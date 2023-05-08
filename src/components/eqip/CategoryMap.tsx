@@ -101,7 +101,7 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(categoryPayment)}
+                                        fill={colorScale(categoryPayment || { value: 0 }) || "#D2D2D2"}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },

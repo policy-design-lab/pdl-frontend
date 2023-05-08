@@ -35,116 +35,123 @@ const MapChart = (props) => {
 
     return (
         <div data-tip="">
-            <ComposableMap projection="geoAlbersUsa">
-                <Geographies geography={geoUrl}>
-                    {({ geographies }) => (
-                        <>
-                            {geographies.map((geo) => {
-                                if (!Object.keys(statePerformance).includes(geo.properties.name)) {
-                                    return null;
-                                }
-                                const record = statePerformance[geo.properties.name][0];
-                                const totalPaymentInDollars = record.totalPaymentInDollars;
-                                const totalPaymentInPercentageNationwide = record.totalPaymentInPercentageNationwide;
-                                const hoverContent = (
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            bgcolor: "#ECF0ED",
-                                            borderRadius: 1
-                                        }}
-                                    >
-                                        <Box>
-                                            <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row"
-                                                }}
-                                            >
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {Number(totalPaymentInDollars) < 1000000
-                                                        ? `$${Number(
-                                                              Number(totalPaymentInDollars) / 1000.0
-                                                          ).toLocaleString(undefined, {
-                                                              maximumFractionDigits: 2
-                                                          })}K`
-                                                        : `$${Number(
-                                                              Number(totalPaymentInDollars) / 1000000.0
-                                                          ).toLocaleString(undefined, {
-                                                              maximumFractionDigits: 2
-                                                          })}M`}
-                                                </Typography>
-                                                <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {totalPaymentInPercentageNationwide
-                                                        ? `${totalPaymentInPercentageNationwide} %`
-                                                        : "0%"}
-                                                </Typography>
+            {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
+                <ComposableMap projection="geoAlbersUsa">
+                    <Geographies geography={geoUrl}>
+                        {({ geographies }) => (
+                            <>
+                                {geographies.map((geo) => {
+                                    if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                        return null;
+                                    }
+                                    const record = statePerformance[geo.properties.name][0];
+                                    const totalPaymentInDollars = record.totalPaymentInDollars;
+                                    const totalPaymentInPercentageNationwide =
+                                        record.totalPaymentInPercentageNationwide;
+                                    const hoverContent = (
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                bgcolor: "#ECF0ED",
+                                                borderRadius: 1
+                                            }}
+                                        >
+                                            <Box>
+                                                <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row"
+                                                    }}
+                                                >
+                                                    <Typography sx={{ color: "#3F3F3F" }}>
+                                                        {Number(totalPaymentInDollars) < 1000000
+                                                            ? `$${Number(
+                                                                  Number(totalPaymentInDollars) / 1000.0
+                                                              ).toLocaleString(undefined, {
+                                                                  maximumFractionDigits: 2
+                                                              })}K`
+                                                            : `$${Number(
+                                                                  Number(totalPaymentInDollars) / 1000000.0
+                                                              ).toLocaleString(undefined, {
+                                                                  maximumFractionDigits: 2
+                                                              })}M`}
+                                                    </Typography>
+                                                    <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+                                                    <Typography sx={{ color: "#3F3F3F" }}>
+                                                        {totalPaymentInPercentageNationwide
+                                                            ? `${totalPaymentInPercentageNationwide} %`
+                                                            : "0%"}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
                                         </Box>
-                                    </Box>
-                                );
-                                return (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        onMouseEnter={() => {
-                                            setTooltipContent(hoverContent);
-                                        }}
-                                        onMouseLeave={() => {
-                                            setTooltipContent("");
-                                        }}
-                                        fill={colorScale(totalPaymentInDollars)}
-                                        stroke="#FFF"
-                                        style={{
-                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
-                                            hover: {
-                                                stroke: "#232323",
-                                                strokeWidth: 2,
-                                                outline: "none"
-                                            },
-                                            pressed: {
-                                                fill: "#345feb",
-                                                outline: "none"
-                                            }
-                                        }}
-                                    />
-                                );
-                            })}
-                            {geographies.map((geo) => {
-                                const centroid = geoCentroid(geo);
-                                const cur = allStates.find((s) => s.val === geo.id);
-                                return (
-                                    <g key={`${geo.rsmKey}-name`}>
-                                        {cur &&
-                                            centroid[0] > -160 &&
-                                            centroid[0] < -67 &&
-                                            (Object.keys(offsets).indexOf(cur.id) === -1 ? (
-                                                <Marker coordinates={centroid}>
-                                                    <text y="2" fontSize={14} textAnchor="middle">
-                                                        {cur.id}
-                                                    </text>
-                                                </Marker>
-                                            ) : (
-                                                <Annotation
-                                                    subject={centroid}
-                                                    dx={offsets[cur.id][0]}
-                                                    dy={offsets[cur.id][1]}
-                                                >
-                                                    <text x={4} fontSize={14} alignmentBaseline="middle">
-                                                        {cur.id}
-                                                    </text>
-                                                </Annotation>
-                                            ))}
-                                    </g>
-                                );
-                            })}
-                        </>
-                    )}
-                </Geographies>
-            </ComposableMap>
+                                    );
+                                    return (
+                                        <Geography
+                                            key={geo.rsmKey}
+                                            geography={geo}
+                                            onMouseEnter={() => {
+                                                setTooltipContent(hoverContent);
+                                            }}
+                                            onMouseLeave={() => {
+                                                setTooltipContent("");
+                                            }}
+                                            fill={colorScale(totalPaymentInDollars || { value: 0 }) || "#D2D2D2"}
+                                            stroke="#FFF"
+                                            style={{
+                                                default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
+                                                hover: {
+                                                    stroke: "#232323",
+                                                    strokeWidth: 2,
+                                                    outline: "none"
+                                                },
+                                                pressed: {
+                                                    fill: "#345feb",
+                                                    outline: "none"
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                                {geographies.map((geo) => {
+                                    const centroid = geoCentroid(geo);
+                                    const cur = allStates.find((s) => s.val === geo.id);
+                                    return (
+                                        <g key={`${geo.rsmKey}-name`}>
+                                            {cur &&
+                                                centroid[0] > -160 &&
+                                                centroid[0] < -67 &&
+                                                (Object.keys(offsets).indexOf(cur.id) === -1 ? (
+                                                    <Marker coordinates={centroid}>
+                                                        <text y="2" fontSize={14} textAnchor="middle">
+                                                            {cur.id}
+                                                        </text>
+                                                    </Marker>
+                                                ) : (
+                                                    <Annotation
+                                                        subject={centroid}
+                                                        dx={offsets[cur.id][0]}
+                                                        dy={offsets[cur.id][1]}
+                                                    >
+                                                        <text x={4} fontSize={14} alignmentBaseline="middle">
+                                                            {cur.id}
+                                                        </text>
+                                                    </Annotation>
+                                                ))}
+                                        </g>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </Geographies>
+                </ComposableMap>
+            ) : (
+                <Box display="flex" justifyContent="center" sx={{ pt: 1 }}>
+                    <h1>Loading Map Data...</h1>
+                </Box>
+            )}
         </div>
     );
 };
@@ -154,24 +161,14 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const CSPTotalMap = (): JSX.Element => {
+const CSPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; allStates: any }): JSX.Element => {
     const quantizeArray: number[] = [];
-    const [statePerformance, setStatePerformance] = useState([]);
-    const [allStates, setAllStates] = useState([]);
-
-    // TBD: due to the time limited, leave this
-    useEffect(() => {
-        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setStatePerformance(response);
-        });
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
-        });
-    }, []);
-
-    Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
+    Object.values(statePerformance).map((value) => {
+        if (Array.isArray(value)) {
+            quantizeArray.push(value[0].totalPaymentInDollars);
+        }
+        return null;
+    });
     const maxValue = Math.max(...quantizeArray);
     const label1 = (maxValue / 5) * 0;
     const label2 = (maxValue / 5) * 1;
@@ -182,51 +179,49 @@ const CSPTotalMap = (): JSX.Element => {
 
     return (
         <div>
-            {allStates.length > 0 && statePerformance.Alabama !== undefined ? (
-                <div>
-                    <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
-                        <HorizontalStackedBar
-                            title="Total CSP Benefits"
-                            color1="#F0F9E8"
-                            color2="#BAE4BC"
-                            color3="#7BCCC4"
-                            color4="#43A2CA"
-                            color5="#0868AC"
-                            label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                            label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                            label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                            label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                            label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                            label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                                maximumFractionDigits: 0
-                            })}M`}
-                        />
-                    </Box>
-                    <MapChart
-                        setTooltipContent={setContent}
-                        maxValue={maxValue}
-                        statePerformance={statePerformance}
-                        allStates={allStates}
+            <div>
+                <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                    <HorizontalStackedBar
+                        title="Total CSP Benefits"
+                        color1="#F0F9E8"
+                        color2="#BAE4BC"
+                        color3="#7BCCC4"
+                        color4="#43A2CA"
+                        color5="#0868AC"
+                        label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
+                        label2={`$${Number(label2 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
+                        label3={`$${Number(label3 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
+                        label4={`$${Number(label4 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
+                        label5={`$${Number(label5 / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
+                        label6={`$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                            maximumFractionDigits: 0
+                        })}M`}
                     />
-                    <div className="tooltip-container">
-                        <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
-                            {content}
-                        </ReactTooltip>
-                    </div>
+                </Box>
+
+                <MapChart
+                    setTooltipContent={setContent}
+                    maxValue={maxValue}
+                    statePerformance={statePerformance}
+                    allStates={allStates}
+                />
+
+                <div className="tooltip-container">
+                    <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                        {content}
+                    </ReactTooltip>
                 </div>
-            ) : (
-                <h1>Loading data...</h1>
-            )}
+            </div>
         </div>
     );
 };

@@ -23,7 +23,7 @@ ProgramDrawer.propTypes = {
 };
 
 let currentChecked = 0;
-function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
     const handleToggle = (value: number) => () => {
@@ -53,6 +53,27 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={`${category} is not available now`} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
                 if (
                     category !== "Land management" &&
                     category !== "Other planning" &&
@@ -154,7 +175,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     );
 }
 
-function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
+function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
     const handleToggle = (value: number) => () => {
@@ -164,29 +185,63 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
         setShowPopUp(false);
     };
 
+    // Match PR89 suggestions
     const CSPList = [
         "Total CSP Benefits",
-        "Land management",
-        "Other improvement",
-        "Existing activity payments",
+        "2018 Practices",
+        "Structural",
         "Vegetative",
+        "Land management",
         "Forest management",
         "Soil remediation",
-        "Structural",
+        "Existing activity payments",
         "Bundles",
+        "Soil testing",
+        "Other improvement",
+
+        "2014 Eligible Land",
         "Cropland",
+        "Grassland",
         "Rangeland",
         "Pastureland",
-        "Other: supplemental, adjustment & other",
         "Non-industrial private forestland",
-        "Pastured cropland"
+        "Other: supplemental, adjustment & other"
     ];
 
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {CSPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
-                if (category !== "Land management" && category !== "Cropland" && category !== "Total CSP Benefits") {
+                if (zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`${category} is not available now`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (
+                    category !== "2018 Practices" &&
+                    category !== "2014 Eligible Land" &&
+                    category !== "Total CSP Benefits"
+                ) {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -228,14 +283,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
                         </ListItem>
                     );
                 }
-                if (category === "Land management") {
+                if (category === "2018 Practices" || category === "2014 Eligible Land") {
                     return (
                         <Box>
-                            <Typography sx={{ pl: 8 }}>
-                                <strong>2018 Practices</strong>
-                            </Typography>
                             <ListItem key={category} disablePadding>
-                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
                                     <Radio
                                         edge="start"
                                         checked={checked === value}
@@ -248,33 +300,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
                                             }
                                         }}
                                     />
-                                    <ListItemText id={labelId} primary={category} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Box>
-                    );
-                }
-                if (category === "Cropland") {
-                    return (
-                        <Box>
-                            <Typography sx={{ pl: 8 }}>
-                                <strong>2014 Eligible Land</strong>
-                            </Typography>
-                            <ListItem key={category} disablePadding>
-                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-                                    <Radio
-                                        edge="start"
-                                        checked={checked === value}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ "aria-labelledby": labelId }}
-                                        sx={{
-                                            "&.Mui-checked": {
-                                                color: "#2f7164"
-                                            }
-                                        }}
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={category}
+                                        primaryTypographyProps={{ fontWeight: 700 }}
                                     />
-                                    <ListItemText id={labelId} primary={category} />
                                 </ListItemButton>
                             </ListItem>
                         </Box>
@@ -282,9 +312,6 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
                 }
                 return (
                     <Box key={category}>
-                        <Typography sx={{ pl: 8 }}>
-                            <strong>Other</strong>
-                        </Typography>
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
                                 <Radio
@@ -309,10 +336,10 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp }) {
     );
 }
 
-export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.Element {
+export default function ProgramDrawer({ setEQIPChecked, setCSPChecked, zeroCategories }): JSX.Element {
     const location = useLocation();
     const navigate = useNavigate();
-
+    const [zeroCategory, setZeroCategory] = React.useState(zeroCategories);
     const [eqipOpen, setEqipOpen] = React.useState(false);
     const eqipRef = React.useRef<HTMLLIElement>(null);
     const handleEqipClick = () => {
@@ -411,10 +438,14 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
                     anchorEl={eqipRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", width: "20%" }}
+                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
                 >
                     <Box>
-                        <EQIPCheckboxList setEQIPChecked={setEQIPChecked} setShowPopUp={setEqipOpen} />
+                        <EQIPCheckboxList
+                            setEQIPChecked={setEQIPChecked}
+                            setShowPopUp={setEqipOpen}
+                            zeroCategory={zeroCategory}
+                        />
                     </Box>
                 </Popper>
             </Box>
@@ -459,10 +490,14 @@ export default function ProgramDrawer({ setEQIPChecked, setCSPChecked }): JSX.El
                     anchorEl={cspRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", width: "20%" }}
+                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
                 >
                     <Box>
-                        <CSPCheckboxList setCSPChecked={setCSPChecked} setShowPopUp={setCspOpen} />
+                        <CSPCheckboxList
+                            setCSPChecked={setCSPChecked}
+                            setShowPopUp={setCspOpen}
+                            zeroCategory={zeroCategory}
+                        />
                     </Box>
                 </Popper>
             </Box>

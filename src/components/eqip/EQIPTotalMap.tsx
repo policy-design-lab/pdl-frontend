@@ -95,7 +95,7 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(totalPaymentInDollars)}
+                                        fill={colorScale(totalPaymentInDollars || { value: 0 }) || "#D2D2D2"}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },

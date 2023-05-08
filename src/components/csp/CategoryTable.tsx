@@ -114,30 +114,47 @@ function Table({ columns, data, statePerformance }: { columns: any; data: any; s
 
 function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
     const cspTableData: any[] = [];
-
+    let categoryRecord = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === "2018 Practices");
-        const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === "2014 Eligible Land");
-        const BArray = BCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray);
-        const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        if (categoryRecord !== undefined) {
-            const newRecord = () => {
-                return {
-                    state: key,
-                    categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
-                        minimumFractionDigits: 2
-                    })}`,
-                    categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                    cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-                        minimumFractionDigits: 2
-                    })}`,
-                    percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+        if (Array.isArray(value)) {
+            const statuteRecord = value[0].statutes;
+            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+            const AArray = ACur.practiceCategories;
+            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+            const BArray = BCur.practiceCategories;
+            const TotalArray = AArray.concat(BArray);
+            if (category === "2018 Practices") {
+                categoryRecord = statuteRecord[0];
+            } else if (category === "2014 Eligible Land") {
+                categoryRecord = statuteRecord[1];
+            } else {
+                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+            }
+            if (categoryRecord !== undefined) {
+                const paymentInDollars =
+                    category === "2018 Practices" || category === "2014 Eligible Land"
+                        ? categoryRecord.statutePaymentInDollars
+                        : categoryRecord.paymentInDollars;
+                const paymentInPercentageWithinState =
+                    category === "2018 Practices" || category === "2014 Eligible Land"
+                        ? categoryRecord.statutePaymentInPercentageWithinState
+                        : categoryRecord.paymentInPercentageWithinState;
+                const newRecord = () => {
+                    return {
+                        state: key,
+                        categoryBenefit: `$${Number(paymentInDollars).toLocaleString(undefined, {
+                            minimumFractionDigits: 2
+                        })}`,
+                        categoryPercentage: `${paymentInPercentageWithinState.toString()}%`,
+                        cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                            minimumFractionDigits: 2
+                        })}`,
+                        percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                    };
                 };
-            };
-            cspTableData.push(newRecord());
+                cspTableData.push(newRecord());
+            }
         }
     }
 

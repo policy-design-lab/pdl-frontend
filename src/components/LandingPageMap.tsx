@@ -111,7 +111,7 @@ const MapChart = ({ setTooltipContent, title }) => {
             color5 = "#045A8D";
             legendTitle = (
                 <Typography noWrap variant="h6">
-                    Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
+                    Total Supplemental Nutrition Assistance Programs (SNAP) Costs from <strong>2018 - 2022</strong>
                 </Typography>
             );
             break;
@@ -238,7 +238,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(total)}
+                                        fill={colorScale(total || { value: 0 }) || "#D2D2D2"}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
