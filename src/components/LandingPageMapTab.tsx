@@ -74,7 +74,7 @@ export default function LandingPageMapTab(): JSX.Element {
     }, []);
 
     // let allPrograms = {allProgramsData};
-    let cur = allProgramsData.find((s) => s.State === "Total");
+    const cur = allProgramsData.find((s) => s.State === "Total");
     let allProgramTotal = "";
     let titleITotal = "";
     let titleIITotal = "";

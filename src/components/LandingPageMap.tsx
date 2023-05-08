@@ -171,7 +171,8 @@ const MapChart = (props) => {
 
                                         if (title === "Supplemental Nutrition Assistance Program (SNAP)") {
                                             records.forEach((record) => {
-                                                totalAverageMonthlyParticipation += record["Average Monthly Participation"];
+                                                totalAverageMonthlyParticipation +=
+                                                    record["Average Monthly Participation"];
                                             });
                                         }
 
@@ -224,11 +225,16 @@ const MapChart = (props) => {
                                                         Payments:
                                                         <br />
                                                         {records.map((record) => (
-                                                            <div key={record.State + record.Title + record["Fiscal Year"]}>
+                                                            <div
+                                                                key={
+                                                                    record.State + record.Title + record["Fiscal Year"]
+                                                                }
+                                                            >
                                                                 {record["Fiscal Year"]}: $
                                                                 {Number(record.Amount / 1000000.0).toLocaleString(
-                                                                  undefined, { maximumFractionDigits: 2
-                                                                })}
+                                                                    undefined,
+                                                                    { maximumFractionDigits: 2 }
+                                                                )}
                                                                 M
                                                             </div>
                                                         ))}
@@ -263,6 +269,7 @@ const MapChart = (props) => {
                                             />
                                         );
                                     }
+                                    return null;
                                 })}
                                 {geographies.map((geo) => {
                                     const centroid = geoCentroid(geo);
