@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - SNAP page and connected to SNAP API Point [#59](https://github.com/policy-design-lab/pdl-frontend/issues/59)
 - Local development work environment to connect dev api server [#93](https://github.com/policy-design-lab/pdl-frontend/issues/93/)
+- CSP page [#74](https://github.com/policy-design-lab/pdl-frontend/issues/74)
 
 ### Changed
 - eslint rules back to original [#94](https://github.com/policy-design-lab/pdl-frontend/issues/94)
