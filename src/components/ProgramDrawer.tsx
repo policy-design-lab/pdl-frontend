@@ -53,7 +53,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
-                if (zeroCategory.includes(category)) {
+                if (zeroCategory && zeroCategory.includes(category)) {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -69,7 +69,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={`${category} is not available now`} />
+                                <ListItemText id={labelId} primary={`No payment reported for ${category}`} />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -212,7 +212,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {CSPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
-                if (zeroCategory.includes(category)) {
+                if (zeroCategory && zeroCategory.includes(category)) {
                     return (
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
@@ -230,7 +230,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                 />
                                 <ListItemText
                                     id={labelId}
-                                    primary={`${category} is not available now`}
+                                    primary={`No payment reported for ${category}`}
                                     sx={{ fontStyle: "italic", color: "#7676764D" }}
                                 />
                             </ListItemButton>

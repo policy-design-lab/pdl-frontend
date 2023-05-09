@@ -88,6 +88,13 @@ const MapChart = (props) => {
                                             </Box>
                                         </Box>
                                     );
+                                    const fillColour = () => {
+                                        if (totalPaymentInDollars) {
+                                            if (totalPaymentInDollars !== 0) return colorScale(totalPaymentInDollars);
+                                            return "#D2D2D2";
+                                        }
+                                        return "#D2D2D2";
+                                    };
                                     return (
                                         <Geography
                                             key={geo.rsmKey}
@@ -98,7 +105,7 @@ const MapChart = (props) => {
                                             onMouseLeave={() => {
                                                 setTooltipContent("");
                                             }}
-                                            fill={colorScale(totalPaymentInDollars || { value: 0 }) || "#D2D2D2"}
+                                            fill={fillColour()}
                                             stroke="#FFF"
                                             style={{
                                                 default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },

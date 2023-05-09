@@ -228,6 +228,13 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         </Box>
                                     </Box>
                                 );
+                                const fillColour = () => {
+                                    if (total) {
+                                        if (total !== 0) return colorScale(total);
+                                        return "#D2D2D2";
+                                    }
+                                    return "#D2D2D2";
+                                };
                                 return (
                                     <Geography
                                         key={geo.rsmKey}
@@ -238,7 +245,7 @@ const MapChart = ({ setTooltipContent, title }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(total || { value: 0 }) || "#D2D2D2"}
+                                        fill={fillColour()}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
