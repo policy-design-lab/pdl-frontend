@@ -336,7 +336,7 @@ export default function CSPPage(): JSX.Element {
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
-                                    <strong>CSP: State Performance by Category of Practices</strong>
+                                    <strong>CSP: State Performance by Category</strong>
                                 </Typography>
                             </Box>
                             <Typography sx={{ mt: 2 }}>
