@@ -71,6 +71,9 @@ module.exports = {
     },
 
     resolve: {
+        alias: {
+            '@components': path.resolve(__dirname, 'src/components/')
+        },
         modules: ['node_modules', 'src'],
         extensions: ['.ts', '.tsx', '.js', '.jsx']
     },

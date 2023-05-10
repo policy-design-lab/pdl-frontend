@@ -1,0 +1,15 @@
+#snapTableHeader{
+  padding-bottom: 1.5em;
+}
+#bothRadio .MuiSvgIcon-root {
+  fill: #212121;
+}
+#bothRadio .Mui-checked {
+  color: #212121;
+}
+#totalBenefitsRadio .Mui-checked {
+  color: #1f78b4;
+}
+#avgMonthlyParticipationRadio .Mui-checked {
+  color: #ba68c8;
+}

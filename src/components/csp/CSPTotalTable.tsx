@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
+import { config } from "../../app.config";
+import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -112,23 +113,22 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-const eqipTableData: any[] = [];
-
-// eslint-disable-next-line no-restricted-syntax
-for (const [key, value] of Object.entries(statePerformance)) {
-    const newRecord = () => {
-        return {
-            state: key,
-            eqipBenefit: `$${value[0].totalPaymentInDollars
-                .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                .toString()}`,
-            percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-        };
-    };
-    eqipTableData.push(newRecord());
-}
-
 function App(): JSX.Element {
+    const [statePerformance, setStatePerformance] = React.useState([]);
+    const [allStates, setAllStates] = React.useState([]);
+
+    // TBD: due to the time limited, leave this
+    React.useEffect(() => {
+        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            setStatePerformance(response);
+        });
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
+            setAllStates(response);
+        });
+    }, []);
+
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
         const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
@@ -145,6 +145,22 @@ function App(): JSX.Element {
         return 0;
     }
 
+    const cspTableData: any[] = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(statePerformance)) {
+        const newRecord = () => {
+            return {
+                state: key,
+                cspBenefit: `$${value[0].totalPaymentInDollars
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}`,
+                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+            };
+        };
+        cspTableData.push(newRecord());
+    }
+
     const columns = React.useMemo(
         () => [
             {
@@ -159,10 +175,10 @@ function App(): JSX.Element {
                         className="tableHeader"
                         sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
                     >
-                        EQIP BENEFITS
+                        CSP BENEFITS
                     </Box>
                 ),
-                accessor: "eqipBenefit",
+                accessor: "cspBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
@@ -183,7 +199,7 @@ function App(): JSX.Element {
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} />
+                <Table columns={columns} data={cspTableData} />
             </Styles>
         </Box>
     );
