@@ -110,25 +110,26 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
             boldText = "What is Farm Bill?";
             bodyText =
                 "The Supplemental Nutrition Assistance Program [SNAP] provides financial assistance to low-income families to help cover the cost of food. Benefits can only be used to purchase food products and are provided in electronic format similar to a credit card and known as the Electronic Benefit Transfer (EBT) card. The map shows the total SNAP costs of the nutrition title by state from 2018-2022.";
-            route = "/";
+            route = "/snap";
             buttonText = "Explore Maps of SNAP";
             button = (
-                <Button
-                    variant="contained"
-                    sx={{
-                        bgcolor: "#2F7164",
-                        minWidth: 400,
-                        minHeight: 80,
-                        borderRadius: 0
-                    }}
-                    disableElevation
-                    onClick={handleAlertOpen}
-                >
-                    <Typography variant="subtitle1">
-                        <strong>{buttonText}</strong>
-                    </Typography>{" "}
-                    <ArrowForwardIcon sx={{ mx: 2 }} />
-                </Button>
+                <Link to="/snap">
+                    <Button
+                        variant="contained"
+                        sx={{
+                            bgcolor: "#2F7164",
+                            minWidth: 400,
+                            minHeight: 80,
+                            borderRadius: 0
+                        }}
+                        disableElevation
+                    >
+                        <Typography variant="subtitle1">
+                            <strong>{buttonText}</strong>
+                        </Typography>{" "}
+                        <ArrowForwardIcon sx={{ mx: 2 }} />
+                    </Button>
+                </Link>
             );
             break;
         case "All Programs":
