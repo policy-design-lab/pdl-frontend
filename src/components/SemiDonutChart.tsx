@@ -6,7 +6,6 @@ const RADIAN = Math.PI / 180;
 
 // eslint-disable-next-line
 export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Element {
-    const data01 = data;
     // eslint-disable-next-line
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -56,7 +55,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
             <PieChart width={1400} height={450}>
                 <Pie
                     dataKey="value"
-                    data={data01}
+                    data={data}
                     startAngle={180}
                     endAngle={0}
                     cx={700}
@@ -87,7 +86,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                 </Pie>
                 <Pie
                     dataKey="value"
-                    data={data01}
+                    data={data}
                     startAngle={180}
                     endAngle={0}
                     cx={700}
