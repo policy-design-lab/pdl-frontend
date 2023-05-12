@@ -111,7 +111,7 @@ const MapChart = (props) => {
             color5 = "#045A8D";
             legendTitle = (
                 <Typography noWrap variant="h6">
-                    Total Supplemental Nutrition Assistance Programs Benefits from <strong>2018 - 2022</strong>
+                    Total Supplemental Nutrition Assistance Program (SNAP) Costs from <strong>2018 - 2022</strong>
                 </Typography>
             );
             break;
@@ -242,6 +242,13 @@ const MapChart = (props) => {
                                                 </Box>
                                             </Box>
                                         );
+                                        const fillColour = () => {
+                                            if (total) {
+                                                if (total !== 0) return colorScale(total);
+                                                return "#D2D2D2";
+                                            }
+                                            return "#D2D2D2";
+                                        };
                                         return (
                                             <Geography
                                                 key={geo.rsmKey}
@@ -252,7 +259,7 @@ const MapChart = (props) => {
                                                 onMouseLeave={() => {
                                                     setTooltipContent("");
                                                 }}
-                                                fill={colorScale(total)}
+                                                fill={fillColour()}
                                                 stroke="#FFF"
                                                 style={{
                                                     default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
