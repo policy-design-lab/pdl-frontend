@@ -276,6 +276,7 @@ const MapChart = (props) => {
                                             />
                                         );
                                     }
+                                    return null;
                                 })}
                                 {geographies.map((geo) => {
                                     const centroid = geoCentroid(geo);
