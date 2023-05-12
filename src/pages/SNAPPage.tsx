@@ -24,6 +24,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 import { hexToRGB } from "../components/shared/StyleFunctions";
 import "../styles/snap.css";
 import { config } from "../app.config";
+import { getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function SNAPPage(): JSX.Element {
     const paddingLR = 40;
@@ -39,10 +40,9 @@ export default function SNAPPage(): JSX.Element {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
-        fetch(`${config.apiUrl}/programs/snap/state-distribution`)
-            .then((response) => response.json())
-            .then((d) => setData(d))
-            .catch((error) => console.error(error));
+        getJsonDataFromUrl(`${config.apiUrl}/programs/snap/state-distribution`).then((response) => {
+            setData(response);
+        });
     }, []);
     const defaultTheme = createTheme({
         spacing: 8
