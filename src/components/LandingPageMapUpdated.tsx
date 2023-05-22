@@ -12,7 +12,6 @@ import { ShortFormat } from "./shared/ConvertionFormats";
 import "../styles/map.css";
 import { config } from "../app.config";
 import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
-import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
