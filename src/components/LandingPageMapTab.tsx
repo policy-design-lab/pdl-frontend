@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { CardMedia, createTheme, styled, Typography, ThemeProvider } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import LandingPageMap from "./LandingPageMap";
+import LandingPageMap from "./LandingPageMapUpdatedSNAP";
 import AllProgramMap from "./AllProgramMap";
 import allPrograms from "../data/allPrograms.json";
 import LandingDisplay from "./LandingDisplay";

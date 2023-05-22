@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
-import LandingPageMap from "../components/LandingPageMap";
+import LandingPageMap from "../components/LandingPageMapUpdated";
 import snap from "../images/legends/SNAP programs benefits 2018 - 2022.png";
 import SnapTable from "../components/snap/SNAPTable";
 import SNAPBar from "../components/snap/SNAPBar";
@@ -110,6 +110,8 @@ export default function SNAPPage(): JSX.Element {
                 >
                     <div id="landingPageMapContainer">
                         <LandingPageMap programTitle="Supplemental Nutrition Assistance Program (SNAP)" />
+                        <LandingPageMap programTitle="Title II: Conservation" />
+                        <LandingPageMap programTitle="Title I: Commodities" />
                     </div>
                     <Box
                         sx={{
