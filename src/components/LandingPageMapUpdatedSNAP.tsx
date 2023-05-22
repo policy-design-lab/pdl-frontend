@@ -11,9 +11,10 @@ import Typography from "@mui/material/Typography";
 import { ShortFormat } from "./shared/ConvertionFormats";
 
 import allStates from "../data/allstates.json";
-import summary from "../data/summary.json";
-import allPrograms from "../data/allPrograms.json";
+import * as summary from "../data/summary.json";
+import * as allPrograms from "../data/allPrograms.json";
 import stateCodes from "../data/stateCodes.json";
+
 import "../styles/map.css";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
