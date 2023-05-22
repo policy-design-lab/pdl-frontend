@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New GitHub issue templates. [#127](https://github.com/policy-design-lab/pdl-frontend/issues/127)  
+
 ### Changed
-- Landing page maps and tabs uses api enpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
+- Landing page maps and tabs uses api endpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
+
+### Removed
+- Previously used default GitHub issue template. [#127](https://github.com/policy-design-lab/pdl-frontend/issues/127)
 
 ## [0.4.0] - 2023-05-10
 
