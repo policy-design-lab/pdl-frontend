@@ -75,7 +75,7 @@ module.exports = {
             '@components': path.resolve(__dirname, 'src/components/')
         },
         modules: ['node_modules', 'src'],
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+        extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
 
     optimization: {
