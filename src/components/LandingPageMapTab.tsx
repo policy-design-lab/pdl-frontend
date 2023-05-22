@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -6,8 +6,9 @@ import { CardMedia, createTheme, styled, Typography, ThemeProvider } from "@mui/
 import Divider from "@mui/material/Divider";
 import LandingPageMap from "./LandingPageMap";
 import AllProgramMap from "./AllProgramMap";
-import allPrograms from "../data/allPrograms.json";
 import LandingDisplay from "./LandingDisplay";
+import { config } from "../app.config";
+import { getJsonDataFromUrl } from "../utils/apiutil";
 
 const theme = createTheme({
     palette: {
@@ -63,12 +64,29 @@ export default function LandingPageMapTab(): JSX.Element {
         textTransform: "none"
     });
 
-    const cur = allPrograms.find((s) => s.State === "Total");
-    const allProgramTotal = cur["18-22 All Programs Total"];
-    const titleITotal = cur["Title I Total"];
-    const titleIITotal = cur["Title II Total"];
-    const cropTotal = cur["Crop Insurance Total"];
-    const snapTotal = cur["SNAP Total"];
+    const [allProgramsData, setAllProgramsData] = useState([]);
+
+    useEffect(() => {
+        const allprograms_url = `${config.apiUrl}/allprograms`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            setAllProgramsData(response);
+        });
+    }, []);
+
+    // let allPrograms = {allProgramsData};
+    const cur = allProgramsData.find((s) => s.State === "Total");
+    let allProgramTotal = "";
+    let titleITotal = "";
+    let titleIITotal = "";
+    let cropTotal = "";
+    let snapTotal = "";
+    if (cur !== undefined) {
+        allProgramTotal = cur["18-22 All Programs Total"];
+        titleITotal = cur["Title I Total"];
+        titleIITotal = cur["Title II Total"];
+        cropTotal = cur["Crop Insurance Total"];
+        snapTotal = cur["SNAP Total"];
+    }
 
     return (
         <Box sx={{ width: "100%", mt: 5 }}>
