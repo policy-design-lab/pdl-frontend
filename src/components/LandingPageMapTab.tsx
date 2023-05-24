@@ -4,8 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { CardMedia, createTheme, styled, Typography, ThemeProvider } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import LandingPageMap from "./LandingPageMapUpdatedSNAP";
-import AllProgramMap from "./AllProgramMap";
+import LandingPageMap from "./LandingPageMap";
 import LandingDisplay from "./LandingDisplay";
 import { config } from "../app.config";
 import { getJsonDataFromUrl } from "../utils/apiutil";
@@ -26,17 +25,33 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
     const { value, index, title, ...other } = props;
-
     return (
-        <Box role="tabpanel" hidden={value !== index} {...other}>
-            {value === index && (
-                <Box
-                    sx={{
-                        width: "60%",
-                        mx: "auto"
-                    }}
-                >
-                    {title === "All Programs" ? <AllProgramMap /> : <LandingPageMap programTitle={title} />}
+        <div>
+            {window.innerWidth > 1679 ? (
+                <Box role="tabpanel" hidden={value !== index} {...other}>
+                    {value === index && (
+                        <Box
+                            sx={{
+                                width: "70%",
+                                mx: "auto"
+                            }}
+                        >
+                            <LandingPageMap programTitle={title} />
+                        </Box>
+                    )}
+                </Box>
+            ) : (
+                <Box role="tabpanel" hidden={value !== index} {...other}>
+                    {value === index && (
+                        <Box
+                            sx={{
+                                width: "80%",
+                                mx: "auto"
+                            }}
+                        >
+                            <LandingPageMap programTitle={title} />
+                        </Box>
+                    )}
                 </Box>
             )}
             {value === index && (
@@ -45,7 +60,7 @@ function TabPanel(props: TabPanelProps) {
                     <LandingDisplay programTitle={title} />{" "}
                 </Box>
             )}
-        </Box>
+        </div>
     );
 }
 
@@ -138,16 +153,16 @@ export default function LandingPageMapTab(): JSX.Element {
                                 </Box>
                             }
                         />
-                        {/* <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-    					<CustomTab
-    						label={
-    							<Box>
-    								<Typography>Crop Insurance</Typography>
-    								<br />
-    								<Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
-    							</Box>
-    						}
-    					/> */}
+                        <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                        <CustomTab
+                            label={
+                                <Box>
+                                    <Typography>Crop Insurance</Typography>
+                                    <br />
+                                    <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                </Box>
+                            }
+                        />
                         <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                         <CustomTab
                             label={
@@ -165,8 +180,8 @@ export default function LandingPageMapTab(): JSX.Element {
             <TabPanel value={value} index={2} title="All Programs" />
             <TabPanel value={value} index={4} title="Title I: Commodities" />
             <TabPanel value={value} index={6} title="Title II: Conservation" />
-            {/* <TabPanel value={value} index={8} title="Crop Insurance" /> */}
-            <TabPanel value={value} index={8} title="Supplemental Nutrition Assistance Program (SNAP)" />
+            <TabPanel value={value} index={8} title="Crop Insurance" />
+            <TabPanel value={value} index={10} title="Supplemental Nutrition Assistance Program (SNAP)" />
         </Box>
     );
 }
