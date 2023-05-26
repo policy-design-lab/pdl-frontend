@@ -5,11 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Added
+
+- Add dynamic color bar for landing page and SNAP page [#121](https://github.com/policy-design-lab/pdl-frontend/issues/121)
 - New GitHub issue templates. [#127](https://github.com/policy-design-lab/pdl-frontend/issues/127)  
 
 ### Changed
+
 - Landing page maps and tabs uses api endpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
+- Add crop insurance tab back to landing page [#130](https://github.com/policy-design-lab/pdl-frontend/issues/130)
+- Removed the duplicate 'AllProgramMap' component on the landing page. Instead, modified the 'LandingPageMap' component to include the all-program map
 
 ### Removed
 - Previously used default GitHub issue template. [#127](https://github.com/policy-design-lab/pdl-frontend/issues/127)
