@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`
@@ -44,7 +43,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -113,31 +112,50 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ category }: { category: string }): JSX.Element {
-    const eqipTableData: any[] = [];
-
+function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
+    const cspTableData: any[] = [];
+    let categoryRecord = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === "(6)(A) Practices");
-        const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === "(6)(B) Practices");
-        const BArray = BCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray);
-        const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        const newRecord = () => {
-            return {
-                state: key,
-                categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                })}`,
-                categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                })}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-            };
-        };
-        eqipTableData.push(newRecord());
+        if (Array.isArray(value)) {
+            const statuteRecord = value[0].statutes;
+            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+            const AArray = ACur.practiceCategories;
+            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+            const BArray = BCur.practiceCategories;
+            const TotalArray = AArray.concat(BArray);
+            if (category === "2018 Practices") {
+                categoryRecord = statuteRecord[0];
+            } else if (category === "2014 Eligible Land") {
+                categoryRecord = statuteRecord[1];
+            } else {
+                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+            }
+            if (categoryRecord !== undefined) {
+                const paymentInDollars =
+                    category === "2018 Practices" || category === "2014 Eligible Land"
+                        ? categoryRecord.statutePaymentInDollars
+                        : categoryRecord.paymentInDollars;
+                const paymentInPercentageWithinState =
+                    category === "2018 Practices" || category === "2014 Eligible Land"
+                        ? categoryRecord.statutePaymentInPercentageWithinState
+                        : categoryRecord.paymentInPercentageWithinState;
+                const newRecord = () => {
+                    return {
+                        state: key,
+                        categoryBenefit: `$${Number(paymentInDollars).toLocaleString(undefined, {
+                            minimumFractionDigits: 2
+                        })}`,
+                        categoryPercentage: `${paymentInPercentageWithinState.toString()}%`,
+                        cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                            minimumFractionDigits: 2
+                        })}`,
+                        percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                    };
+                };
+                cspTableData.push(newRecord());
+            }
+        }
     }
 
     function compareWithDollarSign(rowA, rowB, id, desc) {
@@ -248,10 +266,10 @@ function App({ category }: { category: string }): JSX.Element {
                         className="tableHeader"
                         sx={{ maxWidth: 240, pl: 7, display: "flex", justifyContent: "center" }}
                     >
-                        EQIP BENEFITS
+                        CSP BENEFITS
                     </Box>
                 ),
-                accessor: "eqipBenefit",
+                accessor: "cspBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
@@ -272,7 +290,7 @@ function App({ category }: { category: string }): JSX.Element {
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} />
+                <Table columns={columns} data={cspTableData} statePerformance={statePerformance} />
             </Styles>
         </Box>
     );

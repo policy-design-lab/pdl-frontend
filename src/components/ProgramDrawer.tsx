@@ -8,7 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const drawerWidth = 240;
@@ -23,7 +23,7 @@ ProgramDrawer.propTypes = {
 };
 
 let currentChecked = 0;
-function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
     const handleToggle = (value: number) => () => {
@@ -53,6 +53,27 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {EQIPList.map((category, value) => {
                 const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory && zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={`No payment reported for ${category}`} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
                 if (
                     category !== "Land management" &&
                     category !== "Other planning" &&
@@ -103,7 +124,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                     return (
                         <Box>
                             <Typography sx={{ pl: 8 }}>
-                                <strong>(6)(A) Practices</strong>
+                                <strong>(6)(A) Improvements</strong>
                             </Typography>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -128,7 +149,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
                 return (
                     <Box key={category}>
                         <Typography sx={{ pl: 8 }}>
-                            <strong>(6)(B) Practices</strong>
+                            <strong>(6)(B) Planning</strong>
                         </Typography>
                         <ListItem key={category} disablePadding>
                             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
@@ -154,21 +175,208 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp }) {
     );
 }
 
-export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
+function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
+    const [checked, setChecked] = React.useState(currentChecked);
+
+    const handleToggle = (value: number) => () => {
+        setChecked(value);
+        setCSPChecked(value);
+        currentChecked = value;
+        setShowPopUp(false);
+    };
+
+    // Match PR89 suggestions
+    const CSPList = [
+        "Total CSP Benefits",
+        "2018 Practices",
+        "Structural",
+        "Vegetative",
+        "Land management",
+        "Forest management",
+        "Soil remediation",
+        "Existing activity payments",
+        "Bundles",
+        "Soil testing",
+        "Other improvement",
+
+        "2014 Eligible Land",
+        "Cropland",
+        "Grassland",
+        "Rangeland",
+        "Pastureland",
+        "Non-industrial private forestland",
+        "Other: supplemental, adjustment & other"
+    ];
+
+    return (
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
+            {CSPList.map((category, value) => {
+                const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory && zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (
+                    category !== "2018 Practices" &&
+                    category !== "2014 Eligible Land" &&
+                    category !== "Total CSP Benefits"
+                ) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === "Total CSP Benefits") {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category === "2018 Practices" || category === "2014 Eligible Land") {
+                    return (
+                        <Box>
+                            <ListItem key={category} disablePadding>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
+                                    <Radio
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ "aria-labelledby": labelId }}
+                                        sx={{
+                                            "&.Mui-checked": {
+                                                color: "#2f7164"
+                                            }
+                                        }}
+                                    />
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={category}
+                                        primaryTypographyProps={{ fontWeight: 700 }}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        </Box>
+                    );
+                }
+                return (
+                    <Box key={category}>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
+}
+
+export default function ProgramDrawer({ setEQIPChecked, setCSPChecked, zeroCategories }): JSX.Element {
     const location = useLocation();
+    const navigate = useNavigate();
+    const [zeroCategory, setZeroCategory] = React.useState(zeroCategories);
     const [eqipOpen, setEqipOpen] = React.useState(false);
     const eqipRef = React.useRef<HTMLLIElement>(null);
     const handleEqipClick = () => {
-        setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+        if (location.pathname !== "/eqip") {
+            navigate("/eqip");
+            window.location.reload(false);
+        } else {
+            setEqipOpen((prevEqipOpen) => !prevEqipOpen);
+        }
     };
     const prevEqipOpen = React.useRef(eqipOpen);
     React.useEffect(() => {
-        if (prevEqipOpen.current === true && eqipOpen === false) {
+        if (prevEqipOpen.current && !eqipOpen) {
             eqipRef.current.focus();
         }
 
         prevEqipOpen.current = eqipOpen;
     }, [eqipOpen]);
+
+    const [cspOpen, setCspOpen] = React.useState(false);
+    const cspRef = React.useRef<HTMLLIElement>(null);
+    const handleCspClick = () => {
+        if (location.pathname !== "/csp") {
+            navigate("/csp");
+            window.location.reload(false);
+        } else {
+            setCspOpen((prevCspOpen) => !prevCspOpen);
+        }
+    };
+    const prevCspOpen = React.useRef(cspOpen);
+    React.useEffect(() => {
+        if (prevCspOpen.current && !cspOpen) {
+            cspRef.current.focus();
+        }
+
+        prevCspOpen.current = cspOpen;
+    }, [cspOpen]);
 
     return (
         <Drawer
@@ -197,7 +405,7 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                     onClick={handleEqipClick}
                 >
                     <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
-                        {eqipOpen ? (
+                        {location.pathname === "/eqip" ? (
                             <Typography sx={{ color: "#2f7164" }}>
                                 <strong>EQIP: Environmental Quality Incentives Program</strong>
                             </Typography>
@@ -225,15 +433,74 @@ export default function ProgramDrawer({ setEQIPChecked }): JSX.Element {
                         </Box>
                     </Box>
                 </MenuItem>
-                <Popper open={eqipOpen} anchorEl={eqipRef.current} role={undefined} placement="right-start">
+                <Popper
+                    open={eqipOpen}
+                    anchorEl={eqipRef.current}
+                    role={undefined}
+                    placement="right-start"
+                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                >
                     <Box>
-                        <EQIPCheckboxList setEQIPChecked={setEQIPChecked} setShowPopUp={setEqipOpen} />
+                        <EQIPCheckboxList
+                            setEQIPChecked={setEQIPChecked}
+                            setShowPopUp={setEqipOpen}
+                            zeroCategory={zeroCategory}
+                        />
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>CSP: Conservation Stewardship Program</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={cspRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: cspOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleCspClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                        {location.pathname === "/csp" ? (
+                            <Typography sx={{ color: "#2f7164" }}>
+                                <strong>CSP: Conservation Stewardship Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>CSP: Conservation Stewardship Program</Typography>
+                        )}
+                        <Box
+                            sx={{
+                                maxWidth: 40,
+                                py: 3,
+                                color: "#ffffff",
+                                backgroundColor: "#2f7164",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                maxHeight: 48
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
+                                    <strong>STATUTE</strong>
+                                    <KeyboardArrowDownIcon />
+                                </Box>
+                            </Typography>
+                        </Box>
+                    </Box>
+                </MenuItem>
+                <Popper
+                    open={cspOpen}
+                    anchorEl={cspRef.current}
+                    role={undefined}
+                    placement="right-start"
+                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                >
+                    <Box>
+                        <CSPCheckboxList
+                            setCSPChecked={setCSPChecked}
+                            setShowPopUp={setCspOpen}
+                            zeroCategory={zeroCategory}
+                        />
+                    </Box>
+                </Popper>
+            </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>CRP: Conservation Reserve Program</Typography>
             </MenuItem>

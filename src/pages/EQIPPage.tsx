@@ -5,8 +5,8 @@ import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
 import DataTable from "../components/eqip/EQIPTotalTable";
-import EqipTotalMap from "../components/eqip/EqipTotalMap";
-import chartData from "../data/eqip/EQIP_STATUTE_PERFORMANCE_DATA.json";
+import EqipTotalMap from "../components/eqip/EQIPTotalMap";
+import chartData from "../data/EQIP/EQIP_STATUTE_PERFORMANCE_DATA.json";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 
@@ -99,7 +99,7 @@ export default function EQIPPage(): JSX.Element {
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                     <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                 </Box>
-                <Drawer setEQIPChecked={setChecked} />
+                <Drawer setEQIPChecked={setChecked} setCSPChecked={null} />
                 <Box sx={{ pl: 50, pr: 20 }}>
                     <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
                         <EqipTotalMap />

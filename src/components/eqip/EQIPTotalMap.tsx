@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 
 import PropTypes from "prop-types";
 import allStates from "../../data/allstates.json";
-import statePerformance from "../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json";
+import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
 
@@ -95,7 +95,7 @@ const MapChart = ({ setTooltipContent, maxValue }) => {
                                         onMouseLeave={() => {
                                             setTooltipContent("");
                                         }}
-                                        fill={colorScale(totalPaymentInDollars)}
+                                        fill={colorScale(totalPaymentInDollars || { value: 0 }) || "#D2D2D2"}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
@@ -153,7 +153,7 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const EqipTotalMap = (): JSX.Element => {
+const EQIPTotalMap = (): JSX.Element => {
     const quantizeArray: number[] = [];
     Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
@@ -203,4 +203,4 @@ const EqipTotalMap = (): JSX.Element => {
     );
 };
 
-export default EqipTotalMap;
+export default EQIPTotalMap;
