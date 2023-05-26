@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Landing page maps and tabs uses api endpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
+- Landing page map & tabs use api endpoints instead of local json files [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
 - Add crop insurance tab back to landing page [#130](https://github.com/policy-design-lab/pdl-frontend/issues/130)
 - Removed the duplicate 'AllProgramMap' component on the landing page. Instead, modified the 'LandingPageMap' component to include the all-program map
 
