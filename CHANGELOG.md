@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.0] - 2023-05-26
+
 ### Added
 
 - Add dynamic color bar for landing page and SNAP page [#121](https://github.com/policy-design-lab/pdl-frontend/issues/121)
@@ -13,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Landing page maps and tabs uses api endpoint instead of local json file [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
+- Landing page maps & tabs use api endpoints instead of local json files [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
 - Add crop insurance tab back to landing page [#130](https://github.com/policy-design-lab/pdl-frontend/issues/130)
 - Removed the duplicate 'AllProgramMap' component on the landing page. Instead, modified the 'LandingPageMap' component to include the all-program map
 
@@ -88,6 +90,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
-[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.4.0...HEAD
-[0.4.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.3.0...0.4.0
-[0.3.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.3.0
+[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.4.0
