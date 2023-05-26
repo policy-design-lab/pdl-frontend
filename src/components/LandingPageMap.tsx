@@ -122,7 +122,7 @@ const MapChart = (props) => {
             color4 = "#2B8CBE";
             color5 = "#045A8D";
             legendTitle = (
-                <Typography nowrap variant="h6">
+                <Typography noWrap variant="h6">
                     Total Supplemental Nutrition Assistance Program (SNAP) Costs from <strong>2018 - 2022</strong>
                 </Typography>
             );
