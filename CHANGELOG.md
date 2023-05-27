@@ -95,12 +95,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
-<<<<<<< HEAD
 [unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.1...HEAD
 [0.5.1]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.5.0
-=======
-[unreleased]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.0...HEAD
-[0.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.4.0...0.5.0
-[0.4.0]: https://github.com/policy-design-lab/pdl-frontend/tag/0.4.0
->>>>>>> develop
