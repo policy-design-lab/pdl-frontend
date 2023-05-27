@@ -211,11 +211,17 @@ const MapChart = (props) => {
                                                             </Typography>
                                                         )}
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            $
-                                                            {Number(total / 1000000.0).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 2
-                                                            })}
-                                                            M
+                                                            {Math.round(Number(total / 1000000.0)) >= 0
+                                                                ? `$${Number(
+                                                                      Math.abs(total) / 1000000.0
+                                                                  ).toLocaleString(undefined, {
+                                                                      maximumFractionDigits: 2
+                                                                  })}M`
+                                                                : `-$${Number(
+                                                                      Math.abs(total) / 1000000.0
+                                                                  ).toLocaleString(undefined, {
+                                                                      maximumFractionDigits: 2
+                                                                  })}M`}
                                                         </Typography>
                                                         <br />
                                                         {/* Show additional data on hover for SNAP */}
@@ -239,26 +245,62 @@ const MapChart = (props) => {
                                                     </Box>
                                                     <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                     <Box>
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            Payments:
-                                                            <br />
-                                                            {records.map((record) => (
-                                                                <div
-                                                                    key={
-                                                                        record.State +
-                                                                        record.Title +
-                                                                        record["Fiscal Year"]
-                                                                    }
-                                                                >
-                                                                    {record["Fiscal Year"]}: $
-                                                                    {Number(record.Amount / 1000000.0).toLocaleString(
-                                                                        undefined,
-                                                                        { maximumFractionDigits: 2 }
-                                                                    )}
-                                                                    M
-                                                                </div>
-                                                            ))}
-                                                        </Typography>
+                                                        {title ===
+                                                        "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                            <Typography sx={{ color: "#3F3F3F" }}>
+                                                                Costs:
+                                                                <br />
+                                                                {records.map((record) => (
+                                                                    <div
+                                                                        key={
+                                                                            record.State +
+                                                                            record.Title +
+                                                                            record["Fiscal Year"]
+                                                                        }
+                                                                    >
+                                                                        {record["Fiscal Year"]}:{" "}
+                                                                        {Number(record.Amount / 1000000.0) >= 0
+                                                                            ? `$${Number(
+                                                                                  Math.abs(record.Amount) / 1000000.0
+                                                                              ).toLocaleString(undefined, {
+                                                                                  maximumFractionDigits: 2
+                                                                              })}M`
+                                                                            : `-$${Number(
+                                                                                  Math.abs(record.Amount) / 1000000.0
+                                                                              ).toLocaleString(undefined, {
+                                                                                  maximumFractionDigits: 2
+                                                                              })}M`}
+                                                                    </div>
+                                                                ))}
+                                                            </Typography>
+                                                        ) : (
+                                                            <Typography sx={{ color: "#3F3F3F" }}>
+                                                                {title === "Crop Insurance" ? "Benefits:" : "Payments:"}
+                                                                <br />
+                                                                {records.map((record) => (
+                                                                    <div
+                                                                        key={
+                                                                            record.State +
+                                                                            record.Title +
+                                                                            record["Fiscal Year"]
+                                                                        }
+                                                                    >
+                                                                        {record["Fiscal Year"]}:{" "}
+                                                                        {Number(record.Amount / 1000000.0) >= 0
+                                                                            ? `$${Number(
+                                                                                  Math.abs(record.Amount) / 1000000.0
+                                                                              ).toLocaleString(undefined, {
+                                                                                  maximumFractionDigits: 2
+                                                                              })}M`
+                                                                            : `-$${Number(
+                                                                                  Math.abs(record.Amount) / 1000000.0
+                                                                              ).toLocaleString(undefined, {
+                                                                                  maximumFractionDigits: 2
+                                                                              })}M`}
+                                                                    </div>
+                                                                ))}
+                                                            </Typography>
+                                                        )}
                                                     </Box>
                                                 </Box>
                                             ) : (
@@ -276,11 +318,17 @@ const MapChart = (props) => {
                                                         </Typography>
                                                         <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            $
-                                                            {Number(total / 1000000.0).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 2
-                                                            })}
-                                                            M
+                                                            {Math.round(Number(total / 1000000.0)) >= 0
+                                                                ? `$${Number(
+                                                                      Math.abs(total) / 1000000.0
+                                                                  ).toLocaleString(undefined, {
+                                                                      maximumFractionDigits: 2
+                                                                  })}M`
+                                                                : `-$${Number(
+                                                                      Math.abs(total) / 1000000.0
+                                                                  ).toLocaleString(undefined, {
+                                                                      maximumFractionDigits: 2
+                                                                  })}M`}
                                                         </Typography>
                                                     </Box>
                                                     <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -290,45 +338,90 @@ const MapChart = (props) => {
                                                             <br />
                                                             {records.map((record) => (
                                                                 <div key={record.State}>
-                                                                    2018: $
-                                                                    {Number(
-                                                                        record["2018 All Programs Total"] / 1000000.0
-                                                                    ).toLocaleString(undefined, {
-                                                                        maximumFractionDigits: 2
-                                                                    })}
-                                                                    M
+                                                                    2018:{" "}
+                                                                    {record["2018 All Programs Total"] / 1000000.0 >= 0
+                                                                        ? `$${Number(
+                                                                              Math.abs(
+                                                                                  record["2018 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`
+                                                                        : `-$${Number(
+                                                                              Math.abs(
+                                                                                  record["2018 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`}
                                                                     <br />
-                                                                    2019: $
-                                                                    {Number(
-                                                                        record["2019 All Programs Total"] / 1000000.0
-                                                                    ).toLocaleString(undefined, {
-                                                                        maximumFractionDigits: 2
-                                                                    })}
-                                                                    M
+                                                                    2019:{" "}
+                                                                    {record["2019 All Programs Total"] / 1000000.0 >= 0
+                                                                        ? `$${Number(
+                                                                              Math.abs(
+                                                                                  record["2019 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`
+                                                                        : `-$${Number(
+                                                                              Math.abs(
+                                                                                  record["2019 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`}
                                                                     <br />
-                                                                    2020: $
-                                                                    {Number(
-                                                                        record["2020 All Programs Total"] / 1000000.0
-                                                                    ).toLocaleString(undefined, {
-                                                                        maximumFractionDigits: 2
-                                                                    })}
-                                                                    M
+                                                                    2020:{" "}
+                                                                    {record["2020 All Programs Total"] / 1000000.0 >= 0
+                                                                        ? `$${Number(
+                                                                              Math.abs(
+                                                                                  record["2020 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`
+                                                                        : `-$${Number(
+                                                                              Math.abs(
+                                                                                  record["2020 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`}
                                                                     <br />
-                                                                    2021: $
-                                                                    {Number(
-                                                                        record["2021 All Programs Total"] / 1000000.0
-                                                                    ).toLocaleString(undefined, {
-                                                                        maximumFractionDigits: 2
-                                                                    })}
-                                                                    M
+                                                                    2021:{" "}
+                                                                    {record["2021 All Programs Total"] / 1000000.0 >= 0
+                                                                        ? `$${Number(
+                                                                              Math.abs(
+                                                                                  record["2021 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`
+                                                                        : `-$${Number(
+                                                                              Math.abs(
+                                                                                  record["2021 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`}
                                                                     <br />
-                                                                    2022: $
-                                                                    {Number(
-                                                                        record["2022 All Programs Total"] / 1000000.0
-                                                                    ).toLocaleString(undefined, {
-                                                                        maximumFractionDigits: 2
-                                                                    })}
-                                                                    M
+                                                                    2022:{" "}
+                                                                    {record["2022 All Programs Total"] / 1000000.0 >= 0
+                                                                        ? `$${Number(
+                                                                              Math.abs(
+                                                                                  record["2022 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`
+                                                                        : `-$${Number(
+                                                                              Math.abs(
+                                                                                  record["2022 All Programs Total"]
+                                                                              ) / 1000000.0
+                                                                          ).toLocaleString(undefined, {
+                                                                              maximumFractionDigits: 2
+                                                                          })}M`}
                                                                     <br />
                                                                 </div>
                                                             ))}
