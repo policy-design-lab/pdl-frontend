@@ -1,0 +1,19 @@
+.MapLegendSVG {
+  font-family: "Roboto", sans-serif;
+}
+.legendText{
+  font-size: 0.75em;
+}
+.legendTextSide{
+  font: italic 0.75em "Roboto", sans-serif ;
+  color: #DDD;
+}
+@media (max-width: 1679px) {
+  .legendText{
+    font-size: 0.65em;
+  }
+  .legendTextSide{
+    font: italic 0.65em "Roboto", sans-serif ;
+    color: #DDD;
+  }
+}
