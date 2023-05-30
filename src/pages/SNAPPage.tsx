@@ -24,6 +24,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 import { hexToRGB } from "../components/shared/StyleFunctions";
 import "../styles/snap.css";
 import { config } from "../app.config";
+import { getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function SNAPPage(): JSX.Element {
     const paddingLR = 40;
@@ -39,10 +40,9 @@ export default function SNAPPage(): JSX.Element {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
-        fetch(`${config.apiUrl}/programs/snap/state-distribution`)
-            .then((response) => response.json())
-            .then((d) => setData(d))
-            .catch((error) => console.error(error));
+        getJsonDataFromUrl(`${config.apiUrl}/programs/snap/state-distribution`).then((response) => {
+            setData(response);
+        });
     }, []);
     const defaultTheme = createTheme({
         spacing: 8
@@ -95,7 +95,7 @@ export default function SNAPPage(): JSX.Element {
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                     <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                    <NavSearchBar text="Supplemental Nutrition ... (SNAP)" />
+                    <NavSearchBar bkColor="rgba(255, 255, 255, 1)" brColor="rgba(205, 205, 205, 0.3)" />
                 </Box>
                 <Box
                     className="MainContent"
@@ -161,7 +161,7 @@ export default function SNAPPage(): JSX.Element {
                                 <Grid
                                     container
                                     columns={{ xs: 12 }}
-                                    className="stateChartTableContainer"
+                                    className="stateBarTableContainer"
                                     sx={{
                                         display: "flex",
                                         justifyContent: "space-between"
@@ -293,7 +293,7 @@ export default function SNAPPage(): JSX.Element {
                                 <Grid
                                     container
                                     columns={{ xs: 12 }}
-                                    className="stateChartTableContainer"
+                                    className="stateBarTableContainer"
                                     sx={{
                                         display: "flex",
                                         justifyContent: "space-between"
@@ -345,7 +345,6 @@ export default function SNAPPage(): JSX.Element {
                 </Box>
             </Box>
             <Box
-                className="bottomFooter"
                 sx={{
                     display: "flex",
                     justifyContent: "center",

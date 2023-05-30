@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import EQIPPage from "./pages/EQIPPage";
+import CSPPage from "./pages/CSPPage";
 import SNAPPage from "./pages/SNAPPage";
 import TitleIPage from "./pages/TitleIPage";
 
@@ -19,6 +20,7 @@ export default function Main(): JSX.Element {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/eqip" element={<EQIPPage />} />
+        <Route path="/csp" element={<CSPPage />} />
         <Route path="/title1" element={<TitleIPage />} />
         <Route path="/snap" element={<SNAPPage />} />
       </Routes>

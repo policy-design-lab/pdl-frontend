@@ -1,0 +1,8 @@
+{
+  "parser": "typescript",
+  "printWidth": 120,
+  "trailingComma": "none",
+  "tabWidth": 4,
+  "doubleQuote": true,
+  "quoteProps": "consistent"
+}
