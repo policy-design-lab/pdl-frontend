@@ -5,7 +5,7 @@
       "subPrograms": [
         {
           "subProgramName": "Agriculture Risk Coverage County Option (ARC-CO)",
-          "totalPaymentInDollars": 6588765972.35,
+          "totalPaymentInDollars": 6588765972.57,
           "totalPaymentInPercentage": 94.19
         },
         {
@@ -14,20 +14,31 @@
           "totalPaymentInPercentage": 5.81
         }
       ],
-      "totalPaymentInDollars": 6995057909.71,
-      "totalPaymentInPercentage": 27.61
+      "totalPaymentInDollars": 6995057909.93,
+      "totalPaymentInPercentage": 26.91
     },
     {
       "programName": "Price Loss Coverage (PLC)",
       "subPrograms": [],
-      "totalPaymentInDollars": 14298018247.24,
-      "totalPaymentInPercentage": 56.43
+      "totalPaymentInDollars": 14298018247.47,
+      "totalPaymentInPercentage": 55.0
     },
     {
-      "programName": "Dairy Margin Coverage Program (DMC)",
-      "subPrograms": [],
-      "totalPaymentInDollars": 1888940793.75,
-      "totalPaymentInPercentage": 7.46
+      "programName": "Dairy",
+      "subPrograms": [
+        {
+          "subProgramName": "Dairy Margin Coverage Program (DMC)",
+          "totalPaymentInDollars": 1896344814.96,
+          "totalPaymentInPercentage": 99.9
+        },
+        {
+          "subProgramName": "Dairy Indemnity Payment Program (DIPP)",
+          "totalPaymentInDollars": 1882083.68,
+          "totalPaymentInPercentage": 0.1
+        }
+      ],
+      "totalPaymentInDollars": 1898226898.64,
+      "totalPaymentInPercentage": 7.3
     },
     {
       "programName": "Disaster Assistance",
@@ -35,21 +46,31 @@
         {
           "subProgramName": "Livestock Forage Disaster Program (LFP)",
           "totalPaymentInDollars": 1665253047.94,
-          "totalPaymentInPercentage": 88.53
+          "totalPaymentInPercentage": 59.38
+        },
+        {
+          "subProgramName": "Noninsured Crop Disaster Assistance Program (NAP)",
+          "totalPaymentInDollars": 677203282.89,
+          "totalPaymentInPercentage": 24.15
+        },
+        {
+          "subProgramName": "Emergency Assistance for Livestock, Honeybees, and Farm-Raised Fish (ELAP)",
+          "totalPaymentInDollars": 246322478.2,
+          "totalPaymentInPercentage": 8.78
         },
         {
           "subProgramName": "Livestock Indemnity Program (LIP)",
           "totalPaymentInDollars": 167801215.76,
-          "totalPaymentInPercentage": 8.92
+          "totalPaymentInPercentage": 5.98
         },
         {
           "subProgramName": "Tree Assistance Program (TAP)",
           "totalPaymentInDollars": 48013966.47,
-          "totalPaymentInPercentage": 2.55
+          "totalPaymentInPercentage": 1.71
         }
       ],
-      "totalPaymentInDollars": 1881068230.17,
-      "totalPaymentInPercentage": 7.42
+      "totalPaymentInDollars": 2804593991.26,
+      "totalPaymentInPercentage": 10.79
     }
   ]
 }

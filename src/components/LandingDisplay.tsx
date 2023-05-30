@@ -123,7 +123,7 @@ export default function LandingDisplay({
     case "Supplemental Nutrition Assistance Program (SNAP)":
       boldText = "What is Farm Bill?";
       bodyText =
-        "The Supplemental Nutrition Assistance Program [SNAP] provides financial assistance to low-income families to help cover the cost of food. Benefits can only be used to purchase food products and are provided in electronic format similar to a credit card and known as the Electronic Benefit Transfer (EBT) card. The map shows the total SNAP benefits of the nutrition title by state from 2018-2022.";
+        "The Supplemental Nutrition Assistance Program [SNAP] provides financial assistance to low-income families to help cover the cost of food. Benefits can only be used to purchase food products and are provided in electronic format similar to a credit card and known as the Electronic Benefit Transfer (EBT) card. The map shows the total SNAP costs of the nutrition title by state from 2018-2022.";
       route = "/snap";
       buttonText = "Explore Maps of SNAP";
       button = (

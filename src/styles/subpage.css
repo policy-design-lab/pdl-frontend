@@ -1,16 +1,24 @@
-.sideBar #filler{
-  @media only screen and (min-width: 1096px) {
-    height: 164px; /*180-16*/
+@media only screen and (min-width: 1096px) {
+  .sideBar #filler {
+    height: 164px;
   }
-}
-.halfWidthMainContent{
-  @media only screen and (min-width: 1096px) {
+  .halfWidthMainContent {
     padding: 180px 160px 100px 400px;
   }
-}
-
-.halfWidthMainContent .categoryMapHeader, .halfWidthMainContent .eqipTotalMainHeader{
-  @media only screen and (min-width: 1096px) {
+  .halfWidthMainContent .categoryMapHeader,
+  .halfWidthMainContent .eqipTotalMainHeader {
     padding-top: 0px;
+  }
+
+  .stateTitleContainer {
+    justify-content: space-between;
+    border-bottom: 1px solid #e4ebe7;
+    padding: 16px 0;
+    display: flex;
+  }
+
+  .stateTitleContainer .stateTitle {
+    font-weight: 700;
+    margin-top: 8px;
   }
 }

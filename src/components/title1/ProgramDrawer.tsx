@@ -10,8 +10,6 @@ import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-// import "../styles/ProgramDrawer.css";
-
 const drawerWidth = 240;
 
 Title1CheckboxList.propTypes = {
