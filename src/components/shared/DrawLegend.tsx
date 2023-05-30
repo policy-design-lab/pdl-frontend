@@ -110,9 +110,11 @@ export default function DrawLegend({
                             return i === 0 ? d : d - margin / 4;
                         })
                         .text((d, i) => {
-                            return i === 0
-                                ? `$${ShortFormat(Math.round(cut_points[i]), i)}`
-                                : ShortFormat(Math.round(cut_points[i]), i);
+                            if (i === 0) {
+                                const res = ShortFormat(Math.round(cut_points[i]), i);
+                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                            }
+                            return ShortFormat(Math.round(cut_points[i]), i);
                         });
                 } else {
                     baseSVG
@@ -129,9 +131,11 @@ export default function DrawLegend({
                             return i === 0 ? d : d - margin / 4;
                         })
                         .text((d, i) => {
-                            return i === 0
-                                ? `$${ShortFormat(Math.round(cut_points[i]), i)}`
-                                : ShortFormat(Math.round(cut_points[i]), i);
+                            if (i === 0) {
+                                const res = ShortFormat(Math.round(cut_points[i]), i);
+                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                            }
+                            return ShortFormat(Math.round(cut_points[i]), i);
                         });
                 }
                 if (emptyState.length !== 0) {
