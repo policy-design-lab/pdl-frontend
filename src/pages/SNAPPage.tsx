@@ -16,7 +16,6 @@ import {
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import LandingPageMap from "../components/LandingPageMap";
-import snap from "../images/legends/SNAP programs benefits 2018 - 2022.png";
 import SnapTable from "../components/snap/SNAPTable";
 import SNAPBar from "../components/snap/SNAPBar";
 import NavBar from "../components/NavBar";
@@ -95,7 +94,7 @@ export default function SNAPPage(): JSX.Element {
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                     <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                    <NavSearchBar bkColor="rgba(255, 255, 255, 1)" brColor="rgba(205, 205, 205, 0.3)" />
+                    <NavSearchBar text="Supplemental Nutrition ... (SNAP)" />
                 </Box>
                 <Box
                     className="MainContent"

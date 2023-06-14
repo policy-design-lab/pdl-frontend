@@ -23,9 +23,9 @@ export function compareWithAlphabetic(rowA, rowB, id, desc) {
 }
 
 export function sortByDollars(jsonArray, key): void {
-  jsonArray.sort((a, b) => {
-    const paymentA = Number(a[key].replace(/[^0-9.-]+/g,""));
-    const paymentB = Number(b[key].replace(/[^0-9.-]+/g,""));
-    return paymentB - paymentA;
-  });
+    jsonArray.sort((a, b) => {
+        const paymentA = Number(a[key].replace(/[^0-9.-]+/g, ""));
+        const paymentB = Number(b[key].replace(/[^0-9.-]+/g, ""));
+        return paymentB - paymentA;
+    });
 }

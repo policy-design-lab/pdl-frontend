@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "../styles/map.css";
+import { CircularProgress } from "@mui/material";
 import { config } from "../app.config";
 import { getJsonDataFromUrl, convertAllState } from "../utils/apiutil";
 import DrawLegend from "./shared/DrawLegend";
@@ -133,18 +134,10 @@ const MapChart = (props) => {
     const yearList = summary
         .map((item) => item["Fiscal Year"])
         .filter((value, index, self) => self.indexOf(value) === index);
-
     const zeroPoints = [];
-
     allPrograms.forEach((d) => {
         if (d[searchKey] === 0) zeroPoints.push(d.State);
     });
-    const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
-    const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
-    const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
-    const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
-    const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
-
     return (
         <div data-tip="">
             <Box id="TopMapContainer" display="flex" justifyContent="center" sx={{ mt: 4 }}>
@@ -553,7 +546,10 @@ const LandingPageMap = ({ programTitle }: { programTitle: string }): JSX.Element
                     </div>
                 </div>
             ) : (
-                <div>Loading data...</div>
+                <div className="dataLoading">
+                    <CircularProgress />
+                    Loading data...
+                </div>
             )}
         </div>
     );

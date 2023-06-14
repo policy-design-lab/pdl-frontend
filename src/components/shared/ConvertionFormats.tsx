@@ -12,8 +12,8 @@ export function ShortFormat(labelValue, position?: number) {
         decimalPart = (absoluteValue / 1.0e6) % 1 !== 0 ? result.match(/\.(.*)M$/)[1] : "";
     } else if (absoluteValue >= 1.0e3) {
         result =
-            (absoluteValue / 1.0e3) % 1 !== 0 ? `${(absoluteValue / 1.0e3).toFixed(1)}M` : `${absoluteValue / 1.0e3}M`;
-        decimalPart = (absoluteValue / 1.0e3) % 1 !== 0 ? result.match(/\.(.*)M$/)[1] : "";
+            (absoluteValue / 1.0e3) % 1 !== 0 ? `${(absoluteValue / 1.0e3).toFixed(1)}K` : `${absoluteValue / 1.0e3}K`;
+        decimalPart = (absoluteValue / 1.0e3) % 1 !== 0 ? result.match(/\.(.*)K$/)[1] : "";
     } else {
         result = absoluteValue % 1 !== 0 ? `${absoluteValue.toFixed(1)}` : `${absoluteValue}`;
     }
