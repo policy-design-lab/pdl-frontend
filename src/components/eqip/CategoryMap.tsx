@@ -6,12 +6,9 @@ import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
 import PropTypes from "prop-types";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
-import { config } from "../../app.config";
-import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -28,7 +25,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, category, maxValue, allStates, statePerformance } = props;
+    const { setTooltipContent, category, maxValue, statePerformance, allStates } = props;
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
@@ -166,119 +163,110 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const CategoryMap = ({ category }: { category: string }): JSX.Element => {
+const CategoryMap = ({
+    category,
+    statePerformance,
+    allStates
+}: {
+    category: string;
+    statePerformance: any;
+    allStates: any;
+}): JSX.Element => {
     const [content, setContent] = useState("");
     const title = `${category} Benefits`;
     const quantizeArray: number[] = [];
-    const [allStatesData, setAllStatesData] = useState([]);
-    const [statePerformanceData, setStatePerformanceData] = useState([]);
-    React.useEffect(() => {
-        const state_perf_url = `${config.apiUrl}/programs/conservation/eqip/state-distribution`;
-        getJsonDataFromUrl(state_perf_url).then((response) => {
-            const converted_perf_json = response;
-            setStatePerformanceData(converted_perf_json);
-        });
-    }, []);
-    React.useEffect(() => {
-        const statecode_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = response;
-            setAllStatesData(converted_json);
-        });
-    }, []);
-    if (statePerformanceData !== undefined) {
-        Object.values(statePerformanceData).map((value) => {
-            const statuteRecord = value[0].statutes;
-            const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
-            const AArray = ACur.practiceCategories;
-            const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
-            const BArray = BCur.practiceCategories;
-            const TotalArray = AArray.concat(BArray);
-            const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-            quantizeArray.push(categoryRecord.paymentInDollars);
-            return null;
-        });
-        const maxValue = Math.max(...quantizeArray);
-        const label1 = (maxValue / 5) * 0;
-        const label2 = (maxValue / 5) * 1;
-        const label3 = (maxValue / 5) * 2;
-        const label4 = (maxValue / 5) * 3;
-        const label5 = (maxValue / 5) * 4;
-        return (
-            <div>
-                <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
-                    <HorizontalStackedBar
-                        title={title}
-                        color1="#F0F9E8"
-                        color2="#BAE4BC"
-                        color3="#7BCCC4"
-                        color4="#43A2CA"
-                        color5="#0868AC"
-                        label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                            maximumFractionDigits: 0
-                        })}`}
-                        label2={
-                            label2 >= 1000000
-                                ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-                                      maximumFractionDigits: 0
-                                  })}M`
-                                : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 1
-                                  })}K`
-                        }
-                        label3={
-                            label3 >= 1000000
-                                ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-                                      maximumFractionDigits: 0
-                                  })}M`
-                                : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 1
-                                  })}K`
-                        }
-                        label4={
-                            label4 >= 1000000
-                                ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-                                      maximumFractionDigits: 0
-                                  })}M`
-                                : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 1
-                                  })}K`
-                        }
-                        label5={
-                            label5 >= 1000000
-                                ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-                                      maximumFractionDigits: 0
-                                  })}M`
-                                : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 1
-                                  })}K`
-                        }
-                        label6={
-                            maxValue >= 1000000
-                                ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                                      maximumFractionDigits: 0
-                                  })}M`
-                                : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 1
-                                  })}K`
-                        }
-                    />
-                </Box>
-                <MapChart
-                    setTooltipContent={setContent}
-                    category={category}
-                    maxValue={maxValue}
-                    allStates={allStatesData}
-                    statePerformace={statePerformanceData}
+    Object.values(statePerformance).map((value) => {
+        const statuteRecord = value[0].statutes;
+        const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+        const AArray = ACur.practiceCategories;
+        const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
+        const BArray = BCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray);
+        const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+        quantizeArray.push(categoryRecord.paymentInDollars);
+        return null;
+    });
+    const maxValue = Math.max(...quantizeArray);
+    const label1 = (maxValue / 5) * 0;
+    const label2 = (maxValue / 5) * 1;
+    const label3 = (maxValue / 5) * 2;
+    const label4 = (maxValue / 5) * 3;
+    const label5 = (maxValue / 5) * 4;
+    return (
+        <div>
+            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                <HorizontalStackedBar
+                    title={title}
+                    color1="#F0F9E8"
+                    color2="#BAE4BC"
+                    color3="#7BCCC4"
+                    color4="#43A2CA"
+                    color5="#0868AC"
+                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
+                        maximumFractionDigits: 0
+                    })}`}
+                    label2={
+                        label2 >= 1000000
+                            ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label3={
+                        label3 >= 1000000
+                            ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label4={
+                        label4 >= 1000000
+                            ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label5={
+                        label5 >= 1000000
+                            ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
+                    label6={
+                        maxValue >= 1000000
+                            ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
+                                  maximumFractionDigits: 0
+                              })}M`
+                            : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
+                                  maximumFractionDigits: 1
+                              })}K`
+                    }
                 />
-                <div className="tooltip-container">
-                    <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
-                        {content}
-                    </ReactTooltip>
-                </div>
+            </Box>
+            <MapChart
+                setTooltipContent={setContent}
+                category={category}
+                maxValue={maxValue}
+                statePerformance={statePerformance}
+                allStates={allStates}
+            />
+            <div className="tooltip-container">
+                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                    {content}
+                </ReactTooltip>
             </div>
-        );
-    }
+        </div>
+    );
+
 };
 
 export default CategoryMap;

@@ -2,10 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-// import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
-import { config } from "../../app.config";
-import { getJsonDataFromUrl } from "../../utils/apiutil";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -114,22 +111,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App(): JSX.Element {
-    const [statePerformance, setStatePerformance] = React.useState([]);
-    const [allStates, setAllStates] = React.useState([]);
-
-    // TBD: due to the time limited, leave this
-    React.useEffect(() => {
-        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setStatePerformance(response);
-        });
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
-        });
-    }, []);
-
+function App({ statePerformance }: { statePerformance: any }): JSX.Element {
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
         const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
