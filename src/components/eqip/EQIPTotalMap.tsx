@@ -25,7 +25,7 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance  }) => {
+const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance }) => {
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);

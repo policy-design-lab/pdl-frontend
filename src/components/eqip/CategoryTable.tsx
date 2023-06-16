@@ -271,7 +271,7 @@ function App({ category, statePerformance }: { category: string; statePerformanc
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} statePerformance={statePerformance}/>
+                <Table columns={columns} data={eqipTableData} statePerformance={statePerformance} />
             </Styles>
         </Box>
     );

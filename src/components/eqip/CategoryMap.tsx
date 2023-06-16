@@ -266,7 +266,6 @@ const CategoryMap = ({
             </div>
         </div>
     );
-
 };
 
 export default CategoryMap;
