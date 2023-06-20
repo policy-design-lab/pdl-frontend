@@ -69,8 +69,11 @@ const MapChart = (props) => {
                                                 >
                                                     <Typography sx={{ color: "#3F3F3F" }}>
                                                         {Number(categoryPayment) < 1000000
-                                                            ? `$${Number(Number(categoryPayment) / 1000.0).toLocaleString(
-                                                              undefined, { maximumFractionDigits: 2 })}K`
+                                                            ? `$${Number(
+                                                                  Number(categoryPayment) / 1000.0
+                                                              ).toLocaleString(undefined, {
+                                                                  maximumFractionDigits: 2
+                                                              })}K`
                                                             : `$${Number(
                                                                   Number(categoryPayment) / 1000000.0
                                                               ).toLocaleString(undefined, {
@@ -120,6 +123,7 @@ const MapChart = (props) => {
                                         />
                                     );
                                 }
+                                return null;
                             })}
                             {geographies.map((geo) => {
                                 const centroid = geoCentroid(geo);

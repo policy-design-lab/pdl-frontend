@@ -204,6 +204,6 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
             </div>
         </div>
     );
-}
+};
 
 export default EQIPTotalMap;

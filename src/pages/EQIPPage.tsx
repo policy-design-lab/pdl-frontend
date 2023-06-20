@@ -8,8 +8,8 @@ import DataTable from "../components/eqip/EQIPTotalTable";
 import EqipTotalMap from "../components/eqip/EQIPTotalMap";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
-import {config} from "../app.config";
-import {getJsonDataFromUrl} from "../utils/apiutil";
+import { config } from "../app.config";
+import { getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function EQIPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -103,18 +103,18 @@ export default function EQIPPage(): JSX.Element {
         soilHealthTotal += Number(soilHealthCur.totalPaymentInDollars);
 
         setSixAChartData([
-            {name: "Structural", value: structuralTotal, color: "#2F7164"},
-            {name: "Land management", value: landManagementTotal, color: "#4D847A"},
-            {name: "Vegetative", value: vegetativeTotal, color: "#749F97"},
-            {name: "Forest management", value: forestManagementTotal, color: "#9CBAB4"},
-            {name: "Other improvement", value: other6ATotal, color: "#B9CDC9"},
-            {name: "Soil remediation; Soil testing", value: soilRemediationTotal + soilTestingTotal, color: "#CDDBD8"}
+            { name: "Structural", value: structuralTotal, color: "#2F7164" },
+            { name: "Land management", value: landManagementTotal, color: "#4D847A" },
+            { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
+            { name: "Forest management", value: forestManagementTotal, color: "#9CBAB4" },
+            { name: "Other improvement", value: other6ATotal, color: "#B9CDC9" },
+            { name: "Soil remediation; Soil testing", value: soilRemediationTotal + soilTestingTotal, color: "#CDDBD8" }
         ]);
 
         setSixBChartData([
-            {name: "Other planning", value: otherPlanningTotal, color: "#2F7164"},
-            {name: "Conservation planning assessment", value: conservationPlanningAssessmentTotal, color: "#4D847A"},
-            {name: "Comprehensive Nutrient Mgt.", value: comprehensiveNutrientMgtTotal, color: "#749F97"},
+            { name: "Other planning", value: otherPlanningTotal, color: "#2F7164" },
+            { name: "Conservation planning assessment", value: conservationPlanningAssessmentTotal, color: "#4D847A" },
+            { name: "Comprehensive Nutrient Mgt.", value: comprehensiveNutrientMgtTotal, color: "#749F97" },
             {
                 name: "Resource-conserving crop rotation; Soil health",
                 value: resourceConservingCropRotationTotal + soilHealthTotal,
@@ -123,8 +123,8 @@ export default function EQIPPage(): JSX.Element {
         ]);
 
         setTotalChartData([
-            {name: "6 (A)", value: sixATotal, color: "#2F7164"},
-            {name: "6 (B)", value: sixBTotal, color: "#9CBAB4"}
+            { name: "6 (A)", value: sixATotal, color: "#2F7164" },
+            { name: "6 (B)", value: sixBTotal, color: "#9CBAB4" }
         ]);
     };
 
@@ -137,79 +137,130 @@ export default function EQIPPage(): JSX.Element {
                     </Box>
                     <Drawer setEQIPChecked={setChecked} setCSPChecked={null} />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
+                        >
                             <EqipTotalMap statePerformance={statePerformance} allStates={allStates} />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}>
-                            <CategoryMap category="Land management"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Land management"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}>
-                            <CategoryMap category="Forest management"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Forest management"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}>
-                            <CategoryMap category="Structural"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Structural"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}>
-                            <CategoryMap category="Soil remediation"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Soil remediation"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}>
-                            <CategoryMap category="Vegetative"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Vegetative"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}>
-                            <CategoryMap category="Other improvement"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Other improvement"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 7 ? "none" : "block" }}>
-                            <CategoryMap category="Soil testing"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 7 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Soil testing"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryMap category="Other planning"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 8 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Other planning"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 9 ? "none" : "block" }}>
-                            <CategoryMap category="Conservation planning assessment"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 9 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Conservation planning assessment"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 10 ? "none" : "block" }}>
-                            <CategoryMap category="Resource-conserving crop rotation"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 10 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Resource-conserving crop rotation"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 11 ? "none" : "block" }}>
-                            <CategoryMap category="Soil health"
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 11 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Soil health"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
-                        <Box component="div" sx={{ width: "85%", m: "auto", display: checked !== 12 ? "none" : "block" }}>
-                            <CategoryMap category="Comprehensive Nutrient Mgt."
-                                         statePerformance={statePerformance}
-                                         allStates={allStates}
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 12 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                category="Comprehensive Nutrient Mgt."
+                                statePerformance={statePerformance}
+                                allStates={allStates}
                             />
                         </Box>
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
@@ -220,16 +271,16 @@ export default function EQIPPage(): JSX.Element {
                             </Box>
                             <Typography sx={{ mt: 2 }}>
                                 EQIP provides cost-share assistance for improvements to eligible land. In the statute,
-                                Congress defined seven categories of conservation practices: (1) structural practices, such
-                                as for irrigation and livestock manure management or abatement; (2) land management
-                                practices, such as for fencing, drainage water management, grazing, prescribed burning, and
-                                wildlife habitat; (3) vegetative practices, such as planting filter strips, cover crops,
-                                grassed waterways, field borders, windbreaks, and shelterbelts; (4) forest management
-                                practices, which include planting trees and shrubs, improving forest stands, planting
-                                riparian forest buffers, and treating residues; (5) soil testing practices; (6) soil
-                                remediation practices, such as residue and tillage management (no-till, mulch-till, or
-                                strip-till), and amendments for treating agricultural wastes; and (7) other practices,
-                                including integrated pest management, dust control, and energy improvements.
+                                Congress defined seven categories of conservation practices: (1) structural practices,
+                                such as for irrigation and livestock manure management or abatement; (2) land management
+                                practices, such as for fencing, drainage water management, grazing, prescribed burning,
+                                and wildlife habitat; (3) vegetative practices, such as planting filter strips, cover
+                                crops, grassed waterways, field borders, windbreaks, and shelterbelts; (4) forest
+                                management practices, which include planting trees and shrubs, improving forest stands,
+                                planting riparian forest buffers, and treating residues; (5) soil testing practices; (6)
+                                soil remediation practices, such as residue and tillage management (no-till, mulch-till,
+                                or strip-till), and amendments for treating agricultural wastes; and (7) other
+                                practices, including integrated pest management, dust control, and energy improvements.
                             </Typography>
                         </Box>
                         {aTotal >= 0 || bTotal >= 0 ? (
@@ -263,54 +314,54 @@ export default function EQIPPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <DataTable statePerformance={statePerformance}/>
+                            <DataTable statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
-                            <CategoryTable category="Land management"  statePerformance={statePerformance}/>
+                            <CategoryTable category="Land management" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
-                            <CategoryTable category="Forest management" statePerformance={statePerformance}/>
+                            <CategoryTable category="Forest management" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
-                            <CategoryTable category="Structural" statePerformance={statePerformance}/>
+                            <CategoryTable category="Structural" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
-                            <CategoryTable category="Soil remediation" statePerformance={statePerformance}/>
+                            <CategoryTable category="Soil remediation" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
-                            <CategoryTable category="Vegetative" statePerformance={statePerformance}/>
+                            <CategoryTable category="Vegetative" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
-                            <CategoryTable category="Other improvement" statePerformance={statePerformance}/>
+                            <CategoryTable category="Other improvement" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 7 ? "none" : "block" }}>
-                            <CategoryTable category="Soil testing" statePerformance={statePerformance}/>
+                            <CategoryTable category="Soil testing" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryTable category="Other planning" statePerformance={statePerformance}/>
+                            <CategoryTable category="Other planning" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
-                            <CategoryTable category="Conservation planning assessment"
-                                           statePerformance={statePerformance}
+                            <CategoryTable
+                                category="Conservation planning assessment"
+                                statePerformance={statePerformance}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
-                            <CategoryTable category="Resource-conserving crop rotation"
-                                           statePerformance={statePerformance}
+                            <CategoryTable
+                                category="Resource-conserving crop rotation"
+                                statePerformance={statePerformance}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
-                            <CategoryTable category="Soil health" statePerformance={statePerformance}/>
+                            <CategoryTable category="Soil health" statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
-                            <CategoryTable category="Comprehensive Nutrient Mgt."
-                                           statePerformance={statePerformance}
-                            />
+                            <CategoryTable category="Comprehensive Nutrient Mgt." statePerformance={statePerformance} />
                         </Box>
                     </Box>
                 </Box>
             ) : (
-              <h1>Loading data...</h1>
+                <h1>Loading data...</h1>
             )}
         </ThemeProvider>
     );
