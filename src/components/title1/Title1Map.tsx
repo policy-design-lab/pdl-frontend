@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
-import HorizontalStackedBar from "../HorizontalStackedBar";
-import { filter } from "rxjs";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 
@@ -368,8 +365,8 @@ const Title1Map = ({
                 const subprogramRecord = programRecord.subPrograms.find((s) => s.subProgramName === subprogram);
                 if (!subprogramRecord || subprogramRecord.paymentInDollars === 0) zeroPoints.push(state.state);
             }
-        } else {
-            if (state.totalPaymentInDollars === 0) zeroPoints.push(state.state);
+        } else if (state.totalPaymentInDollars === 0) {
+            zeroPoints.push(state.state);
         }
     });
     return (

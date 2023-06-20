@@ -342,7 +342,11 @@ interface ProgramDrawerProps {
     zeroCategories?: string[];
 }
 
-export default function ProgramDrawer({ setEQIPChecked, setCSPChecked, zeroCategories }: ProgramDrawerProps): JSX.Element {
+export default function ProgramDrawer({
+    setEQIPChecked,
+    setCSPChecked,
+    zeroCategories
+}: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
     const navigate = useNavigate();
     const [zeroCategory, setZeroCategory] = React.useState(zeroCategories);

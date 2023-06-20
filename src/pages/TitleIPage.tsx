@@ -26,7 +26,6 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import "../styles/subpage.css";
 
 export default function TitleIPage(): JSX.Element {
-    const [barStatus, setChartStatus] = React.useState(0);
     const [tab, setTab] = React.useState(0);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
@@ -62,37 +61,10 @@ export default function TitleIPage(): JSX.Element {
         }
     };
     const defaultTheme = createTheme();
-    // const organizeTotalData = () => {
-    //   let ARC_COTotal = 0;
-    //   let ARC_ICTotal = 0;
-    //   let PLCTotal = 0;
-    //   let LIPTotal = 0;
-    //   let TAPTotal = 0;
-
-    //   // eslint-disable-next-line
-    //   const curARC = chartData.programs.find((s) => s.programName === "Agriculture Risk Coverage (ARC)");
-    //   const curPLC = chartData.programs.find((s) => s.programName === "Price Loss Coverage (PLC)");
-    //   const curDMC = chartData.programs.find((s) => s.programName === "Dairy Margin Coverage Program (DMC)");
-    //   const curDA = chartData.programs.find((s) => s.programName === "Disaster Assistance");
-    //   const ARCSubprograms = curARC.subPrograms;
-    //   const DASubprograms = curDA.subPrograms;
-    //   const ARC_CO = ARCSubprograms.find((s) => s.subProgramName === "Agriculture Risk Coverage County Option (ARC-CO)");
-    //   const ARC_IC = ARCSubprograms.find(
-    //       (s) => s.subProgramName === "Agriculture Risk Coverage Individual Coverage (ARC-IC)"
-    //   );
-    //   const LFP = DASubprograms.find((s) => s.subProgramName === "Livestock Forage Disaster Program (LFP)");
-    //   const LIP = DASubprograms.find((s) => s.subProgramName === "Livestock Indemnity Program (LIP)");
-    //   const TAP = DASubprograms.find((s) => s.subProgramName === "Tree Assistance Program (TAP)");
-
-    //   ARC_COTotal += Number(ARC_CO.totalPaymentInDollars);
-    //   ARC_ICTotal += Number(ARC_IC.totalPaymentInDollars);
-    //   LFPTotal += Number(LFP.totalPaymentInDollars);
-    //   LIPTotal += Number(LIP.totalPaymentInDollars);
-    //   TAPTotal += Number(TAP.totalPaymentInDollars);
     // }
     function prepData(program, subprogram, data, year) {
-        let organizedData: {}[] = [];
-        let originalData: {}[] = [];
+        const organizedData: Record<string, unknown>[] = [];
+        const originalData: Record<string, unknown>[] = [];
         data[year].forEach((stateData) => {
             const state = stateData.state;
             const programData = stateData.programs.filter((p) => {
@@ -103,26 +75,26 @@ export default function TitleIPage(): JSX.Element {
                     return p.subProgramName.toString() === subprogram;
                 });
                 organizedData.push({
-                    state: state,
+                    state,
                     baseAcres: subProgramData[0].areaInAcres,
                     payments: subProgramData[0].paymentInDollars,
                     recipients: subProgramData[0].recipientCount
                 });
                 originalData.push({
-                    state: state,
+                    state,
                     baseAcres: subProgramData[0].areaInAcres,
                     payments: subProgramData[0].paymentInDollars,
                     recipients: subProgramData[0].recipientCount
                 });
             } else {
                 organizedData.push({
-                    state: state,
+                    state,
                     baseAcres: programData[0].areaInAcres,
                     payments: programData[0].programPaymentInDollars,
                     recipients: programData[0].recipientCount
                 });
                 originalData.push({
-                    state: state,
+                    state,
                     baseAcres: programData[0].areaInAcres,
                     payments: programData[0].programPaymentInDollars,
                     recipients: programData[0].recipientCount
@@ -192,56 +164,21 @@ export default function TitleIPage(): JSX.Element {
                                 columns={{ xs: 12 }}
                                 sx={{
                                     paddingTop: 6,
-                                    justifyContent: "center",
-                                    margin: "auto 2%"
+                                    justifyContent: "center"
                                 }}
                             >
-                                <Grid
-                                    container
-                                    columns={{ xs: 12 }}
-                                    className="stateChartTableContainer"
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-                                    <Grid
-                                        item
-                                        xs={7}
-                                        justifyContent="flex-start"
-                                        alignItems="center"
-                                        sx={{ display: "flex" }}
-                                    >
-                                        <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                                            <Typography
-                                                variant="h6"
-                                                sx={{
-                                                    display: "flex-box",
-                                                    fontWeight: 400,
-                                                    margin: "2% auto",
-                                                    fontSize: "1.2em",
-                                                    color: "#212121",
-                                                    paddingTop: 1.5
-                                                }}
-                                            >
-                                                Comparing Total Commodities Programs Benefits (2018-2022)
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                                <Box sx={{ width: "100%" }}>
-                                    <Title1ProgramTable
-                                        program="Total Commodities Programs Benefits"
-                                        subprogram={undefined}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        Title1Data={stateDistributionData}
-                                        yearKey="2018-2022"
-                                        color1="#F6EEEA"
-                                        color2="#EAF8EA"
-                                        color3="#F7F0F8"
-                                    />
-                                </Box>
+                                <Title1ProgramTable
+                                    tableTitle="Comparing Total Commodities Programs Payments and Payments Percentage Nationwide (2018-2022)"
+                                    program="Total Commodities Programs Benefits"
+                                    subprogram={undefined}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={stateDistributionData}
+                                    year="2018-2022"
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
                             </Grid>
                         </Box>
                     </Box>
@@ -308,11 +245,10 @@ export default function TitleIPage(): JSX.Element {
                                 columns={{ xs: 12 }}
                                 sx={{
                                     paddingTop: 6,
-                                    justifyContent: "center",
-                                    margin: "auto 2%"
+                                    justifyContent: "center"
                                 }}
                             >
-                                <Box id="title1TableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
+                                <Box className="title1TableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
                                     <Title1TreeMap
                                         program="Agriculture Risk Coverage (ARC)"
                                         TreeMapData={prepData(
@@ -323,22 +259,23 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
+                                        svgW={window.innerWidth * 0.6}
+                                        svgH={3000}
                                     />
                                 </Box>
-                                <Box id="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                    <Box sx={{ width: "100%" }}>
-                                        <Title1ProgramTable
-                                            program="Agriculture Risk Coverage (ARC)"
-                                            subprogram={undefined}
-                                            skipColumns={[]}
-                                            stateCodes={stateCodesData}
-                                            Title1Data={stateDistributionData}
-                                            yearKey="2018-2022"
-                                            color1="#F6EEEA"
-                                            color2="#EAF8EA"
-                                            color3="#F7F0F8"
-                                        />
-                                    </Box>
+                                <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                                    <Title1ProgramTable
+                                        tableTitle="Comparing ARC Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        program="Agriculture Risk Coverage (ARC)"
+                                        subprogram={undefined}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodesData}
+                                        Title1Data={stateDistributionData}
+                                        year="2018-2022"
+                                        color1="#F6EEEA"
+                                        color2="#EAF8EA"
+                                        color3="#F7F0F8"
+                                    />
                                 </Box>
                             </Grid>
                         </Box>
@@ -406,8 +343,7 @@ export default function TitleIPage(): JSX.Element {
                                 columns={{ xs: 12 }}
                                 sx={{
                                     paddingTop: 6,
-                                    justifyContent: "center",
-                                    margin: "auto 2%"
+                                    justifyContent: "center"
                                 }}
                             >
                                 <Box sx={{ display: tab !== 0 ? "none" : "div" }}>
@@ -421,56 +357,23 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
+                                        svgW={window.innerWidth * 0.6}
+                                        svgH={2800}
                                     />
                                 </Box>
-                                <Box id="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                    <Grid
-                                        container
-                                        columns={{ xs: 12 }}
-                                        className="stateChartTableContainer"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}
-                                    >
-                                        <Grid
-                                            item
-                                            xs={7}
-                                            justifyContent="flex-start"
-                                            alignItems="center"
-                                            sx={{ display: "flex" }}
-                                        >
-                                            <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
-                                                        display: "flex-box",
-                                                        fontWeight: 400,
-                                                        margin: "2% auto",
-                                                        fontSize: "1.2em",
-                                                        color: "#212121",
-                                                        paddingTop: 1.5
-                                                    }}
-                                                >
-                                                    Comparing ARC-CO Benefits, Payment Recipients and Base
-                                                    Acres(2018-2022)
-                                                </Typography>
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                    <Box sx={{ width: "100%" }}>
-                                        <Title1ProgramTable
-                                            skipColumns={[]}
-                                            program="Agriculture Risk Coverage (ARC)"
-                                            subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
-                                            stateCodes={stateCodesData}
-                                            Title1Data={stateDistributionData}
-                                            yearKey="2018-2022"
-                                            color1="#F6EEEA"
-                                            color2="#EAF8EA"
-                                            color3="#F7F0F8"
-                                        />
-                                    </Box>
+                                <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                                    <Title1ProgramTable
+                                        tableTitle="Comparing ARC-CO Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        skipColumns={[]}
+                                        program="Agriculture Risk Coverage (ARC)"
+                                        subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
+                                        stateCodes={stateCodesData}
+                                        Title1Data={stateDistributionData}
+                                        year="2018-2022"
+                                        color1="#F6EEEA"
+                                        color2="#EAF8EA"
+                                        color3="#F7F0F8"
+                                    />
                                 </Box>
                             </Grid>
                         </Box>
@@ -539,8 +442,7 @@ export default function TitleIPage(): JSX.Element {
                                 columns={{ xs: 12 }}
                                 sx={{
                                     paddingTop: 6,
-                                    justifyContent: "center",
-                                    margin: "auto 2%"
+                                    justifyContent: "center"
                                 }}
                             >
                                 <Box sx={{ display: tab !== 0 ? "none" : "div" }}>
@@ -554,56 +456,23 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
+                                        svgW={window.innerWidth * 0.6}
+                                        svgH={2300}
                                     />
                                 </Box>
-                                <Box id="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                    <Grid
-                                        container
-                                        columns={{ xs: 12 }}
-                                        className="stateChartTableContainer"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}
-                                    >
-                                        <Grid
-                                            item
-                                            xs={7}
-                                            justifyContent="flex-start"
-                                            alignItems="center"
-                                            sx={{ display: "flex" }}
-                                        >
-                                            <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
-                                                        display: "flex-box",
-                                                        fontWeight: 400,
-                                                        margin: "2% auto",
-                                                        fontSize: "1.2em",
-                                                        color: "#212121",
-                                                        paddingTop: 1.5
-                                                    }}
-                                                >
-                                                    Comparing ARC-IC Benefits, Payment Recipients and Base
-                                                    Acres(2018-2022)
-                                                </Typography>
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                    <Box sx={{ width: "100%" }}>
-                                        <Title1ProgramTable
-                                            skipColumns={[]}
-                                            program="Agriculture Risk Coverage (ARC)"
-                                            subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
-                                            stateCodes={stateCodesData}
-                                            Title1Data={stateDistributionData}
-                                            yearKey="2018-2022"
-                                            color1="#F6EEEA"
-                                            color2="#EAF8EA"
-                                            color3="#F7F0F8"
-                                        />
-                                    </Box>
+                                <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                                    <Title1ProgramTable
+                                        tableTitle="Comparing ARC-IC Benefits, Payment Recipients and Base Acres (2018-2022)"
+                                        skipColumns={[]}
+                                        program="Agriculture Risk Coverage (ARC)"
+                                        subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
+                                        stateCodes={stateCodesData}
+                                        Title1Data={stateDistributionData}
+                                        year="2018-2022"
+                                        color1="#F6EEEA"
+                                        color2="#EAF8EA"
+                                        color3="#F7F0F8"
+                                    />
                                 </Box>
                             </Grid>
                         </Box>
@@ -671,8 +540,7 @@ export default function TitleIPage(): JSX.Element {
                                 columns={{ xs: 12 }}
                                 sx={{
                                     paddingTop: 6,
-                                    justifyContent: "center",
-                                    margin: "auto 2%"
+                                    justifyContent: "center"
                                 }}
                             >
                                 <Box className="title1TableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
@@ -686,54 +554,23 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
+                                        svgW={window.innerWidth * 0.6}
+                                        svgH={2300}
                                     />
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                    <Grid
-                                        container
-                                        columns={{ xs: 12 }}
-                                        className="stateChartTableContainer"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}
-                                    >
-                                        <Grid
-                                            item
-                                            xs={7}
-                                            justifyContent="flex-start"
-                                            alignItems="center"
-                                            sx={{ display: "flex" }}
-                                        >
-                                            <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
-                                                        display: "flex-box",
-                                                        fontWeight: 400,
-                                                        fontSize: "1.2em",
-                                                        color: "#212121",
-                                                        paddingTop: 1.5
-                                                    }}
-                                                >
-                                                    Comparing PLC Benefits, Payment Recipients and Base Acres(2018-2022)
-                                                </Typography>
-                                            </Box>
-                                        </Grid>
-                                    </Grid>
-                                    <Box sx={{ width: "100%" }}>
-                                        <Title1ProgramTable
-                                            program="Price Loss Coverage (PLC)"
-                                            subprogram={undefined}
-                                            skipColumns={[]}
-                                            stateCodes={stateCodesData}
-                                            Title1Data={stateDistributionData}
-                                            yearKey="2018-2022"
-                                            color1="#F6EEEA"
-                                            color2="#EAF8EA"
-                                            color3="#F7F0F8"
-                                        />
-                                    </Box>
+                                    <Title1ProgramTable
+                                        tableTitle="Comparing PLC Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        program="Price Loss Coverage (PLC)"
+                                        subprogram={undefined}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodesData}
+                                        Title1Data={stateDistributionData}
+                                        year="2018-2022"
+                                        color1="#F6EEEA"
+                                        color2="#EAF8EA"
+                                        color3="#F7F0F8"
+                                    />
                                 </Box>
                             </Grid>
                         </Box>

@@ -29,3 +29,11 @@ export function sortByDollars(jsonArray, key): void {
         return paymentB - paymentA;
     });
 }
+
+export function compareWithNumber(rowA, rowB, id, desc) {
+    const a = Number(rowA.values[id].replace(/,/g, ""));
+    const b = Number(rowB.values[id].replace(/,/g, ""));
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+}

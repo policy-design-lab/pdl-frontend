@@ -155,8 +155,11 @@ export default function CSPPage(): JSX.Element {
             {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                        <NavSearchBar text="Conservation Programs (Title II)" subtext="Conversation Stewardship Program (CSP)"/>
+                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavSearchBar
+                            text="Conservation Programs (Title II)"
+                            subtext="Conversation Stewardship Program (CSP)"
+                        />
                     </Box>
                     <Drawer setCSPChecked={setChecked} setEQIPChecked={undefined} zeroCategories={zeroCategories} />
                     <Box sx={{ pl: 50, pr: 20 }}>

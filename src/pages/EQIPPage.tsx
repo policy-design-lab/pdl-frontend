@@ -99,7 +99,10 @@ export default function EQIPPage(): JSX.Element {
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                     <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                    <NavSearchBar text="Conservation Programs (Title II)" subtext="Environmental Quality Incentives Program (EQIP)"/>
+                    <NavSearchBar
+                        text="Conservation Programs (Title II)"
+                        subtext="Environmental Quality Incentives Program (EQIP)"
+                    />
                 </Box>
                 <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} />
                 <Box sx={{ pl: 50, pr: 20 }}>

@@ -1,118 +1,180 @@
 import React, { useState } from "react";
-import { menu } from "./SideBarMenuItem";
-import { hasChildren } from "./Utils";
 import {
     Box,
     Collapse,
     Drawer,
     List,
     ListItem,
+    ListItemButton,
     ListItemIcon,
     ListItemText,
     MenuItem,
-    Typography,
-    styled
+    Typography
 } from "@mui/material";
+import styled from "styled-components";
+import { menu } from "./SideBarMenuItem";
+import { hasChildren } from "./Utils";
 
+const Styles = styled.div`
+    .Mui-disabled {
+        pointerevents: auto !important;
+        opacity: 1 !important;
+    }
+`;
 let currentChecked = "0";
 
 export default function SideBar({ setTitle1Checked }): JSX.Element {
     const [checked, setChecked] = React.useState(currentChecked);
+    const [disabled, setDisabled] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState("0"); // State to track selected item
     const handleToggle = (value: string) => () => {
         setChecked(value);
         setTitle1Checked(value);
         currentChecked = value;
         setSelectedItem(value === selectedItem ? "" : value);
+        return null;
     };
-
-    const SideBarItem = ({ key, item, value }) => {
+    const sameCategory = (item, value) => {
+        if (value[0] === selectedItem[0]) {
+            return true;
+        }
+        return false;
+    };
+    const SideBarItem = ({ item, value, childStyle }) => {
         const Component = hasChildren(item) ? MultiLevel : SingleLevel;
-        return <Component item={item} value={value} />;
+        return <Component item={item} value={value} childStyle={childStyle} />;
     };
 
-    const SingleLevel = ({ value, item }) => {
+    const SingleLevel = ({ value, item, childStyle }) => {
+        const highlight = sameCategory(item, value);
         return (
-            <ListItem
+            <ListItemButton
+                id={item.title}
                 onClick={handleToggle(value)}
-                button
-                style={{ whiteSpace: "normal" }}
                 sx={{
-                    px: 5,
+                    my: 0,
                     py: 3,
-                    color: "#272727",
+                    color: selectedItem === value ? "#2F7164" : "#272727",
                     width: 300,
-                    backgroundColor: selectedItem === value ? "#ECF0EE" : "inherit"
+                    backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
                 }}
                 selected={selectedItem === item}
+                disabled={selectedItem === value}
             >
-                <ListItemText primary={item.title} />
-            </ListItem>
+                {selectedItem === value ? (
+                    <ListItemText
+                        primary={
+                            <Box
+                                sx={{
+                                    paddingLeft: childStyle === true ? 2 : "auto",
+                                    mx: 3,
+                                    fontFamily: '"Roboto", sans-serif',
+                                    fontWeight: 600,
+                                    borderLeft: childStyle === true ? "4px solid #2F7164" : "none"
+                                }}
+                            >
+                                {item.title}
+                            </Box>
+                        }
+                    />
+                ) : (
+                    <ListItemText
+                        primary={
+                            <Box
+                                sx={{
+                                    paddingLeft: childStyle === true ? 2 : "auto",
+                                    mx: 3,
+                                    fontFamily: '"Roboto", sans-serif',
+                                    fontWeight: 400,
+                                    borderLeft: childStyle === true ? "4px solid #ccd7d1" : "none"
+                                }}
+                            >
+                                {item.title}
+                            </Box>
+                        }
+                    />
+                )}
+            </ListItemButton>
         );
     };
 
     const MultiLevel = ({ value, item }) => {
         const { items: children } = item;
         const [open, setOpen] = useState(false);
-
         const handleClick = (event) => {
             event.stopPropagation();
             event.preventDefault();
             setOpen((prev) => !prev);
         };
-
+        const highlight = sameCategory(item, value);
         return (
-            <div>
-                <ListItem
-                    button
+            <Box>
+                <ListItemButton
+                    id={item.title}
                     onClick={handleToggle(value)}
-                    className="mainMenu"
                     style={{ whiteSpace: "normal" }}
                     sx={{
-                        px: 5,
+                        my: 0,
                         py: 3,
                         color: "#272727",
                         width: 300,
-                        backgroundColor: selectedItem === value ? "#ECF0EE" : "inherit"
+                        backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
                     }}
+                    disabled={selectedItem === value}
                 >
-                    <ListItemText primary={item.title} />
-                </ListItem>
-                <Collapse in={true} timeout="auto" unmountOnExit>
+                    <ListItemText
+                        primary={
+                            <Box
+                                sx={{
+                                    mx: 3,
+                                    color: selectedItem === value ? "#2F7164" : "#272727",
+                                    fontWeight: selectedItem === value ? 600 : 400
+                                }}
+                            >
+                                {item.title}
+                            </Box>
+                        }
+                    />
+                </ListItemButton>
+                <Collapse in timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {children.map((child, key) => (
-                            <SideBarItem key={key} item={child} value={value.toString() + key.toString()} />
+                        {children.map((child, k) => (
+                            <SideBarItem
+                                key={item.title}
+                                childStyle
+                                item={child}
+                                value={value.toString() + k.toString()}
+                            />
                         ))}
                     </List>
                 </Collapse>
-            </div>
+            </Box>
         );
     };
 
     return (
-        <Drawer
-            className="sideBar"
-            variant="permanent"
-            anchor="left"
-            sx={{
-                "display": { xs: "none", sm: "block" },
-                "& .MuiDrawer-paper": { boxSizing: "border-box", width: 300 }
-            }}
-            PaperProps={{
-                sx: {
-                    backgroundColor: "#ffffff",
-                    color: "gray"
-                }
-            }}
-            open
-        >
-            <Box id="filler" sx={{minHeight: 180}}/>
-            {/* <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>Total Commodities Programs Benefits</Typography>
-            </MenuItem> */}
-            {menu.map((item, key) => (
-                <SideBarItem key={key} item={item} value={key.toString()} />
-            ))}
-        </Drawer>
+        <Styles>
+            <Drawer
+                className="sideBar"
+                variant="permanent"
+                anchor="left"
+                sx={{
+                    "display": { xs: "none", sm: "block" },
+                    "& .MuiDrawer-paper": { boxSizing: "border-box", width: 300 }
+                }}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: "#ffffff",
+                        color: "gray"
+                    }
+                }}
+                open
+            >
+                <Box id="filler" sx={{ minHeight: 180 }} />
+                {menu.map((item, key) => (
+                    <SideBarItem key={item.title} item={item} value={key.toString()} />
+                ))}
+            </Drawer>
+        </Styles>
     );
 }

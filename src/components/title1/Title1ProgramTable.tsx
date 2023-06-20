@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
-import Box from "@mui/material/Box";
+import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import {
+    compareWithNumber,
     compareWithAlphabetic,
     compareWithDollarSign,
     compareWithPercentSign,
@@ -10,22 +11,22 @@ import {
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 
-import { Typography } from "@mui/material";
 function Title1ProgramTable({
+    tableTitle,
     program,
     subprogram,
     stateCodes,
     Title1Data,
-    yearKey,
+    year,
     color1,
     color2,
     color3,
     skipColumns
 }): JSX.Element {
-    let resultData = [];
+    const resultData = [];
     const hashmap = {};
     // eslint-disable-next-line no-restricted-syntax
-    Title1Data[yearKey].forEach((stateData) => {
+    Title1Data[year].forEach((stateData) => {
         const state = stateData.state;
         let programData = null;
         programData = stateData.programs.filter((p) => {
@@ -39,8 +40,8 @@ function Title1ProgramTable({
                 paymentInDollars: subProgramData[0].paymentInDollars,
                 paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
                 paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
-                areaInAcres: programData[0].areaInAcres,
-                recipientCount: programData[0].recipientCount
+                areaInAcres: subProgramData[0].areaInAcres,
+                recipientCount: subProgramData[0].recipientCount
             };
         } else if (program !== "Total Commodities Programs Benefits") {
             hashmap[state] = {
@@ -60,7 +61,7 @@ function Title1ProgramTable({
             if (subprogram !== undefined) {
                 return value.paymentInPercentageNationwide !== undefined
                     ? {
-                          state: key,
+                          state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                           paymentInDollars: `$${value.paymentInDollars
                               .toLocaleString(undefined, { minimumFractionDigits: 2 })
                               .toString()}`,
@@ -68,29 +69,29 @@ function Title1ProgramTable({
                           paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
                           areaInAcres:
                               value.areaInAcres === 0
-                                  ? `0`
-                                  : `$${value.areaInAcres
+                                  ? "0"
+                                  : `${value.areaInAcres
                                         .toLocaleString(undefined, { minimumFractionDigits: 2 })
                                         .toString()}`,
                           recipientCount:
                               value.recipientCount === 0
-                                  ? `0`
-                                  : `$${value.recipientCount
-                                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                                  ? "0"
+                                  : `${value.recipientCount
+                                        .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                         .toString()}`
                       }
                     : {
-                          state: key,
-                          paymentInDollars: `$0`,
-                          paymentInPercentageNationwide: `0%`,
-                          paymentInPercentageWithinState: `0%`,
+                          state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                          paymentInDollars: "$0",
+                          paymentInPercentageNationwide: "0%",
+                          paymentInPercentageWithinState: "0%",
                           areaInAcres: "0",
                           recipientCount: "0"
                       };
             }
             if (program === "Total Commodities Programs Benefits") {
                 return {
-                    state: key,
+                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                     programPaymentInDollars: `$${value.programPaymentInDollars
                         .toLocaleString(undefined, { minimumFractionDigits: 2 })
                         .toString()}`,
@@ -99,37 +100,35 @@ function Title1ProgramTable({
             }
             return value.programPaymentInDollars !== undefined
                 ? {
-                      state: key,
+                      state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                       programPaymentInDollars: `$${value.programPaymentInDollars
                           .toLocaleString(undefined, { minimumFractionDigits: 2 })
                           .toString()}`,
                       areaInAcres:
                           value.areaInAcres === 0
-                              ? `0`
-                              : `$${value.areaInAcres
+                              ? "0"
+                              : `${value.areaInAcres
                                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                                     .toString()}`,
                       recipientCount:
                           value.recipientCount === 0
-                              ? `0`
-                              : `$${value.recipientCount
-                                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                              ? "0"
+                              : `${value.recipientCount
+                                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                     .toString()}`
                   }
                 : {
-                      state: key,
-                      programPaymentInDollars: `$0`,
+                      state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                      programPaymentInDollars: "$0",
                       areaInAcres: "0",
                       recipientCount: "0"
                   };
         };
         resultData.push(newRecord());
     });
-    console.log(program);
-    console.log(resultData);
-    subprogram !== undefined
-        ? sortByDollars(resultData, "paymentInDollars")
-        : sortByDollars(resultData, "programPaymentInDollars");
+    if (subprogram !== undefined) {
+        sortByDollars(resultData, "paymentInDollars");
+    } else sortByDollars(resultData, "programPaymentInDollars");
     let columns;
     if (program === "Total Commodities Programs Benefits") {
         columns = React.useMemo(
@@ -182,12 +181,12 @@ function Title1ProgramTable({
                           {
                               Header: "AREA IN ACRES",
                               accessor: "areaInAcres",
-                              sortType: compareWithAlphabetic
+                              sortType: compareWithNumber
                           },
                           {
                               Header: "RECIPIENT COUNT",
                               accessor: "recipientCount",
-                              sortType: compareWithAlphabetic
+                              sortType: compareWithNumber
                           }
                       ],
                       []
@@ -207,12 +206,12 @@ function Title1ProgramTable({
                           {
                               Header: "AREA IN ACRES",
                               accessor: "areaInAcres",
-                              sortType: compareWithAlphabetic
+                              sortType: compareWithNumber
                           },
                           {
                               Header: "RECIPIENT COUNT",
                               accessor: "recipientCount",
-                              sortType: compareWithAlphabetic
+                              sortType: compareWithNumber
                           }
                       ],
                       []
@@ -308,16 +307,46 @@ function Title1ProgramTable({
         }
     `;
     return (
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
             <Styles>
-                <Table
-                    columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
-                    data={resultData}
-                    initialState={{
-                        pageSize: 5,
-                        pageIndex: 0
+                <Grid
+                    container
+                    columns={{ xs: 12 }}
+                    className="stateChartTableContainer"
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between"
                     }}
-                />
+                >
+                    <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
+                        <Box id="title1TableHeader" sx={{ width: "100%" }}>
+                            <Typography
+                                id="title1BarHeader"
+                                variant="h6"
+                                sx={{
+                                    fontWeight: 400,
+                                    paddingLeft: 0,
+                                    fontSize: "1.2em",
+                                    color: "#212121",
+                                    marginBottom: 4,
+                                    paddingTop: 0.6
+                                }}
+                            >
+                                {tableTitle}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                </Grid>
+                <TableContainer sx={{ width: "100%" }}>
+                    <Table
+                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
+                        data={resultData}
+                        initialState={{
+                            pageSize: 5,
+                            pageIndex: 0
+                        }}
+                    />
+                </TableContainer>
             </Styles>
         </Box>
     );
@@ -352,8 +381,8 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         usePagination
     );
     return (
-        <>
-            <table {...getTableProps()}>
+        <div style={{ width: "100%" }}>
+            <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
                         <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
@@ -392,9 +421,14 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>
-                                    {row.cells.map((cell, i) => {
+                                    {row.cells.map((cell, j) => {
                                         return (
-                                            <td className={`cell${i}`} key={cell.id} {...cell.getCellProps()}>
+                                            <td
+                                                className={`cell${j}`}
+                                                key={cell.id}
+                                                {...cell.getCellProps()}
+                                                style={{ width: "100%", whiteSpace: "nowrap" }}
+                                            >
                                                 {cell.render("Cell")}
                                             </td>
                                         );
@@ -407,16 +441,16 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
             </table>
             <Box className="pagination" sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                 <Box>
-                    <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                    <button type="button" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                         {"<<"}
                     </button>{" "}
-                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    <button type="button" onClick={() => previousPage()} disabled={!canPreviousPage}>
                         {"<"}
                     </button>{" "}
-                    <button onClick={() => nextPage()} disabled={!canNextPage}>
+                    <button type="button" onClick={() => nextPage()} disabled={!canNextPage}>
                         {">"}
                     </button>{" "}
-                    <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                    <button type="button" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
                         {">>"}
                     </button>{" "}
                     <span>
@@ -431,10 +465,10 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                             type="number"
                             defaultValue={pageIndex + 1}
                             onChange={(e) => {
-                                let page = e.target.value ? Number(e.target.value) - 1 : 0;
-                                if (page > pageOptions.length) page = pageOptions.length - 1;
-                                if (page < 0) page = 0;
-                                gotoPage(page);
+                                let p = e.target.value ? Number(e.target.value) - 1 : 0;
+                                if (p > pageOptions.length) p = pageOptions.length - 1;
+                                if (p < 0) p = 0;
+                                gotoPage(p);
                             }}
                             style={{ width: "3em" }}
                         />{" "}
@@ -445,9 +479,9 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                             setPageSize(Number(e.target.value));
                         }}
                     >
-                        {[10, 25, 40, 51].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
+                        {[10, 25, 40, 51].map((p) => (
+                            <option key={p} value={p}>
+                                Show {p}
                             </option>
                         ))}
                     </select>
@@ -456,7 +490,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                     {" "}
                     {pageSize * (pageIndex + 1) <= rows.length ? (
                         <Typography>
-                            Showing the first {parseInt(pageSize) * (pageIndex + 1)} results of {rows.length} rows
+                            Showing the first {parseInt(pageSize, 10) * (pageIndex + 1)} results of {rows.length} rows
                         </Typography>
                     ) : (
                         <Typography>
@@ -465,7 +499,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                     )}
                 </Box>
             </Box>
-        </>
+        </div>
     );
 }
 
