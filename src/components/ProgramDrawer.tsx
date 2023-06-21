@@ -393,7 +393,7 @@ export default function ProgramDrawer({
             variant="permanent"
             sx={{
                 "display": { xs: "none", sm: "block" },
-                "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth }
+                "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, pt: 9 }
             }}
             PaperProps={{
                 sx: {

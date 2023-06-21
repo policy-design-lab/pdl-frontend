@@ -1,9 +1,9 @@
 @media only screen and (min-width: 1096px) {
   .sideBar #filler {
-    height: 164px;
+    height: 21em;
   }
   .halfWidthMainContent {
-    padding: 180px 160px 100px 400px;
+    padding: 10em 10em 6em 25em;
   }
   .halfWidthMainContent .categoryMapHeader,
   .halfWidthMainContent .eqipTotalMainHeader {
@@ -13,12 +13,12 @@
   .stateTitleContainer {
     justify-content: space-between;
     border-bottom: 1px solid #e4ebe7;
-    padding: 16px 0;
+    padding: 1em 0;
     display: flex;
   }
 
   .stateTitleContainer .stateTitle {
     font-weight: 700;
-    margin-top: 8px;
+    margin-top: 0.5em;
   }
 }

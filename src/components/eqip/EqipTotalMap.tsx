@@ -165,7 +165,7 @@ const EQIPTotalMap = (): JSX.Element => {
     const [content, setContent] = useState("");
     return (
         <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+            <Box display="flex" justifyContent="center" sx={{ pt: 23 }}>
                 <HorizontalStackedBar
                     title="Total EQIP Benefits"
                     color1="#F0F9E8"
