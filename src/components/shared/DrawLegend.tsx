@@ -112,7 +112,7 @@ export default function DrawLegend({
                         .text((d, i) => {
                             if (i === 0) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
-                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                                return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
                             return ShortFormat(Math.round(cut_points[i]), i);
                         });
@@ -133,7 +133,7 @@ export default function DrawLegend({
                         .text((d, i) => {
                             if (i === 0) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
-                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                                return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
                             return ShortFormat(Math.round(cut_points[i]), i);
                         });
