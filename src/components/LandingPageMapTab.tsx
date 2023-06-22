@@ -30,7 +30,7 @@ function TabPanel({
     allStates: any;
     stateCodes: any;
     allPrograms: any;
-    summary: any
+    summary: any;
 }) {
     return (
         <div>
@@ -44,11 +44,11 @@ function TabPanel({
                             }}
                         >
                             <LandingPageMap
-                              programTitle={title}
-                              allStates={allStates}
-                              stateCodes={stateCodes}
-                              allPrograms={allPrograms}
-                              summary={summary}
+                                programTitle={title}
+                                allStates={allStates}
+                                stateCodes={stateCodes}
+                                allPrograms={allPrograms}
+                                summary={summary}
                             />
                         </Box>
                     )}
@@ -63,11 +63,11 @@ function TabPanel({
                             }}
                         >
                             <LandingPageMap
-                              programTitle={title}
-                              allStates={allStates}
-                              stateCodes={stateCodes}
-                              allPrograms={allPrograms}
-                              summary={summary}
+                                programTitle={title}
+                                allStates={allStates}
+                                stateCodes={stateCodes}
+                                allPrograms={allPrograms}
+                                summary={summary}
                             />
                         </Box>
                     )}
@@ -92,8 +92,8 @@ export default function LandingPageMapTab({
     allStates: any;
     stateCodes: any;
     allPrograms: any;
-    summary: any }
-): JSX.Element {
+    summary: any;
+}): JSX.Element {
     const [value, setValue] = React.useState(2);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
