@@ -503,10 +503,19 @@ MapChart.propTypes = {
     title: PropTypes.string
 };
 
-const LandingPageMap = (
-    { programTitle, allStates, stateCodes, allPrograms, summary }:
-    { programTitle: string; allStates: any; stateCodes: any; allPrograms:any; summary: any }
-): JSX.Element => {
+const LandingPageMap = ({
+    programTitle,
+    allStates,
+    stateCodes,
+    allPrograms,
+    summary
+}: {
+    programTitle: string;
+    allStates: any;
+    stateCodes: any;
+    allPrograms:any;
+    summary: any;
+}): JSX.Element => {
     const [content, setContent] = useState("");
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     return (
