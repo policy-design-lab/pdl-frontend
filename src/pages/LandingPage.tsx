@@ -43,7 +43,7 @@ export default function LandingPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            { allStates.length > 0 ? (
+            {allStates.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                     <div style={{ position: "relative" }}>

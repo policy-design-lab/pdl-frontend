@@ -16,11 +16,22 @@ const theme = createTheme({
 });
 
 function TabPanel({
-                    value, index, title, allStates, stateCodes, allPrograms, summary
-                  }: {
-                    value: any; index: any; title: string; allStates: any; stateCodes: any; allPrograms: any; summary: any
-                  }
-) {
+    value,
+    index,
+    title,
+    allStates,
+    stateCodes,
+    allPrograms,
+    summary
+}: {
+    value: any;
+    index: any;
+    title: string;
+    allStates: any;
+    stateCodes: any;
+    allPrograms: any;
+    summary: any
+}) {
     return (
         <div>
             {window.innerWidth > 1679 ? (
@@ -72,9 +83,16 @@ function TabPanel({
     );
 }
 
-export default function LandingPageMapTab(
-      { allStates, stateCodes, allPrograms, summary }:
-      { allStates: any; stateCodes: any; allPrograms: any; summary: any }
+export default function LandingPageMapTab({
+    allStates,
+    stateCodes,
+    allPrograms,
+    summary
+}: {
+    allStates: any;
+    stateCodes: any;
+    allPrograms: any;
+    summary: any }
 ): JSX.Element {
     const [value, setValue] = React.useState(2);
 
