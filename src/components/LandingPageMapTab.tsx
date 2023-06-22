@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { CardMedia, createTheme, styled, Typography, ThemeProvider } from "@mui/material";
+import { createTheme, styled, Typography, ThemeProvider } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import LandingPageMap from "./LandingPageMap";
 import LandingDisplay from "./LandingDisplay";
-import { config } from "../app.config";
-import { getJsonDataFromUrl } from "../utils/apiutil";
 
 const theme = createTheme({
     palette: {
@@ -17,18 +15,14 @@ const theme = createTheme({
     }
 });
 
-interface TabPanelProps {
-    index: number;
-    value: number;
-    title: string;
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { value, index, title, ...other } = props;
+function TabPanel(
+    { value, index, title, allStates, stateCodes, allPrograms, summary }:
+    { value: any; index: any; title: string; allStates: any; stateCodes: any; allPrograms: any; summary: any }
+) {
     return (
         <div>
             {window.innerWidth > 1679 ? (
-                <Box role="tabpanel" hidden={value !== index} {...other}>
+                <Box role="tabpanel" hidden={value !== index}>
                     {value === index && (
                         <Box
                             sx={{
@@ -36,12 +30,18 @@ function TabPanel(props: TabPanelProps) {
                                 mx: "auto"
                             }}
                         >
-                            <LandingPageMap programTitle={title} />
+                            <LandingPageMap
+                              programTitle={title}
+                              allStates={allStates}
+                              stateCodes={stateCodes}
+                              allPrograms={allPrograms}
+                              summary={summary}
+                            />
                         </Box>
                     )}
                 </Box>
             ) : (
-                <Box role="tabpanel" hidden={value !== index} {...other}>
+                <Box role="tabpanel" hidden={value !== index}>
                     {value === index && (
                         <Box
                             sx={{
@@ -49,7 +49,13 @@ function TabPanel(props: TabPanelProps) {
                                 mx: "auto"
                             }}
                         >
-                            <LandingPageMap programTitle={title} />
+                            <LandingPageMap
+                              programTitle={title}
+                              allStates={allStates}
+                              stateCodes={stateCodes}
+                              allPrograms={allPrograms}
+                              summary={summary}
+                            />
                         </Box>
                     )}
                 </Box>
@@ -64,7 +70,10 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-export default function LandingPageMapTab(): JSX.Element {
+export default function LandingPageMapTab(
+      { allStates, stateCodes, allPrograms, summary }:
+      { allStates: any; stateCodes: any; allPrograms: any; summary: any }
+): JSX.Element {
     const [value, setValue] = React.useState(2);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -79,17 +88,7 @@ export default function LandingPageMapTab(): JSX.Element {
         textTransform: "none"
     });
 
-    const [allProgramsData, setAllProgramsData] = useState([]);
-
-    useEffect(() => {
-        const allprograms_url = `${config.apiUrl}/allprograms`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setAllProgramsData(response);
-        });
-    }, []);
-
-    // let allPrograms = {allProgramsData};
-    const cur = allProgramsData.find((s) => s.State === "Total");
+    const cur = allPrograms.find((s) => s.State === "Total");
     let allProgramTotal = "";
     let titleITotal = "";
     let titleIITotal = "";
@@ -176,12 +175,60 @@ export default function LandingPageMapTab(): JSX.Element {
                     </Tabs>
                 </ThemeProvider>
             </Box>
-            <TabPanel value={value} index={0} title="All Programs" />
-            <TabPanel value={value} index={2} title="All Programs" />
-            <TabPanel value={value} index={4} title="Title I: Commodities" />
-            <TabPanel value={value} index={6} title="Title II: Conservation" />
-            <TabPanel value={value} index={8} title="Crop Insurance" />
-            <TabPanel value={value} index={10} title="Supplemental Nutrition Assistance Program (SNAP)" />
+            <TabPanel
+                value={value}
+                index={0}
+                title="All Programs"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
+            <TabPanel
+                value={value}
+                index={2}
+                title="All Programs"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
+            <TabPanel
+                value={value}
+                index={4}
+                title="Title I: Commodities"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
+            <TabPanel
+                value={value}
+                index={6}
+                title="Title II: Conservation"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
+            <TabPanel
+                value={value}
+                index={8}
+                title="Crop Insurance"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
+            <TabPanel
+                value={value}
+                index={10}
+                title="Supplemental Nutrition Assistance Program (SNAP)"
+                allStates={allStates}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                summary={summary}
+            />
         </Box>
     );
 }

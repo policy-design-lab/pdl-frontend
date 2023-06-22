@@ -377,7 +377,7 @@ export default function CSPPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <DataTable />
+                            <DataTable statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
                             <CategoryTable category="2018 Practices" statePerformance={statePerformance} />

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleQuantize } from "d3-scale";
+import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
