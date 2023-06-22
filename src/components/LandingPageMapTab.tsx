@@ -15,9 +15,11 @@ const theme = createTheme({
     }
 });
 
-function TabPanel(
-    { value, index, title, allStates, stateCodes, allPrograms, summary }:
-    { value: any; index: any; title: string; allStates: any; stateCodes: any; allPrograms: any; summary: any }
+function TabPanel({
+                    value, index, title, allStates, stateCodes, allPrograms, summary
+                  }: {
+                    value: any; index: any; title: string; allStates: any; stateCodes: any; allPrograms: any; summary: any
+                  }
 ) {
     return (
         <div>

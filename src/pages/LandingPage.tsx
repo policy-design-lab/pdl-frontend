@@ -1,5 +1,5 @@
 import * as React from "react";
-import {CardMedia, createTheme, ThemeProvider, Typography} from "@mui/material";
+import { CardMedia, createTheme, ThemeProvider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import NavBar from "../components/NavBar";
 import forest from "../images/forest.png";
@@ -7,7 +7,7 @@ import News from "../components/News";
 import Footer from "../components/Footer";
 import LandingPageMapTab from "../components/LandingPageMapTab";
 import { config } from "../app.config";
-import {convertAllState, getJsonDataFromUrl} from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function LandingPage(): JSX.Element {
     // connect to api endpoint
@@ -32,7 +32,7 @@ export default function LandingPage(): JSX.Element {
 
         const allstates_url = `${config.apiUrl}/states`;
         getJsonDataFromUrl(allstates_url).then((response) => {
-          setAllStates(response);
+            setAllStates(response);
         });
 
         const summary_url = `${config.apiUrl}/summary`;
