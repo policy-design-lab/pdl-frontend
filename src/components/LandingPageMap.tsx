@@ -178,8 +178,7 @@ const MapChart = (props) => {
                                     }
                                     if (title === "Supplemental Nutrition Assistance Program (SNAP)") {
                                         records.forEach((record) => {
-                                            totalAverageMonthlyParticipation +=
-                                                record["Average Monthly Participation"];
+                                            totalAverageMonthlyParticipation += record["Average Monthly Participation"];
                                         });
                                     }
 
@@ -197,40 +196,35 @@ const MapChart = (props) => {
                                                     <Typography sx={{ color: "#2F7164" }}>
                                                         {stateCodes[cur.id]}
                                                     </Typography>
-                                                    {title ===
-                                                    "Supplemental Nutrition Assistance Program (SNAP)" ? (
-                                                        <Typography sx={{ color: "#2F7164" }}>
-                                                            Total Cost
-                                                        </Typography>
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                        <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
                                                     ) : (
-                                                        <Typography sx={{ color: "#2F7164" }}>
-                                                            Total Benefit
-                                                        </Typography>
+                                                        <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
                                                     )}
                                                     <Typography sx={{ color: "#3F3F3F" }}>
                                                         {Math.round(Number(total / 1000000.0)) >= 0
-                                                            ? `$${Number(
-                                                                  Math.abs(total) / 1000000.0
-                                                              ).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`
-                                                            : `-$${Number(
-                                                                  Math.abs(total) / 1000000.0
-                                                              ).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`}
+                                                            ? `$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`
+                                                            : `-$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`}
                                                     </Typography>
                                                     <br />
                                                     {/* Show additional data on hover for SNAP */}
-                                                    {title ===
-                                                        "Supplemental Nutrition Assistance Program (SNAP)" && (
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
                                                         <Typography sx={{ color: "#2F7164" }}>
                                                             Avg. Monthly Participation
                                                         </Typography>
                                                     )}
                                                     {/* Average SNAP monthly participation for the current years */}
-                                                    {title ===
-                                                        "Supplemental Nutrition Assistance Program (SNAP)" && (
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
                                                         <Typography sx={{ color: "#3F3F3F" }}>
                                                             {Number(
                                                                 totalAverageMonthlyParticipation / yearList.length
@@ -242,8 +236,7 @@ const MapChart = (props) => {
                                                 </Box>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                 <Box>
-                                                    {title ===
-                                                    "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
                                                         <Typography sx={{ color: "#3F3F3F" }}>
                                                             Costs:
                                                             <br />
@@ -316,16 +309,18 @@ const MapChart = (props) => {
                                                     <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
                                                     <Typography sx={{ color: "#3F3F3F" }}>
                                                         {Math.round(Number(total / 1000000.0)) >= 0
-                                                            ? `$${Number(
-                                                                  Math.abs(total) / 1000000.0
-                                                              ).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`
-                                                            : `-$${Number(
-                                                                  Math.abs(total) / 1000000.0
-                                                              ).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`}
+                                                            ? `$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`
+                                                            : `-$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`}
                                                     </Typography>
                                                 </Box>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -338,16 +333,14 @@ const MapChart = (props) => {
                                                                 2018:{" "}
                                                                 {record["2018 All Programs Total"] / 1000000.0 >= 0
                                                                     ? `$${Number(
-                                                                          Math.abs(
-                                                                              record["2018 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2018 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`
                                                                     : `-$${Number(
-                                                                          Math.abs(
-                                                                              record["2018 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2018 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`}
@@ -355,16 +348,14 @@ const MapChart = (props) => {
                                                                 2019:{" "}
                                                                 {record["2019 All Programs Total"] / 1000000.0 >= 0
                                                                     ? `$${Number(
-                                                                          Math.abs(
-                                                                              record["2019 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2019 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`
                                                                     : `-$${Number(
-                                                                          Math.abs(
-                                                                              record["2019 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2019 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`}
@@ -372,16 +363,14 @@ const MapChart = (props) => {
                                                                 2020:{" "}
                                                                 {record["2020 All Programs Total"] / 1000000.0 >= 0
                                                                     ? `$${Number(
-                                                                          Math.abs(
-                                                                              record["2020 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2020 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`
                                                                     : `-$${Number(
-                                                                          Math.abs(
-                                                                              record["2020 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2020 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`}
@@ -389,16 +378,14 @@ const MapChart = (props) => {
                                                                 2021:{" "}
                                                                 {record["2021 All Programs Total"] / 1000000.0 >= 0
                                                                     ? `$${Number(
-                                                                          Math.abs(
-                                                                              record["2021 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2021 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`
                                                                     : `-$${Number(
-                                                                          Math.abs(
-                                                                              record["2021 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2021 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`}
@@ -406,16 +393,14 @@ const MapChart = (props) => {
                                                                 2022:{" "}
                                                                 {record["2022 All Programs Total"] / 1000000.0 >= 0
                                                                     ? `$${Number(
-                                                                          Math.abs(
-                                                                              record["2022 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2022 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`
                                                                     : `-$${Number(
-                                                                          Math.abs(
-                                                                              record["2022 All Programs Total"]
-                                                                          ) / 1000000.0
+                                                                          Math.abs(record["2022 All Programs Total"]) /
+                                                                              1000000.0
                                                                       ).toLocaleString(undefined, {
                                                                           maximumFractionDigits: 2
                                                                       })}M`}
@@ -513,7 +498,7 @@ const LandingPageMap = ({
     programTitle: string;
     allStates: any;
     stateCodes: any;
-    allPrograms:any;
+    allPrograms: any;
     summary: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
