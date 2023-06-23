@@ -43,7 +43,7 @@ function Title1ProgramTable({
                 areaInAcres: subProgramData[0].areaInAcres,
                 recipientCount: subProgramData[0].recipientCount
             };
-        } else if (program !== "Total Commodities Programs Benefits") {
+        } else if (program !== "Total Commodities Programs") {
             hashmap[state] = {
                 programPaymentInDollars: programData[0].programPaymentInDollars,
                 areaInAcres: programData[0].areaInAcres,
@@ -89,7 +89,7 @@ function Title1ProgramTable({
                           recipientCount: "0"
                       };
             }
-            if (program === "Total Commodities Programs Benefits") {
+            if (program === "Total Commodities Programs") {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                     programPaymentInDollars: `$${value.programPaymentInDollars
@@ -130,7 +130,7 @@ function Title1ProgramTable({
         sortByDollars(resultData, "paymentInDollars");
     } else sortByDollars(resultData, "programPaymentInDollars");
     let columns;
-    if (program === "Total Commodities Programs Benefits") {
+    if (program === "Total Commodities Programs") {
         columns = React.useMemo(
             () => [
                 {

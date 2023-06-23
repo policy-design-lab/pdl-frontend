@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Add Title 1 page and corresponding components for the Conservation Programs [#126](https://github.com/policy-design-lab/pdl-frontend/issues/126)
+
+### Changed
+
+- Reverse the 'm' back to 'k' in the data formatting function for thousands [#145](https://github.com/policy-design-lab/pdl-frontend/issues/145)
+- Add `$` sign to the beginning of legend bar on landing page [#141](https://github.com/policy-design-lab/pdl-frontend/issues/141)
+- Add search bar area and update color theme of EQIP and CSP pages
+
 ## [0.5.1] - 2023-05-30
 
 ### Changed

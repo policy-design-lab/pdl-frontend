@@ -39,7 +39,7 @@ const MapChart = ({
 }) => {
     return (
         <div data-tip="">
-            {program !== "Total Commodities Programs Benefits" ? (
+            {program !== "Total Commodities Programs" ? (
                 <ComposableMap projection="geoAlbersUsa">
                     <Geographies geography={geoUrl}>
                         {({ geographies }) => (
@@ -330,7 +330,7 @@ const Title1Map = ({
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
-    if (program !== "Total Commodities Programs Benefits") {
+    if (program !== "Total Commodities Programs") {
         statePerformance[year].forEach((value) => {
             const programRecord = value.programs;
             const ACur = programRecord.find((s) => s.programName === program);
@@ -355,7 +355,7 @@ const Title1Map = ({
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const zeroPoints = [];
     statePerformance[year].forEach((state) => {
-        if (program !== "Total Commodities Programs Benefits") {
+        if (program !== "Total Commodities Programs") {
             const programList = state.programs;
             if (subprogram === undefined) {
                 const programRecord = programList.find((s) => s.programName === program);
@@ -409,7 +409,7 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
             </Typography>
         );
     }
-    if (program === "Total Commodities Programs Benefits") {
+    if (program === "Total Commodities Programs") {
         return (
             <Typography noWrap variant="h6">
                 <strong>{program}</strong> Payments from <strong>{year}</strong>

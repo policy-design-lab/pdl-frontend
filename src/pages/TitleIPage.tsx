@@ -130,7 +130,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Total Commodities Programs Benefits"
+                                program="Total Commodities Programs"
                                 year="2018-2022"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
@@ -169,7 +169,7 @@ export default function TitleIPage(): JSX.Element {
                             >
                                 <Title1ProgramTable
                                     tableTitle="Comparing Total Commodities Programs Payments and Payments Percentage Nationwide (2018-2022)"
-                                    program="Total Commodities Programs Benefits"
+                                    program="Total Commodities Programs"
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -265,7 +265,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing ARC Payments, Payment Recipients and Base Acres(2018-2022)"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram={undefined}
                                         skipColumns={[]}
@@ -363,7 +363,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-CO Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing ARC-CO Payments, Payment Recipients and Base Acres(2018-2022)"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
@@ -462,7 +462,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-IC Benefits, Payment Recipients and Base Acres (2018-2022)"
+                                        tableTitle="Comparing ARC-IC Payments, Payment Recipients and Base Acres (2018-2022)"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
@@ -560,7 +560,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing PLC Benefits, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing PLC Payments, Payment Recipients and Base Acres(2018-2022)"
                                         program="Price Loss Coverage (PLC)"
                                         subprogram={undefined}
                                         skipColumns={[]}

@@ -190,7 +190,7 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
     const label5 = (maxValue / 5) * 4;
     return (
         <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 23 }}>
+            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                 <HorizontalStackedBar
                     title={title}
                     color1="#F0F9E8"

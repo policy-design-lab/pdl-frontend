@@ -25,7 +25,7 @@ export default function TreeMapSquares({
             const base = d3.select(rn.current).append("g").attr("class", "base");
             const margin = 30;
             const lineMargin = 80;
-            let rowTrack = margin * 0.8;
+            let rowTrack = 0;
             const largestSquare = 250;
             let yTrack = largestSquare + lineMargin;
             const d = chartData.filter(
@@ -124,7 +124,7 @@ export default function TreeMapSquares({
                                 .style("fill", "white");
                             tipGroup
                                 .append("text")
-                                .text(`payments:  ${paymentsOriginalData}`)
+                                .text(`payments:  $${paymentsOriginalData}`)
                                 .attr("x", mousePos[0] + 10)
                                 .attr("y", mousePos[1] + 40)
                                 .style("font-size", "0.8em")
@@ -210,6 +210,7 @@ export default function TreeMapSquares({
                     }
                 }
             }
+            d3.select(rn.current).attr("height", yTrack + largestSquare);
         }
     });
 

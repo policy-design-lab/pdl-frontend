@@ -225,7 +225,7 @@ const CategoryMap = ({
     return (
         <div>
             {maxValue !== 0 ? (
-                <Box display="flex" justifyContent="center" sx={{ pt: 23 }}>
+                <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     <HorizontalStackedBar
                         title={title}
                         color1="#F0F9E8"
@@ -289,7 +289,7 @@ const CategoryMap = ({
                         display: "flex",
                         flexDirection: "column",
                         minWidth: 560,
-                        pt: 23
+                        pt: 24
                     }}
                 >
                     <Box display="flex" justifyContent="center" sx={{ mb: 1 }}>

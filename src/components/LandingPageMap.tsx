@@ -75,7 +75,7 @@ const MapChart = (props) => {
             color5 = "#993404";
             legendTitle = (
                 <Typography noWrap variant="h6">
-                    Total Commodities Programs (Title I) Benefits from <strong>2018 - 2022</strong>
+                    Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
                 </Typography>
             );
             minValue = Math.min(...hashmap.values()); // Self defined by observation

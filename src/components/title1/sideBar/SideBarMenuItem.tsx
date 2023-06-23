@@ -3,7 +3,7 @@ import React from "react";
 export const menu = [
     {
         icon: "",
-        title: "Total Commodities Programs Benefits"
+        title: "Total Commodities Programs"
     },
     {
         icon: "",

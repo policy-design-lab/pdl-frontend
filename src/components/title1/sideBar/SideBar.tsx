@@ -172,7 +172,7 @@ export default function SideBar({ setTitle1Checked }): JSX.Element {
             >
                 <Box id="filler" sx={{ minHeight: 180 }} />
                 {menu.map((item, key) => (
-                    <SideBarItem key={item.title} item={item} value={key.toString()} />
+                    <SideBarItem key={item.title + item} item={item} value={key.toString()} />
                 ))}
             </Drawer>
         </Styles>

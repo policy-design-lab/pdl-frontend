@@ -1,9 +1,15 @@
 import * as React from "react";
 import * as d3 from "d3";
+import styled from "styled-components";
 import { Checkbox, FormControlLabel, FormGroup, Grid, IconButton, SvgIcon, Typography } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import TreeMapSquares from "./TreeMapSquares";
 
+const Styles = styled.div`
+    ".muibuttonbase-root, muicheckbox-root:hover": {
+        background: "none";
+    }
+`;
 const sortDataByAttribute = (data, attr) => {
     data.sort((a, b) => {
         if (a[attr] < b[attr]) {
@@ -74,16 +80,7 @@ const transform = (data) => {
     });
     return res2;
 };
-export default function Title1TreeMap({
-    program,
-    TreeMapData,
-    year,
-    stateCodes,
-    svgW,
-    svgH,
-    widthPercentage = 0.5,
-    heightPercentage = 8
-}): JSX.Element {
+export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, svgW, svgH }): JSX.Element {
     const paymentsColor = "#FBB650";
     const baseAcresColor = "#5BBD5F";
     const recipientsColor = "#990570";
@@ -104,6 +101,11 @@ export default function Title1TreeMap({
         recipientsChecked: true
     });
     const { paymentsChecked, baseAcresChecked, recipientsChecked } = checkedState;
+    let widthPercentage = 0.5;
+    const heightPercentage = 0.8;
+    if (window.innerWidth >= 1920) {
+        widthPercentage = 0.6;
+    }
     const handleResize: () => void = () => {
         setSvgWidth(window.innerWidth * widthPercentage);
         setSvgHeight(window.innerHeight * heightPercentage);
@@ -190,24 +192,17 @@ export default function Title1TreeMap({
     }
     /* eslint-disable */
     return (
-        <div>
+        <Styles>
             <Grid
                 container
                 className="stateChartTableContainer"
                 sx={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    marginLeft: 3
+                    justifyContent: "space-between"
+                    // marginLeft: 3
                 }}
             >
-                <Grid
-                    container
-                    item
-                    xs={7}
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    sx={{ display: "flex", alignItems: "center" }}
-                >
+                <Grid container xs={6} xl={6} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
                     <Grid item xs={12}>
                         <Typography
                             id="title1BarHeader"
@@ -255,109 +250,139 @@ export default function Title1TreeMap({
                                 color: "rgb(163, 163, 163)"
                             }}
                         >
-                            Hover on squares to see detailed data. The size of the square represents the total ranking
-                            of payments, payment recipients, or base acres for the specified year.
+                            Hover over the squares to view detailed data. The size differences of the squares represent
+                            the differences in relative amount <i>within the same category</i>. For example, a larger
+                            purple square indicate a higher number of recipients compared to another smaller purple
+                            square, but it does not necessarily indicate a greater number of recipients compared to a
+                            smaller yellow square representing payments.
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={3} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
-                    <FormGroup>
-                        {chartData[0].payments !== 0 ? (
-                            <IconButton
-                                aria-label="add"
-                                onClick={(event) => handleSortClick(event, "payments")}
-                                sx={{
-                                    borderRadius: "2px"
-                                }}
-                            >
-                                <SortIcon className="sortIcon sortPayments" sx={{ color: sortPaymentButtonColor }} />
-                            </IconButton>
-                        ) : null}
-                        {chartData[0].baseAcres !== 0 ? (
-                            <IconButton
-                                aria-label="add"
-                                onClick={(event) => handleSortClick(event, "baseAcres")}
-                                sx={{
-                                    borderRadius: "2px"
-                                }}
-                            >
-                                <SortIcon className="sortIcon sortBaseAcres" sx={{ color: sortBaseAcresButtonColor }} />
-                            </IconButton>
-                        ) : null}
-                        {chartData[0].recepients !== 0 ? (
-                            <IconButton
-                                aria-label="add"
-                                onClick={(event) => handleSortClick(event, "recepients")}
-                                sx={{
-                                    borderRadius: "2px"
-                                }}
-                            >
-                                <SortIcon
-                                    className="sortIcon sortRecipients"
-                                    sx={{ color: sortRecipientsButtonColor }}
-                                />
-                            </IconButton>
-                        ) : null}
-                    </FormGroup>
-                    <FormGroup>
-                        {chartData[0].payments !== 0 ? (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="showSquare"
-                                        checked={paymentsChecked}
-                                        onChange={handleSquareChange}
-                                        name="paymentsChecked"
-                                        style={{ color: paymentsColor }}
+                <Grid item xl={true}></Grid>
+                <Grid container xs={6} xl={5} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
+                    <Grid container justifyContent="flex-end" xs={7} alignItems="center">
+                        <Grid item xs={2} justifyContent="flex-end" alignItems="center">
+                            <FormGroup>
+                                {chartData[0].payments !== 0 ? (
+                                    <IconButton
+                                        aria-label="add"
+                                        onClick={(event) => handleSortClick(event, "payments")}
+                                        sx={{
+                                            borderRadius: "2px"
+                                        }}
+                                    >
+                                        <SortIcon
+                                            className="sortIcon sortPayments"
+                                            sx={{ color: sortPaymentButtonColor }}
+                                        />
+                                    </IconButton>
+                                ) : null}
+                                {chartData[0].baseAcres !== 0 ? (
+                                    <IconButton
+                                        aria-label="add"
+                                        onClick={(event) => handleSortClick(event, "baseAcres")}
+                                        sx={{
+                                            borderRadius: "2px"
+                                        }}
+                                    >
+                                        <SortIcon
+                                            className="sortIcon sortBaseAcres"
+                                            sx={{ color: sortBaseAcresButtonColor }}
+                                        />
+                                    </IconButton>
+                                ) : null}
+                                {chartData[0].recepients !== 0 ? (
+                                    <IconButton
+                                        aria-label="add"
+                                        onClick={(event) => handleSortClick(event, "recepients")}
+                                        sx={{
+                                            borderRadius: "2px"
+                                        }}
+                                    >
+                                        <SortIcon
+                                            className="sortIcon sortRecipients"
+                                            sx={{ color: sortRecipientsButtonColor }}
+                                        />
+                                    </IconButton>
+                                ) : null}
+                            </FormGroup>
+                        </Grid>
+                        <Grid item xs={10} justifyContent="flex-end" alignItems="center">
+                            <FormGroup>
+                                {chartData[0].payments !== 0 ? (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                className="showSquare"
+                                                checked={paymentsChecked}
+                                                onChange={handleSquareChange}
+                                                name="paymentsChecked"
+                                                style={{ color: paymentsColor }}
+                                            />
+                                        }
+                                        label="Total Payments ($)"
+                                        sx={{ color: paymentsColor }}
                                     />
-                                }
-                                label="Total Payments ($)"
-                                sx={{ color: paymentsColor }}
-                            />
-                        ) : null}
-                        {chartData[0].baseAcres !== 0 ? (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="showSquare"
-                                        checked={baseAcresChecked}
-                                        onChange={handleSquareChange}
-                                        name="baseAcresChecked"
-                                        style={{ color: baseAcresColor }}
+                                ) : null}
+                                {chartData[0].baseAcres !== 0 ? (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                className="showSquare"
+                                                checked={baseAcresChecked}
+                                                onChange={handleSquareChange}
+                                                name="baseAcresChecked"
+                                                style={{ color: baseAcresColor }}
+                                            />
+                                        }
+                                        label="Base Acres (ac)"
+                                        sx={{ color: baseAcresColor }}
                                     />
-                                }
-                                label="Base Acres (ac)"
-                                sx={{ color: baseAcresColor }}
-                            />
-                        ) : null}
-                        {chartData[0].recipients !== 0 ? (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="showSquare"
-                                        checked={recipientsChecked}
-                                        onChange={handleSquareChange}
-                                        name="recipientsChecked"
-                                        style={{ color: recipientsColor }}
+                                ) : null}
+                                {chartData[0].recipients !== 0 ? (
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                className="showSquare"
+                                                checked={recipientsChecked}
+                                                onChange={handleSquareChange}
+                                                name="recipientsChecked"
+                                                style={{ color: recipientsColor }}
+                                            />
+                                        }
+                                        label="Recipients (pers.)"
+                                        sx={{ color: recipientsColor }}
                                     />
-                                }
-                                label="Recipients (pers.)"
-                                sx={{ color: recipientsColor }}
-                            />
-                        ) : null}
-                    </FormGroup>
-                </Grid>
-                <Grid item xs={2} justifyContent="flex-start" sx={{ display: "flex", alignItems: "center" }}>
-                    <svg
-                        ref={rn}
-                        id="Title1TreeMapIllustration"
-                        width={Title1TreeMapIllustration}
-                        height={Title1TreeMapIllustration}
-                    />
+                                ) : null}
+                            </FormGroup>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={5} justifyContent="flex-start" alignItems="center">
+                        <svg
+                            ref={rn}
+                            id="Title1TreeMapIllustration"
+                            width={Title1TreeMapIllustration}
+                            height={Title1TreeMapIllustration}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography
+                            sx={{
+                                fontWeight: 400,
+                                fontSize: "0.8em",
+                                color: "rgb(163, 163, 163)",
+                                marginTop: 1,
+                                paddingLeft: "1em"
+                            }}
+                        >
+                            Click the <SortIcon className="sortIcon sortRecipients" sx={{ fontSize: "1em" }} /> buttons
+                            above to sort squares by payments, base acres or recipients.
+                        </Typography>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid container item xs={12} id="title1BarContainer" sx={{ display: "flex" }} ref={title1Div}>
+                <Grid item xs={12} id="title1BarContainer" sx={{ display: "flex" }} ref={title1Div}>
                     <TreeMapSquares
                         svgWidth={svgWidth}
                         svgHeight={svgHeight}
@@ -369,7 +394,7 @@ export default function Title1TreeMap({
                     />
                 </Grid>
             </Grid>
-        </div>
+        </Styles>
     );
     /* eslint-enable */
 }
