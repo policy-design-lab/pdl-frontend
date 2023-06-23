@@ -36,8 +36,8 @@ const MapChart = (props) => {
     let color3 = "";
     let color4 = "";
     let color5 = "";
-    let minValue = 0;
-    let maxValue = 0;
+    const minValue = 0;
+    const maxValue = 0;
     let legendTitle = <div />;
     let customScale: number[] = [];
     const hashmap = new Map([]);
@@ -50,7 +50,6 @@ const MapChart = (props) => {
             hashmap.set(state, hashmap.get(state) + item.Amount);
         }
     });
-    maxValue = Math.max(...hashmap.values());
     switch (title) {
         case "All Programs":
             searchKey = "18-22 All Programs Total";
@@ -64,7 +63,6 @@ const MapChart = (props) => {
                     Total Farm Bill Benefits from <strong>2018 - 2022</strong>
                 </Typography>
             );
-            minValue = Math.min(...hashmap.values());
             break;
         case "Title I: Commodities":
             searchKey = "Title I Total";
@@ -78,7 +76,6 @@ const MapChart = (props) => {
                     Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
                 </Typography>
             );
-            minValue = Math.min(...hashmap.values()); // Self defined by observation
             break;
         case "Title II: Conservation":
             searchKey = "Title II Total";

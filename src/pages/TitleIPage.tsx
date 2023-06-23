@@ -30,10 +30,12 @@ export default function TitleIPage(): JSX.Element {
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
+    // const [initTreeMapWidthRatio, setInitTreeMapWidthRatio] = React.useState(0.5);
     const [chartData, setChartData] = React.useState({});
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
+    let initTreeMapWidthRatio = 0.6;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -53,6 +55,9 @@ export default function TitleIPage(): JSX.Element {
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
+        if (window.innerWidth >= 1920) {
+          initTreeMapWidthRatio = 0.7;
+        }
     }, []);
 
     const switchChartTable = (event, newTab) => {
@@ -259,7 +264,7 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
-                                        svgW={window.innerWidth * 0.6}
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={3000}
                                     />
                                 </Box>
@@ -357,7 +362,7 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
-                                        svgW={window.innerWidth * 0.6}
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2800}
                                     />
                                 </Box>
@@ -456,7 +461,7 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
-                                        svgW={window.innerWidth * 0.6}
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
                                 </Box>
@@ -554,7 +559,7 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
-                                        svgW={window.innerWidth * 0.6}
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
                                 </Box>

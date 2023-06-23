@@ -291,10 +291,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                         />
                                     </IconButton>
                                 ) : null}
-                                {chartData[0].recepients !== 0 ? (
+                                {chartData[0].recipients !== 0 ? (
                                     <IconButton
                                         aria-label="add"
-                                        onClick={(event) => handleSortClick(event, "recepients")}
+                                        onClick={(event) => handleSortClick(event, "recipients")}
                                         sx={{
                                             borderRadius: "2px"
                                         }}

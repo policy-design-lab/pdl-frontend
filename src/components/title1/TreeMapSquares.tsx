@@ -26,7 +26,10 @@ export default function TreeMapSquares({
             const margin = 30;
             const lineMargin = 80;
             let rowTrack = 0;
-            const largestSquare = 250;
+            let largestSquare = 200;
+            if (window.innerWidth >= 1920) {
+                largestSquare = 250;
+            }
             let yTrack = largestSquare + lineMargin;
             const d = chartData.filter(
                 (stateData) => stateData.baseAcres !== 0 || stateData.payments !== 0 || stateData.recipients !== 0
@@ -73,7 +76,8 @@ export default function TreeMapSquares({
                                         .attr("x", rowTrack)
                                         .attr("y", yTrack - value * largestSquare)
                                         .attr("fill", color[key]);
-                                    if (yTrack <= (largestSquare + lineMargin) * 3) {
+                                    const firstFewLines = window.innerWidth >= 1920 ? 3 : 2;
+                                    if (yTrack <= (largestSquare + lineMargin) * firstFewLines) {
                                         const inSquareText = squareGroup
                                             .append("text")
                                             .attr("id", `inSquareText${value}`)

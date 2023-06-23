@@ -222,7 +222,7 @@ function Title1ProgramTable({
             ? columns.findIndex((c) => c.accessor === "paymentInDollars")
             : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
     const areaInAcresIndex = columns.findIndex((c) => c.accessor === "areaInAcres");
-    const recipeintCountIndex = columns.findIndex((c) => c.accessor === "recipientCount");
+    const recipientCountIndex = columns.findIndex((c) => c.accessor === "recipientCount");
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -265,7 +265,7 @@ function Title1ProgramTable({
                 background-color: ${color2};
             }
 
-            td[class$="cell${recipeintCountIndex}"] {
+            td[class$="cell${recipientCountIndex}"] {
                 background-color: ${color3};
             }
 
@@ -286,6 +286,18 @@ function Title1ProgramTable({
                 :last-child {
                     border-right: 0;
                 }
+            }
+        }
+
+        @media screen and (max-width: 1680px) {
+            table {
+                font-size: 0.9em;
+            }
+            td[class$="cell${paymentsIndex}"],
+            td[class$="cell${areaInAcresIndex}"],
+            td[class$="cell${recipientCountIndex}"] {
+                text-align: left;
+                padding: 1em;
             }
         }
 
