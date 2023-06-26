@@ -204,6 +204,19 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
             >
                 <Grid container xs={6} xl={6} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
                     <Grid item xs={12}>
+                        {/* <Typography
+                            sx={{
+                                fontWeight: 400,
+                                paddingLeft: 0,
+                                fontSize: "0.7em",
+                                color: "rgb(163, 163, 163)"
+                            }}
+                        >
+                            <i>
+                                Payments are calculated based on data from 2018-2022. Base Acres and Payment Recipients
+                                are calculated based on data from 2019-2022.
+                            </i>
+                        </Typography> */}
                         <Typography
                             id="title1BarHeader"
                             variant="h6"
@@ -219,8 +232,8 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                       .match(/\((.*?)\)/g)
                                       .map((match) =>
                                           match.slice(1, -1)
-                                      )} Payments, Payment Recipients and Base Acres (${year})`
-                                : `Comparing ${program} Payments, Payment Recipients and Base Acres (${year})`}
+                                      )} Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)`
+                                : `Comparing ${program} Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)`}
                             <DownloadIcon
                                 sx={{
                                     paddingLeft: 1,
@@ -250,11 +263,13 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                 color: "rgb(163, 163, 163)"
                             }}
                         >
-                            Hover over the squares to view detailed data. The size differences of the squares represent
-                            the differences in relative amount <i>within the same category</i>. For example, a larger
-                            purple square indicate a higher number of recipients compared to another smaller purple
-                            square, but it does not necessarily indicate a greater number of recipients compared to a
-                            smaller yellow square representing payments.
+                            <b>Hover over the squares to view detailed data.</b>
+                            <br />
+                            The size differences of the squares represent the differences in relative amount{" "}
+                            <i>within the same category</i>. For example, a larger purple square indicate a higher
+                            number of recipients compared to another smaller purple square, but it does not necessarily
+                            indicate a greater number of recipients compared to a smaller yellow square representing
+                            payments.
                         </Typography>
                     </Grid>
                 </Grid>

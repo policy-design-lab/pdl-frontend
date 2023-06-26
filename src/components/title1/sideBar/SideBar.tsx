@@ -56,6 +56,7 @@ export default function SideBar({ setTitle1Checked }): JSX.Element {
                     py: 3,
                     color: selectedItem === value ? "#2F7164" : "#272727",
                     width: 300,
+                    maxHeight: "7em",
                     backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
                 }}
                 selected={selectedItem === item}
@@ -116,6 +117,7 @@ export default function SideBar({ setTitle1Checked }): JSX.Element {
                     sx={{
                         my: 0,
                         py: 3,
+                        maxHeight: "7em",
                         color: "#272727",
                         width: 300,
                         backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"

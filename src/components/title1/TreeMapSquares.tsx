@@ -36,6 +36,7 @@ export default function TreeMapSquares({
             );
             let i = 0;
             let lineNumber = 0;
+            let maxInLine = 0;
             while (i < d.length) {
                 const stateData = d[i];
                 if (
@@ -46,7 +47,7 @@ export default function TreeMapSquares({
                     const re_sorted = [stateData.baseAcres, stateData.payments, stateData.recipients].sort(
                         (a, b) => b - a
                     );
-                    const maxInLine = re_sorted[0];
+                    maxInLine = re_sorted[0];
                     const baseArcesOriginalData = ShortFormat(
                         originalData.find((s) => s.state === stateData.state).baseAcres
                     );
@@ -82,12 +83,16 @@ export default function TreeMapSquares({
                                             .append("text")
                                             .attr("id", `inSquareText${value}`)
                                             .text(collectedOriginalData[key])
-                                            .style("font-size", "0.8em")
+                                            .style("font-size", "0.7em")
                                             .style("fill", "white");
                                         const textLength = inSquareText.node().getComputedTextLength();
-                                        inSquareText
-                                            .attr("x", rowTrack + value * largestSquare - textLength - 10)
-                                            .attr("y", yTrack - value * largestSquare + 18);
+                                        if (rowTrack + value * largestSquare - textLength - 10 > 0) {
+                                            inSquareText
+                                                .attr("x", rowTrack + value * largestSquare - textLength - 10)
+                                                .attr("y", yTrack - value * largestSquare + 18);
+                                        } else {
+                                            inSquareText.attr("x", 0).attr("y", yTrack - value * largestSquare + 18);
+                                        }
                                     }
                                 }
                             }
@@ -99,11 +104,12 @@ export default function TreeMapSquares({
                             // eslint-disable-next-line no-restricted-globals
                             const mousePos = d3.pointer(event, squareGroup.node());
                             const tipGroup = base.append("g").attr("class", "TreeMapSquareTip");
+                            const xPosition = mousePos[0] + 160 > svgWidth ? mousePos[0] - 160 : mousePos[0];
                             tipGroup
                                 .append("rect")
-                                .attr("x", mousePos[0])
+                                .attr("x", xPosition)
                                 .attr("y", mousePos[1])
-                                .attr("width", 130)
+                                .attr("width", 155)
                                 .attr("height", 100)
                                 .attr("rx", 5)
                                 .attr("ry", 5)
@@ -121,29 +127,29 @@ export default function TreeMapSquares({
                                         ]
                                     }`
                                 )
-                                .attr("x", mousePos[0] + 10)
+                                .attr("x", xPosition + 10)
                                 .attr("y", mousePos[1] + 20)
                                 .style("font-size", "0.9em")
                                 .style("font-weight", "700")
                                 .style("fill", "white");
                             tipGroup
                                 .append("text")
-                                .text(`payments:  $${paymentsOriginalData}`)
-                                .attr("x", mousePos[0] + 10)
+                                .text(`Payments:  $${paymentsOriginalData}`)
+                                .attr("x", xPosition + 10)
                                 .attr("y", mousePos[1] + 40)
                                 .style("font-size", "0.8em")
                                 .style("fill", "white");
                             tipGroup
                                 .append("text")
-                                .text(`baseAcres: ${baseArcesOriginalData}`)
-                                .attr("x", mousePos[0] + 10)
+                                .text(`Avg. Base Acres: ${baseArcesOriginalData}`)
+                                .attr("x", xPosition + 10)
                                 .attr("y", mousePos[1] + 60)
                                 .style("font-size", "0.8em")
                                 .style("fill", "white");
                             tipGroup
                                 .append("text")
-                                .text(`recipients:  ${recipientsOriginalData}`)
-                                .attr("x", mousePos[0] + 10)
+                                .text(`Avg. Recipients:  ${recipientsOriginalData}`)
+                                .attr("x", xPosition + 10)
                                 .attr("y", mousePos[1] + 80)
                                 .style("font-size", "0.8em")
                                 .style("fill", "white");
@@ -156,20 +162,37 @@ export default function TreeMapSquares({
                         .text(
                             stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === stateData.state)[0]]
                         )
-                        .style("font-size", "0.8em");
+                        .style("font-size", "0.75em");
                     const textLength = stateName.node().getComputedTextLength();
-                    stateName
-                        .attr("x", rowTrack + (maxInLine * largestSquare) / 2 - textLength / 2)
-                        .attr("y", yTrack + 16);
+                    if (rowTrack + (maxInLine * largestSquare) / 2 - textLength / 2 < 0) {
+                        stateName.attr("x", 0).attr("y", yTrack + 16);
+                    } else {
+                        stateName
+                            .attr("x", rowTrack + (maxInLine * largestSquare) / 2 - textLength / 2)
+                            .attr("y", yTrack + 16);
+                    }
                     rowTrack = rowTrack + maxInLine * largestSquare + margin * 2;
                     i += 1;
                 } else {
-                    yTrack =
-                        lineNumber > 2
-                            ? yTrack + largestSquare + lineMargin - lineNumber * 25
-                            : yTrack + largestSquare + lineMargin;
+                    let max = 0;
+                    for (let temp = 1; temp <= 5; temp += 1) {
+                        if (chartData[temp + 1]) {
+                            const nextOne = chartData[temp + 1];
+                            max =
+                                max > [nextOne.baseAcres, nextOne.payments, nextOne.recipients].sort((a, b) => b - a)[0]
+                                    ? max
+                                    : [nextOne.baseAcres, nextOne.payments, nextOne.recipients].sort(
+                                          (a, b) => b - a
+                                      )[0];
+                        }
+                    }
+                    if (max <= 0.8) {
+                        yTrack = yTrack + largestSquare * max + lineMargin * 0.5;
+                    } else {
+                        yTrack = yTrack + largestSquare + lineMargin;
+                    }
                     lineNumber += 1;
-                    rowTrack = margin * 0.8;
+                    rowTrack = 0;
                 }
             }
             // check if see if any of state has all zeros
@@ -204,13 +227,17 @@ export default function TreeMapSquares({
                             .style("fill", "white");
                         const underSquare = zeros.append("text").text(stateData.state).style("font-size", "0.8em");
                         const textLength = underSquare.node().getComputedTextLength();
-                        underSquare.attr("x", rowTrack + (20 - textLength) / 2).attr("y", yTrack + 16);
+                        if (rowTrack + (20 - textLength) / 2 < 0) {
+                            underSquare.attr("x", 0).attr("y", yTrack + 16);
+                        } else {
+                            underSquare.attr("x", rowTrack + (20 - textLength) / 2).attr("y", yTrack + 16);
+                        }
                         rowTrack = rowTrack + 20 + margin * 2;
                         j += 1;
                     } else {
                         yTrack = yTrack + largestSquare * 0.8 - lineNumber * 20;
                         lineNumber += 5;
-                        rowTrack = margin * 0.8;
+                        rowTrack = 0;
                     }
                 }
             }

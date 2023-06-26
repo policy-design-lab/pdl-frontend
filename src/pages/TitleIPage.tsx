@@ -56,7 +56,7 @@ export default function TitleIPage(): JSX.Element {
             setStateDistributionData(response);
         });
         if (window.innerWidth >= 1920) {
-          initTreeMapWidthRatio = 0.7;
+            initTreeMapWidthRatio = 0.7;
         }
     }, []);
 
@@ -81,28 +81,28 @@ export default function TitleIPage(): JSX.Element {
                 });
                 organizedData.push({
                     state,
-                    baseAcres: subProgramData[0].areaInAcres,
+                    baseAcres: subProgramData[0].averageAreaInAcres,
                     payments: subProgramData[0].paymentInDollars,
-                    recipients: subProgramData[0].recipientCount
+                    recipients: subProgramData[0].averageRecipientCount
                 });
                 originalData.push({
                     state,
-                    baseAcres: subProgramData[0].areaInAcres,
+                    baseAcres: subProgramData[0].averageAreaInAcres,
                     payments: subProgramData[0].paymentInDollars,
-                    recipients: subProgramData[0].recipientCount
+                    recipients: subProgramData[0].averageRecipientCount
                 });
             } else {
                 organizedData.push({
                     state,
-                    baseAcres: programData[0].areaInAcres,
+                    baseAcres: programData[0].averageAreaInAcres,
                     payments: programData[0].programPaymentInDollars,
-                    recipients: programData[0].recipientCount
+                    recipients: programData[0].averageRecipientCount
                 });
                 originalData.push({
                     state,
-                    baseAcres: programData[0].areaInAcres,
+                    baseAcres: programData[0].averageAreaInAcres,
                     payments: programData[0].programPaymentInDollars,
-                    recipients: programData[0].recipientCount
+                    recipients: programData[0].averageRecipientCount
                 });
             }
         });
@@ -270,7 +270,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC Payments, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing ARC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram={undefined}
                                         skipColumns={[]}
@@ -368,7 +368,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-CO Payments, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing ARC-CO Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
@@ -467,7 +467,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-IC Payments, Payment Recipients and Base Acres (2018-2022)"
+                                        tableTitle="Comparing ARC-IC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
@@ -565,7 +565,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing PLC Payments, Payment Recipients and Base Acres(2018-2022)"
+                                        tableTitle="Comparing PLC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
                                         program="Price Loss Coverage (PLC)"
                                         subprogram={undefined}
                                         skipColumns={[]}

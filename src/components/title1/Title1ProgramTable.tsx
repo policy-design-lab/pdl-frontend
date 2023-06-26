@@ -40,14 +40,14 @@ function Title1ProgramTable({
                 paymentInDollars: subProgramData[0].paymentInDollars,
                 paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
                 paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
-                areaInAcres: subProgramData[0].areaInAcres,
-                recipientCount: subProgramData[0].recipientCount
+                averageAreaInAcres: subProgramData[0].averageAreaInAcres,
+                averageRecipientCount: subProgramData[0].averageRecipientCount
             };
         } else if (program !== "Total Commodities Programs") {
             hashmap[state] = {
                 programPaymentInDollars: programData[0].programPaymentInDollars,
-                areaInAcres: programData[0].areaInAcres,
-                recipientCount: programData[0].recipientCount
+                averageAreaInAcres: programData[0].averageAreaInAcres,
+                averageRecipientCount: programData[0].averageRecipientCount
             };
         } else {
             hashmap[state] = {
@@ -67,16 +67,16 @@ function Title1ProgramTable({
                               .toString()}`,
                           paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
                           paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
-                          areaInAcres:
-                              value.areaInAcres === 0
+                          averageAreaInAcres:
+                              value.averageAreaInAcres === 0
                                   ? "0"
-                                  : `${value.areaInAcres
+                                  : `${value.averageAreaInAcres
                                         .toLocaleString(undefined, { minimumFractionDigits: 2 })
                                         .toString()}`,
-                          recipientCount:
-                              value.recipientCount === 0
+                          averageRecipientCount:
+                              value.averageRecipientCount === 0
                                   ? "0"
-                                  : `${value.recipientCount
+                                  : `${value.averageRecipientCount
                                         .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                         .toString()}`
                       }
@@ -85,8 +85,8 @@ function Title1ProgramTable({
                           paymentInDollars: "$0",
                           paymentInPercentageNationwide: "0%",
                           paymentInPercentageWithinState: "0%",
-                          areaInAcres: "0",
-                          recipientCount: "0"
+                          averageAreaInAcres: "0",
+                          averageRecipientCount: "0"
                       };
             }
             if (program === "Total Commodities Programs") {
@@ -104,24 +104,24 @@ function Title1ProgramTable({
                       programPaymentInDollars: `$${value.programPaymentInDollars
                           .toLocaleString(undefined, { minimumFractionDigits: 2 })
                           .toString()}`,
-                      areaInAcres:
-                          value.areaInAcres === 0
+                      averageAreaInAcres:
+                          value.averageAreaInAcres === 0
                               ? "0"
-                              : `${value.areaInAcres
+                              : `${value.averageAreaInAcres
                                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                                     .toString()}`,
-                      recipientCount:
-                          value.recipientCount === 0
+                      averageRecipientCount:
+                          value.averageRecipientCount === 0
                               ? "0"
-                              : `${value.recipientCount
+                              : `${value.averageRecipientCount
                                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                     .toString()}`
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                       programPaymentInDollars: "$0",
-                      areaInAcres: "0",
-                      recipientCount: "0"
+                      averageAreaInAcres: "0",
+                      averageRecipientCount: "0"
                   };
         };
         resultData.push(newRecord());
@@ -179,13 +179,13 @@ function Title1ProgramTable({
                               sortType: compareWithPercentSign
                           },
                           {
-                              Header: "AREA IN ACRES",
-                              accessor: "areaInAcres",
+                              Header: "AVG. BASE ACRES",
+                              accessor: "averageAreaInAcres",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "RECIPIENT COUNT",
-                              accessor: "recipientCount",
+                              Header: "AVG. AVG. RECIPIENT COUNT",
+                              accessor: "averageRecipientCount",
                               sortType: compareWithNumber
                           }
                       ],
@@ -204,13 +204,13 @@ function Title1ProgramTable({
                               sortType: compareWithDollarSign
                           },
                           {
-                              Header: "AREA IN ACRES",
-                              accessor: "areaInAcres",
+                              Header: "AVG. BASE ACRES",
+                              accessor: "averageAreaInAcres",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "RECIPIENT COUNT",
-                              accessor: "recipientCount",
+                              Header: "AVG. RECIPIENT COUNT",
+                              accessor: "averageRecipientCount",
                               sortType: compareWithNumber
                           }
                       ],
@@ -221,8 +221,8 @@ function Title1ProgramTable({
         subprogram !== undefined
             ? columns.findIndex((c) => c.accessor === "paymentInDollars")
             : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
-    const areaInAcresIndex = columns.findIndex((c) => c.accessor === "areaInAcres");
-    const recipientCountIndex = columns.findIndex((c) => c.accessor === "recipientCount");
+    const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
+    const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -261,11 +261,11 @@ function Title1ProgramTable({
                 background-color: ${color1};
             }
 
-            td[class$="cell${areaInAcresIndex}"] {
+            td[class$="cell${averageAreaInAcresIndex}"] {
                 background-color: ${color2};
             }
 
-            td[class$="cell${recipientCountIndex}"] {
+            td[class$="cell${averageRecipientCountIndex}"] {
                 background-color: ${color3};
             }
 
@@ -294,8 +294,8 @@ function Title1ProgramTable({
                 font-size: 0.9em;
             }
             td[class$="cell${paymentsIndex}"],
-            td[class$="cell${areaInAcresIndex}"],
-            td[class$="cell${recipientCountIndex}"] {
+            td[class$="cell${averageAreaInAcresIndex}"],
+            td[class$="cell${averageRecipientCountIndex}"] {
                 text-align: left;
                 padding: 1em;
             }
