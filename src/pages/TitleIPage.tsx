@@ -270,7 +270,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
+                                        tableTitle="Comparing ARC Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram={undefined}
                                         skipColumns={[]}
@@ -368,7 +368,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-CO Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
+                                        tableTitle="Comparing ARC-CO Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
@@ -467,7 +467,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing ARC-IC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
+                                        tableTitle="Comparing ARC-IC Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         skipColumns={[]}
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
@@ -565,7 +565,7 @@ export default function TitleIPage(): JSX.Element {
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
-                                        tableTitle="Comparing PLC Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)"
+                                        tableTitle="Comparing PLC Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         program="Price Loss Coverage (PLC)"
                                         subprogram={undefined}
                                         skipColumns={[]}

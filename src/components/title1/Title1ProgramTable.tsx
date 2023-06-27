@@ -332,6 +332,25 @@ function Title1ProgramTable({
                 >
                     <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
                         <Box id="title1TableHeader" sx={{ width: "100%" }}>
+                            {program !== "Total Commodities Programs" ? (
+                                <Typography
+                                    sx={{
+                                        fontWeight: 400,
+                                        paddingLeft: 0,
+                                        fontSize: "0.7em",
+                                        color: "rgb(163, 163, 163)"
+                                    }}
+                                >
+                                    <i>
+                                        The payments are calculated as the total of the data from 2018-2022; The base
+                                        acres and payment recipients are calculated as the average of the data from
+                                        2019-2022.
+                                    </i>
+                                </Typography>
+                            ) : (
+                                <div />
+                            )}
+
                             <Typography
                                 id="title1BarHeader"
                                 variant="h6"

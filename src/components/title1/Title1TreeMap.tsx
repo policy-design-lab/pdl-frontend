@@ -204,7 +204,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
             >
                 <Grid container xs={6} xl={6} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
                     <Grid item xs={12}>
-                        {/* <Typography
+                        <Typography
                             sx={{
                                 fontWeight: 400,
                                 paddingLeft: 0,
@@ -213,10 +213,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             <i>
-                                Payments are calculated based on data from 2018-2022. Base Acres and Payment Recipients
-                                are calculated based on data from 2019-2022.
+                                The payments are calculated as the total of the data from 2018-2022; The base acres and
+                                payment recipients are calculated as the average of the data from 2019-2022.
                             </i>
-                        </Typography> */}
+                        </Typography>
                         <Typography
                             id="title1BarHeader"
                             variant="h6"
@@ -232,8 +232,8 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                       .match(/\((.*?)\)/g)
                                       .map((match) =>
                                           match.slice(1, -1)
-                                      )} Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)`
-                                : `Comparing ${program} Payments (2018-2022), Payment Recipients and Base Acres (2019-2022)`}
+                                      )} Payments, Avg. Payment Recipients and Avg. Base Acres`
+                                : `Comparing ${program} Payments, Avg. Payment Recipients and Avg. Base Acres`}
                             <DownloadIcon
                                 sx={{
                                     paddingLeft: 1,
@@ -350,7 +350,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                                 style={{ color: baseAcresColor }}
                                             />
                                         }
-                                        label="Base Acres (ac)"
+                                        label="Avg. Base Acres (ac)"
                                         sx={{ color: baseAcresColor }}
                                     />
                                 ) : null}
@@ -365,7 +365,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                                 style={{ color: recipientsColor }}
                                             />
                                         }
-                                        label="Recipients (pers.)"
+                                        label="Avg. Recipients (pers.)"
                                         sx={{ color: recipientsColor }}
                                     />
                                 ) : null}
