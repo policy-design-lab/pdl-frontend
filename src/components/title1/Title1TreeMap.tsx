@@ -267,8 +267,8 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             <br />
                             The size differences of the squares represent the differences in relative amount{" "}
                             <i>within the same category</i>. For example, a larger purple square indicate a higher
-                            number of recipients compared to another smaller purple square, but it does not necessarily
-                            indicate a greater number of recipients compared to a smaller yellow square representing
+                            number of avg. recipients compared to another smaller purple square, but it does not necessarily
+                            indicate a greater number of avg. recipients compared to a smaller yellow square representing
                             payments.
                         </Typography>
                     </Grid>
@@ -391,7 +391,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             Click the <SortIcon className="sortIcon sortRecipients" sx={{ fontSize: "1em" }} /> buttons
-                            above to sort squares by payments, base acres or recipients.
+                            above to sort squares by payments, avg. base acres or avg. recipients.
                         </Typography>
                     </Grid>
                 </Grid>
