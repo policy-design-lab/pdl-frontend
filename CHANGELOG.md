@@ -8,9 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- EQIP page updated to use the data from API endpoint [#132](https://github.com/policy-design-lab/pdl-frontend/issues/132)
 - Reverse the 'm' back to 'k' in the data formatting function for thousands [#145](https://github.com/policy-design-lab/pdl-frontend/issues/145)
 - Add `$` sign to the beginning of legend bar on landing page [#141](https://github.com/policy-design-lab/pdl-frontend/issues/141)
-
 
 ## [0.5.1] - 2023-05-30
 
