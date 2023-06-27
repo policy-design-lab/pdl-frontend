@@ -163,7 +163,7 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
     const [content, setContent] = useState("");
     return (
         <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                 <HorizontalStackedBar
                     title="Total EQIP Benefits"
                     color1="#F0F9E8"
