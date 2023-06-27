@@ -103,7 +103,7 @@ const MapChart = ({
                                                         </Typography>
                                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            ${totalPaymentInPercentage} %
+                                                            {totalPaymentInPercentage} %
                                                         </Typography>
                                                     </Box>
                                                 )}
@@ -229,7 +229,7 @@ const MapChart = ({
                                                         </Typography>
                                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            ${totalPaymentInPercentage} %
+                                                            {totalPaymentInPercentage} %
                                                         </Typography>
                                                     </Box>
                                                 )}
