@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleQuantize } from "d3-scale";
+import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import PropTypes from "prop-types";
-import allStates from "../../data/allstates.json";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
 
@@ -27,7 +25,7 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, maxValue }) => {
+const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance }) => {
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
@@ -153,7 +151,7 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const EQIPTotalMap = (): JSX.Element => {
+const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; allStates: any }): JSX.Element => {
     const quantizeArray: number[] = [];
     Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
@@ -193,7 +191,12 @@ const EQIPTotalMap = (): JSX.Element => {
                     })}M`}
                 />
             </Box>
-            <MapChart setTooltipContent={setContent} maxValue={maxValue} />
+            <MapChart
+                setTooltipContent={setContent}
+                maxValue={maxValue}
+                allStates={allStates}
+                statePerformance={statePerformance}
+            />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}

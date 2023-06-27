@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleQuantize } from "d3-scale";
+import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
 import PropTypes from "prop-types";
-import allStates from "../../data/allstates.json";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
 
@@ -27,7 +24,8 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, category, maxValue }) => {
+const MapChart = (props) => {
+    const { setTooltipContent, category, maxValue, statePerformance, allStates } = props;
     const colorScale = scaleQuantize()
         .domain([0, maxValue])
         .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
@@ -39,91 +37,93 @@ const MapChart = ({ setTooltipContent, category, maxValue }) => {
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
-                                if (!Object.keys(statePerformance).includes(geo.properties.name)) {
-                                    return null;
-                                }
-                                const statuteRecord = statePerformance[geo.properties.name][0].statutes;
-                                const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
-                                const AArray = ACur.practiceCategories;
-                                const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
-                                const BArray = BCur.practiceCategories;
-                                const TotalArray = AArray.concat(BArray);
-                                const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-                                const categoryPayment = categoryRecord.paymentInDollars;
-                                const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
-                                const withinStatePercentage = categoryRecord.paymentInPercentageWithinState;
-                                const hoverContent = (
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            bgcolor: "#ECF0ED",
-                                            borderRadius: 1
-                                        }}
-                                    >
-                                        <Box>
-                                            <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row"
-                                                }}
-                                            >
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {Number(categoryPayment) < 1000000
-                                                        ? `$${Number(Number(categoryPayment) / 1000.0).toLocaleString(
-                                                              undefined,
-                                                              {
+                                if (statePerformance !== undefined) {
+                                    if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                        return null;
+                                    }
+                                    const statuteRecord = statePerformance[geo.properties.name][0].statutes;
+                                    const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
+                                    const AArray = ACur.practiceCategories;
+                                    const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
+                                    const BArray = BCur.practiceCategories;
+                                    const TotalArray = AArray.concat(BArray);
+                                    const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+                                    const categoryPayment = categoryRecord.paymentInDollars;
+                                    const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
+                                    const hoverContent = (
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                bgcolor: "#ECF0ED",
+                                                borderRadius: 1
+                                            }}
+                                        >
+                                            <Box>
+                                                <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        flexDirection: "row"
+                                                    }}
+                                                >
+                                                    <Typography sx={{ color: "#3F3F3F" }}>
+                                                        {Number(categoryPayment) < 1000000
+                                                            ? `$${Number(
+                                                                  Number(categoryPayment) / 1000.0
+                                                              ).toLocaleString(undefined, {
                                                                   maximumFractionDigits: 2
-                                                              }
-                                                          )}K`
-                                                        : `$${Number(
-                                                              Number(categoryPayment) / 1000000.0
-                                                          ).toLocaleString(undefined, {
-                                                              maximumFractionDigits: 2
-                                                          })}M`}
-                                                </Typography>
-                                                <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {nationwidePercentage ? `${nationwidePercentage} %` : "0%"}
-                                                </Typography>
+                                                              })}K`
+                                                            : `$${Number(
+                                                                  Number(categoryPayment) / 1000000.0
+                                                              ).toLocaleString(undefined, {
+                                                                  maximumFractionDigits: 2
+                                                              })}M`}
+                                                    </Typography>
+                                                    <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+                                                    <Typography sx={{ color: "#3F3F3F" }}>
+                                                        {nationwidePercentage ? `${nationwidePercentage} %` : "0%"}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
                                         </Box>
-                                    </Box>
-                                );
-                                const fillColour = () => {
-                                    if (categoryPayment) {
-                                        if (categoryPayment !== 0) return colorScale(categoryPayment);
+                                    );
+
+                                    const fillColour = () => {
+                                        if (categoryPayment) {
+                                            if (categoryPayment !== 0) return colorScale(categoryPayment);
+                                            return "#D2D2D2";
+                                        }
                                         return "#D2D2D2";
-                                    }
-                                    return "#D2D2D2";
-                                };
-                                return (
-                                    <Geography
-                                        key={geo.rsmKey}
-                                        geography={geo}
-                                        onMouseEnter={() => {
-                                            setTooltipContent(hoverContent);
-                                        }}
-                                        onMouseLeave={() => {
-                                            setTooltipContent("");
-                                        }}
-                                        fill={fillColour()}
-                                        stroke="#FFF"
-                                        style={{
-                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
-                                            hover: {
-                                                stroke: "#232323",
-                                                strokeWidth: 2,
-                                                outline: "none"
-                                            },
-                                            pressed: {
-                                                fill: "#345feb",
-                                                outline: "none"
-                                            }
-                                        }}
-                                    />
-                                );
+                                    };
+                                    return (
+                                        <Geography
+                                            key={geo.rsmKey}
+                                            geography={geo}
+                                            onMouseEnter={() => {
+                                                setTooltipContent(hoverContent);
+                                            }}
+                                            onMouseLeave={() => {
+                                                setTooltipContent("");
+                                            }}
+                                            fill={fillColour()}
+                                            stroke="#FFF"
+                                            style={{
+                                                default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
+                                                hover: {
+                                                    stroke: "#232323",
+                                                    strokeWidth: 2,
+                                                    outline: "none"
+                                                },
+                                                pressed: {
+                                                    fill: "#345feb",
+                                                    outline: "none"
+                                                }
+                                            }}
+                                        />
+                                    );
+                                }
+                                return null;
                             })}
                             {geographies.map((geo) => {
                                 const centroid = geoCentroid(geo);
@@ -167,7 +167,15 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const CategoryMap = ({ category }: { category: string }): JSX.Element => {
+const CategoryMap = ({
+    category,
+    statePerformance,
+    allStates
+}: {
+    category: string;
+    statePerformance: any;
+    allStates: any;
+}): JSX.Element => {
     const [content, setContent] = useState("");
     const title = `${category} Benefits`;
     const quantizeArray: number[] = [];
@@ -248,7 +256,13 @@ const CategoryMap = ({ category }: { category: string }): JSX.Element => {
                     }
                 />
             </Box>
-            <MapChart setTooltipContent={setContent} category={category} maxValue={maxValue} />
+            <MapChart
+                setTooltipContent={setContent}
+                category={category}
+                maxValue={maxValue}
+                statePerformance={statePerformance}
+                allStates={allStates}
+            />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
                     {content}

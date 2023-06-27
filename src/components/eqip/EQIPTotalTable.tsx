@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`
@@ -112,23 +111,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-const eqipTableData: any[] = [];
-
-// eslint-disable-next-line no-restricted-syntax
-for (const [key, value] of Object.entries(statePerformance)) {
-    const newRecord = () => {
-        return {
-            state: key,
-            eqipBenefit: `$${value[0].totalPaymentInDollars
-                .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                .toString()}`,
-            percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-        };
-    };
-    eqipTableData.push(newRecord());
-}
-
-function App(): JSX.Element {
+function App({ statePerformance }: { statePerformance: any }): JSX.Element {
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
         const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
@@ -143,6 +126,22 @@ function App(): JSX.Element {
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
+    }
+
+    const eqipTableData: any[] = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(statePerformance)) {
+        const newRecord = () => {
+            return {
+                state: key,
+                eqipBenefit: `$${value[0].totalPaymentInDollars
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}`,
+                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+            };
+        };
+        eqipTableData.push(newRecord());
     }
 
     const columns = React.useMemo(
