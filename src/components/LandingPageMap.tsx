@@ -29,15 +29,13 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, title, stateCodes, allPrograms, allStates, summary, screenWidth } = props;
+    const { setTooltipContent, title, stateCodes, allPrograms, allStates, summary } = props;
     let searchKey = "";
     let color1 = "";
     let color2 = "";
     let color3 = "";
     let color4 = "";
     let color5 = "";
-    const minValue = 0;
-    const maxValue = 0;
     let legendTitle = <div />;
     let customScale: number[] = [];
     const hashmap = new Map([]);
