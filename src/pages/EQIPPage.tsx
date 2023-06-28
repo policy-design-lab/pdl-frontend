@@ -10,6 +10,7 @@ import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
 import { getJsonDataFromUrl } from "../utils/apiutil";
+import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function EQIPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -133,9 +134,13 @@ export default function EQIPPage(): JSX.Element {
             {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
+                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavSearchBar
+                            text="Conservation Programs (Title II)"
+                            subtext="Environmental Quality Incentives Program (EQIP)"
+                        />
                     </Box>
-                    <Drawer setEQIPChecked={setChecked} setCSPChecked={null} />
+                    <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         <Box
                             component="div"

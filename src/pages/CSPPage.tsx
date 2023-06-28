@@ -10,6 +10,7 @@ import CategoryTable from "../components/csp/CategoryTable";
 import CategoryMap from "../components/csp/CategoryMap";
 import { config } from "../app.config";
 import { getJsonDataFromUrl } from "../utils/apiutil";
+import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function CSPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -154,9 +155,13 @@ export default function CSPPage(): JSX.Element {
             {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
+                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavSearchBar
+                            text="Conservation Programs (Title II)"
+                            subtext="Conversation Stewardship Program (CSP)"
+                        />
                     </Box>
-                    <Drawer setCSPChecked={setChecked} setEQIPChecked={null} zeroCategories={zeroCategories} />
+                    <Drawer setCSPChecked={setChecked} setEQIPChecked={undefined} zeroCategories={zeroCategories} />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         <Box
                             component="div"

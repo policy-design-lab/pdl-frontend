@@ -21,3 +21,19 @@ export function compareWithAlphabetic(rowA, rowB, id, desc) {
     if (a < b) return -1;
     return 0;
 }
+
+export function sortByDollars(jsonArray, key): void {
+    jsonArray.sort((a, b) => {
+        const paymentA = Number(a[key].replace(/[^0-9.-]+/g, ""));
+        const paymentB = Number(b[key].replace(/[^0-9.-]+/g, ""));
+        return paymentB - paymentA;
+    });
+}
+
+export function compareWithNumber(rowA, rowB, id, desc) {
+    const a = Number(rowA.values[id].replace(/,/g, ""));
+    const b = Number(rowB.values[id].replace(/,/g, ""));
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+}

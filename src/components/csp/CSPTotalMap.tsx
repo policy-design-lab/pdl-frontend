@@ -187,7 +187,7 @@ const CSPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; a
     return (
         <div>
             <div>
-                <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     <HorizontalStackedBar
                         title="Total CSP Benefits"
                         color1="#F0F9E8"

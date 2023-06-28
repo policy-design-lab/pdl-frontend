@@ -20,6 +20,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
+    "@mui/styles": "^5.13.2",
     "@types/node": "^18.8.2",
     "@types/react-router": "^5.1.20",
     "apexcharts": "^3.36.3",
