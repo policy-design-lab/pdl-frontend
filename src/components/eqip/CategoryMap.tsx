@@ -177,7 +177,15 @@ const CategoryMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    const title = `${category} Benefits`;
+    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
+    let years = "2018-2022";
+    if (
+        Object.keys(statePerformance).length !== 0 &&
+        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
+    ) {
+        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
+    }
+    const title = `${category} Benefits from ${years}`;
     const quantizeArray: number[] = [];
     Object.values(statePerformance).map((value) => {
         const statuteRecord = value[0].statutes;
