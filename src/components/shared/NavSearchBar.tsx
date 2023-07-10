@@ -39,14 +39,15 @@ export default function NavSearchBar({
                     >
                         {text}
                     </Typography>
-                    <IconButton
+                    {/* Issue 159: Temporary block the arrow to avoid misunderstanding */}
+                    {/* <IconButton
                         aria-label="select location"
                         component="label"
                         sx={{ "&:hover": { backgroundColor: "transparent" } }}
                         disableRipple
                     >
                         <ArrowDropDownIcon sx={{ m: 0, p: 0, color: "rgba(63, 63, 63, 1)" }} />
-                    </IconButton>
+                    </IconButton> */}
                     {subtext !== "" ? (
                         <Typography
                             className="NavSearchBar-subtext"

@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `$` sign to the beginning of legend bar on landing page [#141](https://github.com/policy-design-lab/pdl-frontend/issues/141)
 - Add search bar area and update color theme of EQIP and CSP pages
 - Update Title 1 navigation bar title [#156](https://github.com/policy-design-lab/pdl-frontend/issues/156)
+- Add year to the titles of map in the EQIP page and CSP page [#158](https://github.com/policy-design-lab/pdl-frontend/issues/158)
+- Remove the arrow in navigation search bar [#159](https://github.com/policy-design-lab/pdl-frontend/issues/159)
 
 ## [0.5.1] - 2023-05-30
 
