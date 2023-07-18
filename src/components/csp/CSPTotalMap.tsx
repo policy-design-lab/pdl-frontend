@@ -183,13 +183,20 @@ const CSPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; a
     const label4 = (maxValue / 5) * 3;
     const label5 = (maxValue / 5) * 4;
     const [content, setContent] = useState("");
-
+    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
+    let years = "2018-2022";
+    if (
+        Object.keys(statePerformance).length !== 0 &&
+        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
+    ) {
+        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
+    }
     return (
         <div>
             <div>
                 <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     <HorizontalStackedBar
-                        title="Total CSP Benefits"
+                        title={`Total CSP Benefits from ${years}`}
                         color1="#F0F9E8"
                         color2="#BAE4BC"
                         color3="#7BCCC4"

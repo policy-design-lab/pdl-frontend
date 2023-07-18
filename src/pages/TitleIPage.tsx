@@ -117,7 +117,7 @@ export default function TitleIPage(): JSX.Element {
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                        <NavSearchBar text="Conservation Programs (Title I)" />
+                        <NavSearchBar text="Commodities Programs (Title I)" />
                     </Box>
                     <Box sx={{ height: "64px" }} />
                     <SideBar setTitle1Checked={setChecked} />
