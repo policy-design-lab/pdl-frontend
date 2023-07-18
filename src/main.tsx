@@ -21,7 +21,7 @@ export default function Main(): JSX.Element {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/eqip" element={<EQIPPage />} />
                 <Route path="/csp" element={<CSPPage />} />
-                <Route path="/title1" element={<TitleIPage />} />
+                {/* <Route path="/title1" element={<TitleIPage />} /> */}
                 <Route path="/snap" element={<SNAPPage />} />
             </Routes>
         </ScrollToTop>

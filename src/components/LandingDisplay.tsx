@@ -33,7 +33,8 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
             bodyText =
                 "Title I, Commodities cover price and income support for the farmers who raise widely-produced and traded non-perishable crops, like corn, soybeans, wheat, cotton and rice – as well as dairy and sugar. The title also includes agricultural disaster assistance. The map shows the total benefits paid to farmers from of the commodities programs by state from 2018-2022.";
 
-            route = "/title1";
+            //route = "/title1";
+            route = "/";
             buttonText = "Explore Maps of Commodities Programs";
             button = (
                 <Button
@@ -45,8 +46,9 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
                         borderRadius: 0
                     }}
                     disableElevation
-                    component={Link}
-                    to={route}
+                    // component={Link}
+                    // to={route}
+                    onClick={handleAlertOpen}
                 >
                     <Typography variant="subtitle1">
                         <strong>{buttonText}</strong>
