@@ -5,7 +5,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export default function NavSearchBar({
     bkColor = "rgba(255, 255, 255, 1)",
-    brColor = "rgba(205, 205, 205, 0.3)"
+    brColor = "rgba(205, 205, 205, 0.3)",
+    text,
+    subtext = ""
 }): JSX.Element {
     return (
         <Grid
@@ -28,22 +30,37 @@ export default function NavSearchBar({
             >
                 <Box display="flex" alignItems="center">
                     <Typography
+                        className="NavSearchBar-text"
                         sx={{
                             fontFamily: "Georgia",
                             fontSize: "1em",
                             fontWeight: 700
                         }}
                     >
-                        Supplemental Nutrition ... (SNAP)
+                        {text}
                     </Typography>
-                    <IconButton
+                    {/* Issue 159: Temporary block the arrow to avoid misunderstanding */}
+                    {/* <IconButton
                         aria-label="select location"
                         component="label"
                         sx={{ "&:hover": { backgroundColor: "transparent" } }}
                         disableRipple
                     >
                         <ArrowDropDownIcon sx={{ m: 0, p: 0, color: "rgba(63, 63, 63, 1)" }} />
-                    </IconButton>
+                    </IconButton> */}
+                    {subtext !== "" ? (
+                        <Typography
+                            className="NavSearchBar-subtext"
+                            sx={{
+                                fontSize: "0.9em",
+                                color: "rgba(0, 0, 0, 0.5)",
+                                fontWeight: 400,
+                                ml: 3
+                            }}
+                        >
+                            / {subtext}
+                        </Typography>
+                    ) : null}
                 </Box>
             </Grid>
             <Grid container item xs={5} sx={{ flexDirection: "row", my: 1, paddingRight: 3 }} justifyContent="flex-end">

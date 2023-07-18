@@ -190,7 +190,15 @@ const CategoryMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    const title = `${category} Benefits`;
+    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
+    let years = "2018-2022";
+    if (
+        Object.keys(statePerformance).length !== 0 &&
+        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
+    ) {
+        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
+    }
+    const title = `${category} Benefits from ${years}`;
     const quantizeArray: number[] = [];
     let categoryRecord = {};
     Object.values(statePerformance).map((value) => {
@@ -225,7 +233,7 @@ const CategoryMap = ({
     return (
         <div>
             {maxValue !== 0 ? (
-                <Box display="flex" justifyContent="center" sx={{ pt: 12 }}>
+                <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     <HorizontalStackedBar
                         title={title}
                         color1="#F0F9E8"
@@ -289,7 +297,7 @@ const CategoryMap = ({
                         display: "flex",
                         flexDirection: "column",
                         minWidth: 560,
-                        pt: 12
+                        pt: 24
                     }}
                 >
                     <Box display="flex" justifyContent="center" sx={{ mb: 1 }}>

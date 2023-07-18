@@ -6,6 +6,7 @@ import "../../styles/drawLegend.css";
 /**
  * Keys in legendConfig.json must match the 'searchKey' variable in DrawLegend.tsx file.
  * If there's any changes in legendConfig.json, please re-check and update the 'searchKey' variable here.
+ * The programData parameter is the array of all data points that will be used to draw the legend.
  */
 export default function DrawLegend({
     colorScale,
@@ -34,7 +35,6 @@ export default function DrawLegend({
             d3.select(legendRn.current).selectAll("svg").remove();
             const baseSVG = d3.select(legendRn.current).append("svg").attr("width", width).attr("height", 90);
             const customScale = colorScale.domain();
-
             cut_points.push(Math.min(...programData));
             cut_points = cut_points.concat(customScale);
             const legendRectX: number[] = [];
@@ -112,7 +112,7 @@ export default function DrawLegend({
                         .text((d, i) => {
                             if (i === 0) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
-                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                                return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
                             return ShortFormat(Math.round(cut_points[i]), i);
                         });
@@ -133,7 +133,7 @@ export default function DrawLegend({
                         .text((d, i) => {
                             if (i === 0) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
-                                return res.indexOf("-") < 0 ? `${res}` : `-$${res.substring(1)}`;
+                                return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
                             return ShortFormat(Math.round(cut_points[i]), i);
                         });

@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2023-07-18
+
+### Added
+
+- Add Title 1 page and corresponding components for the Conservation Programs [#126](https://github.com/policy-design-lab/pdl-frontend/issues/126)
+
+### Changed
+
+- EQIP page updated to use the data from API endpoint [#132](https://github.com/policy-design-lab/pdl-frontend/issues/132)
+- Reverse the 'm' back to 'k' in the data formatting function for thousands [#145](https://github.com/policy-design-lab/pdl-frontend/issues/145)
+- Add `$` sign to the beginning of legend bar on landing page [#141](https://github.com/policy-design-lab/pdl-frontend/issues/141)
+- Add search bar area and update color theme of EQIP and CSP pages
+- Update Title 1 navigation bar title [#156](https://github.com/policy-design-lab/pdl-frontend/issues/156)
+- Add year to the titles of map in the EQIP page and CSP page [#158](https://github.com/policy-design-lab/pdl-frontend/issues/158)
+- Remove the arrow in navigation search bar [#159](https://github.com/policy-design-lab/pdl-frontend/issues/159)
+
 ## [0.5.1] - 2023-05-30
 
 ### Changed
@@ -95,6 +111,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[0.6.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.1...0.6.0
 [0.5.1]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.3.0...0.4.0

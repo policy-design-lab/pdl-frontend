@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
-import statePerformance from "../../data/EQIP/EQIP_STATE_PERFORMANCE_DATA.json";
 import "../../styles/table.css";
 
 const Styles = styled.div`
@@ -44,7 +43,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -113,7 +112,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ category }: { category: string }): JSX.Element {
+function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
     const eqipTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -272,7 +271,7 @@ function App({ category }: { category: string }): JSX.Element {
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} />
+                <Table columns={columns} data={eqipTableData} statePerformance={statePerformance} />
             </Styles>
         </Box>
     );
