@@ -33,8 +33,6 @@ const MapChart = (props) => {
     let color3 = "";
     let color4 = "";
     let color5 = "";
-    let minValue = 0;
-    let maxValue = 0;
     let legendTitle = <div />;
     let customScale: number[] = [];
     const hashmap = new Map([]);
@@ -47,7 +45,6 @@ const MapChart = (props) => {
             hashmap.set(state, hashmap.get(state) + item.Amount);
         }
     });
-    maxValue = Math.max(...hashmap.values());
     switch (title) {
         case "All Programs":
             searchKey = "18-22 All Programs Total";
@@ -61,7 +58,6 @@ const MapChart = (props) => {
                     Total Farm Bill Benefits from <strong>2018 - 2022</strong>
                 </Typography>
             );
-            minValue = Math.min(...hashmap.values());
             break;
         case "Title I: Commodities":
             searchKey = "Title I Total";
@@ -75,7 +71,6 @@ const MapChart = (props) => {
                     Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
                 </Typography>
             );
-            minValue = Math.min(...hashmap.values());
             break;
         case "Title II: Conservation":
             searchKey = "Title II Total";
@@ -135,11 +130,6 @@ const MapChart = (props) => {
     allPrograms.forEach((d) => {
         if (d[searchKey] === 0) zeroPoints.push(d.State);
     });
-    const label1 = ((maxValue - minValue) / 5) * 0 + minValue;
-    const label2 = ((maxValue - minValue) / 5) * 1 + minValue;
-    const label3 = ((maxValue - minValue) / 5) * 2 + minValue;
-    const label4 = ((maxValue - minValue) / 5) * 3 + minValue;
-    const label5 = ((maxValue - minValue) / 5) * 4 + minValue;
     return (
         <div data-tip="">
             <Box id="TopMapContainer" display="flex" justifyContent="center" sx={{ mt: 4 }}>
@@ -200,12 +190,18 @@ const MapChart = (props) => {
                                                     )}
                                                     <Typography sx={{ color: "#3F3F3F" }}>
                                                         {Math.round(Number(total / 1000000.0)) >= 0
-                                                            ? `$${Number(undefined).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`
-                                                            : `-$${Number(undefined).toLocaleString(undefined, {
-                                                                  maximumFractionDigits: 2
-                                                              })}M`}
+                                                            ? `$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`
+                                                            : `-$${Number(Math.abs(total) / 1000000.0).toLocaleString(
+                                                                  undefined,
+                                                                  {
+                                                                      maximumFractionDigits: 2
+                                                                  }
+                                                              )}M`}
                                                     </Typography>
                                                     <br />
                                                     {/* Show additional data on hover for SNAP */}
