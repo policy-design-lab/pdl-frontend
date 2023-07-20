@@ -43,7 +43,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
+function Table({ columns, data }: { columns: any; data: any; statePerformance: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
