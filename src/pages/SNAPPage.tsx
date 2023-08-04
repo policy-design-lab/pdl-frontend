@@ -23,7 +23,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 import { hexToRGB } from "../components/shared/StyleFunctions";
 import "../styles/snap.css";
 import { config } from "../app.config";
-import { getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function SNAPPage(): JSX.Element {
     const paddingLR = 40;
@@ -38,7 +38,34 @@ export default function SNAPPage(): JSX.Element {
     const heightPercentage = 0.4;
     const [data, setData] = React.useState(null);
 
+    // connect to api endpoint
+    const [stateCodes, setStateCodes] = React.useState([]);
+    const [allPrograms, setAllPrograms] = React.useState([]);
+    const [allStates, setAllStates] = React.useState([]);
+    const [summary, setSummary] = React.useState([]);
+
     React.useEffect(() => {
+        const statecode_url = `${config.apiUrl}/statecodes`;
+        getJsonDataFromUrl(statecode_url).then((response) => {
+            const converted_json = convertAllState(response);
+            setStateCodes(converted_json);
+        });
+
+        const allprograms_url = `${config.apiUrl}/allprograms`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            setAllPrograms(response);
+        });
+
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
+            setAllStates(response);
+        });
+
+        const summary_url = `${config.apiUrl}/summary`;
+        getJsonDataFromUrl(summary_url).then((response) => {
+            setSummary(response);
+        });
+
         getJsonDataFromUrl(`${config.apiUrl}/programs/snap/state-distribution`).then((response) => {
             setData(response);
         });
@@ -91,258 +118,275 @@ export default function SNAPPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Box sx={{ width: "100%" }}>
-                <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                    <NavSearchBar text="Supplemental Nutrition ... (SNAP)" />
-                </Box>
-                <Box
-                    className="MainContent"
-                    sx={{
-                        position: "relative",
-                        top: 0,
-                        width: "80%",
-                        m: "0 auto",
-                        pt: 25,
-                        pb: 5
-                    }}
-                >
-                    <div id="landingPageMapContainer">
-                        <LandingPageMap programTitle="Supplemental Nutrition Assistance Program (SNAP)" />
-                    </div>
+            {Object.keys(stateCodes).length > 0 &&
+            Object.keys(allStates).length > 0 &&
+            Object.keys(summary).length > 0 ? (
+                <Box sx={{ width: "100%" }}>
+                    <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
+                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavSearchBar text="Supplemental Nutrition ... (SNAP)" />
+                    </Box>
                     <Box
+                        className="MainContent"
                         sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            height: 50
+                            position: "relative",
+                            top: 0,
+                            width: "80%",
+                            m: "0 auto",
+                            pt: 25,
+                            pb: 5
                         }}
-                    />
-                    <Box component="div" ref={snapDiv}>
-                        <Grid
-                            container
-                            columns={{ xs: 12 }}
-                            className="stateTitleContainer"
+                    >
+                        <div id="landingPageMapContainer">
+                            <LandingPageMap
+                                programTitle="Supplemental Nutrition Assistance Program (SNAP)"
+                                allStates={allStates}
+                                stateCodes={stateCodes}
+                                allPrograms={allPrograms}
+                                summary={summary}
+                            />
+                        </div>
+                        <Box
                             sx={{
-                                justifyContent: "space-between",
-                                borderBottom: "1px solid #e4ebe7",
-                                py: 2,
-                                display: "flex"
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
                             }}
-                        >
-                            <Typography variant="h4" sx={{ fontWeight: 700, marginTop: 1 }}>
-                                Comparison by States
-                            </Typography>
-                            <ToggleButtonGroup
-                                className="BarTableToggle"
-                                value={tab}
-                                exclusive
-                                onChange={switchBarTable}
-                                aria-label="SNAP toggle button group"
-                                sx={{ justifyContent: "flex-end" }}
+                        />
+                        <Box component="div" ref={snapDiv}>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                className="stateTitleContainer"
+                                sx={{
+                                    justifyContent: "space-between",
+                                    borderBottom: "1px solid #e4ebe7",
+                                    py: 2,
+                                    display: "flex"
+                                }}
                             >
-                                <ToggleButton value={0}>
-                                    <InsertChartIcon />
-                                </ToggleButton>
-                                <ToggleButton value={1}>
-                                    <TableChartIcon />
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Grid>
-                        <Grid
-                            container
-                            columns={{ xs: 12 }}
-                            sx={{
-                                paddingTop: 6,
-                                justifyContent: "center"
-                            }}
-                        >
-                            <Box sx={{ display: tab !== 0 ? "none" : "div" }}>
-                                <Grid
-                                    container
-                                    columns={{ xs: 12 }}
-                                    className="stateBarTableContainer"
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between"
-                                    }}
+                                <Typography variant="h4" sx={{ fontWeight: 700, marginTop: 1 }}>
+                                    Comparison by States
+                                </Typography>
+                                <ToggleButtonGroup
+                                    className="BarTableToggle"
+                                    value={tab}
+                                    exclusive
+                                    onChange={switchBarTable}
+                                    aria-label="SNAP toggle button group"
+                                    sx={{ justifyContent: "flex-end" }}
                                 >
+                                    <ToggleButton value={0}>
+                                        <InsertChartIcon />
+                                    </ToggleButton>
+                                    <ToggleButton value={1}>
+                                        <TableChartIcon />
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Box sx={{ display: tab !== 0 ? "none" : "div" }}>
                                     <Grid
-                                        item
-                                        xs={7}
-                                        justifyContent="flex-start"
-                                        alignItems="center"
-                                        sx={{ display: "flex" }}
+                                        container
+                                        columns={{ xs: 12 }}
+                                        className="stateBarTableContainer"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-between"
+                                        }}
+                                    >
+                                        <Grid
+                                            item
+                                            xs={7}
+                                            justifyContent="flex-start"
+                                            alignItems="center"
+                                            sx={{ display: "flex" }}
+                                        >
+                                            <Typography
+                                                id="snapBarHeader"
+                                                variant="h6"
+                                                sx={{
+                                                    fontWeight: 400,
+                                                    paddingLeft: 0,
+                                                    fontSize: "1.2em",
+                                                    color: "#212121"
+                                                }}
+                                            >
+                                                Total SNAP Costs and Avg. Monthly Participation (2018-2022)
+                                            </Typography>
+                                            <DownloadIcon
+                                                sx={{
+                                                    paddingLeft: 1,
+                                                    paddingTop: 1.5,
+                                                    fontSize: "2.5em",
+                                                    color: "#212121",
+                                                    cursor: "pointer",
+                                                    justifyContent: "center",
+                                                    alignItems: "center"
+                                                }}
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    downloadSVG(true);
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid
+                                            item
+                                            xs={5}
+                                            justifyContent="flex-end"
+                                            sx={{ display: "flex", width: "100%" }}
+                                        >
+                                            <RadioGroup
+                                                row
+                                                className="BarColorToggle"
+                                                defaultValue={0}
+                                                onChange={switchBarStatus}
+                                                aria-label="SNAP toggle button group"
+                                                sx={{ justifyContent: "flex-end" }}
+                                            >
+                                                <FormControlLabel
+                                                    id="bothRadio"
+                                                    value={0}
+                                                    control={<Radio />}
+                                                    label="Both"
+                                                    sx={{ color: "#212121" }}
+                                                />
+                                                <FormControlLabel
+                                                    id="totalCostsRadio"
+                                                    value={1}
+                                                    control={<Radio sx={{ color: color1 }} />}
+                                                    label="Total Costs"
+                                                    sx={{ color: color1 }}
+                                                />
+                                                <FormControlLabel
+                                                    id="avgMonthlyParticipationRadio"
+                                                    value={2}
+                                                    control={<Radio sx={{ color: color2 }} />}
+                                                    label="Avg. Monthly Participation"
+                                                    sx={{ marginRight: 0, color: color2 }}
+                                                />
+                                            </RadioGroup>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid
+                                        container
+                                        columns={{ xs: 12 }}
+                                        className="reminderContainer"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "flex-start"
+                                        }}
                                     >
                                         <Typography
-                                            id="snapBarHeader"
-                                            variant="h6"
                                             sx={{
                                                 fontWeight: 400,
                                                 paddingLeft: 0,
-                                                fontSize: "1.2em",
-                                                color: "#212121"
+                                                fontSize: "0.8em",
+                                                color: "rgb(163, 163, 163)"
                                             }}
                                         >
-                                            Total SNAP Costs and Avg. Monthly Participation (2018-2022)
+                                            Hover on the state names to see detailed data
                                         </Typography>
-                                        <DownloadIcon
-                                            sx={{
-                                                paddingLeft: 1,
-                                                paddingTop: 1.5,
-                                                fontSize: "2.5em",
-                                                color: "#212121",
-                                                cursor: "pointer",
-                                                justifyContent: "center",
-                                                alignItems: "center"
-                                            }}
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                downloadSVG(true);
-                                            }}
-                                        />
                                     </Grid>
-                                    <Grid item xs={5} justifyContent="flex-end" sx={{ display: "flex", width: "100%" }}>
-                                        <RadioGroup
-                                            row
-                                            className="BarColorToggle"
-                                            defaultValue={0}
-                                            onChange={switchBarStatus}
-                                            aria-label="SNAP toggle button group"
-                                            sx={{ justifyContent: "flex-end" }}
+                                    <Grid container columns={{ xs: 12 }}>
+                                        <Grid
+                                            container
+                                            item
+                                            xs={12}
+                                            id="snapBarContainer"
+                                            sx={{ display: "flex" }}
+                                            ref={snapDiv}
                                         >
-                                            <FormControlLabel
-                                                id="bothRadio"
-                                                value={0}
-                                                control={<Radio />}
-                                                label="Both"
-                                                sx={{ color: "#212121" }}
-                                            />
-                                            <FormControlLabel
-                                                id="totalCostsRadio"
-                                                value={1}
-                                                control={<Radio sx={{ color: color1 }} />}
-                                                label="Total Costs"
-                                                sx={{ color: color1 }}
-                                            />
-                                            <FormControlLabel
-                                                id="avgMonthlyParticipationRadio"
-                                                value={2}
-                                                control={<Radio sx={{ color: color2 }} />}
-                                                label="Avg. Monthly Participation"
-                                                sx={{ marginRight: 0, color: color2 }}
-                                            />
-                                        </RadioGroup>
+                                            {data ? (
+                                                <SNAPBar
+                                                    SnapData={data}
+                                                    status={Number(barStatus)}
+                                                    yearKey={yearKey}
+                                                    margin={{
+                                                        top: paddingTB,
+                                                        right: paddingLR,
+                                                        bottom: paddingTB,
+                                                        left: paddingLR
+                                                    }}
+                                                    topSpace={40}
+                                                    w={window.innerWidth * widthPercentage}
+                                                    h={window.innerWidth * heightPercentage}
+                                                    color1={color1}
+                                                    color2={color2}
+                                                    widthPercentage={widthPercentage}
+                                                    heightPercentage={heightPercentage}
+                                                />
+                                            ) : (
+                                                <p>Loading...</p>
+                                            )}
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid
-                                    container
-                                    columns={{ xs: 12 }}
-                                    className="reminderContainer"
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "flex-start"
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 400,
-                                            paddingLeft: 0,
-                                            fontSize: "0.8em",
-                                            color: "rgb(163, 163, 163)"
-                                        }}
-                                    >
-                                        Hover on the state names to see detailed data
-                                    </Typography>
-                                </Grid>
-                                <Grid container columns={{ xs: 12 }}>
+                                </Box>
+                                <Box id="snapTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Grid
                                         container
-                                        item
-                                        xs={12}
-                                        id="snapBarContainer"
-                                        sx={{ display: "flex" }}
-                                        ref={snapDiv}
+                                        columns={{ xs: 12 }}
+                                        className="stateBarTableContainer"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-between"
+                                        }}
                                     >
+                                        <Grid
+                                            item
+                                            xs={7}
+                                            justifyContent="flex-start"
+                                            alignItems="center"
+                                            sx={{ display: "flex" }}
+                                        >
+                                            <Box id="snapTableHeader" sx={{ width: "100%" }}>
+                                                <Typography
+                                                    variant="h6"
+                                                    sx={{
+                                                        display: "flex-box",
+                                                        fontWeight: 400,
+                                                        paddingLeft: 0,
+                                                        fontSize: "1.2em",
+                                                        color: "#212121",
+                                                        paddingTop: 1.5
+                                                    }}
+                                                >
+                                                    Total SNAP Costs and Avg. Monthly Participation (2018-2022)
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                    <Box sx={{ width: "100%" }}>
                                         {data ? (
-                                            <SNAPBar
+                                            <SnapTable
                                                 SnapData={data}
-                                                status={Number(barStatus)}
                                                 yearKey={yearKey}
-                                                margin={{
-                                                    top: paddingTB,
-                                                    right: paddingLR,
-                                                    bottom: paddingTB,
-                                                    left: paddingLR
-                                                }}
-                                                topSpace={40}
                                                 w={window.innerWidth * widthPercentage}
                                                 h={window.innerWidth * heightPercentage}
-                                                color1={color1}
-                                                color2={color2}
+                                                color1={hexToRGB(color1, 0.1)}
+                                                color2={hexToRGB(color2, 0.1)}
                                                 widthPercentage={widthPercentage}
                                                 heightPercentage={heightPercentage}
                                             />
                                         ) : (
                                             <p>Loading...</p>
                                         )}
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                            <Box id="snapTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                <Grid
-                                    container
-                                    columns={{ xs: 12 }}
-                                    className="stateBarTableContainer"
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-                                    <Grid
-                                        item
-                                        xs={7}
-                                        justifyContent="flex-start"
-                                        alignItems="center"
-                                        sx={{ display: "flex" }}
-                                    >
-                                        <Box id="snapTableHeader" sx={{ width: "100%" }}>
-                                            <Typography
-                                                variant="h6"
-                                                sx={{
-                                                    display: "flex-box",
-                                                    fontWeight: 400,
-                                                    paddingLeft: 0,
-                                                    fontSize: "1.2em",
-                                                    color: "#212121",
-                                                    paddingTop: 1.5
-                                                }}
-                                            >
-                                                Total SNAP Costs and Avg. Monthly Participation (2018-2022)
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                                <Box sx={{ width: "100%" }}>
-                                    {data ? (
-                                        <SnapTable
-                                            SnapData={data}
-                                            yearKey={yearKey}
-                                            w={window.innerWidth * widthPercentage}
-                                            h={window.innerWidth * heightPercentage}
-                                            color1={hexToRGB(color1, 0.1)}
-                                            color2={hexToRGB(color2, 0.1)}
-                                            widthPercentage={widthPercentage}
-                                            heightPercentage={heightPercentage}
-                                        />
-                                    ) : (
-                                        <p>Loading...</p>
-                                    )}
+                                    </Box>
                                 </Box>
-                            </Box>
-                        </Grid>
+                            </Grid>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
+            ) : (
+                <p>Loading data...</p>
+            )}
             <Box
                 sx={{
                     display: "flex",
