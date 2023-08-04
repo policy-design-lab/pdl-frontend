@@ -31,7 +31,7 @@ export default function DrawLegend({
     const [width, setWidth] = React.useState(initWidth);
     React.useEffect(() => {
         drawLegend();
-    }, []);
+    });
     const drawLegend = () => {
         if (legendRn.current) {
             d3.select(legendRn.current).selectAll("svg").remove();

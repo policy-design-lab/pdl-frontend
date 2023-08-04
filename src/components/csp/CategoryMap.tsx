@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantile, scaleQuantize } from "d3-scale";
+import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -190,7 +190,15 @@ const CategoryMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    const title = `${category} Benefits`;
+    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
+    let years = "2018-2022";
+    if (
+        Object.keys(statePerformance).length !== 0 &&
+        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
+    ) {
+        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
+    }
+    const title = `${category} Benefits from ${years}`;
     const quantizeArray: number[] = [];
     let categoryRecord = {};
     Object.values(statePerformance).map((value) => {
