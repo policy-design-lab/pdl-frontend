@@ -1,61 +1,238 @@
-{
-  "AL": "Alabama",
-  "AK": "Alaska",
-  "AS": "American Samoa",
-  "AZ": "Arizona",
-  "AR": "Arkansas",
-  "CA": "California",
-  "CO": "Colorado",
-  "CT": "Connecticut",
-  "DE": "Delaware",
-  "DC": "District Of Columbia",
-  "FM": "Federated States Of Micronesia",
-  "FL": "Florida",
-  "GA": "Georgia",
-  "GU": "Guam",
-  "HI": "Hawaii",
-  "ID": "Idaho",
-  "IL": "Illinois",
-  "IN": "Indiana",
-  "IA": "Iowa",
-  "KS": "Kansas",
-  "KY": "Kentucky",
-  "LA": "Louisiana",
-  "ME": "Maine",
-  "MH": "Marshall Islands",
-  "MD": "Maryland",
-  "MA": "Massachusetts",
-  "MI": "Michigan",
-  "MN": "Minnesota",
-  "MS": "Mississippi",
-  "MO": "Missouri",
-  "MT": "Montana",
-  "NE": "Nebraska",
-  "NV": "Nevada",
-  "NH": "New Hampshire",
-  "NJ": "New Jersey",
-  "NM": "New Mexico",
-  "NY": "New York",
-  "NC": "North Carolina",
-  "ND": "North Dakota",
-  "MP": "Northern Mariana Islands",
-  "OH": "Ohio",
-  "OK": "Oklahoma",
-  "OR": "Oregon",
-  "PW": "Palau",
-  "PA": "Pennsylvania",
-  "PR": "Puerto Rico",
-  "RI": "Rhode Island",
-  "SC": "South Carolina",
-  "SD": "South Dakota",
-  "TN": "Tennessee",
-  "TX": "Texas",
-  "UT": "Utah",
-  "VT": "Vermont",
-  "VI": "Virgin Islands",
-  "VA": "Virginia",
-  "WA": "Washington",
-  "WV": "West Virginia",
-  "WI": "Wisconsin",
-  "WY": "Wyoming"
-}
+[
+  {
+    "code": "AL",
+    "name": "Alabama"
+  },
+  {
+    "code": "AK",
+    "name": "Alaska"
+  },
+  {
+    "code": "AS",
+    "name": "American Samoa"
+  },
+  {
+    "code": "AZ",
+    "name": "Arizona"
+  },
+  {
+    "code": "AR",
+    "name": "Arkansas"
+  },
+  {
+    "code": "CA",
+    "name": "California"
+  },
+  {
+    "code": "CO",
+    "name": "Colorado"
+  },
+  {
+    "code": "CT",
+    "name": "Connecticut"
+  },
+  {
+    "code": "DE",
+    "name": "Delaware"
+  },
+  {
+    "code": "DC",
+    "name": "District Of Columbia"
+  },
+  {
+    "code": "FM",
+    "name": "Federated States Of Micronesia"
+  },
+  {
+    "code": "FL",
+    "name": "Florida"
+  },
+  {
+    "code": "GA",
+    "name": "Georgia"
+  },
+  {
+    "code": "GU",
+    "name": "Guam"
+  },
+  {
+    "code": "HI",
+    "name": "Hawaii"
+  },
+  {
+    "code": "ID",
+    "name": "Idaho"
+  },
+  {
+    "code": "IL",
+    "name": "Illinois"
+  },
+  {
+    "code": "IN",
+    "name": "Indiana"
+  },
+  {
+    "code": "IA",
+    "name": "Iowa"
+  },
+  {
+    "code": "KS",
+    "name": "Kansas"
+  },
+  {
+    "code": "KY",
+    "name": "Kentucky"
+  },
+  {
+    "code": "LA",
+    "name": "Louisiana"
+  },
+  {
+    "code": "ME",
+    "name": "Maine"
+  },
+  {
+    "code": "MH",
+    "name": "Marshall Islands"
+  },
+  {
+    "code": "MD",
+    "name": "Maryland"
+  },
+  {
+    "code": "MA",
+    "name": "Massachusetts"
+  },
+  {
+    "code": "MI",
+    "name": "Michigan"
+  },
+  {
+    "code": "MN",
+    "name": "Minnesota"
+  },
+  {
+    "code": "MS",
+    "name": "Mississippi"
+  },
+  {
+    "code": "MO",
+    "name": "Missouri"
+  },
+  {
+    "code": "MT",
+    "name": "Montana"
+  },
+  {
+    "code": "NE",
+    "name": "Nebraska"
+  },
+  {
+    "code": "NV",
+    "name": "Nevada"
+  },
+  {
+    "code": "NH",
+    "name": "New Hampshire"
+  },
+  {
+    "code": "NJ",
+    "name": "New Jersey"
+  },
+  {
+    "code": "NM",
+    "name": "New Mexico"
+  },
+  {
+    "code": "NY",
+    "name": "New York"
+  },
+  {
+    "code": "NC",
+    "name": "North Carolina"
+  },
+  {
+    "code": "ND",
+    "name": "North Dakota"
+  },
+  {
+    "code": "MP",
+    "name": "Northern Mariana Islands"
+  },
+  {
+    "code": "OH",
+    "name": "Ohio"
+  },
+  {
+    "code": "OK",
+    "name": "Oklahoma"
+  },
+  {
+    "code": "OR",
+    "name": "Oregon"
+  },
+  {
+    "code": "PW",
+    "name": "Palau"
+  },
+  {
+    "code": "PA",
+    "name": "Pennsylvania"
+  },
+  {
+    "code": "PR",
+    "name": "Puerto Rico"
+  },
+  {
+    "code": "RI",
+    "name": "Rhode Island"
+  },
+  {
+    "code": "SC",
+    "name": "South Carolina"
+  },
+  {
+    "code": "SD",
+    "name": "South Dakota"
+  },
+  {
+    "code": "TN",
+    "name": "Tennessee"
+  },
+  {
+    "code": "TX",
+    "name": "Texas"
+  },
+  {
+    "code": "UT",
+    "name": "Utah"
+  },
+  {
+    "code": "VT",
+    "name": "Vermont"
+  },
+  {
+    "code": "VI",
+    "name": "Virgin Islands"
+  },
+  {
+    "code": "VA",
+    "name": "Virginia"
+  },
+  {
+    "code": "WA",
+    "name": "Washington"
+  },
+  {
+    "code": "WV",
+    "name": "West Virginia"
+  },
+  {
+    "code": "WI",
+    "name": "Wisconsin"
+  },
+  {
+    "code": "WY",
+    "name": "Wyoming"
+  }
+]

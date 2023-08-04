@@ -66,7 +66,6 @@ export default function TitleIPage(): JSX.Element {
         }
     };
     const defaultTheme = createTheme();
-    // }
     function prepData(program, subprogram, data, year) {
         const organizedData: Record<string, unknown>[] = [];
         const originalData: Record<string, unknown>[] = [];

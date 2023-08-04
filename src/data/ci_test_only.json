@@ -1,0 +1,854 @@
+{
+  "2018-2022": [
+    {
+      "state": "AL",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 5237837748,
+          "totalPremiumInDollars": 4123284822,
+          "totalPremiumSubsidyInDollars": 2773200473,
+          "totalFarmerPaidPremiumInDollars": 1350084349,
+          "totalNetFarmerBenefitInDollars": 3887753399,
+          "totalPoliciesEarningPremium": 214072,
+          "totalLiabilitiesInDollars": 18959422061,
+          "averageLossRatio": 0.85,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "AK",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3102269316,
+          "totalPremiumInDollars": 4055882128,
+          "totalPremiumSubsidyInDollars": 3749391618,
+          "totalFarmerPaidPremiumInDollars": 306490510,
+          "totalNetFarmerBenefitInDollars": 2795778806,
+          "totalPoliciesEarningPremium": 144766,
+          "totalLiabilitiesInDollars": 27270446723,
+          "averageLossRatio": 0.96,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "AZ",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2555356449,
+          "totalPremiumInDollars": 3245657161,
+          "totalPremiumSubsidyInDollars": 534279132,
+          "totalFarmerPaidPremiumInDollars": 2711378029,
+          "totalNetFarmerBenefitInDollars": -156021580,
+          "totalPoliciesEarningPremium": 44493,
+          "totalLiabilitiesInDollars": 27275043647,
+          "averageLossRatio": 0.65,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "AR",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8194682023,
+          "totalPremiumInDollars": 3589832026,
+          "totalPremiumSubsidyInDollars": 3989750305,
+          "totalFarmerPaidPremiumInDollars": -399918279,
+          "totalNetFarmerBenefitInDollars": 8594600302,
+          "totalPoliciesEarningPremium": 347751,
+          "totalLiabilitiesInDollars": 18864588624,
+          "averageLossRatio": 0.8,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "CA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 5677063326,
+          "totalPremiumInDollars": 928795147,
+          "totalPremiumSubsidyInDollars": 979003387,
+          "totalFarmerPaidPremiumInDollars": -50208240,
+          "totalNetFarmerBenefitInDollars": 5727271566,
+          "totalPoliciesEarningPremium": 132987,
+          "totalLiabilitiesInDollars": 23155354147,
+          "averageLossRatio": 1.47,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "CO",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 4593306736,
+          "totalPremiumInDollars": 5965817599,
+          "totalPremiumSubsidyInDollars": 3022776697,
+          "totalFarmerPaidPremiumInDollars": 2943040902,
+          "totalNetFarmerBenefitInDollars": 1650265834,
+          "totalPoliciesEarningPremium": 124690,
+          "totalLiabilitiesInDollars": 25081334778,
+          "averageLossRatio": 0.75,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "CT",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3601927196,
+          "totalPremiumInDollars": 3992981715,
+          "totalPremiumSubsidyInDollars": 3893853555,
+          "totalFarmerPaidPremiumInDollars": 99128160,
+          "totalNetFarmerBenefitInDollars": 3502799036,
+          "totalPoliciesEarningPremium": 245174,
+          "totalLiabilitiesInDollars": 28400630725,
+          "averageLossRatio": 1.44,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "DE",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6847355976,
+          "totalPremiumInDollars": 5440454792,
+          "totalPremiumSubsidyInDollars": 2052993975,
+          "totalFarmerPaidPremiumInDollars": 3387460817,
+          "totalNetFarmerBenefitInDollars": 3459895159,
+          "totalPoliciesEarningPremium": 39906,
+          "totalLiabilitiesInDollars": 21630824621,
+          "averageLossRatio": 0.88,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "FL",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 1317622933,
+          "totalPremiumInDollars": 4003105558,
+          "totalPremiumSubsidyInDollars": 3276866257,
+          "totalFarmerPaidPremiumInDollars": 726239301,
+          "totalNetFarmerBenefitInDollars": 591383632,
+          "totalPoliciesEarningPremium": 86672,
+          "totalLiabilitiesInDollars": 27399276088,
+          "averageLossRatio": 0.8,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "GA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2679493464,
+          "totalPremiumInDollars": 2552104409,
+          "totalPremiumSubsidyInDollars": 2756297296,
+          "totalFarmerPaidPremiumInDollars": -204192887,
+          "totalNetFarmerBenefitInDollars": 2883686351,
+          "totalPoliciesEarningPremium": 335320,
+          "totalLiabilitiesInDollars": 18585866401,
+          "averageLossRatio": 0.66,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "HI",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 4314727068,
+          "totalPremiumInDollars": 3850933068,
+          "totalPremiumSubsidyInDollars": 570977482,
+          "totalFarmerPaidPremiumInDollars": 3279955586,
+          "totalNetFarmerBenefitInDollars": 1034771482,
+          "totalPoliciesEarningPremium": 111275,
+          "totalLiabilitiesInDollars": 24828855806,
+          "averageLossRatio": 0.88,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "ID",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 7397728709,
+          "totalPremiumInDollars": 1923733084,
+          "totalPremiumSubsidyInDollars": 4124764312,
+          "totalFarmerPaidPremiumInDollars": -2201031228,
+          "totalNetFarmerBenefitInDollars": 9598759937,
+          "totalPoliciesEarningPremium": 328786,
+          "totalLiabilitiesInDollars": 18821214740,
+          "averageLossRatio": 0.74,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "IL",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6975863827,
+          "totalPremiumInDollars": 1535138640,
+          "totalPremiumSubsidyInDollars": 3711269687,
+          "totalFarmerPaidPremiumInDollars": -2176131047,
+          "totalNetFarmerBenefitInDollars": 9151994874,
+          "totalPoliciesEarningPremium": 282977,
+          "totalLiabilitiesInDollars": 26456328425,
+          "averageLossRatio": 1.47,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "IN",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 9070238157,
+          "totalPremiumInDollars": 6306795320,
+          "totalPremiumSubsidyInDollars": 2930702399,
+          "totalFarmerPaidPremiumInDollars": 3376092921,
+          "totalNetFarmerBenefitInDollars": 5694145236,
+          "totalPoliciesEarningPremium": 137300,
+          "totalLiabilitiesInDollars": 21671665635,
+          "averageLossRatio": 1.14,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "IA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8902027223,
+          "totalPremiumInDollars": 1667389042,
+          "totalPremiumSubsidyInDollars": 4100911511,
+          "totalFarmerPaidPremiumInDollars": -2433522469,
+          "totalNetFarmerBenefitInDollars": 11335549692,
+          "totalPoliciesEarningPremium": 155140,
+          "totalLiabilitiesInDollars": 21015839049,
+          "averageLossRatio": 1.12,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "KS",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6665147848,
+          "totalPremiumInDollars": 1993079589,
+          "totalPremiumSubsidyInDollars": 2392221751,
+          "totalFarmerPaidPremiumInDollars": -399142162,
+          "totalNetFarmerBenefitInDollars": 7064290010,
+          "totalPoliciesEarningPremium": 313659,
+          "totalLiabilitiesInDollars": 21962232925,
+          "averageLossRatio": 1.47,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "KY",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6378508944,
+          "totalPremiumInDollars": 1781332067,
+          "totalPremiumSubsidyInDollars": 2062570433,
+          "totalFarmerPaidPremiumInDollars": -281238366,
+          "totalNetFarmerBenefitInDollars": 6659747310,
+          "totalPoliciesEarningPremium": 148903,
+          "totalLiabilitiesInDollars": 20041235913,
+          "averageLossRatio": 1.46,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "LA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2470179624,
+          "totalPremiumInDollars": 6420476822,
+          "totalPremiumSubsidyInDollars": 4155787229,
+          "totalFarmerPaidPremiumInDollars": 2264689593,
+          "totalNetFarmerBenefitInDollars": 205490031,
+          "totalPoliciesEarningPremium": 134070,
+          "totalLiabilitiesInDollars": 25646041497,
+          "averageLossRatio": 1.43,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "ME",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2071778400,
+          "totalPremiumInDollars": 4313862338,
+          "totalPremiumSubsidyInDollars": 1503023035,
+          "totalFarmerPaidPremiumInDollars": 2810839303,
+          "totalNetFarmerBenefitInDollars": -739060903,
+          "totalPoliciesEarningPremium": 95089,
+          "totalLiabilitiesInDollars": 23954017365,
+          "averageLossRatio": 0.62,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MD",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8288746271,
+          "totalPremiumInDollars": 2579181856,
+          "totalPremiumSubsidyInDollars": 2181713639,
+          "totalFarmerPaidPremiumInDollars": 397468217,
+          "totalNetFarmerBenefitInDollars": 7891278054,
+          "totalPoliciesEarningPremium": 189887,
+          "totalLiabilitiesInDollars": 23353378288,
+          "averageLossRatio": 1.25,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3315030767,
+          "totalPremiumInDollars": 5092870763,
+          "totalPremiumSubsidyInDollars": 2241207427,
+          "totalFarmerPaidPremiumInDollars": 2851663336,
+          "totalNetFarmerBenefitInDollars": 463367431,
+          "totalPoliciesEarningPremium": 297715,
+          "totalLiabilitiesInDollars": 19116830213,
+          "averageLossRatio": 1.49,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MI",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 592500320,
+          "totalPremiumInDollars": 5958746754,
+          "totalPremiumSubsidyInDollars": 3544811574,
+          "totalFarmerPaidPremiumInDollars": 2413935180,
+          "totalNetFarmerBenefitInDollars": -1821434860,
+          "totalPoliciesEarningPremium": 274274,
+          "totalLiabilitiesInDollars": 26073877945,
+          "averageLossRatio": 1.19,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MN",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3488119879,
+          "totalPremiumInDollars": 3844905673,
+          "totalPremiumSubsidyInDollars": 3921165417,
+          "totalFarmerPaidPremiumInDollars": -76259744,
+          "totalNetFarmerBenefitInDollars": 3564379623,
+          "totalPoliciesEarningPremium": 166960,
+          "totalLiabilitiesInDollars": 22078638508,
+          "averageLossRatio": 1.35,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MS",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 7747702360,
+          "totalPremiumInDollars": 1197140793,
+          "totalPremiumSubsidyInDollars": 2180566627,
+          "totalFarmerPaidPremiumInDollars": -983425834,
+          "totalNetFarmerBenefitInDollars": 8731128194,
+          "totalPoliciesEarningPremium": 255948,
+          "totalLiabilitiesInDollars": 19779000970,
+          "averageLossRatio": 1.2,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MO",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3500382246,
+          "totalPremiumInDollars": 4765250430,
+          "totalPremiumSubsidyInDollars": 3479089081,
+          "totalFarmerPaidPremiumInDollars": 1286161349,
+          "totalNetFarmerBenefitInDollars": 2214220897,
+          "totalPoliciesEarningPremium": 353570,
+          "totalLiabilitiesInDollars": 25290002517,
+          "averageLossRatio": 1.06,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "MT",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3698593371,
+          "totalPremiumInDollars": 4292999385,
+          "totalPremiumSubsidyInDollars": 1274976043,
+          "totalFarmerPaidPremiumInDollars": 3018023342,
+          "totalNetFarmerBenefitInDollars": 680570029,
+          "totalPoliciesEarningPremium": 139797,
+          "totalLiabilitiesInDollars": 25080591810,
+          "averageLossRatio": 1.14,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NE",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 1352452007,
+          "totalPremiumInDollars": 4073205733,
+          "totalPremiumSubsidyInDollars": 3448073393,
+          "totalFarmerPaidPremiumInDollars": 625132340,
+          "totalNetFarmerBenefitInDollars": 727319667,
+          "totalPoliciesEarningPremium": 156920,
+          "totalLiabilitiesInDollars": 24531143183,
+          "averageLossRatio": 0.77,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NV",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 4472255068,
+          "totalPremiumInDollars": 5748280447,
+          "totalPremiumSubsidyInDollars": 1680558805,
+          "totalFarmerPaidPremiumInDollars": 4067721642,
+          "totalNetFarmerBenefitInDollars": 404533426,
+          "totalPoliciesEarningPremium": 351578,
+          "totalLiabilitiesInDollars": 20858393245,
+          "averageLossRatio": 0.82,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NH",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 389030244,
+          "totalPremiumInDollars": 3093289315,
+          "totalPremiumSubsidyInDollars": 2862183094,
+          "totalFarmerPaidPremiumInDollars": 231106221,
+          "totalNetFarmerBenefitInDollars": 157924023,
+          "totalPoliciesEarningPremium": 164173,
+          "totalLiabilitiesInDollars": 20524808975,
+          "averageLossRatio": 0.81,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NJ",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8307762006,
+          "totalPremiumInDollars": 562792057,
+          "totalPremiumSubsidyInDollars": 4264522626,
+          "totalFarmerPaidPremiumInDollars": -3701730569,
+          "totalNetFarmerBenefitInDollars": 12009492575,
+          "totalPoliciesEarningPremium": 286270,
+          "totalLiabilitiesInDollars": 21557226169,
+          "averageLossRatio": 0.96,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NM",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 7885732580,
+          "totalPremiumInDollars": 6175359624,
+          "totalPremiumSubsidyInDollars": 553167679,
+          "totalFarmerPaidPremiumInDollars": 5622191945,
+          "totalNetFarmerBenefitInDollars": 2263540635,
+          "totalPoliciesEarningPremium": 285451,
+          "totalLiabilitiesInDollars": 21497226231,
+          "averageLossRatio": 0.65,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NY",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2800926388,
+          "totalPremiumInDollars": 3847200203,
+          "totalPremiumSubsidyInDollars": 3517762552,
+          "totalFarmerPaidPremiumInDollars": 329437651,
+          "totalNetFarmerBenefitInDollars": 2471488737,
+          "totalPoliciesEarningPremium": 358094,
+          "totalLiabilitiesInDollars": 23075991353,
+          "averageLossRatio": 1.43,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "NC",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 5163807938,
+          "totalPremiumInDollars": 1566904630,
+          "totalPremiumSubsidyInDollars": 4183843063,
+          "totalFarmerPaidPremiumInDollars": -2616938433,
+          "totalNetFarmerBenefitInDollars": 7780746371,
+          "totalPoliciesEarningPremium": 270663,
+          "totalLiabilitiesInDollars": 25304704574,
+          "averageLossRatio": 1.33,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "ND",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 1085830011,
+          "totalPremiumInDollars": 3897156764,
+          "totalPremiumSubsidyInDollars": 3571362795,
+          "totalFarmerPaidPremiumInDollars": 325793969,
+          "totalNetFarmerBenefitInDollars": 760036042,
+          "totalPoliciesEarningPremium": 295464,
+          "totalLiabilitiesInDollars": 21316525181,
+          "averageLossRatio": 1.19,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "OH",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 7537569950,
+          "totalPremiumInDollars": 3865947561,
+          "totalPremiumSubsidyInDollars": 1536935364,
+          "totalFarmerPaidPremiumInDollars": 2329012197,
+          "totalNetFarmerBenefitInDollars": 5208557753,
+          "totalPoliciesEarningPremium": 62887,
+          "totalLiabilitiesInDollars": 19823736296,
+          "averageLossRatio": 1.34,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "OK",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3430815094,
+          "totalPremiumInDollars": 4596270769,
+          "totalPremiumSubsidyInDollars": 1579163466,
+          "totalFarmerPaidPremiumInDollars": 3017107303,
+          "totalNetFarmerBenefitInDollars": 413707791,
+          "totalPoliciesEarningPremium": 233643,
+          "totalLiabilitiesInDollars": 20261723700,
+          "averageLossRatio": 1.25,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "OR",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 7617922672,
+          "totalPremiumInDollars": 1442597747,
+          "totalPremiumSubsidyInDollars": 587890379,
+          "totalFarmerPaidPremiumInDollars": 854707368,
+          "totalNetFarmerBenefitInDollars": 6763215304,
+          "totalPoliciesEarningPremium": 117834,
+          "totalLiabilitiesInDollars": 23766228203,
+          "averageLossRatio": 0.62,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "PA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6698292635,
+          "totalPremiumInDollars": 4437844173,
+          "totalPremiumSubsidyInDollars": 949611289,
+          "totalFarmerPaidPremiumInDollars": 3488232884,
+          "totalNetFarmerBenefitInDollars": 3210059751,
+          "totalPoliciesEarningPremium": 252971,
+          "totalLiabilitiesInDollars": 19430999707,
+          "averageLossRatio": 0.94,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "RI",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 4284813612,
+          "totalPremiumInDollars": 3931878698,
+          "totalPremiumSubsidyInDollars": 1154156151,
+          "totalFarmerPaidPremiumInDollars": 2777722547,
+          "totalNetFarmerBenefitInDollars": 1507091065,
+          "totalPoliciesEarningPremium": 9828,
+          "totalLiabilitiesInDollars": 28268091209,
+          "averageLossRatio": 0.93,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "SC",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 830348241,
+          "totalPremiumInDollars": 5980102200,
+          "totalPremiumSubsidyInDollars": 1083737637,
+          "totalFarmerPaidPremiumInDollars": 4896364563,
+          "totalNetFarmerBenefitInDollars": -4066016322,
+          "totalPoliciesEarningPremium": 118154,
+          "totalLiabilitiesInDollars": 22416522885,
+          "averageLossRatio": 1.09,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "SD",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 430262592,
+          "totalPremiumInDollars": 1752968435,
+          "totalPremiumSubsidyInDollars": 4403256755,
+          "totalFarmerPaidPremiumInDollars": -2650288320,
+          "totalNetFarmerBenefitInDollars": 3080550912,
+          "totalPoliciesEarningPremium": 352139,
+          "totalLiabilitiesInDollars": 28313624043,
+          "averageLossRatio": 0.88,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "TN",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2896594701,
+          "totalPremiumInDollars": 4939425028,
+          "totalPremiumSubsidyInDollars": 4238909304,
+          "totalFarmerPaidPremiumInDollars": 700515724,
+          "totalNetFarmerBenefitInDollars": 2196078977,
+          "totalPoliciesEarningPremium": 244905,
+          "totalLiabilitiesInDollars": 25882761897,
+          "averageLossRatio": 1.03,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "TX",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3952614902,
+          "totalPremiumInDollars": 1867364014,
+          "totalPremiumSubsidyInDollars": 2660683010,
+          "totalFarmerPaidPremiumInDollars": -793318996,
+          "totalNetFarmerBenefitInDollars": 4745933898,
+          "totalPoliciesEarningPremium": 110149,
+          "totalLiabilitiesInDollars": 19787265244,
+          "averageLossRatio": 1.12,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "UT",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8059166016,
+          "totalPremiumInDollars": 569137275,
+          "totalPremiumSubsidyInDollars": 3852960308,
+          "totalFarmerPaidPremiumInDollars": -3283823033,
+          "totalNetFarmerBenefitInDollars": 11342989049,
+          "totalPoliciesEarningPremium": 113868,
+          "totalLiabilitiesInDollars": 25773922641,
+          "averageLossRatio": 1.03,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "VT",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8566159830,
+          "totalPremiumInDollars": 6445891590,
+          "totalPremiumSubsidyInDollars": 2914618961,
+          "totalFarmerPaidPremiumInDollars": 3531272629,
+          "totalNetFarmerBenefitInDollars": 5034887201,
+          "totalPoliciesEarningPremium": 182862,
+          "totalLiabilitiesInDollars": 23857423803,
+          "averageLossRatio": 1.12,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "VA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 5337326982,
+          "totalPremiumInDollars": 1456002342,
+          "totalPremiumSubsidyInDollars": 470513475,
+          "totalFarmerPaidPremiumInDollars": 985488867,
+          "totalNetFarmerBenefitInDollars": 4351838115,
+          "totalPoliciesEarningPremium": 51049,
+          "totalLiabilitiesInDollars": 19031445194,
+          "averageLossRatio": 0.87,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "WA",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 3741573861,
+          "totalPremiumInDollars": 1741001308,
+          "totalPremiumSubsidyInDollars": 2254286347,
+          "totalFarmerPaidPremiumInDollars": -513285039,
+          "totalNetFarmerBenefitInDollars": 4254858900,
+          "totalPoliciesEarningPremium": 185110,
+          "totalLiabilitiesInDollars": 24337751239,
+          "averageLossRatio": 1.02,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "WV",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 2039017663,
+          "totalPremiumInDollars": 4490568787,
+          "totalPremiumSubsidyInDollars": 2918215651,
+          "totalFarmerPaidPremiumInDollars": 1572353136,
+          "totalNetFarmerBenefitInDollars": 466664527,
+          "totalPoliciesEarningPremium": 217948,
+          "totalLiabilitiesInDollars": 20057859744,
+          "averageLossRatio": 1.39,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "WI",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 8849908291,
+          "totalPremiumInDollars": 4248036277,
+          "totalPremiumSubsidyInDollars": 1941607803,
+          "totalFarmerPaidPremiumInDollars": 2306428474,
+          "totalNetFarmerBenefitInDollars": 6543479817,
+          "totalPoliciesEarningPremium": 94042,
+          "totalLiabilitiesInDollars": 19601219530,
+          "averageLossRatio": 0.66,
+          "subPrograms": []
+        }
+      ]
+    },
+    {
+      "state": "WY",
+      "programs": [
+        {
+          "programName": "Crop Insurance",
+          "totalIndemnitiesInDollars": 6247378378,
+          "totalPremiumInDollars": 3182792326,
+          "totalPremiumSubsidyInDollars": 1880597189,
+          "totalFarmerPaidPremiumInDollars": 1302195137,
+          "totalNetFarmerBenefitInDollars": 4945183241,
+          "totalPoliciesEarningPremium": 267746,
+          "totalLiabilitiesInDollars": 24670741008,
+          "averageLossRatio": 0.94,
+          "subPrograms": []
+        }
+      ]
+    }
+  ]
+}

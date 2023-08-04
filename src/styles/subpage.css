@@ -1,6 +1,10 @@
 @media only screen and (min-width: 1680px) {
-  .sideBar #filler {
-    /* height: 11em; */
+  .fullWidthMainContent {
+    padding: 6em;
+  }
+  .fullWidthMainContent .mapArea{
+    padding: 3em 1em 0 20em;
+    max-width: 65%;
   }
   .halfWidthMainContent {
     padding: 10em 10em 6em 25em;
@@ -24,8 +28,12 @@
 }
 
 @media only screen and (max-width: 1679px) {
-  .sideBar #filler {
-    /* height: 11em; */
+  .fullWidthMainContent {
+    padding: 5em;
+  }
+  .fullWidthMainContent .mapArea{
+    padding: 3em 1em 0 15em;
+    max-width: 65%;
   }
   .halfWidthMainContent {
     padding: 10em 5em 6em 25em;
@@ -46,4 +54,16 @@
     font-weight: 700;
     margin-top: 0.5em;
   }
+}
+
+
+.sideBar-short .MuiPaper-root {
+  box-sizing: border-box;
+  width: 300px;
+  height: auto;
+  max-height: 90vh;
+  overflow-x: hidden;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 0.1em solid #DDD;
 }
