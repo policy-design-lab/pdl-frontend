@@ -404,22 +404,39 @@ const Title1Map = ({
 const titleElement = ({ program, subprogram, year }): JSX.Element => {
     if (subprogram) {
         return (
-            <Typography noWrap variant="h6">
-                Total <strong>{subprogram}</strong> Payments from <strong>{year}</strong>
-            </Typography>
+            <Box>
+                {" "}
+                <Typography noWrap variant="h6">
+                    Total <strong>{subprogram}</strong> Payments from <strong>{year}</strong>
+                </Typography>
+                <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                    <i>2022 payments for title 1 has not been paid</i>
+                </Typography>
+            </Box>
         );
     }
     if (program === "Total Commodities Programs") {
         return (
-            <Typography noWrap variant="h6">
-                <strong>{program}</strong> Payments from <strong>{year}</strong>
-            </Typography>
+            <Box>
+                {" "}
+                <Typography noWrap variant="h6">
+                    <strong>{program}</strong> Payments from <strong>{year}</strong>
+                </Typography>{" "}
+                <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                    <i>2022 payments for title 1 has not been paid</i>
+                </Typography>
+            </Box>
         );
     }
     return (
-        <Typography noWrap variant="h6">
-            Total <strong>{program}</strong> Payments from <strong>{year}</strong>
-        </Typography>
+        <Box>
+            <Typography noWrap variant="h6">
+                Total <strong>{program}</strong> Payments from <strong>{year}</strong>
+            </Typography>{" "}
+            <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                <i>2022 payments for title 1 has not been paid</i>
+            </Typography>
+        </Box>
     );
 };
 export default Title1Map;

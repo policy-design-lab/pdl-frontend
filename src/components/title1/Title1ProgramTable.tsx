@@ -289,9 +289,13 @@ function Title1ProgramTable({
             }
         }
 
-        @media screen and (max-width: 1680px) {
+        @media screen and (max-width: 1790px) {
             table {
                 font-size: 0.9em;
+            }
+            table th,
+            table td {
+                padding: 1em;
             }
             td[class$="cell${paymentsIndex}"],
             td[class$="cell${averageAreaInAcresIndex}"],
@@ -342,9 +346,8 @@ function Title1ProgramTable({
                                     }}
                                 >
                                     <i>
-                                        The payments are calculated as the total of the data from 2018-2022; The base
-                                        acres and payment recipients are calculated as the average of the data from
-                                        2019-2022.
+                                        The payments are calculated as the total of the data from 2014-2021; The base
+                                        acres calculated as the average of the data from 2014-2022.
                                     </i>
                                 </Typography>
                             ) : (

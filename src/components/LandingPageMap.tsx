@@ -54,9 +54,14 @@ const MapChart = (props) => {
             color4 = "#1B9577";
             color5 = "#005A45";
             legendTitle = (
-                <Typography noWrap variant="h6">
-                    Total Farm Bill Benefits from <strong>2018 - 2022</strong>
-                </Typography>
+                <Box>
+                    <Typography noWrap variant="h6">
+                        Total Farm Bill Benefits from <strong>2018 - 2022</strong>
+                    </Typography>
+                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                        <i>2022 payments for title 1 has not been paid</i>
+                    </Typography>
+                </Box>
             );
             break;
         case "Title I: Commodities":
@@ -67,9 +72,14 @@ const MapChart = (props) => {
             color4 = "#D95F0E";
             color5 = "#993404";
             legendTitle = (
-                <Typography noWrap variant="h6">
-                    Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
-                </Typography>
+                <Box>
+                    <Typography noWrap variant="h6">
+                        Total Commodities Programs (Title I) from <strong>2018 - 2021</strong>
+                    </Typography>
+                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                        <i>2022 payments for title 1 has not been paid</i>
+                    </Typography>
+                </Box>
             );
             break;
         case "Title II: Conservation":
@@ -262,18 +272,27 @@ const MapChart = (props) => {
                                                                         record["Fiscal Year"]
                                                                     }
                                                                 >
-                                                                    {record["Fiscal Year"]}:{" "}
-                                                                    {Number(record.Amount / 1000000.0) >= 0
-                                                                        ? `$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`
-                                                                        : `-$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`}
+                                                                    {String(record["Fiscal Year"]) === "2022" &&
+                                                                    title.includes("Title I") ? (
+                                                                        <div>2022: Not Available</div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            {record["Fiscal Year"]}:{" "}
+                                                                            {Number(record.Amount / 1000000.0) >= 0
+                                                                                ? `$${Number(
+                                                                                      Math.abs(record.Amount) /
+                                                                                          1000000.0
+                                                                                  ).toLocaleString(undefined, {
+                                                                                      maximumFractionDigits: 2
+                                                                                  })}M`
+                                                                                : `-$${Number(
+                                                                                      Math.abs(record.Amount) /
+                                                                                          1000000.0
+                                                                                  ).toLocaleString(undefined, {
+                                                                                      maximumFractionDigits: 2
+                                                                                  })}M`}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             ))}
                                                         </Typography>

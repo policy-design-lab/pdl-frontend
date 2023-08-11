@@ -139,10 +139,18 @@ export default function DrawLegend({
                         });
                 }
                 if (emptyState.length !== 0) {
+                    const middleText = baseSVG
+                        .append("text")
+                        .attr("class", "legendTextSide")
+                        .attr("x", -1000)
+                        .attr("y", -1000)
+                        .text(`${emptyState.join(", ")}'s data is not available`);
+                    const middleBox = middleText.node().getBBox();
+                    middleText.remove();
                     baseSVG
                         .append("text")
                         .attr("class", "legendTextSide")
-                        .attr("x", (svgWidth + margin * 2) / 2 - margin * 2)
+                        .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
                         .attr("y", 80)
                         .text(`${emptyState.join(", ")}'s data is not available`);
                 }
