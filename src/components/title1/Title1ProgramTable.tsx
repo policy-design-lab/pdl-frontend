@@ -346,7 +346,8 @@ function Title1ProgramTable({
                                     }}
                                 >
                                     <i>
-                                    The payments,base acres and payment recipients are calculated as the total of the data from 2014-2021. 2022 payments for Title I have not yet been paid.
+                                        The payments,base acres and payment recipients are calculated as the total of
+                                        the data from 2014-2021. 2022 payments for Title I have not yet been paid.
                                     </i>
                                 </Typography>
                             ) : (
