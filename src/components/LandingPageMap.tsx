@@ -59,7 +59,7 @@ const MapChart = (props) => {
                         Total Farm Bill Benefits from <strong>2018 - 2022</strong>
                     </Typography>
                     <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                        <i>2022 payments for title 1 has not been paid</i>
+                        <i>2022 payments for Title I have not yet been paid</i>
                     </Typography>
                 </Box>
             );
@@ -77,7 +77,7 @@ const MapChart = (props) => {
                         Total Commodities Programs (Title I) from <strong>2018 - 2021</strong>
                     </Typography>
                     <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                        <i>2022 payments for title 1 has not been paid</i>
+                        <i>2022 payments for Title I have not yet been paid</i>
                     </Typography>
                 </Box>
             );

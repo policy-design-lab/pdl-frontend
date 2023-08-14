@@ -410,7 +410,7 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
                     Total <strong>{subprogram}</strong> Payments from <strong>{year}</strong>
                 </Typography>
                 <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                    <i>2022 payments for title 1 has not been paid</i>
+                    <i>2022 payments for Title I have not yet been paid</i>
                 </Typography>
             </Box>
         );
@@ -423,7 +423,7 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
                     <strong>{program}</strong> Payments from <strong>{year}</strong>
                 </Typography>{" "}
                 <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                    <i>2022 payments for title 1 has not been paid</i>
+                    <i>2022 payments for Title I have not yet been paid</i>
                 </Typography>
             </Box>
         );
@@ -434,7 +434,7 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
                 Total <strong>{program}</strong> Payments from <strong>{year}</strong>
             </Typography>{" "}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                <i>2022 payments for title 1 has not been paid</i>
+                <i>2022 payments for Title I have not yet been paid</i>
             </Typography>
         </Box>
     );

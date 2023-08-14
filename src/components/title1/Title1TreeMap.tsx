@@ -213,8 +213,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             <i>
-                                The payments are calculated as the total of the data from 2014-2021 (2022 payment is not available); The base acres and
-                                payment recipients are calculated as the average of the data from 2014-2022.
+                                The payments,base acres and payment recipients are calculated as the total of the data from 2014-2021. 2022 payments for Title I have not yet been paid.
                             </i>
                         </Typography>
                         <Typography
