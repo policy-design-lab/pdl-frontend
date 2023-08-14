@@ -74,7 +74,7 @@ const MapChart = (props) => {
             legendTitle = (
                 <Box>
                     <Typography noWrap variant="h6">
-                        Total Commodities Programs (Title I) from <strong>2018 - 2021</strong>
+                        Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
                     </Typography>
                     <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
                         <i>2022 payments for Title I have not yet been paid</i>
