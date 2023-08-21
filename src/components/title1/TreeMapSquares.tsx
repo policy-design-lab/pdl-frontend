@@ -82,7 +82,11 @@ export default function TreeMapSquares({
                                         const inSquareText = squareGroup
                                             .append("text")
                                             .attr("id", `inSquareText${value}`)
-                                            .text(collectedOriginalData[key])
+                                            .text(
+                                                key === "payments"
+                                                    ? `$${collectedOriginalData[key]}`
+                                                    : collectedOriginalData[key]
+                                            )
                                             .style("font-size", "0.7em")
                                             .style("fill", "white");
                                         const textLength = inSquareText.node().getComputedTextLength();
