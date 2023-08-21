@@ -10,7 +10,8 @@ export default function TreeMapSquares({
     originalData,
     chartData,
     color,
-    availableAttributes
+    availableAttributes,
+    program
 }): JSX.Element {
     const Styles = styled.div`
         #Title1TreeMap {
@@ -25,6 +26,8 @@ export default function TreeMapSquares({
             const base = d3.select(rn.current).append("g").attr("class", "base");
             const margin = 30;
             const lineMargin = 80;
+            const baseSize = 10;
+            const stepSize = 20;
             let rowTrack = 0;
             let largestSquare = 200;
             if (window.innerWidth >= 1920) {
@@ -109,12 +112,14 @@ export default function TreeMapSquares({
                             const mousePos = d3.pointer(event, squareGroup.node());
                             const tipGroup = base.append("g").attr("class", "TreeMapSquareTip");
                             const xPosition = mousePos[0] + 160 > svgWidth ? mousePos[0] - 160 : mousePos[0];
+                            const tipHeight =
+                                program === "Agriculture Risk Coverage Individual Coverage (ARC-IC)" ? 80 : 100;
                             tipGroup
                                 .append("rect")
                                 .attr("x", xPosition)
                                 .attr("y", mousePos[1])
                                 .attr("width", 155)
-                                .attr("height", 100)
+                                .attr("height", tipHeight)
                                 .attr("rx", 5)
                                 .attr("ry", 5)
                                 .attr("fill", "#2F7164")
@@ -131,32 +136,42 @@ export default function TreeMapSquares({
                                         ]
                                     }`
                                 )
-                                .attr("x", xPosition + 10)
-                                .attr("y", mousePos[1] + 20)
+                                .attr("x", xPosition + baseSize)
+                                .attr("y", mousePos[1] + stepSize * 1)
                                 .style("font-size", "0.9em")
                                 .style("font-weight", "700")
                                 .style("fill", "white");
                             tipGroup
                                 .append("text")
                                 .text(`Payments:  $${paymentsOriginalData}`)
-                                .attr("x", xPosition + 10)
-                                .attr("y", mousePos[1] + 40)
+                                .attr("x", xPosition + baseSize)
+                                .attr("y", mousePos[1] + stepSize * 2)
                                 .style("font-size", "0.8em")
                                 .style("fill", "white");
-                            tipGroup
-                                .append("text")
-                                .text(`Avg. Base Acres: ${baseArcesOriginalData}`)
-                                .attr("x", xPosition + 10)
-                                .attr("y", mousePos[1] + 60)
-                                .style("font-size", "0.8em")
-                                .style("fill", "white");
-                            tipGroup
-                                .append("text")
-                                .text(`Avg. Recipients:  ${recipientsOriginalData}`)
-                                .attr("x", xPosition + 10)
-                                .attr("y", mousePos[1] + 80)
-                                .style("font-size", "0.8em")
-                                .style("fill", "white");
+                            if (program === "Agriculture Risk Coverage Individual Coverage (ARC-IC)") {
+                                tipGroup
+                                    .append("text")
+                                    .text(`Avg. Recipients:  ${recipientsOriginalData}`)
+                                    .attr("x", xPosition + baseSize)
+                                    .attr("y", mousePos[1] + stepSize * 3)
+                                    .style("font-size", "0.8em")
+                                    .style("fill", "white");
+                            } else {
+                                tipGroup
+                                    .append("text")
+                                    .text(`Avg. Base Acres: ${baseArcesOriginalData}`)
+                                    .attr("x", xPosition + baseSize)
+                                    .attr("y", mousePos[1] + stepSize * 3)
+                                    .style("font-size", "0.8em")
+                                    .style("fill", "white");
+                                tipGroup
+                                    .append("text")
+                                    .text(`Avg. Recipients:  ${recipientsOriginalData}`)
+                                    .attr("x", xPosition + 10)
+                                    .attr("y", mousePos[1] + stepSize * 4)
+                                    .style("font-size", "0.8em")
+                                    .style("fill", "white");
+                            }
                         })
                         .on("mouseleave", function (e) {
                             base.selectAll(".TreeMapSquareTip").remove();

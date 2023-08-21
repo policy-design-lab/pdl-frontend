@@ -173,7 +173,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle="Comparing Total Commodities Programs Payments and Payments Percentage Nationwide (2014-2021)"
+                                    tableTitle="Comparison of Total Payments for these Commodities Programs and the State's Percentage of that Total (2014-2021)"
                                     program="Total Commodities Programs"
                                     subprogram={undefined}
                                     skipColumns={[]}

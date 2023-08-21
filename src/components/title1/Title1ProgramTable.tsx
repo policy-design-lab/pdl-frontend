@@ -10,6 +10,7 @@ import {
     sortByDollars
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
+import { ToDollarString } from "../shared/ConvertionFormats";
 
 function Title1ProgramTable({
     tableTitle,
@@ -62,9 +63,12 @@ function Title1ProgramTable({
                 return value.paymentInPercentageNationwide !== undefined
                     ? {
                           state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                          paymentInDollars: `$${value.paymentInDollars
-                              .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                              .toString()}`,
+                          paymentInDollars: `$${
+                              value.paymentInDollars
+                                  .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                                  .toString()
+                                  .split(".")[0]
+                          }`,
                           paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
                           paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
                           averageAreaInAcres:
@@ -92,18 +96,24 @@ function Title1ProgramTable({
             if (program === "Total Commodities Programs") {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${value.programPaymentInDollars
-                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                        .toString()}`,
+                    programPaymentInDollars: `$${
+                        value.programPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
                     paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
                 };
             }
             return value.programPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: `$${value.programPaymentInDollars
-                          .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                          .toString()}`,
+                      programPaymentInDollars: `$${
+                          value.programPaymentInDollars
+                              .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                              .toString()
+                              .split(".")[0]
+                      }`,
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0
                               ? "0"

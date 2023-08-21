@@ -141,7 +141,7 @@ export default function LandingPageMapTab({
                             </Typography>
                             <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
                                 <strong>Map visualization</strong>{" "}
-                                <b style={{ color: "lightgrey" }}>(Numbers are not final)</b>
+                                <b style={{ color: "lightgrey" }}>(Numbers have not yet been finalized)</b>
                             </Typography>
                         </Box>
                         <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />

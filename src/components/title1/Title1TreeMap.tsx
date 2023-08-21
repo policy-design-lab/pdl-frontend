@@ -405,6 +405,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                         chartData={chartData}
                         color={{ baseAcres: baseAcresColor, payments: paymentsColor, recipients: recipientsColor }}
                         availableAttributes={availableAttributes}
+                        program={program}
                     />
                 </Grid>
             </Grid>
