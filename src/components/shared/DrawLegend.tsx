@@ -14,20 +14,26 @@ export default function DrawLegend({
     programData,
     prepColor,
     emptyState,
-    initWidth
+    initRatioLarge,
+    initRatioSmall
 }: {
     colorScale: d3.ScaleThreshold<number, string>;
     title: React.ReactElement;
     programData: number[];
     prepColor: string[];
     emptyState: string[];
-    initWidth: number;
+    initRatioLarge: number;
+    initRatioSmall: number;
 }): JSX.Element {
     const legendRn = React.useRef(null);
     const margin = 40;
     let cut_points: number[] = [];
-    const [width, setWidth] = React.useState(initWidth);
+    const [width, setWidth] = React.useState(
+        window.innerWidth >= 1679 ? window.innerWidth * initRatioLarge : window.innerWidth * initRatioSmall
+    );
     React.useEffect(() => {
+        if (window.innerWidth > 1679) setWidth(window.innerWidth * initRatioLarge);
+        else setWidth(window.innerWidth * initRatioSmall);
         drawLegend();
     });
     const drawLegend = () => {

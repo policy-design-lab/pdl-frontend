@@ -149,7 +149,8 @@ const MapChart = (props) => {
                     programData={allPrograms.filter((d) => d.State !== "Total").map((d) => d[searchKey])}
                     prepColor={[color1, color2, color3, color4, color5]}
                     emptyState={zeroPoints}
-                    initWidth={window.innerWidth > 1679 ? window.innerWidth * 0.75 : window.innerWidth * 0.8}
+                    initRatioLarge={0.75}
+                    initRatioSmall={0.8}
                 />
             </Box>
             <ComposableMap projection="geoAlbersUsa">

@@ -378,7 +378,8 @@ const Title1Map = ({
                     programData={quantizeArray}
                     prepColor={mapColor}
                     emptyState={zeroPoints}
-                    initWidth={window.innerWidth > 1679 ? window.innerWidth * 0.6 : window.innerWidth * 0.5}
+                    initRatioLarge={0.6}
+                    initRatioSmall={0.5}
                 />
             </Box>
             <MapChart
