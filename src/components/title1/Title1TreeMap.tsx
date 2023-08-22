@@ -213,8 +213,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             <i>
-                                The payments are calculated as the total of the data from 2018-2022; The base acres and
-                                payment recipients are calculated as the average of the data from 2019-2022.
+                                The payments,base acres and payment recipients are calculated as the total of the data from 2014-2021. 2022 payments for Title I have not yet been paid.
                             </i>
                         </Typography>
                         <Typography
@@ -406,6 +405,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                         chartData={chartData}
                         color={{ baseAcres: baseAcresColor, payments: paymentsColor, recipients: recipientsColor }}
                         availableAttributes={availableAttributes}
+                        program={program}
                     />
                 </Grid>
             </Grid>

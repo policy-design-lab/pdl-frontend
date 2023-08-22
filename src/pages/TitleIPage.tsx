@@ -136,7 +136,7 @@ export default function TitleIPage(): JSX.Element {
                         >
                             <Title1Map
                                 program="Total Commodities Programs"
-                                year="2018-2022"
+                                year="2014-2021"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -173,13 +173,13 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle="Comparing Total Commodities Programs Payments and Payments Percentage Nationwide (2018-2022)"
+                                    tableTitle="Comparison of Total Payments for these Commodities Programs and the State's Percentage of that Total (2014-2021)"
                                     program="Total Commodities Programs"
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
                                     Title1Data={stateDistributionData}
-                                    year="2018-2022"
+                                    year="2014-2021"
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -202,7 +202,7 @@ export default function TitleIPage(): JSX.Element {
                         >
                             <Title1Map
                                 program="Agriculture Risk Coverage (ARC)"
-                                year="2018-2022"
+                                year="2014-2021"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -260,10 +260,10 @@ export default function TitleIPage(): JSX.Element {
                                             "Agriculture Risk Coverage (ARC)",
                                             undefined,
                                             stateDistributionData,
-                                            "2018-2022"
+                                            "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={3000}
                                     />
@@ -276,7 +276,7 @@ export default function TitleIPage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         Title1Data={stateDistributionData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -300,7 +300,7 @@ export default function TitleIPage(): JSX.Element {
                             <Title1Map
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
-                                year="2018-2022"
+                                year="2014-2021"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -358,10 +358,10 @@ export default function TitleIPage(): JSX.Element {
                                             "Agriculture Risk Coverage (ARC)",
                                             "Agriculture Risk Coverage County Option (ARC-CO)",
                                             stateDistributionData,
-                                            "2018-2022"
+                                            "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2800}
                                     />
@@ -374,7 +374,7 @@ export default function TitleIPage(): JSX.Element {
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
                                         stateCodes={stateCodesData}
                                         Title1Data={stateDistributionData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -399,7 +399,7 @@ export default function TitleIPage(): JSX.Element {
                             <Title1Map
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
-                                year="2018-2022"
+                                year="2014-2021"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -457,10 +457,10 @@ export default function TitleIPage(): JSX.Element {
                                             "Agriculture Risk Coverage (ARC)",
                                             "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
                                             stateDistributionData,
-                                            "2018-2022"
+                                            "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
@@ -473,7 +473,7 @@ export default function TitleIPage(): JSX.Element {
                                         subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
                                         stateCodes={stateCodesData}
                                         Title1Data={stateDistributionData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -497,7 +497,7 @@ export default function TitleIPage(): JSX.Element {
                         >
                             <Title1Map
                                 program="Price Loss Coverage (PLC)"
-                                year="2018-2022"
+                                year="2014-2021"
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -555,10 +555,10 @@ export default function TitleIPage(): JSX.Element {
                                             "Price Loss Coverage (PLC)",
                                             undefined,
                                             stateDistributionData,
-                                            "2018-2022"
+                                            "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
@@ -571,7 +571,7 @@ export default function TitleIPage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         Title1Data={stateDistributionData}
-                                        year="2018-2022"
+                                        year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
