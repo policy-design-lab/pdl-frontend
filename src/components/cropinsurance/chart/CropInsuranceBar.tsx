@@ -199,7 +199,6 @@ export default function CropInsuranceBar({
             const topBar = d3.select(TotalBars.nodes()[1]);
             const leftLineData = [
                 {
-                    // x: mousePos[0] + margin.left - minusMouse[0],
                     x: Number(topBar.attr("x")) + Number(topBar.attr("width")) + margin.left,
                     y: topBar.attr("y")
                 },
@@ -251,7 +250,6 @@ export default function CropInsuranceBar({
                 .text(leftTextContent1)
                 .style("font-size", "0.81rem")
                 .style("fill", "white");
-            // equal sign
             d3.select(rnBar.current)
                 .append("text")
                 .attr("x", margin.left + leftBox1.width + textPadding * 2 + textPadding / 2)
@@ -296,7 +294,6 @@ export default function CropInsuranceBar({
                 .text(leftTextContent2)
                 .style("font-size", "0.81rem")
                 .style("fill", "white");
-            // plus sign
             d3.select(rnBar.current)
                 .append("text")
                 .attr(
@@ -355,7 +352,6 @@ export default function CropInsuranceBar({
                         textPadding +
                         leftBox2.width +
                         textPadding +
-                        // textPadding / 2 +
                         textPadding * 3
                 )
                 .attr("y", topBar.attr("y") - InfoGap * 2)

@@ -28,14 +28,13 @@ export default function CropInsuranceBars({
     initChartWidthRatio: number;
 }): JSX.Element {
     const cropinsuranceDiv = React.useRef(null);
-    // Bar-related parameters
     const [barStatus, setBarStatus] = React.useState(0);
     const [secondarybarStatus, setSecondaryBarStatus] = React.useState(3);
     const yearKey = "2018-2022";
     const widthPercentage = initChartWidthRatio;
     const heightPercentage = 0.4;
     const paddingLR = 60;
-    const paddingTB = 40;
+    const paddingTB = 20;
     const color1 = "#B65700";
     const color2 = "#D3AA3D";
     const [whichBar, setWhichBar] = React.useState(checkedMenu);
@@ -146,7 +145,7 @@ export default function CropInsuranceBars({
                         </Grid>
                     </Grid>
                     <Box display="flex" justifyContent="center" style={{ marginTop: "2em" }}>
-                        <Typography variant="h5" sx={{ mb: 3, fontSize: "1.2em" }}>
+                        <Typography variant="h5" sx={{ fontSize: "1.2em" }}>
                             Total Premium = <strong>Farmer Paid Premium</strong> + Premium Subsidy
                         </Typography>
                     </Box>

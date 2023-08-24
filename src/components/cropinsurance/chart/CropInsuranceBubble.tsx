@@ -301,7 +301,6 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
                     .style("stroke", darkBrown);
             }
             theState.style("fill-opacity", 1).style("stroke-opacity", 1).style("fill", "white");
-            // Draw the vertical line to x axis
             const lineDataVertical = [
                 { x: x(theState.data()[0].TotalIndemnities), y: y(0) },
                 {
@@ -316,7 +315,6 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
                 })
                 .y(function (d) {
                     return d.y;
-                    // + Number(theBubble.attr("r")) + - Number(theState.attr("font-size"))/2;
                 });
             const verticalLine = d3
                 .select(rn.current)
@@ -332,7 +330,6 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
                 .attr("stroke-width", 1)
                 .attr("fill", "none")
                 .attr("transform", `translate(${margin * 2}, ${margin * 2})`);
-            // Draw the horizontal line to y axis
             const lineDataHorizontal = [
                 { x: x(0), y: y(theState.data()[0].TotalFarmerPaidPremium) },
                 {
@@ -359,11 +356,8 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
         };
         const drawTips = (theState) => {
             const theBubble = d3.select(rn.current).select(`#bubble-${theState.data()[0].State}`);
-
-            // Find the location of center of the bubble, then plus r plus 1em
             let xTips = Number(theBubble.attr("cx")) + Number(theBubble.attr("r")) + 16;
             let yTips = Number(theBubble.attr("cy"));
-
             if (xTips + tipWidth > width) {
                 xTips = xTips - Number(theBubble.attr("r")) - tipWidth - Number(theBubble.attr("r")) / 2;
                 yTips = Number(theBubble.attr("cy")) + Number(theBubble.attr("r")) + 16;

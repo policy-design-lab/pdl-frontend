@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-    Box,
-    Collapse,
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    Typography
-} from "@mui/material";
+import { Box, Collapse, Drawer, List, ListItemButton, ListItemText } from "@mui/material";
 import styled from "styled-components";
 import { menu } from "./SideBarMenuItem";
 import { hasChildren } from "./Utils";
@@ -25,8 +14,7 @@ let currentChecked = "0";
 
 export default function SideBar({ setTitle1Checked }): JSX.Element {
     const [checked, setChecked] = React.useState(currentChecked);
-    const [disabled, setDisabled] = React.useState(false);
-    const [selectedItem, setSelectedItem] = useState("0"); // State to track selected item
+    const [selectedItem, setSelectedItem] = useState("0");
     const handleToggle = (value: string) => () => {
         setChecked(value);
         setTitle1Checked(value);

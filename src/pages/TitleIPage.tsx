@@ -30,7 +30,6 @@ export default function TitleIPage(): JSX.Element {
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
-    // const [initTreeMapWidthRatio, setInitTreeMapWidthRatio] = React.useState(0.5);
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];

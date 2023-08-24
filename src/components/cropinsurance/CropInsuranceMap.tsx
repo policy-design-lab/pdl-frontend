@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
-import { ConstructionOutlined } from "@mui/icons-material";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
@@ -185,25 +183,6 @@ const CropInsuranceMap = ({
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
-    // if (program !== "Total Commodities Programs") {
-    //     statePerformance[year].forEach((value) => {
-    //         const programRecord = value.programs;
-    //         const ACur = programRecord.find((s) => s.programName === program);
-    //         if (attribute === undefined) {
-    //             quantizeArray.push(ACur.programPaymentInDollars);
-    //         } else {
-    //             const AArray = ACur.subPrograms;
-    //             const attributeRecord = AArray.find((s) => s.subProgramName === attribute);
-    //             quantizeArray.push(attributeRecord.paymentInDollars);
-    //         }
-    //         return null;
-    //     });
-    // } else {
-    //     statePerformance[year].forEach((value) => {
-    //         quantizeArray.push(value.totalPaymentInDollars);
-    //         return null;
-    //     });
-    // }
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
@@ -230,7 +209,8 @@ const CropInsuranceMap = ({
                         programData={quantizeArray}
                         prepColor={mapColor}
                         emptyState={zeroPoints}
-                        initWidth={window.innerWidth > 1679 ? window.innerWidth * 0.6 : window.innerWidth * 0.5}
+                        initRatioLarge={0.6}
+                        initRatioSmall={0.5}
                     />
                 ) : (
                     <DrawLegend
@@ -240,7 +220,8 @@ const CropInsuranceMap = ({
                         programData={quantizeArray}
                         prepColor={mapColor}
                         emptyState={zeroPoints}
-                        initWidth={window.innerWidth > 1679 ? window.innerWidth * 0.6 : window.innerWidth * 0.5}
+                        initRatioLarge={0.6}
+                        initRatioSmall={0.5}
                     />
                 )}
             </Box>

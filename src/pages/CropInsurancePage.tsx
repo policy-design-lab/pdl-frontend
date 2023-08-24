@@ -51,9 +51,6 @@ export default function CropInsurancePage(): JSX.Element {
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
-        if (window.innerWidth >= 1920) {
-            // initTreeMapWidthRatio = 0.7;
-        }
     }, []);
 
     const switchChartTable = (event, newTab) => {
@@ -649,9 +646,9 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         />
                         <Grid container justifyContent="center">
-                            <Grid item xs={12} md={8}>
+                            <Grid item xs={12}>
                                 <Box
-                                    className="chartArea"
+                                    className="chartArea narrowChartArea"
                                     component="div"
                                     ref={cropInsuranceDiv}
                                     sx={{
@@ -705,9 +702,9 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         />
                         <Grid container justifyContent="center">
-                            <Grid item xs={12} md={8}>
+                            <Grid item xs={12}>
                                 <Box
-                                    className="chartArea"
+                                    className="chartArea narrowChartArea"
                                     component="div"
                                     ref={cropInsuranceDiv}
                                     sx={{

@@ -2,21 +2,22 @@
   box-sizing: border-box;
   width: 300px;
   height: auto;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-x: hidden;
   margin-bottom: 1em;
   padding-bottom: 1em;
   border-bottom: 0.1em solid #DDD;
 }
 
-@media only screen and (min-width: 1680px) {
+@media only screen and (min-width: 1441px) {
   .fullWidthMainContent {
     padding: 6em;
   }
-  .fullWidthMainContent .mapArea{
+  .fullWidthMainContent .mapArea, .fullWidthMainContent .narrowChartArea{
     padding: 3em 1em 0 20em;
     max-width: 65%;
   }
+
   .halfWidthMainContent {
     padding: 10em 10em 6em 25em;
   }
@@ -38,14 +39,15 @@
   }
 }
 
-@media only screen and (max-width: 1679px) {
+@media only screen and (max-width: 1440px) {
   .fullWidthMainContent {
     padding: 5em;
   }
-  .fullWidthMainContent .mapArea{
+  .fullWidthMainContent .mapArea, .fullWidthMainContent .narrowChartArea{
     padding: 3em 1em 0 15em;
     max-width: 65%;
   }
+  
   .halfWidthMainContent {
     padding: 10em 5em 6em 25em;
   }
