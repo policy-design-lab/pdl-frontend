@@ -5,21 +5,17 @@ import InsertChartIcon from "@mui/icons-material/InsertChart";
 import {
     CircularProgress,
     createTheme,
-    FormControlLabel,
     Grid,
-    MenuItem,
-    RadioGroup,
-    SvgIcon,
     ThemeProvider,
     ToggleButton,
     ToggleButtonGroup,
     Typography
 } from "@mui/material";
 import NavBar from "../components/NavBar";
-import CropInsuranceMap from "../components/cropInsurance/CropInsuranceMap";
+import CropInsuranceMap from "../components/cropinsurance/CropInsuranceMap";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import CropInsuranceProgramTable from "../components/cropinsurance/CropInsuranceTable";
-import SideBar from "../components/cropInsurance/sideBar/ShortSideBar";
+import SideBar from "../components/cropinsurance/sideBar/ShortSideBar";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import "../styles/subpage.css";
