@@ -16,10 +16,6 @@ const ScrollToTop = (props: any) => {
     return <>{props.children}</>;
 };
 
-/**
- * TODO
- * in the future, we can add the common datasets such as summary, statecodes here in stead of re-loading them in each page to reduce redundant API calls
- */
 export default function Main(): JSX.Element {
     return (
         <ScrollToTop>
