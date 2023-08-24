@@ -37,19 +37,19 @@ function CropInsuranceProgramTable({
         });
     });
     Object.keys(hashmap).forEach((s) => {
-      let newRecord = {state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]]};
-      Object.entries(hashmap[s]).forEach(([attr, value]) => {
-        if(attr === "averageLossRatio"){
-          newRecord[attr] = `${value.toString()}%`;
-        }else{
-          newRecord[attr] = `$${value.toLocaleString(undefined, { minimumFractionDigits: 2 })
-                          .toString()}`;
-        }
-      });
-      resultData.push(newRecord);
+        const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
+        Object.entries(hashmap[s]).forEach(([attr, value]) => {
+            if (attr === "lossRatio") {
+                newRecord[attr] = `${value.toString()}%`;
+            } else {
+                newRecord[attr] = `$${
+                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+                }`;
+            }
+        });
+        resultData.push(newRecord);
     });
-    let columns;
-    let columnPrep = [];
+    const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     attributes.forEach((attribute) => {
         const json = {
@@ -58,20 +58,14 @@ function CropInsuranceProgramTable({
                 .trim()
                 .split(" ")
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ").toUpperCase(),
+                .join(" ")
+                .toUpperCase(),
             accessor: attribute,
-            sortType: attribute === "averageLossRatio" ? compareWithPercentSign : compareWithDollarSign
+            sortType: attribute === "lossRatio" ? compareWithPercentSign : compareWithDollarSign
         };
         columnPrep.push(json);
     });
-    columns = React.useMemo(() => columnPrep, []);
-
-    // const paymentsIndex =
-    //     subprogram !== undefined
-    //         ? columns.findIndex((c) => c.accessor === "paymentInDollars")
-    //         : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
-    // const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
-    // const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
+    const columns = React.useMemo(() => columnPrep, []);
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -144,7 +138,7 @@ function CropInsuranceProgramTable({
     `;
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
-            <Styles>
+            <Styles value={attributes[0]}>
                 <Grid
                     container
                     columns={{ xs: 12 }}
@@ -168,8 +162,15 @@ function CropInsuranceProgramTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                {tableTitle}
+                                Comparing {tableTitle}
                             </Typography>
+                            {attributes.includes("lossRatio") ? (
+                                <Box display="flex" justifyContent="center" style={{ marginTop: "0.5em" }}>
+                                    <Typography variant="h5" sx={{ mb: 1, fontSize: "1.2em" }}>
+                                        Loss Ratio = Total Indemnities / Total Premium
+                                    </Typography>
+                                </Box>
+                            ) : null}
                         </Box>
                     </Grid>
                 </Grid>

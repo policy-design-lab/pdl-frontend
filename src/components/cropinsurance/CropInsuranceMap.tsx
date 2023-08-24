@@ -8,9 +8,10 @@ import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
+import { ConstructionOutlined } from "@mui/icons-material";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
-import { ConstructionOutlined } from "@mui/icons-material";
+import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -69,7 +70,7 @@ const MapChart = ({
                                         <Box>
                                             <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
 
-                                            {attribute === "averageLossRatio" ? (
+                                            {attribute === "lossRatio" ? (
                                                 <Typography sx={{ color: "#3F3F3F" }}>
                                                     {Number(programPayment * 100).toLocaleString(undefined, {
                                                         maximumFractionDigits: 2
@@ -84,11 +85,7 @@ const MapChart = ({
                                                     }}
                                                 >
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        $
-                                                        {Number(programPayment / 1000000.0).toLocaleString(undefined, {
-                                                            maximumFractionDigits: 2
-                                                        })}
-                                                        M
+                                                        ${ShortFormat(programPayment)}
                                                     </Typography>
                                                 </Box>
                                             )}
@@ -225,9 +222,9 @@ const CropInsuranceMap = ({
     return (
         <div>
             <Box display="flex" justifyContent="center">
-                {attribute === "averageLossRatio" ? (
+                {attribute === "lossRatio" ? (
                     <DrawLegend
-                        isRatio={true}
+                        isRatio
                         colorScale={colorScale}
                         title={titleElement({ attribute, year })}
                         programData={quantizeArray}
@@ -289,7 +286,6 @@ const getValueFromAttr = (stateRecord, attribute): string => {
         const extractedKey = match ? match[1] : key;
         if (extractedKey === attribute) {
             ans = key;
-            return;
         }
     });
     return ans;

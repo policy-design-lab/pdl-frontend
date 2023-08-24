@@ -1,3 +1,14 @@
+.sideBar-short .MuiPaper-root {
+  box-sizing: border-box;
+  width: 300px;
+  height: auto;
+  max-height: 90vh;
+  overflow-x: hidden;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 0.1em solid #DDD;
+}
+
 @media only screen and (min-width: 1680px) {
   .fullWidthMainContent {
     padding: 6em;
@@ -54,16 +65,11 @@
     font-weight: 700;
     margin-top: 0.5em;
   }
+
+  .sideBar-short .MuiPaper-root {
+    max-height: 99vh;
+  }
 }
 
 
-.sideBar-short .MuiPaper-root {
-  box-sizing: border-box;
-  width: 300px;
-  height: auto;
-  max-height: 90vh;
-  overflow-x: hidden;
-  margin-bottom: 1em;
-  padding-bottom: 1em;
-  border-bottom: 0.1em solid #DDD;
-}
+

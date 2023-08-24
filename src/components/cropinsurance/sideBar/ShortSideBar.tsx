@@ -117,7 +117,6 @@ export default function SideBar({ setCropInsuranceChecked }): JSX.Element {
                     sx={{
                         my: 0,
                         py: 3,
-                        maxHeight: "7em",
                         color: "#272727",
                         width: 300,
                         backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
@@ -162,7 +161,7 @@ export default function SideBar({ setCropInsuranceChecked }): JSX.Element {
                 anchor="left"
                 sx={{
                     "display": { xs: "none", sm: "block" },
-                    "& .MuiDrawer-paper": { boxSizing: "border-box", width: 300 },
+                    "& .MuiDrawer-paper": { boxSizing: "border-box", width: 300 }
                 }}
                 PaperProps={{
                     sx: {

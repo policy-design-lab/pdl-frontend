@@ -33,7 +33,22 @@ export function ShortFormat(labelValue, position?: number) {
 export function ToPercentageString(value: string): string {
     return `${parseFloat(value).toFixed(2)}%`;
 }
-export function ToDollarString(value: string, decimals = 6): string {
+export function ToDollarString(value: string, decimals: number): string {
+    if (decimals === 3) {
+        return `${Number(parseFloat(value) / 10 ** decimals).toLocaleString(undefined, {
+            maximumFractionDigits: 2
+        })}K`;
+    }
+    if (decimals === 6) {
+        return `${Number(parseFloat(value) / 10 ** decimals).toLocaleString(undefined, {
+            maximumFractionDigits: 2
+        })}M`;
+    }
+    if (decimals === 9) {
+        return `${Number(parseFloat(value) / 10 ** decimals).toLocaleString(undefined, {
+            maximumFractionDigits: 2
+        })}B`;
+    }
     return Number(parseFloat(value) / 10 ** decimals).toLocaleString(undefined, {
         maximumFractionDigits: 2
     });

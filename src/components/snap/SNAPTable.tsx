@@ -5,15 +5,16 @@ import { useTable, useSortBy, usePagination } from "react-table";
 import Box from "@mui/material/Box";
 import { compareWithAlphabetic, compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import stateCodes from "../../data/stateCodes.json";
 
 function SnapTable({
     SnapData,
+    stateCodes,
     yearKey,
     color1,
     color2
 }: {
     SnapData: any;
+    stateCodes: any;
     yearKey: string;
     color1: string;
     color2: string;

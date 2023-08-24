@@ -54,9 +54,11 @@ const MapChart = (props) => {
             color4 = "#1B9577";
             color5 = "#005A45";
             legendTitle = (
-                <Typography noWrap variant="h6">
-                    Total Farm Bill Benefits from <strong>2018 - 2022</strong>
-                </Typography>
+                <Box>
+                    <Typography noWrap variant="h6">
+                        Total Farm Bill Benefits from <strong>2018 - 2022</strong>
+                    </Typography>
+                </Box>
             );
             break;
         case "Title I: Commodities":
@@ -87,11 +89,6 @@ const MapChart = (props) => {
             break;
         case "Crop Insurance":
             searchKey = "Crop Insurance Total";
-            // color1 = "#A1622F";
-            // color2 = "#DCC287";
-            // color3 = "#E3E3E3";
-            // color4 = "#89CBC1";
-            // color5 = "#2C8472";
             color1 = "#C26C06";
             color2 = "#CCECE6";
             color3 = "#66C2A4";
