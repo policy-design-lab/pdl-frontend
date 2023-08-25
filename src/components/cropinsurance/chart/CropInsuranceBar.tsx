@@ -2,6 +2,7 @@ import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
 import { randomBytes } from "crypto";
+import { Box, Typography } from "@mui/material";
 import { ShortFormat, ToPercentageString, ToDollarString } from "../../shared/ConvertionFormats";
 
 export default function CropInsuranceBar({
@@ -928,6 +929,23 @@ export default function CropInsuranceBar({
     };
     return (
         <div>
+            <Box display="flex" justifyContent="center" style={{ marginTop: "2em" }}>
+                {barStatus === 0 ? (
+                    <Typography variant="h5" sx={{ fontSize: "1.2em" }}>
+                        Total Premium = <strong>Farmer Paid Premium</strong> + Premium Subsidy
+                    </Typography>
+                ) : null}
+                {barStatus === 1 ? (
+                    <Typography variant="h5" sx={{ fontSize: "1.2em" }}>
+                        <strong>Farmer Paid Premium</strong> = Total Premium - Premium Subsidy
+                    </Typography>
+                ) : null}
+                {barStatus === 2 ? (
+                    <Typography variant="h5" sx={{ fontSize: "1.2em" }}>
+                        <strong>Premium Subsidy</strong> = Total Premium - Farmer Paid Premium
+                    </Typography>
+                ) : null}
+            </Box>
             <Styles>
                 <svg ref={rnBar} id="CropInsuranceBarChart" />
             </Styles>

@@ -144,11 +144,6 @@ export default function CropInsuranceBars({
                             </RadioGroup>
                         </Grid>
                     </Grid>
-                    <Box display="flex" justifyContent="center" style={{ marginTop: "2em" }}>
-                        <Typography variant="h5" sx={{ fontSize: "1.2em" }}>
-                            Total Premium = <strong>Farmer Paid Premium</strong> + Premium Subsidy
-                        </Typography>
-                    </Box>
                     <Grid container columns={{ xs: 12 }}>
                         <Grid
                             container
