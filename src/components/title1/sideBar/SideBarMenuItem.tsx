@@ -1,7 +1,7 @@
 export const menu = [
     {
         icon: "",
-        title: "Total Commodities Programs"
+        title: "Total Commodities Programs, Subtitle A"
     },
     {
         icon: "",
