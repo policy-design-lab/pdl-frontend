@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Use different title equations for the bar charts in pages under the Net Farmer Benefit section [#179](https://github.com/policy-design-lab/pdl-frontend/issues/179)
 - Adjusted font size of chart headers on Crop Insurance page [#183](https://github.com/policy-design-lab/pdl-frontend/issues/182)
+- Adjusted '$' sign for some sub-pages of Crop Insurance page [#184](https://github.com/policy-design-lab/pdl-frontend/issues/184)
 
 
 ## [0.7.0] - 2023-08-22

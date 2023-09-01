@@ -39,7 +39,7 @@ const MapChart = ({
 }) => {
     let attr = 0;
     if (attribute === "lossRatio") attr = 1;
-    if (attribute === "averageInsuredAreaInAcres") attr = 2;
+    if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") attr = 2;
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -223,7 +223,7 @@ const CropInsuranceMap = ({
                     />
                 ) : (
                     <div>
-                        {attribute === "averageInsuredAreaInAcres" ? (
+                        {attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium" ? (
                             <DrawLegend
                                 isRatio={false}
                                 notDollar

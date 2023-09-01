@@ -114,7 +114,7 @@ export default function CropInsuranceBar({
             renderSingleBar(
                 prepDueBarData(CIData[yearKey], "totalPoliciesEarningPremium"),
                 "totalPoliciesEarningPremium",
-                "Total Policies Earning Premium ($)",
+                "Total Policies Earning Premium",
                 "Total Policies Earning Premium",
                 color1
             );
@@ -370,6 +370,7 @@ export default function CropInsuranceBar({
             .axisLeft(y0)
             .ticks(10)
             .tickFormat(function (d) {
+                if (barStatus === 4) return `${ShortFormat(parseInt(d, 10))}`;
                 return `$${ShortFormat(parseInt(d, 10))}`;
             })
             .tickSizeOuter(0);
@@ -480,6 +481,7 @@ export default function CropInsuranceBar({
             .axisLeft(y0)
             .ticks(10)
             .tickFormat(function (d) {
+                if (barStatus === 4) return `${ShortFormat(parseInt(d, 10))}`;
                 return `$${ShortFormat(parseInt(d, 10))}`;
             })
             .tickSizeOuter(0);
@@ -721,7 +723,7 @@ export default function CropInsuranceBar({
             }
         };
         const totalPoliciesEarningPremiumText = (totalPoliciesEarningPremiumBar, state) => {
-            const leftTextContent = `Total Policies Earning Premium: $${ToDollarString(
+            const leftTextContent = `Total Policies Earning Premium: ${ToDollarString(
                 totalPoliciesEarningPremiumBar.data()[0].totalPoliciesEarningPremium,
                 0
             )}`;
@@ -764,6 +766,7 @@ export default function CropInsuranceBar({
             .axisLeft(y0)
             .ticks(10)
             .tickFormat(function (d) {
+              if (barStatus === 4 || barStatus === 3) return `${ShortFormat(parseInt(d, 10))}`;
                 return `$${ShortFormat(parseInt(d, 10))}`;
             })
             .tickSizeOuter(0);
@@ -810,7 +813,7 @@ export default function CropInsuranceBar({
             .attr("dy", "1em")
             .style("text-anchor", "start")
             .style("fill", color1)
-            .text("Total Policies Earning Premium ($)")
+            .text("Total Policies Earning Premium")
             .style("font-weight", "400")
             .style("font-size", "0.785rem");
         d3.select(rnBar.current)
