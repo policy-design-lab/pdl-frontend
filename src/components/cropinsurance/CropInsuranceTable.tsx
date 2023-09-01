@@ -58,7 +58,8 @@ function CropInsuranceProgramTable({
     attributes.forEach((attribute) => {
         let sortMethod = compareWithDollarSign;
         if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
-        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") sortMethod = compareWithNumber;
+        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
+            sortMethod = compareWithNumber;
         const json = {
             Header: attribute
                 .replace(/([A-Z])/g, " $1")

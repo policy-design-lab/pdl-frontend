@@ -766,7 +766,7 @@ export default function CropInsuranceBar({
             .axisLeft(y0)
             .ticks(10)
             .tickFormat(function (d) {
-              if (barStatus === 4 || barStatus === 3) return `${ShortFormat(parseInt(d, 10))}`;
+                if (barStatus === 4 || barStatus === 3) return `${ShortFormat(parseInt(d, 10))}`;
                 return `$${ShortFormat(parseInt(d, 10))}`;
             })
             .tickSizeOuter(0);
