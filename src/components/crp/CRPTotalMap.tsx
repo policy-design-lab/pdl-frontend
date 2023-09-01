@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
+import { getValueFromAttr } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -249,18 +250,6 @@ const CRPTotalMap = ({
             </div>
         </div>
     );
-};
-
-const getValueFromAttr = (stateRecord, attribute): string => {
-    let ans = "";
-    Object.keys(stateRecord).forEach((key) => {
-        const match = key.match(/^(.*?)(?=\s*InDollars)/);
-        const extractedKey = match ? match[1] : key;
-        if (extractedKey === attribute) {
-            ans = key;
-        }
-    });
-    return ans;
 };
 
 export default CRPTotalMap;

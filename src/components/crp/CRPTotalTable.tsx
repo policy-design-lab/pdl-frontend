@@ -111,7 +111,15 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ statePerformance }: { statePerformance: any }): JSX.Element {
+function App({
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    statePerformance: any;
+    year: any;
+    stateCodes: any;
+}): JSX.Element {
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
         const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
@@ -128,21 +136,41 @@ function App({ statePerformance }: { statePerformance: any }): JSX.Element {
         return 0;
     }
 
+    function compareNumber(rowA, rowB, id, desc) {
+        const a = Number.parseInt(rowA.values[id].replaceAll(",", ""), 10);
+        const b = Number.parseInt(rowB.values[id].replaceAll(",", ""), 10);
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
+    }
+
     const crpTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
+    statePerformance[year].forEach((value) => {
+        const totalCrp = value.programs.find((s) => s.programName === "Total CRP");
+        let stateName;
+        stateCodes.forEach((sValue) => {
+            if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                stateName = sValue.name;
+            }
+        });
         const newRecord = () => {
             return {
-                state: key,
-                crpBenefit: `$${value[0].totalPaymentInDollars
+                state: stateName,
+                crpBenefit: `$${totalCrp.paymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                percentage: `${totalCrp.paymentInPercentageNationwide.toString()}%`,
+                noContract: `${totalCrp.totalContracts
+                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                    .toString()}`,
+                noFarm: `${totalCrp.totalFarms.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
+                totAcre: `${totalCrp.totalAcre.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`
             };
         };
         crpTableData.push(newRecord());
-    }
+    });
 
     const columns = React.useMemo(
         () => [
@@ -150,7 +178,7 @@ function App({ statePerformance }: { statePerformance: any }): JSX.Element {
                 Header: <Box className="tableHeader">STATES</Box>,
                 accessor: "state",
                 paddingLeft: "5rem",
-                paddingRight: "32rem"
+                paddingRight: "5rem"
             },
             {
                 Header: (
@@ -171,6 +199,51 @@ function App({ statePerformance }: { statePerformance: any }): JSX.Element {
                 Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
                 accessor: "percentage",
                 sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
+            },
+            {
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                    >
+                        NO. OF CONTRACTS
+                    </Box>
+                ),
+                accessor: "noContract",
+                sortType: compareNumber,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
+            },
+            {
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                    >
+                        NO. OF FARMS
+                    </Box>
+                ),
+                accessor: "noFarm",
+                sortType: compareNumber,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
+            },
+            {
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                    >
+                        ACRES
+                    </Box>
+                ),
+                accessor: "totAcre",
+                sortType: compareNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }

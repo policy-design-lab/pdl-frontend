@@ -4,9 +4,9 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
-// import DataTable from "../components/crp/CRPTotalTable";
+import DataTable from "../components/crp/CRPTotalTable";
 import CRPTotalMap from "../components/crp/CRPTotalMap";
-// import CategoryTable from "../components/crp/CategoryTable";
+import CategoryTable from "../components/crp/CategoryTable";
 import CategoryMap from "../components/crp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
@@ -19,6 +19,7 @@ export default function CRPPage(): JSX.Element {
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [subChartData, setSubChartData] = React.useState([{}]);
@@ -44,6 +45,7 @@ export default function CRPPage(): JSX.Element {
 
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
@@ -227,12 +229,51 @@ export default function CRPPage(): JSX.Element {
                             />
                         </Box>
 
-                        <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            flexDirection="column"
+                            sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}
+                        >
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
-                                    <strong>CRP: State Performance by Category</strong>
+                                    <strong>CRP: Category of Practice Performance</strong>
                                 </Typography>
                             </Box>
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            flexDirection="column"
+                            sx={{
+                                mt: 10,
+                                mb: 2,
+                                display: checked === 1 || checked === 2 || checked === 6 ? "block" : "none"
+                            }}
+                        >
+                            <Box display="flex" justifyContent="center">
+                                <Typography variant="h5">
+                                    <strong>CRP: Category of Practice Performance</strong>
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            flexDirection="column"
+                            sx={{
+                                mt: 10,
+                                mb: 2,
+                                display: checked > 2 && checked < 6 ? "block" : "none"
+                            }}
+                        >
+                            <Box display="flex" justifyContent="center">
+                                <Typography variant="h5">
+                                    <strong>CRP Total Continuous: Sub-Category of Practice Performance</strong>
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box>
                             <Typography sx={{ mt: 2 }}>
                                 CRP provides five-year annual contract payments to farmers in return for increasing,
                                 improving or advancing conservation across the entire farm operation.
@@ -268,8 +309,63 @@ export default function CRPPage(): JSX.Element {
 
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
-                                <strong>Performance by State</strong>
+                                <strong>Overall Performance of States</strong>
                             </Typography>
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
+                            <DataTable
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Total General Sign-Up"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Total Continuous Sign-Up"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="CREP Only"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Continuous Non-CREP"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Farmable Wetland"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Grassland"
+                                statePerformance={stateDistributionData}
+                                year={year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                     </Box>
                 </Box>

@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import "../../styles/map.css";
 import HorizontalStackedBar from "../HorizontalStackedBar";
+import { getValueFromAttr } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -216,17 +217,7 @@ const CategoryMap = ({
     const [content, setContent] = useState("");
     const title = `${category} Benefits from ${year}`;
     const quantizeArray: number[] = [];
-    // let categoryRecord = {};
     const zeroPoints = [];
-    // statePerformance[year].forEach((value) => {
-    //     const programRecord = value.programs;
-    //     const ACur = programRecord.find((s) => s.programName === category);
-    //     let key = getValueFromAttr(ACur, attribute);
-    //     key = key !== "" ? key : attribute;
-    //     quantizeArray.push(ACur[key]);
-    //     ACur[key] === 0 && zeroPoints.push(value.state);
-    //     return null;
-    // });
 
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
@@ -252,42 +243,7 @@ const CategoryMap = ({
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
-    // if (category === "Total General Sign-Up") {
-    //     categoryRecord = ACur;
-    // } else if (category === "Total Continuous Sign-Up") {
-    //     categoryRecord = BCur;
-    // } else if (category === "CREP Only") {
-    //     categoryRecord = CCur;
-    // } else if (category === "Continuous Non-CREP") {
-    //     categoryRecord = DCur;
-    // } else if (category === "Farmable Wetland") {
-    //     categoryRecord = ECur;
-    // } else {
-    //     categoryRecord = FCur;
-    // }
-    // Object.values(statePerformance).map((value) => {
-    //     if (Array.isArray(value)) {
-    //         const statuteRecord = value[0].statutes;
-    //         const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-    //         const AArray = ACur.practiceCategories;
-    //         const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-    //         const BArray = BCur.practiceCategories;
-    //         const TotalArray = AArray.concat(BArray);
-    //         if (category === "2018 Practices") {
-    //             categoryRecord = statuteRecord[0];
-    //         } else if (category === "2014 Eligible Land") {
-    //             categoryRecord = statuteRecord[1];
-    //         } else {
-    //             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-    //         }
-    //         if (categoryRecord !== undefined) {
-    //             if (category === "2018 Practices" || category === "2014 Eligible Land")
-    //                 quantizeArray.push(categoryRecord.statutePaymentInDollars);
-    //             else quantizeArray.push(categoryRecord.paymentInDollars);
-    //         }
-    //     }
-    //     return null;
-    // });
+
     const maxValue = Math.max(...quantizeArray);
     const label1 = (maxValue / 5) * 0;
     const label2 = (maxValue / 5) * 1;
@@ -392,18 +348,6 @@ const CategoryMap = ({
             </div>
         </div>
     );
-};
-
-const getValueFromAttr = (stateRecord, attribute): string => {
-    let ans = "";
-    Object.keys(stateRecord).forEach((key) => {
-        const match = key.match(/^(.*?)(?=\s*InDollars)/);
-        const extractedKey = match ? match[1] : key;
-        if (extractedKey === attribute) {
-            ans = key;
-        }
-    });
-    return ans;
 };
 
 export default CategoryMap;
