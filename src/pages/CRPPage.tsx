@@ -98,9 +98,6 @@ export default function CRPPage(): JSX.Element {
             if (wetlandPaymentInDollars === 0) zeroCategory.push("Farmable Wetland");
             grasslandPyamentInDollars = cur7.paymentInDollars;
             if (grasslandPyamentInDollars === 0) zeroCategory.push("Grassland");
-            console.log(totalCRPPaymentInDollars);
-            console.log(generalSignUpPaymentInDollars);
-            console.log(continuousSingUpPaymentInDollars);
 
             setZeroCategories(zeroCategory);
 
