@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add Crop Insurance page and corresponding components for its attributes [#125](https://github.com/policy-design-lab/pdl-frontend/issues/125)
+- Added Average Insured Area In Acres sub-page to Crop Insurance pages [#183](https://github.com/policy-design-lab/pdl-frontend/issues/183)
 
 ### Changed
 
 - Use different title equations for the bar charts in pages under the Net Farmer Benefit section [#179](https://github.com/policy-design-lab/pdl-frontend/issues/179)
+- Adjusted font size of chart headers on Crop Insurance page [#183](https://github.com/policy-design-lab/pdl-frontend/issues/182)
 
 
 ## [0.7.0] - 2023-08-22
