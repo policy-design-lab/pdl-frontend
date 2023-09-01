@@ -144,8 +144,13 @@ function App({
         }
 
         let stateName;
-        const percentageValue =
-            (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) * 100;
+        let percentageValue = 0;
+        if (Number.parseInt(totalCrp.paymentInDollars, 10) > 0) {
+            percentageValue =
+                (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) *
+                100;
+        }
+
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
                 stateName = sValue.name;
@@ -185,14 +190,6 @@ function App({
     function compareWithPercentSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
         const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareNumber(rowA, rowB, id, desc) {
-        const a = Number.parseInt(rowA.values[id].replaceAll(",", ""), 10);
-        const b = Number.parseInt(rowB.values[id].replaceAll(",", ""), 10);
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
