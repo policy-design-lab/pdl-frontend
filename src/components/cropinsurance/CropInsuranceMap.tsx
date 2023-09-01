@@ -37,6 +37,9 @@ const MapChart = ({
     allStates,
     colorScale
 }) => {
+    let attr = 0;
+    if (attribute === "lossRatio") attr = 1;
+    if (attribute === "averageInsuredAreaInAcres") attr = 2;
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -68,7 +71,7 @@ const MapChart = ({
                                         <Box>
                                             <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
 
-                                            {attribute === "lossRatio" ? (
+                                            {attr === 1 ? (
                                                 <Typography sx={{ color: "#3F3F3F" }}>
                                                     {Number(programPayment * 100).toLocaleString(undefined, {
                                                         maximumFractionDigits: 2
@@ -82,9 +85,15 @@ const MapChart = ({
                                                         flexDirection: "row"
                                                     }}
                                                 >
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(programPayment)}
-                                                    </Typography>
+                                                    {attr === 2 ? (
+                                                        <Typography sx={{ color: "#3F3F3F" }}>
+                                                            {ShortFormat(programPayment)}
+                                                        </Typography>
+                                                    ) : (
+                                                        <Typography sx={{ color: "#3F3F3F" }}>
+                                                            ${ShortFormat(programPayment)}
+                                                        </Typography>
+                                                    )}
                                                 </Box>
                                             )}
                                         </Box>
@@ -213,16 +222,32 @@ const CropInsuranceMap = ({
                         initRatioSmall={0.5}
                     />
                 ) : (
-                    <DrawLegend
-                        isRatio={false}
-                        colorScale={colorScale}
-                        title={titleElement({ attribute, year })}
-                        programData={quantizeArray}
-                        prepColor={mapColor}
-                        emptyState={zeroPoints}
-                        initRatioLarge={0.6}
-                        initRatioSmall={0.5}
-                    />
+                    <div>
+                        {attribute === "averageInsuredAreaInAcres" ? (
+                            <DrawLegend
+                                isRatio={false}
+                                notDollar
+                                colorScale={colorScale}
+                                title={titleElement({ attribute, year })}
+                                programData={quantizeArray}
+                                prepColor={mapColor}
+                                emptyState={zeroPoints}
+                                initRatioLarge={0.6}
+                                initRatioSmall={0.5}
+                            />
+                        ) : (
+                            <DrawLegend
+                                isRatio={false}
+                                colorScale={colorScale}
+                                title={titleElement({ attribute, year })}
+                                programData={quantizeArray}
+                                prepColor={mapColor}
+                                emptyState={zeroPoints}
+                                initRatioLarge={0.6}
+                                initRatioSmall={0.5}
+                            />
+                        )}
+                    </div>
                 )}
             </Box>
             <MapChart

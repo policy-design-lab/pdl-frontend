@@ -33,5 +33,10 @@ export const menu = [
     {
         icon: "",
         title: "Total Policies Earning Premium"
+    },
+
+    {
+        icon: "",
+        title: "Average Insured Area in Acres"
     }
 ];

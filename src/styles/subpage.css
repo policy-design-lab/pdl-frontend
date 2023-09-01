@@ -2,7 +2,7 @@
   box-sizing: border-box;
   width: 300px;
   height: auto;
-  max-height: 95vh;
+  max-height: 100vh;
   overflow-x: hidden;
   margin-bottom: 1em;
   padding-bottom: 1em;
@@ -34,7 +34,6 @@
   }
 
   .stateTitleContainer .stateTitle {
-    font-weight: 700;
     margin-top: 0.5em;
   }
 }
@@ -64,7 +63,6 @@
   }
 
   .stateTitleContainer .stateTitle {
-    font-weight: 700;
     margin-top: 0.5em;
   }
 

@@ -41,6 +41,10 @@ function CropInsuranceProgramTable({
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr === "lossRatio") {
                 newRecord[attr] = `${value.toString()}%`;
+            } else if (attr === "averageInsuredAreaInAcres") {
+                newRecord[attr] = `${
+                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+                }`;
             } else {
                 newRecord[attr] = `$${
                     value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
@@ -52,6 +56,9 @@ function CropInsuranceProgramTable({
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     attributes.forEach((attribute) => {
+        let sortMethod = compareWithDollarSign;
+        if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
+        if (attribute === "averageInsuredAreaInAcres") sortMethod = compareWithNumber;
         const json = {
             Header: attribute
                 .replace(/([A-Z])/g, " $1")
@@ -61,7 +68,7 @@ function CropInsuranceProgramTable({
                 .join(" ")
                 .toUpperCase(),
             accessor: attribute,
-            sortType: attribute === "lossRatio" ? compareWithPercentSign : compareWithDollarSign
+            sortType: sortMethod
         };
         columnPrep.push(json);
     });

@@ -126,7 +126,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -231,7 +231,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -336,7 +336,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -441,7 +441,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -545,7 +545,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -763,7 +763,7 @@ export default function CropInsurancePage(): JSX.Element {
                             }}
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h4">
+                                <Typography className="stateTitle" variant="h6">
                                     Comparison by States
                                 </Typography>
                                 <ToggleButtonGroup
@@ -817,6 +817,62 @@ export default function CropInsurancePage(): JSX.Element {
                                 </Box>
                             </Grid>
                         </Box>
+                    </Box>
+                    {/* Average Acres Insured Section */}
+                    <Box
+                        component="div"
+                        className="fullWidthMainContent"
+                        sx={{ display: checked !== "4" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <CropInsuranceMap
+                                program="Crop Insurance"
+                                attribute="averageInsuredAreaInAcres"
+                                year="2018-2022"
+                                mapColor={mapColor}
+                                statePerformance={stateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Grid container justifyContent="center">
+                            <Grid item xs={12}>
+                                <Box
+                                    className="chartArea narrowChartArea"
+                                    component="div"
+                                    ref={cropInsuranceDiv}
+                                    sx={{
+                                        width: "100%",
+                                        m: "auto"
+                                    }}
+                                >
+                                    <CropInsuranceProgramTable
+                                        tableTitle="Average Insured Area in Acres (2018-2022)"
+                                        program="Crop Insurance"
+                                        attributes={["averageInsuredAreaInAcres"]}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodesData}
+                                        CropInsuranceData={stateDistributionData}
+                                        year="2018-2022"
+                                        colors={[]}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Box>
             ) : (

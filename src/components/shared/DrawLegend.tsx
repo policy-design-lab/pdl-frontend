@@ -10,6 +10,7 @@ import "../../styles/drawLegend.css";
  */
 export default function DrawLegend({
     isRatio = false,
+    notDollar = false,
     colorScale,
     title,
     programData,
@@ -19,6 +20,7 @@ export default function DrawLegend({
     initRatioSmall
 }: {
     isRatio: boolean;
+    notDollar: boolean;
     colorScale: d3.ScaleThreshold<number, string>;
     title: React.ReactElement;
     programData: number[];
@@ -88,10 +90,10 @@ export default function DrawLegend({
                         const sum = data_distribution.slice(0, i).reduce((acc, curr) => acc + curr, 0);
                         return margin + svgWidth * sum;
                     })
-                    .attr("y", (d, index) => {
+                    .attr("y", () => {
                         return 20;
                     })
-                    .attr("width", (d, index) => {
+                    .attr("width", (d) => {
                         return d * svgWidth;
                     })
                     .attr("height", 10)
@@ -122,7 +124,7 @@ export default function DrawLegend({
                             if (isRatio) {
                                 return `${Math.round(cut_points[i] * 100)}%`;
                             }
-                            if (i === 0) {
+                            if (i === 0 && !notDollar) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
                                 return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
@@ -146,7 +148,7 @@ export default function DrawLegend({
                             if (isRatio) {
                                 return `${Math.round(cut_points[i] * 100)}%`;
                             }
-                            if (i === 0) {
+                            if (i === 0 && !notDollar) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
                                 return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
