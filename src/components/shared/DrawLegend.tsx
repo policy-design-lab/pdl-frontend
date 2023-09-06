@@ -9,6 +9,8 @@ import "../../styles/drawLegend.css";
  * The programData parameter is the array of all data points that will be used to draw the legend.
  */
 export default function DrawLegend({
+    isRatio = false,
+    notDollar = false,
     colorScale,
     title,
     programData,
@@ -17,6 +19,8 @@ export default function DrawLegend({
     initRatioLarge,
     initRatioSmall
 }: {
+    isRatio: boolean;
+    notDollar: boolean;
     colorScale: d3.ScaleThreshold<number, string>;
     title: React.ReactElement;
     programData: number[];
@@ -43,6 +47,7 @@ export default function DrawLegend({
             const customScale = colorScale.domain();
             cut_points.push(Math.min(...programData));
             cut_points = cut_points.concat(customScale);
+
             const legendRectX: number[] = [];
             if (Math.min(...programData) !== Infinity && Math.max(...programData) !== Infinity) {
                 baseSVG.selectAll("text").remove();
@@ -85,10 +90,10 @@ export default function DrawLegend({
                         const sum = data_distribution.slice(0, i).reduce((acc, curr) => acc + curr, 0);
                         return margin + svgWidth * sum;
                     })
-                    .attr("y", (d, index) => {
+                    .attr("y", () => {
                         return 20;
                     })
-                    .attr("width", (d, index) => {
+                    .attr("width", (d) => {
                         return d * svgWidth;
                     })
                     .attr("height", 10)
@@ -116,7 +121,10 @@ export default function DrawLegend({
                             return i === 0 ? d : d - margin / 4;
                         })
                         .text((d, i) => {
-                            if (i === 0) {
+                            if (isRatio) {
+                                return `${Math.round(cut_points[i] * 100)}%`;
+                            }
+                            if (i === 0 && !notDollar) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
                                 return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }
@@ -137,7 +145,10 @@ export default function DrawLegend({
                             return i === 0 ? d : d - margin / 4;
                         })
                         .text((d, i) => {
-                            if (i === 0) {
+                            if (isRatio) {
+                                return `${Math.round(cut_points[i] * 100)}%`;
+                            }
+                            if (i === 0 && !notDollar) {
                                 const res = ShortFormat(Math.round(cut_points[i]), i);
                                 return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                             }

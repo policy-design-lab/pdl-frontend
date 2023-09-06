@@ -1,24 +1,79 @@
-import { Typography } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
-import Box from "@mui/material/Box";
-import { compareWithAlphabetic, compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
+import { Grid, TableContainer, Typography, Box } from "@mui/material";
+import {
+    compareWithNumber,
+    compareWithAlphabetic,
+    compareWithDollarSign,
+    compareWithPercentSign,
+    sortByDollars
+} from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 
-function SnapTable({
-    SnapData,
+function CropInsuranceProgramTable({
+    tableTitle,
+    program,
+    attributes,
     stateCodes,
-    yearKey,
-    color1,
-    color2
-}: {
-    SnapData: any;
-    stateCodes: any;
-    yearKey: string;
-    color1: string;
-    color2: string;
+    CropInsuranceData,
+    year,
+    colors,
+    skipColumns
 }): JSX.Element {
+    const resultData = [];
+    const hashmap = {};
+    // eslint-disable-next-line no-restricted-syntax
+    CropInsuranceData[year].forEach((stateData) => {
+        const state = stateData.state;
+        let programData = null;
+        programData = stateData.programs.filter((p) => {
+            return p.programName.toString() === program;
+        });
+        hashmap[state] = {};
+        attributes.forEach((attribute) => {
+            const attributeData = programData[0][attribute];
+            hashmap[state][attribute] = attributeData;
+        });
+    });
+    Object.keys(hashmap).forEach((s) => {
+        const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
+        Object.entries(hashmap[s]).forEach(([attr, value]) => {
+            if (attr === "lossRatio") {
+                newRecord[attr] = `${value.toString()}%`;
+            } else if (attr === "averageInsuredAreaInAcres") {
+                newRecord[attr] = `${
+                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+                }`;
+            } else {
+                newRecord[attr] = `$${
+                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+                }`;
+            }
+        });
+        resultData.push(newRecord);
+    });
+    const columnPrep = [];
+    columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
+    attributes.forEach((attribute) => {
+        let sortMethod = compareWithDollarSign;
+        if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
+        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
+            sortMethod = compareWithNumber;
+        const json = {
+            Header: attribute
+                .replace(/([A-Z])/g, " $1")
+                .trim()
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+                .toUpperCase(),
+            accessor: attribute,
+            sortType: sortMethod
+        };
+        columnPrep.push(json);
+    });
+    const columns = React.useMemo(() => columnPrep, []);
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -53,18 +108,12 @@ function SnapTable({
                 padding-right: 10em;
             }
 
-            td[class$="cell1"] {
-                background-color: ${color1};
-            }
-
-            td[class$="cell3"] {
-                background-color: ${color2};
-            }
-
             td[class$="cell1"],
             td[class$="cell2"],
             td[class$="cell3"],
-            td[class$="cell4"] {
+            td[class$="cell4"],
+            td[class$="cell5"],
+            td[class$="cell6"] {
                 text-align: right;
             }
 
@@ -78,7 +127,6 @@ function SnapTable({
                 }
             }
         }
-
         .pagination {
             margin-top: 1.5em;
         }
@@ -96,66 +144,62 @@ function SnapTable({
             }
         }
     `;
-    const resultData = [];
-    // eslint-disable-next-line no-restricted-syntax
-    SnapData[yearKey].forEach((d) => {
-        const newRecord = () => {
-            return {
-                state: stateCodes[d.state],
-                snapCost: `$${d.totalPaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
-                averageMonthlyParticipation: `${d.averageMonthlyParticipation
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`,
-                paymentPercentage: `${d.totalPaymentInPercentageNationwide.toString()}%`,
-                avgMonthlyPercentage: `${d.averageMonthlyParticipationInPercentageNationwide.toString()}%`
-            };
-        };
-        resultData.push(newRecord());
-    });
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: "STATE",
-                accessor: "state",
-                sortType: compareWithAlphabetic
-            },
-            {
-                Header: "SNAP COSTS",
-                accessor: "snapCost",
-                sortType: compareWithDollarSign
-            },
-
-            {
-                Header: "COSTS PCT. NATIONWIDE",
-                accessor: "paymentPercentage",
-                sortType: compareWithPercentSign
-            },
-            {
-                Header: "AVG. MONTHLY PARTICIPATION",
-                accessor: "averageMonthlyParticipation",
-                sortType: compareWithPercentSign
-            },
-            {
-                Header: "PARTICIPATION PCT. NATIONWIDE",
-                accessor: "avgMonthlyPercentage",
-                sortType: compareWithPercentSign
-            }
-        ],
-        []
-    );
     return (
-        <Box display="flex" justifyContent="center">
-            <Styles>
-                <Table
-                    columns={columns}
-                    data={resultData}
-                    initialState={{
-                        pageSize: 5,
-                        pageIndex: 0
+        <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
+            <Styles value={attributes[0]}>
+                <Grid
+                    container
+                    columns={{ xs: 12 }}
+                    className="stateChartTableContainer"
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between"
                     }}
-                />
+                >
+                    <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
+                        <Box id="cropInsuranceTableHeader" sx={{ width: "100%" }}>
+                            <Typography
+                                id="cropInsuranceBarHeader"
+                                variant="h6"
+                                sx={{
+                                    fontWeight: 400,
+                                    paddingLeft: 0,
+                                    fontSize: "1.2em",
+                                    color: "#212121",
+                                    marginBottom: 4,
+                                    paddingTop: 0.6
+                                }}
+                            >
+                                Comparing {tableTitle}
+                            </Typography>
+                            {attributes.includes("lossRatio") ? (
+                                <Box display="flex" justifyContent="center" style={{ marginTop: "0.5em" }}>
+                                    <Typography variant="h5" sx={{ mb: 1, fontSize: "1.2em" }}>
+                                        Loss Ratio = Total Indemnities / Total Premium
+                                    </Typography>
+                                </Box>
+                            ) : null}
+                            {attributes.includes("averageInsuredAreaInAcres") ? (
+                                <Box display="flex" justifyContent="start">
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
+                                        policies)
+                                    </Typography>
+                                </Box>
+                            ) : null}
+                        </Box>
+                    </Grid>
+                </Grid>
+                <TableContainer sx={{ width: "100%" }}>
+                    <Table
+                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
+                        data={resultData}
+                        initialState={{
+                            pageSize: 5,
+                            pageIndex: 0
+                        }}
+                    />
+                </TableContainer>
             </Styles>
         </Box>
     );
@@ -190,14 +234,15 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         usePagination
     );
     return (
-        <>
-            <table {...getTableProps()}>
+        <div style={{ width: "100%" }}>
+            <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
                         <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
                                 // Add the sorting props to control sorting.
                                 <th
+                                    className={column.render("Header").replace(/\s/g, "")}
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                     {...column.getHeaderProps({
@@ -229,9 +274,14 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>
-                                    {row.cells.map((cell, item) => {
+                                    {row.cells.map((cell, j) => {
                                         return (
-                                            <td className={`cell${item}`} key={cell.id} {...cell.getCellProps()}>
+                                            <td
+                                                className={`cell${j}`}
+                                                key={cell.id}
+                                                {...cell.getCellProps()}
+                                                style={{ width: "100%", whiteSpace: "nowrap" }}
+                                            >
                                                 {cell.render("Cell")}
                                             </td>
                                         );
@@ -271,7 +321,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                                 let p = e.target.value ? Number(e.target.value) - 1 : 0;
                                 if (p > pageOptions.length) p = pageOptions.length - 1;
                                 if (p < 0) p = 0;
-                                gotoPage(page);
+                                gotoPage(p);
                             }}
                             style={{ width: "3em" }}
                         />{" "}
@@ -282,9 +332,9 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                             setPageSize(Number(e.target.value));
                         }}
                     >
-                        {[10, 25, 40, 51].map((pSize) => (
-                            <option key={pSize} value={pSize}>
-                                Show {pSize}
+                        {[10, 25, 40, 51].map((p) => (
+                            <option key={p} value={p}>
+                                Show {p}
                             </option>
                         ))}
                     </select>
@@ -302,8 +352,8 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                     )}
                 </Box>
             </Box>
-        </>
+        </div>
     );
 }
 
-export default SnapTable;
+export default CropInsuranceProgramTable;

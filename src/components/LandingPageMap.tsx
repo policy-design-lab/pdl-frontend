@@ -97,11 +97,11 @@ const MapChart = (props) => {
             break;
         case "Crop Insurance":
             searchKey = "Crop Insurance Total";
-            color1 = "#A1622F";
-            color2 = "#DCC287";
-            color3 = "#E3E3E3";
-            color4 = "#89CBC1";
-            color5 = "#2C8472";
+            color1 = "#C26C06";
+            color2 = "#CCECE6";
+            color3 = "#66C2A4";
+            color4 = "#238B45";
+            color5 = "#005C24";
             legendTitle = (
                 <div>
                     <Box display="flex" flexDirection="column">

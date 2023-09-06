@@ -1,0 +1,19 @@
+#cropInsuranceTableHeader{
+  padding-bottom: 1.5em;
+}
+#totalPremium .MuiSvgIcon-root,
+#bothBar .MuiSvgIcon-root {
+  fill: #662500
+}
+#totalPremium .Mui-checked,
+#bothBar .Mui-checked {
+  color: #662500
+}
+#farmerPaidPremium .Mui-checked,
+#totalPoliciesEarningPremium .Mui-checked {
+  color: #B65700;
+}
+#premiumSubsidy .Mui-checked,
+#totalIndemnities .Mui-checked {
+  color: #E2B12C;
+}
