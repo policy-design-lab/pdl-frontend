@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adjusted font size of chart headers on Crop Insurance page [#182](https://github.com/policy-design-lab/pdl-frontend/issues/182)
 - Adjusted '$' sign for some sub-pages of Crop Insurance page [#184](https://github.com/policy-design-lab/pdl-frontend/issues/184)
 - Adjusted menu height of Crop Insurance page [#185](https://github.com/policy-design-lab/pdl-frontend/issues/185)
+- Added explanation to the Insured Acres subpage of Crop Insurance page [#186](https://github.com/policy-design-lab/pdl-frontend/issues/186)
 
 
 ## [0.7.0] - 2023-08-22

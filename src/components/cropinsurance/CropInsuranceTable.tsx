@@ -179,6 +179,14 @@ function CropInsuranceProgramTable({
                                     </Typography>
                                 </Box>
                             ) : null}
+                            {attributes.includes("averageInsuredAreaInAcres") ? (
+                                <Box display="flex" justifyContent="start">
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
+                                        policies)
+                                    </Typography>
+                                </Box>
+                            ) : null}
                         </Box>
                     </Grid>
                 </Grid>

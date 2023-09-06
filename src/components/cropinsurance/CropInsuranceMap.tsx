@@ -271,6 +271,30 @@ const CropInsuranceMap = ({
     );
 };
 const titleElement = ({ attribute, year }): JSX.Element => {
+    if (attribute === "averageInsuredAreaInAcres")
+        return (
+            <div>
+                {" "}
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
+                    </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="subtitle2" sx={{ color: "#AAA" }}>
+                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF) policies)
+                    </Typography>
+                </Box>
+            </div>
+        );
     return (
         <Typography noWrap variant="h6">
             <strong>
