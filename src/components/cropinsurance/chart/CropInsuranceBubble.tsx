@@ -568,7 +568,7 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
             </Box>
             <Box display="flex" justifyContent="center">
                 <Typography variant="h6" sx={{ mb: 4, fontSize: "0.9em" }}>
-                    <i>(IF Total Indemnities = Farmer Paid Premium, Net Farmer Benefits = $0)</i>
+                    <i>(If Total Indemnities = Farmer Paid Premium, Net Farmer Benefits = $0)</i>
                 </Typography>
             </Box>
             <Styles>
