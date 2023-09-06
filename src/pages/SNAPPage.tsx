@@ -367,6 +367,7 @@ export default function SNAPPage(): JSX.Element {
                                         {data ? (
                                             <SnapTable
                                                 SnapData={data}
+                                                stateCodes={stateCodes}
                                                 yearKey={yearKey}
                                                 w={window.innerWidth * widthPercentage}
                                                 h={window.innerWidth * heightPercentage}

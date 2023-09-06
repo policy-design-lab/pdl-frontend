@@ -30,8 +30,6 @@ export default function TitleIPage(): JSX.Element {
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
-    // const [initTreeMapWidthRatio, setInitTreeMapWidthRatio] = React.useState(0.5);
-    const [chartData, setChartData] = React.useState({});
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
@@ -46,10 +44,6 @@ export default function TitleIPage(): JSX.Element {
         getJsonDataFromUrl(statecode_url).then((response) => {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
-        });
-        const subprograms_url = `${config.apiUrl}/programs/commodities/subprograms`;
-        getJsonDataFromUrl(subprograms_url).then((response) => {
-            setChartData(response);
         });
         const statedistribution_url = `${config.apiUrl}/programs/commodities/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
@@ -66,7 +60,6 @@ export default function TitleIPage(): JSX.Element {
         }
     };
     const defaultTheme = createTheme();
-    // }
     function prepData(program, subprogram, data, year) {
         const organizedData: Record<string, unknown>[] = [];
         const originalData: Record<string, unknown>[] = [];
@@ -112,7 +105,6 @@ export default function TitleIPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(chartData).length > 0 &&
             Object.keys(stateDistributionData).length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
