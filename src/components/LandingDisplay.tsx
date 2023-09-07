@@ -86,7 +86,7 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
             bodyText =
                 "Crop Insurance provides farmers with the option to purchase insurance policies on the acres of crops they plant to help manage the risks of farming, including to indemnify against losses in yields, crop or whole farm revenue, crop margins and other risks. The program also offsets the cost of the insurance policies through premium subsidies. In addition, the program provides Administrative and Operating (A&O) subsidies to the private crop insurance companies who provide federal crop insurance to farmers. The map shows the total farmer net benefitbenefit of the crop insurance program by state from 2018-2022.";
 
-            route = "/";
+            route = "/cropinsurance";
             buttonText = "Explore Maps of Crop Insurance";
             button = (
                 <Button
@@ -98,7 +98,8 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
                         borderRadius: 0
                     }}
                     disableElevation
-                    onClick={handleAlertOpen}
+                    component={Link}
+                    to={route}
                 >
                     <Typography variant="subtitle1">
                         <strong>{buttonText}</strong>

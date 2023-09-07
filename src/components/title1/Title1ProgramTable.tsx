@@ -10,6 +10,7 @@ import {
     sortByDollars
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
+import { ToDollarString } from "../shared/ConvertionFormats";
 
 function Title1ProgramTable({
     tableTitle,
@@ -62,9 +63,12 @@ function Title1ProgramTable({
                 return value.paymentInPercentageNationwide !== undefined
                     ? {
                           state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                          paymentInDollars: `$${value.paymentInDollars
-                              .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                              .toString()}`,
+                          paymentInDollars: `$${
+                              value.paymentInDollars
+                                  .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                                  .toString()
+                                  .split(".")[0]
+                          }`,
                           paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
                           paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
                           averageAreaInAcres:
@@ -92,18 +96,24 @@ function Title1ProgramTable({
             if (program === "Total Commodities Programs") {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${value.programPaymentInDollars
-                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                        .toString()}`,
+                    programPaymentInDollars: `$${
+                        value.programPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
                     paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
                 };
             }
             return value.programPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: `$${value.programPaymentInDollars
-                          .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                          .toString()}`,
+                      programPaymentInDollars: `$${
+                          value.programPaymentInDollars
+                              .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                              .toString()
+                              .split(".")[0]
+                      }`,
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0
                               ? "0"
@@ -289,9 +299,13 @@ function Title1ProgramTable({
             }
         }
 
-        @media screen and (max-width: 1680px) {
+        @media screen and (max-width: 1790px) {
             table {
                 font-size: 0.9em;
+            }
+            table th,
+            table td {
+                padding: 1em;
             }
             td[class$="cell${paymentsIndex}"],
             td[class$="cell${averageAreaInAcresIndex}"],
@@ -342,9 +356,8 @@ function Title1ProgramTable({
                                     }}
                                 >
                                     <i>
-                                        The payments are calculated as the total of the data from 2018-2022; The base
-                                        acres and payment recipients are calculated as the average of the data from
-                                        2019-2022.
+                                        The payments,base acres and payment recipients are calculated as the total of
+                                        the data from 2014-2021. 2022 payments for Title I have not yet been paid.
                                     </i>
                                 </Typography>
                             ) : (

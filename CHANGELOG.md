@@ -6,11 +6,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add Crop Insurance page and corresponding components for its attributes [#125](https://github.com/policy-design-lab/pdl-frontend/issues/125)
+- Added Average Insured Area In Acres sub-page to Crop Insurance pages [#183](https://github.com/policy-design-lab/pdl-frontend/issues/183)
+
+### Changed
+
+- Use different title equations for the bar charts in pages under the Net Farmer Benefit section [#179](https://github.com/policy-design-lab/pdl-frontend/issues/179)
+- Adjusted font size of chart headers on Crop Insurance page [#182](https://github.com/policy-design-lab/pdl-frontend/issues/182)
+- Adjusted '$' sign for some sub-pages of Crop Insurance page [#184](https://github.com/policy-design-lab/pdl-frontend/issues/184)
+- Adjusted menu height of Crop Insurance page [#185](https://github.com/policy-design-lab/pdl-frontend/issues/185)
+- Added explanation to the Insured Acres subpage of Crop Insurance page [#186](https://github.com/policy-design-lab/pdl-frontend/issues/186)
+
+
+## [0.7.0] - 2023-08-22
+
 ### Changed
 
 - Landing page clean up for use API endpoint by removing redundant calls [#148](https://github.com/policy-design-lab/pdl-frontend/issues/148)
 - CSP page uses API endpoint instead of local json file [#149](https://github.com/policy-design-lab/pdl-frontend/issues/149)
 - SNAP page landing page uses API endpoint following the pattern in Landing Page [#166](https://github.com/policy-design-lab/pdl-frontend/issues/166)
+- Updated the year related labels on landing page and title 1 page to reflect changes of new title 1 API [#168](https://github.com/policy-design-lab/pdl-frontend/issues/168)
+- Updated the landing page map tab to include a label to explain that the top-line numbers are not finalized [#171](https://github.com/policy-design-lab/pdl-frontend/issues/171)
+- Added '(Numbers have not yet been finalized)' label on landing page top line tab and updated several details on Title 1 page [#172](https://github.com/policy-design-lab/pdl-frontend/issues/172)
+- Changed the "Total Commodities Programs" on the Title I page menu to "Total Commodities Programs, Subtitle A" [#176](https://github.com/policy-design-lab/pdl-frontend/issues/176)
 
 ## [0.6.0] - 2023-07-18
 
@@ -119,6 +139,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[0.7.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.1...0.6.0
 [0.5.1]: https://github.com/policy-design-lab/pdl-frontend/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.4.0...0.5.0

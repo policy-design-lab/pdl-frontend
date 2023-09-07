@@ -54,9 +54,14 @@ const MapChart = (props) => {
             color4 = "#1B9577";
             color5 = "#005A45";
             legendTitle = (
-                <Typography noWrap variant="h6">
-                    Total Farm Bill Benefits from <strong>2018 - 2022</strong>
-                </Typography>
+                <Box>
+                    <Typography noWrap variant="h6">
+                        Total Farm Bill Benefits from <strong>2018 - 2022</strong>
+                    </Typography>
+                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                        <i>2022 payments for Title I have not yet been paid</i>
+                    </Typography>
+                </Box>
             );
             break;
         case "Title I: Commodities":
@@ -67,9 +72,14 @@ const MapChart = (props) => {
             color4 = "#D95F0E";
             color5 = "#993404";
             legendTitle = (
-                <Typography noWrap variant="h6">
-                    Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
-                </Typography>
+                <Box>
+                    <Typography noWrap variant="h6">
+                        Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
+                    </Typography>
+                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
+                        <i>2022 payments for Title I have not yet been paid</i>
+                    </Typography>
+                </Box>
             );
             break;
         case "Title II: Conservation":
@@ -87,11 +97,11 @@ const MapChart = (props) => {
             break;
         case "Crop Insurance":
             searchKey = "Crop Insurance Total";
-            color1 = "#A1622F";
-            color2 = "#DCC287";
-            color3 = "#E3E3E3";
-            color4 = "#89CBC1";
-            color5 = "#2C8472";
+            color1 = "#C26C06";
+            color2 = "#CCECE6";
+            color3 = "#66C2A4";
+            color4 = "#238B45";
+            color5 = "#005C24";
             legendTitle = (
                 <div>
                     <Box display="flex" flexDirection="column">
@@ -139,7 +149,8 @@ const MapChart = (props) => {
                     programData={allPrograms.filter((d) => d.State !== "Total").map((d) => d[searchKey])}
                     prepColor={[color1, color2, color3, color4, color5]}
                     emptyState={zeroPoints}
-                    initWidth={window.innerWidth > 1679 ? window.innerWidth * 0.75 : window.innerWidth * 0.8}
+                    initRatioLarge={0.75}
+                    initRatioSmall={0.8}
                 />
             </Box>
             <ComposableMap projection="geoAlbersUsa">
@@ -262,18 +273,27 @@ const MapChart = (props) => {
                                                                         record["Fiscal Year"]
                                                                     }
                                                                 >
-                                                                    {record["Fiscal Year"]}:{" "}
-                                                                    {Number(record.Amount / 1000000.0) >= 0
-                                                                        ? `$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`
-                                                                        : `-$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`}
+                                                                    {String(record["Fiscal Year"]) === "2022" &&
+                                                                    title.includes("Title I") ? (
+                                                                        <div>2022: Not Available</div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            {record["Fiscal Year"]}:{" "}
+                                                                            {Number(record.Amount / 1000000.0) >= 0
+                                                                                ? `$${Number(
+                                                                                      Math.abs(record.Amount) /
+                                                                                          1000000.0
+                                                                                  ).toLocaleString(undefined, {
+                                                                                      maximumFractionDigits: 2
+                                                                                  })}M`
+                                                                                : `-$${Number(
+                                                                                      Math.abs(record.Amount) /
+                                                                                          1000000.0
+                                                                                  ).toLocaleString(undefined, {
+                                                                                      maximumFractionDigits: 2
+                                                                                  })}M`}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             ))}
                                                         </Typography>
