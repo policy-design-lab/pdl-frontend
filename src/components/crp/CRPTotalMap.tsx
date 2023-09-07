@@ -206,7 +206,7 @@ const CRPTotalMap = ({
             <div>
                 <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     <HorizontalStackedBar
-                        title={`Total CRP Benefits from ${year}`}
+                        title={`CRP Total Benefits from ${year}`}
                         color1="#F0F9E8"
                         color2="#BAE4BC"
                         color3="#7BCCC4"

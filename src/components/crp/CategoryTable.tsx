@@ -144,12 +144,12 @@ function App({
         }
 
         let stateName;
-        let percentageValue = 0;
-        if (Number.parseInt(totalCrp.paymentInDollars, 10) > 0) {
-            percentageValue =
-                (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) *
-                100;
-        }
+        // let percentageValue = 0;
+        // if (Number.parseInt(totalCrp.paymentInDollars, 10) > 0) {
+        //     percentageValue =
+        //         (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) *
+        //         100;
+        // }
 
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
@@ -162,18 +162,13 @@ function App({
                 categoryBenefit: `$${categoryCrp.paymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                categoryPercentage: `${percentageValue
+                categoryPercentage: `${categoryCrp.paymentInPercentageWithinState
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}%`,
                 crpBenefit: `$${totalCrp.paymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
                 percentage: `${categoryCrp.paymentInPercentageNationwide.toString()}%`
-                // noContract: `${totalCrp.totalContracts
-                //     .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                //     .toString()}`,
-                // noFarm: `${totalCrp.totalFarms.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                // totAcre: `${totalCrp.totalAcre.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`
             };
         };
         crpTableData.push(newRecord());

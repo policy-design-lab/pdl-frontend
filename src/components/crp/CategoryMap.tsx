@@ -215,7 +215,7 @@ const CategoryMap = ({
     stateCodes: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    const title = `${category} Benefits from ${year}`;
+    let title = `CRP ${category} from ${year}`;
     const quantizeArray: number[] = [];
     const zeroPoints = [];
 
@@ -231,6 +231,7 @@ const CategoryMap = ({
         } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
             const contSingUp = programRecord.find((s) => s.programName === "Total Continuous Sign-Up");
             const subPrograms = contSingUp.subPrograms;
+            title = `CRP Total Continuous, ${category} from ${year}`;
             subPrograms.forEach((subValue) => {
                 if (subValue.programName === category) {
                     ACur = subValue;
