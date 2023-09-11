@@ -275,8 +275,11 @@ export default function CRPPage(): JSX.Element {
                         </Box>
                         <Box>
                             <Typography sx={{ mt: 2 }}>
-                                CRP provides five-year annual contract payments to farmers in return for increasing,
-                                improving or advancing conservation across the entire farm operation.
+                                CRP provides annual rental payments to landowners in return for conservation practices
+                                that remove the acres from production and implements conservation cover (e.g., grasses
+                                and/or trees). CRP contracts are for 10 or 15 years and enrolled land can be an entire
+                                field or portions of a field (e.g., grass waterways or buffers). CRP spending will be
+                                visualized using the following categories.
                             </Typography>
                         </Box>
 
