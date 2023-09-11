@@ -127,7 +127,7 @@ export default function CRPPage(): JSX.Element {
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
-                            subtext="Conversation Stewardship Program (CRP)"
+                            subtext="Conversation Reserve Program (CRP)"
                         />
                     </Box>
                     <Drawer
