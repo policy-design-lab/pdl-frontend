@@ -30,8 +30,8 @@ const Styles = styled.div`
         td {
             margin: 0;
             padding: 0rem;
-            padding-left: 3rem;
-            padding-right: 3rem;
+            padding-left: 5rem;
+            padding-right: 5rem;
             border-bottom: 1px solid #e4ebe7;
             border-right: none;
 
