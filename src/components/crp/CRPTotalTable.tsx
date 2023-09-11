@@ -184,9 +184,9 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
                     >
-                        CRP BENEFITS
+                        TOTAL CRP BENEFITS
                     </Box>
                 ),
                 accessor: "crpBenefit",
@@ -196,7 +196,14 @@ function App({
                 }
             },
             {
-                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                    >
+                        PCT. NATIONWIDE <br /> (as of Sep. 2022)
+                    </Box>
+                ),
                 accessor: "percentage",
                 sortType: compareWithPercentSign,
                 Cell: function styleCells(row) {
@@ -207,9 +214,9 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
                     >
-                        NO. OF CONTRACTS
+                        NO. OF CONTRACTS <br /> (as of Sep. 2022)
                     </Box>
                 ),
                 accessor: "noContract",
@@ -222,9 +229,9 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
                     >
-                        NO. OF FARMS
+                        NO. OF FARMS <br /> (as of Sep. 2022)
                     </Box>
                 ),
                 accessor: "noFarm",
@@ -237,9 +244,9 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
                     >
-                        ACRES
+                        ACRES <br /> (as of Sep. 2022)
                     </Box>
                 ),
                 accessor: "totAcre",
