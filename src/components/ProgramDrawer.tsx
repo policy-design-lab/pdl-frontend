@@ -56,7 +56,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                 if (zeroCategory && zeroCategory.includes(category)) {
                     return (
                         <ListItem key={category} disablePadding>
-                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8 }}>
                                 <Radio
                                     edge="start"
                                     disabled

@@ -52,11 +52,10 @@ export default function DrawLegend({
             if (Math.min(...programData) !== Infinity && Math.max(...programData) !== Infinity) {
                 baseSVG.selectAll("text").remove();
                 baseSVG.selectAll("rect").remove();
-                const d_distribution: number[] = [];
+                const data_distribution: number[] = [];
                 const cutCount = Array.from({ length: cut_points.length - 1 }, (v, i) => 1 + i);
-
                 cutCount.forEach((i) => {
-                    d_distribution.push(
+                    data_distribution.push(
                         programData.filter((d) => d >= cut_points[i - 1] && d < cut_points[i]).length /
                             programData.length
                     );
@@ -66,25 +65,12 @@ export default function DrawLegend({
                     //     .reduce((accumulator, currentValue) => accumulator + currentValue, 0) /
                     //     programData.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
                 });
-                d_distribution.push(
+                data_distribution.push(
                     programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
                 );
-                // Leave following part as the backup of solution 2.
-                // data_distribution.push(
-                //     programData
-                //         .filter((d) => d >= cut_points[cut_points.length - 1])
-                //         .reduce((accumulator, currentValue) => accumulator + currentValue, 0) /
-                //         programData.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-                // );
-                const data_distribution = d_distribution.reduce((acc, num) => {
-                    if (!acc.includes(num)) {
-                        acc.push(num);
-                    }
-                    return acc;
-                }, []);
                 const svgWidth = baseSVG.attr("width") - margin * 2;
                 // No need to show color length if there are less than five colors (i.e. not enough data points or label is not correctly identified)
-                if (data_distribution.length === 5) {
+                if (!data_distribution.includes(0)) {
                     baseSVG
                         .selectAll(null)
                         .data(data_distribution)
