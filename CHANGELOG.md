@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - CRP page and corresponding components for its attributes [#170](https://github.com/policy-design-lab/pdl-frontend/issues/170)
 
+### Changed
+
+- Replace the color legends on the EQIP, CSP, and CRP pages with the customized scheme [189](https://github.com/policy-design-lab/pdl-frontend/issues/189)
+- Adjusted the menu height of CRP page on small screen [#190](https://github.com/policy-design-lab/pdl-frontend/issues/190)
+
 ## [0.8.0] - 2023-09-06
 
 ### Added

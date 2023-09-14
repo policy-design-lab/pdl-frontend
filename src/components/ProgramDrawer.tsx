@@ -69,7 +69,11 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={`No payment reported for ${category}`} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );

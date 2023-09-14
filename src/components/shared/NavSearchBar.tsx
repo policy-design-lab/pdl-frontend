@@ -17,7 +17,7 @@ export default function NavSearchBar({
                 borderLeft: 0,
                 borderRight: 0,
                 borderColor: brColor,
-                padding: 1,
+                margin: 1,
                 backgroundColor: bkColor
             }}
         >
