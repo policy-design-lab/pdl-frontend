@@ -508,6 +508,8 @@ export default function ProgramDrawer({
         prevCrpOpen.current = crpOpen;
     }, [crpOpen]);
 
+    const crpMenuHeight = window.innerHeight < 900 ? "38%" : "40%";
+
     return (
         <Drawer
             variant="permanent"
@@ -620,7 +622,7 @@ export default function ProgramDrawer({
                     anchorEl={cspRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ height: crpMenuHeight, overflowY: "scroll", maxWidth: "20%" }}
                 >
                     <Box>
                         <CSPCheckboxList
@@ -672,7 +674,7 @@ export default function ProgramDrawer({
                     anchorEl={crpRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
                 >
                     <Box>
                         <CRPCheckboxList
