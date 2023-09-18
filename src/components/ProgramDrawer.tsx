@@ -56,7 +56,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                 if (zeroCategory && zeroCategory.includes(category)) {
                     return (
                         <ListItem key={category} disablePadding>
-                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8 }}>
                                 <Radio
                                     edge="start"
                                     disabled
@@ -69,7 +69,11 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={`No payment reported for ${category}`} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -336,15 +340,113 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
     );
 }
 
+function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
+    const [checked, setChecked] = React.useState(currentChecked);
+
+    const handleToggle = (value: number) => () => {
+        setChecked(value);
+        setCRPChecked(value);
+        currentChecked = value;
+        setShowPopUp(false);
+    };
+
+    const CRPList = [
+        "Total CRP",
+        "Total General Sign-up",
+        "Total Continuous Sign-Up",
+        "CREP Only",
+        "Continuous Non-CREP",
+        "Farmable Wetland",
+        "Grassland"
+    ];
+
+    return (
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
+            {CRPList.map((category, value) => {
+                const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory && zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                if (category !== "CREP Only" && category !== "Continuous Non-CREP" && category !== "Farmable Wetland") {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                return (
+                    <Box key={category}>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
+}
+
 interface ProgramDrawerProps {
     setEQIPChecked?: (value: number) => void;
     setCSPChecked?: (value: number) => void;
+    setCRPChecked?: (value: number) => void;
     zeroCategories?: string[];
 }
 
 export default function ProgramDrawer({
     setEQIPChecked,
     setCSPChecked,
+    setCRPChecked,
     zeroCategories
 }: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
@@ -387,6 +489,26 @@ export default function ProgramDrawer({
 
         prevCspOpen.current = cspOpen;
     }, [cspOpen]);
+    const [crpOpen, setCrpOpen] = React.useState(false);
+    const crpRef = React.useRef<HTMLLIElement>(null);
+    const handleCrpClick = () => {
+        if (location.pathname !== "/crp") {
+            navigate("/crp");
+            window.location.reload(false);
+        } else {
+            setCrpOpen((prevCrpOpen) => !prevCrpOpen);
+        }
+    };
+    const prevCrpOpen = React.useRef(crpOpen);
+    React.useEffect(() => {
+        if (prevCrpOpen.current && !crpOpen) {
+            crpRef.current.focus();
+        }
+
+        prevCrpOpen.current = crpOpen;
+    }, [crpOpen]);
+
+    const crpMenuHeight = window.innerHeight < 900 ? "38%" : "40%";
 
     return (
         <Drawer
@@ -500,7 +622,7 @@ export default function ProgramDrawer({
                     anchorEl={cspRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ height: crpMenuHeight, overflowY: "scroll", maxWidth: "20%" }}
                 >
                     <Box>
                         <CSPCheckboxList
@@ -511,9 +633,58 @@ export default function ProgramDrawer({
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>CRP: Conservation Reserve Program</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={crpRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: crpOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleCrpClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                        {location.pathname === "/crp" ? (
+                            <Typography sx={{ color: "#2f7164" }}>
+                                <strong>CRP: Conservation Reserve Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>CRP: Conservation Reserve Program</Typography>
+                        )}
+                        <Box
+                            sx={{
+                                maxWidth: 40,
+                                py: 3,
+                                color: "#ffffff",
+                                backgroundColor: "#2f7164",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                maxHeight: 48
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
+                                    <strong>STATUTE</strong>
+                                    <KeyboardArrowDownIcon />
+                                </Box>
+                            </Typography>
+                        </Box>
+                    </Box>
+                </MenuItem>
+                <Popper
+                    open={crpOpen}
+                    anchorEl={crpRef.current}
+                    role={undefined}
+                    placement="right-start"
+                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
+                >
+                    <Box>
+                        <CRPCheckboxList
+                            setCRPChecked={setCRPChecked}
+                            setShowPopUp={setCrpOpen}
+                            zeroCategory={zeroCategory}
+                        />
+                    </Box>
+                </Popper>
+            </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
             </MenuItem>

@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
+import { getValueFromAttr } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -26,23 +27,25 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, allStates, statePerformance, colorScale } = props;
+    const { setTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
 
     return (
         <div data-tip="">
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
+            {allStates.length > 0 && statePerformance[year] !== undefined ? (
                 <ComposableMap projection="geoAlbersUsa">
                     <Geographies geography={geoUrl}>
                         {({ geographies }) => (
                             <>
                                 {geographies.map((geo) => {
-                                    if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                    const record = statePerformance[year].filter(
+                                        (v) => stateCodes[v.state] === geo.properties.name
+                                    )[0];
+                                    if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const record = statePerformance[geo.properties.name][0];
-                                    const totalPaymentInDollars = record.totalPaymentInDollars;
+                                    const totalPaymentInDollars = record.programs[0].paymentInDollars;
                                     const totalPaymentInPercentageNationwide =
-                                        record.totalPaymentInPercentageNationwide;
+                                        record.programs[0].paymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{
@@ -162,28 +165,39 @@ MapChart.propTypes = {
     setTooltipContent: PropTypes.func
 };
 
-const CSPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; allStates: any }): JSX.Element => {
+const CRPTotalMap = ({
+    program,
+    attribute,
+    year,
+    statePerformance,
+    stateCodes,
+    allStates
+}: {
+    program: string;
+    attribute: any;
+    year: string;
+    statePerformance: any;
+    stateCodes: any;
+    allStates: any;
+}): JSX.Element => {
+    const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
-    const category = "Total CSP";
-    Object.values(statePerformance).map((value) => {
-        if (Array.isArray(value)) {
-            quantizeArray.push(value[0].totalPaymentInDollars);
-        }
+    const zeroPoints = [];
+    statePerformance[year].forEach((value) => {
+        const programRecord = value.programs;
+        const ACur = programRecord.find((s) => s.programName === program);
+        let key = getValueFromAttr(ACur, attribute);
+        key = key !== "" ? key : attribute;
+        quantizeArray.push(ACur[key]);
+        ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
+    const category = "Total CRP";
+    const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
-    const [content, setContent] = useState("");
-    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
-    let years = "2018-2022";
-    if (
-        Object.keys(statePerformance).length !== 0 &&
-        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
-    ) {
-        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
-    }
     return (
         <div>
             <div>
@@ -217,6 +231,8 @@ const CSPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; a
                     maxValue={maxValue}
                     statePerformance={statePerformance}
                     allStates={allStates}
+                    year={year}
+                    stateCodes={stateCodes}
                     colorScale={colorScale}
                 />
 
@@ -241,4 +257,4 @@ const titleElement = (attribute, year): JSX.Element => {
         </Box>
     );
 };
-export default CSPTotalMap;
+export default CRPTotalMap;
