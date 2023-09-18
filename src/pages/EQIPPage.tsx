@@ -28,6 +28,7 @@ export default function EQIPPage(): JSX.Element {
     let comprehensiveNutrientMgtTotal = 0;
     let resourceConservingCropRotationTotal = 0;
     let soilHealthTotal = 0;
+    const zeroCategory = [];
 
     // connect to api endpoint
     const [statePerformance, setStatePerformance] = React.useState({});
@@ -37,6 +38,7 @@ export default function EQIPPage(): JSX.Element {
     const [sixBChartData, setSixBChartData] = React.useState([{}]);
     const [aTotal, setATotal] = React.useState(0);
     const [bTotal, setBTotal] = React.useState(0);
+    const [zeroCategories, setZeroCategories] = React.useState([]);
 
     React.useEffect(() => {
         const state_perf_url = `${config.apiUrl}/programs/conservation/eqip/state-distribution`;
@@ -90,18 +92,30 @@ export default function EQIPPage(): JSX.Element {
         const soilHealthCur = BCur.find((s) => s.practiceCategoryName === "Soil health");
 
         structuralTotal += Number(structuralCur.totalPaymentInDollars);
+        if (structuralTotal === 0) zeroCategory.push("Structural");
         landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
+        if (landManagementTotal === 0) zeroCategory.push("Land management");
         vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
+        if (vegetativeTotal === 0) zeroCategory.push("Vegetative");
         forestManagementTotal += Number(forestManagementCur.totalPaymentInDollars);
+        if (forestManagementTotal === 0) zeroCategory.push("Forest management");
         soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
+        if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
         other6ATotal += Number(other6ACur.totalPaymentInDollars);
+        if (other6ATotal === 0) zeroCategory.push("Other improvement");
         soilTestingTotal += Number(soilTestingCur.totalPaymentInDollars);
+        if (soilTestingTotal === 0) zeroCategory.push("Soil testing");
 
         otherPlanningTotal += Number(otherPlanningCur.totalPaymentInDollars);
+        if (otherPlanningTotal === 0) zeroCategory.push("Other planning");
         conservationPlanningAssessmentTotal += Number(conservationPlanningAssessmentCur.totalPaymentInDollars);
+        if (conservationPlanningAssessmentTotal === 0) zeroCategory.push("Conservation planning assessment");
         comprehensiveNutrientMgtTotal += Number(comprehensiveNutrientMgtCur.totalPaymentInDollars);
+        if (comprehensiveNutrientMgtTotal === 0) zeroCategory.push("Comprehensive Nutrient Mgt.");
         resourceConservingCropRotationTotal += Number(resourceConservingCropRotationCur.totalPaymentInDollars);
+        if (resourceConservingCropRotationTotal === 0) zeroCategory.push("Resource-conserving crop rotation");
         soilHealthTotal += Number(soilHealthCur.totalPaymentInDollars);
+        if (soilHealthTotal === 0) zeroCategory.push("Soil health");
 
         setSixAChartData([
             { name: "Structural", value: structuralTotal, color: "#2F7164" },
@@ -127,6 +141,8 @@ export default function EQIPPage(): JSX.Element {
             { name: "6 (A)", value: sixATotal, color: "#2F7164" },
             { name: "6 (B)", value: sixBTotal, color: "#9CBAB4" }
         ]);
+
+        setZeroCategories(zeroCategory);
     };
 
     return (
@@ -140,7 +156,7 @@ export default function EQIPPage(): JSX.Element {
                             subtext="Environmental Quality Incentives Program (EQIP)"
                         />
                     </Box>
-                    <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} />
+                    <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} zeroCategories={zeroCategories} />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         <Box
                             component="div"

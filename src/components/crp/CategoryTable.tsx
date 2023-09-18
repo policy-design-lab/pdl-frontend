@@ -31,8 +31,8 @@ const Styles = styled.div`
         td {
             margin: 0;
             padding: 0rem;
-            padding-left: 3rem;
-            padding-right: 3rem;
+            padding-left: 5rem;
+            padding-right: 5rem;
             border-bottom: 1px solid #e4ebe7;
             border-right: none;
 
@@ -113,51 +113,67 @@ function Table({ columns, data }: { columns: any; data: any; statePerformance: a
     );
 }
 
-function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
-    const cspTableData: any[] = [];
-    let categoryRecord = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
-        if (Array.isArray(value)) {
-            const statuteRecord = value[0].statutes;
-            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-            const AArray = ACur.practiceCategories;
-            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-            const BArray = BCur.practiceCategories;
-            const TotalArray = AArray.concat(BArray);
-            if (category === "2018 Practices") {
-                categoryRecord = statuteRecord[0];
-            } else if (category === "2014 Eligible Land") {
-                categoryRecord = statuteRecord[1];
-            } else {
-                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-            }
-            if (categoryRecord !== undefined) {
-                const paymentInDollars =
-                    category === "2018 Practices" || category === "2014 Eligible Land"
-                        ? categoryRecord.statutePaymentInDollars
-                        : categoryRecord.paymentInDollars;
-                const paymentInPercentageWithinState =
-                    category === "2018 Practices" || category === "2014 Eligible Land"
-                        ? categoryRecord.statutePaymentInPercentageWithinState
-                        : categoryRecord.paymentInPercentageWithinState;
-                const newRecord = () => {
-                    return {
-                        state: key,
-                        categoryBenefit: `$${Number(paymentInDollars).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`,
-                        categoryPercentage: `${paymentInPercentageWithinState.toString()}%`,
-                        cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`,
-                        percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-                    };
-                };
-                cspTableData.push(newRecord());
-            }
+function App({
+    category,
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    category: string;
+    statePerformance: any;
+    year: any;
+    stateCodes: any;
+}): JSX.Element {
+    const crpTableData: any[] = [];
+    statePerformance[year].forEach((value) => {
+        const totalCrp = value.programs.find((s) => s.programName === "Total CRP");
+        let categoryCrp;
+        if (
+            category === "Total General Sign-Up" ||
+            category === "Total Continuous Sign-Up" ||
+            category === "Grassland"
+        ) {
+            categoryCrp = value.programs.find((s) => s.programName === category);
+        } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
+            const contSingUp = value.programs.find((s) => s.programName === "Total Continuous Sign-Up");
+            const subPrograms = contSingUp.subPrograms;
+            subPrograms.forEach((subValue) => {
+                if (subValue.programName === category) {
+                    categoryCrp = subValue;
+                }
+            });
         }
-    }
+
+        let stateName;
+        // let percentageValue = 0;
+        // if (Number.parseInt(totalCrp.paymentInDollars, 10) > 0) {
+        //     percentageValue =
+        //         (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) *
+        //         100;
+        // }
+
+        stateCodes.forEach((sValue) => {
+            if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                stateName = sValue.name;
+            }
+        });
+        const newRecord = () => {
+            return {
+                state: stateName,
+                categoryBenefit: `$${categoryCrp.paymentInDollars
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}`,
+                categoryPercentage: `${categoryCrp.paymentInPercentageWithinState
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}%`,
+                crpBenefit: `$${totalCrp.paymentInDollars
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()}`,
+                percentage: `${categoryCrp.paymentInPercentageNationwide.toString()}%`
+            };
+        };
+        crpTableData.push(newRecord());
+    });
 
     function compareWithDollarSign(rowA, rowB, id, desc) {
         const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
@@ -267,10 +283,10 @@ function App({ category, statePerformance }: { category: string; statePerformanc
                         className="tableHeader"
                         sx={{ maxWidth: 240, pl: 7, display: "flex", justifyContent: "center" }}
                     >
-                        CSP BENEFITS
+                        CRP BENEFITS
                     </Box>
                 ),
-                accessor: "cspBenefit",
+                accessor: "crpBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
@@ -291,7 +307,7 @@ function App({ category, statePerformance }: { category: string; statePerformanc
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={cspTableData} statePerformance={statePerformance} />
+                <Table columns={columns} data={crpTableData} statePerformance={statePerformance} />
             </Styles>
         </Box>
     );

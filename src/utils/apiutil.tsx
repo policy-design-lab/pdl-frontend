@@ -17,3 +17,15 @@ export function convertAllState(inlist) {
 
     return JSON.parse(conv_str);
 }
+
+export const getValueFromAttr = (stateRecord, attribute): string => {
+    let ans = "";
+    Object.keys(stateRecord).forEach((key) => {
+        const match = key.match(/^(.*?)(?=\s*InDollars)/);
+        const extractedKey = match ? match[1] : key;
+        if (extractedKey === attribute) {
+            ans = key;
+        }
+    });
+    return ans;
+};

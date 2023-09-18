@@ -11,6 +11,7 @@ import * as d3 from "d3";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
+import { getValueFromAttr } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -27,7 +28,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, category, allStates, statePerformance, colorScale } = props;
+    const { year, setTooltipContent, category, allStates, stateCodes, statePerformance, colorScale } = props;
     let categoryRecord;
     return (
         <div data-tip="">
@@ -36,34 +37,51 @@ const MapChart = (props) => {
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
-                                if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                const record = statePerformance[year].filter(
+                                    (v) => stateCodes[v.state] === geo.properties.name
+                                )[0];
+                                if (record === undefined || record.length === 0) {
                                     return null;
                                 }
-                                const statuteRecord = statePerformance[geo.properties.name][0].statutes;
-                                const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-                                const AArray = ACur.practiceCategories;
-                                const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-                                const BArray = BCur.practiceCategories;
-                                const TotalArray = AArray.concat(BArray);
-                                if (category === "2018 Practices") {
-                                    categoryRecord = statuteRecord[0];
-                                } else if (category === "2014 Eligible Land") {
-                                    categoryRecord = statuteRecord[1];
+                                let ACur = {};
+                                let BCur = {};
+                                let CCur = {};
+                                let DCur = {};
+                                let ECur = {};
+                                let FCur = {};
+                                record.programs.forEach((value) => {
+                                    if (value.programName === "Total General Sign-Up") {
+                                        ACur = value;
+                                    } else if (value.programName === "Total Continuous Sign-Up") {
+                                        BCur = value;
+                                        value.subPrograms.forEach((subValue) => {
+                                            if (subValue.programName === "CREP Only") {
+                                                CCur = subValue;
+                                            } else if (subValue.programName === "Continuous Non-CREP") {
+                                                DCur = subValue;
+                                            } else if (subValue.programName === "Farmable Wetland") {
+                                                ECur = subValue;
+                                            }
+                                        });
+                                    } else if (value.programName === "Grassland") {
+                                        FCur = value;
+                                    }
+                                });
+                                if (category === "Total General Sign-Up") {
+                                    categoryRecord = ACur;
+                                } else if (category === "Total Continuous Sign-Up") {
+                                    categoryRecord = BCur;
+                                } else if (category === "CREP Only") {
+                                    categoryRecord = CCur;
+                                } else if (category === "Continuous Non-CREP") {
+                                    categoryRecord = DCur;
+                                } else if (category === "Farmable Wetland") {
+                                    categoryRecord = ECur;
                                 } else {
-                                    categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
+                                    categoryRecord = FCur;
                                 }
-                                const categoryPayment =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInDollars
-                                        : categoryRecord.paymentInDollars;
-                                const nationwidePercentage =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInPercentageNationwide
-                                        : categoryRecord.paymentInPercentageNationwide;
-                                const withinStatePercentage =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInPercentageWithinState
-                                        : categoryRecord.paymentInPercentageWithinState;
+                                const categoryPayment = categoryRecord.paymentInDollars;
+                                const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
                                 const hoverContent = (
                                     <Box
                                         sx={{
@@ -174,64 +192,60 @@ const MapChart = (props) => {
 };
 
 MapChart.propTypes = {
+    year: PropTypes.string,
     setTooltipContent: PropTypes.func,
     category: PropTypes.string
 };
 
 const CategoryMap = ({
+    year,
     category,
+    attribute,
     statePerformance,
-    allStates
+    allStates,
+    stateCodes
 }: {
+    year: string;
     category: string;
+    attribute: string;
     statePerformance: any;
     allStates: any;
+    stateCodes: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
-    let years = "2018-2022";
-    if (
-        Object.keys(statePerformance).length !== 0 &&
-        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
-    ) {
-        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
-    }
-    const title = `${category} Benefits from ${years}`;
+    let title = `CRP ${category} from ${year}`;
     const quantizeArray: number[] = [];
-    let categoryRecord = {};
-    Object.values(statePerformance).map((value) => {
-        if (Array.isArray(value)) {
-            const statuteRecord = value[0].statutes;
-            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-            const AArray = ACur.practiceCategories;
-            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-            const BArray = BCur.practiceCategories;
-            const TotalArray = AArray.concat(BArray);
-            if (category === "2018 Practices") {
-                categoryRecord = statuteRecord[0];
-            } else if (category === "2014 Eligible Land") {
-                categoryRecord = statuteRecord[1];
-            } else {
-                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-            }
-            if (categoryRecord !== undefined) {
-                if (category === "2018 Practices" || category === "2014 Eligible Land")
-                    quantizeArray.push(categoryRecord.statutePaymentInDollars);
-                else quantizeArray.push(categoryRecord.paymentInDollars);
-            }
+    const zeroPoints = [];
+
+    statePerformance[year].forEach((value) => {
+        const programRecord = value.programs;
+        let ACur = {};
+        if (
+            category === "Total General Sign-Up" ||
+            category === "Total Continuous Sign-Up" ||
+            category === "Grassland"
+        ) {
+            ACur = programRecord.find((s) => s.programName === category);
+        } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
+            const contSingUp = programRecord.find((s) => s.programName === "Total Continuous Sign-Up");
+            const subPrograms = contSingUp.subPrograms;
+            title = `CRP Total Continuous, ${category} from ${year}`;
+            subPrograms.forEach((subValue) => {
+                if (subValue.programName === category) {
+                    ACur = subValue;
+                }
+            });
         }
+        let key = getValueFromAttr(ACur, attribute);
+        key = key !== "" ? key : attribute;
+        quantizeArray.push(ACur[key]);
+        ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
+    const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
-    let legendCategory = category;
-    if (category === "Structural") legendCategory = "Structural-CSP";
-    if (category === "Vegetative") legendCategory = "Vegetative-CSP";
-    if (category === "Land management") legendCategory = "Land management-CSP";
-    if (category === "Forest management") legendCategory = "Forest management-CSP";
-    if (category === "Soil testing") legendCategory = "Soil testing-CSP";
-    if (category === "Other improvement") legendCategory = "Other improvement-CSP";
-    const customScale = legendConfig[legendCategory];
+    const customScale = legendConfig[category === "Grassland" ? "Grassland-CRP" : category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     return (
         <div>
@@ -282,11 +296,13 @@ const CategoryMap = ({
                 </Box>
             )}
             <MapChart
+                year={year}
                 setTooltipContent={setContent}
                 category={category}
-                statePerformance={statePerformance}
-                allStates={allStates}
                 colorScale={colorScale}
+                allStates={allStates}
+                stateCodes={stateCodes}
+                statePerformance={statePerformance}
             />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">

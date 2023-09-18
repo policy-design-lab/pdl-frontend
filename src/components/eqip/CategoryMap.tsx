@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
+import * as d3 from "d3";
 import "../../styles/map.css";
-import HorizontalStackedBar from "../HorizontalStackedBar";
+import legendConfig from "../../utils/legendConfig.json";
+import DrawLegend from "../shared/DrawLegend";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -25,10 +26,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, category, maxValue, statePerformance, allStates } = props;
-    const colorScale = scaleQuantize()
-        .domain([0, maxValue])
-        .range(["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]);
+    const { setTooltipContent, category, statePerformance, allStates, colorScale } = props;
 
     return (
         <div data-tip="">
@@ -163,8 +161,7 @@ const MapChart = (props) => {
 
 MapChart.propTypes = {
     setTooltipContent: PropTypes.func,
-    category: PropTypes.string,
-    maxValue: PropTypes.number
+    category: PropTypes.string
 };
 
 const CategoryMap = ({
@@ -185,7 +182,6 @@ const CategoryMap = ({
     ) {
         years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
     }
-    const title = `${category} Benefits from ${years}`;
     const quantizeArray: number[] = [];
     Object.values(statePerformance).map((value) => {
         const statuteRecord = value[0].statutes;
@@ -199,77 +195,41 @@ const CategoryMap = ({
         return null;
     });
     const maxValue = Math.max(...quantizeArray);
-    const label1 = (maxValue / 5) * 0;
-    const label2 = (maxValue / 5) * 1;
-    const label3 = (maxValue / 5) * 2;
-    const label4 = (maxValue / 5) * 3;
-    const label5 = (maxValue / 5) * 4;
+    const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
+    const customScale = legendConfig[category];
+    const colorScale = d3.scaleThreshold(customScale, mapColor);
     return (
         <div>
             <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
-                <HorizontalStackedBar
-                    title={title}
-                    color1="#F0F9E8"
-                    color2="#BAE4BC"
-                    color3="#7BCCC4"
-                    color4="#43A2CA"
-                    color5="#0868AC"
-                    label1={`$${Number(label1 / 1000000).toLocaleString(undefined, {
-                        maximumFractionDigits: 0
-                    })}`}
-                    label2={
-                        label2 >= 1000000
-                            ? `$${Number(label2 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label2 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label3={
-                        label3 >= 1000000
-                            ? `$${Number(label3 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label3 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label4={
-                        label4 >= 1000000
-                            ? `$${Number(label4 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label4 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label5={
-                        label5 >= 1000000
-                            ? `$${Number(label5 / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(label5 / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                    label6={
-                        maxValue >= 1000000
-                            ? `$${Number(maxValue / 1000000).toLocaleString(undefined, {
-                                  maximumFractionDigits: 0
-                              })}M`
-                            : `$${Number(maxValue / 1000.0).toLocaleString(undefined, {
-                                  maximumFractionDigits: 1
-                              })}K`
-                    }
-                />
+                {maxValue !== 0 ? (
+                    <DrawLegend
+                        colorScale={colorScale}
+                        title={titleElement(category, years)}
+                        programData={quantizeArray}
+                        prepColor={mapColor}
+                        initRatioLarge={0.6}
+                        initRatioSmall={0.5}
+                        isRatio={false}
+                        notDollar={false}
+                        emptyState={[]}
+                    />
+                ) : (
+                    <div>
+                        {titleElement(category, years)}
+                        <Box display="flex" justifyContent="center">
+                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                                {category} data in {years} is unavailable for all states.
+                            </Typography>
+                        </Box>
+                    </div>
+                )}
             </Box>
             <MapChart
                 setTooltipContent={setContent}
                 category={category}
-                maxValue={maxValue}
                 statePerformance={statePerformance}
                 allStates={allStates}
+                colorScale={colorScale}
             />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
@@ -279,5 +239,16 @@ const CategoryMap = ({
         </div>
     );
 };
-
+const titleElement = (attribute, year): JSX.Element => {
+    return (
+        <Box>
+            <Typography noWrap variant="h6">
+                <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
+            </Typography>{" "}
+            <Typography noWrap style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
+                <i>In any state that appears in grey, there is no available data</i>
+            </Typography>
+        </Box>
+    );
+};
 export default CategoryMap;
