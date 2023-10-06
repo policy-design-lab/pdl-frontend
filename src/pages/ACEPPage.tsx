@@ -1,0 +1,435 @@
+import Box from "@mui/material/Box";
+import * as React from "react";
+import { createTheme, Grid, ThemeProvider, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import InsertChartIcon from "@mui/icons-material/InsertChart";
+import NavBar from "../components/NavBar";
+import Drawer from "../components/ProgramDrawer";
+import SemiDonutChart from "../components/SemiDonutChart";
+import ACEPTotalMap from "../components/acep/ACEPTotalMap";
+import CategoryMap from "../components/acep/ACEPCategoryMap";
+import { config } from "../app.config";
+import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import NavSearchBar from "../components/shared/NavSearchBar";
+import ACEPTable from "../components/acep/ACEPTable";
+import AcepTreeMap from "../components/acep/AcepTreeMap";
+import "../styles/subpage.css";
+
+export default function ACEPPage(): JSX.Element {
+    const year = "2018-2022";
+    const [checked, setChecked] = React.useState(0);
+
+    const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
+    const [allStatesData, setAllStatesData] = React.useState([]);
+    const [totalChartData, setTotalChartData] = React.useState([{}]);
+    const [subChartData, setSubChartData] = React.useState([{}]);
+    const [zeroCategories, setZeroCategories] = React.useState([]);
+    const [totalAcep, setTotalAcep] = React.useState(0);
+    const [tab, setTab] = React.useState(0);
+    const initTreeMapWidthRatio = 0.6;
+
+    const defaultTheme = createTheme();
+    const zeroCategory = [];
+    let totalACEPPaymentInDollars = 0;
+    let totalContracts = 0;
+    let totalAcres = 0;
+    let assistancePaymentInDollars = 0;
+    let reimbursePaymentInDollars = 0;
+    let techPaymentInDollars = 0;
+
+    React.useEffect(() => {
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
+            setAllStatesData(response);
+        });
+
+        const statecode_url = `${config.apiUrl}/statecodes`;
+        getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
+            const converted_json = convertAllState(response);
+            setStateCodesData(converted_json);
+        });
+
+        const statedistribution_url = `${config.apiUrl}/programs/conservation/acep/state-distribution`;
+        getJsonDataFromUrl(statedistribution_url).then((response) => {
+            setStateDistributionData(response);
+        });
+
+        const chartData_url = `${config.apiUrl}/programs/conservation/acep/subprograms`;
+        getJsonDataFromUrl(chartData_url).then((response) => {
+            processData(response);
+        });
+    }, []);
+
+    const switchChartTable = (event, newTab) => {
+        if (newTab !== null) {
+            setTab(newTab);
+        }
+    };
+    const processData = (chartData) => {
+        if (chartData.programs === undefined) return;
+        const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
+
+        totalACEPPaymentInDollars = cur1.paymentInDollars;
+        setTotalAcep(totalACEPPaymentInDollars);
+        if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
+        totalContracts = cur1.totalContracts;
+        if (totalContracts === 0) zeroCategory.push("Total Contracts");
+        totalAcres = cur1.totalAcre;
+        if (totalAcres === 0) zeroCategory.push("Total Acres");
+        assistancePaymentInDollars = cur1.assistancePaymentInDollars;
+        if (assistancePaymentInDollars === 0) zeroCategory.push("Assistance Payment");
+        reimbursePaymentInDollars = cur1.reimbursePaymentInDollars;
+        if (reimbursePaymentInDollars === 0) zeroCategory.push("Reimburse Payment");
+        techPaymentInDollars = cur1.techPaymentInDollars;
+        if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
+        setZeroCategories(zeroCategory);
+
+        setTotalChartData([
+            { name: "ACEP", value: totalACEPPaymentInDollars, color: "#2F7164" },
+            { name: "Assistance Payment", value: assistancePaymentInDollars, color: "#869397" },
+            { name: "Reimburse Payment", value: reimbursePaymentInDollars, color: "#9CBAB4" },
+            { name: "Tech Payment", value: techPaymentInDollars, color: "#C9D6D2" }
+        ]);
+    };
+    function prepData(program, subprogram, data, dataYear) {
+        const organizedData: Record<string, unknown>[] = [];
+        const originalData: Record<string, unknown>[] = [];
+        data[dataYear].forEach((stateData) => {
+            const state = stateData.state;
+            const programData = stateData.programs.filter((p) => {
+                return p.programName.toString() === program;
+            });
+            organizedData.push({
+                state,
+                acres: programData[0].totalAcres,
+                payments: programData[0].paymentInDollars,
+                contracts: programData[0].totalContracts
+            });
+            originalData.push({
+                state,
+                acres: programData[0].totalAcres,
+                payments: programData[0].paymentInDollars,
+                contracts: programData[0].totalContracts
+            });
+        });
+        return [organizedData, originalData];
+    }
+    return (
+        <ThemeProvider theme={defaultTheme}>
+            {Object.keys(stateCodesData).length > 0 &&
+            Object.keys(allStatesData).length > 0 &&
+            Object.keys(stateDistributionData).length > 0 ? (
+                <Box sx={{ width: "100%" }}>
+                    <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
+                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavSearchBar
+                            text="Conservation Programs (Title II)"
+                            subtext="Conversation Reserve Program (ACEP)"
+                        />
+                    </Box>
+                    <Drawer
+                        setACEPChecked={setChecked}
+                        setCSPChecked={undefined}
+                        setEQIPChecked={undefined}
+                        zeroCategories={zeroCategories}
+                    />
+                    <Box sx={{ pl: 50, pr: 20 }}>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
+                        >
+                            <ACEPTotalMap
+                                program="ACEP"
+                                attribute="payments"
+                                year={year}
+                                statePerformance={stateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                year={year}
+                                category="Total Contracts"
+                                attribute="contracts"
+                                statePerformance={stateDistributionData}
+                                allStates={allStatesData}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                year={year}
+                                category="Total Acres"
+                                attribute="acres"
+                                statePerformance={stateDistributionData}
+                                allStates={allStatesData}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                year={year}
+                                category="Assistance Payment"
+                                attribute="assistance"
+                                statePerformance={stateDistributionData}
+                                allStates={allStatesData}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                year={year}
+                                category="Reimburse Payment"
+                                attribute="reimburse"
+                                statePerformance={stateDistributionData}
+                                allStates={allStatesData}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}
+                        >
+                            <CategoryMap
+                                year={year}
+                                category="Tech Payment"
+                                attribute="tech"
+                                statePerformance={stateDistributionData}
+                                allStates={allStatesData}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            flexDirection="column"
+                            sx={{ mt: 10, mb: 2, display: "block" }}
+                        >
+                            <Box display="flex" justifyContent="center">
+                                <Typography variant="h5">
+                                    <strong>ACEP: Agriculture Conservation Easement Program</strong>
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Typography sx={{ mt: 2 }}>
+                                [TO BE UPDATED]The ACEP was first introduced in the 2014 Farm Bill as a consolidation of
+                                three previously separate easement programs – the Wetlands Reserve Program, Grassland
+                                Reserve Program, and Farm and Ranch Land Protection Program. The program is divided into
+                                two basic tracks, the Wetland Reserve Easement (“WRE”) and the Agricultural Land
+                                Easement (“ALE”). The wetland land easement track is largely similar to the old Wetlands
+                                Reserve Program, while the agricultural land easement track incorporates the other two
+                                former easement programs. ACEP participants receive financial and technical assistance
+                                in exchange for enrolling their lands in one of the two tracks.
+                            </Typography>
+                        </Box>
+
+                        <div>
+                            <Box component="div" sx={{ display: "block" }}>
+                                <SemiDonutChart
+                                    data={totalChartData}
+                                    label1={totalAcep.toString()}
+                                    label2="ACEP TOTAL BENEFITS"
+                                />
+                            </Box>
+                        </div>
+
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
+                            <ACEPTable
+                                tableTitle="Total ACEP"
+                                program="ACEP"
+                                attributes={["paymentInDollars", "totalPaymentInPercentageNationwide"]}
+                                skipColumns={[]}
+                                stateCodes={stateCodesData}
+                                AcepData={stateDistributionData}
+                                year="2018-2022"
+                                colors={[]}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 1 ? "none" : "block" }}>
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography
+                                    className="stateTitle"
+                                    variant="h5"
+                                    sx={{ fontWeight: 700, fontSize: "1.2em" }}
+                                >
+                                    Performance by States
+                                </Typography>
+                                <ToggleButtonGroup
+                                    className="ChartTableToggle"
+                                    value={tab}
+                                    exclusive
+                                    onChange={switchChartTable}
+                                    aria-label="ACEP toggle button group"
+                                    sx={{ justifyContent: "flex-end" }}
+                                >
+                                    <ToggleButton value={0}>
+                                        <InsertChartIcon />
+                                    </ToggleButton>
+                                    <ToggleButton value={1}>
+                                        <TableChartIcon />
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Box className="acepTableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
+                                    <AcepTreeMap
+                                        program="ACEP"
+                                        TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
+                                        stateCodes={stateCodesData}
+                                        year="2018-2022"
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
+                                        svgH={3000}
+                                    />
+                                </Box>
+                                <Box className="acepTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                                    <ACEPTable
+                                        tableTitle="No. of Contracts"
+                                        program="ACEP"
+                                        attributes={["totalContracts", "contractsInPercentageNationwide"]}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodesData}
+                                        AcepData={stateDistributionData}
+                                        year="2018-2022"
+                                        colors={[]}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Box>
+
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 2 ? "none" : "block" }}>
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography
+                                    className="stateTitle"
+                                    variant="h5"
+                                    sx={{ fontWeight: 700, fontSize: "1.2em" }}
+                                >
+                                    Performance by States
+                                </Typography>
+                                <ToggleButtonGroup
+                                    className="ChartTableToggle"
+                                    value={tab}
+                                    exclusive
+                                    onChange={switchChartTable}
+                                    aria-label="ACEP toggle button group"
+                                    sx={{ justifyContent: "flex-end" }}
+                                >
+                                    <ToggleButton value={0}>
+                                        <InsertChartIcon />
+                                    </ToggleButton>
+                                    <ToggleButton value={1}>
+                                        <TableChartIcon />
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Box className="acepTableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
+                                    <AcepTreeMap
+                                        program="ACEP"
+                                        TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
+                                        stateCodes={stateCodesData}
+                                        year="2018-2022"
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
+                                        svgH={3000}
+                                    />
+                                </Box>
+                                <Box className="acepTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                                    <ACEPTable
+                                        tableTitle="Acres(ac.)"
+                                        program="ACEP"
+                                        attributes={["totalAcres", "acresInPercentageNationwide"]}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodesData}
+                                        AcepData={stateDistributionData}
+                                        year="2018-2022"
+                                        colors={[]}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Box>
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 3 ? "none" : "block" }}>
+                            <ACEPTable
+                                tableTitle="Assistance Payment"
+                                program="ACEP"
+                                attributes={[
+                                    "assistancePaymentInDollars",
+                                    "assistancePaymentInPercentageNationwide",
+                                    "assistancePaymentInPercentageWithinState"
+                                ]}
+                                skipColumns={[]}
+                                stateCodes={stateCodesData}
+                                AcepData={stateDistributionData}
+                                year="2018-2022"
+                                colors={[]}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 4 ? "none" : "block" }}>
+                            <ACEPTable
+                                tableTitle="Reimburse Payment"
+                                program="ACEP"
+                                attributes={[
+                                    "reimbursePaymentInDollars",
+                                    "reimbursePaymentInPercentageNationwide",
+                                    "reimbursePaymentInPercentageWithinState"
+                                ]}
+                                skipColumns={[]}
+                                stateCodes={stateCodesData}
+                                AcepData={stateDistributionData}
+                                year="2018-2022"
+                                colors={[]}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 5 ? "none" : "block" }}>
+                            <ACEPTable
+                                tableTitle="Tech Payment"
+                                program="ACEP"
+                                attributes={[
+                                    "techPaymentInDollars",
+                                    "techPaymentInPercentageNationwide",
+                                    "techPaymentInPercentageWithinState"
+                                ]}
+                                skipColumns={[]}
+                                stateCodes={stateCodesData}
+                                AcepData={stateDistributionData}
+                                year="2018-2022"
+                                colors={[]}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
+            ) : (
+                <h1>Loading data...</h1>
+            )}
+        </ThemeProvider>
+    );
+}
