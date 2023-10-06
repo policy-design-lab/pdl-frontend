@@ -477,27 +477,6 @@ function RCPPCheckboxList({ setRCPPChecked, setShowPopUp, zeroCategory }) {
                         </ListItem>
                     );
                 }
-                // if (category !== "Total RCPP") {
-                //     return (
-                //         <ListItem key={category} disablePadding>
-                //             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
-                //                 <Radio
-                //                     edge="start"
-                //                     checked={checked === value}
-                //                     tabIndex={-1}
-                //                     disableRipple
-                //                     inputProps={{ "aria-labelledby": labelId }}
-                //                     sx={{
-                //                         "&.Mui-checked": {
-                //                             color: "#2f7164"
-                //                         }
-                //                     }}
-                //                 />
-                //                 <ListItemText id={labelId} primary={category} />
-                //             </ListItemButton>
-                //         </ListItem>
-                //     );
-                // }
                 return (
                     <Box key={category}>
                         <ListItem key={category} disablePadding>
@@ -604,9 +583,6 @@ export default function ProgramDrawer({
             navigate("/rcpp");
             window.location.reload(false);
         }
-        // else {
-        //     setRcppOpen((prevRcppOpen) => !prevRcppOpen);
-        // }
     };
     const prevRcppOpen = React.useRef(rcppOpen);
     React.useEffect(() => {
