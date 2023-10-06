@@ -436,10 +436,99 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
     );
 }
 
+function RCPPCheckboxList({ setRCPPChecked, setShowPopUp, zeroCategory }) {
+    const [checked, setChecked] = React.useState(currentChecked);
+
+    const handleToggle = (value: number) => () => {
+        setChecked(value);
+        setRCPPChecked(value);
+        currentChecked = value;
+        setShowPopUp(false);
+    };
+
+    const RCPPList = ["Total RCPP"];
+
+    return (
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
+            {RCPPList.map((category, value) => {
+                const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory && zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                // if (category !== "Total RCPP") {
+                //     return (
+                //         <ListItem key={category} disablePadding>
+                //             <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
+                //                 <Radio
+                //                     edge="start"
+                //                     checked={checked === value}
+                //                     tabIndex={-1}
+                //                     disableRipple
+                //                     inputProps={{ "aria-labelledby": labelId }}
+                //                     sx={{
+                //                         "&.Mui-checked": {
+                //                             color: "#2f7164"
+                //                         }
+                //                     }}
+                //                 />
+                //                 <ListItemText id={labelId} primary={category} />
+                //             </ListItemButton>
+                //         </ListItem>
+                //     );
+                // }
+                return (
+                    <Box key={category}>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
+}
+
 interface ProgramDrawerProps {
     setEQIPChecked?: (value: number) => void;
     setCSPChecked?: (value: number) => void;
     setCRPChecked?: (value: number) => void;
+    setRCPPChecked?: (value: number) => void;
     zeroCategories?: string[];
 }
 
@@ -447,6 +536,7 @@ export default function ProgramDrawer({
     setEQIPChecked,
     setCSPChecked,
     setCRPChecked,
+    setRCPPChecked,
     zeroCategories
 }: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
@@ -507,6 +597,25 @@ export default function ProgramDrawer({
 
         prevCrpOpen.current = crpOpen;
     }, [crpOpen]);
+    const [rcppOpen, setRcppOpen] = React.useState(false);
+    const rcppRef = React.useRef<HTMLLIElement>(null);
+    const handleRcppClick = () => {
+        if (location.pathname !== "/rcpp") {
+            navigate("/rcpp");
+            window.location.reload(false);
+        }
+        // else {
+        //     setRcppOpen((prevRcppOpen) => !prevRcppOpen);
+        // }
+    };
+    const prevRcppOpen = React.useRef(rcppOpen);
+    React.useEffect(() => {
+        if (prevRcppOpen.current && !rcppOpen) {
+            rcppRef.current.focus();
+        }
+
+        prevRcppOpen.current = rcppOpen;
+    }, [rcppOpen]);
 
     const crpMenuHeight = window.innerHeight < 900 ? "38%" : "40%";
 
@@ -688,9 +797,58 @@ export default function ProgramDrawer({
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
             </MenuItem>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>RCPP: Regional Conservation Partnership Program</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={rcppRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: rcppOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleRcppClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                        {location.pathname === "/rcpp" ? (
+                            <Typography sx={{ color: "#2f7164" }}>
+                                <strong>RCPP: Regional Conservation Partnership Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>RCPP: Regional Conservation Partnership Program</Typography>
+                        )}
+                        <Box
+                            sx={{
+                                maxWidth: 40,
+                                py: 3,
+                                color: "#ffffff",
+                                backgroundColor: "#2f7164",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                maxHeight: 48
+                            }}
+                        >
+                            {/* <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
+                                    <strong>STATUTE</strong>
+                                    <KeyboardArrowDownIcon />
+                                </Box>
+                            </Typography> */}
+                        </Box>
+                    </Box>
+                </MenuItem>
+                <Popper
+                    open={rcppOpen}
+                    anchorEl={rcppRef.current}
+                    role={undefined}
+                    placement="right-start"
+                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
+                >
+                    <Box>
+                        <RCPPCheckboxList
+                            setRCPPChecked={setRCPPChecked}
+                            setShowPopUp={setRcppOpen}
+                            zeroCategory={zeroCategory}
+                        />
+                    </Box>
+                </Popper>
+            </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Other Conservation</Typography>
             </MenuItem>
