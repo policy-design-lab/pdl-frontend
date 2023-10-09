@@ -5,9 +5,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
-import SemiDonutChart from "../components/SemiDonutChart";
 import ACEPTotalMap from "../components/acep/ACEPTotalMap";
-import CategoryMap from "../components/acep/ACEPCategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
@@ -23,12 +21,9 @@ export default function ACEPPage(): JSX.Element {
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
-    const [totalChartData, setTotalChartData] = React.useState([{}]);
-    const [subChartData, setSubChartData] = React.useState([{}]);
     const [zeroCategories, setZeroCategories] = React.useState([]);
     const [totalAcep, setTotalAcep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
-    const initTreeMapWidthRatio = 0.6;
 
     const defaultTheme = createTheme();
     const zeroCategory = [];
@@ -86,12 +81,6 @@ export default function ACEPPage(): JSX.Element {
         techPaymentInDollars = cur1.techPaymentInDollars;
         if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
         setZeroCategories(zeroCategory);
-
-        setTotalChartData([
-            { name: "Assistance Payment", value: assistancePaymentInDollars, color: "#2F7164" },
-            { name: "Reimburse Payment", value: reimbursePaymentInDollars, color: "#9CBAB4" },
-            { name: "Tech Payment", value: techPaymentInDollars, color: "#C9D6D2" }
-        ]);
     };
     function prepData(program, subprogram, data, dataYear) {
         const organizedData: Record<string, unknown>[] = [];
@@ -150,71 +139,6 @@ export default function ACEPPage(): JSX.Element {
                             />
                         </Box>
                         <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
-                        >
-                            <CategoryMap
-                                year={year}
-                                category="Total Contracts"
-                                attribute="contracts"
-                                statePerformance={stateDistributionData}
-                                allStates={allStatesData}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}
-                        >
-                            <CategoryMap
-                                year={year}
-                                category="Total Acres"
-                                attribute="acres"
-                                statePerformance={stateDistributionData}
-                                allStates={allStatesData}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}
-                        >
-                            <CategoryMap
-                                year={year}
-                                category="Assistance Payment"
-                                attribute="assistance"
-                                statePerformance={stateDistributionData}
-                                allStates={allStatesData}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}
-                        >
-                            <CategoryMap
-                                year={year}
-                                category="Reimburse Payment"
-                                attribute="reimburse"
-                                statePerformance={stateDistributionData}
-                                allStates={allStatesData}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}
-                        >
-                            <CategoryMap
-                                year={year}
-                                category="Tech Payment"
-                                attribute="tech"
-                                statePerformance={stateDistributionData}
-                                allStates={allStatesData}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
                             display="flex"
                             justifyContent="center"
                             flexDirection="column"
@@ -223,6 +147,20 @@ export default function ACEPPage(): JSX.Element {
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
                                     <strong>ACEP: Agriculture Conservation Easement Program</strong>
+                                </Typography>
+                            </Box>
+                            <Box display="flex" justifyContent="center">
+                                <Typography variant="h6" sx={{ my: 2 }}>
+                                    Total Benefits ({year}):
+                                    <strong>
+                                        $
+                                        {
+                                            totalAcep
+                                                .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                                                .toString()
+                                                .split(".")[0]
+                                        }
+                                    </strong>
                                 </Typography>
                             </Box>
                         </Box>
@@ -239,17 +177,7 @@ export default function ACEPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        <div>
-                            <Box component="div" sx={{ display: "block" }}>
-                                <SemiDonutChart
-                                    data={totalChartData}
-                                    label1={totalAcep.toString()}
-                                    label2="ACEP TOTAL BENEFITS"
-                                />
-                            </Box>
-                        </div>
-
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
+                        {/* <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
                             <ACEPTable
                                 tableTitle="Total ACEP"
                                 program="ACEP"
@@ -260,8 +188,8 @@ export default function ACEPPage(): JSX.Element {
                                 year="2018-2022"
                                 colors={[]}
                             />
-                        </Box>
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 1 ? "none" : "block" }}>
+                        </Box> */}
+                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography
                                     className="stateTitle"
@@ -300,129 +228,32 @@ export default function ACEPPage(): JSX.Element {
                                         TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
                                         stateCodes={stateCodesData}
                                         year="2018-2022"
-                                        svgW={window.innerWidth * initTreeMapWidthRatio}
+                                        svgW={
+                                            window.innerWidth > 1440 ? window.innerWidth * 0.7 : window.innerWidth * 0.6
+                                        }
                                         svgH={3000}
                                     />
                                 </Box>
                                 <Box className="acepTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <ACEPTable
-                                        tableTitle="No. of Contracts"
+                                        tableTitle="Total ACEP, Acres and No. of Contracts"
                                         program="ACEP"
-                                        attributes={["totalContracts", "contractsInPercentageNationwide"]}
+                                        attributes={[
+                                            "paymentInDollars",
+                                            "totalPaymentInPercentageNationwide",
+                                            "totalAcres",
+                                            "acresInPercentageNationwide",
+                                            "totalContracts",
+                                            "contractsInPercentageNationwide"
+                                        ]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         AcepData={stateDistributionData}
                                         year="2018-2022"
-                                        colors={[]}
+                                        colors={["#1F78B433", "#C8119526", "#66BB6A40"]}
                                     />
                                 </Box>
                             </Grid>
-                        </Box>
-
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 2 ? "none" : "block" }}>
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography
-                                    className="stateTitle"
-                                    variant="h5"
-                                    sx={{ fontWeight: 700, fontSize: "1.2em" }}
-                                >
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="ACEP toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box className="acepTableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
-                                    <AcepTreeMap
-                                        program="ACEP"
-                                        TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
-                                        stateCodes={stateCodesData}
-                                        year="2018-2022"
-                                        svgW={window.innerWidth * initTreeMapWidthRatio}
-                                        svgH={3000}
-                                    />
-                                </Box>
-                                <Box className="acepTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                                    <ACEPTable
-                                        tableTitle="Acres(ac.)"
-                                        program="ACEP"
-                                        attributes={["totalAcres", "acresInPercentageNationwide"]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        AcepData={stateDistributionData}
-                                        year="2018-2022"
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 3 ? "none" : "block" }}>
-                            <ACEPTable
-                                tableTitle="Assistance Payment"
-                                program="ACEP"
-                                attributes={[
-                                    "assistancePaymentInDollars",
-                                    "assistancePaymentInPercentageNationwide",
-                                    "assistancePaymentInPercentageWithinState"
-                                ]}
-                                skipColumns={[]}
-                                stateCodes={stateCodesData}
-                                AcepData={stateDistributionData}
-                                year="2018-2022"
-                                colors={[]}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 4 ? "none" : "block" }}>
-                            <ACEPTable
-                                tableTitle="Reimburse Payment"
-                                program="ACEP"
-                                attributes={[
-                                    "reimbursePaymentInDollars",
-                                    "reimbursePaymentInPercentageNationwide",
-                                    "reimbursePaymentInPercentageWithinState"
-                                ]}
-                                skipColumns={[]}
-                                stateCodes={stateCodesData}
-                                AcepData={stateDistributionData}
-                                year="2018-2022"
-                                colors={[]}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 5 ? "none" : "block" }}>
-                            <ACEPTable
-                                tableTitle="Tech Payment"
-                                program="ACEP"
-                                attributes={[
-                                    "techPaymentInDollars",
-                                    "techPaymentInPercentageNationwide",
-                                    "techPaymentInPercentageWithinState"
-                                ]}
-                                skipColumns={[]}
-                                stateCodes={stateCodesData}
-                                AcepData={stateDistributionData}
-                                year="2018-2022"
-                                colors={[]}
-                            />
                         </Box>
                     </Box>
                 </Box>

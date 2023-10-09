@@ -85,9 +85,9 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
         recipientsChecked: true
     });
     const { paymentsChecked, baseAcresChecked, recipientsChecked } = checkedState;
-    let widthPercentage = 0.5;
+    let widthPercentage = 0.7;
     const heightPercentage = 0.8;
-    if (window.innerWidth >= 1920) {
+    if (window.innerWidth <= 1440) {
         widthPercentage = 0.6;
     }
     const handleResize: () => void = () => {
@@ -97,6 +97,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
     };
     React.useEffect(() => {
         window.addEventListener("resize", handleResize);
+        drawIllustration();
         return () => window.removeEventListener("resize", handleResize);
     });
     const handleSortClick = (e, attr) => {
@@ -147,32 +148,34 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
             URL.revokeObjectURL(url);
         }
     };
-    if (chartData[0].payments !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", Title1TreeMapIllustration)
-            .attr("height", Title1TreeMapIllustration)
-            .attr("fill", paymentsColor);
-    }
-    if (chartData[0].baseAcres !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", Title1TreeMapIllustration * 0.3)
-            .attr("width", Title1TreeMapIllustration * 0.7)
-            .attr("height", Title1TreeMapIllustration * 0.7)
-            .attr("fill", baseAcresColor);
-    }
-    if (chartData[0].recipients !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", Title1TreeMapIllustration * 0.6)
-            .attr("width", Title1TreeMapIllustration * 0.4)
-            .attr("height", Title1TreeMapIllustration * 0.4)
-            .attr("fill", recipientsColor);
+    function drawIllustration() {
+        if (chartData[0].payments !== 0) {
+            d3.select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", Title1TreeMapIllustration)
+                .attr("height", Title1TreeMapIllustration)
+                .attr("fill", paymentsColor);
+        }
+        if (chartData[0].baseAcres !== 0) {
+            d3.select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", Title1TreeMapIllustration * 0.3)
+                .attr("width", Title1TreeMapIllustration * 0.7)
+                .attr("height", Title1TreeMapIllustration * 0.7)
+                .attr("fill", baseAcresColor);
+        }
+        if (chartData[0].recipients !== 0) {
+            d3.select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", Title1TreeMapIllustration * 0.6)
+                .attr("width", Title1TreeMapIllustration * 0.4)
+                .attr("height", Title1TreeMapIllustration * 0.4)
+                .attr("fill", recipientsColor);
+        }
     }
     /* eslint-disable */
     return (
@@ -197,7 +200,8 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             <i>
-                                The payments,base acres and payment recipients are calculated as the total of the data from 2014-2021. 2022 payments for Title I have not yet been paid.
+                                The payments,base acres and payment recipients are calculated as the total of the data
+                                from 2014-2021. 2022 payments for Title I have not yet been paid.
                             </i>
                         </Typography>
                         <Typography
@@ -250,9 +254,9 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             <br />
                             The size differences of the squares represent the differences in relative amount{" "}
                             <i>within the same category</i>. For example, a larger purple square indicate a higher
-                            number of avg. recipients compared to another smaller purple square, but it does not necessarily
-                            indicate a greater number of avg. recipients compared to a smaller yellow square representing
-                            payments.
+                            number of avg. recipients compared to another smaller purple square, but it does not
+                            necessarily indicate a greater number of avg. recipients compared to a smaller yellow square
+                            representing payments.
                         </Typography>
                     </Grid>
                 </Grid>

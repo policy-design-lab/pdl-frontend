@@ -84,9 +84,9 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
         contractsChecked: true
     });
     const { paymentsChecked, acresChecked, contractsChecked } = checkedState;
-    let widthPercentage = 0.5;
+    let widthPercentage = 0.7;
     const heightPercentage = 0.8;
-    if (window.innerWidth >= 1920) {
+    if (window.innerWidth <= 1440) {
         widthPercentage = 0.6;
     }
     const handleResize: () => void = () => {
@@ -96,6 +96,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
     };
     React.useEffect(() => {
         window.addEventListener("resize", handleResize);
+        drawIllustration();
         return () => window.removeEventListener("resize", handleResize);
     });
     const handleSortClick = (e, attr) => {
@@ -146,33 +147,38 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
             URL.revokeObjectURL(url);
         }
     };
-    if (chartData[0].payments !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", AcepTreeMapIllustration)
-            .attr("height", AcepTreeMapIllustration)
-            .attr("fill", paymentsColor);
+    function drawIllustration() {
+        d3.select(rn.current).selectAll("*").remove();
+        if (chartData[0].payments !== 0) {
+            const test = d3
+                .select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", AcepTreeMapIllustration)
+                .attr("height", AcepTreeMapIllustration)
+                .attr("fill", paymentsColor);
+        }
+        if (chartData[0].acres !== 0) {
+            d3.select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", AcepTreeMapIllustration * 0.3)
+                .attr("width", AcepTreeMapIllustration * 0.7)
+                .attr("height", AcepTreeMapIllustration * 0.7)
+                .attr("fill", acresColor);
+        }
+        if (chartData[0].contracts !== 0) {
+            d3.select(rn.current)
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", AcepTreeMapIllustration * 0.6)
+                .attr("width", AcepTreeMapIllustration * 0.4)
+                .attr("height", AcepTreeMapIllustration * 0.4)
+                .attr("fill", contractsColor);
+        }
     }
-    if (chartData[0].acres !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", AcepTreeMapIllustration * 0.3)
-            .attr("width", AcepTreeMapIllustration * 0.7)
-            .attr("height", AcepTreeMapIllustration * 0.7)
-            .attr("fill", acresColor);
-    }
-    if (chartData[0].contracts !== 0) {
-        d3.select(rn.current)
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", AcepTreeMapIllustration * 0.6)
-            .attr("width", AcepTreeMapIllustration * 0.4)
-            .attr("height", AcepTreeMapIllustration * 0.4)
-            .attr("fill", contractsColor);
-    }
+
     /* eslint-disable */
     return (
         <Styles>
@@ -200,10 +206,8 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             {program.includes("(")
                                 ? `Comparing ${program
                                       .match(/\((.*?)\)/g)
-                                      .map((match) =>
-                                          match.slice(1, -1)
-                                      )} Payments, No. of Contracts and Farms/acreas(ac)`
-                                : `Comparing ${program} Payments, No. of Contracts and Farms/acreas(ac)`}
+                                      .map((match) => match.slice(1, -1))} Payments, Acres and No. of Contracts`
+                                : `Comparing ${program} Payments, Acres and No. of Contracts`}
                             <DownloadIcon
                                 sx={{
                                     paddingLeft: 1,
@@ -237,9 +241,9 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             <br />
                             The size differences of the squares represent the differences in relative amount{" "}
                             <i>within the same category</i>. For example, a larger purple square indicate a higher
-                            number of avg. contracts compared to another smaller purple square, but it does not necessarily
-                            indicate a greater number of avg. contracts compared to a smaller yellow square representing
-                            payments.
+                            number of avg. contracts compared to another smaller purple square, but it does not
+                            necessarily indicate a greater number of avg. contracts compared to a smaller yellow square
+                            representing payments.
                         </Typography>
                     </Grid>
                 </Grid>
@@ -320,7 +324,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                                                 style={{ color: acresColor }}
                                             />
                                         }
-                                        label="Farms/acreas(ac)"
+                                        label="Acres"
                                         sx={{ color: acresColor }}
                                     />
                                 ) : null}
@@ -335,7 +339,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                                                 style={{ color: contractsColor }}
                                             />
                                         }
-                                        label="Contracts"
+                                        label="No. of Contracts"
                                         sx={{ color: contractsColor }}
                                     />
                                 ) : null}
@@ -378,7 +382,6 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                         availableAttributes={availableAttributes}
                         program={program}
                     />
-                   
                 </Grid>
             </Grid>
         </Styles>

@@ -786,50 +786,16 @@ export default function ProgramDrawer({
                     sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: acepOpen ? "#ecf0ee" : "grey" }}
                     onClick={handleAcepClick}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center", my: 1 }}>
                         {location.pathname === "/acep" ? (
-                            <Typography sx={{ color: "#2f7164" }}>
+                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
                                 <strong>ACEP: Agriculture Conservation Easement Program</strong>
                             </Typography>
                         ) : (
                             <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
                         )}
-                        <Box
-                            sx={{
-                                maxWidth: 40,
-                                py: 3,
-                                color: "#ffffff",
-                                backgroundColor: "#2f7164",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                maxHeight: 48
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
-                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                    <strong>STATUE</strong>
-                                    <KeyboardArrowDownIcon />
-                                </Box>
-                            </Typography>
-                        </Box>
                     </Box>
                 </MenuItem>
-                <Popper
-                    open={acepOpen}
-                    anchorEl={acepRef.current}
-                    role={undefined}
-                    placement="right-start"
-                    sx={{ maxHeight: menuHeight, overflowY: "auto", maxWidth: "20%" }}
-                >
-                    <Box>
-                        <ACEPCheckboxList
-                            setACEPChecked={setACEPChecked}
-                            setShowPopUp={setAcepOpen}
-                            zeroCategory={zeroCategory}
-                        />
-                    </Box>
-                </Popper>
             </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>RCPP: Regional Conservation Partnership Program</Typography>

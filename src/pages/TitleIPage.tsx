@@ -33,7 +33,7 @@ export default function TitleIPage(): JSX.Element {
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
-    let initTreeMapWidthRatio = 0.6;
+    const initTreeMapWidthRatio = 0.6;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -49,9 +49,6 @@ export default function TitleIPage(): JSX.Element {
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
-        if (window.innerWidth >= 1920) {
-            initTreeMapWidthRatio = 0.7;
-        }
     }, []);
 
     const switchChartTable = (event, newTab) => {
@@ -256,7 +253,11 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2014-2021"
-                                        svgW={window.innerWidth * initTreeMapWidthRatio}
+                                        svgW={
+                                            window.innerWidth > 1440
+                                                ? window.innerWidth * 0.75
+                                                : window.innerWidth * 0.65
+                                        }
                                         svgH={3000}
                                     />
                                 </Box>

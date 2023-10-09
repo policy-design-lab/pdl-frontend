@@ -45,6 +45,10 @@ function AcepProgramTable({
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr.includes("Percentage")) {
                 newRecord[attr] = `${value.toString()}%`;
+            } else if (attr === "totalAcres" || attr === "totalContracts") {
+                newRecord[attr] = `${
+                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+                }`;
             } else {
                 newRecord[attr] = `$${
                     value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
@@ -58,7 +62,7 @@ function AcepProgramTable({
     attributes.forEach((attribute) => {
         let sortMethod = compareWithDollarSign;
         if (attribute.includes("Percentage")) sortMethod = compareWithPercentSign;
-        if (attribute.includes("totalAcres") || attribute.includes("totalAcres")) sortMethod = compareWithNumber;
+        if (attribute.includes("totalContracts") || attribute.includes("totalAcres")) sortMethod = compareWithNumber;
         const json = {
             Header: attribute
                 .replace(/([A-Z])/g, " $1")
@@ -73,6 +77,12 @@ function AcepProgramTable({
         columnPrep.push(json);
     });
     const columns = React.useMemo(() => columnPrep, []);
+    const paymentsIndex = columns.findIndex((c) => c.accessor === "paymentInDollars");
+    const acresIndex = columns.findIndex((c) => c.accessor === "totalAcres");
+    const contractsIndex = columns.findIndex((c) => c.accessor === "totalContracts");
+    const paymentsPercentageIndex = columns.findIndex((c) => c.accessor === "totalPaymentInPercentageNationwide");
+    const contractsPercentageIndex = columns.findIndex((c) => c.accessor === "contractsInPercentageNationwide");
+    const acresPercentageIndex = columns.findIndex((c) => c.accessor === "acresInPercentageNationwide");
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -107,6 +117,26 @@ function AcepProgramTable({
                 padding-right: 10em;
             }
 
+            td[class$="cell${paymentsIndex}"] {
+              background-color: ${colors[0]};
+          }
+
+          td[class$="cell${paymentsPercentageIndex}"] {
+            background-color: ${colors[0]};
+          }
+          td[class$="cell${contractsIndex}"] {
+          background-color: ${colors[1]};
+          }
+          td[class$="cell${contractsPercentageIndex}"] {
+              background-color: ${colors[1]};
+          }
+          td[class$="cell${acresIndex}"] {
+              background-color: ${colors[2]};
+          }
+          td[class$="cell${acresPercentageIndex}"] {
+              background-color: ${colors[2]};
+          }
+        
             td[class$="cell1"],
             td[class$="cell2"],
             td[class$="cell3"],
@@ -125,26 +155,34 @@ function AcepProgramTable({
                     border-right: 0;
                 }
             }
+
+            table .tableArrow{
+              margin-left: 8px;
+            }
         }
         .pagination {
             margin-top: 1.5em;
         }
 
-        @media screen and (max-width: 1024px) {
-            th,
-            td {
-                padding: 8px;
+        @media screen and (max-width: 1440px) {
+          table {
+            font-size: 0.9em;
+
+            th:not(:first-of-type) {
+              text-align: left;
             }
-            td[class$="cell0"] {
-                padding-right: 1em;
-            }
-            .pagination {
+          }
+          table th,
+          table td {
+                padding: 1em;
+                text-align: left;
+          }
+          .pagination {
                 margin-top: 8px;
-            }
+          }
         }
 
         .acepBox > .stateTitle {
-          font-weight: 700;
           margin-top: 0.5em;
           font-size: 1.2em;
           text-align: left;
@@ -240,10 +278,22 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                                     <span>
                                         {(() => {
                                             if (!column.isSorted)
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{2B83}"}</Box>;
+                                                return (
+                                                    <Box className="tableArrow" sx={{ display: "inline" }}>
+                                                        {"\u{2B83}"}
+                                                    </Box>
+                                                );
                                             if (column.isSortedDesc)
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
-                                            return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
+                                                return (
+                                                    <Box className="tableArrow" sx={{ display: "inline" }}>
+                                                        {"\u{25BC}"}
+                                                    </Box>
+                                                );
+                                            return (
+                                                <Box className="tableArrow" sx={{ display: "inline" }}>
+                                                    {"\u{25B2}"}
+                                                </Box>
+                                            );
                                         })()}
                                     </span>
                                 </th>

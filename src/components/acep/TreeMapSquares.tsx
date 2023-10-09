@@ -108,8 +108,7 @@ export default function TreeMapSquares({
                             const mousePos = d3.pointer(event, squareGroup.node());
                             const tipGroup = base.append("g").attr("class", "TreeMapSquareTip");
                             const xPosition = mousePos[0] + 160 > svgWidth ? mousePos[0] - 160 : mousePos[0];
-                            const tipHeight =
-                                program === "Agriculture Risk Coverage Individual Coverage (ARC-IC)" ? 80 : 100;
+                            const tipHeight = 100;
                             tipGroup
                                 .append("rect")
                                 .attr("x", xPosition)
@@ -142,30 +141,21 @@ export default function TreeMapSquares({
                                 .attr("y", mousePos[1] + stepSize * 2)
                                 .style("font-size", "0.8em")
                                 .style("fill", "white");
-                            if (program === "Agriculture Risk Coverage Individual Coverage (ARC-IC)") {
-                                tipGroup
-                                    .append("text")
-                                    .text(`Contracts:  ${contractsOriginalData}`)
-                                    .attr("x", xPosition + baseSize)
-                                    .attr("y", mousePos[1] + stepSize * 3)
-                                    .style("font-size", "0.8em")
-                                    .style("fill", "white");
-                            } else {
-                                tipGroup
-                                    .append("text")
-                                    .text(`Farms/acreas(ac): ${acresOriginalData}`)
-                                    .attr("x", xPosition + baseSize)
-                                    .attr("y", mousePos[1] + stepSize * 3)
-                                    .style("font-size", "0.8em")
-                                    .style("fill", "white");
-                                tipGroup
-                                    .append("text")
-                                    .text(`Contracts:  ${contractsOriginalData}`)
-                                    .attr("x", xPosition + 10)
-                                    .attr("y", mousePos[1] + stepSize * 4)
-                                    .style("font-size", "0.8em")
-                                    .style("fill", "white");
-                            }
+
+                            tipGroup
+                                .append("text")
+                                .text(`Acres: ${acresOriginalData}`)
+                                .attr("x", xPosition + baseSize)
+                                .attr("y", mousePos[1] + stepSize * 3)
+                                .style("font-size", "0.8em")
+                                .style("fill", "white");
+                            tipGroup
+                                .append("text")
+                                .text(`No. of Contracts:  ${contractsOriginalData}`)
+                                .attr("x", xPosition + 10)
+                                .attr("y", mousePos[1] + stepSize * 4)
+                                .style("font-size", "0.8em")
+                                .style("fill", "white");
                         })
                         .on("mouseleave", function (e) {
                             base.selectAll(".TreeMapSquareTip").remove();
