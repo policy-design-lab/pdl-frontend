@@ -88,8 +88,7 @@ export default function ACEPPage(): JSX.Element {
         setZeroCategories(zeroCategory);
 
         setTotalChartData([
-            { name: "ACEP", value: totalACEPPaymentInDollars, color: "#2F7164" },
-            { name: "Assistance Payment", value: assistancePaymentInDollars, color: "#869397" },
+            { name: "Assistance Payment", value: assistancePaymentInDollars, color: "#2F7164" },
             { name: "Reimburse Payment", value: reimbursePaymentInDollars, color: "#9CBAB4" },
             { name: "Tech Payment", value: techPaymentInDollars, color: "#C9D6D2" }
         ]);
