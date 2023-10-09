@@ -44,7 +44,7 @@ const MapChart = (props) => {
                                     }
                                     const totalPaymentInDollars = record.programs[0].paymentInDollars;
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].paymentInPercentageNationwide;
+                                        record.programs[0].totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{

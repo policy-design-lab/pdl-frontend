@@ -162,13 +162,13 @@ function App({
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,
                 totAcre: `${totalRcpp.totalAcres.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                finPayment: `${totalRcpp.assistancePaymentInDollars
+                finPayment: `$${totalRcpp.assistancePaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                reimbursePayment: `${totalRcpp.reimbursePaymentInDollars
+                reimbursePayment: `$${totalRcpp.reimbursePaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                techPayment: `${totalRcpp.techPaymentInDollars
+                techPayment: `$${totalRcpp.techPaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`
             };
@@ -218,7 +218,7 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "right" }}
                     >
                         ACRES <br />
                     </Box>
@@ -239,37 +239,7 @@ function App({
                     </Box>
                 ),
                 accessor: "finPayment",
-                sortType: compareWithPercentSign,
-                Cell: function styleCells(row) {
-                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
-                }
-            },
-            {
-                Header: (
-                    <Box
-                        className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
-                    >
-                        REIMBURSABLE ASSISTANT PAYMENTS <br />
-                    </Box>
-                ),
-                accessor: "reimbursePayment",
-                sortType: compareWithPercentSign,
-                Cell: function styleCells(row) {
-                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
-                }
-            },
-            {
-                Header: (
-                    <Box
-                        className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
-                    >
-                        TECHNICAL ASSISTANT PAYMENTS <br />
-                    </Box>
-                ),
-                accessor: "techPayment",
-                sortType: compareWithPercentSign,
+                sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }

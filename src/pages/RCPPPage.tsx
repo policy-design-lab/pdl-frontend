@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { Label } from "recharts";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
@@ -24,6 +25,7 @@ export default function RCPPPage(): JSX.Element {
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [zeroCategories, setZeroCategories] = React.useState([]);
     const [totalRcpp, setTotalRcpp] = React.useState(0);
+    const [totalBenefit, setTotalBenefit] = React.useState("");
 
     const defaultTheme = createTheme();
     const zeroCategory = [];
@@ -79,6 +81,27 @@ export default function RCPPPage(): JSX.Element {
             { name: "Total Reimbursable Payments", value: reimbursePayments, color: "#869397" },
             { name: "Total Techinical Assistance Payments", value: techPayments, color: "#9CBAB4" }
         ]);
+
+        if (Number(totalRCPPPaymentInDollars.toString()) >= 1000000000) {
+            const totalBenefitTmp = `$${Number(
+                Number(totalRCPPPaymentInDollars.toString()) / 1000000000.0
+            ).toLocaleString(undefined, {
+                maximumFractionDigits: 2
+            })}B`;
+            setTotalBenefit(totalBenefitTmp);
+        } else {
+            const totalBenefitTmp = `$${Number(Number(totalRCPPPaymentInDollars.toString()) / 1000000.0).toLocaleString(
+                undefined,
+                {
+                    maximumFractionDigits: 2
+                }
+            )}M`;
+            setTotalBenefit(totalBenefitTmp);
+        }
+
+        // position="center"
+        // dy={-75}
+        // style={{ textAnchor: "middle", fontSize: "200%", fill: "rgba(0, 0, 0, 0.87)" }}
     };
 
     return (
@@ -170,21 +193,18 @@ export default function RCPPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        <div>
-                            <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                                <SemiDonutChart
-                                    data={totalChartData}
-                                    label1={totalRcpp.toString()}
-                                    label2="RCPP TOTAL BENEFITS"
-                                />
-                            </Box>
-                        </div>
-
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
                                 <strong>Overall Performance of States</strong>
                             </Typography>
                         </Box>
+
+                        <Box display="flex" justifyContent="center" sx={{ mt: 1, mb: 2 }}>
+                            <Typography variant="h6">
+                                <strong>{totalBenefit}</strong>
+                            </Typography>
+                        </Box>
+
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                             <DataTable
                                 statePerformance={stateDistributionData}
