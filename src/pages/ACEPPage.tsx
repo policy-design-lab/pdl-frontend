@@ -166,14 +166,14 @@ export default function ACEPPage(): JSX.Element {
                         </Box>
                         <Box>
                             <Typography sx={{ mt: 2 }}>
-                                [TO BE UPDATED]The ACEP was first introduced in the 2014 Farm Bill as a consolidation of
-                                three previously separate easement programs – the Wetlands Reserve Program, Grassland
-                                Reserve Program, and Farm and Ranch Land Protection Program. The program is divided into
-                                two basic tracks, the Wetland Reserve Easement (“WRE”) and the Agricultural Land
-                                Easement (“ALE”). The wetland land easement track is largely similar to the old Wetlands
-                                Reserve Program, while the agricultural land easement track incorporates the other two
-                                former easement programs. ACEP participants receive financial and technical assistance
-                                in exchange for enrolling their lands in one of the two tracks.
+                                A conservation easement is a permanent (or long term) property right in agricultural
+                                land for conservation of natural resources. Agricultural Land Easements (ALE) limit
+                                non-agricultural uses of eligible land, including grazing land, to protect farmland from
+                                development or other pressures and works through land trusts or other entities such as
+                                state and local governments. Wetland Reserve Easements (WRE) protect, restore, and
+                                enhance wetlands that have been previously degraded due to agricultural uses. In the
+                                Agricultural Act of 2014, Congress combined existing conservation easement programs into
+                                a single program.
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
