@@ -247,8 +247,8 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xl={true}></Grid>
-                <Grid container xs={6} xl={4} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
+                <Grid item  xs={true} xl={true}></Grid>
+                <Grid container xs={5} xl={4} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
                     <Grid container justifyContent="flex-end" xs={7} alignItems="center">
                         <Grid item xs={2} justifyContent="flex-end" alignItems="center">
                             <FormGroup>
