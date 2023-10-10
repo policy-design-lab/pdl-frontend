@@ -176,19 +176,6 @@ export default function ACEPPage(): JSX.Element {
                                 in exchange for enrolling their lands in one of the two tracks.
                             </Typography>
                         </Box>
-
-                        {/* <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
-                            <ACEPTable
-                                tableTitle="Total ACEP"
-                                program="ACEP"
-                                attributes={["paymentInDollars", "totalPaymentInPercentageNationwide"]}
-                                skipColumns={[]}
-                                stateCodes={stateCodesData}
-                                AcepData={stateDistributionData}
-                                year="2018-2022"
-                                colors={[]}
-                            />
-                        </Box> */}
                         <Box component="div" sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}>
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography
@@ -236,7 +223,7 @@ export default function ACEPPage(): JSX.Element {
                                 </Box>
                                 <Box className="acepTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <ACEPTable
-                                        tableTitle="Total ACEP, Acres and No. of Contracts"
+                                        tableTitle="Total ACEP Benefits, Acres and No. of Contracts"
                                         program="ACEP"
                                         attributes={[
                                             "paymentInDollars",

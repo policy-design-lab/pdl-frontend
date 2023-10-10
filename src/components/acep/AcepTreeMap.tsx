@@ -191,7 +191,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                     // marginLeft: 3
                 }}
             >
-                <Grid container xs={6} xl={6} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
+                <Grid container xs={6} xl={7} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
                     <Grid item xs={12}>
                         <Typography
                             id="acepBarHeader"
@@ -204,10 +204,10 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             }}
                         >
                             {program.includes("(")
-                                ? `Comparing ${program
+                                ? `Comparing Total ${program
                                       .match(/\((.*?)\)/g)
-                                      .map((match) => match.slice(1, -1))} Payments, Acres and No. of Contracts`
-                                : `Comparing ${program} Payments, Acres and No. of Contracts`}
+                                      .map((match) => match.slice(1, -1))} Benefits, Acres and No. of Contracts (${year})`
+                                : `Comparing Total ${program} Benefits, Acres and No. of Contracts (${year})`}
                             <DownloadIcon
                                 sx={{
                                     paddingLeft: 1,
@@ -241,14 +241,14 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             <br />
                             The size differences of the squares represent the differences in relative amount{" "}
                             <i>within the same category</i>. For example, a larger purple square indicate a higher
-                            number of avg. contracts compared to another smaller purple square, but it does not
-                            necessarily indicate a greater number of avg. contracts compared to a smaller yellow square
-                            representing payments.
+                            number of no. of contracts compared to another smaller purple square, but it does not
+                            necessarily indicate a greater number of no. of contracts compared to a smaller green square
+                            representing acres.
                         </Typography>
                     </Grid>
                 </Grid>
                 <Grid item xl={true}></Grid>
-                <Grid container xs={6} xl={5} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
+                <Grid container xs={6} xl={4} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
                     <Grid container justifyContent="flex-end" xs={7} alignItems="center">
                         <Grid item xs={2} justifyContent="flex-end" alignItems="center">
                             <FormGroup>
@@ -365,7 +365,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             }}
                         >
                             Click the <SortIcon className="sortIcon sortRecipients" sx={{ fontSize: "1em" }} /> buttons
-                            above to sort squares by payments, avg. base acres or avg. contracts.
+                            above to sort squares by total benefits, acres or no. of contracts.
                         </Typography>
                     </Grid>
                 </Grid>
