@@ -185,11 +185,14 @@ export default function RCPPPage(): JSX.Element {
                         </Box>
                         <Box>
                             <Typography sx={{ mt: 2 }}>
-                                CRP provides annual rental payments to landowners in return for conservation practices
-                                that remove the acres from production and implements conservation cover (e.g., grasses
-                                and/or trees). CRP contracts are for 10 or 15 years and enrolled land can be an entire
-                                field or portions of a field (e.g., grass waterways or buffers). CRP spending will be
-                                visualized using the following categories.
+                                RCPP assists with the conservation, protection, restoration, and sustainable uses of
+                                soil, water, wildlife, and related natural resources on a regional or watershed scale
+                                and combines federal funding with private partner funding and other contributions. RCPP
+                                works across multiple farms (or nonindustrial private forest operations) through
+                                multiple conservation practices to achieve greater conservation outcomes, encourage
+                                flexibility in program operation, and leverage private resources. Congress created the
+                                RCPP in the Agricultural Act of 2014 and revised the program in the Agricultural
+                                Improvement Act of 2018
                             </Typography>
                         </Box>
 
