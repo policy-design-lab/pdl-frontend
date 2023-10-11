@@ -8,6 +8,7 @@ import RCPPPage from "./pages/RCPPPage";
 import SNAPPage from "./pages/SNAPPage";
 import TitleIPage from "./pages/TitleIPage";
 import CropInsurancePage from "./pages/CropInsurancePage";
+import ACEPPage from "./pages/ACEPPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();

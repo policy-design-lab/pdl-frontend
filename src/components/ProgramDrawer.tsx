@@ -23,6 +23,8 @@ ProgramDrawer.propTypes = {
 };
 
 let currentChecked = 0;
+const menuHeight = window.innerHeight < 900 ? "38%" : "40%";
+
 function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
@@ -593,7 +595,25 @@ export default function ProgramDrawer({
         prevRcppOpen.current = rcppOpen;
     }, [rcppOpen]);
 
-    const crpMenuHeight = window.innerHeight < 900 ? "38%" : "40%";
+    // ACEP Menu
+    const [acepOpen, setAcepOpen] = React.useState(false);
+    const acepRef = React.useRef<HTMLLIElement>(null);
+    const handleAcepClick = () => {
+        if (location.pathname !== "/acep") {
+            navigate("/acep");
+            window.location.reload(false);
+        } else {
+            setAcepOpen((prevAcepOpen) => !prevAcepOpen);
+        }
+    };
+    const prevAcepOpen = React.useRef(acepOpen);
+    React.useEffect(() => {
+        if (prevAcepOpen.current && !acepOpen) {
+            acepRef.current.focus();
+        }
+
+        prevAcepOpen.current = acepOpen;
+    }, [acepOpen]);
 
     return (
         <Drawer
@@ -610,7 +630,7 @@ export default function ProgramDrawer({
             }}
             open
         >
-            <Box sx={{ height: 100 }} />
+            <Box id="filler" sx={{ minHeight: 100 }} />
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Total Conservation Programs Benefits</Typography>
             </MenuItem>
@@ -655,7 +675,7 @@ export default function ProgramDrawer({
                     anchorEl={eqipRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ height: "50%", overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <EQIPCheckboxList
@@ -707,7 +727,7 @@ export default function ProgramDrawer({
                     anchorEl={cspRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: crpMenuHeight, overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ maxHeight: menuHeight, overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <CSPCheckboxList
@@ -759,7 +779,7 @@ export default function ProgramDrawer({
                     anchorEl={crpRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ maxHeight: menuHeight, overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <CRPCheckboxList

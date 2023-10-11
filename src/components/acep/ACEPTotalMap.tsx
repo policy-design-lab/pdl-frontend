@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
-import { getValueFromAttrDollar } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -38,14 +37,14 @@ const MapChart = (props) => {
                             <>
                                 {geographies.map((geo) => {
                                     const record = statePerformance[year].filter(
-                                        (v) => stateCodes[v.state] === geo.properties.name
+                                        (v) => v.state === geo.properties.name
                                     )[0];
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
                                     const totalPaymentInDollars = record.programs[0].paymentInDollars;
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].paymentInPercentageNationwide;
+                                        record.programs[0].totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{
@@ -165,7 +164,7 @@ MapChart.propTypes = {
     setTooltipContent: PropTypes.func
 };
 
-const CRPTotalMap = ({
+const ACEPTotalMap = ({
     program,
     attribute,
     year,
@@ -186,13 +185,12 @@ const CRPTotalMap = ({
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
         const ACur = programRecord.find((s) => s.programName === program);
-        let key = getValueFromAttrDollar(ACur, attribute);
-        key = key !== "" ? key : attribute;
+        const key = "paymentInDollars";
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
-    const category = "Total CRP";
+    const category = "Total ACEP";
     const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
@@ -257,4 +255,4 @@ const titleElement = (attribute, year): JSX.Element => {
         </Box>
     );
 };
-export default CRPTotalMap;
+export default ACEPTotalMap;

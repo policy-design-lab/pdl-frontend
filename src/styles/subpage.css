@@ -31,8 +31,10 @@
     display: flex;
   }
 
-  .stateTitleContainer .stateTitle {
-    margin-top: 0.5em;
+  .stateTitleContainer > .stateTitle {
+    font-weight: 700;
+    margin-top: 1em;
+    font-size: 1.2em;
   }
 
 @media only screen and (max-width: 1440px) {
@@ -65,10 +67,12 @@
     display: flex;
   }
 
-  .stateTitleContainer .stateTitle {
+
+  .stateTitleContainer > .stateTitle {
     margin-top: 0.5em;
   }
-
+  
+  
   .sideBar-short .MuiPaper-root {
     max-height: 99vh;
   }
