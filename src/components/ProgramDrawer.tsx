@@ -790,9 +790,24 @@ export default function ProgramDrawer({
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={acepRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: acepOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleAcepClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center", my: 1 }}>
+                        {location.pathname === "/acep" ? (
+                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
+                                <strong>ACEP: Agriculture Conservation Easement Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
+                        )}
+                    </Box>
+                </MenuItem>
+            </Box>
             <Box>
                 <MenuItem
                     ref={rcppRef}
@@ -802,13 +817,13 @@ export default function ProgramDrawer({
                 >
                     <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
                         {location.pathname === "/rcpp" ? (
-                            <Typography sx={{ color: "#2f7164" }}>
+                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
                                 <strong>RCPP: Regional Conservation Partnership Program</strong>
                             </Typography>
                         ) : (
                             <Typography>RCPP: Regional Conservation Partnership Program</Typography>
                         )}
-                        <Box
+                        {/* <Box
                             sx={{
                                 maxWidth: 40,
                                 py: 3,
@@ -820,30 +835,9 @@ export default function ProgramDrawer({
                                 maxHeight: 48
                             }}
                         >
-                            {/* <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
-                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                    <strong>STATUTE</strong>
-                                    <KeyboardArrowDownIcon />
-                                </Box>
-                            </Typography> */}
-                        </Box>
+                        </Box> */}
                     </Box>
                 </MenuItem>
-                <Popper
-                    open={rcppOpen}
-                    anchorEl={rcppRef.current}
-                    role={undefined}
-                    placement="right-start"
-                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
-                >
-                    <Box>
-                        <RCPPCheckboxList
-                            setRCPPChecked={setRCPPChecked}
-                            setShowPopUp={setRcppOpen}
-                            zeroCategory={zeroCategory}
-                        />
-                    </Box>
-                </Popper>
             </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Other Conservation</Typography>

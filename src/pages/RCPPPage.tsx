@@ -82,22 +82,25 @@ export default function RCPPPage(): JSX.Element {
             { name: "Total Techinical Assistance Payments", value: techPayments, color: "#9CBAB4" }
         ]);
 
-        if (Number(totalRCPPPaymentInDollars.toString()) >= 1000000000) {
-            const totalBenefitTmp = `$${Number(
-                Number(totalRCPPPaymentInDollars.toString()) / 1000000000.0
-            ).toLocaleString(undefined, {
-                maximumFractionDigits: 2
-            })}B`;
-            setTotalBenefit(totalBenefitTmp);
-        } else {
-            const totalBenefitTmp = `$${Number(Number(totalRCPPPaymentInDollars.toString()) / 1000000.0).toLocaleString(
-                undefined,
-                {
-                    maximumFractionDigits: 2
-                }
-            )}M`;
-            setTotalBenefit(totalBenefitTmp);
-        }
+        setTotalBenefit(
+            totalRCPPPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+        );
+        // if (Number(totalRCPPPaymentInDollars.toString()) >= 1000000000) {
+        //     const totalBenefitTmp = `$${Number(
+        //         Number(totalRCPPPaymentInDollars.toString()) / 1000000000.0
+        //     ).toLocaleString(undefined, {
+        //         maximumFractionDigits: 2
+        //     })}B`;
+        //     setTotalBenefit(totalBenefitTmp);
+        // } else {
+        //     const totalBenefitTmp = `$${Number(Number(totalRCPPPaymentInDollars.toString()) / 1000000.0).toLocaleString(
+        //         undefined,
+        //         {
+        //             maximumFractionDigits: 2
+        //         }
+        //     )}M`;
+        //     setTotalBenefit(totalBenefitTmp);
+        // }
 
         // position="center"
         // dy={-75}
@@ -125,10 +128,7 @@ export default function RCPPPage(): JSX.Element {
                         zeroCategories={zeroCategories}
                     />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box
-                            component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
-                        >
+                        <Box component="div" sx={{ width: "85%", m: "auto", display: "block" }}>
                             <RCPPTotalMap
                                 program="RCPP"
                                 attribute={attribute}
@@ -138,19 +138,6 @@ export default function RCPPPage(): JSX.Element {
                                 allStates={allStatesData}
                             />
                         </Box>
-
-                        <Box
-                            display="flex"
-                            justifyContent="center"
-                            flexDirection="column"
-                            sx={{ mt: 10, mb: 2, display: checked !== 0 ? "none" : "block" }}
-                        >
-                            <Box display="flex" justifyContent="center">
-                                <Typography variant="h5">
-                                    <strong>RCPP: Regional Conservation Partnership Program</strong>
-                                </Typography>
-                            </Box>
-                        </Box>
                         <Box
                             display="flex"
                             justifyContent="center"
@@ -158,7 +145,7 @@ export default function RCPPPage(): JSX.Element {
                             sx={{
                                 mt: 10,
                                 mb: 2,
-                                display: checked === 1 || checked === 2 || checked === 6 ? "block" : "none"
+                                display: "block"
                             }}
                         >
                             <Box display="flex" justifyContent="center">
@@ -166,20 +153,10 @@ export default function RCPPPage(): JSX.Element {
                                     <strong>RCPP: Regional Conservation Partnership Program</strong>
                                 </Typography>
                             </Box>
-                        </Box>
-                        <Box
-                            display="flex"
-                            justifyContent="center"
-                            flexDirection="column"
-                            sx={{
-                                mt: 10,
-                                mb: 2,
-                                display: checked > 2 && checked < 6 ? "block" : "none"
-                            }}
-                        >
                             <Box display="flex" justifyContent="center">
-                                <Typography variant="h5">
-                                    <strong>CRP Total Continuous: Sub-Category of Practice Performance</strong>
+                                <Typography variant="h6" sx={{ my: 2 }}>
+                                    Total Benefits ({year}):
+                                    <strong> ${totalBenefit} </strong>
                                 </Typography>
                             </Box>
                         </Box>
@@ -192,7 +169,7 @@ export default function RCPPPage(): JSX.Element {
                                 multiple conservation practices to achieve greater conservation outcomes, encourage
                                 flexibility in program operation, and leverage private resources. Congress created the
                                 RCPP in the Agricultural Act of 2014 and revised the program in the Agricultural
-                                Improvement Act of 2018
+                                Improvement Act of 2018.
                             </Typography>
                         </Box>
 
@@ -201,13 +178,6 @@ export default function RCPPPage(): JSX.Element {
                                 <strong>Overall Performance of States</strong>
                             </Typography>
                         </Box>
-
-                        <Box display="flex" justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-                            <Typography variant="h6">
-                                <strong>{totalBenefit}</strong>
-                            </Typography>
-                        </Box>
-
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                             <DataTable
                                 statePerformance={stateDistributionData}

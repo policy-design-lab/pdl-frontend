@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithNumber } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
-    margin-left: ${window.innerWidth <= 1440 ? "480px" : "auto"};
 
     table {
         border-spacing: 0;
@@ -121,30 +121,6 @@ function App({
     year: any;
     stateCodes: any;
 }): JSX.Element {
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareNumber(rowA, rowB, id, desc) {
-        const a = Number.parseInt(rowA.values[id].replaceAll(",", ""), 10);
-        const b = Number.parseInt(rowB.values[id].replaceAll(",", ""), 10);
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
     const rcppTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -154,28 +130,41 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                rcppBenefit: `$${totalRcpp.paymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
+                rcppBenefit: `$${
+                    totalRcpp.paymentInDollars
+                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                        .toString()
+                        .split(".")[0]
+                }`,
                 percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
                 noContract: `${totalRcpp.totalContracts
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,
                 totAcre: `${totalRcpp.totalAcres.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                finPayment: `$${totalRcpp.assistancePaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
-                reimbursePayment: `$${totalRcpp.reimbursePaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
-                techPayment: `$${totalRcpp.techPaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`
+                finPayment: `$${
+                    totalRcpp.assistancePaymentInDollars
+                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                        .toString()
+                        .split(".")[0]
+                }`,
+                reimbursePayment: `$${
+                    totalRcpp.reimbursePaymentInDollars
+                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                        .toString()
+                        .split(".")[0]
+                }`,
+                techPayment: `$${
+                    totalRcpp.techPaymentInDollars
+                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                        .toString()
+                        .split(".")[0]
+                }`
             };
         };
         rcppTableData.push(newRecord());
     });
 
+    // PENDING: The 'pl' below are hard coded values that are inherited from old code design. Need to update this in the future
     const columns = React.useMemo(
         () => [
             {
@@ -205,11 +194,11 @@ function App({
                         className="tableHeader"
                         sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
                     >
-                        NO. OF CONTRACTS <br />
+                        NO. OF CONTRACTS
                     </Box>
                 ),
                 accessor: "noContract",
-                sortType: compareNumber,
+                sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
@@ -218,13 +207,13 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "right" }}
+                        sx={{ maxWidth: 240, pl: 8, display: "flex", justifyContent: "center" }}
                     >
-                        ACRES <br />
+                        <div>ACRES</div>
                     </Box>
                 ),
                 accessor: "totAcre",
-                sortType: compareNumber,
+                sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
@@ -235,7 +224,7 @@ function App({
                         className="tableHeader"
                         sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
                     >
-                        FINANCIAL ASSISTANT PAYMENTS <br />
+                        FINANCIAL ASSISTANT PAYMENTS
                     </Box>
                 ),
                 accessor: "finPayment",

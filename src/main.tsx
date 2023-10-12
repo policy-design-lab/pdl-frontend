@@ -28,6 +28,7 @@ export default function Main(): JSX.Element {
                 <Route path="/csp" element={<CSPPage />} />
                 <Route path="/crp" element={<CRPPage />} />
                 <Route path="/rcpp" element={<RCPPPage />} />
+                <Route path="/acep" element={<ACEPPage />} />
                 <Route path="/title1" element={<TitleIPage />} />
                 <Route path="/cropinsurance" element={<CropInsurancePage />} />
                 <Route path="/snap" element={<SNAPPage />} />

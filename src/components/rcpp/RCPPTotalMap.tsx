@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
-import { getValueFromAttr } from "../../utils/apiutil";
+import { getValueFromAttrDollar } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -185,7 +185,7 @@ const RCPPTotalMap = ({
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
         const ACur = programRecord.find((s) => s.programName === program);
-        let key = getValueFromAttr(ACur, attribute);
+        let key = getValueFromAttrDollar(ACur, attribute);
         key = key !== "" ? key : attribute;
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);

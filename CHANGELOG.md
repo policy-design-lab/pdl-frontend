@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - ACEP page and corresponding components for its attributes [#200](https://github.com/policy-design-lab/pdl-frontend/issues/200)
 
+- RCPP page and corresponding components for its attributes [#196](https://github.com/policy-design-lab/pdl-frontend/issues/196)
+
 ### Changed
 - Reverse some unnecessary changes in EQIP, CSP and CRP table [#199](https://github.com/policy-design-lab/pdl-frontend/issues/199)
 
