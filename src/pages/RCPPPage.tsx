@@ -1,10 +1,8 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { createTheme, ThemeProvider, Typography } from "@mui/material";
-import { Label } from "recharts";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
-import SemiDonutChart from "../components/SemiDonutChart";
 import DataTable from "../components/rcpp/RCPPTotalTable";
 import RCPPTotalMap from "../components/rcpp/RCPPTotalMap";
 // import CategoryTable from "../components/rcpp/CategoryTable";
