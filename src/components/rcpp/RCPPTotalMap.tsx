@@ -189,6 +189,7 @@ const RCPPTotalMap = ({
         const ACur = programRecord.find((s) => s.programName === program);
         let key = getValueFromAttrDollar(ACur, attribute);
         key = key !== "" ? key : attribute;
+        console.log(key);
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;

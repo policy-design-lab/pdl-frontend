@@ -15,7 +15,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function RCPPPage(): JSX.Element {
     const year = "2018-2022";
-    const attribute = "paymentInDollars";
+    const attribute = "assistancePaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
