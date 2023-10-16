@@ -182,7 +182,7 @@ function App({
                         TOTAL RCPP BENEFITS
                     </Box>
                 ),
-                accessor: "rcppBenefit",
+                accessor: "finPayment",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
@@ -214,21 +214,6 @@ function App({
                 ),
                 accessor: "totAcre",
                 sortType: compareWithNumber,
-                Cell: function styleCells(row) {
-                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
-                }
-            },
-            {
-                Header: (
-                    <Box
-                        className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
-                    >
-                        FINANCIAL ASSISTANT PAYMENTS
-                    </Box>
-                ),
-                accessor: "finPayment",
-                sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }

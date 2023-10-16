@@ -42,9 +42,11 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].paymentInDollars;
+                                    // the totalPaymentInDolloars in RCPP is financial assistancePaymentInDollars
+                                    const totalPaymentInDollars = record.programs[0].assistancePaymentInDollars;
+                                    // since the total is financial assistance, the percentage should also be financial one
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].totalPaymentInPercentageNationwide;
+                                        record.programs[0].assistancePaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{

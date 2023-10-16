@@ -83,28 +83,9 @@ export default function RCPPPage(): JSX.Element {
         ]);
 
         setTotalBenefit(
-            totalRCPPPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+            // total benefit should be financial assistance payment
+            assistancePayments.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
         );
-        // if (Number(totalRCPPPaymentInDollars.toString()) >= 1000000000) {
-        //     const totalBenefitTmp = `$${Number(
-        //         Number(totalRCPPPaymentInDollars.toString()) / 1000000000.0
-        //     ).toLocaleString(undefined, {
-        //         maximumFractionDigits: 2
-        //     })}B`;
-        //     setTotalBenefit(totalBenefitTmp);
-        // } else {
-        //     const totalBenefitTmp = `$${Number(Number(totalRCPPPaymentInDollars.toString()) / 1000000.0).toLocaleString(
-        //         undefined,
-        //         {
-        //             maximumFractionDigits: 2
-        //         }
-        //     )}M`;
-        //     setTotalBenefit(totalBenefitTmp);
-        // }
-
-        // position="center"
-        // dy={-75}
-        // style={{ textAnchor: "middle", fontSize: "200%", fill: "rgba(0, 0, 0, 0.87)" }}
     };
 
     return (
