@@ -62,17 +62,18 @@ function AcepProgramTable({
         let sortMethod = compareWithDollarSign;
         if (attribute.includes("Percentage")) sortMethod = compareWithPercentSign;
         if (attribute.includes("totalContracts") || attribute.includes("totalAcres")) sortMethod = compareWithNumber;
+        let attrName = attribute
+            .replace(/([A-Z])/g, " $1")
+            .trim()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+            .toUpperCase();
+        if (attribute === "assistancePaymentInDollars") attrName = "Total Payment in Dollars".toUpperCase();
+        if (attribute === "assistancePaymentInPercentageNationwide")
+            attrName = "Total Payment In Percentage Nationwide".toUpperCase();
         const json = {
-            Header:
-                attribute === "assistancePaymentInDollars"
-                    ? "Total Payment in Dollars".toUpperCase()
-                    : attribute
-                          .replace(/([A-Z])/g, " $1")
-                          .trim()
-                          .split(" ")
-                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                          .join(" ")
-                          .toUpperCase(),
+            Header: attrName,
             accessor: attribute,
             sortType: sortMethod
         };
