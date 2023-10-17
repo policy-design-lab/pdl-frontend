@@ -6,8 +6,7 @@ import {
     compareWithNumber,
     compareWithAlphabetic,
     compareWithDollarSign,
-    compareWithPercentSign,
-    sortByDollars
+    compareWithPercentSign
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 
@@ -64,23 +63,26 @@ function AcepProgramTable({
         if (attribute.includes("Percentage")) sortMethod = compareWithPercentSign;
         if (attribute.includes("totalContracts") || attribute.includes("totalAcres")) sortMethod = compareWithNumber;
         const json = {
-            Header: attribute
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-                .split(" ")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-                .toUpperCase(),
+            Header:
+                attribute === "assistancePaymentInDollars"
+                    ? "Total Payment in Dollars".toUpperCase()
+                    : attribute
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                          .split(" ")
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(" ")
+                          .toUpperCase(),
             accessor: attribute,
             sortType: sortMethod
         };
         columnPrep.push(json);
     });
     const columns = React.useMemo(() => columnPrep, []);
-    const paymentsIndex = columns.findIndex((c) => c.accessor === "paymentInDollars");
+    const paymentsIndex = columns.findIndex((c) => c.accessor === "assistancePaymentInDollars");
     const acresIndex = columns.findIndex((c) => c.accessor === "totalAcres");
     const contractsIndex = columns.findIndex((c) => c.accessor === "totalContracts");
-    const paymentsPercentageIndex = columns.findIndex((c) => c.accessor === "totalPaymentInPercentageNationwide");
+    const paymentsPercentageIndex = columns.findIndex((c) => c.accessor === "assistancePaymentInPercentageNationwide");
     const contractsPercentageIndex = columns.findIndex((c) => c.accessor === "contractsInPercentageNationwide");
     const acresPercentageIndex = columns.findIndex((c) => c.accessor === "acresInPercentageNationwide");
     const Styles = styled.div`

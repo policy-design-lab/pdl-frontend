@@ -42,9 +42,9 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].paymentInDollars;
-                                    const totalPaymentInPercentageNationwide =
-                                        record.programs[0].totalPaymentInPercentageNationwide;
+                                    const totalPaymentInDollars = record.programs[0].assistancePaymentInDollars;
+                                    const assistancePaymentInPercentageNationwide =
+                                        record.programs[0].assistancePaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{
@@ -77,8 +77,8 @@ const MapChart = (props) => {
                                                     </Typography>
                                                     <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        {totalPaymentInPercentageNationwide
-                                                            ? `${totalPaymentInPercentageNationwide} %`
+                                                        {assistancePaymentInPercentageNationwide
+                                                            ? `${assistancePaymentInPercentageNationwide} %`
                                                             : "0%"}
                                                     </Typography>
                                                 </Box>
@@ -185,7 +185,7 @@ const ACEPTotalMap = ({
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
         const ACur = programRecord.find((s) => s.programName === program);
-        const key = "paymentInDollars";
+        const key = "assistancePaymentInDollars";
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;

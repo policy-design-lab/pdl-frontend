@@ -30,9 +30,9 @@ export default function ACEPPage(): JSX.Element {
     let totalACEPPaymentInDollars = 0;
     let totalContracts = 0;
     let totalAcres = 0;
-    let assistancePaymentInDollars = 0;
-    let reimbursePaymentInDollars = 0;
-    let techPaymentInDollars = 0;
+    const assistancePaymentInDollars = 0;
+    const reimbursePaymentInDollars = 0;
+    const techPaymentInDollars = 0;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -67,19 +67,19 @@ export default function ACEPPage(): JSX.Element {
         if (chartData.programs === undefined) return;
         const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
 
-        totalACEPPaymentInDollars = cur1.paymentInDollars;
+        totalACEPPaymentInDollars = cur1.assistancePaymentInDollars;
         setTotalAcep(totalACEPPaymentInDollars);
         if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
         totalContracts = cur1.totalContracts;
         if (totalContracts === 0) zeroCategory.push("Total Contracts");
         totalAcres = cur1.totalAcre;
         if (totalAcres === 0) zeroCategory.push("Total Acres");
-        assistancePaymentInDollars = cur1.assistancePaymentInDollars;
-        if (assistancePaymentInDollars === 0) zeroCategory.push("Assistance Payment");
-        reimbursePaymentInDollars = cur1.reimbursePaymentInDollars;
-        if (reimbursePaymentInDollars === 0) zeroCategory.push("Reimburse Payment");
-        techPaymentInDollars = cur1.techPaymentInDollars;
-        if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
+        // assistancePaymentInDollars = cur1.assistancePaymentInDollars;
+        // if (assistancePaymentInDollars === 0) zeroCategory.push("Assistance Payment");
+        // reimbursePaymentInDollars = cur1.reimbursePaymentInDollars;
+        // if (reimbursePaymentInDollars === 0) zeroCategory.push("Reimburse Payment");
+        // techPaymentInDollars = cur1.techPaymentInDollars;
+        // if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
         setZeroCategories(zeroCategory);
     };
     function prepData(program, subprogram, data, dataYear) {
@@ -93,13 +93,13 @@ export default function ACEPPage(): JSX.Element {
             organizedData.push({
                 state,
                 acres: programData[0].totalAcres,
-                payments: programData[0].paymentInDollars,
+                payments: programData[0].assistancePaymentInDollars,
                 contracts: programData[0].totalContracts
             });
             originalData.push({
                 state,
                 acres: programData[0].totalAcres,
-                payments: programData[0].paymentInDollars,
+                payments: programData[0].assistancePaymentInDollars,
                 contracts: programData[0].totalContracts
             });
         });
@@ -226,8 +226,8 @@ export default function ACEPPage(): JSX.Element {
                                         tableTitle="Total ACEP Benefits, Acres and No. of Contracts"
                                         program="ACEP"
                                         attributes={[
-                                            "paymentInDollars",
-                                            "totalPaymentInPercentageNationwide",
+                                            "assistancePaymentInDollars",
+                                            "assistancePaymentInPercentageNationwide",
                                             "totalAcres",
                                             "acresInPercentageNationwide",
                                             "totalContracts",
