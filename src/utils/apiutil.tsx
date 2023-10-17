@@ -18,12 +18,26 @@ export function convertAllState(inlist) {
     return JSON.parse(conv_str);
 }
 
-export const getValueFromAttr = (stateRecord, attribute): string => {
+export const getValueFromAttrDollar = (stateRecord, attribute): string => {
+    let ans = "";
+    if (attribute) {
+        Object.keys(stateRecord).forEach((key) => {
+            const match = key.toLowerCase().match(/(.*?)(?=\s*indollars)/);
+            const extractedKey = match ? match[1] : "";
+            if (extractedKey.includes(attribute)) {
+                ans = key;
+            }
+        });
+    }
+    return ans;
+};
+
+export const getValueFromAttrPercentage = (stateRecord, attribute): string => {
     let ans = "";
     Object.keys(stateRecord).forEach((key) => {
-        const match = key.match(/^(.*?)(?=\s*InDollars)/);
-        const extractedKey = match ? match[1] : key;
-        if (extractedKey === attribute) {
+        const match = key.toLowerCase().match(/(.*?)(?=\s*inpercentagenationwide)/);
+        const extractedKey = match ? match[1] : "";
+        if (extractedKey.includes(attribute)) {
             ans = key;
         }
     });

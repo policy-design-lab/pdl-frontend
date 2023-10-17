@@ -29,62 +29,61 @@ const scaling = (value, scaling_factor, base, max, min, maxCut, minCut) => {
     return value === 0 ? 0 : temp * (max - min) + min;
 };
 const transform = (data) => {
-    let minbaseAcres = Infinity;
-    let maxbaseAcres = -Infinity;
+    let minacres = Infinity;
+    let maxacres = -Infinity;
     let minpayments = Infinity;
     let maxpayments = -Infinity;
-    let minrecipients = Infinity;
-    let maxrecipients = -Infinity;
+    let mincontracts = Infinity;
+    let maxcontracts = -Infinity;
     data.forEach((stateData) => {
-        minbaseAcres = Math.min(minbaseAcres, stateData.baseAcres);
-        maxbaseAcres = Math.max(maxbaseAcres, stateData.baseAcres);
+        minacres = Math.min(minacres, stateData.acres);
+        maxacres = Math.max(maxacres, stateData.acres);
         minpayments = Math.min(minpayments, stateData.payments);
         maxpayments = Math.max(maxpayments, stateData.payments);
-        minrecipients = Math.min(minrecipients, stateData.recipients);
-        maxrecipients = Math.max(maxrecipients, stateData.recipients);
+        mincontracts = Math.min(mincontracts, stateData.contracts);
+        maxcontracts = Math.max(maxcontracts, stateData.contracts);
     });
     const res = data.map((stateData) => {
-        const transformedJson = { baseAcres: 0, payments: 0, recipients: 0, state: "" };
-        transformedJson.baseAcres =
-            stateData.baseAcres === 0 ? 0 : (stateData.baseAcres - minbaseAcres) / (maxbaseAcres - minbaseAcres);
+        const transformedJson = { acres: 0, payments: 0, contracts: 0, state: "" };
+        transformedJson.acres = stateData.acres === 0 ? 0 : (stateData.acres - minacres) / (maxacres - minacres);
         transformedJson.payments =
             stateData.payments === 0 ? 0 : (stateData.payments - minpayments) / (maxpayments - minpayments);
-        transformedJson.recipients =
-            stateData.recipients === 0 ? 0 : (stateData.recipients - minrecipients) / (maxrecipients - minrecipients);
+        transformedJson.contracts =
+            stateData.contracts === 0 ? 0 : (stateData.contracts - mincontracts) / (maxcontracts - mincontracts);
         transformedJson.state = stateData.state;
         return transformedJson;
     });
     const res2 = res.map((stateData) => {
-        const transformedJson = { baseAcres: 0, payments: 0, recipients: 0, state: "" };
-        transformedJson.baseAcres = scaling(stateData.baseAcres, 1, 10, 0.9, 0.2, 1, 0);
+        const transformedJson = { acres: 0, payments: 0, contracts: 0, state: "" };
+        transformedJson.acres = scaling(stateData.acres, 1, 10, 0.9, 0.2, 1, 0);
         transformedJson.payments = scaling(stateData.payments, 1, 10, 1, 0.1, 1, 0);
-        transformedJson.recipients = scaling(stateData.recipients, 1, 10, 0.7, 0.05, 1, 0);
+        transformedJson.contracts = scaling(stateData.contracts, 1, 10, 0.7, 0.05, 1, 0);
         transformedJson.state = stateData.state;
         return transformedJson;
     });
     return res2;
 };
-export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, svgW, svgH }): JSX.Element {
-    const paymentsColor = "#FBB650";
-    const baseAcresColor = "#5BBD5F";
-    const recipientsColor = "#990570";
+export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, svgW, svgH }): JSX.Element {
+    const paymentsColor = "#1F78B4";
+    const acresColor = "#66BB6A";
+    const contractsColor = "#C81194";
     const stCodes = stateCodes;
     const rn = React.useRef(null);
-    const title1Div = React.useRef(null);
+    const acepDiv = React.useRef(null);
     const [sortPaymentButtonColor, setPaymentSortButtonColor] = React.useState(paymentsColor);
     const [sortBaseAcresButtonColor, setSortBaseAcresButtonColor] = React.useState("#CCC");
     const [sortRecipientsButtonColor, setSortRecipientsButtonColor] = React.useState("#CCC");
-    const [Title1TreeMapIllustration, setTitle1TreeMapIllustration] = React.useState(window.innerWidth * 0.06);
+    const [AcepTreeMapIllustration, setAcepTreeMapIllustration] = React.useState(window.innerWidth * 0.06);
     const [chartData, setChartData] = React.useState(sortDataByAttribute(transform(TreeMapData[1]), "payments"));
-    const [availableAttributes, setAvailableAttributes] = React.useState(["payments", "baseAcres", "recipients"]);
+    const [availableAttributes, setAvailableAttributes] = React.useState(["payments", "acres", "contracts"]);
     const [svgWidth, setSvgWidth] = React.useState(svgW);
     const [svgHeight, setSvgHeight] = React.useState(svgH);
     const [checkedState, setCheckedState] = React.useState({
         paymentsChecked: true,
-        baseAcresChecked: true,
-        recipientsChecked: true
+        acresChecked: true,
+        contractsChecked: true
     });
-    const { paymentsChecked, baseAcresChecked, recipientsChecked } = checkedState;
+    const { paymentsChecked, acresChecked, contractsChecked } = checkedState;
     let widthPercentage = 0.7;
     const heightPercentage = 0.8;
     if (window.innerWidth <= 1440) {
@@ -93,7 +92,7 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
     const handleResize: () => void = () => {
         setSvgWidth(window.innerWidth * widthPercentage);
         setSvgHeight(window.innerHeight * heightPercentage);
-        setTitle1TreeMapIllustration(window.innerWidth * 0.05);
+        setAcepTreeMapIllustration(window.innerWidth * 0.05);
     };
     React.useEffect(() => {
         window.addEventListener("resize", handleResize);
@@ -111,12 +110,12 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                     setChartData(sortDataByAttribute(transform(TreeMapData[1]), "payments"));
                 }
                 if (el.classList.contains("sortBaseAcres")) {
-                    setSortBaseAcresButtonColor(baseAcresColor);
-                    setChartData(sortDataByAttribute(transform(TreeMapData[1]), "baseAcres"));
+                    setSortBaseAcresButtonColor(acresColor);
+                    setChartData(sortDataByAttribute(transform(TreeMapData[1]), "acres"));
                 }
                 if (el.classList.contains("sortRecipients")) {
-                    setSortRecipientsButtonColor(recipientsColor);
-                    setChartData(sortDataByAttribute(transform(TreeMapData[1]), "recipients"));
+                    setSortRecipientsButtonColor(contractsColor);
+                    setChartData(sortDataByAttribute(transform(TreeMapData[1]), "contracts"));
                 }
             }
         });
@@ -127,21 +126,21 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
             ...checkedState,
             [event.target.name]: event.target.checked
         };
-        if (temp.baseAcresChecked === true) checkedList.push("baseAcres");
+        if (temp.acresChecked === true) checkedList.push("acres");
         if (temp.paymentsChecked === true) checkedList.push("payments");
-        if (temp.recipientsChecked === true) checkedList.push("recipients");
+        if (temp.contractsChecked === true) checkedList.push("contracts");
         setCheckedState(temp);
         setAvailableAttributes(checkedList);
     };
     const downloadSVG = (status) => {
-        if (title1Div.current !== undefined && status) {
-            const svgElement = title1Div.current.querySelector("#Title1TreeMap");
+        if (acepDiv.current !== undefined && status) {
+            const svgElement = acepDiv.current.querySelector("#AcepTreeMap");
             const svgData = new XMLSerializer().serializeToString(svgElement);
             const blob = new Blob([svgData], { type: "image/svg+xml" });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "title1-treemap.svg";
+            link.download = "acep-treemap.svg";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -149,34 +148,37 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
         }
     };
     function drawIllustration() {
+        d3.select(rn.current).selectAll("*").remove();
         if (chartData[0].payments !== 0) {
-            d3.select(rn.current)
+            const test = d3
+                .select(rn.current)
                 .append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("width", Title1TreeMapIllustration)
-                .attr("height", Title1TreeMapIllustration)
+                .attr("width", AcepTreeMapIllustration)
+                .attr("height", AcepTreeMapIllustration)
                 .attr("fill", paymentsColor);
         }
-        if (chartData[0].baseAcres !== 0) {
+        if (chartData[0].acres !== 0) {
             d3.select(rn.current)
                 .append("rect")
                 .attr("x", 0)
-                .attr("y", Title1TreeMapIllustration * 0.3)
-                .attr("width", Title1TreeMapIllustration * 0.7)
-                .attr("height", Title1TreeMapIllustration * 0.7)
-                .attr("fill", baseAcresColor);
+                .attr("y", AcepTreeMapIllustration * 0.3)
+                .attr("width", AcepTreeMapIllustration * 0.7)
+                .attr("height", AcepTreeMapIllustration * 0.7)
+                .attr("fill", acresColor);
         }
-        if (chartData[0].recipients !== 0) {
+        if (chartData[0].contracts !== 0) {
             d3.select(rn.current)
                 .append("rect")
                 .attr("x", 0)
-                .attr("y", Title1TreeMapIllustration * 0.6)
-                .attr("width", Title1TreeMapIllustration * 0.4)
-                .attr("height", Title1TreeMapIllustration * 0.4)
-                .attr("fill", recipientsColor);
+                .attr("y", AcepTreeMapIllustration * 0.6)
+                .attr("width", AcepTreeMapIllustration * 0.4)
+                .attr("height", AcepTreeMapIllustration * 0.4)
+                .attr("fill", contractsColor);
         }
     }
+
     /* eslint-disable */
     return (
         <Styles>
@@ -189,23 +191,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                     // marginLeft: 3
                 }}
             >
-                <Grid container xs={6} xl={6} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
+                <Grid container xs={6} xl={7} justifyContent="flex-start" sx={{ display: "flex", alignItems: "end" }}>
                     <Grid item xs={12}>
                         <Typography
-                            sx={{
-                                fontWeight: 400,
-                                paddingLeft: 0,
-                                fontSize: "0.7em",
-                                color: "rgb(163, 163, 163)"
-                            }}
-                        >
-                            <i>
-                                The payments,base acres and payment recipients are calculated as the total of the data
-                                from 2014-2021. 2022 payments for Title I have not yet been paid.
-                            </i>
-                        </Typography>
-                        <Typography
-                            id="title1BarHeader"
+                            id="acepBarHeader"
                             variant="h6"
                             sx={{
                                 fontWeight: 400,
@@ -215,12 +204,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             {program.includes("(")
-                                ? `Comparing ${program
+                                ? `Comparing Total ${program
                                       .match(/\((.*?)\)/g)
-                                      .map((match) =>
-                                          match.slice(1, -1)
-                                      )} Payments, Avg. Payment Recipients and Avg. Base Acres`
-                                : `Comparing ${program} Payments, Avg. Payment Recipients and Avg. Base Acres`}
+                                      .map((match) => match.slice(1, -1))} Benefits, Acres and No. of Contracts (${year})`
+                                : `Comparing Total ${program} Benefits, Acres and No. of Contracts (${year})`}
                             <DownloadIcon
                                 sx={{
                                     paddingLeft: 1,
@@ -254,14 +241,14 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             <br />
                             The size differences of the squares represent the differences in relative amount{" "}
                             <i>within the same category</i>. For example, a larger purple square indicate a higher
-                            number of avg. recipients compared to another smaller purple square, but it does not
-                            necessarily indicate a greater number of avg. recipients compared to a smaller yellow square
-                            representing payments.
+                            number of no. of contracts compared to another smaller purple square, but it does not
+                            necessarily indicate a greater number of no. of contracts compared to a smaller green square
+                            representing acres.
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xl={true}></Grid>
-                <Grid container xs={6} xl={5} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
+                <Grid item  xs={true} xl={true}></Grid>
+                <Grid container xs={5} xl={4} justifyContent="flex-end" sx={{ display: "flex", alignItems: "center" }}>
                     <Grid container justifyContent="flex-end" xs={7} alignItems="center">
                         <Grid item xs={2} justifyContent="flex-end" alignItems="center">
                             <FormGroup>
@@ -279,10 +266,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                         />
                                     </IconButton>
                                 ) : null}
-                                {chartData[0].baseAcres !== 0 ? (
+                                {chartData[0].acres !== 0 ? (
                                     <IconButton
                                         aria-label="add"
-                                        onClick={(event) => handleSortClick(event, "baseAcres")}
+                                        onClick={(event) => handleSortClick(event, "acres")}
                                         sx={{
                                             borderRadius: "2px"
                                         }}
@@ -293,10 +280,10 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                         />
                                     </IconButton>
                                 ) : null}
-                                {chartData[0].recipients !== 0 ? (
+                                {chartData[0].contracts !== 0 ? (
                                     <IconButton
                                         aria-label="add"
-                                        onClick={(event) => handleSortClick(event, "recipients")}
+                                        onClick={(event) => handleSortClick(event, "contracts")}
                                         sx={{
                                             borderRadius: "2px"
                                         }}
@@ -322,38 +309,38 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                                                 style={{ color: paymentsColor }}
                                             />
                                         }
-                                        label="Total Payments ($)"
+                                        label="Total Benefits ($)"
                                         sx={{ color: paymentsColor }}
                                     />
                                 ) : null}
-                                {chartData[0].baseAcres !== 0 ? (
+                                {chartData[0].acres !== 0 ? (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
                                                 className="showSquare"
-                                                checked={baseAcresChecked}
+                                                checked={acresChecked}
                                                 onChange={handleSquareChange}
-                                                name="baseAcresChecked"
-                                                style={{ color: baseAcresColor }}
+                                                name="acresChecked"
+                                                style={{ color: acresColor }}
                                             />
                                         }
-                                        label="Avg. Base Acres (ac)"
-                                        sx={{ color: baseAcresColor }}
+                                        label="Acres"
+                                        sx={{ color: acresColor }}
                                     />
                                 ) : null}
-                                {chartData[0].recipients !== 0 ? (
+                                {chartData[0].contracts !== 0 ? (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
                                                 className="showSquare"
-                                                checked={recipientsChecked}
+                                                checked={contractsChecked}
                                                 onChange={handleSquareChange}
-                                                name="recipientsChecked"
-                                                style={{ color: recipientsColor }}
+                                                name="contractsChecked"
+                                                style={{ color: contractsColor }}
                                             />
                                         }
-                                        label="Avg. Recipients (pers.)"
-                                        sx={{ color: recipientsColor }}
+                                        label="No. of Contracts"
+                                        sx={{ color: contractsColor }}
                                     />
                                 ) : null}
                             </FormGroup>
@@ -362,9 +349,9 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                     <Grid item xs={5} justifyContent="flex-start" alignItems="center">
                         <svg
                             ref={rn}
-                            id="Title1TreeMapIllustration"
-                            width={Title1TreeMapIllustration}
-                            height={Title1TreeMapIllustration}
+                            id="AcepTreeMapIllustration"
+                            width={AcepTreeMapIllustration}
+                            height={AcepTreeMapIllustration}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -378,20 +365,20 @@ export default function Title1TreeMap({ program, TreeMapData, year, stateCodes, 
                             }}
                         >
                             Click the <SortIcon className="sortIcon sortRecipients" sx={{ fontSize: "1em" }} /> buttons
-                            above to sort squares by payments, avg. base acres or avg. recipients.
+                            above to sort squares by total benefits, acres or no. of contracts.
                         </Typography>
                     </Grid>
                 </Grid>
             </Grid>
             <Grid container>
-                <Grid item xs={12} id="title1BarContainer" sx={{ display: "flex" }} ref={title1Div}>
+                <Grid item xs={12} id="acepBarContainer" sx={{ display: "flex" }} ref={acepDiv}>
                     <TreeMapSquares
                         svgWidth={svgWidth}
                         svgHeight={svgHeight}
                         stateCodes={stCodes}
                         originalData={TreeMapData[0]}
                         chartData={chartData}
-                        color={{ baseAcres: baseAcresColor, payments: paymentsColor, recipients: recipientsColor }}
+                        color={{ acres: acresColor, payments: paymentsColor, contracts: contractsColor }}
                         availableAttributes={availableAttributes}
                         program={program}
                     />

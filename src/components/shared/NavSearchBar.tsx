@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Grid, IconButton, Typography, Box } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export default function NavSearchBar({
     bkColor = "rgba(255, 255, 255, 1)",
@@ -17,7 +16,7 @@ export default function NavSearchBar({
                 borderLeft: 0,
                 borderRight: 0,
                 borderColor: brColor,
-                margin: 1,
+                mb: 1,
                 backgroundColor: bkColor
             }}
         >

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { scaleQuantize } from "d3-scale";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -11,7 +10,7 @@ import * as d3 from "d3";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
-import { getValueFromAttrDollar } from "../../utils/apiutil";
+import { getValueFromAttrDollar, getValueFromAttrPercentage } from "../../utils/apiutil";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -28,8 +27,8 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { year, setTooltipContent, category, allStates, stateCodes, statePerformance, colorScale } = props;
-    let categoryRecord;
+    const { year, setTooltipContent, category, allStates, stateCodes, statePerformance, colorScale, attribute } = props;
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -37,51 +36,24 @@ const MapChart = (props) => {
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
-                                const record = statePerformance[year].filter(
-                                    (v) => stateCodes[v.state] === geo.properties.name
-                                )[0];
+                                let keyDollar;
+                                let keyPercentage = "";
+                                const record = statePerformance[year].filter((v) => v.state === geo.properties.name)[0];
                                 if (record === undefined || record.length === 0) {
                                     return null;
                                 }
-                                let ACur = {};
-                                let BCur = {};
-                                let CCur = {};
-                                let DCur = {};
-                                let ECur = {};
-                                let FCur = {};
-                                record.programs.forEach((value) => {
-                                    if (value.programName === "Total General Sign-Up") {
-                                        ACur = value;
-                                    } else if (value.programName === "Total Continuous Sign-Up") {
-                                        BCur = value;
-                                        value.subPrograms.forEach((subValue) => {
-                                            if (subValue.programName === "CREP Only") {
-                                                CCur = subValue;
-                                            } else if (subValue.programName === "Continuous Non-CREP") {
-                                                DCur = subValue;
-                                            } else if (subValue.programName === "Farmable Wetland") {
-                                                ECur = subValue;
-                                            }
-                                        });
-                                    } else if (value.programName === "Grassland") {
-                                        FCur = value;
-                                    }
-                                });
-                                if (category === "Total General Sign-Up") {
-                                    categoryRecord = ACur;
-                                } else if (category === "Total Continuous Sign-Up") {
-                                    categoryRecord = BCur;
-                                } else if (category === "CREP Only") {
-                                    categoryRecord = CCur;
-                                } else if (category === "Continuous Non-CREP") {
-                                    categoryRecord = DCur;
-                                } else if (category === "Farmable Wetland") {
-                                    categoryRecord = ECur;
+                                if (attribute === "contracts") {
+                                    keyDollar = "totalContracts";
+                                    keyPercentage = "contractsInPercentageNationwide";
+                                } else if (attribute === "acres") {
+                                    keyDollar = "totalAcres";
+                                    keyPercentage = "acresInPercentageNationwide";
                                 } else {
-                                    categoryRecord = FCur;
+                                    keyDollar = getValueFromAttrDollar(record.programs[0], attribute);
+                                    keyPercentage = getValueFromAttrPercentage(record.programs[0], attribute);
                                 }
-                                const categoryPayment = categoryRecord.paymentInDollars;
-                                const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
+                                const categoryPayment = record.programs[0][keyDollar];
+                                const nationwidePercentage = record.programs[0][keyPercentage];
                                 const hoverContent = (
                                     <Box
                                         sx={{
@@ -213,31 +185,20 @@ const CategoryMap = ({
     stateCodes: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    let title = `CRP ${category} from ${year}`;
+    const title = `ACEP ${category} from ${year}`;
     const quantizeArray: number[] = [];
     const zeroPoints = [];
 
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
-        let ACur = {};
-        if (
-            category === "Total General Sign-Up" ||
-            category === "Total Continuous Sign-Up" ||
-            category === "Grassland"
-        ) {
-            ACur = programRecord.find((s) => s.programName === category);
-        } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
-            const contSingUp = programRecord.find((s) => s.programName === "Total Continuous Sign-Up");
-            const subPrograms = contSingUp.subPrograms;
-            title = `CRP Total Continuous, ${category} from ${year}`;
-            subPrograms.forEach((subValue) => {
-                if (subValue.programName === category) {
-                    ACur = subValue;
-                }
-            });
+        const ACur = programRecord[0];
+        let key = "";
+        if (attribute === "contracts") key = "totalContracts";
+        else if (attribute === "acres") key = "totalAcres";
+        else {
+            key = getValueFromAttrDollar(ACur, attribute);
+            key = key !== "" ? key : attribute;
         }
-        let key = getValueFromAttrDollar(ACur, attribute);
-        key = key !== "" ? key : attribute;
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
@@ -245,7 +206,7 @@ const CategoryMap = ({
     const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
-    const customScale = legendConfig[category === "Grassland" ? "Grassland-CRP" : category];
+    const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     return (
         <div>
@@ -260,7 +221,7 @@ const CategoryMap = ({
                             initRatioLarge={0.6}
                             initRatioSmall={0.5}
                             isRatio={false}
-                            notDollar={false}
+                            notDollar={!!(attribute === "acres" || attribute === "contracts")}
                             emptyState={[]}
                         />
                     ) : (
@@ -303,6 +264,7 @@ const CategoryMap = ({
                 allStates={allStates}
                 stateCodes={stateCodes}
                 statePerformance={statePerformance}
+                attribute={attribute}
             />
             <div className="tooltip-container">
                 <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
@@ -316,7 +278,7 @@ const titleElement = (attribute, year): JSX.Element => {
     return (
         <Box>
             <Typography noWrap variant="h6">
-                <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
+                <strong>{attribute}</strong> from <strong>{year}</strong>
             </Typography>{" "}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
                 <i>In any state that appears in grey, there is no available data</i>

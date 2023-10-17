@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2023-10-17
+
+### Added
+
+- ACEP page and corresponding components for its attributes [#200](https://github.com/policy-design-lab/pdl-frontend/issues/200)
+
+- RCPP page and corresponding components for its attributes [#196](https://github.com/policy-design-lab/pdl-frontend/issues/196)
+
+### Changed
+- Reverse some unnecessary changes in EQIP, CSP and CRP table [#199](https://github.com/policy-design-lab/pdl-frontend/issues/199)
+
+
+## Fixed
+- Adjust program drawer to remove over-length scroll bar in Chrome/Firefox [#198](https://github.com/policy-design-lab/pdl-frontend/issues/198)
+
+
 ## [0.9.0] - 2023-09-18
 
 ### Added

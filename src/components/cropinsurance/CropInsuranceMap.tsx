@@ -55,8 +55,8 @@ const MapChart = ({
                                     return null;
                                 }
                                 const key =
-                                    getValueFromAttr(state.programs[0], attribute) !== ""
-                                        ? getValueFromAttr(state.programs[0], attribute)
+                                    getValueFromAttrDollar(state.programs[0], attribute) !== ""
+                                        ? getValueFromAttrDollar(state.programs[0], attribute)
                                         : "totalNetFarmerBenefit";
                                 programPayment = state.programs[0][key];
                                 const hoverContent = (
@@ -196,7 +196,7 @@ const CropInsuranceMap = ({
     statePerformance[year].forEach((value) => {
         const programRecord = value.programs;
         const ACur = programRecord.find((s) => s.programName === program);
-        let key = getValueFromAttr(ACur, attribute);
+        let key = getValueFromAttrDollar(ACur, attribute);
         key = key !== "" ? key : "totalNetFarmerBenefit";
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
@@ -309,7 +309,7 @@ const titleElement = ({ attribute, year }): JSX.Element => {
         </Typography>
     );
 };
-const getValueFromAttr = (stateRecord, attribute): string => {
+const getValueFromAttrDollar = (stateRecord, attribute): string => {
     let ans = "";
     Object.keys(stateRecord).forEach((key) => {
         const match = key.match(/^(.*?)(?=\s*InDollars)/);

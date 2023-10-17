@@ -6,7 +6,7 @@ import "../../styles/table.css";
 
 const Styles = styled.div`
     padding: 1rem;
-    margin-left: ${window.innerWidth <= 1440 ? "480px" : "auto"};
+    ${window.innerWidth <= 1440 ? "margin-left: 480px" : ""};
 
     table {
         border-spacing: 0;
