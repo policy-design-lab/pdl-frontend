@@ -136,7 +136,7 @@ function App({
                         .toString()
                         .split(".")[0]
                 }`,
-                percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
+                percentage: `${totalRcpp.assistancePaymentInPercentageNationwide.toString()}%`,
                 noContract: `${totalRcpp.totalContracts
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,
@@ -213,6 +213,21 @@ function App({
                     </Box>
                 ),
                 accessor: "totAcre",
+                sortType: compareWithNumber,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
+            },
+            {
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{ maxWidth: 240, pl: 8, display: "flex", justifyContent: "center" }}
+                    >
+                        <div>PCT. NATIONWIDE</div>
+                    </Box>
+                ),
+                accessor: "percentage",
                 sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
