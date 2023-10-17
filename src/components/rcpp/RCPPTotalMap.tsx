@@ -28,7 +28,6 @@ const offsets = {
 
 const MapChart = (props) => {
     const { setTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
-
     return (
         <div data-tip="">
             {allStates.length > 0 && statePerformance[year] !== undefined ? (
@@ -38,14 +37,16 @@ const MapChart = (props) => {
                             <>
                                 {geographies.map((geo) => {
                                     const record = statePerformance[year].filter(
-                                        (v) => stateCodes[v.state] === geo.properties.name
+                                        (v) => v.state === geo.properties.name
                                     )[0];
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].paymentInDollars;
+                                    // the totalPaymentInDolloars in RCPP is financial assistancePaymentInDollars
+                                    const totalPaymentInDollars = record.programs[0].assistancePaymentInDollars;
+                                    // since the total is financial assistance, the percentage should also be financial one
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].paymentInPercentageNationwide;
+                                        record.programs[0].assistancePaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <Box
                                             sx={{
@@ -165,7 +166,7 @@ MapChart.propTypes = {
     setTooltipContent: PropTypes.func
 };
 
-const CRPTotalMap = ({
+const RCPPTotalMap = ({
     program,
     attribute,
     year,
@@ -192,7 +193,7 @@ const CRPTotalMap = ({
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
-    const category = "Total CRP";
+    const category = "Total RCPP";
     const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
@@ -245,6 +246,7 @@ const CRPTotalMap = ({
         </div>
     );
 };
+
 const titleElement = (attribute, year): JSX.Element => {
     return (
         <Box>
@@ -257,4 +259,4 @@ const titleElement = (attribute, year): JSX.Element => {
         </Box>
     );
 };
-export default CRPTotalMap;
+export default RCPPTotalMap;

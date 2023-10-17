@@ -23,6 +23,8 @@ ProgramDrawer.propTypes = {
 };
 
 let currentChecked = 0;
+const menuHeight = window.innerHeight < 900 ? "38%" : "40%";
+
 function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     const [checked, setChecked] = React.useState(currentChecked);
 
@@ -436,10 +438,78 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
     );
 }
 
+function RCPPCheckboxList({ setRCPPChecked, setShowPopUp, zeroCategory }) {
+    const [checked, setChecked] = React.useState(currentChecked);
+
+    const handleToggle = (value: number) => () => {
+        setChecked(value);
+        setRCPPChecked(value);
+        currentChecked = value;
+        setShowPopUp(false);
+    };
+
+    const RCPPList = ["Total RCPP"];
+
+    return (
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
+            {RCPPList.map((category, value) => {
+                const labelId = `checkbox-list-label-${value}`;
+                if (zeroCategory && zeroCategory.includes(category)) {
+                    return (
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
+                                <Radio
+                                    edge="start"
+                                    disabled
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={`No payment reported for ${category}`}
+                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                }
+                return (
+                    <Box key={category}>
+                        <ListItem key={category} disablePadding>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
+                                <Radio
+                                    edge="start"
+                                    checked={checked === value}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ "aria-labelledby": labelId }}
+                                    sx={{
+                                        "&.Mui-checked": {
+                                            color: "#2f7164"
+                                        }
+                                    }}
+                                />
+                                <ListItemText id={labelId} primary={category} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Box>
+                );
+            })}
+        </List>
+    );
+}
+
 interface ProgramDrawerProps {
     setEQIPChecked?: (value: number) => void;
     setCSPChecked?: (value: number) => void;
     setCRPChecked?: (value: number) => void;
+    setRCPPChecked?: (value: number) => void;
     zeroCategories?: string[];
 }
 
@@ -447,6 +517,7 @@ export default function ProgramDrawer({
     setEQIPChecked,
     setCSPChecked,
     setCRPChecked,
+    setRCPPChecked,
     zeroCategories
 }: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
@@ -507,8 +578,42 @@ export default function ProgramDrawer({
 
         prevCrpOpen.current = crpOpen;
     }, [crpOpen]);
+    const [rcppOpen, setRcppOpen] = React.useState(false);
+    const rcppRef = React.useRef<HTMLLIElement>(null);
+    const handleRcppClick = () => {
+        if (location.pathname !== "/rcpp") {
+            navigate("/rcpp");
+            window.location.reload(false);
+        }
+    };
+    const prevRcppOpen = React.useRef(rcppOpen);
+    React.useEffect(() => {
+        if (prevRcppOpen.current && !rcppOpen) {
+            rcppRef.current.focus();
+        }
 
-    const crpMenuHeight = window.innerHeight < 900 ? "38%" : "40%";
+        prevRcppOpen.current = rcppOpen;
+    }, [rcppOpen]);
+
+    // ACEP Menu
+    const [acepOpen, setAcepOpen] = React.useState(false);
+    const acepRef = React.useRef<HTMLLIElement>(null);
+    const handleAcepClick = () => {
+        if (location.pathname !== "/acep") {
+            navigate("/acep");
+            window.location.reload(false);
+        } else {
+            setAcepOpen((prevAcepOpen) => !prevAcepOpen);
+        }
+    };
+    const prevAcepOpen = React.useRef(acepOpen);
+    React.useEffect(() => {
+        if (prevAcepOpen.current && !acepOpen) {
+            acepRef.current.focus();
+        }
+
+        prevAcepOpen.current = acepOpen;
+    }, [acepOpen]);
 
     return (
         <Drawer
@@ -525,7 +630,7 @@ export default function ProgramDrawer({
             }}
             open
         >
-            <Box sx={{ height: 100 }} />
+            <Box id="filler" sx={{ minHeight: 100 }} />
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Total Conservation Programs Benefits</Typography>
             </MenuItem>
@@ -570,7 +675,7 @@ export default function ProgramDrawer({
                     anchorEl={eqipRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "50%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ height: "50%", overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <EQIPCheckboxList
@@ -622,7 +727,7 @@ export default function ProgramDrawer({
                     anchorEl={cspRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: crpMenuHeight, overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ maxHeight: menuHeight, overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <CSPCheckboxList
@@ -674,7 +779,7 @@ export default function ProgramDrawer({
                     anchorEl={crpRef.current}
                     role={undefined}
                     placement="right-start"
-                    sx={{ height: "40%", overflowY: "scroll", maxWidth: "20%" }}
+                    sx={{ maxHeight: menuHeight, overflowY: "auto", maxWidth: "20%" }}
                 >
                     <Box>
                         <CRPCheckboxList
@@ -685,12 +790,55 @@ export default function ProgramDrawer({
                     </Box>
                 </Popper>
             </Box>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
-            </MenuItem>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
-                <Typography>RCPP: Regional Conservation Partnership Program</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={acepRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: acepOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleAcepClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center", my: 1 }}>
+                        {location.pathname === "/acep" ? (
+                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
+                                <strong>ACEP: Agriculture Conservation Easement Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
+                        )}
+                    </Box>
+                </MenuItem>
+            </Box>
+            <Box>
+                <MenuItem
+                    ref={rcppRef}
+                    style={{ whiteSpace: "normal" }}
+                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: rcppOpen ? "#ecf0ee" : "grey" }}
+                    onClick={handleRcppClick}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                        {location.pathname === "/rcpp" ? (
+                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
+                                <strong>RCPP: Regional Conservation Partnership Program</strong>
+                            </Typography>
+                        ) : (
+                            <Typography>RCPP: Regional Conservation Partnership Program</Typography>
+                        )}
+                        {/* <Box
+                            sx={{
+                                maxWidth: 40,
+                                py: 3,
+                                color: "#ffffff",
+                                backgroundColor: "#2f7164",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                maxHeight: 48
+                            }}
+                        >
+                        </Box> */}
+                    </Box>
+                </MenuItem>
+            </Box>
             <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
                 <Typography>Other Conservation</Typography>
             </MenuItem>
