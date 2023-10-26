@@ -48,7 +48,11 @@ const MapChart = ({
                                     let programPayment = 0;
                                     let totalPaymentInPercentage = 0;
                                     const state = statePerformance[year].filter(
-                                        (v) => stateCodes[v.state] === geo.properties.name
+                                        (v) =>
+                                            v.state.length !== 2
+                                                ? v.state === geo.properties.name
+                                                : stateCodes[v.state] === geo.properties.name
+                                        /* eslint-disable func-call-spacing */
                                     )[0];
                                     if (state === undefined || state.length === 0) {
                                         return null;
@@ -371,7 +375,7 @@ const Title1Map = ({
     });
     return (
         <div>
-            <Box display="flex" justifyContent="center" className="ARCCOMapHeader">
+            <Box display="flex" justifyContent="center" className="Title1MapHeader">
                 <DrawLegend
                     colorScale={colorScale}
                     title={titleElement({ program, subprogram, year })}

@@ -11,7 +11,13 @@
   "Agriculture Risk Coverage County Option (ARC-CO)": [50000000, 100000000, 250000000, 500000000],
   "Agriculture Risk Coverage Individual Coverage (ARC-IC)": [5000000, 10000000, 25000000, 50000000],
   "Price Loss Coverage (PLC)":[50000000, 100000000, 500000000, 1000000000],
-
+  "Dairy Programs; Dairy margin coverage (DMC)":[1000000, 5000000, 10000000, 50000000],
+  "Supplemental Agricultural Disaster Assistance":[500000, 10000000, 100000000, 500000000],
+  "Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)":[500000, 1000000, 5000000,10000000],
+  "Livestock Forage Program (LFP)":[500000, 10000000, 100000000, 500000000],
+  "Livestock Indemnity Payments (LIP)":[100000, 500000, 5000000, 10000000],
+  "Tree Assistance Program (TAP)":[10000, 500000, 1000000, 5000000],
+  
   "totalIndemnities":[10000000, 100000000, 1000000000, 5000000000],
   "totalPremium":[10000000, 100000000, 1000000000, 5000000000],
   "totalPremiumSubsidy": [5000000, 100000000, 500000000, 1000000000],

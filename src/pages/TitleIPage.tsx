@@ -28,12 +28,18 @@ import "../styles/subpage.css";
 export default function TitleIPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const [sadaStateDistributionData, setSadaStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [dmcStateDistributionData, setDmcStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
     const initTreeMapWidthRatio = 0.6;
+
+    // years
+    const sadaYear = "2014-2021";
+    const dmcYear = "2014-2021";
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -48,6 +54,16 @@ export default function TitleIPage(): JSX.Element {
         const statedistribution_url = `${config.apiUrl}/programs/commodities/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
+        });
+
+        // TODO: SADA and DMC endpoints should be integrated into the above API call
+        const dmc_url = `${config.apiUrl}/programs/commodities/dmc/state-distribution`;
+        getJsonDataFromUrl(dmc_url).then((response) => {
+            setDmcStateDistributionData(response);
+        });
+        const sada_url = `${config.apiUrl}/programs/commodities/sada/state-distribution`;
+        getJsonDataFromUrl(sada_url).then((response) => {
+            setSadaStateDistributionData(response);
         });
     }, []);
 
@@ -102,7 +118,9 @@ export default function TitleIPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 ? (
+            Object.keys(stateDistributionData).length > 0 &&
+            Object.keys(sadaStateDistributionData).length > 0 &&
+            Object.keys(dmcStateDistributionData).length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -570,6 +588,407 @@ export default function TitleIPage(): JSX.Element {
                                         color3="#F7F0F8"
                                     />
                                 </Box>
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "3" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Dairy Programs; Dairy margin coverage (DMC)"
+                                year={dmcYear}
+                                mapColor={mapColor}
+                                statePerformance={dmcStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Dairy margin coverage and the State's Percentage of that Total (${dmcYear})`}
+                                    program="Dairy Programs; Dairy margin coverage (DMC)" // TODO: need to be updated in API!
+                                    subprogram={undefined}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={dmcStateDistributionData}
+                                    year={dmcYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    {/* SADA */}
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "4" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Supplemental Agricultural Disaster Assistance"
+                                year={sadaYear}
+                                mapColor={mapColor}
+                                statePerformance={sadaStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Supplemental Agricultural Disaster Assistance and the State's Percentage of that Total (${sadaYear})`}
+                                    program="Supplemental Agricultural Disaster Assistance" // TODO: need to be updated in API!
+                                    subprogram={undefined}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={sadaStateDistributionData}
+                                    year={sadaYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "40" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Supplemental Agricultural Disaster Assistance"
+                                subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
+                                year={sadaYear}
+                                mapColor={mapColor}
+                                statePerformance={sadaStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) and the State's Percentage of that Total (${sadaYear})`}
+                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)" // TODO: need to be updated in API!
+                                    program="Supplemental Agricultural Disaster Assistance"
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={sadaStateDistributionData}
+                                    year={sadaYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "41" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Supplemental Agricultural Disaster Assistance"
+                                subprogram="Livestock Forage Program (LFP)"
+                                year={sadaYear}
+                                mapColor={mapColor}
+                                statePerformance={sadaStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Livestock Forage Program (LFP) and the State's Percentage of that Total (${sadaYear})`}
+                                    subprogram="Livestock Forage Program (LFP)" // TODO: need to be updated in API!
+                                    program="Supplemental Agricultural Disaster Assistance"
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={sadaStateDistributionData}
+                                    year={sadaYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "42" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Supplemental Agricultural Disaster Assistance"
+                                subprogram="Livestock Indemnity Payments (LIP)"
+                                year={sadaYear}
+                                mapColor={mapColor}
+                                statePerformance={sadaStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Livestock Indemnity Payments (LIP) and the State's Percentage of that Total (${sadaYear})`}
+                                    subprogram="Livestock Indemnity Payments (LIP)" // TODO: need to be updated in API!
+                                    program="Supplemental Agricultural Disaster Assistance"
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={sadaStateDistributionData}
+                                    year={sadaYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "43" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Title1Map
+                                program="Supplemental Agricultural Disaster Assistance"
+                                subprogram="Tree Assistance Program (TAP)"
+                                year={sadaYear}
+                                mapColor={mapColor}
+                                statePerformance={sadaStateDistributionData}
+                                stateCodes={stateCodesData}
+                                allStates={allStatesData}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Title1ProgramTable
+                                    tableTitle={`Comparison of Total Payments for Tree Assistance Program (TAP) and the State's Percentage of that Total (${sadaYear})`}
+                                    subprogram="Tree Assistance Program (TAP)" // TODO: need to be updated in API!
+                                    program="Supplemental Agricultural Disaster Assistance"
+                                    skipColumns={[]}
+                                    stateCodes={stateCodesData}
+                                    Title1Data={sadaStateDistributionData}
+                                    year={sadaYear}
+                                    color1="#F6EEEA"
+                                    color2="#EAF8EA"
+                                    color3="#F7F0F8"
+                                />
                             </Grid>
                         </Box>
                     </Box>

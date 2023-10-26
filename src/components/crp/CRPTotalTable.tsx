@@ -66,10 +66,19 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                     {...column.getHeaderProps({
-                                        style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+                                        style: {
+                                            paddingLeft: column.paddingLeft,
+                                            paddingRight: column.paddingRight
+                                        }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "horizontal",
+                                            alignItems: "center"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {(() => {
@@ -185,7 +194,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 6,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         TOTAL CRP BENEFITS
                     </Box>
@@ -200,7 +214,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 2,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         PCT. NATIONWIDE <br /> (as of Sep. 2022)
                     </Box>
@@ -215,7 +234,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 2,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         NO. OF CONTRACTS <br /> (as of Sep. 2022)
                     </Box>
@@ -230,7 +254,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 2,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         NO. OF FARMS <br /> (as of Sep. 2022)
                     </Box>
@@ -245,7 +274,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 2, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 2,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         ACRES <br /> (as of Sep. 2022)
                     </Box>

@@ -33,7 +33,38 @@ function Title1ProgramTable({
         programData = stateData.programs.filter((p) => {
             return p.programName.toString() === program;
         });
-        if (subprogram !== undefined) {
+
+        // TODO: change this judgement to subtitle d or subtitle e
+        if (
+            program.toString().toLowerCase().includes("disaster") ||
+            program.toString().toLowerCase().includes("dairy")
+        ) {
+            if (subprogram !== undefined) {
+                const subProgramData = programData[0].subPrograms.filter((p) => {
+                    return p.subProgramName.toString() === subprogram;
+                });
+                hashmap[state] = {
+                    paymentInDollars: subProgramData[0].paymentInDollars,
+                    paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
+                    paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
+                    averageRecipientCount: subProgramData[0].averageRecipientCount,
+                    averageRecipientCountInPercentageNationwide:
+                        subProgramData[0].averageRecipientCountInPercentageNationwide,
+                    averageRecipientCountInPercentageWithinState:
+                        subProgramData[0].averageRecipientCountInPercentageWithinState
+                };
+            } else {
+                hashmap[state] = {
+                    programPaymentInDollars: programData[0].programPaymentInDollars,
+                    paymentInPercentageNationwide: programData[0].paymentInPercentageNationwide,
+                    averageRecipientCount: programData[0].averageRecipientCount,
+                    averageRecipientCountInPercentageNationwide:
+                        programData[0].averageRecipientCountInPercentageNationwide,
+                    averageRecipientCountInPercentageWithinState:
+                        programData[0].averageRecipientCountInPercentageWithinState
+                };
+            }
+        } else if (subprogram !== undefined) {
             const subProgramData = programData[0].subPrograms.filter((p) => {
                 return p.subProgramName.toString() === subprogram;
             });
@@ -59,6 +90,55 @@ function Title1ProgramTable({
     });
     Object.entries(hashmap).forEach(([key, value]) => {
         const newRecord = () => {
+            if (program === "Total Commodities Programs") {
+                return {
+                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                    programPaymentInDollars: `$${
+                        value.programPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
+                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
+                };
+            }
+            if (
+                program.toString().toLowerCase().includes("disaster") ||
+                program.toString().toLowerCase().includes("dairy")
+            ) {
+                if (subprogram !== undefined) {
+                    return {
+                        state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                        paymentInDollars: `$${
+                            value.paymentInDollars
+                                .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                                .toString()
+                                .split(".")[0]
+                        }`,
+                        paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
+                        paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
+                        averageRecipientCount: `${value.averageRecipientCount
+                            .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                            .toString()}`,
+                        averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
+                        averageRecipientCountInPercentageWithinState: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
+                    };
+                }
+                return {
+                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                    programPaymentInDollars: `$${
+                        value.programPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
+                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
+                    averageRecipientCount: `${value.averageRecipientCount
+                        .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                        .toString()}`,
+                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
+                };
+            }
             if (subprogram !== undefined) {
                 return value.paymentInPercentageNationwide !== undefined
                     ? {
@@ -92,18 +172,6 @@ function Title1ProgramTable({
                           averageAreaInAcres: "0",
                           averageRecipientCount: "0"
                       };
-            }
-            if (program === "Total Commodities Programs") {
-                return {
-                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${
-                        value.programPaymentInDollars
-                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                            .toString()
-                            .split(".")[0]
-                    }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
-                };
             }
             return value.programPaymentInDollars !== undefined
                 ? {
@@ -162,7 +230,7 @@ function Title1ProgramTable({
             ],
             []
         );
-    } else {
+    } else if (program.includes("ARC") || program.includes("PLC")) {
         columns =
             subprogram !== undefined
                 ? React.useMemo(
@@ -226,6 +294,74 @@ function Title1ProgramTable({
                       ],
                       []
                   );
+    } else {
+        columns =
+            subprogram !== undefined
+                ? React.useMemo(
+                      () => [
+                          {
+                              Header: "STATE",
+                              accessor: "state",
+                              sortType: compareWithAlphabetic
+                          },
+                          {
+                              Header: "PAYMENT",
+                              accessor: "paymentInDollars",
+                              sortType: compareWithDollarSign
+                          },
+                          {
+                              Header: "PAYMENT PCT. NATIONWIDE",
+                              accessor: "paymentInPercentageNationwide",
+                              sortType: compareWithPercentSign
+                          },
+                          {
+                              Header: "AVG. RECIPIENT COUNT",
+                              accessor: "averageRecipientCount",
+                              sortType: compareWithNumber
+                          },
+                          {
+                              Header: "AVG. RECIPIENT COUNT PCT. NATIONWIDE",
+                              accessor: "averageRecipientCountInPercentageNationwide",
+                              sortType: compareWithNumber
+                          },
+                          {
+                              Header: "AVG. RECIPIENT COUNT PCT. WITHIN STATE",
+                              accessor: "averageRecipientCountInPercentageWithinState",
+                              sortType: compareWithNumber
+                          }
+                      ],
+                      []
+                  )
+                : React.useMemo(
+                      () => [
+                          {
+                              Header: "STATE",
+                              accessor: "state",
+                              sortType: compareWithAlphabetic
+                          },
+                          {
+                              Header: "PAYMENT",
+                              accessor: "programPaymentInDollars",
+                              sortType: compareWithDollarSign
+                          },
+                          {
+                              Header: "PAYMENT PCT. NATIONWIDE",
+                              accessor: "paymentInPercentageNationwide",
+                              sortType: compareWithPercentSign
+                          },
+                          {
+                              Header: "AVG. RECIPIENT COUNT",
+                              accessor: "averageRecipientCount",
+                              sortType: compareWithNumber
+                          },
+                          {
+                              Header: "AVG. RECIPIENT COUNT PCT. NATIONWIDE",
+                              accessor: "averageRecipientCountInPercentageNationwide",
+                              sortType: compareWithNumber
+                          }
+                      ],
+                      []
+                  );
     }
     const paymentsIndex =
         subprogram !== undefined
@@ -233,105 +369,192 @@ function Title1ProgramTable({
             : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
     const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
     const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
-    const Styles = styled.div`
-        padding: 0;
-        margin: 0;
+    const Styles =
+        program.includes("ARC") || program.includes("PLC")
+            ? styled.div`
+                  padding: 0;
+                  margin: 0;
 
-        table {
-            border-spacing: 0;
-            border: 1px solid #e4ebe7;
-            border-left: none;
-            border-right: none;
-            width: 100%;
+                  table {
+                      border-spacing: 0;
+                      border: 1px solid #e4ebe7;
+                      border-left: none;
+                      border-right: none;
+                      width: 100%;
 
-            tr {
-                :last-child {
-                    td {
-                        border-bottom: 0;
-                    }
-                }
-            }
+                      tr {
+                          :last-child {
+                              td {
+                                  border-bottom: 0;
+                              }
+                          }
+                      }
 
-            th {
-                background-color: rgba(241, 241, 241, 1);
-                padding: 1em 3em;
-                cursor: pointer;
-                text-align: left;
-            }
+                      th {
+                          background-color: rgba(241, 241, 241, 1);
+                          padding: 1em 3em;
+                          cursor: pointer;
+                          text-align: left;
+                      }
 
-            th:not(:first-of-type) {
-                text-align: right;
-            }
+                      th:not(:first-of-type) {
+                          text-align: right;
+                      }
 
-            td[class$="cell0"] {
-                padding-right: 10em;
-            }
+                      td[class$="cell0"] {
+                          padding-right: 10em;
+                      }
 
-            td[class$="cell${paymentsIndex}"] {
-                background-color: ${color1};
-            }
+                      td[class$="cell${paymentsIndex}"] {
+                          background-color: ${color1};
+                      }
 
-            td[class$="cell${averageAreaInAcresIndex}"] {
-                background-color: ${color2};
-            }
+                      td[class$="cell${averageAreaInAcresIndex}"] {
+                          background-color: ${color2};
+                      }
 
-            td[class$="cell${averageRecipientCountIndex}"] {
-                background-color: ${color3};
-            }
+                      td[class$="cell${averageRecipientCountIndex}"] {
+                          background-color: ${color3};
+                      }
 
-            td[class$="cell1"],
-            td[class$="cell2"],
-            td[class$="cell3"],
-            td[class$="cell4"],
-            td[class$="cell5"],
-            td[class$="cell6"] {
-                text-align: right;
-            }
+                      td[class$="cell1"],
+                      td[class$="cell2"],
+                      td[class$="cell3"],
+                      td[class$="cell4"],
+                      td[class$="cell5"],
+                      td[class$="cell6"] {
+                          text-align: right;
+                      }
 
-            td {
-                padding: 1em 3em;
-                border-bottom: 1px solid #e4ebe7;
-                border-right: none;
+                      td {
+                          padding: 1em 3em;
+                          border-bottom: 1px solid #e4ebe7;
+                          border-right: none;
 
-                :last-child {
-                    border-right: 0;
-                }
-            }
-        }
+                          :last-child {
+                              border-right: 0;
+                          }
+                      }
+                  }
 
-        @media screen and (max-width: 1790px) {
-            table {
-                font-size: 0.9em;
-            }
-            table th,
-            table td {
-                padding: 1em;
-            }
-            td[class$="cell${paymentsIndex}"],
-            td[class$="cell${averageAreaInAcresIndex}"],
-            td[class$="cell${averageRecipientCountIndex}"] {
-                text-align: left;
-                padding: 1em;
-            }
-        }
+                  @media screen and (max-width: 1790px) {
+                      table {
+                          font-size: 0.9em;
+                      }
+                      table th,
+                      table td {
+                          padding: 1em;
+                      }
+                      td[class$="cell${paymentsIndex}"],
+                      td[class$="cell${averageAreaInAcresIndex}"],
+                      td[class$="cell${averageRecipientCountIndex}"] {
+                          text-align: left;
+                          padding: 1em;
+                      }
+                  }
 
-        .pagination {
-            margin-top: 1.5em;
-        }
+                  .pagination {
+                      margin-top: 1.5em;
+                  }
 
-        @media screen and (max-width: 1024px) {
-            th,
-            td {
-                padding: 8px;
-            }
-            td[class$="cell0"] {
-                padding-right: 1em;
-            }
-            .pagination {
-                margin-top: 8px;
-            }
-        }
-    `;
+                  @media screen and (max-width: 1024px) {
+                      th,
+                      td {
+                          padding: 8px;
+                      }
+                      td[class$="cell0"] {
+                          padding-right: 1em;
+                      }
+                      .pagination {
+                          margin-top: 8px;
+                      }
+                  }
+              `
+            : styled.div`
+                  padding: 0;
+                  margin: 0;
+
+                  table {
+                      border-spacing: 0;
+                      border: 1px solid #e4ebe7;
+                      border-left: none;
+                      border-right: none;
+                      width: 100%;
+
+                      tr {
+                          :last-child {
+                              td {
+                                  border-bottom: 0;
+                              }
+                          }
+                      }
+
+                      th {
+                          background-color: rgba(241, 241, 241, 1);
+                          padding: 1em 3em;
+                          cursor: pointer;
+                          text-align: left;
+                      }
+
+                      th:not(:first-of-type) {
+                          text-align: right;
+                      }
+
+                      td[class$="cell0"] {
+                          padding-right: 10em;
+                      }
+
+                      td[class$="cell1"],
+                      td[class$="cell2"],
+                      td[class$="cell3"],
+                      td[class$="cell4"],
+                      td[class$="cell5"],
+                      td[class$="cell6"] {
+                          text-align: right;
+                      }
+
+                      td {
+                          padding: 1em 3em;
+                          border-bottom: 1px solid #e4ebe7;
+                          border-right: none;
+
+                          :last-child {
+                              border-right: 0;
+                          }
+                      }
+                  }
+
+                  @media screen and (max-width: 1790px) {
+                      table {
+                          font-size: 0.9em;
+                      }
+                      table th,
+                      table td {
+                          padding: 1em;
+                      }
+                      td[class$="cell0"] {
+                          text-align: left;
+                          padding: 1em;
+                      }
+                  }
+
+                  .pagination {
+                      margin-top: 1.5em;
+                  }
+
+                  @media screen and (max-width: 1024px) {
+                      th,
+                      td {
+                          padding: 8px;
+                      }
+                      td[class$="cell0"] {
+                          padding-right: 1em;
+                      }
+                      .pagination {
+                          margin-top: 8px;
+                      }
+                  }
+              `;
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
             <Styles>
@@ -346,7 +569,7 @@ function Title1ProgramTable({
                 >
                     <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
                         <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                            {program !== "Total Commodities Programs" ? (
+                            {program.includes("ARC") || program.includes("PLC") ? (
                                 <Typography
                                     sx={{
                                         fontWeight: 400,
