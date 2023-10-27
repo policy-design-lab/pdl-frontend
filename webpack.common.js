@@ -31,13 +31,13 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     'babel-loader',
-                    {
-                        // Show eslint messages in the output
-                        loader: 'eslint-loader',
-                        options: {
-                            emitWarning: true
-                        }
-                    }
+                    // {
+                    //     // Show eslint messages in the output
+                    //     loader: 'eslint-loader',
+                    //     options: {
+                    //         emitWarning: true
+                    //     }
+                    // }
                 ]
             },
             {
