@@ -15,7 +15,7 @@ ENV PATH="./node_modules/.bin:$PATH"
 COPY .eslintrc *.js tsconfig.json typedoc.json babel.config.json jest.config.js ./
 COPY src ./src/
 
-RUN npm run build
+RUN DISABLE_ESLINT_PLUGIN=true npm run build
 
 # ----------------------------------------------------------------------
 # Include nginx web server and host the build
