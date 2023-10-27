@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Dairy Margin Coverage page and Supplemental Agricultural Disaster Assistance page with corresponding components for their attributes [#206](https://github.com/policy-design-lab/pdl-frontend/issues/206)
 
+### Changed
+
+- Change PDL logo to use the new design [#209](https://github.com/policy-design-lab/pdl-frontend/issues/209)
+
 ## [0.10.0] - 2023-10-17
 
 ### Added
