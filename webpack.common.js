@@ -26,10 +26,6 @@ module.exports = {
     module: {
         rules: [
             {
-                // Use babel-loader for ts, tsx, js, and jsx files
-                // Tried to move babel-loader to dev env only to save docker building time
-            },
-            {
                 test: /\.css$/,
                 use: [
                     {
