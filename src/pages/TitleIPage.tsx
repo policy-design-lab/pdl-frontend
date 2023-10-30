@@ -643,8 +643,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Dairy margin coverage and the State's Percentage of that Total (${dmcYear})`}
-                                    program="Dairy Margin Coverage, Subtitle D" // TODO: need to be updated in API!
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Dairy Margin Coverage (${dmcYear})`}
+                                    program="Dairy Margin Coverage, Subtitle D"
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -710,7 +710,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Supplemental Agricultural Disaster Assistance, Subtitle E and the State's Percentage of that Total (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E" // TODO: need to be updated in API!
                                     subprogram={undefined}
                                     skipColumns={[]}
@@ -777,8 +777,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) and the State's Percentage of that Total (${sadaYear})`}
-                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)" // TODO: need to be updated in API!
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) (${sadaYear})`}
+                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -844,8 +844,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Livestock Forage Program (LFP) and the State's Percentage of that Total (${sadaYear})`}
-                                    subprogram="Livestock Forage Program (LFP)" // TODO: need to be updated in API!
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Emergency Assistance for Livestock Forage Program (LFP) (${sadaYear})`}
+                                    subprogram="Livestock Forage Program (LFP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -911,8 +911,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Livestock Indemnity Payments (LIP) and the State's Percentage of that Total (${sadaYear})`}
-                                    subprogram="Livestock Indemnity Payments (LIP)" // TODO: need to be updated in API!
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
+                                    subprogram="Livestock Indemnity Payments (LIP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -978,8 +978,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Tree Assistance Program (TAP) and the State's Percentage of that Total (${sadaYear})`}
-                                    subprogram="Tree Assistance Program (TAP)" // TODO: need to be updated in API!
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
+                                    subprogram="Tree Assistance Program (TAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
