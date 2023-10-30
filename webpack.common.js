@@ -27,18 +27,7 @@ module.exports = {
         rules: [
             {
                 // Use babel-loader for ts, tsx, js, and jsx files
-                test: /\.[tj]sx?$/,
-                exclude: /node_modules/,
-                use: [
-                    'babel-loader',
-                    // {
-                    //     // Show eslint messages in the output
-                    //     loader: 'eslint-loader',
-                    //     options: {
-                    //         emitWarning: true
-                    //     }
-                    // }
-                ]
+                // Tried to move babel-loader to dev env only to save docker building time
             },
             {
                 test: /\.css$/,

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Optimize webpack config to save docker building time [#203](https://github.com/policy-design-lab/pdl-frontend/issues/203)
 - Change PDL logo to use the new design [#209](https://github.com/policy-design-lab/pdl-frontend/issues/209)
 
 ## [0.10.0] - 2023-10-17

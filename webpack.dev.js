@@ -8,6 +8,26 @@ module.exports = merge(commonConfig, {
     mode: 'development',
     devtool: 'eval-source-map',
 
+    module: {
+        rules: [
+            {
+                // Use babel-loader for ts, tsx, js, and jsx files
+                test: /\.[tj]sx?$/,
+                exclude: /node_modules/,
+                use: [
+                    'babel-loader',
+                    {
+                        // Show eslint messages in the output
+                        loader: 'eslint-loader',
+                        options: {
+                            emitWarning: true
+                        }
+                    }
+                ]
+            },
+        ]
+    },
+    
     devServer: {
         hot: true,
         host: 'localhost',
@@ -25,5 +45,6 @@ module.exports = merge(commonConfig, {
             ENV: JSON.stringify('development')
         }),
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 8081 })
-    ]
+    ],
+
 });

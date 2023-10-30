@@ -605,7 +605,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Dairy Programs; Dairy margin coverage (DMC)"
+                                program="Dairy Margin Coverage, Subtitle D"
                                 year={dmcYear}
                                 mapColor={mapColor}
                                 statePerformance={dmcStateDistributionData}
@@ -644,7 +644,7 @@ export default function TitleIPage(): JSX.Element {
                             >
                                 <Title1ProgramTable
                                     tableTitle={`Comparison of Total Payments for Dairy margin coverage and the State's Percentage of that Total (${dmcYear})`}
-                                    program="Dairy Programs; Dairy margin coverage (DMC)" // TODO: need to be updated in API!
+                                    program="Dairy Margin Coverage, Subtitle D" // TODO: need to be updated in API!
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -672,7 +672,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance"
+                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 year={sadaYear}
                                 mapColor={mapColor}
                                 statePerformance={sadaStateDistributionData}
@@ -710,8 +710,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparison of Total Payments for Supplemental Agricultural Disaster Assistance and the State's Percentage of that Total (${sadaYear})`}
-                                    program="Supplemental Agricultural Disaster Assistance" // TODO: need to be updated in API!
+                                    tableTitle={`Comparison of Total Payments for Supplemental Agricultural Disaster Assistance, Subtitle E and the State's Percentage of that Total (${sadaYear})`}
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E" // TODO: need to be updated in API!
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -738,7 +738,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance"
+                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
                                 year={sadaYear}
                                 mapColor={mapColor}
@@ -779,7 +779,7 @@ export default function TitleIPage(): JSX.Element {
                                 <Title1ProgramTable
                                     tableTitle={`Comparison of Total Payments for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) and the State's Percentage of that Total (${sadaYear})`}
                                     subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)" // TODO: need to be updated in API!
-                                    program="Supplemental Agricultural Disaster Assistance"
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
                                     Title1Data={sadaStateDistributionData}
@@ -805,7 +805,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance"
+                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 subprogram="Livestock Forage Program (LFP)"
                                 year={sadaYear}
                                 mapColor={mapColor}
@@ -846,7 +846,7 @@ export default function TitleIPage(): JSX.Element {
                                 <Title1ProgramTable
                                     tableTitle={`Comparison of Total Payments for Livestock Forage Program (LFP) and the State's Percentage of that Total (${sadaYear})`}
                                     subprogram="Livestock Forage Program (LFP)" // TODO: need to be updated in API!
-                                    program="Supplemental Agricultural Disaster Assistance"
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
                                     Title1Data={sadaStateDistributionData}
@@ -872,7 +872,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance"
+                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 subprogram="Livestock Indemnity Payments (LIP)"
                                 year={sadaYear}
                                 mapColor={mapColor}
@@ -913,7 +913,7 @@ export default function TitleIPage(): JSX.Element {
                                 <Title1ProgramTable
                                     tableTitle={`Comparison of Total Payments for Livestock Indemnity Payments (LIP) and the State's Percentage of that Total (${sadaYear})`}
                                     subprogram="Livestock Indemnity Payments (LIP)" // TODO: need to be updated in API!
-                                    program="Supplemental Agricultural Disaster Assistance"
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
                                     Title1Data={sadaStateDistributionData}
@@ -939,7 +939,7 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance"
+                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 subprogram="Tree Assistance Program (TAP)"
                                 year={sadaYear}
                                 mapColor={mapColor}
@@ -980,7 +980,7 @@ export default function TitleIPage(): JSX.Element {
                                 <Title1ProgramTable
                                     tableTitle={`Comparison of Total Payments for Tree Assistance Program (TAP) and the State's Percentage of that Total (${sadaYear})`}
                                     subprogram="Tree Assistance Program (TAP)" // TODO: need to be updated in API!
-                                    program="Supplemental Agricultural Disaster Assistance"
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
                                     Title1Data={sadaStateDistributionData}

@@ -1,3 +1,4 @@
+// TBD: Optimize the menu structure to retrieve data automatically from the backend
 export const menu = [
     {
         icon: "",
@@ -21,12 +22,12 @@ export const menu = [
     },
     {
         icon: "",
-        title: "Dairy Programs; Dairy margin coverage (DMC)"
+        title: "Dairy Margin Coverage, Subtitle D"
     },
 
     {
         icon: "",
-        title: "Supplemental Agricultural Disaster Assistance",
+        title: "Supplemental Agricultural Disaster Assistance, Subtitle E",
         items: [
             {
                 title: "Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
