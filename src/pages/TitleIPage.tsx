@@ -711,7 +711,7 @@ export default function TitleIPage(): JSX.Element {
                             >
                                 <Title1ProgramTable
                                     tableTitle={`Comparing Payments and Avg. Payment Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E" // TODO: need to be updated in API!
+                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -844,7 +844,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Emergency Assistance for Livestock Forage Program (LFP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
                                     subprogram="Livestock Forage Program (LFP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}

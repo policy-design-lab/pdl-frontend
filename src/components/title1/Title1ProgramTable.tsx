@@ -10,7 +10,6 @@ import {
     sortByDollars
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { ToDollarString } from "../shared/ConvertionFormats";
 
 function Title1ProgramTable({
     tableTitle,
@@ -47,21 +46,16 @@ function Title1ProgramTable({
                     paymentInDollars: subProgramData[0].paymentInDollars,
                     paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
                     paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
-                    averageRecipientCount: subProgramData[0].averageRecipientCount,
-                    averageRecipientCountInPercentageNationwide:
-                        subProgramData[0].averageRecipientCountInPercentageNationwide,
-                    averageRecipientCountInPercentageWithinState:
-                        subProgramData[0].averageRecipientCountInPercentageWithinState
+                    totalCounts: subProgramData[0].totalCounts,
+                    countInPercentageNationwide: subProgramData[0].countInPercentageNationwide,
+                    countInPercentageWithinState: subProgramData[0].countInPercentageWithinState
                 };
             } else {
                 hashmap[state] = {
                     programPaymentInDollars: programData[0].programPaymentInDollars,
                     paymentInPercentageNationwide: programData[0].paymentInPercentageNationwide,
-                    averageRecipientCount: programData[0].averageRecipientCount,
-                    averageRecipientCountInPercentageNationwide:
-                        programData[0].averageRecipientCountInPercentageNationwide,
-                    averageRecipientCountInPercentageWithinState:
-                        programData[0].averageRecipientCountInPercentageWithinState
+                    totalCounts: programData[0].totalCounts,
+                    countInPercentageNationwide: programData[0].countInPercentageNationwide
                 };
             }
         } else if (subprogram !== undefined) {
@@ -117,11 +111,11 @@ function Title1ProgramTable({
                         }`,
                         paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
                         paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
-                        averageRecipientCount: `${value.averageRecipientCount
+                        totalCounts: `${value.totalCounts
                             .toLocaleString(undefined, { minimumFractionDigits: 0 })
                             .toString()}`,
-                        averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
-                        averageRecipientCountInPercentageWithinState: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
+                        countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`,
+                        countInPercentageWithinState: `${value.countInPercentageWithinState.toString()}%`
                     };
                 }
                 return {
@@ -133,10 +127,10 @@ function Title1ProgramTable({
                             .split(".")[0]
                     }`,
                     paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
-                    averageRecipientCount: `${value.averageRecipientCount
+                    totalCounts: `${value.totalCounts
                         .toLocaleString(undefined, { minimumFractionDigits: 0 })
                         .toString()}`,
-                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
+                    countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`
                 };
             }
             if (subprogram !== undefined) {
@@ -263,7 +257,7 @@ function Title1ProgramTable({
                           },
                           {
                               Header: "AVG. AVG. RECIPIENT COUNT",
-                              accessor: "averageRecipientCount",
+                              accessor: " averageRecipientCount",
                               sortType: compareWithNumber
                           }
                       ],
@@ -288,7 +282,7 @@ function Title1ProgramTable({
                           },
                           {
                               Header: "AVG. RECIPIENT COUNT",
-                              accessor: "averageRecipientCount",
+                              accessor: " averageRecipientCount",
                               sortType: compareWithNumber
                           }
                       ],
@@ -315,18 +309,23 @@ function Title1ProgramTable({
                               sortType: compareWithPercentSign
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT",
-                              accessor: "averageRecipientCount",
+                              Header: "PAYMENT PCT. WITHIN STATE",
+                              accessor: "paymentInPercentageWithinState",
+                              sortType: compareWithPercentSign
+                          },
+                          {
+                              Header: "RECIPIENT COUNT",
+                              accessor: "totalCounts",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT PCT. NATIONWIDE",
-                              accessor: "averageRecipientCountInPercentageNationwide",
+                              Header: "RECIPIENT COUNT PCT. NATIONWIDE",
+                              accessor: "countInPercentageNationwide",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT PCT. WITHIN STATE",
-                              accessor: "averageRecipientCountInPercentageWithinState",
+                              Header: "RECIPIENT COUNT COUNT PCT. WITHIN STATE",
+                              accessor: "countInPercentageWithinState",
                               sortType: compareWithNumber
                           }
                       ],
@@ -350,13 +349,13 @@ function Title1ProgramTable({
                               sortType: compareWithPercentSign
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT",
-                              accessor: "averageRecipientCount",
+                              Header: "RECIPIENT COUNT",
+                              accessor: "totalCounts",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT PCT. NATIONWIDE",
-                              accessor: "averageRecipientCountInPercentageNationwide",
+                              Header: "RECIPIENT COUNT PCT. NATIONWIDE",
+                              accessor: "countInPercentageNationwide",
                               sortType: compareWithNumber
                           }
                       ],
