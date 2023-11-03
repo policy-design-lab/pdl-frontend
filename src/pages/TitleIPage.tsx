@@ -35,7 +35,7 @@ export default function TitleIPage(): JSX.Element {
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
-    const initTreeMapWidthRatio = 0.6;
+    const initTreeMapWidthRatio = 0.55;
 
     // years
     const sadaYear = "2014-2021";
@@ -271,12 +271,8 @@ export default function TitleIPage(): JSX.Element {
                                         )}
                                         stateCodes={stateCodesData}
                                         year="2014-2021"
-                                        svgW={
-                                            window.innerWidth > 1440
-                                                ? window.innerWidth * 0.75
-                                                : window.innerWidth * 0.65
-                                        }
-                                        svgH={3000}
+                                        svgW={window.innerWidth * initTreeMapWidthRatio}
+                                        svgH={2800}
                                     />
                                 </Box>
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
@@ -643,7 +639,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Dairy Margin Coverage (${dmcYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Dairy Margin Coverage (${dmcYear})`}
                                     program="Dairy Margin Coverage, Subtitle D"
                                     subprogram={undefined}
                                     skipColumns={[]}
@@ -710,7 +706,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     subprogram={undefined}
                                     skipColumns={[]}
@@ -777,7 +773,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) (${sadaYear})`}
                                     subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
@@ -844,7 +840,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
                                     subprogram="Livestock Forage Program (LFP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
@@ -911,7 +907,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
                                     subprogram="Livestock Indemnity Payments (LIP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
@@ -978,7 +974,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Avg. Payment Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Payments Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
                                     subprogram="Tree Assistance Program (TAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
