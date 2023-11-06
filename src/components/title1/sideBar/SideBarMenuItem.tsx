@@ -30,7 +30,7 @@ export const menu = [
         title: "Supplemental Agricultural Disaster Assistance, Subtitle E",
         items: [
             {
-                title: "Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
+                title: "Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
             },
             { title: "Livestock Forage Program (LFP)" },
             {

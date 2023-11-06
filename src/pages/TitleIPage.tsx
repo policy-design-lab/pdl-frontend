@@ -639,7 +639,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Dairy Margin Coverage (${dmcYear})`}
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Dairy Margin Coverage (${dmcYear})`}
                                     program="Dairy Margin Coverage, Subtitle D"
                                     subprogram={undefined}
                                     skipColumns={[]}
@@ -706,7 +706,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     subprogram={undefined}
                                     skipColumns={[]}
@@ -735,7 +735,7 @@ export default function TitleIPage(): JSX.Element {
                         >
                             <Title1Map
                                 program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
+                                subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
                                 year={sadaYear}
                                 mapColor={mapColor}
                                 statePerformance={sadaStateDistributionData}
@@ -773,8 +773,8 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP) (${sadaYear})`}
-                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish (ELAP)"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP) (${sadaYear})`}
+                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -840,7 +840,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
                                     subprogram="Livestock Forage Program (LFP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
@@ -907,7 +907,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
                                     subprogram="Livestock Indemnity Payments (LIP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}
@@ -974,7 +974,7 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Payments Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
                                     subprogram="Tree Assistance Program (TAP)"
                                     program="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                     skipColumns={[]}

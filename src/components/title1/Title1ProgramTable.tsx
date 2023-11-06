@@ -256,7 +256,7 @@ function Title1ProgramTable({
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "AVG. AVG. RECIPIENT COUNT",
+                              Header: "AVG. AVG. TOTAL RECIPIENTS",
                               accessor: "averageRecipientCount",
                               sortType: compareWithNumber
                           }
@@ -281,7 +281,7 @@ function Title1ProgramTable({
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "AVG. RECIPIENT COUNT",
+                              Header: "AVG. TOTAL RECIPIENTS",
                               accessor: "averageRecipientCount",
                               sortType: compareWithNumber
                           }
@@ -314,17 +314,17 @@ function Title1ProgramTable({
                               sortType: compareWithPercentSign
                           },
                           {
-                              Header: "RECIPIENT COUNT",
+                              Header: "TOTAL RECIPIENTS",
                               accessor: "totalCounts",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "RECIPIENT COUNT PCT. NATIONWIDE",
+                              Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
                               accessor: "countInPercentageNationwide",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "RECIPIENT COUNT COUNT PCT. WITHIN STATE",
+                              Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
                               accessor: "countInPercentageWithinState",
                               sortType: compareWithNumber
                           }
@@ -349,12 +349,12 @@ function Title1ProgramTable({
                               sortType: compareWithPercentSign
                           },
                           {
-                              Header: "RECIPIENT COUNT",
+                              Header: "TOTAL RECIPIENTS",
                               accessor: "totalCounts",
                               sortType: compareWithNumber
                           },
                           {
-                              Header: "RECIPIENT COUNT PCT. NATIONWIDE",
+                              Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
                               accessor: "countInPercentageNationwide",
                               sortType: compareWithNumber
                           }
