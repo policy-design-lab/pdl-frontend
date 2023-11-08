@@ -425,7 +425,7 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
             <Box>
                 {" "}
                 <Typography noWrap variant="h6">
-                    <strong>{program}</strong> Payments from <strong>{year}</strong>
+                    <strong>Total Commodities Programs, Subtitle A</strong> Payments from <strong>{year}</strong>
                 </Typography>{" "}
                 <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
                     <i>2022 payments for Title I have not yet been paid</i>
