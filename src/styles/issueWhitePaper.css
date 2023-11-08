@@ -1,0 +1,32 @@
+
+.titleTabGroup .Mui-selected{
+    font-weight: 700 !important;
+}
+.titleTab {
+  padding: 1.5em 1em;
+}
+.titleTab:not(:last-child){
+  border-right: 1px #CBCBCB solid;
+}
+.MuiTabs-indicator{
+  display: none;
+}
+.paperCard{
+  padding: 3em 0 1.5em 0;
+  font-family: Montserrat;
+  border-bottom: 1px solid var(--light-other-divider, rgba(0, 0, 0, 0.12));
+}
+.inCardContainer{
+  margin-bottom: 1.25em;
+  font-weight: 500;
+}
+
+/* TBD: move this to use variant */
+.mainItems{
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+.subItems{
+  font-size: 1em;
+  color: #00000080;
+}
