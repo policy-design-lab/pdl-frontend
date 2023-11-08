@@ -646,7 +646,10 @@ export default function CropInsuranceBar({
                             parseFloat(totalIndemnitiesInDollarsBar.attr("width")),
                         y: totalIndemnitiesInDollarsBar.attr("y")
                     },
-                    { x: margin.left + graphWidth, y: totalIndemnitiesInDollarsBar.attr("y") }
+                    {
+                        x: margin.left + graphWidth,
+                        y: totalIndemnitiesInDollarsBar.attr("y")
+                    }
                 ];
                 d3.select(rnBar.current)
                     .append("path")

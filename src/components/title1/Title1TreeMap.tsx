@@ -44,7 +44,12 @@ const transform = (data) => {
         maxrecipients = Math.max(maxrecipients, stateData.recipients);
     });
     const res = data.map((stateData) => {
-        const transformedJson = { baseAcres: 0, payments: 0, recipients: 0, state: "" };
+        const transformedJson = {
+            baseAcres: 0,
+            payments: 0,
+            recipients: 0,
+            state: ""
+        };
         transformedJson.baseAcres =
             stateData.baseAcres === 0 ? 0 : (stateData.baseAcres - minbaseAcres) / (maxbaseAcres - minbaseAcres);
         transformedJson.payments =
@@ -55,7 +60,12 @@ const transform = (data) => {
         return transformedJson;
     });
     const res2 = res.map((stateData) => {
-        const transformedJson = { baseAcres: 0, payments: 0, recipients: 0, state: "" };
+        const transformedJson = {
+            baseAcres: 0,
+            payments: 0,
+            recipients: 0,
+            state: ""
+        };
         transformedJson.baseAcres = scaling(stateData.baseAcres, 1, 10, 0.9, 0.2, 1, 0);
         transformedJson.payments = scaling(stateData.payments, 1, 10, 1, 0.1, 1, 0);
         transformedJson.recipients = scaling(stateData.recipients, 1, 10, 0.7, 0.05, 1, 0);
