@@ -124,11 +124,27 @@ export default function CSPPage(): JSX.Element {
 
         setNew2018ChartData([
             { name: "Land management", value: landManagementTotal, color: "#2F7164" },
-            { name: "Other Improvement", value: otherImprovementTotal, color: "#4D847A" },
-            { name: "Existing activity payments", value: existingAPTotal, color: "#869397" },
+            {
+                name: "Other Improvement",
+                value: otherImprovementTotal,
+                color: "#4D847A"
+            },
+            {
+                name: "Existing activity payments",
+                value: existingAPTotal,
+                color: "#869397"
+            },
             { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
-            { name: "Forest management", value: forestManagementTotal, color: "#9CBAB4" },
-            { name: "Soil remediation", value: soilRemediationTotal, color: "#B9CDC9" },
+            {
+                name: "Forest management",
+                value: forestManagementTotal,
+                color: "#9CBAB4"
+            },
+            {
+                name: "Soil remediation",
+                value: soilRemediationTotal,
+                color: "#B9CDC9"
+            },
             { name: "Structural", value: structuralTotal, color: "#CDDBD8" },
             { name: "Bundles", value: bundlesTotal, color: "#C3C5C4" },
             { name: "Soil Testing", value: soilTestingTotal, color: "#CAD4C5" }
@@ -138,8 +154,16 @@ export default function CSPPage(): JSX.Element {
             { name: "Cropland", value: croplandTotal, color: "#2F7164" },
             { name: "Rangeland", value: rangelandTotal, color: "#4D847A" },
             { name: "Pastureland", value: pasturelandTotal, color: "#749F97" },
-            { name: "Other: supplemental, adjustment & other", value: SAOTotal, color: "#869397" },
-            { name: "Non-industrial private forestland", value: NIPFTotal, color: "#9CBAB4" },
+            {
+                name: "Other: supplemental, adjustment & other",
+                value: SAOTotal,
+                color: "#869397"
+            },
+            {
+                name: "Non-industrial private forestland",
+                value: NIPFTotal,
+                color: "#9CBAB4"
+            },
             { name: "Grassland", value: grasslandTotal, color: "#B9CDC9" }
         ]);
 
@@ -165,13 +189,21 @@ export default function CSPPage(): JSX.Element {
                     <Box sx={{ pl: 50, pr: 20 }}>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 0 ? "none" : "block"
+                            }}
                         >
                             <CSPTotalMap statePerformance={statePerformance} allStates={allStates} />
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 1 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="2018 Practices"
@@ -181,7 +213,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 2 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 2 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Structural"
@@ -192,7 +228,11 @@ export default function CSPPage(): JSX.Element {
 
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 3 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 3 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Vegetative"
@@ -202,7 +242,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 4 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 4 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Land management"
@@ -213,7 +257,11 @@ export default function CSPPage(): JSX.Element {
 
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 5 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 5 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Forest management"
@@ -223,7 +271,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 6 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Soil remediation"
@@ -233,7 +285,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 7 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 7 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Existing activity payments"
@@ -243,13 +299,21 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 8 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 8 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap category="Bundles" statePerformance={statePerformance} allStates={allStates} />
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 9 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 9 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Soil testing"
@@ -259,7 +323,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 10 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 10 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Other improvement"
@@ -270,7 +338,11 @@ export default function CSPPage(): JSX.Element {
 
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 11 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 11 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="2014 Eligible Land"
@@ -280,7 +352,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 12 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 12 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Cropland"
@@ -290,7 +366,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 13 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 13 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Grassland"
@@ -300,7 +380,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 14 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 14 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Rangeland"
@@ -310,7 +394,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 15 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 15 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Pastureland"
@@ -320,7 +408,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 16 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 16 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Non-industrial private forestland"
@@ -330,7 +422,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box
                             component="div"
-                            sx={{ width: "85%", m: "auto", display: checked !== 17 ? "none" : "block" }}
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 17 ? "none" : "block"
+                            }}
                         >
                             <CategoryMap
                                 category="Other: supplemental, adjustment & other"
@@ -359,7 +455,12 @@ export default function CSPPage(): JSX.Element {
                                         label2="CSP TOTAL BENEFITS"
                                     />
                                 </Box>
-                                <Box component="div" sx={{ display: checked >= 1 && checked <= 10 ? "block" : "none" }}>
+                                <Box
+                                    component="div"
+                                    sx={{
+                                        display: checked >= 1 && checked <= 10 ? "block" : "none"
+                                    }}
+                                >
                                     <SemiDonutChart
                                         data={new2018ChartData}
                                         label1={firstTotal.toString()}
