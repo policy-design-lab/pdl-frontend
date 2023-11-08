@@ -67,10 +67,19 @@ function Table({ columns, data }: { columns: any; data: any; statePerformance: a
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                     {...column.getHeaderProps({
-                                        style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+                                        style: {
+                                            paddingLeft: column.paddingLeft,
+                                            paddingRight: column.paddingRight
+                                        }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "horizontal",
+                                            alignItems: "center"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {(() => {
@@ -197,7 +206,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 12, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 12,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         STATES
                     </Box>
@@ -208,7 +222,14 @@ function App({
                 }) {
                     return (
                         <div style={{ textAlign: "left" }}>
-                            <Box sx={{ py: 2, pl: 6, display: "flex", justifyContent: "flex-start" }}>
+                            <Box
+                                sx={{
+                                    py: 2,
+                                    pl: 6,
+                                    display: "flex",
+                                    justifyContent: "flex-start"
+                                }}
+                            >
                                 {props.value}
                             </Box>
                         </div>
@@ -219,7 +240,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 6,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         {`${category} Benefit`.toUpperCase()}
                     </Box>
@@ -250,7 +276,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 6, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 6,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         {`${category} Percentage Within State`.toUpperCase()}
                     </Box>
@@ -281,7 +312,12 @@ function App({
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 7, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 7,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         CRP BENEFITS
                     </Box>

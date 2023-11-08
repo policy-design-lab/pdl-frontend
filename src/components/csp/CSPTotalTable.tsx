@@ -65,10 +65,19 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                     {...column.getHeaderProps({
-                                        style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+                                        style: {
+                                            paddingLeft: column.paddingLeft,
+                                            paddingRight: column.paddingRight
+                                        }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "horizontal",
+                                            alignItems: "center"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {(() => {
@@ -156,7 +165,12 @@ function App({ statePerformance }: { statePerformance: any }): JSX.Element {
                 Header: (
                     <Box
                         className="tableHeader"
-                        sx={{ maxWidth: 240, pl: 9, display: "flex", justifyContent: "center" }}
+                        sx={{
+                            maxWidth: 240,
+                            pl: 9,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
                     >
                         CSP BENEFITS
                     </Box>
