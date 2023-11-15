@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add the issue release/white paper page [#210](https://github.com/policy-design-lab/pdl-frontend/issues/210)
+- Add iFrame component to the release/white paper page [#214](https://github.com/policy-design-lab/pdl-frontend/issues/214)
 
 ## [0.11.0] - 2023-11-08
 

@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import "../styles/issueWhitePaper.css";
 import Footer from "../components/Footer";
 import CardPaper from "../components/issueWhitePaper/cardPaper";
+import CardIFrame from "../components/issueWhitePaper/cardIframe";
 
 export default function IssueWhitePaperPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
@@ -38,7 +39,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                             container
                             columns={{ xs: 12 }}
                             sx={{
-                                pt: 3.5
+                                pt: 3.5,
+                                display: "none" // comment out this line to show the switch tabs!
                             }}
                         >
                             <Tabs
@@ -108,23 +110,12 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                         sx={{ display: "flex", width: "100%" }}
                                     >
                                         {/* Copy card components and make new ones! */}
-                                        <CardPaper
+                                        <CardIFrame
                                             title=" Proin vitae justo nec nisl eleifend fringilla. "
                                             author="Professor Coppess"
                                             date="Nov. 1 2023"
                                             link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                        />
-                                        <CardPaper
-                                            title="Lorem ipsum dolor sit amet consectetur sit amet consectetur."
-                                            author="Professor Coppess"
-                                            date="Nov. 2 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                        />
-                                        <CardPaper
-                                            title="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                                            author="Professor Coppess"
-                                            date="Nov. 1 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
+                                            iframeLink="https://policydesignlab.ncsa.illinois.edu/"
                                         />
                                     </Grid>
                                 </Grid>
@@ -148,18 +139,6 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                         {/* Copy card components and make new ones! */}
                                         <CardPaper
                                             title="Lorem ipsum dolor sit amet consectetur sit amet consectetur."
-                                            author="Professor Coppess"
-                                            date="Nov. 2 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                        />
-                                        <CardPaper
-                                            title="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                                            author="Professor Coppess"
-                                            date="Nov. 1 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                        />
-                                        <CardPaper
-                                            title="Suspendisse eget dui a libero dapibus luctus."
                                             author="Professor Coppess"
                                             date="Nov. 2 2023"
                                             link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
