@@ -13,7 +13,7 @@ export default function CardIFrame({ title, author, date, link, iframeTitle, ifr
     }));
     const classes = useStyles();
     const iframeWidth = window.innerWidth > 1679 ? window.innerWidth * 0.9 : window.innerWidth * 0.7;
-    const iframeHeight = window.innerHeight > 1049 ? window.innerHeight * 0.5 : window.innerHeight * 0.6;
+    const iframeHeight = window.innerHeight * 0.95;
 
     return (
         <Grid container className="paperCard" sx={{ display: "flex", justifyContent: "space-between" }}>
