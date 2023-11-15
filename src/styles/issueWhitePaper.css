@@ -28,5 +28,7 @@
 }
 .subItems{
   font-size: 1em;
+  display: flex;
   color: #00000080;
+  margin: 1.5rem auto;
 }

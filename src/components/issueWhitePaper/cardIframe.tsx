@@ -53,13 +53,7 @@ export default function CardIFrame({ title, author, date, link, iframeTitle, ifr
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid
-                    className="inCardContainer subItems"
-                    container
-                    xs={12}
-                    sm={12}
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex" }}>
                     <Grid item xs={12} sm={6}>
                         <Typography variant="body1" component="div">
                             Author: {author}
@@ -70,6 +64,15 @@ export default function CardIFrame({ title, author, date, link, iframeTitle, ifr
                             Date: {date}
                         </Typography>
                     </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
+                    <Typography variant="body1" component="div">
+                        As Congress considers reauthorizing the Farm Bill, vital resources that are available to farmers
+                        and ranchers today are at risk — specifically the $18 billion investment from the Inflation
+                        Reduction Act (IRA) for the U.S. Department of Agriculture’s (USDA) popular conservation
+                        programs. This issue brief provides a first look at what farmers stand to lose in each state if
+                        these investments are eliminated by Congress.
+                    </Typography>
                 </Grid>
                 <Grid
                     className="inCardContainer subItems"
