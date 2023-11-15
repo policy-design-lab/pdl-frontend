@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import * as React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 
-export default function CardIFrame({ title, author, date, link, iframeLink }): JSX.Element {
+export default function CardIFrame({ title, author, date, link, iframeTitle, iframeLink }): JSX.Element {
     const useStyles = makeStyles(() => ({
         downloadButton: {
             "&:hover": {
@@ -79,6 +79,7 @@ export default function CardIFrame({ title, author, date, link, iframeLink }): J
                     sx={{ display: "flex", justifyContent: "center" }}
                 >
                     <iframe
+                        title={iframeTitle}
                         width={iframeWidth}
                         height={iframeHeight}
                         src={iframeLink}

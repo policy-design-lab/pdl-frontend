@@ -111,11 +111,12 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                     >
                                         {/* Copy card components and make new ones! */}
                                         <CardIFrame
-                                            title=" Proin vitae justo nec nisl eleifend fringilla. "
-                                            author="Professor Coppess"
-                                            date="Nov. 1 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                            iframeLink="https://policydesignlab.ncsa.illinois.edu/"
+                                            title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
+                                            iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
+                                            author="Professor Jonathan Coppess"
+                                            date="Nov. 15 2023"
+                                            link="https://policydesignlab.ncsa.illinois.edu/" // replace this to PDF link
+                                            iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
                                         />
                                     </Grid>
                                 </Grid>

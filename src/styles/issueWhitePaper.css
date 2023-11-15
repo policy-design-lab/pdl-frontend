@@ -24,7 +24,7 @@
 /* TBD: move this to use variant */
 .mainItems{
   font-size: 1.5em;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 .subItems{
   font-size: 1em;
