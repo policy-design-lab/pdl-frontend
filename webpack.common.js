@@ -34,7 +34,8 @@ module.exports = {
                             publicPath: '../'
                         }
                     },
-                    'css-loader'
+                    'css-loader',
+                    
                 ]
             },
             {
@@ -42,7 +43,7 @@ module.exports = {
                 loader: 'svg-inline-loader'
             },
             {
-                test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2)$/,
+                test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pdf)$/,
                 use: [
                     {
                         loader: 'file-loader',
