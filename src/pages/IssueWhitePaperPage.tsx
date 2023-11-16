@@ -1,3 +1,4 @@
+// RELEASE NOTE Nov 16: hide issue/switch panel because client only has one issue brief available. Unhide this after white paper is available.
 import * as React from "react";
 import { Box, createTheme, ThemeProvider, Typography, Grid, Tabs, Tab } from "@mui/material";
 import NavBar from "../components/NavBar";
@@ -18,6 +19,9 @@ export default function IssueWhitePaperPage(): JSX.Element {
             setTab(newTab);
         }
     };
+    const iframeWidth = window.innerWidth * 0.9;
+    const iframeHeight = window.innerWidth > 1679 ? window.innerHeight * 0.92 : window.innerHeight * 0.95;
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ width: "100%" }}>
@@ -41,7 +45,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                             columns={{ xs: 12 }}
                             sx={{
                                 pt: 3.5,
-                                display: "none" // comment out this line to show the switch tabs!
+                                display: "none"
                             }}
                         >
                             <Tabs
@@ -110,7 +114,6 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                         justifyContent="flex-start"
                                         sx={{ display: "flex", width: "100%" }}
                                     >
-                                        {/* Copy card components and make new ones! */}
                                         <CardIFrame
                                             title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                             iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
@@ -118,6 +121,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             date="Nov. 15 2023"
                                             link={PDF}
                                             iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
+                                            iframeWidth={iframeWidth}
+                                            iframeHeight={iframeHeight}
                                         />
                                     </Grid>
                                 </Grid>
@@ -137,15 +142,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                         xs={12}
                                         justifyContent="flex-start"
                                         sx={{ display: "flex", width: "100%" }}
-                                    >
-                                        {/* Copy card components and make new ones! */}
-                                        <CardPaper
-                                            title="Lorem ipsum dolor sit amet consectetur sit amet consectetur."
-                                            author="Professor Coppess"
-                                            date="Nov. 2 2023"
-                                            link="https://drive.google.com/file/d/0B28Gtf1n8u8DUnF2cTliTXo2Y1E/view?resourcekey=0-pd6Q3GLnI09wt1u5EoGAAQ"
-                                        />
-                                    </Grid>
+                                    />
                                 </Grid>
                             </Box>
                         </Grid>
