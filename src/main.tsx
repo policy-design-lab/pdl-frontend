@@ -9,6 +9,7 @@ import SNAPPage from "./pages/SNAPPage";
 import TitleIPage from "./pages/TitleIPage";
 import CropInsurancePage from "./pages/CropInsurancePage";
 import ACEPPage from "./pages/ACEPPage";
+import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();
@@ -32,6 +33,7 @@ export default function Main(): JSX.Element {
                 <Route path="/title1" element={<TitleIPage />} />
                 <Route path="/cropinsurance" element={<CropInsurancePage />} />
                 <Route path="/snap" element={<SNAPPage />} />
+                <Route path="/issue_whitepaper" element={<IssueWhitePaperPage />} />
             </Routes>
         </ScrollToTop>
     );

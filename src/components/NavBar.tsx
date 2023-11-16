@@ -16,7 +16,11 @@ import { Link } from "react-router-dom";
 import PDLLogo from "./PDLLogo";
 
 const drawerWidth = 240;
-const navItems = ["HOME", "EXPLORE FARM BILL DATA", "ABOUT PDL"];
+const navItems = [
+    { title: "HOME", link: "/" },
+    { title: "ISSUES & WHITE PAPERS", link: "/issue_whitepaper" },
+    { title: "ABOUT PDL" }
+];
 export default function NavBar({
     bkColor = "rgba(255, 255, 255, 1)",
     ftColor = "rgba(255, 255, 255, 1)",
@@ -47,9 +51,15 @@ export default function NavBar({
             <Divider />
             <List>
                 {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
+                    <ListItem key={item.title} disablePadding>
                         <ListItemButton sx={{ textAlign: "center" }}>
-                            <ListItemText primary={item} />
+                            {item.link ? (
+                                // <a href={item.link}>
+                                <ListItemText primary={item.title} />
+                            ) : (
+                                // </a>
+                                <ListItemText primary={item.title} />
+                            )}
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -92,16 +102,21 @@ export default function NavBar({
                         </Button>
                         <Box sx={{ display: { xs: "none", sm: "block" } }}>
                             {navItems.map((item) => {
-                                if (item === "HOME") {
+                                if (item.link) {
                                     return (
-                                        <Button component={Link} to="/" key={item} sx={{ color: ftColor }}>
-                                            {item}
+                                        <Button
+                                            component={Link}
+                                            to={item.link}
+                                            key={item.title}
+                                            sx={{ color: ftColor }}
+                                        >
+                                            {item.title}
                                         </Button>
                                     );
                                 }
                                 return (
-                                    <Button key={item} sx={{ color: ftColor }}>
-                                        {item}
+                                    <Button key={item.title} sx={{ color: ftColor }}>
+                                        {item.title}
                                     </Button>
                                 );
                             })}
