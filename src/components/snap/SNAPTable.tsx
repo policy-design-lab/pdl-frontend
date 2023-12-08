@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import { compareWithAlphabetic, compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
@@ -211,7 +212,11 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                                     <span>
                                         {(() => {
                                             if (!column.isSorted)
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{2B83}"}</Box>;
+                                                return (
+                                                    <Box sx={{ ml: 1, display: "inline" }}>
+                                                        <SwapVertIcon />
+                                                    </Box>
+                                                );
                                             if (column.isSortedDesc)
                                                 return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
                                             return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;

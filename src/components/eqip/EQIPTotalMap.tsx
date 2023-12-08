@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
+import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -58,17 +59,7 @@ const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance, co
                                                 }}
                                             >
                                                 <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {Number(totalPaymentInDollars) < 1000000
-                                                        ? `$${Number(
-                                                              Number(totalPaymentInDollars) / 1000.0
-                                                          ).toLocaleString(undefined, {
-                                                              maximumFractionDigits: 2
-                                                          })}K`
-                                                        : `$${Number(
-                                                              Number(totalPaymentInDollars) / 1000000.0
-                                                          ).toLocaleString(undefined, {
-                                                              maximumFractionDigits: 2
-                                                          })}M`}
+                                                    ${ShortFormat(totalPaymentInDollars, undefined, 2)}
                                                 </Typography>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                 <Typography sx={{ color: "#3F3F3F" }}>
