@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import "../styles/map.css";
 import DrawLegend from "./shared/DrawLegend";
 import legendConfig from "../utils/legendConfig.json";
+import { ShortFormat } from "./shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -200,19 +201,7 @@ const MapChart = (props) => {
                                                         <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
                                                     )}
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        {Math.round(Number(total / 1000000.0)) >= 0
-                                                            ? `$${Number(Math.abs(total) / 1000000.0).toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 2
-                                                                  }
-                                                              )}M`
-                                                            : `-$${Number(Math.abs(total) / 1000000.0).toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 2
-                                                                  }
-                                                              )}M`}
+                                                        ${ShortFormat(total, undefined, 2)}
                                                     </Typography>
                                                     <br />
                                                     {/* Show additional data on hover for SNAP */}
@@ -224,11 +213,11 @@ const MapChart = (props) => {
                                                     {/* Average SNAP monthly participation for the current years */}
                                                     {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {Number(
-                                                                totalAverageMonthlyParticipation / yearList.length
-                                                            ).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 0
-                                                            })}
+                                                            {ShortFormat(
+                                                                totalAverageMonthlyParticipation / yearList.length,
+                                                                undefined,
+                                                                2
+                                                            )}
                                                         </Typography>
                                                     )}
                                                 </Box>
@@ -247,17 +236,7 @@ const MapChart = (props) => {
                                                                     }
                                                                 >
                                                                     {record["Fiscal Year"]}:{" "}
-                                                                    {Number(record.Amount / 1000000.0) >= 0
-                                                                        ? `$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`
-                                                                        : `-$${Number(
-                                                                              Math.abs(record.Amount) / 1000000.0
-                                                                          ).toLocaleString(undefined, {
-                                                                              maximumFractionDigits: 2
-                                                                          })}M`}
+                                                                    {ShortFormat(record.Amount, undefined, 2)}
                                                                 </div>
                                                             ))}
                                                         </Typography>
@@ -278,20 +257,8 @@ const MapChart = (props) => {
                                                                         <div>2022: Not Available</div>
                                                                     ) : (
                                                                         <div>
-                                                                            {record["Fiscal Year"]}:{" "}
-                                                                            {Number(record.Amount / 1000000.0) >= 0
-                                                                                ? `$${Number(
-                                                                                      Math.abs(record.Amount) /
-                                                                                          1000000.0
-                                                                                  ).toLocaleString(undefined, {
-                                                                                      maximumFractionDigits: 2
-                                                                                  })}M`
-                                                                                : `-$${Number(
-                                                                                      Math.abs(record.Amount) /
-                                                                                          1000000.0
-                                                                                  ).toLocaleString(undefined, {
-                                                                                      maximumFractionDigits: 2
-                                                                                  })}M`}
+                                                                            {record["Fiscal Year"]}: $
+                                                                            {ShortFormat(record.Amount, undefined, 2)}
                                                                         </div>
                                                                     )}
                                                                 </div>
@@ -315,19 +282,7 @@ const MapChart = (props) => {
                                                     </Typography>
                                                     <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        {Math.round(Number(total / 1000000.0)) >= 0
-                                                            ? `$${Number(Math.abs(total) / 1000000.0).toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 2
-                                                                  }
-                                                              )}M`
-                                                            : `-$${Number(Math.abs(total) / 1000000.0).toLocaleString(
-                                                                  undefined,
-                                                                  {
-                                                                      maximumFractionDigits: 2
-                                                                  }
-                                                              )}M`}
+                                                        ${ShortFormat(total, undefined, 2)}
                                                     </Typography>
                                                 </Box>
                                                 <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -337,80 +292,40 @@ const MapChart = (props) => {
                                                         <br />
                                                         {records.map((record) => (
                                                             <div key={record.State}>
-                                                                2018:{" "}
-                                                                {record["2018 All Programs Total"] / 1000000.0 >= 0
-                                                                    ? `$${Number(
-                                                                          Math.abs(record["2018 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`
-                                                                    : `-$${Number(
-                                                                          Math.abs(record["2018 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`}
+                                                                2018: $
+                                                                {ShortFormat(
+                                                                    record["2018 All Programs Total"],
+                                                                    undefined,
+                                                                    2
+                                                                )}
                                                                 <br />
-                                                                2019:{" "}
-                                                                {record["2019 All Programs Total"] / 1000000.0 >= 0
-                                                                    ? `$${Number(
-                                                                          Math.abs(record["2019 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`
-                                                                    : `-$${Number(
-                                                                          Math.abs(record["2019 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`}
+                                                                2019: $
+                                                                {ShortFormat(
+                                                                    record["2019 All Programs Total"],
+                                                                    undefined,
+                                                                    2
+                                                                )}
                                                                 <br />
-                                                                2020:{" "}
-                                                                {record["2020 All Programs Total"] / 1000000.0 >= 0
-                                                                    ? `$${Number(
-                                                                          Math.abs(record["2020 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`
-                                                                    : `-$${Number(
-                                                                          Math.abs(record["2020 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`}
+                                                                2020: $
+                                                                {ShortFormat(
+                                                                    record["2020 All Programs Total"],
+                                                                    undefined,
+                                                                    2
+                                                                )}
                                                                 <br />
-                                                                2021:{" "}
-                                                                {record["2021 All Programs Total"] / 1000000.0 >= 0
-                                                                    ? `$${Number(
-                                                                          Math.abs(record["2021 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`
-                                                                    : `-$${Number(
-                                                                          Math.abs(record["2021 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`}
+                                                                2021: $
+                                                                {ShortFormat(
+                                                                    record["2021 All Programs Total"],
+                                                                    undefined,
+                                                                    2
+                                                                )}
                                                                 <br />
-                                                                2022:{" "}
-                                                                {record["2022 All Programs Total"] / 1000000.0 >= 0
-                                                                    ? `$${Number(
-                                                                          Math.abs(record["2022 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`
-                                                                    : `-$${Number(
-                                                                          Math.abs(record["2022 All Programs Total"]) /
-                                                                              1000000.0
-                                                                      ).toLocaleString(undefined, {
-                                                                          maximumFractionDigits: 2
-                                                                      })}M`}
+                                                                2022: $
+                                                                {ShortFormat(
+                                                                    record["2022 All Programs Total"],
+                                                                    undefined,
+                                                                    2
+                                                                )}
                                                                 <br />
                                                             </div>
                                                         ))}

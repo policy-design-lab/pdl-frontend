@@ -1,21 +1,35 @@
-export function ShortFormat(labelValue, position?: number) {
+/**
+ *
+ * @param labelValue
+ * @param position: put undefined if no preference of floor or ceiling
+ * @param decimals: if not defined, use 1 decimal place
+ * @returns
+ */
+export function ShortFormat(labelValue, position?: number, decimal?: number) {
     const absoluteValue = Math.abs(Number.parseFloat(labelValue));
     let decimalPart = "";
     let result = "";
+    const decimals = !decimal ? 1 : decimal;
     if (absoluteValue >= 1.0e9) {
         result =
-            (absoluteValue / 1.0e9) % 1 !== 0 ? `${(absoluteValue / 1.0e9).toFixed(1)}B` : `${absoluteValue / 1.0e9}B`;
+            (absoluteValue / 1.0e9) % 1 !== 0
+                ? `${(absoluteValue / 1.0e9).toFixed(decimals)}B`
+                : `${absoluteValue / 1.0e9}B`;
         decimalPart = (absoluteValue / 1.0e9) % 1 !== 0 ? result.match(/\.(.*)B$/)[1] : "";
     } else if (absoluteValue >= 1.0e6) {
         result =
-            (absoluteValue / 1.0e6) % 1 !== 0 ? `${(absoluteValue / 1.0e6).toFixed(1)}M` : `${absoluteValue / 1.0e6}M`;
+            (absoluteValue / 1.0e6) % 1 !== 0
+                ? `${(absoluteValue / 1.0e6).toFixed(decimals)}M`
+                : `${absoluteValue / 1.0e6}M`;
         decimalPart = (absoluteValue / 1.0e6) % 1 !== 0 ? result.match(/\.(.*)M$/)[1] : "";
     } else if (absoluteValue >= 1.0e3) {
         result =
-            (absoluteValue / 1.0e3) % 1 !== 0 ? `${(absoluteValue / 1.0e3).toFixed(1)}K` : `${absoluteValue / 1.0e3}K`;
+            (absoluteValue / 1.0e3) % 1 !== 0
+                ? `${(absoluteValue / 1.0e3).toFixed(decimals)}K`
+                : `${absoluteValue / 1.0e3}K`;
         decimalPart = (absoluteValue / 1.0e3) % 1 !== 0 ? result.match(/\.(.*)K$/)[1] : "";
     } else {
-        result = absoluteValue % 1 !== 0 ? `${absoluteValue.toFixed(1)}` : `${absoluteValue}`;
+        result = absoluteValue % 1 !== 0 ? `${absoluteValue.toFixed(decimals)}` : `${absoluteValue}`;
     }
     if (labelValue.toString().includes("-")) {
         result = `-${result}`;

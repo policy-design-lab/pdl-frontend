@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy } from "react-table";
 import Box from "@mui/material/Box";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { compareWithDollarSign, compareWithNumber } from "../shared/TableCompareFunctions";
 
@@ -82,7 +83,12 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         {column.render("Header")}
                                         <div>
                                             {(() => {
-                                                if (!column.isSorted) return <Box sx={{ ml: 1 }}>{"\u{2B83}"}</Box>;
+                                                if (!column.isSorted)
+                                                    return (
+                                                        <Box sx={{ ml: 1 }}>
+                                                            <SwapVertIcon />
+                                                        </Box>
+                                                    );
                                                 if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
                                                 return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
                                             })()}

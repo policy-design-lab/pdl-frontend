@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
+import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -82,11 +83,7 @@ const MapChart = ({
 
                                                 {subprogram === undefined ? (
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        $
-                                                        {Number(programPayment / 1000000.0).toLocaleString(undefined, {
-                                                            maximumFractionDigits: 2
-                                                        })}
-                                                        M
+                                                        ${ShortFormat(programPayment, undefined, 2)}
                                                     </Typography>
                                                 ) : (
                                                     <Box
@@ -96,14 +93,7 @@ const MapChart = ({
                                                         }}
                                                     >
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            $
-                                                            {Number(programPayment / 1000000.0).toLocaleString(
-                                                                undefined,
-                                                                {
-                                                                    maximumFractionDigits: 2
-                                                                }
-                                                            )}
-                                                            M
+                                                            ${ShortFormat(programPayment, undefined, 2)}
                                                         </Typography>
                                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                         <Typography sx={{ color: "#3F3F3F" }}>
@@ -208,11 +198,7 @@ const MapChart = ({
 
                                                 {subprogram === undefined ? (
                                                     <Typography sx={{ color: "#3F3F3F" }}>
-                                                        $
-                                                        {Number(programPayment / 1000000.0).toLocaleString(undefined, {
-                                                            maximumFractionDigits: 2
-                                                        })}
-                                                        M
+                                                        ${ShortFormat(programPayment, undefined, 2)}
                                                     </Typography>
                                                 ) : (
                                                     <Box
@@ -222,14 +208,7 @@ const MapChart = ({
                                                         }}
                                                     >
                                                         <Typography sx={{ color: "#3F3F3F" }}>
-                                                            $
-                                                            {Number(programPayment / 1000000.0).toLocaleString(
-                                                                undefined,
-                                                                {
-                                                                    maximumFractionDigits: 2
-                                                                }
-                                                            )}
-                                                            M
+                                                            ${ShortFormat(programPayment, undefined, 2)}
                                                         </Typography>
                                                         <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
                                                         <Typography sx={{ color: "#3F3F3F" }}>
