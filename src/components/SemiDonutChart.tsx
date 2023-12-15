@@ -1,6 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Tooltip, Label, Cell } from "recharts";
 import { Box } from "@mui/material";
+import { ShortFormat } from "./shared/ConvertionFormats";
 
 const RADIAN = Math.PI / 180;
 
@@ -66,15 +67,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     label={renderCustomizedLabel}
                 >
                     <Label
-                        value={
-                            Number(label1) >= 1000000000
-                                ? `$${Number(Number(label1) / 1000000000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 2
-                                  })}B`
-                                : `$${Number(Number(label1) / 1000000.0).toLocaleString(undefined, {
-                                      maximumFractionDigits: 2
-                                  })}M`
-                        }
+                        value={`$${ShortFormat(Number(label1), undefined, 2)}`}
                         position="center"
                         dy={-75}
                         style={{ textAnchor: "middle", fontSize: "200%", fill: "rgba(0, 0, 0, 0.87)" }}

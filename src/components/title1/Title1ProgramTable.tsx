@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import {
     compareWithNumber,
@@ -669,7 +670,11 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                                     <span>
                                         {(() => {
                                             if (!column.isSorted)
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{2B83}"}</Box>;
+                                                return (
+                                                    <Box sx={{ ml: 1, display: "inline" }}>
+                                                        <SwapVertIcon />
+                                                    </Box>
+                                                );
                                             if (column.isSortedDesc)
                                                 return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
                                             return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;

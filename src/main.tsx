@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import ReactGA from "react-ga";
 import LandingPage from "./pages/LandingPage";
 import EQIPPage from "./pages/EQIPPage";
 import CSPPage from "./pages/CSPPage";
@@ -11,6 +12,9 @@ import CropInsurancePage from "./pages/CropInsurancePage";
 import ACEPPage from "./pages/ACEPPage";
 import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
 
+const TRACKING_ID = "G-GFR8PTXMDM";
+ReactGA.initialize(TRACKING_ID);
+
 const ScrollToTop = (props: any) => {
     const location = useLocation();
     useEffect(() => {
@@ -21,6 +25,10 @@ const ScrollToTop = (props: any) => {
 };
 
 export default function Main(): JSX.Element {
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }, []);
+
     return (
         <ScrollToTop>
             <Routes>
