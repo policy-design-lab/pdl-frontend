@@ -11,9 +11,7 @@ import TitleIPage from "./pages/TitleIPage";
 import CropInsurancePage from "./pages/CropInsurancePage";
 import ACEPPage from "./pages/ACEPPage";
 import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
-
-const TRACKING_ID = "G-GFR8PTXMDM";
-ReactGA.initialize(TRACKING_ID);
+import { config } from "./app.config";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();
@@ -26,6 +24,7 @@ const ScrollToTop = (props: any) => {
 
 export default function Main(): JSX.Element {
     useEffect(() => {
+        ReactGA.initialize(config.ga_tracking_id);
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
 
