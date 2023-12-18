@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.13.0] - 2023-12-14
 
 ### Added
 
@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Updated all maps to show exact number of dollars instead of rounding units to the nearest million [#137](https://github.com/policy-design-lab/pdl-frontend/issues/137)
-
 - Replaced the arrow of table to Material UI icons to show in Linux browser[#151](https://github.com/policy-design-lab/pdl-frontend/issues/151)
 
 ## [0.12.0] - 2023-11-17
@@ -39,7 +38,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - ACEP page and corresponding components for its attributes [#200](https://github.com/policy-design-lab/pdl-frontend/issues/200)
-
 - RCPP page and corresponding components for its attributes [#196](https://github.com/policy-design-lab/pdl-frontend/issues/196)
 
 ### Changed
