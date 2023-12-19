@@ -13,6 +13,7 @@ import {
     Radio,
     SvgIcon
 } from "@mui/material";
+import ReactGA from "react-ga";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import LandingPageMap from "../components/LandingPageMap";
@@ -69,6 +70,9 @@ export default function SNAPPage(): JSX.Element {
         getJsonDataFromUrl(`${config.apiUrl}/programs/snap/state-distribution`).then((response) => {
             setData(response);
         });
+
+        // test ReactGA
+        ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
     const defaultTheme = createTheme({
         spacing: 8
