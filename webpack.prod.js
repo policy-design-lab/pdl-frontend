@@ -1,6 +1,6 @@
 const Webpack = require('webpack');
 const { merge } = require('webpack-merge');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonConfig = require('./webpack.common');
 
 module.exports = merge(commonConfig, {
@@ -33,8 +33,13 @@ module.exports = merge(commonConfig, {
     },
 
     plugins: [
+        new HtmlWebpackPlugin({
+            template: 'src/index.html',
+            GA_URL: 'https://www.googletagmanager.com/gtag/js?id=G-GFR8PTXMDM',
+        }),
         new Webpack.DefinePlugin({
-            ENV: JSON.stringify('production')
+            ENV: JSON.stringify('production'),
+            
         })
     ]
 });
