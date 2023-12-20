@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed the loss ratio representation at crop insurance page [#225](https://github.com/policy-design-lab/pdl-frontend/issues/225)
+- Changed Google Analytics plugin from `react-ga` module to script and use webpack environmental variable to config [#226](https://github.com/policy-design-lab/pdl-frontend/issues/226)
 
 ## [0.13.0] - 2023-12-14
 
