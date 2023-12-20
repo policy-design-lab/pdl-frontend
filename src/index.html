@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script async src="<%= htmlWebpackPlugin.options.GA_URL %>"></script>
+  <script async src="<%= process.env.GA_URL %>"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    var url = "<%= htmlWebpackPlugin.options.GA_URL %>";
+    var url = "<%= process.env.GA_URL %>";
     var regex = /id=(.*)/;
     var id = url.match(regex)[1];
     gtag('config', id);

@@ -1,7 +1,6 @@
 const Webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const commonConfig = require('./webpack.common');
 
@@ -43,11 +42,7 @@ module.exports = merge(commonConfig, {
 
     plugins: [
         new Webpack.DefinePlugin({
-            ENV: JSON.stringify('development'),
-        }),
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-             GA_URL: 'https://www.googletagmanager.com/gtag/js?id=G-K4MLHWSVVT',
+            ENV: JSON.stringify('development')
         }),
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 8081 })
     ],
