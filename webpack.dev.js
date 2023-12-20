@@ -1,7 +1,7 @@
 const Webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
+require('dotenv').config();
 const commonConfig = require('./webpack.common');
 
 module.exports = merge(commonConfig, {
@@ -41,8 +41,9 @@ module.exports = merge(commonConfig, {
     },
 
     plugins: [
+        new Webpack.EnvironmentPlugin(['GA_URL']),
         new Webpack.DefinePlugin({
-            ENV: JSON.stringify('development')
+            ENV: JSON.stringify('development'),
         }),
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 8081 })
     ],

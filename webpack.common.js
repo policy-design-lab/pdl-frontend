@@ -109,6 +109,6 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({ filename: 'css/[name]-[fullhash].css' }),
         new CleanWebpackPlugin(),
-        new Dotenv(),
+        //new Dotenv(),
     ]
 };
