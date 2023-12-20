@@ -2,6 +2,7 @@ const path = require('path');
 const Webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -78,7 +79,9 @@ module.exports = {
     },
 
     plugins: [
-        
+        new HtmlWebpackPlugin({
+            template: 'src/index.html'
+        }),
         new Webpack.DefinePlugin({
             "process.env": {
                 "APP_ENV": JSON.stringify(process.env.APP_ENV)

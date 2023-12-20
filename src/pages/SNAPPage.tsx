@@ -13,7 +13,6 @@ import {
     Radio,
     SvgIcon
 } from "@mui/material";
-import ReactGA from "react-ga";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import LandingPageMap from "../components/LandingPageMap";
