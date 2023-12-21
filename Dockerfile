@@ -5,8 +5,8 @@ FROM node:14.5.0-alpine AS builder
 WORKDIR /usr/src/app
 ARG REACT_APP_ENV=""
 ENV REACT_APP_ENV=${REACT_APP_ENV}
-ARG GA_URL=""
-ENV GA_URL=${GA_URL}
+ARG REACT_GA_URL=""
+ENV REACT_GA_URL=${REACT_GA_URL}
 
 COPY package.json package-lock.json /usr/src/app/
 
