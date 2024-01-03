@@ -101,7 +101,8 @@ export default function CRPPage(): JSX.Element {
             grasslandPyamentInDollars = cur7.paymentInDollars;
             if (grasslandPyamentInDollars === 0) zeroCategory.push("Grassland");
 
-            setZeroCategories(zeroCategory);
+            if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
+            else setZeroCategories(["None"]);
 
             setTotalChartData([
                 { name: "Total General Sign-Up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
@@ -121,7 +122,8 @@ export default function CRPPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 ? (
+            Object.keys(stateDistributionData).length > 0 &&
+            zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

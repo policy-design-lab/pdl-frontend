@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { set } from "react-ga";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
@@ -172,11 +173,12 @@ export default function CSPPage(): JSX.Element {
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" }
         ]);
 
-        setZeroCategories(zeroCategory);
+        if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
+        else setZeroCategories(["None"]);
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
+            {allStates.length > 0 && statePerformance.Wisconsin !== undefined && zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
