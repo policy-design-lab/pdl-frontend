@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { createTheme, ThemeProvider, Typography } from "@mui/material";
-import { set } from "react-ga";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
@@ -133,20 +132,20 @@ export default function CSPPage(): JSX.Element {
             {
                 name: "Existing activity payments",
                 value: existingAPTotal,
-                color: "#869397"
+                color: "#749F97"
             },
-            { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
+            { name: "Vegetative", value: vegetativeTotal, color: "#9CBAB4" },
             {
                 name: "Forest management",
                 value: forestManagementTotal,
-                color: "#9CBAB4"
+                color: "#B9CDC9"
             },
             {
                 name: "Soil remediation",
                 value: soilRemediationTotal,
-                color: "#B9CDC9"
+                color: "#CDDBD8"
             },
-            { name: "Structural", value: structuralTotal, color: "#CDDBD8" },
+            { name: "Structural", value: structuralTotal, color: "#E2E8E7" },
             { name: "Bundles", value: bundlesTotal, color: "#C3C5C4" },
             { name: "Soil Testing", value: soilTestingTotal, color: "#CAD4C5" }
         ]);
@@ -158,14 +157,14 @@ export default function CSPPage(): JSX.Element {
             {
                 name: "Other: supplemental, adjustment & other",
                 value: SAOTotal,
-                color: "#869397"
+                color: "#9CBAB4"
             },
             {
                 name: "Non-industrial private forestland",
                 value: NIPFTotal,
-                color: "#9CBAB4"
+                color: "#B9CDC9"
             },
-            { name: "Grassland", value: grasslandTotal, color: "#B9CDC9" }
+            { name: "Grassland", value: grasslandTotal, color: "#CDDBD8" }
         ]);
 
         setTotalChartData([

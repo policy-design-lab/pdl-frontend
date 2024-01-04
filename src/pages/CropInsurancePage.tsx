@@ -19,6 +19,7 @@ import SideBar from "../components/cropinsurance/sideBar/ShortSideBar";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import "../styles/subpage.css";
+
 import "../styles/cropinsurance.css";
 import CropInsuranceBubble from "../components/cropinsurance/chart/CropInsuranceBubble";
 import CropInsuranceBars from "../components/cropinsurance/chart/CropInsuranceBars";

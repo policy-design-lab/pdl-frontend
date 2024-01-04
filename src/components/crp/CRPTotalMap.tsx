@@ -28,7 +28,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
+    const { setReactTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
 
     return (
         <div data-tip="">
@@ -89,10 +89,10 @@ const MapChart = (props) => {
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
+                                                setReactTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent("");
+                                                setReactTooltipContent("");
                                             }}
                                             fill={fillColour()}
                                             stroke="#FFF"
@@ -153,7 +153,7 @@ const MapChart = (props) => {
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func
+    setReactTooltipContent: PropTypes.func
 };
 
 const CRPTotalMap = ({
@@ -218,7 +218,7 @@ const CRPTotalMap = ({
                 </Box>
 
                 <MapChart
-                    setTooltipContent={setContent}
+                    setReactTooltipContent={setContent}
                     maxValue={maxValue}
                     statePerformance={statePerformance}
                     allStates={allStates}

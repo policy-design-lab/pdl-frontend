@@ -27,7 +27,7 @@ const offsets = {
 };
 
 const MapChart = ({
-    setTooltipContent,
+    setReactTooltipContent,
     program,
     subprogram,
     maxValue,
@@ -109,10 +109,10 @@ const MapChart = ({
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
+                                                setReactTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent("");
+                                                setReactTooltipContent("");
                                             }}
                                             fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
                                             stroke="#FFF"
@@ -224,10 +224,10 @@ const MapChart = ({
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
+                                                setReactTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent("");
+                                                setReactTooltipContent("");
                                             }}
                                             fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
                                             stroke="#FFF"
@@ -288,7 +288,7 @@ const MapChart = ({
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func,
+    setReactTooltipContent: PropTypes.func,
     subprogram: PropTypes.string,
     program: PropTypes.string,
     maxValue: PropTypes.number
@@ -366,7 +366,7 @@ const Title1Map = ({
                 />
             </Box>
             <MapChart
-                setTooltipContent={setContent}
+                setReactTooltipContent={setContent}
                 program={program}
                 subprogram={subprogram}
                 maxValue={maxValue}

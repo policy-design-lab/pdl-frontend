@@ -106,14 +106,14 @@ export default function CRPPage(): JSX.Element {
 
             setTotalChartData([
                 { name: "Total General Sign-Up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
-                { name: "Total Continuous", value: continuousSingUpPaymentInDollars, color: "#869397" },
-                { name: "Grassland", value: grasslandPyamentInDollars, color: "#9CBAB4" }
+                { name: "Total Continuous", value: continuousSingUpPaymentInDollars, color: "#9CBAB4" },
+                { name: "Grassland", value: grasslandPyamentInDollars, color: "#CDDBD8" }
             ]);
 
             setSubChartData([
                 { name: "CREP Only", value: crepPaymentInDollars, color: "#2F7164" },
-                { name: "Continuous Non-CREP", value: nocCrepPaymentInDollars, color: "#869397" },
-                { name: "Farmable Wetland", value: wetlandPaymentInDollars, color: "#9CBAB4" }
+                { name: "Continuous Non-CREP", value: nocCrepPaymentInDollars, color: "#9CBAB4" },
+                { name: "Farmable Wetland", value: wetlandPaymentInDollars, color: "#CDDBD8" }
             ]);
         }
     };

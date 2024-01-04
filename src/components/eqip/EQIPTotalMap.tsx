@@ -27,7 +27,7 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance, colorScale }) => {
+const MapChart = ({ setReactTooltipContent, maxValue, allStates, statePerformance, colorScale }) => {
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -76,10 +76,10 @@ const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance, co
                                         key={geo.rsmKey}
                                         geography={geo}
                                         onMouseEnter={() => {
-                                            setTooltipContent(hoverContent);
+                                            setReactTooltipContent(hoverContent);
                                         }}
                                         onMouseLeave={() => {
-                                            setTooltipContent("");
+                                            setReactTooltipContent("");
                                         }}
                                         fill={colorScale(totalPaymentInDollars || { value: 0 }) || "#D2D2D2"}
                                         stroke="#FFF"
@@ -135,7 +135,7 @@ const MapChart = ({ setTooltipContent, maxValue, allStates, statePerformance, co
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func,
+    setReactTooltipContent: PropTypes.func,
     maxValue: PropTypes.number
 };
 
@@ -183,7 +183,7 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
                 )}
             </Box>
             <MapChart
-                setTooltipContent={setContent}
+                setReactTooltipContent={setContent}
                 maxValue={maxValue}
                 allStates={allStates}
                 statePerformance={statePerformance}

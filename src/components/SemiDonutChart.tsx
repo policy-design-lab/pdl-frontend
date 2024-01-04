@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Tooltip, Label, Cell } from "recharts";
+import { PieChart, Pie, ReactTooltip, Label, Cell } from "recharts";
 import { Box } from "@mui/material";
 import { ShortFormat } from "./shared/ConvertionFormats";
 
@@ -28,7 +28,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
         );
     };
 
-    const CustomTooltip = ({ active, payload, label }: any) => {
+    const CustomReactTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
                 <div
@@ -93,8 +93,8 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         <Cell key={entry.id} fillOpacity={0} />
                     ))}
                 </Pie>
-                <Tooltip
-                    content={<CustomTooltip />}
+                <ReactTooltip
+                    content={<CustomReactTooltip />}
                     wrapperStyle={{
                         backgroundColor: "white",
                         borderStyle: "ridge",

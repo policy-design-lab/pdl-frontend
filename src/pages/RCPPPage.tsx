@@ -5,8 +5,6 @@ import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import DataTable from "../components/rcpp/RCPPTotalTable";
 import RCPPTotalMap from "../components/rcpp/RCPPTotalMap";
-// import CategoryTable from "../components/rcpp/CategoryTable";
-// import CategoryMap from "../components/rcpp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
@@ -76,8 +74,8 @@ export default function RCPPPage(): JSX.Element {
 
         setTotalChartData([
             { name: "Total Financial Assistance Payments", value: assistancePayments, color: "#2F7164" },
-            { name: "Total Reimbursable Payments", value: reimbursePayments, color: "#869397" },
-            { name: "Total Techinical Assistance Payments", value: techPayments, color: "#9CBAB4" }
+            { name: "Total Reimbursable Payments", value: reimbursePayments, color: "#9CBAB4" },
+            { name: "Total Techinical Assistance Payments", value: techPayments, color: "#CDDBD8" }
         ]);
 
         setTotalBenefit(

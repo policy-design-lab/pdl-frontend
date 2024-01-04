@@ -5,11 +5,7 @@ import InsertChartIcon from "@mui/icons-material/InsertChart";
 import {
     CircularProgress,
     createTheme,
-    FormControlLabel,
     Grid,
-    MenuItem,
-    RadioGroup,
-    SvgIcon,
     ThemeProvider,
     ToggleButton,
     ToggleButtonGroup,
