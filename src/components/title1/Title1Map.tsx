@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
+import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
@@ -38,6 +39,7 @@ const MapChart = ({
     allStates,
     colorScale
 }) => {
+    const classes = useStyles();
     return (
         <div data-tip="">
             {program !== "Total Commodities Programs" ? (
@@ -70,39 +72,42 @@ const MapChart = ({
                                         totalPaymentInPercentage = subprogramRecord.paymentInPercentageNationwide;
                                     }
                                     const hoverContent = (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                bgcolor: "#ECF0ED",
-                                                borderRadius: 1
-                                            }}
-                                        >
-                                            <Box>
-                                                <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
-
-                                                {subprogram === undefined ? (
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(programPayment, undefined, 2)}
-                                                    </Typography>
-                                                ) : (
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            flexDirection: "row"
-                                                        }}
-                                                    >
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            ${ShortFormat(programPayment, undefined, 2)}
-                                                        </Typography>
-                                                        <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {totalPaymentInPercentage} %
-                                                        </Typography>
-                                                    </Box>
-                                                )}
-                                            </Box>
-                                        </Box>
+                                        <div className={classes.tooltip_overall}>
+                                            <div className={classes.tooltip_header}>
+                                                <b>{geo.properties.name}</b>
+                                            </div>
+                                            {subprogram === undefined ? (
+                                                <table className={classes.tooltip_table}>
+                                                    <tbody key={geo.properties.name}>
+                                                        <tr>
+                                                            <td className={classes.tooltip_topcell_left}>
+                                                                {ShortFormat(programPayment, undefined, 2)}
+                                                            </td>
+                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            ) : (
+                                                <table className={classes.tooltip_table}>
+                                                    <tbody key={geo.properties.name}>
+                                                        <tr style={topTipStyle}>
+                                                            <td className={classes.tooltip_topcell_left}>Payments:</td>
+                                                            <td className={classes.tooltip_topcell_right}>
+                                                                ${ShortFormat(programPayment, undefined, 2)}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={classes.tooltip_regularcell_left}>
+                                                                PCT. Nationwide:
+                                                            </td>
+                                                            <td className={classes.tooltip_regularcell_right}>
+                                                                {totalPaymentInPercentage} %
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            )}
+                                        </div>
                                     );
                                     return (
                                         <Geography
@@ -185,39 +190,42 @@ const MapChart = ({
                                     programPayment = state.totalPaymentInDollars;
                                     totalPaymentInPercentage = state.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                bgcolor: "#ECF0ED",
-                                                borderRadius: 1
-                                            }}
-                                        >
-                                            <Box>
-                                                <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
-
-                                                {subprogram === undefined ? (
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(programPayment, undefined, 2)}
-                                                    </Typography>
-                                                ) : (
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            flexDirection: "row"
-                                                        }}
-                                                    >
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            ${ShortFormat(programPayment, undefined, 2)}
-                                                        </Typography>
-                                                        <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {totalPaymentInPercentage} %
-                                                        </Typography>
-                                                    </Box>
-                                                )}
-                                            </Box>
-                                        </Box>
+                                        <div className={classes.tooltip_overall}>
+                                            <div className={classes.tooltip_header}>
+                                                <b>{geo.properties.name}</b>
+                                            </div>
+                                            {subprogram === undefined ? (
+                                                <table className={classes.tooltip_table}>
+                                                    <tbody key={geo.properties.name}>
+                                                        <tr>
+                                                            <td className={classes.tooltip_topcell_left}>
+                                                                ${ShortFormat(programPayment, undefined, 2)}
+                                                            </td>
+                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            ) : (
+                                                <table className={classes.tooltip_table}>
+                                                    <tbody key={geo.properties.name}>
+                                                        <tr style={topTipStyle}>
+                                                            <td className={classes.tooltip_topcell_left}>Payments:</td>
+                                                            <td className={classes.tooltip_topcell_right}>
+                                                                ${ShortFormat(programPayment, undefined, 2)}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={classes.tooltip_regularcell_left}>
+                                                                PCT. Nationwide:
+                                                            </td>
+                                                            <td className={classes.tooltip_regularcell_right}>
+                                                                {totalPaymentInPercentage} %
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            )}
+                                        </div>
                                     );
                                     return (
                                         <Geography
@@ -352,6 +360,7 @@ const Title1Map = ({
             zeroPoints.push(state.state);
         }
     });
+    const classes = useStyles();
     return (
         <div>
             <Box display="flex" justifyContent="center" className="Title1MapHeader">
@@ -378,7 +387,7 @@ const Title1Map = ({
                 colorScale={colorScale}
             />
             <div className="tooltip-container">
-                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}
                 </ReactTooltip>
             </div>

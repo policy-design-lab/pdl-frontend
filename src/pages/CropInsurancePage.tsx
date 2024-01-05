@@ -128,7 +128,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"
@@ -233,7 +233,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"
@@ -338,7 +338,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"
@@ -443,7 +443,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"
@@ -547,7 +547,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"
@@ -765,7 +765,7 @@ export default function CropInsurancePage(): JSX.Element {
                         >
                             <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
                                 <Typography className="stateTitle" variant="h6">
-                                    Comparison by States
+                                    Performance by States
                                 </Typography>
                                 <ToggleButtonGroup
                                     className="ChartTableToggle"

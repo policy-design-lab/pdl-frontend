@@ -4,7 +4,6 @@ import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import * as d3 from "d3";
-import { makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,6 +11,7 @@ import "../styles/map.css";
 import DrawLegend from "./shared/DrawLegend";
 import legendConfig from "../utils/legendConfig.json";
 import { ShortFormat } from "./shared/ConvertionFormats";
+import { useStyles, tooltipBkgColor } from "./shared/MapTooltip";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -26,91 +26,6 @@ const offsets = {
     MD: [47, 10],
     DC: [49, 21]
 };
-
-// Shared Styles
-const commonMenuStyles = {
-    tooltip_cell: {
-        margin: 0
-    }
-};
-const useStyles = makeStyles(() => ({
-    customized_tooltip: {
-        "backgroundColor": "#D9D9D9 !important",
-        "padding": "0 !important",
-        "margin": "0 !important",
-        "opacity": "1 !important",
-        "& .arrow": {
-            backgroundColor: "#D9D9D9 !important"
-        }
-    },
-    tooltip_overall: {
-        backgroundColor: "white",
-        width: "100%",
-        height: "100%"
-    },
-    tooltip_header: {
-        padding: "0.5em 0 0.5em 1em",
-        textAlign: "left",
-        fontSize: "1.5em",
-        color: "#00000099",
-        margin: 0
-    },
-    tooltip_table: {
-        backgroundColor: "#D9D9D9",
-        width: "100%",
-        fontSize: "1.25em",
-        color: "#00000099",
-        padding: 0,
-        margin: 0,
-        borderCollapse: "collapse"
-    },
-    tooltip_topcell_left: {
-        ...commonMenuStyles.tooltip_cell,
-        padding: "1em 0.5em 1em 1em"
-    },
-    tooltip_topcell_right: {
-        ...commonMenuStyles.tooltip_cell,
-        textAlign: "right",
-        padding: "0.5em 1em 1em 0",
-        borderRight: "none"
-    },
-    tooltip_bottomcell_left: {
-        ...commonMenuStyles.tooltip_cell,
-        padding: "0 0 1em 1em"
-    },
-    tooltip_bottomcell_right: {
-        ...commonMenuStyles.tooltip_cell,
-        textAlign: "right",
-        padding: "0 1em 1em 0",
-        borderLeft: "none"
-    },
-    tooltip_regularcell_left: {
-        ...commonMenuStyles.tooltip_cell,
-        padding: "0 0 1em 1em"
-    },
-    tooltip_regularcell_right: {
-        ...commonMenuStyles.tooltip_cell,
-        textAlign: "right",
-        padding: "0 1em 1em 0",
-        borderLeft: "none"
-    },
-    tooltip_footer_left: {
-        ...commonMenuStyles.tooltip_cell,
-        textAlign: "left",
-        padding: "1em 0 1em 1em",
-        borderTop: "0.1em solid #00000099",
-        color: "black",
-        borderRight: "none"
-    },
-    tooltip_footer_right: {
-        ...commonMenuStyles.tooltip_cell,
-        textAlign: "right",
-        padding: "1em 1em 1em 0",
-        borderTop: "0.1em solid #00000099",
-        color: "black",
-        borderLeft: "none"
-    }
-}));
 
 const MapChart = (props) => {
     const { setReactTooltipContent, title, stateCodes, allPrograms, allStates, summary, screenWidth } = props;
@@ -287,7 +202,18 @@ const MapChart = (props) => {
                                                                             : classes.tooltip_regularcell_left
                                                                     }
                                                                 >
-                                                                    {record["Fiscal Year"]}
+                                                                    {title ===
+                                                                    "Supplemental Nutrition Assistance Program (SNAP)"
+                                                                        ? `${record["Fiscal Year"]} Cost:`
+                                                                        : null}
+                                                                    {title === "Crop Insurance"
+                                                                        ? `${record["Fiscal Year"]} Payment:`
+                                                                        : null}
+                                                                    {title !== "Crop Insurance" &&
+                                                                    title !==
+                                                                        "Supplemental Nutrition Assistance Program (SNAP)"
+                                                                        ? `${record["Fiscal Year"]} Benefit:`
+                                                                        : null}
                                                                 </td>
                                                                 <td
                                                                     className={
@@ -309,7 +235,7 @@ const MapChart = (props) => {
                                                         "Supplemental Nutrition Assistance Program (SNAP)" ? (
                                                             <tr>
                                                                 <td className={classes.tooltip_footer_left}>
-                                                                    Total Cost:
+                                                                    Total Costs:
                                                                 </td>
                                                                 <td className={classes.tooltip_footer_right}>
                                                                     ${ShortFormat(total, undefined, 2)}
@@ -320,7 +246,7 @@ const MapChart = (props) => {
                                                                 <td className={classes.tooltip_footer_left}>
                                                                     {title === "Crop Insurance"
                                                                         ? "Total Payments: "
-                                                                        : "Total Benefit: "}
+                                                                        : "Total Benefits: "}
                                                                 </td>
                                                                 <td className={classes.tooltip_footer_right}>
                                                                     ${ShortFormat(total, undefined, 2)}
@@ -355,7 +281,9 @@ const MapChart = (props) => {
                                                     {records.map((record) => (
                                                         <tbody key={record.State}>
                                                             <tr>
-                                                                <td className={classes.tooltip_topcell_left}>2018: </td>
+                                                                <td className={classes.tooltip_topcell_left}>
+                                                                    2018 Benefit:{" "}
+                                                                </td>
                                                                 <td className={classes.tooltip_topcell_right}>
                                                                     {`${ShortFormat(
                                                                         record["2018 All Programs Total"],
@@ -366,7 +294,7 @@ const MapChart = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td className={classes.tooltip_regularcell_left}>
-                                                                    2019:{" "}
+                                                                    2019 Benefit:{" "}
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
@@ -378,7 +306,7 @@ const MapChart = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td className={classes.tooltip_regularcell_left}>
-                                                                    2020:{" "}
+                                                                    2020 Benefit:{" "}
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
@@ -390,7 +318,7 @@ const MapChart = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td className={classes.tooltip_regularcell_left}>
-                                                                    2021:{" "}
+                                                                    2021 Benefit:{" "}
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
@@ -402,7 +330,7 @@ const MapChart = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td className={classes.tooltip_bottomcell_left}>
-                                                                    2022:{" "}
+                                                                    2022 Benefit:{" "}
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_bottomcell_right}
@@ -414,7 +342,7 @@ const MapChart = (props) => {
                                                             </tr>
                                                             <tr>
                                                                 <td className={classes.tooltip_footer_left}>
-                                                                    Total Benefit:{" "}
+                                                                    Total Benefits:{" "}
                                                                 </td>
                                                                 <td className={classes.tooltip_footer_right}>
                                                                     ${ShortFormat(total, undefined, 2)}
@@ -533,7 +461,8 @@ const LandingPageMap = ({
                     screenWidth={screenWidth}
                 />
                 <div className="tooltip-container">
-                    <ReactTooltip classNameArrow="tooltip-arrow" className={`${classes.customized_tooltip} tooltip`}>
+                    {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
+                    <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                         {content}
                     </ReactTooltip>
                 </div>

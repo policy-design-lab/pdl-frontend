@@ -480,7 +480,7 @@ export default function CSPPage(): JSX.Element {
 
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
-                                <strong>Performance by State</strong>
+                                <strong>Performance by States</strong>
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
