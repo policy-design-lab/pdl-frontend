@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, ReactTooltip, Label, Cell } from "recharts";
+import { PieChart, Pie, Tooltip, Label, Cell } from "recharts";
 import { Box } from "@mui/material";
 import { ShortFormat } from "./shared/ConvertionFormats";
 
@@ -93,7 +93,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                         <Cell key={entry.id} fillOpacity={0} />
                     ))}
                 </Pie>
-                <ReactTooltip
+                <Tooltip
                     content={<CustomReactTooltip />}
                     wrapperStyle={{
                         backgroundColor: "white",
