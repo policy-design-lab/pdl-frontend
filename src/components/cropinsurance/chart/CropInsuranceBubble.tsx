@@ -367,7 +367,9 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
             }
             const fullName = stateCodes[theState.data()[0].State.toString()];
             const CustomLabel = () => (
-                <div style={{ backgroundColor: "white", width: "100%", border: "1px solid #0000001F", borderRadius: 5 }}>
+                <div
+                    style={{ backgroundColor: "white", width: "100%", border: "1px solid #0000001F", borderRadius: 5 }}
+                >
                     <div
                         style={{
                             padding: "0.5em 1em",

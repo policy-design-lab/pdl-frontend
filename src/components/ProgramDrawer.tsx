@@ -223,7 +223,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                 }
                 if (category === "Land management") {
                     return (
-                        <Box>
+                        <Box key={category}>
                             <Typography sx={{ pl: 8 }}>
                                 <strong>(6)(A) Improvements</strong>
                             </Typography>
@@ -402,7 +402,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                 }
                 if (category === "2018 Practices" || category === "2014 Eligible Land") {
                     return (
-                        <Box>
+                        <Box key={category}>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
                                     <Radio

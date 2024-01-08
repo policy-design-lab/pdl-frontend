@@ -63,10 +63,7 @@ const MapChart = (props) => {
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td
-                                                            className={classes.tooltip_regularcell_left}
-                                                            sx={{ fontWeight: 700 }}
-                                                        >
+                                                        <td className={classes.tooltip_regularcell_left}>
                                                             PCT. Nationwide:
                                                         </td>
                                                         <td className={classes.tooltip_regularcell_right}>
