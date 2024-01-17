@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
@@ -72,7 +71,7 @@ const MapChart = ({
                                         totalPaymentInPercentage = subprogramRecord.paymentInPercentageNationwide;
                                     }
                                     const hoverContent = (
-                                        <div className={classes.tooltip_overall}>
+                                        <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>
@@ -190,7 +189,7 @@ const MapChart = ({
                                     programPayment = state.totalPaymentInDollars;
                                     totalPaymentInPercentage = state.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
-                                        <div className={classes.tooltip_overall}>
+                                        <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>

@@ -62,7 +62,7 @@ const MapChart = ({
                                         : "totalNetFarmerBenefit";
                                 programPayment = state.programs[0][key];
                                 const hoverContent = (
-                                    <div className={classes.tooltip_overall}>
+                                    <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
                                             <b>{geo.properties.name}</b>
                                         </div>

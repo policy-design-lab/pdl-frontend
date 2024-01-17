@@ -48,7 +48,7 @@ const MapChart = (props) => {
                                     const totalPaymentInPercentageNationwide =
                                         record.programs[0].paymentInPercentageNationwide;
                                     const hoverContent = (
-                                        <div className={classes.tooltip_overall}>
+                                        <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>

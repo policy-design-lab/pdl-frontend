@@ -66,7 +66,7 @@ const MapChart = (props) => {
                                         ? categoryRecord.statutePaymentInPercentageWithinState
                                         : categoryRecord.paymentInPercentageWithinState;
                                 const hoverContent = (
-                                    <div className={classes.tooltip_overall}>
+                                    <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
                                             <b>{geo.properties.name}</b>
                                         </div>

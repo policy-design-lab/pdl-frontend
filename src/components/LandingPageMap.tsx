@@ -7,11 +7,11 @@ import * as d3 from "d3";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "../styles/map.css";
 import DrawLegend from "./shared/DrawLegend";
 import legendConfig from "../utils/legendConfig.json";
 import { ShortFormat } from "./shared/ConvertionFormats";
 import { useStyles, tooltipBkgColor } from "./shared/MapTooltip";
+import "../styles/map.css";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -185,7 +185,7 @@ const MapChart = (props) => {
 
                                     const hoverContent =
                                         title !== "All Programs" ? (
-                                            <div className={classes.tooltip_overall}>
+                                            <div className="map_tooltip">
                                                 <div className={classes.tooltip_header}>
                                                     <b>{stateCodes[cur.id]}</b>
                                                 </div>
@@ -273,7 +273,7 @@ const MapChart = (props) => {
                                                 </table>
                                             </div>
                                         ) : (
-                                            <div className={classes.tooltip_overall}>
+                                            <div className="map_tooltip">
                                                 <div className={classes.tooltip_header}>
                                                     <b>{cur ? stateCodes[cur.id] : ""}</b>
                                                 </div>

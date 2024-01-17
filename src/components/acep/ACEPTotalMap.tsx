@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -47,7 +47,7 @@ const MapChart = (props) => {
                                     const assistancePaymentInPercentageNationwide =
                                         record.programs[0].assistancePaymentInPercentageNationwide;
                                     const hoverContent = (
-                                        <div className={classes.tooltip_overall}>
+                                        <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>
