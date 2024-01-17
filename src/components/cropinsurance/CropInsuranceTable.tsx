@@ -11,6 +11,7 @@ import {
     sortByDollars
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
+import { ShortFormat } from "../shared/ConvertionFormats";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -41,7 +42,7 @@ function CropInsuranceProgramTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr === "lossRatio") {
-                newRecord[attr] = `${value.toString()}%`;
+                newRecord[attr] = `${ShortFormat((Number(value) * 100).toString(), undefined, 1)}%`;
             } else if (attr === "averageInsuredAreaInAcres") {
                 newRecord[attr] = `${
                     value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]

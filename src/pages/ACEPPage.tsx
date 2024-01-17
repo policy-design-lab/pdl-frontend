@@ -11,6 +11,7 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import ACEPTable from "../components/acep/ACEPTable";
 import AcepTreeMap from "../components/acep/AcepTreeMap";
+
 import "../styles/subpage.css";
 
 export default function ACEPPage(): JSX.Element {

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
+import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
@@ -27,8 +27,8 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
-
+    const { setReactTooltipContent, allStates, statePerformance, year, stateCodes, colorScale } = props;
+    const classes = useStyles();
     return (
         <div data-tip="">
             {allStates.length > 0 && statePerformance[year] !== undefined ? (
@@ -47,34 +47,31 @@ const MapChart = (props) => {
                                     const assistancePaymentInPercentageNationwide =
                                         record.programs[0].assistancePaymentInPercentageNationwide;
                                     const hoverContent = (
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "row",
-                                                bgcolor: "#ECF0ED",
-                                                borderRadius: 1
-                                            }}
-                                        >
-                                            <Box>
-                                                <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        flexDirection: "row"
-                                                    }}
-                                                >
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(totalPaymentInDollars, undefined, 2)}
-                                                    </Typography>
-                                                    <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        {assistancePaymentInPercentageNationwide
-                                                            ? `${assistancePaymentInPercentageNationwide} %`
-                                                            : "0%"}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </Box>
+                                        <div className="map_tooltip">
+                                            <div className={classes.tooltip_header}>
+                                                <b>{geo.properties.name}</b>
+                                            </div>
+                                            <table className={classes.tooltip_table}>
+                                                <tbody key={geo.properties.name}>
+                                                    <tr style={topTipStyle}>
+                                                        <td className={classes.tooltip_topcell_left}>Benefits:</td>
+                                                        <td className={classes.tooltip_topcell_right}>
+                                                            ${ShortFormat(totalPaymentInDollars, undefined, 2)}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={classes.tooltip_regularcell_left}>
+                                                            PCT. Nationwide:
+                                                        </td>
+                                                        <td className={classes.tooltip_regularcell_right}>
+                                                            {assistancePaymentInPercentageNationwide
+                                                                ? `${assistancePaymentInPercentageNationwide} %`
+                                                                : "0%"}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     );
                                     const fillColour = () => {
                                         if (totalPaymentInDollars) {
@@ -88,10 +85,10 @@ const MapChart = (props) => {
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
+                                                setReactTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent("");
+                                                setReactTooltipContent("");
                                             }}
                                             fill={fillColour()}
                                             stroke="#FFF"
@@ -152,7 +149,7 @@ const MapChart = (props) => {
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func
+    setReactTooltipContent: PropTypes.func
 };
 
 const ACEPTotalMap = ({
@@ -187,49 +184,48 @@ const ACEPTotalMap = ({
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const classes = useStyles();
     return (
         <div>
-            <div>
-                <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
-                    {maxValue !== 0 ? (
-                        <DrawLegend
-                            colorScale={colorScale}
-                            title={titleElement(category, years)}
-                            programData={quantizeArray}
-                            prepColor={mapColor}
-                            initRatioLarge={0.6}
-                            initRatioSmall={0.5}
-                            isRatio={false}
-                            notDollar={false}
-                            emptyState={[]}
-                        />
-                    ) : (
-                        <div>
-                            {titleElement(category, years)}
-                            <Box display="flex" justifyContent="center">
-                                <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                    {category} data in {years} is unavailable for all states.
-                                </Typography>
-                            </Box>
-                        </div>
-                    )}
-                </Box>
+            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
+                {maxValue !== 0 ? (
+                    <DrawLegend
+                        colorScale={colorScale}
+                        title={titleElement(category, years)}
+                        programData={quantizeArray}
+                        prepColor={mapColor}
+                        initRatioLarge={0.6}
+                        initRatioSmall={0.5}
+                        isRatio={false}
+                        notDollar={false}
+                        emptyState={[]}
+                    />
+                ) : (
+                    <div>
+                        {titleElement(category, years)}
+                        <Box display="flex" justifyContent="center">
+                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                                {category} data in {years} is unavailable for all states.
+                            </Typography>
+                        </Box>
+                    </div>
+                )}
+            </Box>
 
-                <MapChart
-                    setTooltipContent={setContent}
-                    maxValue={maxValue}
-                    statePerformance={statePerformance}
-                    allStates={allStates}
-                    year={year}
-                    stateCodes={stateCodes}
-                    colorScale={colorScale}
-                />
+            <MapChart
+                setReactTooltipContent={setContent}
+                maxValue={maxValue}
+                statePerformance={statePerformance}
+                allStates={allStates}
+                year={year}
+                stateCodes={stateCodes}
+                colorScale={colorScale}
+            />
 
-                <div className="tooltip-container">
-                    <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
-                        {content}
-                    </ReactTooltip>
-                </div>
+            <div className="tooltip-container">
+                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
+                    {content}
+                </ReactTooltip>
             </div>
         </div>
     );

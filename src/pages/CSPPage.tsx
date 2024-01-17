@@ -132,20 +132,20 @@ export default function CSPPage(): JSX.Element {
             {
                 name: "Existing activity payments",
                 value: existingAPTotal,
-                color: "#869397"
+                color: "#749F97"
             },
-            { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
+            { name: "Vegetative", value: vegetativeTotal, color: "#9CBAB4" },
             {
                 name: "Forest management",
                 value: forestManagementTotal,
-                color: "#9CBAB4"
+                color: "#B9CDC9"
             },
             {
                 name: "Soil remediation",
                 value: soilRemediationTotal,
-                color: "#B9CDC9"
+                color: "#CDDBD8"
             },
-            { name: "Structural", value: structuralTotal, color: "#CDDBD8" },
+            { name: "Structural", value: structuralTotal, color: "#E2E8E7" },
             { name: "Bundles", value: bundlesTotal, color: "#C3C5C4" },
             { name: "Soil Testing", value: soilTestingTotal, color: "#CAD4C5" }
         ]);
@@ -157,14 +157,14 @@ export default function CSPPage(): JSX.Element {
             {
                 name: "Other: supplemental, adjustment & other",
                 value: SAOTotal,
-                color: "#869397"
+                color: "#9CBAB4"
             },
             {
                 name: "Non-industrial private forestland",
                 value: NIPFTotal,
-                color: "#9CBAB4"
+                color: "#B9CDC9"
             },
-            { name: "Grassland", value: grasslandTotal, color: "#B9CDC9" }
+            { name: "Grassland", value: grasslandTotal, color: "#CDDBD8" }
         ]);
 
         setTotalChartData([
@@ -172,11 +172,12 @@ export default function CSPPage(): JSX.Element {
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" }
         ]);
 
-        setZeroCategories(zeroCategory);
+        if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
+        else setZeroCategories(["None"]);
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
+            {allStates.length > 0 && statePerformance.Wisconsin !== undefined && zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -479,7 +480,7 @@ export default function CSPPage(): JSX.Element {
 
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
-                                <strong>Performance by State</strong>
+                                <strong>Performance by States</strong>
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>

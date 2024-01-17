@@ -1,16 +1,17 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import * as d3 from "d3";
-import Divider from "@mui/material/Divider";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "../styles/map.css";
 import DrawLegend from "./shared/DrawLegend";
 import legendConfig from "../utils/legendConfig.json";
 import { ShortFormat } from "./shared/ConvertionFormats";
+import { useStyles, tooltipBkgColor } from "./shared/MapTooltip";
+import "../styles/map.css";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -27,7 +28,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setTooltipContent, title, stateCodes, allPrograms, allStates, summary, screenWidth } = props;
+    const { setReactTooltipContent, title, stateCodes, allPrograms, allStates, summary, screenWidth } = props;
     let searchKey = "";
     let color1 = "";
     let color2 = "";
@@ -141,6 +142,7 @@ const MapChart = (props) => {
     allPrograms.forEach((d) => {
         if (d[searchKey] === 0) zeroPoints.push(d.State);
     });
+    const classes = useStyles();
     return (
         <div data-tip="">
             <Box id="TopMapContainer" display="flex" justifyContent="center" sx={{ mt: 4 }}>
@@ -183,156 +185,179 @@ const MapChart = (props) => {
 
                                     const hoverContent =
                                         title !== "All Programs" ? (
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    bgcolor: "#ECF0ED",
-                                                    borderRadius: 1
-                                                }}
-                                            >
-                                                <Box>
-                                                    <Typography sx={{ color: "#2F7164" }}>
-                                                        {stateCodes[cur.id]}
-                                                    </Typography>
-                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
-                                                        <Typography sx={{ color: "#2F7164" }}>Total Cost</Typography>
-                                                    ) : (
-                                                        <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
-                                                    )}
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(total, undefined, 2)}
-                                                    </Typography>
-                                                    <br />
-                                                    {/* Show additional data on hover for SNAP */}
-                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
-                                                        <Typography sx={{ color: "#2F7164" }}>
-                                                            Avg. Monthly Participation
-                                                        </Typography>
-                                                    )}
-                                                    {/* Average SNAP monthly participation for the current years */}
-                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" && (
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {ShortFormat(
-                                                                totalAverageMonthlyParticipation / yearList.length,
-                                                                undefined,
-                                                                2
-                                                            )}
-                                                        </Typography>
-                                                    )}
-                                                </Box>
-                                                <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Box>
-                                                    {title === "Supplemental Nutrition Assistance Program (SNAP)" ? (
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            Costs:
-                                                            <br />
-                                                            {records.map((record) => (
-                                                                <div
-                                                                    key={
-                                                                        record.State +
-                                                                        record.Title +
-                                                                        record["Fiscal Year"]
+                                            <div className="map_tooltip">
+                                                <div className={classes.tooltip_header}>
+                                                    <b>{stateCodes[cur.id]}</b>
+                                                </div>
+                                                <table className={classes.tooltip_table}>
+                                                    <tbody key={cur.id}>
+                                                        {records.map((record) => (
+                                                            <tr key={record["Fiscal Year"]}>
+                                                                <td
+                                                                    className={
+                                                                        record["Fiscal Year"] === 2018
+                                                                            ? classes.tooltip_topcell_left
+                                                                            : record["Fiscal Year"] === 2022
+                                                                            ? classes.tooltip_bottomcell_left
+                                                                            : classes.tooltip_regularcell_left
                                                                     }
                                                                 >
-                                                                    {record["Fiscal Year"]}:{" "}
-                                                                    {ShortFormat(record.Amount, undefined, 2)}
-                                                                </div>
-                                                            ))}
-                                                        </Typography>
-                                                    ) : (
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {title === "Crop Insurance" ? "Benefits:" : "Payments:"}
-                                                            <br />
-                                                            {records.map((record) => (
-                                                                <div
-                                                                    key={
-                                                                        record.State +
-                                                                        record.Title +
-                                                                        record["Fiscal Year"]
+                                                                    {title ===
+                                                                    "Supplemental Nutrition Assistance Program (SNAP)"
+                                                                        ? `${record["Fiscal Year"]} Cost:`
+                                                                        : null}
+                                                                    {title === "Crop Insurance"
+                                                                        ? `${record["Fiscal Year"]} Payment:`
+                                                                        : null}
+                                                                    {title !== "Crop Insurance" &&
+                                                                    title !==
+                                                                        "Supplemental Nutrition Assistance Program (SNAP)"
+                                                                        ? `${record["Fiscal Year"]} Benefit:`
+                                                                        : null}
+                                                                </td>
+                                                                <td
+                                                                    className={
+                                                                        record["Fiscal Year"] === 2018
+                                                                            ? classes.tooltip_topcell_right
+                                                                            : record["Fiscal Year"] === 2022
+                                                                            ? classes.tooltip_bottomcell_right
+                                                                            : classes.tooltip_regularcell_right
                                                                     }
                                                                 >
                                                                     {String(record["Fiscal Year"]) === "2022" &&
-                                                                    title.includes("Title I") ? (
-                                                                        <div>2022: Not Available</div>
-                                                                    ) : (
-                                                                        <div>
-                                                                            {record["Fiscal Year"]}: $
-                                                                            {ShortFormat(record.Amount, undefined, 2)}
-                                                                        </div>
+                                                                    title.includes("Title I")
+                                                                        ? "Not Available"
+                                                                        : `$${ShortFormat(
+                                                                              record.Amount,
+                                                                              undefined,
+                                                                              2
+                                                                          )}`}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                        {title ===
+                                                        "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                            <tr>
+                                                                <td className={classes.tooltip_footer_left}>
+                                                                    Total Costs:
+                                                                </td>
+                                                                <td className={classes.tooltip_footer_right}>
+                                                                    ${ShortFormat(total, undefined, 2)}
+                                                                </td>
+                                                            </tr>
+                                                        ) : (
+                                                            <tr>
+                                                                <td className={classes.tooltip_footer_left}>
+                                                                    {title === "Crop Insurance"
+                                                                        ? "Total Payments: "
+                                                                        : "Total Benefits: "}
+                                                                </td>
+                                                                <td className={classes.tooltip_footer_right}>
+                                                                    ${ShortFormat(total, undefined, 2)}
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        {title ===
+                                                        "Supplemental Nutrition Assistance Program (SNAP)" ? (
+                                                            <tr style={{ color: "black" }}>
+                                                                <td className={classes.tooltip_bottomcell_left}>
+                                                                    Avg. Monthly Participation:
+                                                                </td>
+                                                                <td className={classes.tooltip_bottomcell_right}>
+                                                                    {ShortFormat(
+                                                                        totalAverageMonthlyParticipation /
+                                                                            yearList.length,
+                                                                        undefined,
+                                                                        2
                                                                     )}
-                                                                </div>
-                                                            ))}
-                                                        </Typography>
-                                                    )}
-                                                </Box>
-                                            </Box>
+                                                                </td>
+                                                            </tr>
+                                                        ) : null}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         ) : (
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    bgcolor: "#ECF0ED",
-                                                    borderRadius: 1
-                                                }}
-                                            >
-                                                <Box>
-                                                    <Typography sx={{ color: "#2F7164" }}>
-                                                        {cur ? stateCodes[cur.id] : ""}
-                                                    </Typography>
-                                                    <Typography sx={{ color: "#2F7164" }}>Total Benefit</Typography>
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        ${ShortFormat(total, undefined, 2)}
-                                                    </Typography>
-                                                </Box>
-                                                <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-                                                <Box>
-                                                    <Typography sx={{ color: "#3F3F3F" }}>
-                                                        Payments:
-                                                        <br />
-                                                        {records.map((record) => (
-                                                            <div key={record.State}>
-                                                                2018: $
-                                                                {ShortFormat(
-                                                                    record["2018 All Programs Total"],
-                                                                    undefined,
-                                                                    2
-                                                                )}
-                                                                <br />
-                                                                2019: $
-                                                                {ShortFormat(
+                                            <div className="map_tooltip">
+                                                <div className={classes.tooltip_header}>
+                                                    <b>{cur ? stateCodes[cur.id] : ""}</b>
+                                                </div>
+                                                <table className={classes.tooltip_table}>
+                                                    {records.map((record) => (
+                                                        <tbody key={record.State}>
+                                                            <tr>
+                                                                <td className={classes.tooltip_topcell_left}>
+                                                                    2018 Benefit:{" "}
+                                                                </td>
+                                                                <td className={classes.tooltip_topcell_right}>
+                                                                    {`$${ShortFormat(
+                                                                        record["2018 All Programs Total"],
+                                                                        undefined,
+                                                                        2
+                                                                    )}`}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className={classes.tooltip_regularcell_left}>
+                                                                    2019 Benefit:{" "}
+                                                                </td>
+                                                                <td
+                                                                    className={classes.tooltip_regularcell_right}
+                                                                >{`$${ShortFormat(
                                                                     record["2019 All Programs Total"],
                                                                     undefined,
                                                                     2
-                                                                )}
-                                                                <br />
-                                                                2020: $
-                                                                {ShortFormat(
+                                                                )}`}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className={classes.tooltip_regularcell_left}>
+                                                                    2020 Benefit:{" "}
+                                                                </td>
+                                                                <td
+                                                                    className={classes.tooltip_regularcell_right}
+                                                                >{`$${ShortFormat(
                                                                     record["2020 All Programs Total"],
                                                                     undefined,
                                                                     2
-                                                                )}
-                                                                <br />
-                                                                2021: $
-                                                                {ShortFormat(
+                                                                )}`}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className={classes.tooltip_regularcell_left}>
+                                                                    2021 Benefit:{" "}
+                                                                </td>
+                                                                <td
+                                                                    className={classes.tooltip_regularcell_right}
+                                                                >{`$${ShortFormat(
                                                                     record["2021 All Programs Total"],
                                                                     undefined,
                                                                     2
-                                                                )}
-                                                                <br />
-                                                                2022: $
-                                                                {ShortFormat(
+                                                                )}`}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className={classes.tooltip_bottomcell_left}>
+                                                                    2022 Benefit:{" "}
+                                                                </td>
+                                                                <td
+                                                                    className={classes.tooltip_bottomcell_right}
+                                                                >{`$${ShortFormat(
                                                                     record["2022 All Programs Total"],
                                                                     undefined,
                                                                     2
-                                                                )}
-                                                                <br />
-                                                            </div>
-                                                        ))}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
+                                                                )}`}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className={classes.tooltip_footer_left}>
+                                                                    Total Benefits:{" "}
+                                                                </td>
+                                                                <td className={classes.tooltip_footer_right}>
+                                                                    ${ShortFormat(total, undefined, 2)}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    ))}
+                                                </table>
+                                            </div>
                                         );
+
                                     const fillColour = () => {
                                         if (total) {
                                             if (total !== 0) return colorScale(total);
@@ -340,15 +365,16 @@ const MapChart = (props) => {
                                         }
                                         return "#D2D2D2";
                                     };
+
                                     return (
                                         <Geography
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(hoverContent);
+                                                setReactTooltipContent(hoverContent);
                                             }}
                                             onMouseLeave={() => {
-                                                setTooltipContent("");
+                                                setReactTooltipContent("");
                                             }}
                                             fill={fillColour()}
                                             stroke="#FFF"
@@ -406,7 +432,7 @@ const MapChart = (props) => {
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func,
+    setReactTooltipContent: PropTypes.func,
     title: PropTypes.string
 };
 
@@ -423,13 +449,14 @@ const LandingPageMap = ({
     allPrograms: any;
     summary: any;
 }): JSX.Element => {
+    const classes = useStyles();
     const [content, setContent] = useState("");
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     return (
         <div>
             <div>
                 <MapChart
-                    setTooltipContent={setContent}
+                    setReactTooltipContent={setContent}
                     title={programTitle}
                     stateCodes={stateCodes}
                     allPrograms={allPrograms}
@@ -438,7 +465,8 @@ const LandingPageMap = ({
                     screenWidth={screenWidth}
                 />
                 <div className="tooltip-container">
-                    <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                    {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
+                    <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                         {content}
                     </ReactTooltip>
                 </div>

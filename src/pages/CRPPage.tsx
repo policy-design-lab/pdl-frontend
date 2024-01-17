@@ -101,18 +101,19 @@ export default function CRPPage(): JSX.Element {
             grasslandPyamentInDollars = cur7.paymentInDollars;
             if (grasslandPyamentInDollars === 0) zeroCategory.push("Grassland");
 
-            setZeroCategories(zeroCategory);
+            if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
+            else setZeroCategories(["None"]);
 
             setTotalChartData([
                 { name: "Total General Sign-Up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
-                { name: "Total Continuous", value: continuousSingUpPaymentInDollars, color: "#869397" },
-                { name: "Grassland", value: grasslandPyamentInDollars, color: "#9CBAB4" }
+                { name: "Total Continuous", value: continuousSingUpPaymentInDollars, color: "#9CBAB4" },
+                { name: "Grassland", value: grasslandPyamentInDollars, color: "#CDDBD8" }
             ]);
 
             setSubChartData([
                 { name: "CREP Only", value: crepPaymentInDollars, color: "#2F7164" },
-                { name: "Continuous Non-CREP", value: nocCrepPaymentInDollars, color: "#869397" },
-                { name: "Farmable Wetland", value: wetlandPaymentInDollars, color: "#9CBAB4" }
+                { name: "Continuous Non-CREP", value: nocCrepPaymentInDollars, color: "#9CBAB4" },
+                { name: "Farmable Wetland", value: wetlandPaymentInDollars, color: "#CDDBD8" }
             ]);
         }
     };
@@ -121,7 +122,8 @@ export default function CRPPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 ? (
+            Object.keys(stateDistributionData).length > 0 &&
+            zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -312,7 +314,7 @@ export default function CRPPage(): JSX.Element {
 
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
-                                <strong>Overall Performance of States</strong>
+                                <strong>Performance by States</strong>
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
