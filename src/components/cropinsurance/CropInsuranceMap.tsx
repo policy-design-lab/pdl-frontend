@@ -9,10 +9,10 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
+import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
-
 const offsets = {
     VT: [50, -8],
     NH: [34, 2],
@@ -26,7 +26,7 @@ const offsets = {
 };
 
 const MapChart = ({
-    setTooltipContent,
+    setReactTooltipContent,
     program,
     attribute,
     maxValue,
@@ -40,6 +40,8 @@ const MapChart = ({
     let attr = 0;
     if (attribute === "lossRatio") attr = 1;
     if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") attr = 2;
+
+    const classes = useStyles();
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -60,54 +62,57 @@ const MapChart = ({
                                         : "totalNetFarmerBenefit";
                                 programPayment = state.programs[0][key];
                                 const hoverContent = (
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            bgcolor: "#ECF0ED",
-                                            borderRadius: 1
-                                        }}
-                                    >
-                                        <Box>
-                                            <Typography sx={{ color: "#2F7164" }}>{geo.properties.name}</Typography>
+                                    <div className="map_tooltip">
+                                        <div className={classes.tooltip_header}>
+                                            <b>{geo.properties.name}</b>
+                                        </div>
 
-                                            {attr === 1 ? (
-                                                <Typography sx={{ color: "#3F3F3F" }}>
-                                                    {Number(programPayment * 100).toLocaleString(undefined, {
-                                                        maximumFractionDigits: 2
-                                                    })}
-                                                    %
-                                                </Typography>
-                                            ) : (
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        flexDirection: "row"
-                                                    }}
-                                                >
+                                        {attr === 1 ? (
+                                            <table className={classes.tooltip_table}>
+                                                <tbody key={geo.properties.name}>
+                                                    <tr>
+                                                        <td className={classes.tooltip_topcell_left}>
+                                                            {Number(programPayment * 100).toLocaleString(undefined, {
+                                                                maximumFractionDigits: 2
+                                                            })}
+                                                            %
+                                                        </td>
+                                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <table className={classes.tooltip_table}>
+                                                <tbody key={geo.properties.name}>
                                                     {attr === 2 ? (
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            {ShortFormat(programPayment)}
-                                                        </Typography>
+                                                        <tr>
+                                                            <td className={classes.tooltip_topcell_left}>
+                                                                ${ShortFormat(programPayment)}
+                                                            </td>
+                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                                        </tr>
                                                     ) : (
-                                                        <Typography sx={{ color: "#3F3F3F" }}>
-                                                            ${ShortFormat(programPayment)}
-                                                        </Typography>
+                                                        <tr>
+                                                            <td className={classes.tooltip_topcell_left}>
+                                                                ${ShortFormat(programPayment)}
+                                                            </td>
+                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                                        </tr>
                                                     )}
-                                                </Box>
-                                            )}
-                                        </Box>
-                                    </Box>
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
                                 );
                                 return (
                                     <Geography
                                         key={geo.rsmKey}
                                         geography={geo}
                                         onMouseEnter={() => {
-                                            setTooltipContent(hoverContent);
+                                            setReactTooltipContent(hoverContent);
                                         }}
                                         onMouseLeave={() => {
-                                            setTooltipContent("");
+                                            setReactTooltipContent("");
                                         }}
                                         fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
                                         stroke="#FFF"
@@ -167,7 +172,7 @@ const MapChart = ({
 };
 
 MapChart.propTypes = {
-    setTooltipContent: PropTypes.func,
+    setReactTooltipContent: PropTypes.func,
     attribute: PropTypes.string,
     program: PropTypes.string,
     maxValue: PropTypes.number
@@ -207,6 +212,7 @@ const CropInsuranceMap = ({
     const searchKey = attribute === undefined ? program : attribute;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const classes = useStyles();
     return (
         <div>
             <Box display="flex" justifyContent="center">
@@ -251,7 +257,7 @@ const CropInsuranceMap = ({
                 )}
             </Box>
             <MapChart
-                setTooltipContent={setContent}
+                setReactTooltipContent={setContent}
                 program={program}
                 attribute={attribute}
                 maxValue={maxValue}
@@ -263,7 +269,7 @@ const CropInsuranceMap = ({
                 colorScale={colorScale}
             />
             <div className="tooltip-container">
-                <ReactTooltip className="tooltip" classNameArrow="tooltip-arrow" backgroundColor="#ECF0ED">
+                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}
                 </ReactTooltip>
             </div>

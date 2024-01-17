@@ -28,7 +28,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
         );
     };
 
-    const CustomTooltip = ({ active, payload, label }: any) => {
+    const CustomReactTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
                 <div
@@ -94,7 +94,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     ))}
                 </Pie>
                 <Tooltip
-                    content={<CustomTooltip />}
+                    content={<CustomReactTooltip />}
                     wrapperStyle={{
                         backgroundColor: "white",
                         borderStyle: "ridge",

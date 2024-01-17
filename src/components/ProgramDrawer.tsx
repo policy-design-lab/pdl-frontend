@@ -10,9 +10,95 @@ import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { makeStyles } from "@mui/styles";
 
+/** ALL MENUs */
 const drawerWidth = 240;
+const commonMenuStyles = {
+    topMenu: {
+        marginRight: 8
+    },
+    topMenuItem: {
+        paddingLeft: "1.5em",
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingRight: 0
+    },
+    statue_common: {
+        maxWidth: 40,
+        paddingTop: "1.5em",
+        paddingBottom: "1.5em",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        maxHeight: 48
+    }
+};
 
+// xxx_top are styles that should be added to top level menu items only
+const useStyles = makeStyles(() => ({
+    // background classes for menuItem
+    bk_on: {
+        ...commonMenuStyles.topMenuItem,
+        backgroundColor: "#ECF0EE"
+    },
+    bk_off: {
+        ...commonMenuStyles.topMenuItem,
+        backgroundColor: "transparent"
+    },
+    // text classes for the top box inside the menuItem and listIemText(submenu)
+    regular: {
+        "& .MuiTypography-root": {
+            ...commonMenuStyles.topMenu,
+            color: "#3F3F3F"
+        }
+    },
+    regular_top: {
+        paddingTop: 24,
+        paddingBottom: 24
+    },
+    selected: {
+        "& .MuiTypography-root": {
+            ...commonMenuStyles.topMenu,
+            color: "#2f7164",
+            fontWeight: 700
+        }
+    },
+    disabled: {
+        "& .MuiTypography-root": {
+            ...commonMenuStyles.topMenu,
+            color: "#00000061",
+            cursor: "not-allowed"
+        }
+    },
+    disabled_top: {
+        paddingTop: 24,
+        paddingBottom: 24
+    },
+    // statue classes for box wrapping the text and icon
+    no_statue: {
+        paddingTop: "1.5em",
+        paddingBottom: "1.5em"
+    },
+    statue_on: {
+        ...commonMenuStyles.statue_common,
+        color: "#ffffff",
+        backgroundColor: "#2f7164"
+    },
+    statue_off: {
+        ...commonMenuStyles.statue_common,
+        color: "transparent",
+        backgroundColor: "transparent"
+    },
+    // statue class for text inside the box
+    statue_text: {
+        color: "white",
+        fontSize: "0.875em"
+    }
+}));
+
+/** EQIP */
 EQIPCheckboxList.propTypes = {
     setEQIPChecked: PropTypes.func,
     setShowPopUp: PropTypes.func
@@ -51,6 +137,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
         "Comprehensive Nutrient Mgt."
     ];
 
+    const classes = useStyles();
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {EQIPList.map((category, value) => {
@@ -74,7 +161,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                 <ListItemText
                                     id={labelId}
                                     primary={`No payment reported for ${category}`}
-                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                    className={classes.disabled}
                                 />
                             </ListItemButton>
                         </ListItem>
@@ -100,7 +187,11 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -121,14 +212,18 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
                 }
                 if (category === "Land management") {
                     return (
-                        <Box>
+                        <Box key={category}>
                             <Typography sx={{ pl: 8 }}>
                                 <strong>(6)(A) Improvements</strong>
                             </Typography>
@@ -146,7 +241,11 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                             }
                                         }}
                                     />
-                                    <ListItemText id={labelId} primary={category} />
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={category}
+                                        className={checked === value ? classes.selected : classes.regular}
+                                    />
                                 </ListItemButton>
                             </ListItem>
                         </Box>
@@ -171,7 +270,11 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     </Box>
@@ -213,7 +316,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
         "Non-industrial private forestland",
         "Other: supplemental, adjustment & other"
     ];
-
+    const classes = useStyles();
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {CSPList.map((category, value) => {
@@ -237,7 +340,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                 <ListItemText
                                     id={labelId}
                                     primary={`No payment reported for ${category}`}
-                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                    className={classes.disabled}
                                 />
                             </ListItemButton>
                         </ListItem>
@@ -263,7 +366,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -284,14 +391,18 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
                 }
                 if (category === "2018 Practices" || category === "2014 Eligible Land") {
                     return (
-                        <Box>
+                        <Box key={category}>
                             <ListItem key={category} disablePadding>
                                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
                                     <Radio
@@ -310,6 +421,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                         id={labelId}
                                         primary={category}
                                         primaryTypographyProps={{ fontWeight: 700 }}
+                                        className={checked === value ? classes.selected : classes.regular}
                                     />
                                 </ListItemButton>
                             </ListItem>
@@ -332,7 +444,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     </Box>
@@ -361,7 +477,7 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
         "Farmable Wetland",
         "Grassland"
     ];
-
+    const classes = useStyles();
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
             {CRPList.map((category, value) => {
@@ -385,7 +501,7 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
                                 <ListItemText
                                     id={labelId}
                                     primary={`No payment reported for ${category}`}
-                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                    className={classes.disabled}
                                 />
                             </ListItemButton>
                         </ListItem>
@@ -407,7 +523,11 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
                                         }
                                     }}
                                 />
-                                <ListItemText id={labelId} primary={category} />
+                                <ListItemText
+                                    id={labelId}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
+                                />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -419,48 +539,6 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
                                 <Radio
                                     edge="start"
                                     checked={checked === value}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ "aria-labelledby": labelId }}
-                                    sx={{
-                                        "&.Mui-checked": {
-                                            color: "#2f7164"
-                                        }
-                                    }}
-                                />
-                                <ListItemText id={labelId} primary={category} />
-                            </ListItemButton>
-                        </ListItem>
-                    </Box>
-                );
-            })}
-        </List>
-    );
-}
-
-function RCPPCheckboxList({ setRCPPChecked, setShowPopUp, zeroCategory }) {
-    const [checked, setChecked] = React.useState(currentChecked);
-
-    const handleToggle = (value: number) => () => {
-        setChecked(value);
-        setRCPPChecked(value);
-        currentChecked = value;
-        setShowPopUp(false);
-    };
-
-    const RCPPList = ["Total RCPP"];
-
-    return (
-        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
-            {RCPPList.map((category, value) => {
-                const labelId = `checkbox-list-label-${value}`;
-                if (zeroCategory && zeroCategory.includes(category)) {
-                    return (
-                        <ListItem key={category} disablePadding>
-                            <ListItemButton role={undefined} dense sx={{ pl: 8, cursor: "pointer" }}>
-                                <Radio
-                                    edge="start"
-                                    disabled
                                     tabIndex={-1}
                                     disableRipple
                                     inputProps={{ "aria-labelledby": labelId }}
@@ -472,30 +550,9 @@ function RCPPCheckboxList({ setRCPPChecked, setShowPopUp, zeroCategory }) {
                                 />
                                 <ListItemText
                                     id={labelId}
-                                    primary={`No payment reported for ${category}`}
-                                    sx={{ fontStyle: "italic", color: "#7676764D" }}
+                                    primary={category}
+                                    className={checked === value ? classes.selected : classes.regular}
                                 />
-                            </ListItemButton>
-                        </ListItem>
-                    );
-                }
-                return (
-                    <Box key={category}>
-                        <ListItem key={category} disablePadding>
-                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 8 }}>
-                                <Radio
-                                    edge="start"
-                                    checked={checked === value}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ "aria-labelledby": labelId }}
-                                    sx={{
-                                        "&.Mui-checked": {
-                                            color: "#2f7164"
-                                        }
-                                    }}
-                                />
-                                <ListItemText id={labelId} primary={category} />
                             </ListItemButton>
                         </ListItem>
                     </Box>
@@ -518,13 +575,15 @@ export default function ProgramDrawer({
     setCSPChecked,
     setCRPChecked,
     setRCPPChecked,
-    zeroCategories
+    zeroCategories // different page will pass different zeroCategories
 }: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
     const navigate = useNavigate();
     const [zeroCategory, setZeroCategory] = React.useState(zeroCategories);
     const [eqipOpen, setEqipOpen] = React.useState(false);
     const eqipRef = React.useRef<HTMLLIElement>(null);
+
+    const classes = useStyles();
     const handleEqipClick = () => {
         if (location.pathname !== "/eqip") {
             navigate("/eqip");
@@ -624,50 +683,49 @@ export default function ProgramDrawer({
             }}
             PaperProps={{
                 sx: {
-                    backgroundColor: "#ffffff",
-                    color: "gray"
+                    backgroundColor: "#ffffff"
                 }
             }}
             open
         >
             <Box id="filler" sx={{ minHeight: 100 }} />
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem
+                style={{ whiteSpace: "normal" }}
+                className={`${classes.bk_off} ${classes.disabled_top} ${classes.disabled}  ${classes.no_statue}`}
+            >
                 <Typography>Total Conservation Programs Benefits</Typography>
             </MenuItem>
             <Box>
                 <MenuItem
                     ref={eqipRef}
                     style={{ whiteSpace: "normal" }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: eqipOpen ? "#ecf0ee" : "grey" }}
                     onClick={handleEqipClick}
+                    className={location.pathname === "/eqip" ? classes.bk_on : classes.bk_off}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/eqip"
+                                ? `${classes.selected} ${classes.selected_top}`
+                                : `${classes.regular} ${classes.regular_top}`
+                        }
+                    >
+                        <Typography>EQIP: Environmental Quality Incentives Program</Typography>
                         {location.pathname === "/eqip" ? (
-                            <Typography sx={{ color: "#2f7164" }}>
-                                <strong>EQIP: Environmental Quality Incentives Program</strong>
-                            </Typography>
-                        ) : (
-                            <Typography>EQIP: Environmental Quality Incentives Program</Typography>
-                        )}
-                        <Box
-                            sx={{
-                                maxWidth: 40,
-                                py: 3,
-                                color: "#ffffff",
-                                backgroundColor: "#2f7164",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                maxHeight: 48
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
-                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                    <strong>STATUTE</strong>
-                                    <KeyboardArrowDownIcon />
+                            <Box className={classes.statue_on}>
+                                <Box sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                    <Box
+                                        sx={{ display: "flex", flexDirection: "horizontal" }}
+                                        className={classes.statue_text}
+                                    >
+                                        <strong>STATUTE</strong>
+                                        {eqipOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </Box>
                                 </Box>
-                            </Typography>
-                        </Box>
+                            </Box>
+                        ) : (
+                            <Box className={classes.statue_off} />
+                        )}
                     </Box>
                 </MenuItem>
                 <Popper
@@ -690,36 +748,33 @@ export default function ProgramDrawer({
                 <MenuItem
                     ref={cspRef}
                     style={{ whiteSpace: "normal" }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: cspOpen ? "#ecf0ee" : "grey" }}
+                    className={location.pathname === "/csp" ? classes.bk_on : classes.bk_off}
                     onClick={handleCspClick}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/csp"
+                                ? `${classes.selected} ${classes.selected_top}`
+                                : `${classes.regular} ${classes.regular_top}`
+                        }
+                    >
+                        <Typography>CSP: Conservation Stewardship Program</Typography>
                         {location.pathname === "/csp" ? (
-                            <Typography sx={{ color: "#2f7164" }}>
-                                <strong>CSP: Conservation Stewardship Program</strong>
-                            </Typography>
-                        ) : (
-                            <Typography>CSP: Conservation Stewardship Program</Typography>
-                        )}
-                        <Box
-                            sx={{
-                                maxWidth: 40,
-                                py: 3,
-                                color: "#ffffff",
-                                backgroundColor: "#2f7164",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                maxHeight: 48
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
-                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                    <strong>STATUTE</strong>
-                                    <KeyboardArrowDownIcon />
+                            <Box className={classes.statue_on}>
+                                <Box sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                    <Box
+                                        sx={{ display: "flex", flexDirection: "horizontal" }}
+                                        className={classes.statue_text}
+                                    >
+                                        <strong>STATUTE</strong>
+                                        {cspOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </Box>
                                 </Box>
-                            </Typography>
-                        </Box>
+                            </Box>
+                        ) : (
+                            <Box className={classes.statue_off} />
+                        )}
                     </Box>
                 </MenuItem>
                 <Popper
@@ -742,36 +797,33 @@ export default function ProgramDrawer({
                 <MenuItem
                     ref={crpRef}
                     style={{ whiteSpace: "normal" }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: crpOpen ? "#ecf0ee" : "grey" }}
+                    className={location.pathname === "/crp" ? classes.bk_on : classes.bk_off}
                     onClick={handleCrpClick}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/crp"
+                                ? `${classes.selected} ${classes.selected_top}`
+                                : `${classes.regular} ${classes.regular_top}`
+                        }
+                    >
+                        <Typography>CRP: Conservation Reserve Program</Typography>
                         {location.pathname === "/crp" ? (
-                            <Typography sx={{ color: "#2f7164" }}>
-                                <strong>CRP: Conservation Reserve Program</strong>
-                            </Typography>
-                        ) : (
-                            <Typography>CRP: Conservation Reserve Program</Typography>
-                        )}
-                        <Box
-                            sx={{
-                                maxWidth: 40,
-                                py: 3,
-                                color: "#ffffff",
-                                backgroundColor: "#2f7164",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                maxHeight: 48
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
-                                <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
-                                    <strong>STATUTE</strong>
-                                    <KeyboardArrowDownIcon />
+                            <Box className={classes.statue_on}>
+                                <Box sx={{ rotate: "270deg", pt: 6, pb: 0 }}>
+                                    <Box
+                                        sx={{ display: "flex", flexDirection: "horizontal" }}
+                                        className={classes.statue_text}
+                                    >
+                                        <strong>STATUTE</strong>
+                                        {crpOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                    </Box>
                                 </Box>
-                            </Typography>
-                        </Box>
+                            </Box>
+                        ) : (
+                            <Box className={classes.statue_off} />
+                        )}
                     </Box>
                 </MenuItem>
                 <Popper
@@ -794,17 +846,18 @@ export default function ProgramDrawer({
                 <MenuItem
                     ref={acepRef}
                     style={{ whiteSpace: "normal" }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: acepOpen ? "#ecf0ee" : "grey" }}
+                    className={location.pathname === "/acep" ? classes.bk_on : classes.bk_off}
                     onClick={handleAcepClick}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center", my: 1 }}>
-                        {location.pathname === "/acep" ? (
-                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
-                                <strong>ACEP: Agriculture Conservation Easement Program</strong>
-                            </Typography>
-                        ) : (
-                            <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
-                        )}
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/acep"
+                                ? `${classes.selected} ${classes.selected_top}  ${classes.no_statue}`
+                                : `${classes.regular} ${classes.regular_top}  ${classes.no_statue}`
+                        }
+                    >
+                        <Typography>ACEP: Agriculture Conservation Easement Program</Typography>
                     </Box>
                 </MenuItem>
             </Box>
@@ -812,34 +865,25 @@ export default function ProgramDrawer({
                 <MenuItem
                     ref={rcppRef}
                     style={{ whiteSpace: "normal" }}
-                    sx={{ my: 1, pl: 3, pr: 0, py: 0, backgroundColor: rcppOpen ? "#ecf0ee" : "grey" }}
+                    className={location.pathname === "/rcpp" ? classes.bk_on : classes.bk_off}
                     onClick={handleRcppClick}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}>
-                        {location.pathname === "/rcpp" ? (
-                            <Typography sx={{ color: "#2f7164", pt: 0.8, pb: 0.8 }}>
-                                <strong>RCPP: Regional Conservation Partnership Program</strong>
-                            </Typography>
-                        ) : (
-                            <Typography>RCPP: Regional Conservation Partnership Program</Typography>
-                        )}
-                        {/* <Box
-                            sx={{
-                                maxWidth: 40,
-                                py: 3,
-                                color: "#ffffff",
-                                backgroundColor: "#2f7164",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                maxHeight: 48
-                            }}
-                        >
-                        </Box> */}
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/rcpp"
+                                ? `${classes.selected} ${classes.selected_top}  ${classes.no_statue}`
+                                : `${classes.regular} ${classes.regular_top}  ${classes.no_statue}`
+                        }
+                    >
+                        <Typography>RCPP: Regional Conservation Partnership Program</Typography>
                     </Box>
                 </MenuItem>
             </Box>
-            <MenuItem style={{ whiteSpace: "normal" }} sx={{ my: 1, pl: 3 }}>
+            <MenuItem
+                className={`${classes.bk_off} ${classes.disabled_top} ${classes.disabled} ${classes.no_statue}`}
+                style={{ whiteSpace: "normal" }}
+            >
                 <Typography>Other Conservation</Typography>
             </MenuItem>
         </Drawer>

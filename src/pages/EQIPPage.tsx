@@ -142,12 +142,13 @@ export default function EQIPPage(): JSX.Element {
             { name: "6 (B)", value: sixBTotal, color: "#9CBAB4" }
         ]);
 
-        setZeroCategories(zeroCategory);
+        if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
+        else setZeroCategories(["None"]);
     };
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined ? (
+            {allStates.length > 0 && statePerformance.Wisconsin !== undefined && zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -331,7 +332,7 @@ export default function EQIPPage(): JSX.Element {
                         ) : null}
                         <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
                             <Typography variant="h5">
-                                <strong>Performance by State</strong>
+                                <strong>Performance by States</strong>
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>

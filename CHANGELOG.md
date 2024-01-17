@@ -4,49 +4,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.14.0] - 2024-01-17
+
+### Changed
+- Based on the user feasibility testing result, adjusted all tables to have a similar header style[#233](https://github.com/policy-design-lab/pdl-frontend/issues/233)
+- Based on the user feasibility testing result, adjusted the pie chart color at Conservation pages[#230](https://github.com/policy-design-lab/pdl-frontend/issues/230)
+- Based on the user feasibility testing result, adjusted the side menu style at Conservation pages[#229](https://github.com/policy-design-lab/pdl-frontend/issues/229)
+- Based on the user feasibility testing result, adjusted tooltip styles for all maps [#232](https://github.com/policy-design-lab/pdl-frontend/issues/232)
+
+### Fixed
+- Fixed the loss ratio representation at crop insurance page [#225](https://github.com/policy-design-lab/pdl-frontend/issues/225)
+- Changed Google Analytics plugin from `react-ga` module to script and use webpack environmental variable to config [#226](https://github.com/policy-design-lab/pdl-frontend/issues/226)
+
 ## [0.13.0] - 2023-12-14
 
 ### Added
-
 - Added Google Analytics using `react-ga` module to page router [#217](https://github.com/policy-design-lab/pdl-frontend/issues/217)
 
 ### Changed
-
 - Updated all maps to show exact number of dollars instead of rounding units to the nearest million [#137](https://github.com/policy-design-lab/pdl-frontend/issues/137)
 - Replaced the arrow of table to Material UI icons to show in Linux browser[#151](https://github.com/policy-design-lab/pdl-frontend/issues/151)
 
 ## [0.12.0] - 2023-11-17
 
 ### Added
-
 - Add the issue release/white paper page [#210](https://github.com/policy-design-lab/pdl-frontend/issues/210)
 - Add iFrame component to the release/white paper page [#214](https://github.com/policy-design-lab/pdl-frontend/issues/214)
 
 ## [0.11.0] - 2023-11-08
 
 ### Added
-
 - Dairy Margin Coverage page and Supplemental Agricultural Disaster Assistance page with corresponding components for their attributes [#206](https://github.com/policy-design-lab/pdl-frontend/issues/206)
 
 ### Changed
-
 - Optimize webpack config to save docker building time [#203](https://github.com/policy-design-lab/pdl-frontend/issues/203)
 - Change PDL logo to use the new design [#209](https://github.com/policy-design-lab/pdl-frontend/issues/209)
 
 ## [0.10.0] - 2023-10-17
 
 ### Added
-
 - ACEP page and corresponding components for its attributes [#200](https://github.com/policy-design-lab/pdl-frontend/issues/200)
 - RCPP page and corresponding components for its attributes [#196](https://github.com/policy-design-lab/pdl-frontend/issues/196)
 
 ### Changed
 - Reverse some unnecessary changes in EQIP, CSP and CRP table [#199](https://github.com/policy-design-lab/pdl-frontend/issues/199)
 
-
-## Fixed
+### Fixed
 - Adjust program drawer to remove over-length scroll bar in Chrome/Firefox [#198](https://github.com/policy-design-lab/pdl-frontend/issues/198)
-
 
 ## [0.9.0] - 2023-09-18
 
@@ -54,7 +58,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - CRP page and corresponding components for its attributes [#170](https://github.com/policy-design-lab/pdl-frontend/issues/170)
 
 ### Changed
-
 - Replace the color legends on the EQIP, CSP, and CRP pages with the customized scheme [189](https://github.com/policy-design-lab/pdl-frontend/issues/189)
 - Adjusted the menu height of CRP page on small screen [#190](https://github.com/policy-design-lab/pdl-frontend/issues/190)
 
@@ -64,12 +67,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.8.0] - 2023-09-06
 
 ### Added
-
 - Add Crop Insurance page and corresponding components for its attributes [#125](https://github.com/policy-design-lab/pdl-frontend/issues/125)
 - Added Average Insured Area In Acres sub-page to Crop Insurance pages [#183](https://github.com/policy-design-lab/pdl-frontend/issues/183)
 
 ### Changed
-
 - Use different title equations for the bar charts in pages under the Net Farmer Benefit section [#179](https://github.com/policy-design-lab/pdl-frontend/issues/179)
 - Adjusted font size of chart headers on Crop Insurance page [#182](https://github.com/policy-design-lab/pdl-frontend/issues/182)
 - Adjusted '$' sign for some sub-pages of Crop Insurance page [#184](https://github.com/policy-design-lab/pdl-frontend/issues/184)
@@ -80,7 +81,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.7.0] - 2023-08-22
 
 ### Changed
-
 - Landing page clean up for use API endpoint by removing redundant calls [#148](https://github.com/policy-design-lab/pdl-frontend/issues/148)
 - CSP page uses API endpoint instead of local json file [#149](https://github.com/policy-design-lab/pdl-frontend/issues/149)
 - SNAP page landing page uses API endpoint following the pattern in Landing Page [#166](https://github.com/policy-design-lab/pdl-frontend/issues/166)
@@ -92,11 +92,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.6.0] - 2023-07-18
 
 ### Added
-
 - Add Title 1 page and corresponding components for the Conservation Programs [#126](https://github.com/policy-design-lab/pdl-frontend/issues/126)
 
 ### Changed
-
 - EQIP page updated to use the data from API endpoint [#132](https://github.com/policy-design-lab/pdl-frontend/issues/132)
 - Reverse the 'm' back to 'k' in the data formatting function for thousands [#145](https://github.com/policy-design-lab/pdl-frontend/issues/145)
 - Add `$` sign to the beginning of legend bar on landing page [#141](https://github.com/policy-design-lab/pdl-frontend/issues/141)
@@ -108,19 +106,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.5.1] - 2023-05-30
 
 ### Changed
-
 - Change the format of negative values in landing page maps' tips and legend bar to fit client's request
 - Modify the title of each map's tip to match each program
 
 ## [0.5.0] - 2023-05-26
 
 ### Added
-
 - Add dynamic color bar for landing page and SNAP page [#121](https://github.com/policy-design-lab/pdl-frontend/issues/121)
 - New GitHub issue templates. [#127](https://github.com/policy-design-lab/pdl-frontend/issues/127)  
 
 ### Changed
-
 - Landing page maps & tabs use api endpoints instead of local json files [#110](https://github.com/policy-design-lab/pdl-frontend/issues/110)
 - Add crop insurance tab back to landing page [#130](https://github.com/policy-design-lab/pdl-frontend/issues/130)
 - Removed the duplicate 'AllProgramMap' component on the landing page. Instead, modified the 'LandingPageMap' component to include the all-program map
@@ -196,6 +191,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[0.14.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.13.0...0.14.0
+[0.13.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.12.0...0.13.0
+[0.12.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.10.0...0.11.0
+[0.10.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.6.0...0.7.0

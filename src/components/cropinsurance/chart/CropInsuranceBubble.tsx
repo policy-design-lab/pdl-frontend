@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import styled from "styled-components";
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
-import { ShortFormat, ToDollarString } from "../../shared/ConvertionFormats";
+import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
 
 export default function CropInsuranceBubble({ originalData, initChartWidthRatio, stateCodesData }): JSX.Element {
@@ -367,20 +367,22 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
             }
             const fullName = stateCodes[theState.data()[0].State.toString()];
             const CustomLabel = () => (
-                <div style={{ backgroundColor: "white", width: "100%", border: "1px solid #D9D9D9", borderRadius: 5 }}>
+                <div
+                    style={{ backgroundColor: "white", width: "100%", border: "1px solid #0000001F", borderRadius: 5 }}
+                >
                     <div
                         style={{
                             padding: "0.5em 1em",
                             textAlign: "left",
                             fontSize: "0.9em",
-                            borderRight: "2px solid #D9D9D9"
+                            borderRight: "2px solid #0000001F"
                         }}
                     >
                         <b>{fullName}</b>
                     </div>
                     <table
                         style={{
-                            backgroundColor: "#D9D9D9",
+                            backgroundColor: "#0000001F",
                             width: "100%",
                             fontSize: "0.8em",
                             color: "#00000099",

@@ -4,16 +4,19 @@ const baseConfig = {
 
 const deployConfig = {
     apiUrl: "/pdl",
+    ga_tracking_id: "G-GFR8PTXMDM",
     ...baseConfig
 };
 
 const developConfig = {
     apiUrl: "https://policydesignlab-dev.ncsa.illinois.edu/pdl",
+    ga_tracking_id: "G-K4MLHWSVVT",
     ...baseConfig
 };
 
 const localConfig = {
     apiUrl: "http://localhost:5000/pdl",
+    ga_tracking_id: "none",
     ...baseConfig
 };
 
