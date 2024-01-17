@@ -227,7 +227,11 @@ const MapChart = (props) => {
                                                                     {String(record["Fiscal Year"]) === "2022" &&
                                                                     title.includes("Title I")
                                                                         ? "Not Available"
-                                                                        : `${ShortFormat(record.Amount, undefined, 2)}`}
+                                                                        : `$${ShortFormat(
+                                                                              record.Amount,
+                                                                              undefined,
+                                                                              2
+                                                                          )}`}
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -285,7 +289,7 @@ const MapChart = (props) => {
                                                                     2018 Benefit:{" "}
                                                                 </td>
                                                                 <td className={classes.tooltip_topcell_right}>
-                                                                    {`${ShortFormat(
+                                                                    {`$${ShortFormat(
                                                                         record["2018 All Programs Total"],
                                                                         undefined,
                                                                         2
@@ -298,7 +302,7 @@ const MapChart = (props) => {
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
-                                                                >{`${ShortFormat(
+                                                                >{`$${ShortFormat(
                                                                     record["2019 All Programs Total"],
                                                                     undefined,
                                                                     2
@@ -310,7 +314,7 @@ const MapChart = (props) => {
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
-                                                                >{`${ShortFormat(
+                                                                >{`$${ShortFormat(
                                                                     record["2020 All Programs Total"],
                                                                     undefined,
                                                                     2
@@ -322,7 +326,7 @@ const MapChart = (props) => {
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_regularcell_right}
-                                                                >{`${ShortFormat(
+                                                                >{`$${ShortFormat(
                                                                     record["2021 All Programs Total"],
                                                                     undefined,
                                                                     2
@@ -334,7 +338,7 @@ const MapChart = (props) => {
                                                                 </td>
                                                                 <td
                                                                     className={classes.tooltip_bottomcell_right}
-                                                                >{`${ShortFormat(
+                                                                >{`$${ShortFormat(
                                                                     record["2022 All Programs Total"],
                                                                     undefined,
                                                                     2

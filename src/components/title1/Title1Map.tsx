@@ -80,7 +80,7 @@ const MapChart = ({
                                                     <tbody key={geo.properties.name}>
                                                         <tr>
                                                             <td className={classes.tooltip_topcell_left}>
-                                                                {ShortFormat(programPayment, undefined, 2)}
+                                                                ${ShortFormat(programPayment, undefined, 2)}
                                                             </td>
                                                             <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                                         </tr>

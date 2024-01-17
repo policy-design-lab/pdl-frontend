@@ -1,13 +1,18 @@
 import { makeStyles } from "@mui/styles";
 
 // Shared Tooltip Styles for react-simplemap
-export const tooltipBkgColor = "#F3F3F3";
+export const tooltipBkgColor = "#dadada";
 const regularTextColor = "#00000099";
 const commonMenuStyles = {
     tooltip_cell: {
         margin: 0
     }
 };
+
+/**
+ * New Styles that follow the same style as the bubble chart in Crop Insurance
+ * Note the font-size has an increment of 0.2em
+ */
 export const useStyles = makeStyles(() => ({
     customized_tooltip: {
         backgroundColor: `${tooltipBkgColor} !important`,
@@ -23,14 +28,14 @@ export const useStyles = makeStyles(() => ({
     tooltip_header: {
         padding: "0.5em 1em 0.5em 1em",
         textAlign: "left",
-        fontSize: "1.5em",
+        fontSize: "1.1em",
         color: "black",
         margin: 0
     },
     tooltip_table: {
         backgroundColor: `${tooltipBkgColor} !important`,
         width: "100%",
-        fontSize: "1.25em",
+        fontSize: "1em",
         color: `${regularTextColor}`,
         padding: 0,
         margin: 0,

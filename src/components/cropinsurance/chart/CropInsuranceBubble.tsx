@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import styled from "styled-components";
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
-import { ShortFormat, ToDollarString } from "../../shared/ConvertionFormats";
+import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
 
 export default function CropInsuranceBubble({ originalData, initChartWidthRatio, stateCodesData }): JSX.Element {
