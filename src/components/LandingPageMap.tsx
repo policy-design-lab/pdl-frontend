@@ -128,7 +128,7 @@ const MapChart = (props) => {
             color5 = "#045A8D";
             legendTitle = (
                 <Typography variant="h6">
-                    Total Supplemental Nutrition Assistance Program (SNAP) Costs from <strong>2018 - 2022</strong>
+                    Total Supplemental Nutrition Assistance Program (SNAP) Benefits from <strong>2018 - 2022</strong>
                 </Typography>
             );
             break;
@@ -202,18 +202,7 @@ const MapChart = (props) => {
                                                                             : classes.tooltip_regularcell_left
                                                                     }
                                                                 >
-                                                                    {title ===
-                                                                    "Supplemental Nutrition Assistance Program (SNAP)"
-                                                                        ? `${record["Fiscal Year"]} Cost:`
-                                                                        : null}
-                                                                    {title === "Crop Insurance"
-                                                                        ? `${record["Fiscal Year"]} Payment:`
-                                                                        : null}
-                                                                    {title !== "Crop Insurance" &&
-                                                                    title !==
-                                                                        "Supplemental Nutrition Assistance Program (SNAP)"
-                                                                        ? `${record["Fiscal Year"]} Benefit:`
-                                                                        : null}
+                                                                    {`${record["Fiscal Year"]} Benefit:`}
                                                                 </td>
                                                                 <td
                                                                     className={
@@ -239,7 +228,7 @@ const MapChart = (props) => {
                                                         "Supplemental Nutrition Assistance Program (SNAP)" ? (
                                                             <tr>
                                                                 <td className={classes.tooltip_footer_left}>
-                                                                    Total Costs:
+                                                                    Total Benefits:
                                                                 </td>
                                                                 <td className={classes.tooltip_footer_right}>
                                                                     ${ShortFormat(total, undefined, 2)}
@@ -248,9 +237,7 @@ const MapChart = (props) => {
                                                         ) : (
                                                             <tr>
                                                                 <td className={classes.tooltip_footer_left}>
-                                                                    {title === "Crop Insurance"
-                                                                        ? "Total Payments: "
-                                                                        : "Total Benefits: "}
+                                                                    Total Benefits:
                                                                 </td>
                                                                 <td className={classes.tooltip_footer_right}>
                                                                     ${ShortFormat(total, undefined, 2)}
