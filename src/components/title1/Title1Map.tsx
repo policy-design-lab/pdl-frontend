@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
+import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
@@ -310,7 +311,7 @@ const Title1Map = ({
     stateCodes,
     allStates
 }: {
-    program: string;
+    program: any;
     subprogram: any;
     year: string;
     mapColor: [string, string, string, string, string];
@@ -320,7 +321,7 @@ const Title1Map = ({
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
-    if (program !== "Total Commodities Programs") {
+    if (program) {
         statePerformance[year].forEach((value) => {
             const programRecord = value.programs;
             const ACur = programRecord.find((s) => s.programName === program);
@@ -345,7 +346,7 @@ const Title1Map = ({
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const zeroPoints = [];
     statePerformance[year].forEach((state) => {
-        if (program !== "Total Commodities Programs") {
+        if (program) {
             const programList = state.programs;
             if (subprogram === undefined) {
                 const programRecord = programList.find((s) => s.programName === program);
@@ -407,12 +408,13 @@ const titleElement = ({ program, subprogram, year }): JSX.Element => {
             </Box>
         );
     }
-    if (program === "Total Commodities Programs") {
+    if (!program) {
         return (
             <Box>
                 {" "}
                 <Typography noWrap variant="h6">
-                    <strong>Total Commodities Programs, Subtitle A</strong> Payments from <strong>{year}</strong>
+                    <strong>{`Total Commodities Programs, ${program}`}</strong> Payments from{" "}
+                    <strong>{year}</strong>
                 </Typography>{" "}
                 <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
                     <i>2022 payments for Title I have not yet been paid</i>

@@ -23,9 +23,14 @@ import "../styles/subpage.css";
 
 export default function TitleIPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
+    /** need retire */
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [sadaStateDistributionData, setSadaStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
     const [dmcStateDistributionData, setDmcStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    /** stay here */
+    const [subtitleAStateDistributionData, setSubtitleAStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [subtitleEStateDistributionData, setSubtitleEStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const title1Div = React.useRef(null);
@@ -47,12 +52,12 @@ export default function TitleIPage(): JSX.Element {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
+
+        // The following three APIs are pending for retire
         const statedistribution_url = `${config.apiUrl}/programs/commodities/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
-
-        // TODO: SADA and DMC endpoints should be integrated into the above API call
         const dmc_url = `${config.apiUrl}/programs/commodities/dmc/state-distribution`;
         getJsonDataFromUrl(dmc_url).then((response) => {
             setDmcStateDistributionData(response);
@@ -60,6 +65,20 @@ export default function TitleIPage(): JSX.Element {
         const sada_url = `${config.apiUrl}/programs/commodities/sada/state-distribution`;
         getJsonDataFromUrl(sada_url).then((response) => {
             setSadaStateDistributionData(response);
+        });
+
+        // YMK's new API endpoints. Total of all titles API is not ready yet.
+        const subtitle_a_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/state-distribution`;
+        getJsonDataFromUrl(subtitle_a_state_distribution).then((response) => {
+            setSubtitleAStateDistributionData(response);
+        });
+        const subtitle_d_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-d/state-distribution`;
+        getJsonDataFromUrl(subtitle_d_state_distribution).then((response) => {
+            setSubtitleDStateDistributionData(response);
+        });
+        const subtitle_e_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-e/state-distribution`;
+        getJsonDataFromUrl(subtitle_e_state_distribution).then((response) => {
+            setSubtitleEStateDistributionData(response);
         });
     }, []);
 
@@ -69,7 +88,57 @@ export default function TitleIPage(): JSX.Element {
         }
     };
     const defaultTheme = createTheme();
+    /**
+     * This function is for treemap only
+     * @param program 
+     * @param subprogram 
+     * @param data 
+     * @param year 
+     * @returns 
+     */
     function prepData(program, subprogram, data, year) {
+        const organizedData: Record<string, unknown>[] = [];
+        const originalData: Record<string, unknown>[] = [];
+        data[year].forEach((stateData) => {
+            const state = stateData.state;
+            const programData = stateData.programs.filter((p) => {
+                return p.programName.toString() === program;
+            });
+            if (subprogram !== undefined) {
+                const subProgramData = programData[0].subPrograms.filter((p) => {
+                    return p.subProgramName.toString() === subprogram;
+                });
+                organizedData.push({
+                    state,
+                    baseAcres: subProgramData[0].averageAreaInAcres,
+                    payments: subProgramData[0].paymentInDollars,
+                    recipients: subProgramData[0].averageRecipientCount
+                });
+                originalData.push({
+                    state,
+                    baseAcres: subProgramData[0].averageAreaInAcres,
+                    payments: subProgramData[0].paymentInDollars,
+                    recipients: subProgramData[0].averageRecipientCount
+                });
+            } else {
+                organizedData.push({
+                    state,
+                    baseAcres: programData[0].averageAreaInAcres,
+                    payments: programData[0].programPaymentInDollars,
+                    recipients: programData[0].averageRecipientCount
+                });
+                originalData.push({
+                    state,
+                    baseAcres: programData[0].averageAreaInAcres,
+                    payments: programData[0].programPaymentInDollars,
+                    recipients: programData[0].averageRecipientCount
+                });
+            }
+        });
+        console.log(organizedData, originalData);
+        return [organizedData, originalData];
+    }
+    function prepData_new(program, subprogram, data, year) {
         const organizedData: Record<string, unknown>[] = [];
         const originalData: Record<string, unknown>[] = [];
         data[year].forEach((stateData) => {
@@ -114,6 +183,7 @@ export default function TitleIPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
+            Object.keys(subtitleAStateDistributionData).length > 0 &&
             Object.keys(stateDistributionData).length > 0 &&
             Object.keys(sadaStateDistributionData).length > 0 &&
             Object.keys(dmcStateDistributionData).length > 0 ? (
@@ -138,10 +208,10 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Total Commodities Programs"
+                                program={undefined}
                                 year="2014-2021"
                                 mapColor={mapColor}
-                                statePerformance={stateDistributionData}
+                                statePerformance={subtitleAStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -177,7 +247,7 @@ export default function TitleIPage(): JSX.Element {
                             >
                                 <Title1ProgramTable
                                     tableTitle="Comparison of Total Payments for these Commodities Programs and the State's Percentage of that Total (2014-2021)"
-                                    program="Total Commodities Programs"
+                                    program={undefined}
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
@@ -207,7 +277,7 @@ export default function TitleIPage(): JSX.Element {
                                 program="Agriculture Risk Coverage (ARC)"
                                 year="2014-2021"
                                 mapColor={mapColor}
-                                statePerformance={stateDistributionData}
+                                statePerformance={subtitleAStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -262,7 +332,7 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Agriculture Risk Coverage (ARC)",
                                             undefined,
-                                            stateDistributionData,
+                                            subtitleAStateDistributionData,
                                             "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
@@ -278,7 +348,7 @@ export default function TitleIPage(): JSX.Element {
                                         subprogram={undefined}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
-                                        Title1Data={stateDistributionData}
+                                        Title1Data={subtitleAStateDistributionData}
                                         year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
@@ -305,7 +375,7 @@ export default function TitleIPage(): JSX.Element {
                                 subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
                                 year="2014-2021"
                                 mapColor={mapColor}
-                                statePerformance={stateDistributionData}
+                                statePerformance={subtitleAStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -360,7 +430,7 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Agriculture Risk Coverage (ARC)",
                                             "Agriculture Risk Coverage County Option (ARC-CO)",
-                                            stateDistributionData,
+                                            subtitleAStateDistributionData,
                                             "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
@@ -376,7 +446,7 @@ export default function TitleIPage(): JSX.Element {
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
                                         stateCodes={stateCodesData}
-                                        Title1Data={stateDistributionData}
+                                        Title1Data={subtitleAStateDistributionData}
                                         year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
@@ -502,7 +572,7 @@ export default function TitleIPage(): JSX.Element {
                                 program="Price Loss Coverage (PLC)"
                                 year="2014-2021"
                                 mapColor={mapColor}
-                                statePerformance={stateDistributionData}
+                                statePerformance={subtitleAStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -557,7 +627,7 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Price Loss Coverage (PLC)",
                                             undefined,
-                                            stateDistributionData,
+                                            subtitleAStateDistributionData,
                                             "2014-2021"
                                         )}
                                         stateCodes={stateCodesData}
@@ -573,7 +643,7 @@ export default function TitleIPage(): JSX.Element {
                                         subprogram={undefined}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
-                                        Title1Data={stateDistributionData}
+                                        Title1Data={subtitleAStateDistributionData}
                                         year="2014-2021"
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
