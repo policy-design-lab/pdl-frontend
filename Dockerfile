@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Build application using node
 # ----------------------------------------------------------------------
-FROM node:16.19.1 AS builder
+FROM node:18.16.0 AS builder
 WORKDIR /usr/src/app
 ARG REACT_APP_ENV=""
 ENV REACT_APP_ENV=${REACT_APP_ENV}
@@ -51,4 +51,4 @@ COPY --from=builder /usr/src/app/build/ .
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # # Run the Node.js script
-# CMD ["node", "./scripts/geofilter.mjs"]
+CMD ["node", "./scripts/geofilter.mjs"]

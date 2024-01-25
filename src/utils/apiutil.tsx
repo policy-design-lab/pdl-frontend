@@ -1,9 +1,26 @@
 export async function getJsonDataFromUrl(url) {
     const response = await fetch(url, { method: "GET", mode: "cors" });
-    if (response.status === 200) {
-        return response.json();
+    if (response.ok) {
+        const responseBody = await response.text();
+        if (isJSON(responseBody)) {
+            try {
+                return JSON.parse(responseBody);
+            } catch (error) {
+                console.error(responseBody);
+                throw new Error(
+                    "Error parsing JSON!! You either not set up environment variable correctly, or your are not fetching json"
+                );
+            }
+        } else {
+            console.error(
+                "Response body is not json!! You either not set up environment variable correctly, or your are not fetching json"
+            );
+            console.error(responseBody);
+            return [];
+        }
     }
-    return [];
+    console.error(`Error fetching data. Status: ${response.status}`);
+    throw new Error(`Error fetching data. Status: ${response.status}`);
 }
 
 export function convertAllState(inlist) {
@@ -43,3 +60,12 @@ export const getValueFromAttrPercentage = (stateRecord, attribute): string => {
     });
     return ans;
 };
+
+function isJSON(str) {
+    try {
+        JSON.parse(str);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}

@@ -22,6 +22,9 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
+    if (!process.env.APP_ENV) {
+        throw new Error("APP_ENV environment variable not set or being detected. You will not be able to parse your json");
+    }
     if (process.env.APP_ENV === "local") {
         return localConfig;
     }
