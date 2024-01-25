@@ -6,6 +6,9 @@ WORKDIR /usr/src/app
 ARG REACT_APP_ENV=""
 ENV REACT_APP_ENV=${REACT_APP_ENV}
 
+# Set the NODE_OPTIONS for node>=17
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+
 # Install libvips dependencies
 RUN apt-get update && apt-get install -y \
     libvips-dev \
