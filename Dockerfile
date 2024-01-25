@@ -31,7 +31,6 @@ COPY scripts ./scripts/
 COPY src ./src/
 
 RUN npm install
-RUN npm audit fix --force
 RUN npm run build
 
 # ----------------------------------------------------------------------
