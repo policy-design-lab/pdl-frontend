@@ -15,6 +15,8 @@ RUN npm install
 ENV PATH="./node_modules/.bin:$PATH"
 
 COPY .eslintrc *.js tsconfig.json typedoc.json babel.config.json jest.config.js ./
+COPY assets ./assets/
+COPY scripts ./scripts/
 COPY src ./src/
 
 RUN npm run build
