@@ -50,5 +50,5 @@ COPY --from=builder /usr/src/app/build/ .
 # Copy your nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Run the Node.js script
-CMD ["node", "./scripts/geofilter.mjs"]
+# # Run the Node.js script
+# CMD ["node", "./scripts/geofilter.mjs"]
