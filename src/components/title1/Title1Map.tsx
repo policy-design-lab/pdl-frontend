@@ -63,7 +63,9 @@ const MapChart = ({
                                     const programRecord = state.programs;
                                     const ACur = programRecord.find((s) => s.programName === program);
                                     if (!subprogram) {
-                                        programPayment = subtitle.includes("Subtitle E")? ACur.paymentInDollars:ACur.programPaymentInDollars; // need to change for title e
+                                        programPayment = subtitle.includes("Subtitle E")
+                                            ? ACur.paymentInDollars
+                                            : ACur.programPaymentInDollars; // need to change for title e
                                         totalPaymentInPercentage = ACur.paymentInPercentageNationwide;
                                     } else {
                                         const subprogramRecord = ACur.subPrograms.find(
@@ -304,8 +306,8 @@ const Title1Map = ({
             const programRecord = value.programs;
             const ACur = programRecord.find((s) => s.programName === program);
             if (!subprogram) {
-              // change after update E's name
-                subtitle.includes("Subtitle E")? quantizeArray.push(ACur.paymentInDollars): quantizeArray.push(ACur.programPaymentInDollars);
+                if (subtitle.includes("Subtitle E")) quantizeArray.push(ACur.paymentInDollars);
+                else quantizeArray.push(ACur.programPaymentInDollars);
             } else {
                 const AArray = ACur.subPrograms;
                 const subprogramRecord = AArray.find((s) => s.subProgramName === subprogram);
@@ -320,14 +322,14 @@ const Title1Map = ({
         });
     }
     const maxValue = Math.max(...quantizeArray);
-    const searchKey = !subprogram ? (program? program:subtitle) : subprogram;
+    const searchKey = !subprogram ? program || subtitle : subprogram;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const zeroPoints = [];
     statePerformance[year].forEach((state) => {
         if (subtitle && program) {
             const programList = state.programs;
-            if (!subprogram ) {
+            if (!subprogram) {
                 const programRecord = programList.find((s) => s.programName === program);
                 if (!programRecord || programRecord.programPaymentInDollars === 0) zeroPoints.push(state.state);
             } else {
@@ -384,7 +386,7 @@ const titleElement = ({ subtitle, program, subprogram, year }): JSX.Element => {
                 </Typography>
             ) : (
                 <Typography noWrap variant="h6">
-                    <strong>{program? program:subtitle}</strong> Payments from <strong>{year}</strong>
+                    <strong>{program || subtitle}</strong> Payments from <strong>{year}</strong>
                 </Typography>
             )}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>

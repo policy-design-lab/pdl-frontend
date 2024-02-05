@@ -50,7 +50,7 @@ function Title1ProgramTable({
                         programData[0].averageRecipientCountInPercentageNationwide,
                     averageRecipientCountInPercentageWithinState:
                         programData[0].averageRecipientCountInPercentageWithinState
-                    //countInPercentageWithinState: programData[0].countInPercentageWithinState
+                    // countInPercentageWithinState: programData[0].countInPercentageWithinState
                 };
             } else {
                 // Subtitle D and E
@@ -60,7 +60,7 @@ function Title1ProgramTable({
                     totalCounts: stateData.totalCounts,
                     averageRecipientCount: stateData.averageRecipientCount,
                     averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide
-                    //countInPercentageNationwide: stateData.countInPercentageNationwide
+                    // countInPercentageNationwide: stateData.countInPercentageNationwide
                 };
             }
         } else if (subtitle && program && subprogram) {
@@ -136,7 +136,7 @@ function Title1ProgramTable({
                     // countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`
                 };
             }
-            //subtitle A
+            // subtitle A
             if (subtitle && !program) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
@@ -208,7 +208,7 @@ function Title1ProgramTable({
         };
         resultData.push(newRecord());
     });
-    if (resultData[0].hasOwnProperty("paymentInDollars")) {
+    if (resultData[0].paymentInDollars) {
         sortByDollars(resultData, "paymentInDollars");
     } else sortByDollars(resultData, "programPaymentInDollars");
     let columns;
@@ -305,8 +305,6 @@ function Title1ProgramTable({
                   []
               );
     } else {
-
-        console.log(subtitle, program, resultData);
         columns = program
             ? React.useMemo(
                   // SADA's program
@@ -355,7 +353,7 @@ function Title1ProgramTable({
                           Header: "AVG. TOTAL RECIPIENTS PCT. NATIONWIDE",
                           accessor: "averageRecipientCountInPercentageNationwide",
                           sortType: compareWithNumber
-                      },
+                      }
                       // {
                       //     Header: "AVG. TOTAL RECIPIENTS PCT. WITHIN STATE",
                       //     accessor: "averageRecipientCountInPercentageWithinState",
