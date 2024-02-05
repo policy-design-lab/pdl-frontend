@@ -23,14 +23,9 @@ import "../styles/subpage.css";
 
 export default function TitleIPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
-    /** need retire */
-    const [stateDistributionData, setStateDistributionData] = React.useState({});
-    const [sadaStateDistributionData, setSadaStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
-    const [dmcStateDistributionData, setDmcStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
-    /** stay here */
-    const [subtitleAStateDistributionData, setSubtitleAStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
-    const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [subtitleADistributionData, setSubtitleADistributionData] = React.useState({});
     const [subtitleEStateDistributionData, setSubtitleEStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const title1Div = React.useRef(null);
@@ -39,8 +34,9 @@ export default function TitleIPage(): JSX.Element {
     const initTreeMapWidthRatio = 0.55;
 
     // years
-    const sadaYear = "2014-2021";
-    const dmcYear = "2014-2021";
+    const subtitleAYear = "2014-2021";
+    const subtitleEYear = "2014-2021";
+    const subtitleDYear = "2014-2021";
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -52,32 +48,17 @@ export default function TitleIPage(): JSX.Element {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
-
-        // The following three APIs are pending for retire
-        const statedistribution_url = `${config.apiUrl}/programs/commodities/state-distribution`;
-        getJsonDataFromUrl(statedistribution_url).then((response) => {
-            setStateDistributionData(response);
-        });
-        const dmc_url = `${config.apiUrl}/programs/commodities/dmc/state-distribution`;
-        getJsonDataFromUrl(dmc_url).then((response) => {
-            setDmcStateDistributionData(response);
-        });
-        const sada_url = `${config.apiUrl}/programs/commodities/sada/state-distribution`;
-        getJsonDataFromUrl(sada_url).then((response) => {
-            setSadaStateDistributionData(response);
+        const subtitleA_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/state-distribution`;
+        getJsonDataFromUrl(subtitleA_url).then((response) => {
+            setSubtitleADistributionData(response);
         });
 
-        // YMK's new API endpoints. Total of all titles API is not ready yet.
-        const subtitle_a_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/state-distribution`;
-        getJsonDataFromUrl(subtitle_a_state_distribution).then((response) => {
-            setSubtitleAStateDistributionData(response);
-        });
-        const subtitle_d_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-d/state-distribution`;
-        getJsonDataFromUrl(subtitle_d_state_distribution).then((response) => {
+        const subtitleD_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-d/state-distribution`;
+        getJsonDataFromUrl(subtitleD_url).then((response) => {
             setSubtitleDStateDistributionData(response);
         });
-        const subtitle_e_state_distribution = `${config.apiUrl}/titles/title-i/subtitles/subtitle-e/state-distribution`;
-        getJsonDataFromUrl(subtitle_e_state_distribution).then((response) => {
+        const subtitleE_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-e/state-distribution`;
+        getJsonDataFromUrl(subtitleE_url).then((response) => {
             setSubtitleEStateDistributionData(response);
         });
     }, []);
@@ -88,57 +69,7 @@ export default function TitleIPage(): JSX.Element {
         }
     };
     const defaultTheme = createTheme();
-    /**
-     * This function is for treemap only
-     * @param program 
-     * @param subprogram 
-     * @param data 
-     * @param year 
-     * @returns 
-     */
     function prepData(program, subprogram, data, year) {
-        const organizedData: Record<string, unknown>[] = [];
-        const originalData: Record<string, unknown>[] = [];
-        data[year].forEach((stateData) => {
-            const state = stateData.state;
-            const programData = stateData.programs.filter((p) => {
-                return p.programName.toString() === program;
-            });
-            if (subprogram !== undefined) {
-                const subProgramData = programData[0].subPrograms.filter((p) => {
-                    return p.subProgramName.toString() === subprogram;
-                });
-                organizedData.push({
-                    state,
-                    baseAcres: subProgramData[0].averageAreaInAcres,
-                    payments: subProgramData[0].paymentInDollars,
-                    recipients: subProgramData[0].averageRecipientCount
-                });
-                originalData.push({
-                    state,
-                    baseAcres: subProgramData[0].averageAreaInAcres,
-                    payments: subProgramData[0].paymentInDollars,
-                    recipients: subProgramData[0].averageRecipientCount
-                });
-            } else {
-                organizedData.push({
-                    state,
-                    baseAcres: programData[0].averageAreaInAcres,
-                    payments: programData[0].programPaymentInDollars,
-                    recipients: programData[0].averageRecipientCount
-                });
-                originalData.push({
-                    state,
-                    baseAcres: programData[0].averageAreaInAcres,
-                    payments: programData[0].programPaymentInDollars,
-                    recipients: programData[0].averageRecipientCount
-                });
-            }
-        });
-        console.log(organizedData, originalData);
-        return [organizedData, originalData];
-    }
-    function prepData_new(program, subprogram, data, year) {
         const organizedData: Record<string, unknown>[] = [];
         const originalData: Record<string, unknown>[] = [];
         data[year].forEach((stateData) => {
@@ -183,10 +114,9 @@ export default function TitleIPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(subtitleAStateDistributionData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 &&
-            Object.keys(sadaStateDistributionData).length > 0 &&
-            Object.keys(dmcStateDistributionData).length > 0 ? (
+            Object.keys(subtitleADistributionData).length > 0 &&
+            Object.keys(subtitleEStateDistributionData).length > 0 &&
+            Object.keys(subtitleDStateDistributionData).length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -208,10 +138,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
+                                subtitle="Total Commodities Programs, Subtitle A"
                                 program={undefined}
-                                year="2014-2021"
+                                subprogram={undefined}
+                                year={subtitleAYear}
                                 mapColor={mapColor}
-                                statePerformance={subtitleAStateDistributionData}
+                                statePerformance={subtitleADistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -247,12 +179,13 @@ export default function TitleIPage(): JSX.Element {
                             >
                                 <Title1ProgramTable
                                     tableTitle="Comparison of Total Payments for these Commodities Programs and the State's Percentage of that Total (2014-2021)"
+                                    subtitle="Total Commodities Programs, Subtitle A"
                                     program={undefined}
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={stateDistributionData}
-                                    year="2014-2021"
+                                    Title1Data={subtitleADistributionData}
+                                    year={subtitleAYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -274,10 +207,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
+                                subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
-                                year="2014-2021"
+                                subprogram={undefined}
+                                year={subtitleAYear}
                                 mapColor={mapColor}
-                                statePerformance={subtitleAStateDistributionData}
+                                statePerformance={subtitleADistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -332,11 +267,11 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Agriculture Risk Coverage (ARC)",
                                             undefined,
-                                            subtitleAStateDistributionData,
-                                            "2014-2021"
+                                            subtitleADistributionData,
+                                            subtitleAYear
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2014-2021"
+                                        year={subtitleAYear}
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2800}
                                     />
@@ -344,12 +279,13 @@ export default function TitleIPage(): JSX.Element {
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
                                         tableTitle="Comparing ARC Payments, Avg. Payment Recipients and Avg. Base Acres"
+                                        subtitle="Total Commodities Programs, Subtitle A"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram={undefined}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
-                                        Title1Data={subtitleAStateDistributionData}
-                                        year="2014-2021"
+                                        Title1Data={subtitleADistributionData}
+                                        year={subtitleAYear}
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -371,11 +307,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
+                                subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
-                                year="2014-2021"
+                                year={subtitleAYear}
                                 mapColor={mapColor}
-                                statePerformance={subtitleAStateDistributionData}
+                                statePerformance={subtitleADistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -430,11 +367,11 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Agriculture Risk Coverage (ARC)",
                                             "Agriculture Risk Coverage County Option (ARC-CO)",
-                                            subtitleAStateDistributionData,
-                                            "2014-2021"
+                                            subtitleADistributionData,
+                                            subtitleAYear
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2014-2021"
+                                        year={subtitleAYear}
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2800}
                                     />
@@ -443,11 +380,12 @@ export default function TitleIPage(): JSX.Element {
                                     <Title1ProgramTable
                                         tableTitle="Comparing ARC-CO Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         skipColumns={[]}
+                                        subtitle="Total Commodities Programs, Subtitle A"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
                                         stateCodes={stateCodesData}
-                                        Title1Data={subtitleAStateDistributionData}
-                                        year="2014-2021"
+                                        Title1Data={subtitleADistributionData}
+                                        year={subtitleAYear}
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -470,11 +408,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
+                                subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
-                                year="2014-2021"
+                                year={subtitleAYear}
                                 mapColor={mapColor}
-                                statePerformance={stateDistributionData}
+                                statePerformance={subtitleADistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -529,11 +468,11 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Agriculture Risk Coverage (ARC)",
                                             "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
-                                            stateDistributionData,
-                                            "2014-2021"
+                                            subtitleADistributionData,
+                                            subtitleAYear
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2014-2021"
+                                        year={subtitleAYear}
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
@@ -542,11 +481,12 @@ export default function TitleIPage(): JSX.Element {
                                     <Title1ProgramTable
                                         tableTitle="Comparing ARC-IC Payments, Avg. Payment Recipients and Avg. Base Acres"
                                         skipColumns={[]}
+                                        subtitle="Total Commodities Programs, Subtitle A"
                                         program="Agriculture Risk Coverage (ARC)"
                                         subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
                                         stateCodes={stateCodesData}
-                                        Title1Data={stateDistributionData}
-                                        year="2014-2021"
+                                        Title1Data={subtitleADistributionData}
+                                        year={subtitleAYear}
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -569,10 +509,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
+                                subtitle="Total Commodities Programs, Subtitle A"
                                 program="Price Loss Coverage (PLC)"
-                                year="2014-2021"
+                                subprogram={undefined}
+                                year={subtitleAYear}
                                 mapColor={mapColor}
-                                statePerformance={subtitleAStateDistributionData}
+                                statePerformance={subtitleADistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -627,11 +569,11 @@ export default function TitleIPage(): JSX.Element {
                                         TreeMapData={prepData(
                                             "Price Loss Coverage (PLC)",
                                             undefined,
-                                            subtitleAStateDistributionData,
-                                            "2014-2021"
+                                            subtitleADistributionData,
+                                            subtitleAYear
                                         )}
                                         stateCodes={stateCodesData}
-                                        year="2014-2021"
+                                        year={subtitleAYear}
                                         svgW={window.innerWidth * initTreeMapWidthRatio}
                                         svgH={2300}
                                     />
@@ -639,12 +581,13 @@ export default function TitleIPage(): JSX.Element {
                                 <Box className="title1TableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
                                     <Title1ProgramTable
                                         tableTitle="Comparing PLC Payments, Avg. Payment Recipients and Avg. Base Acres"
+                                        subtitle="Total Commodities Programs, Subtitle A"
                                         program="Price Loss Coverage (PLC)"
                                         subprogram={undefined}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
-                                        Title1Data={subtitleAStateDistributionData}
-                                        year="2014-2021"
+                                        Title1Data={subtitleADistributionData}
+                                        year={subtitleAYear}
                                         color1="#F6EEEA"
                                         color2="#EAF8EA"
                                         color3="#F7F0F8"
@@ -667,10 +610,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Dairy Margin Coverage, Subtitle D"
-                                year={dmcYear}
+                                subtitle="Dairy Margin Coverage, Subtitle D"
+                                program={undefined}
+                                subprogram={undefined}
+                                year={subtitleDYear}
                                 mapColor={mapColor}
-                                statePerformance={dmcStateDistributionData}
+                                statePerformance={subtitleDStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -705,13 +650,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Dairy Margin Coverage (${dmcYear})`}
-                                    program="Dairy Margin Coverage, Subtitle D"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Dairy Margin Coverage (${subtitleDYear})`}
+                                    subtitle="Dairy Margin Coverage, Subtitle D"
+                                    program={undefined}
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={dmcStateDistributionData}
-                                    year={dmcYear}
+                                    Title1Data={subtitleDStateDistributionData}
+                                    year={subtitleDYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -734,10 +680,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                year={sadaYear}
+                                subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                program={undefined}
+                                subprogram={undefined}
+                                year={subtitleEYear}
                                 mapColor={mapColor}
-                                statePerformance={sadaStateDistributionData}
+                                statePerformance={subtitleEStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -772,13 +720,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Supplemental Agricultural Disaster Assistance (${sadaYear})`}
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Supplemental Agricultural Disaster Assistance (${subtitleEYear})`}
+                                    program={undefined}
                                     subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={sadaStateDistributionData}
-                                    year={sadaYear}
+                                    Title1Data={subtitleEStateDistributionData}
+                                    year={subtitleEYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -800,11 +749,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
-                                year={sadaYear}
+                                subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                program="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
+                                subprogram={undefined}
+                                year={subtitleEYear}
                                 mapColor={mapColor}
-                                statePerformance={sadaStateDistributionData}
+                                statePerformance={subtitleEStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -839,13 +789,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP) (${sadaYear})`}
-                                    subprogram="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP) (${subtitleEYear})`}
+                                    program="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
+                                    subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={sadaStateDistributionData}
-                                    year={sadaYear}
+                                    Title1Data={subtitleEStateDistributionData}
+                                    year={subtitleEYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -867,11 +818,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                subprogram="Livestock Forage Program (LFP)"
-                                year={sadaYear}
+                                subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                program="Livestock Forage Program (LFP)"
+                                subprogram={undefined}
+                                year={subtitleEYear}
                                 mapColor={mapColor}
-                                statePerformance={sadaStateDistributionData}
+                                statePerformance={subtitleEStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -906,13 +858,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Forage Program (LFP) (${sadaYear})`}
-                                    subprogram="Livestock Forage Program (LFP)"
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Forage Program (LFP) (${subtitleEYear})`}
+                                    program="Livestock Forage Program (LFP)"
+                                    subprogram={undefined}
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={sadaStateDistributionData}
-                                    year={sadaYear}
+                                    Title1Data={subtitleEStateDistributionData}
+                                    year={subtitleEYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -934,11 +887,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                subprogram="Livestock Indemnity Payments (LIP)"
-                                year={sadaYear}
+                                subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                program="Livestock Indemnity Payments (LIP)"
+                                subprogram={undefined}
+                                year={subtitleEYear}
                                 mapColor={mapColor}
-                                statePerformance={sadaStateDistributionData}
+                                statePerformance={subtitleEStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -973,13 +927,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Indemnity Payments (LIP) (${sadaYear})`}
-                                    subprogram="Livestock Indemnity Payments (LIP)"
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Livestock Indemnity Payments (LIP) (${subtitleEYear})`}
+                                    subprogram={undefined}
+                                    program="Livestock Indemnity Payments (LIP)"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={sadaStateDistributionData}
-                                    year={sadaYear}
+                                    Title1Data={subtitleEStateDistributionData}
+                                    year={subtitleEYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
@@ -1001,11 +956,12 @@ export default function TitleIPage(): JSX.Element {
                             }}
                         >
                             <Title1Map
-                                program="Supplemental Agricultural Disaster Assistance, Subtitle E"
-                                subprogram="Tree Assistance Program (TAP)"
-                                year={sadaYear}
+                                subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                program="Tree Assistance Program (TAP)"
+                                subprogram={undefined}
+                                year={subtitleEYear}
                                 mapColor={mapColor}
-                                statePerformance={sadaStateDistributionData}
+                                statePerformance={subtitleEStateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStatesData}
                             />
@@ -1040,13 +996,14 @@ export default function TitleIPage(): JSX.Element {
                                 }}
                             >
                                 <Title1ProgramTable
-                                    tableTitle={`Comparing Payments and Total Payments Recipients for Tree Assistance Program (TAP) (${sadaYear})`}
-                                    subprogram="Tree Assistance Program (TAP)"
-                                    program="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
+                                    tableTitle={`Comparing Payments and Total Payments Recipients for Tree Assistance Program (TAP) (${subtitleEYear})`}
+                                    subprogram={undefined}
+                                    program="Tree Assistance Program (TAP)"
                                     skipColumns={[]}
                                     stateCodes={stateCodesData}
-                                    Title1Data={sadaStateDistributionData}
-                                    year={sadaYear}
+                                    Title1Data={subtitleEStateDistributionData}
+                                    year={subtitleEYear}
                                     color1="#F6EEEA"
                                     color2="#EAF8EA"
                                     color3="#F7F0F8"
