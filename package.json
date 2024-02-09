@@ -6,7 +6,7 @@
   "main": "src/app.tsx",
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config ./webpack.prod.js",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack --config ./webpack.prod.js",
     "test": "jest --coverage --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint src",
@@ -27,9 +27,12 @@
     "d3": "^7.8.4",
     "d3-geo": "^3.0.1",
     "d3-scale": "^4.0.2",
+    "node-sass": "^9.0.0",
+    "rc-slider": "^10.5.0",
     "react": "^17.0.2",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^17.0.2",
+    "react-dropdown-select": "^4.11.1",
     "react-ga": "^3.3.1",
     "react-horizontal-stacked-bar-chart": "^8.15.2",
     "react-router-dom": "^6.6.1",
@@ -37,6 +40,7 @@
     "react-table": "^7.8.0",
     "react-tooltip": "^4.5.1",
     "recharts": "^2.3.2",
+    "sass-loader": "^14.0.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {

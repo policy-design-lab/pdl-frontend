@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import LandingPageMapTab from "../components/LandingPageMapTab";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import Map from "../components/surface51/components/Map";
 
 export default function LandingPage(): JSX.Element {
     // connect to api endpoint
@@ -95,6 +96,7 @@ export default function LandingPage(): JSX.Element {
                             Visualize Federal Agricultural, Conservation and Food Policies
                         </Typography>
                     </div>
+                    <Map />
                     <LandingPageMapTab
                         allStates={allStates}
                         stateCodes={stateCodes}
