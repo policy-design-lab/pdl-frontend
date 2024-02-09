@@ -63,16 +63,14 @@ const MapChart = ({
                                     const programRecord = state.programs;
                                     const ACur = programRecord.find((s) => s.programName === program);
                                     if (!subprogram) {
-                                        programPayment = subtitle.includes("Subtitle E")
-                                            ? ACur.paymentInDollars
-                                            : ACur.programPaymentInDollars; // need to change for title e
-                                        totalPaymentInPercentage = ACur.paymentInPercentageNationwide;
+                                        programPayment = ACur.totalPaymentInDollars;
+                                        totalPaymentInPercentage = ACur.totalPaymentInPercentageNationwide;
                                     } else {
                                         const subprogramRecord = ACur.subPrograms.find(
                                             (s) => s.subProgramName === subprogram
                                         );
-                                        programPayment = subprogramRecord.paymentInDollars;
-                                        totalPaymentInPercentage = subprogramRecord.paymentInPercentageNationwide;
+                                        programPayment = subprogramRecord.totalPaymentInDollars;
+                                        totalPaymentInPercentage = subprogramRecord.totalPaymentInPercentageNationwide;
                                     }
                                     const hoverContent = (
                                         <div className="map_tooltip">
@@ -177,8 +175,8 @@ const MapChart = ({
                                     if (state === undefined || state.length === 0) {
                                         return null;
                                     }
-                                    programPayment = state.subtitlePaymentInDollars;
-                                    totalPaymentInPercentage = state.paymentInPercentageNationwide;
+                                    programPayment = state.totalPaymentInDollars;
+                                    totalPaymentInPercentage = state.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -306,18 +304,17 @@ const Title1Map = ({
             const programRecord = value.programs;
             const ACur = programRecord.find((s) => s.programName === program);
             if (!subprogram) {
-                if (subtitle.includes("Subtitle E")) quantizeArray.push(ACur.paymentInDollars);
-                else quantizeArray.push(ACur.programPaymentInDollars);
+                quantizeArray.push(ACur.totalPaymentInDollars);
             } else {
                 const AArray = ACur.subPrograms;
                 const subprogramRecord = AArray.find((s) => s.subProgramName === subprogram);
-                quantizeArray.push(subprogramRecord.paymentInDollars);
+                quantizeArray.push(subprogramRecord.totalPaymentInDollars);
             }
             return null;
         });
     } else {
         statePerformance[year].forEach((value) => {
-            quantizeArray.push(value.subtitlePaymentInDollars);
+            quantizeArray.push(value.totalPaymentInDollars);
             return null;
         });
     }
@@ -331,13 +328,13 @@ const Title1Map = ({
             const programList = state.programs;
             if (!subprogram) {
                 const programRecord = programList.find((s) => s.programName === program);
-                if (!programRecord || programRecord.programPaymentInDollars === 0) zeroPoints.push(state.state);
+                if (!programRecord || programRecord.totalPaymentInDollars === 0) zeroPoints.push(state.state);
             } else {
                 const programRecord = programList.find((s) => s.programName === program);
                 const subprogramRecord = programRecord.subPrograms.find((s) => s.subProgramName === subprogram);
-                if (!subprogramRecord || subprogramRecord.paymentInDollars === 0) zeroPoints.push(state.state);
+                if (!subprogramRecord || subprogramRecord.totalPaymentInDollars === 0) zeroPoints.push(state.state);
             }
-        } else if (state.subtitlePaymentInDollars === 0) {
+        } else if (state.totalPaymentInDollars === 0) {
             zeroPoints.push(state.state);
         }
     });

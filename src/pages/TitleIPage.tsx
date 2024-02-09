@@ -24,8 +24,8 @@ import "../styles/subpage.css";
 export default function TitleIPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
     const [subtitleADistributionData, setSubtitleADistributionData] = React.useState({});
-    const [subtitleEStateDistributionData, setSubtitleEStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
-    const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({}); // TODO: need to be updated in API!
+    const [subtitleEStateDistributionData, setSubtitleEStateDistributionData] = React.useState({});
+    const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const title1Div = React.useRef(null);
@@ -84,32 +84,33 @@ export default function TitleIPage(): JSX.Element {
                 organizedData.push({
                     state,
                     baseAcres: subProgramData[0].averageAreaInAcres,
-                    payments: subProgramData[0].paymentInDollars,
+                    payments: subProgramData[0].totalPaymentInDollars,
                     recipients: subProgramData[0].averageRecipientCount
                 });
                 originalData.push({
                     state,
                     baseAcres: subProgramData[0].averageAreaInAcres,
-                    payments: subProgramData[0].paymentInDollars,
+                    payments: subProgramData[0].totalPaymentInDollars,
                     recipients: subProgramData[0].averageRecipientCount
                 });
             } else {
                 organizedData.push({
                     state,
                     baseAcres: programData[0].averageAreaInAcres,
-                    payments: programData[0].programPaymentInDollars,
+                    payments: programData[0].totalPaymentInDollars,
                     recipients: programData[0].averageRecipientCount
                 });
                 originalData.push({
                     state,
                     baseAcres: programData[0].averageAreaInAcres,
-                    payments: programData[0].programPaymentInDollars,
+                    payments: programData[0].totalPaymentInDollars,
                     recipients: programData[0].averageRecipientCount
                 });
             }
         });
         return [organizedData, originalData];
     }
+
     return (
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&

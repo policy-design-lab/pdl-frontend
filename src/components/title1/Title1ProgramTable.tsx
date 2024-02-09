@@ -32,35 +32,31 @@ function Title1ProgramTable({
         const state = stateData.state;
         let programData = null;
         programData = stateData.programs.filter((p) => p.programName.toString() === program);
-        if (
-            // TODO: Add countInPercentageNationwide for subtitle and countInPercentageWithinState for program back
-            subtitle.includes("Subtitle D") ||
-            subtitle.includes("Subtitle E")
-        ) {
+        if (subtitle.includes("Subtitle D") || subtitle.includes("Subtitle E")) {
             // SADA's program
             if (program) {
                 hashmap[state] = {
-                    paymentInDollars: programData[0].paymentInDollars,
-                    paymentInPercentageNationwide: programData[0].paymentInPercentageNationwide,
-                    paymentInPercentageWithinState: programData[0].paymentInPercentageWithinState,
+                    totalPaymentInDollars: programData[0].totalPaymentInDollars,
+                    totalPaymentInPercentageNationwide: programData[0].totalPaymentInPercentageNationwide,
+                    totalPaymentInPercentageWithinState: programData[0].totalPaymentInPercentageWithinState,
                     totalCounts: programData[0].totalCounts,
-                    countInPercentageNationwide: programData[0].countInPercentageNationwide,
+                    totalCountsInPercentageNationwide: programData[0].totalCountsInPercentageNationwide,
                     averageRecipientCount: programData[0].averageRecipientCount,
                     averageRecipientCountInPercentageNationwide:
                         programData[0].averageRecipientCountInPercentageNationwide,
                     averageRecipientCountInPercentageWithinState:
-                        programData[0].averageRecipientCountInPercentageWithinState
-                    // countInPercentageWithinState: programData[0].countInPercentageWithinState
+                        programData[0].averageRecipientCountInPercentageWithinState,
+                    totalCountsInPercentageWithinState: programData[0].totalCountsInPercentageWithinState
                 };
             } else {
                 // Subtitle D and E
                 hashmap[state] = {
-                    programPaymentInDollars: stateData.subtitlePaymentInDollars,
-                    paymentInPercentageNationwide: stateData.paymentInPercentageNationwide,
+                    totalPaymentInDollars: stateData.totalPaymentInDollars,
+                    totalPaymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide,
                     totalCounts: stateData.totalCounts,
                     averageRecipientCount: stateData.averageRecipientCount,
-                    averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide
-                    // countInPercentageNationwide: stateData.countInPercentageNationwide
+                    averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide,
+                    totalCountsInPercentageNationwide: stateData.totalCountsInPercentageNationwide
                 };
             }
         } else if (subtitle && program && subprogram) {
@@ -69,25 +65,25 @@ function Title1ProgramTable({
                 return p.subProgramName.toString() === subprogram;
             });
             hashmap[state] = {
-                paymentInDollars: subProgramData[0].paymentInDollars,
-                paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
-                paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
+                totalPaymentInDollars: subProgramData[0].totalPaymentInDollars,
+                totalPaymentInPercentageNationwide: subProgramData[0].totalPaymentInPercentageNationwide,
+                totalPaymentInPercentageWithinState: subProgramData[0].totalPaymentInPercentageWithinState,
                 averageAreaInAcres: subProgramData[0].averageAreaInAcres,
                 averageRecipientCount: subProgramData[0].averageRecipientCount
             };
         } else if (program) {
             // PLC and ARC
             hashmap[state] = {
-                programPaymentInDollars: programData[0].programPaymentInDollars,
+                totalPaymentInDollars: programData[0].totalPaymentInDollars,
                 averageAreaInAcres: programData[0].averageAreaInAcres,
                 averageRecipientCount: programData[0].averageRecipientCount,
-                paymentInPercentageNationwide: programData[0].paymentInPercentageNationwide
+                totalPaymentInPercentageNationwide: programData[0].totalPaymentInPercentageNationwide
             };
         } else {
             // Subtitle A Case
             hashmap[state] = {
-                programPaymentInDollars: stateData.subtitlePaymentInDollars,
-                paymentInPercentageNationwide: stateData.paymentInPercentageNationwide
+                totalPaymentInDollars: stateData.totalPaymentInDollars,
+                totalPaymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide
             };
         }
     });
@@ -101,66 +97,66 @@ function Title1ProgramTable({
                     // SADA's program
                     return {
                         state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                        paymentInDollars: `$${
-                            value.paymentInDollars
+                        totalPaymentInDollars: `$${
+                            value.totalPaymentInDollars
                                 .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                 .toString()
                                 .split(".")[0]
                         }`,
-                        paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
-                        paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
+                        totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
+                        totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                         totalCounts: `${value.totalCounts
                             .toLocaleString(undefined, { minimumFractionDigits: 0 })
                             .toString()}`,
                         averageRecipientCount: `${value.averageRecipientCount}`,
                         averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
-                        countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`
-                        // countInPercentageWithinState: `${value.countInPercentageWithinState.toString()}%`
+                        totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`,
+                        totalCountsInPercentageWithinState: `${value.totalCountsInPercentageWithinState.toString()}%`
                     };
                 }
                 return {
                     // subtitle D and E
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${
-                        value.programPaymentInDollars
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
                             .toLocaleString(undefined, { minimumFractionDigits: 2 })
                             .toString()
                             .split(".")[0]
                     }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     totalCounts: `${value.totalCounts
                         .toLocaleString(undefined, { minimumFractionDigits: 0 })
                         .toString()}`,
                     averageRecipientCount: `${value.averageRecipientCount}`,
-                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
-                    // countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`
+                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
+                    totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`
                 };
             }
             // subtitle A
             if (subtitle && !program) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${
-                        value.programPaymentInDollars
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
                             .toLocaleString(undefined, { minimumFractionDigits: 2 })
                             .toString()
                             .split(".")[0]
                     }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`
                 };
             }
             // ARC's subprograms
             if (subprogram) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    paymentInDollars: `$${
-                        value.paymentInDollars
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
                             .toLocaleString(undefined, { minimumFractionDigits: 0 })
                             .toString()
                             .split(".")[0]
                     }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
-                    paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
+                    totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                     averageAreaInAcres:
                         value.averageAreaInAcres === 0
                             ? "0"
@@ -176,16 +172,16 @@ function Title1ProgramTable({
                 };
             }
             // ARC & PLC
-            return value.programPaymentInDollars !== undefined
+            return value.totalPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: `$${
-                          value.programPaymentInDollars
+                      totalPaymentInDollars: `$${
+                          value.totalPaymentInDollars
                               .toLocaleString(undefined, { minimumFractionDigits: 2 })
                               .toString()
                               .split(".")[0]
                       }`,
-                      paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
+                      totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0
                               ? "0"
@@ -201,16 +197,16 @@ function Title1ProgramTable({
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: "$0",
+                      totalPaymentInDollars: "$0",
                       averageAreaInAcres: "0",
                       averageRecipientCount: "0"
                   };
         };
         resultData.push(newRecord());
     });
-    if (resultData[0].paymentInDollars) {
-        sortByDollars(resultData, "paymentInDollars");
-    } else sortByDollars(resultData, "programPaymentInDollars");
+    if (resultData[0].totalPaymentInDollars) {
+        sortByDollars(resultData, "totalPaymentInDollars");
+    } else sortByDollars(resultData, "totalPaymentInDollars");
     let columns;
     if (subtitle.includes("Subtitle A") && !program) {
         columns = React.useMemo(
@@ -222,13 +218,13 @@ function Title1ProgramTable({
                 },
                 {
                     Header: "PAYMENT",
-                    accessor: "programPaymentInDollars",
+                    accessor: "totalPaymentInDollars",
                     sortType: compareWithDollarSign
                 },
 
                 {
                     Header: "PAYMENT PCT. NATIONWIDE",
-                    accessor: "paymentInPercentageNationwide",
+                    accessor: "totalPaymentInPercentageNationwide",
                     sortType: compareWithPercentSign
                 }
             ],
@@ -246,20 +242,20 @@ function Title1ProgramTable({
                       },
                       {
                           Header: "PAYMENT",
-                          accessor: "paymentInDollars",
+                          accessor: "totalPaymentInDollars",
                           sortType: compareWithDollarSign
                       },
 
                       {
                           Header: "PAYMENT PCT. NATIONWIDE",
-                          accessor: "paymentInPercentageNationwide",
+                          accessor: "totalPaymentInPercentageNationwide",
                           sortType: compareWithPercentSign
                       },
-                      // {
-                      //     Header: "PAYMENT PCT. WITHIN STATE",
-                      //     accessor: "paymentInPercentageWithinState",
-                      //     sortType: compareWithPercentSign
-                      // },
+                      {
+                          Header: "PAYMENT PCT. WITHIN STATE",
+                          accessor: "totalPaymentInPercentageWithinState",
+                          sortType: compareWithPercentSign
+                      },
                       {
                           Header: "AVG. BASE ACRES",
                           accessor: "averageAreaInAcres",
@@ -283,12 +279,12 @@ function Title1ProgramTable({
                       },
                       {
                           Header: "PAYMENT",
-                          accessor: "programPaymentInDollars",
+                          accessor: "totalPaymentInDollars",
                           sortType: compareWithDollarSign
                       },
                       {
                           Header: "PAYMENT PCT. NATIONWIDE",
-                          accessor: "paymentInPercentageNationwide",
+                          accessor: "totalPaymentInPercentageNationwide",
                           sortType: compareWithPercentSign
                       },
                       {
@@ -316,17 +312,17 @@ function Title1ProgramTable({
                       },
                       {
                           Header: "PAYMENT",
-                          accessor: "paymentInDollars",
+                          accessor: "totalPaymentInDollars",
                           sortType: compareWithDollarSign
                       },
                       {
                           Header: "PAYMENT PCT. NATIONWIDE",
-                          accessor: "paymentInPercentageNationwide",
+                          accessor: "totalPaymentInPercentageNationwide",
                           sortType: compareWithPercentSign
                       },
                       {
                           Header: "PAYMENT PCT. WITHIN STATE",
-                          accessor: "paymentInPercentageWithinState",
+                          accessor: "totalPaymentInPercentageWithinState",
                           sortType: compareWithPercentSign
                       },
                       {
@@ -336,29 +332,14 @@ function Title1ProgramTable({
                       },
                       {
                           Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                          accessor: "countInPercentageNationwide",
-                          sortType: compareWithNumber
-                      },
-                      // {
-                      //     Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
-                      //     accessor: "countInPercentageWithinState",
-                      //     sortType: compareWithNumber
-                      // },
-                      {
-                          Header: "AVG. TOTAL RECIPIENTS",
-                          accessor: "averageRecipientCount",
+                          accessor: "totalCountsInPercentageNationwide",
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "AVG. TOTAL RECIPIENTS PCT. NATIONWIDE",
-                          accessor: "averageRecipientCountInPercentageNationwide",
+                          Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
+                          accessor: "totalCountsInPercentageWithinState",
                           sortType: compareWithNumber
                       }
-                      // {
-                      //     Header: "AVG. TOTAL RECIPIENTS PCT. WITHIN STATE",
-                      //     accessor: "averageRecipientCountInPercentageWithinState",
-                      //     sortType: compareWithNumber
-                      // }
                   ],
                   []
               )
@@ -372,12 +353,12 @@ function Title1ProgramTable({
                       },
                       {
                           Header: "PAYMENT",
-                          accessor: "programPaymentInDollars",
+                          accessor: "totalPaymentInDollars",
                           sortType: compareWithDollarSign
                       },
                       {
                           Header: "PAYMENT PCT. NATIONWIDE",
-                          accessor: "paymentInPercentageNationwide",
+                          accessor: "totalPaymentInPercentageNationwide",
                           sortType: compareWithPercentSign
                       },
                       {
@@ -385,19 +366,9 @@ function Title1ProgramTable({
                           accessor: "totalCounts",
                           sortType: compareWithNumber
                       },
-                      // {
-                      //     Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                      //     accessor: "countInPercentageNationwide",
-                      //     sortType: compareWithNumber
-                      // } //reverse after the data is available,
                       {
-                          Header: "AVG. TOTAL RECIPIENTS",
-                          accessor: "averageRecipientCount",
-                          sortType: compareWithNumber
-                      },
-                      {
-                          Header: "AVG. TOTAL RECIPIENTS PCT. NATIONWIDE",
-                          accessor: "averageRecipientCountInPercentageNationwide",
+                          Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
+                          accessor: "totalCountsInPercentageNationwide",
                           sortType: compareWithNumber
                       }
                   ],
@@ -405,9 +376,9 @@ function Title1ProgramTable({
               );
     }
     const paymentsIndex =
-        columns.findIndex((c) => c.accessor === "paymentInDollars") !== -1
-            ? columns.findIndex((c) => c.accessor === "paymentInDollars")
-            : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
+        columns.findIndex((c) => c.accessor === "totalPaymentInDollars") !== -1
+            ? columns.findIndex((c) => c.accessor === "totalPaymentInDollars")
+            : columns.findIndex((c) => c.accessor === "totalPaymentInDollars");
     const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
     const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
 
