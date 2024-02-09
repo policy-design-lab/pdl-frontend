@@ -28,6 +28,7 @@ const offsets = {
 
 const MapChart = ({
     setReactTooltipContent,
+    subtitle,
     program,
     subprogram,
     maxValue,
@@ -41,7 +42,7 @@ const MapChart = ({
     const classes = useStyles();
     return (
         <div data-tip="">
-            {program !== "Total Commodities Programs" ? (
+            {subtitle && program ? (
                 <ComposableMap projection="geoAlbersUsa">
                     <Geographies geography={geoUrl}>
                         {({ geographies }) => (
@@ -61,51 +62,40 @@ const MapChart = ({
                                     }
                                     const programRecord = state.programs;
                                     const ACur = programRecord.find((s) => s.programName === program);
-                                    if (subprogram === undefined) {
-                                        programPayment = ACur.programPaymentInDollars;
+                                    if (!subprogram) {
+                                        programPayment = ACur.totalPaymentInDollars;
+                                        totalPaymentInPercentage = ACur.totalPaymentInPercentageNationwide;
                                     } else {
                                         const subprogramRecord = ACur.subPrograms.find(
                                             (s) => s.subProgramName === subprogram
                                         );
-                                        programPayment = subprogramRecord.paymentInDollars;
-                                        totalPaymentInPercentage = subprogramRecord.paymentInPercentageNationwide;
+                                        programPayment = subprogramRecord.totalPaymentInDollars;
+                                        totalPaymentInPercentage = subprogramRecord.totalPaymentInPercentageNationwide;
                                     }
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>
-                                            {subprogram === undefined ? (
-                                                <table className={classes.tooltip_table}>
-                                                    <tbody key={geo.properties.name}>
-                                                        <tr>
-                                                            <td className={classes.tooltip_topcell_left}>
-                                                                ${ShortFormat(programPayment, undefined, 2)}
-                                                            </td>
-                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            ) : (
-                                                <table className={classes.tooltip_table}>
-                                                    <tbody key={geo.properties.name}>
-                                                        <tr style={topTipStyle}>
-                                                            <td className={classes.tooltip_topcell_left}>Payments:</td>
-                                                            <td className={classes.tooltip_topcell_right}>
-                                                                ${ShortFormat(programPayment, undefined, 2)}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className={classes.tooltip_regularcell_left}>
-                                                                PCT. Nationwide:
-                                                            </td>
-                                                            <td className={classes.tooltip_regularcell_right}>
-                                                                {totalPaymentInPercentage} %
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            )}
+                                            <table className={classes.tooltip_table}>
+                                                <tbody key={geo.properties.name}>
+                                                    <tr style={topTipStyle}>
+                                                        <td className={classes.tooltip_topcell_left}>Payments:</td>
+                                                        <td className={classes.tooltip_topcell_right}>
+                                                            ${ShortFormat(programPayment, undefined, 2)}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={classes.tooltip_regularcell_left}>
+                                                            PCT. Nationwide:
+                                                        </td>
+                                                        <td className={classes.tooltip_regularcell_right}>
+                                                            {totalPaymentInPercentage} %
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            {/* )} */}
                                         </div>
                                     );
                                     return (
@@ -185,7 +175,6 @@ const MapChart = ({
                                     if (state === undefined || state.length === 0) {
                                         return null;
                                     }
-
                                     programPayment = state.totalPaymentInDollars;
                                     totalPaymentInPercentage = state.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
@@ -193,37 +182,25 @@ const MapChart = ({
                                             <div className={classes.tooltip_header}>
                                                 <b>{geo.properties.name}</b>
                                             </div>
-                                            {subprogram === undefined ? (
-                                                <table className={classes.tooltip_table}>
-                                                    <tbody key={geo.properties.name}>
-                                                        <tr>
-                                                            <td className={classes.tooltip_topcell_left}>
-                                                                ${ShortFormat(programPayment, undefined, 2)}
-                                                            </td>
-                                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            ) : (
-                                                <table className={classes.tooltip_table}>
-                                                    <tbody key={geo.properties.name}>
-                                                        <tr style={topTipStyle}>
-                                                            <td className={classes.tooltip_topcell_left}>Payments:</td>
-                                                            <td className={classes.tooltip_topcell_right}>
-                                                                ${ShortFormat(programPayment, undefined, 2)}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className={classes.tooltip_regularcell_left}>
-                                                                PCT. Nationwide:
-                                                            </td>
-                                                            <td className={classes.tooltip_regularcell_right}>
-                                                                {totalPaymentInPercentage} %
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            )}
+                                            <table className={classes.tooltip_table}>
+                                                <tbody key={geo.properties.name}>
+                                                    <tr style={topTipStyle}>
+                                                        <td className={classes.tooltip_topcell_left}>Payments:</td>
+                                                        <td className={classes.tooltip_topcell_right}>
+                                                            ${ShortFormat(programPayment, undefined, 2)}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={classes.tooltip_regularcell_left}>
+                                                            PCT. Nationwide:
+                                                        </td>
+                                                        <td className={classes.tooltip_regularcell_right}>
+                                                            {totalPaymentInPercentage} %
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            {/* )} */}
                                         </div>
                                     );
                                     return (
@@ -302,6 +279,7 @@ MapChart.propTypes = {
 };
 
 const Title1Map = ({
+    subtitle,
     program,
     subprogram,
     year,
@@ -310,7 +288,8 @@ const Title1Map = ({
     stateCodes,
     allStates
 }: {
-    program: string;
+    subtitle: string;
+    program: any;
     subprogram: any;
     year: string;
     mapColor: [string, string, string, string, string];
@@ -320,16 +299,16 @@ const Title1Map = ({
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
-    if (program !== "Total Commodities Programs") {
+    if (subtitle && program) {
         statePerformance[year].forEach((value) => {
             const programRecord = value.programs;
             const ACur = programRecord.find((s) => s.programName === program);
-            if (subprogram === undefined) {
-                quantizeArray.push(ACur.programPaymentInDollars);
+            if (!subprogram) {
+                quantizeArray.push(ACur.totalPaymentInDollars);
             } else {
                 const AArray = ACur.subPrograms;
                 const subprogramRecord = AArray.find((s) => s.subProgramName === subprogram);
-                quantizeArray.push(subprogramRecord.paymentInDollars);
+                quantizeArray.push(subprogramRecord.totalPaymentInDollars);
             }
             return null;
         });
@@ -340,20 +319,20 @@ const Title1Map = ({
         });
     }
     const maxValue = Math.max(...quantizeArray);
-    const searchKey = subprogram === undefined ? program : subprogram;
+    const searchKey = !subprogram ? program || subtitle : subprogram;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const zeroPoints = [];
     statePerformance[year].forEach((state) => {
-        if (program !== "Total Commodities Programs") {
+        if (subtitle && program) {
             const programList = state.programs;
-            if (subprogram === undefined) {
+            if (!subprogram) {
                 const programRecord = programList.find((s) => s.programName === program);
-                if (!programRecord || programRecord.programPaymentInDollars === 0) zeroPoints.push(state.state);
+                if (!programRecord || programRecord.totalPaymentInDollars === 0) zeroPoints.push(state.state);
             } else {
                 const programRecord = programList.find((s) => s.programName === program);
                 const subprogramRecord = programRecord.subPrograms.find((s) => s.subProgramName === subprogram);
-                if (!subprogramRecord || subprogramRecord.paymentInDollars === 0) zeroPoints.push(state.state);
+                if (!subprogramRecord || subprogramRecord.totalPaymentInDollars === 0) zeroPoints.push(state.state);
             }
         } else if (state.totalPaymentInDollars === 0) {
             zeroPoints.push(state.state);
@@ -365,7 +344,7 @@ const Title1Map = ({
             <Box display="flex" justifyContent="center" className="Title1MapHeader">
                 <DrawLegend
                     colorScale={colorScale}
-                    title={titleElement({ program, subprogram, year })}
+                    title={titleElement({ subtitle, program, subprogram, year })}
                     programData={quantizeArray}
                     prepColor={mapColor}
                     emptyState={zeroPoints}
@@ -375,6 +354,7 @@ const Title1Map = ({
             </Box>
             <MapChart
                 setReactTooltipContent={setContent}
+                subtitle={subtitle}
                 program={program}
                 subprogram={subprogram}
                 maxValue={maxValue}
@@ -393,38 +373,19 @@ const Title1Map = ({
         </div>
     );
 };
-const titleElement = ({ program, subprogram, year }): JSX.Element => {
-    if (subprogram) {
-        return (
-            <Box>
-                {" "}
-                <Typography noWrap variant="h6">
-                    Total <strong>{subprogram}</strong> Payments from <strong>{year}</strong>
-                </Typography>
-                <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                    <i>2022 payments for Title I have not yet been paid</i>
-                </Typography>
-            </Box>
-        );
-    }
-    if (program === "Total Commodities Programs") {
-        return (
-            <Box>
-                {" "}
-                <Typography noWrap variant="h6">
-                    <strong>Total Commodities Programs, Subtitle A</strong> Payments from <strong>{year}</strong>
-                </Typography>{" "}
-                <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                    <i>2022 payments for Title I have not yet been paid</i>
-                </Typography>
-            </Box>
-        );
-    }
+const titleElement = ({ subtitle, program, subprogram, year }): JSX.Element => {
     return (
         <Box>
-            <Typography noWrap variant="h6">
-                Total <strong>{program}</strong> Payments from <strong>{year}</strong>
-            </Typography>{" "}
+            {" "}
+            {subprogram ? (
+                <Typography noWrap variant="h6">
+                    <strong>{subprogram}</strong> Payments from <strong>{year}</strong>
+                </Typography>
+            ) : (
+                <Typography noWrap variant="h6">
+                    <strong>{program || subtitle}</strong> Payments from <strong>{year}</strong>
+                </Typography>
+            )}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
                 <i>2022 payments for Title I have not yet been paid</i>
             </Typography>

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added `paymentPercentageNationwide` to Title I page map tooltips and tables [#238](https://github.com/policy-design-lab/pdl-frontend/issues/238) 
+
+### Changed
+- Changed 'Payments' to 'Benefits' for the Crop Insurance map on landing page [#240](https://github.com/policy-design-lab/pdl-frontend/issues/240)
+- Changed all 'Costs' for the SNAP program to 'Benefits' across the website [#241](https://github.com/policy-design-lab/pdl-frontend/issues/241)
+- Updated Title I page to use the revised API endpoints [#243](https://github.com/policy-design-lab/pdl-frontend/issues/243)
+
 ## [0.14.0] - 2024-01-17
 
 ### Changed

@@ -201,7 +201,7 @@ export default function SNAPBar({
             }
         };
         const blueText = (blueBar, state) => {
-            const leftTextContent = `Costs: $${ToDollarString(
+            const leftTextContent = `Benefits: $${ToDollarString(
                 blueBar.data()[0].totalPaymentInDollars,
                 0
             )}  |  ${ToPercentageString(blueBar.data()[0].totalPaymentInPercentageNationwide)}`;
@@ -324,7 +324,7 @@ export default function SNAPBar({
             .attr("dy", "1em")
             .style("text-anchor", "start")
             .style("fill", color1)
-            .text("SNAP Costs ($)")
+            .text("SNAP Benefits ($)")
             .style("font-weight", "400")
             .style("font-size", "0.785rem");
         d3.select(rn.current).select(".y0.axis").selectAll(".tick").style("fill", color1).style("font-size", "0.7rem");

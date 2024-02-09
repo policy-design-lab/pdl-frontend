@@ -123,13 +123,13 @@ function SnapTable({
                 sortType: compareWithAlphabetic
             },
             {
-                Header: "SNAP COSTS",
+                Header: "SNAP BENEFITS",
                 accessor: "snapCost",
                 sortType: compareWithDollarSign
             },
 
             {
-                Header: "COSTS PCT. NATIONWIDE",
+                Header: "BENEFITS PCT. NATIONWIDE",
                 accessor: "paymentPercentage",
                 sortType: compareWithPercentSign
             },

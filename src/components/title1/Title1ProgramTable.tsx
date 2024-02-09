@@ -14,6 +14,7 @@ import "../../styles/table.css";
 
 function Title1ProgramTable({
     tableTitle,
+    subtitle,
     program,
     subprogram,
     stateCodes,
@@ -30,153 +31,157 @@ function Title1ProgramTable({
     Title1Data[year].forEach((stateData) => {
         const state = stateData.state;
         let programData = null;
-        programData = stateData.programs.filter((p) => {
-            return p.programName.toString() === program;
-        });
-
-        // TODO: change this judgement to subtitle d or subtitle e
-        if (
-            program.toString().toLowerCase().includes("disaster") ||
-            program.toString().toLowerCase().includes("dairy")
-        ) {
-            if (subprogram !== undefined) {
-                const subProgramData = programData[0].subPrograms.filter((p) => {
-                    return p.subProgramName.toString() === subprogram;
-                });
+        programData = stateData.programs.filter((p) => p.programName.toString() === program);
+        if (subtitle.includes("Subtitle D") || subtitle.includes("Subtitle E")) {
+            // SADA's program
+            if (program) {
                 hashmap[state] = {
-                    paymentInDollars: subProgramData[0].paymentInDollars,
-                    paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
-                    paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
-                    totalCounts: subProgramData[0].totalCounts,
-                    countInPercentageNationwide: subProgramData[0].countInPercentageNationwide,
-                    countInPercentageWithinState: subProgramData[0].countInPercentageWithinState
+                    totalPaymentInDollars: programData[0].totalPaymentInDollars,
+                    totalPaymentInPercentageNationwide: programData[0].totalPaymentInPercentageNationwide,
+                    totalPaymentInPercentageWithinState: programData[0].totalPaymentInPercentageWithinState,
+                    totalCounts: programData[0].totalCounts,
+                    totalCountsInPercentageNationwide: programData[0].totalCountsInPercentageNationwide,
+                    averageRecipientCount: programData[0].averageRecipientCount,
+                    averageRecipientCountInPercentageNationwide:
+                        programData[0].averageRecipientCountInPercentageNationwide,
+                    averageRecipientCountInPercentageWithinState:
+                        programData[0].averageRecipientCountInPercentageWithinState,
+                    totalCountsInPercentageWithinState: programData[0].totalCountsInPercentageWithinState
                 };
             } else {
+                // Subtitle D and E
                 hashmap[state] = {
-                    programPaymentInDollars: programData[0].programPaymentInDollars,
-                    paymentInPercentageNationwide: programData[0].paymentInPercentageNationwide,
-                    totalCounts: programData[0].totalCounts,
-                    countInPercentageNationwide: programData[0].countInPercentageNationwide
+                    totalPaymentInDollars: stateData.totalPaymentInDollars,
+                    totalPaymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide,
+                    totalCounts: stateData.totalCounts,
+                    averageRecipientCount: stateData.averageRecipientCount,
+                    averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide,
+                    totalCountsInPercentageNationwide: stateData.totalCountsInPercentageNationwide
                 };
             }
-        } else if (subprogram !== undefined) {
+        } else if (subtitle && program && subprogram) {
+            // ARC subprograms
             const subProgramData = programData[0].subPrograms.filter((p) => {
                 return p.subProgramName.toString() === subprogram;
             });
             hashmap[state] = {
-                paymentInDollars: subProgramData[0].paymentInDollars,
-                paymentInPercentageNationwide: subProgramData[0].paymentInPercentageNationwide,
-                paymentInPercentageWithinState: subProgramData[0].paymentInPercentageWithinState,
+                totalPaymentInDollars: subProgramData[0].totalPaymentInDollars,
+                totalPaymentInPercentageNationwide: subProgramData[0].totalPaymentInPercentageNationwide,
+                totalPaymentInPercentageWithinState: subProgramData[0].totalPaymentInPercentageWithinState,
                 averageAreaInAcres: subProgramData[0].averageAreaInAcres,
                 averageRecipientCount: subProgramData[0].averageRecipientCount
             };
-        } else if (program !== "Total Commodities Programs") {
+        } else if (program) {
+            // PLC and ARC
             hashmap[state] = {
-                programPaymentInDollars: programData[0].programPaymentInDollars,
+                totalPaymentInDollars: programData[0].totalPaymentInDollars,
                 averageAreaInAcres: programData[0].averageAreaInAcres,
-                averageRecipientCount: programData[0].averageRecipientCount
+                averageRecipientCount: programData[0].averageRecipientCount,
+                totalPaymentInPercentageNationwide: programData[0].totalPaymentInPercentageNationwide
             };
         } else {
+            // Subtitle A Case
             hashmap[state] = {
-                programPaymentInDollars: stateData.totalPaymentInDollars,
-                paymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide
+                totalPaymentInDollars: stateData.totalPaymentInDollars,
+                totalPaymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide
             };
         }
     });
     Object.entries(hashmap).forEach(([key, value]) => {
         const newRecord = () => {
-            if (program === "Total Commodities Programs") {
-                return {
-                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${
-                        value.programPaymentInDollars
-                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                            .toString()
-                            .split(".")[0]
-                    }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`
-                };
-            }
             if (
-                program.toString().toLowerCase().includes("disaster") ||
-                program.toString().toLowerCase().includes("dairy")
+                subtitle.includes("Subtitle D") ||
+                subtitle.includes("Subtitle E") // Subtitle D and E. If new subtitles have different attributes, change this condition
             ) {
-                if (subprogram !== undefined) {
+                if (program) {
+                    // SADA's program
                     return {
                         state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                        paymentInDollars: `$${
-                            value.paymentInDollars
+                        totalPaymentInDollars: `$${
+                            value.totalPaymentInDollars
                                 .toLocaleString(undefined, { minimumFractionDigits: 0 })
                                 .toString()
                                 .split(".")[0]
                         }`,
-                        paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
-                        paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
+                        totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
+                        totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                         totalCounts: `${value.totalCounts
                             .toLocaleString(undefined, { minimumFractionDigits: 0 })
                             .toString()}`,
-                        countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`,
-                        countInPercentageWithinState: `${value.countInPercentageWithinState.toString()}%`
+                        averageRecipientCount: `${value.averageRecipientCount}`,
+                        averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
+                        totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`,
+                        totalCountsInPercentageWithinState: `${value.totalCountsInPercentageWithinState.toString()}%`
                     };
                 }
                 return {
+                    // subtitle D and E
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    programPaymentInDollars: `$${
-                        value.programPaymentInDollars
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
                             .toLocaleString(undefined, { minimumFractionDigits: 2 })
                             .toString()
                             .split(".")[0]
                     }`,
-                    paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     totalCounts: `${value.totalCounts
                         .toLocaleString(undefined, { minimumFractionDigits: 0 })
                         .toString()}`,
-                    countInPercentageNationwide: `${value.countInPercentageNationwide.toString()}%`
+                    averageRecipientCount: `${value.averageRecipientCount}`,
+                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
+                    totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`
                 };
             }
-            if (subprogram !== undefined) {
-                return value.paymentInPercentageNationwide !== undefined
-                    ? {
-                          state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                          paymentInDollars: `$${
-                              value.paymentInDollars
-                                  .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                                  .toString()
-                                  .split(".")[0]
-                          }`,
-                          paymentInPercentageNationwide: `${value.paymentInPercentageNationwide.toString()}%`,
-                          paymentInPercentageWithinState: `${value.paymentInPercentageWithinState.toString()}%`,
-                          averageAreaInAcres:
-                              value.averageAreaInAcres === 0
-                                  ? "0"
-                                  : `${value.averageAreaInAcres
-                                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                                        .toString()}`,
-                          averageRecipientCount:
-                              value.averageRecipientCount === 0
-                                  ? "0"
-                                  : `${value.averageRecipientCount
-                                        .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                                        .toString()}`
-                      }
-                    : {
-                          state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                          paymentInDollars: "$0",
-                          paymentInPercentageNationwide: "0%",
-                          paymentInPercentageWithinState: "0%",
-                          averageAreaInAcres: "0",
-                          averageRecipientCount: "0"
-                      };
+            // subtitle A
+            if (subtitle && !program) {
+                return {
+                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`
+                };
             }
-            return value.programPaymentInDollars !== undefined
+            // ARC's subprograms
+            if (subprogram) {
+                return {
+                    state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
+                    totalPaymentInDollars: `$${
+                        value.totalPaymentInDollars
+                            .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                            .toString()
+                            .split(".")[0]
+                    }`,
+                    totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
+                    totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
+                    averageAreaInAcres:
+                        value.averageAreaInAcres === 0
+                            ? "0"
+                            : `${value.averageAreaInAcres
+                                  .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                                  .toString()}`,
+                    averageRecipientCount:
+                        value.averageRecipientCount === 0
+                            ? "0"
+                            : `${value.averageRecipientCount
+                                  .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                                  .toString()}`
+                };
+            }
+            // ARC & PLC
+            return value.totalPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: `$${
-                          value.programPaymentInDollars
+                      totalPaymentInDollars: `$${
+                          value.totalPaymentInDollars
                               .toLocaleString(undefined, { minimumFractionDigits: 2 })
                               .toString()
                               .split(".")[0]
                       }`,
+                      totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0
                               ? "0"
@@ -192,18 +197,18 @@ function Title1ProgramTable({
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      programPaymentInDollars: "$0",
+                      totalPaymentInDollars: "$0",
                       averageAreaInAcres: "0",
                       averageRecipientCount: "0"
                   };
         };
         resultData.push(newRecord());
     });
-    if (subprogram !== undefined) {
-        sortByDollars(resultData, "paymentInDollars");
-    } else sortByDollars(resultData, "programPaymentInDollars");
+    if (resultData[0].totalPaymentInDollars) {
+        sortByDollars(resultData, "totalPaymentInDollars");
+    } else sortByDollars(resultData, "totalPaymentInDollars");
     let columns;
-    if (program === "Total Commodities Programs") {
+    if (subtitle.includes("Subtitle A") && !program) {
         columns = React.useMemo(
             () => [
                 {
@@ -213,164 +218,172 @@ function Title1ProgramTable({
                 },
                 {
                     Header: "PAYMENT",
-                    accessor: "programPaymentInDollars",
+                    accessor: "totalPaymentInDollars",
                     sortType: compareWithDollarSign
                 },
 
                 {
                     Header: "PAYMENT PCT. NATIONWIDE",
-                    accessor: "paymentInPercentageNationwide",
+                    accessor: "totalPaymentInPercentageNationwide",
                     sortType: compareWithPercentSign
                 }
             ],
             []
         );
-    } else if (program.includes("ARC") || program.includes("PLC")) {
-        columns =
-            subprogram !== undefined
-                ? React.useMemo(
-                      () => [
-                          {
-                              Header: "STATE",
-                              accessor: "state",
-                              sortType: compareWithAlphabetic
-                          },
-                          {
-                              Header: "PAYMENT",
-                              accessor: "paymentInDollars",
-                              sortType: compareWithDollarSign
-                          },
+    } else if (subtitle.includes("Subtitle A") && program) {
+        columns = subprogram
+            ? React.useMemo(
+                  // ARC's subprograms
+                  () => [
+                      {
+                          Header: "STATE",
+                          accessor: "state",
+                          sortType: compareWithAlphabetic
+                      },
+                      {
+                          Header: "PAYMENT",
+                          accessor: "totalPaymentInDollars",
+                          sortType: compareWithDollarSign
+                      },
 
-                          {
-                              Header: "PAYMENT PCT. NATIONWIDE",
-                              accessor: "paymentInPercentageNationwide",
-                              sortType: compareWithPercentSign
-                          },
-                          {
-                              Header: "PAYMENT PCT. WITHIN STATE",
-                              accessor: "paymentInPercentageWithinState",
-                              sortType: compareWithPercentSign
-                          },
-                          {
-                              Header: "AVG. BASE ACRES",
-                              accessor: "averageAreaInAcres",
-                              sortType: compareWithNumber
-                          },
-                          {
-                              Header: "AVG. AVG. TOTAL RECIPIENTS",
-                              accessor: "averageRecipientCount",
-                              sortType: compareWithNumber
-                          }
-                      ],
-                      []
-                  )
-                : React.useMemo(
-                      () => [
-                          {
-                              Header: "STATE",
-                              accessor: "state",
-                              sortType: compareWithAlphabetic
-                          },
-                          {
-                              Header: "PAYMENT",
-                              accessor: "programPaymentInDollars",
-                              sortType: compareWithDollarSign
-                          },
-                          {
-                              Header: "AVG. BASE ACRES",
-                              accessor: "averageAreaInAcres",
-                              sortType: compareWithNumber
-                          },
-                          {
-                              Header: "AVG. TOTAL RECIPIENTS",
-                              accessor: "averageRecipientCount",
-                              sortType: compareWithNumber
-                          }
-                      ],
-                      []
-                  );
+                      {
+                          Header: "PAYMENT PCT. NATIONWIDE",
+                          accessor: "totalPaymentInPercentageNationwide",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "PAYMENT PCT. WITHIN STATE",
+                          accessor: "totalPaymentInPercentageWithinState",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "AVG. BASE ACRES",
+                          accessor: "averageAreaInAcres",
+                          sortType: compareWithNumber
+                      },
+                      {
+                          Header: "AVG. AVG. TOTAL RECIPIENTS",
+                          accessor: "averageRecipientCount",
+                          sortType: compareWithNumber
+                      }
+                  ],
+                  []
+              )
+            : React.useMemo(
+                  // ARC & PLC
+                  () => [
+                      {
+                          Header: "STATE",
+                          accessor: "state",
+                          sortType: compareWithAlphabetic
+                      },
+                      {
+                          Header: "PAYMENT",
+                          accessor: "totalPaymentInDollars",
+                          sortType: compareWithDollarSign
+                      },
+                      {
+                          Header: "PAYMENT PCT. NATIONWIDE",
+                          accessor: "totalPaymentInPercentageNationwide",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "AVG. BASE ACRES",
+                          accessor: "averageAreaInAcres",
+                          sortType: compareWithNumber
+                      },
+                      {
+                          Header: "AVG. TOTAL RECIPIENTS",
+                          accessor: "averageRecipientCount",
+                          sortType: compareWithNumber
+                      }
+                  ],
+                  []
+              );
     } else {
-        columns =
-            subprogram !== undefined
-                ? React.useMemo(
-                      () => [
-                          {
-                              Header: "STATE",
-                              accessor: "state",
-                              sortType: compareWithAlphabetic
-                          },
-                          {
-                              Header: "PAYMENT",
-                              accessor: "paymentInDollars",
-                              sortType: compareWithDollarSign
-                          },
-                          {
-                              Header: "PAYMENT PCT. NATIONWIDE",
-                              accessor: "paymentInPercentageNationwide",
-                              sortType: compareWithPercentSign
-                          },
-                          {
-                              Header: "PAYMENT PCT. WITHIN STATE",
-                              accessor: "paymentInPercentageWithinState",
-                              sortType: compareWithPercentSign
-                          },
-                          {
-                              Header: "TOTAL RECIPIENTS",
-                              accessor: "totalCounts",
-                              sortType: compareWithNumber
-                          },
-                          {
-                              Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                              accessor: "countInPercentageNationwide",
-                              sortType: compareWithNumber
-                          },
-                          {
-                              Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
-                              accessor: "countInPercentageWithinState",
-                              sortType: compareWithNumber
-                          }
-                      ],
-                      []
-                  )
-                : React.useMemo(
-                      () => [
-                          {
-                              Header: "STATE",
-                              accessor: "state",
-                              sortType: compareWithAlphabetic
-                          },
-                          {
-                              Header: "PAYMENT",
-                              accessor: "programPaymentInDollars",
-                              sortType: compareWithDollarSign
-                          },
-                          {
-                              Header: "PAYMENT PCT. NATIONWIDE",
-                              accessor: "paymentInPercentageNationwide",
-                              sortType: compareWithPercentSign
-                          },
-                          {
-                              Header: "TOTAL RECIPIENTS",
-                              accessor: "totalCounts",
-                              sortType: compareWithNumber
-                          },
-                          {
-                              Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                              accessor: "countInPercentageNationwide",
-                              sortType: compareWithNumber
-                          }
-                      ],
-                      []
-                  );
+        columns = program
+            ? React.useMemo(
+                  // SADA's program
+                  () => [
+                      {
+                          Header: "STATE",
+                          accessor: "state",
+                          sortType: compareWithAlphabetic
+                      },
+                      {
+                          Header: "PAYMENT",
+                          accessor: "totalPaymentInDollars",
+                          sortType: compareWithDollarSign
+                      },
+                      {
+                          Header: "PAYMENT PCT. NATIONWIDE",
+                          accessor: "totalPaymentInPercentageNationwide",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "PAYMENT PCT. WITHIN STATE",
+                          accessor: "totalPaymentInPercentageWithinState",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "TOTAL RECIPIENTS",
+                          accessor: "totalCounts",
+                          sortType: compareWithNumber
+                      },
+                      {
+                          Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
+                          accessor: "totalCountsInPercentageNationwide",
+                          sortType: compareWithNumber
+                      },
+                      {
+                          Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
+                          accessor: "totalCountsInPercentageWithinState",
+                          sortType: compareWithNumber
+                      }
+                  ],
+                  []
+              )
+            : React.useMemo(
+                  // Subtitle D and E
+                  () => [
+                      {
+                          Header: "STATE",
+                          accessor: "state",
+                          sortType: compareWithAlphabetic
+                      },
+                      {
+                          Header: "PAYMENT",
+                          accessor: "totalPaymentInDollars",
+                          sortType: compareWithDollarSign
+                      },
+                      {
+                          Header: "PAYMENT PCT. NATIONWIDE",
+                          accessor: "totalPaymentInPercentageNationwide",
+                          sortType: compareWithPercentSign
+                      },
+                      {
+                          Header: "TOTAL RECIPIENTS",
+                          accessor: "totalCounts",
+                          sortType: compareWithNumber
+                      },
+                      {
+                          Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
+                          accessor: "totalCountsInPercentageNationwide",
+                          sortType: compareWithNumber
+                      }
+                  ],
+                  []
+              );
     }
     const paymentsIndex =
-        subprogram !== undefined
-            ? columns.findIndex((c) => c.accessor === "paymentInDollars")
-            : columns.findIndex((c) => c.accessor === "programPaymentInDollars");
+        columns.findIndex((c) => c.accessor === "totalPaymentInDollars") !== -1
+            ? columns.findIndex((c) => c.accessor === "totalPaymentInDollars")
+            : columns.findIndex((c) => c.accessor === "totalPaymentInDollars");
     const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
     const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
+
     const Styles =
-        program.includes("ARC") || program.includes("PLC")
+        program && subtitle.includes("Subtitle A")
             ? styled.div`
                   padding: 0;
                   margin: 0;
@@ -569,7 +582,7 @@ function Title1ProgramTable({
                 >
                     <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
                         <Box id="title1TableHeader" sx={{ width: "100%" }}>
-                            {program.includes("ARC") || program.includes("PLC") ? (
+                            {program && subtitle.includes("Subtitle A") ? (
                                 <Typography
                                     sx={{
                                         fontWeight: 400,
