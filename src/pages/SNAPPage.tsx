@@ -220,7 +220,7 @@ export default function SNAPPage(): JSX.Element {
                                                     color: "#212121"
                                                 }}
                                             >
-                                                Total SNAP Costs and Avg. Monthly Participation (2018-2022)
+                                                Total SNAP Benefits and Avg. Monthly Participation (2018-2022)
                                             </Typography>
                                             <DownloadIcon
                                                 sx={{
@@ -260,10 +260,10 @@ export default function SNAPPage(): JSX.Element {
                                                     sx={{ color: "#212121" }}
                                                 />
                                                 <FormControlLabel
-                                                    id="totalCostsRadio"
+                                                    id="totalBenefitsRadio"
                                                     value={1}
                                                     control={<Radio sx={{ color: color1 }} />}
-                                                    label="Total Costs"
+                                                    label="Total Benefits"
                                                     sx={{ color: color1 }}
                                                 />
                                                 <FormControlLabel
@@ -359,7 +359,7 @@ export default function SNAPPage(): JSX.Element {
                                                         paddingTop: 1.5
                                                     }}
                                                 >
-                                                    Total SNAP Costs and Avg. Monthly Participation (2018-2022)
+                                                    Total SNAP Benefits and Avg. Monthly Participation (2018-2022)
                                                 </Typography>
                                             </Box>
                                         </Grid>
