@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [0.15.0] - 2024-02-09
 
 ### Added
 - Added `paymentPercentageNationwide` to Title I page map tooltips and tables [#238](https://github.com/policy-design-lab/pdl-frontend/issues/238) 
@@ -201,6 +201,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[0.15.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.14.0...0.15.0
 [0.14.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.13.0...0.14.0
 [0.13.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.11.0...0.12.0
