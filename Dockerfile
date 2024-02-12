@@ -2,7 +2,10 @@
 # Build application using node
 # ----------------------------------------------------------------------
 # NOTE: node 18 original version would take one hour to build, but it can make the build successful.
-FROM 16.19.1-alpine AS builder
+# FROM node:16.19.1 AS builder
+FROM node:16-alpine3.18 AS builder
+# Resolve node-sass python not found error by intall it separately, instead of using full version of node
+RUN apk --no-cache add --virtual .builds-deps build-base python3 
 WORKDIR /usr/src/app
 ARG REACT_APP_ENV=""
 ENV REACT_APP_ENV=${REACT_APP_ENV}
