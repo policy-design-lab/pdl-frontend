@@ -10,10 +10,10 @@ ENV REACT_APP_ENV=${REACT_APP_ENV}
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 # Install libvips dependencies
-RUN apt-get update && apt-get install -y \
-    libvips-dev \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     libvips-dev \
+#     --no-install-recommends \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Download and install libvips
 # RUN wget https://github.com/libvips/libvips/releases/download/v8.11.1/vips-8.11.1.tar.gz \
@@ -34,6 +34,7 @@ COPY scripts ./scripts/
 COPY src ./src/
 
 RUN npm install
+RUN npm rebuild node-sass
 RUN npm run build
 
 # ----------------------------------------------------------------------
