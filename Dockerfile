@@ -20,13 +20,16 @@ ENV APP_ENV=${APP_ENV}
 ENV PATH="./node_modules/.bin:$PATH"
 
 # Copy only the necessary files and folders
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json /usr/src/app/
+
+RUN npm install
+
 COPY .eslintrc *.js tsconfig.json typedoc.json babel.config.json jest.config.js ./
 COPY assets ./assets/
 COPY scripts ./scripts/
 COPY src ./src/
 
-# RUN npm install
+
 RUN npm run build
 
 # ----------------------------------------------------------------------
