@@ -17,6 +17,7 @@ ENV APP_ENV=${APP_ENV}
 
 # Set the NODE_OPTIONS for node>=17
 # ENV NODE_OPTIONS="--openssl-legacy-provider"
+ENV PATH="./node_modules/.bin:$PATH"
 
 # Copy only the necessary files and folders
 COPY package.json package-lock.json ./
@@ -25,7 +26,7 @@ COPY assets ./assets/
 COPY scripts ./scripts/
 COPY src ./src/
 
-RUN npm install
+# RUN npm install
 RUN npm run build
 
 # ----------------------------------------------------------------------
