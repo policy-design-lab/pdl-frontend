@@ -1,30 +1,19 @@
 # ----------------------------------------------------------------------
 # Build application using node
 # ----------------------------------------------------------------------
-FROM node:18.16.0 AS builder
+# NOTE: node 18 original version would take one hour to build, but it can make the build successful.
+FROM node:18-alpine AS builder
 WORKDIR /usr/src/app
 ARG REACT_APP_ENV=""
 ENV REACT_APP_ENV=${REACT_APP_ENV}
 
+# test APP_ENV instead of REACT_APP_ENV
+ARG APP_ENV=""
+ENV APP_ENV=${APP_ENV}
+
+
 # Set the NODE_OPTIONS for node>=17
 ENV NODE_OPTIONS="--openssl-legacy-provider"
-
-# Install libvips dependencies
-# RUN apt-get update && apt-get install -y \
-#     libvips-dev \
-#     --no-install-recommends \
-#     && rm -rf /var/lib/apt/lists/*
-
-# Download and install libvips
-# RUN wget https://github.com/libvips/libvips/releases/download/v8.11.1/vips-8.11.1.tar.gz \
-#     && tar xf vips-8.11.1.tar.gz \
-#     && cd vips-8.11.1 \
-#     && ./configure \
-#     && make \
-#     && make install \
-#     && ldconfig \
-#     && cd .. \
-#     && rm -rf vips-8.11.1 vips-8.11.1.tar.gz
 
 # Copy only the necessary files and folders
 COPY package.json package-lock.json ./
@@ -34,7 +23,6 @@ COPY scripts ./scripts/
 COPY src ./src/
 
 RUN npm install
-RUN npm rebuild node-sass
 RUN npm run build
 
 # ----------------------------------------------------------------------
