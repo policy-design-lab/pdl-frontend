@@ -22,11 +22,22 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-    if (process.env.APP_ENV === "local") {
-        return localConfig;
-    }
-    if (process.env.APP_ENV === "development") {
-        return developConfig;
+    // In case APP_ENV is not set, we will try to determine the environment based on the hostname
+    if (!process.env.APP_ENV) {
+        const hostname = window && window.location && window.location.hostname;
+        if (hostname === "localhost") {
+            return localConfig;
+        }
+        if (hostname === "policydesignlab-dev.ncsa.illinois.edu") {
+            return developConfig;
+        }
+    } else {
+        if (process.env.APP_ENV === "local") {
+            return localConfig;
+        }
+        if (process.env.APP_ENV === "development") {
+            return developConfig;
+        }
     }
     return deployConfig;
 }

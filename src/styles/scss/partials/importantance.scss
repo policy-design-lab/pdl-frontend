@@ -1,0 +1,32 @@
+section.importance {
+    margin-top           : 3rem;
+    margin-bottom        : 3rem;
+    display              : grid;
+    grid-template-columns: 20% auto;
+    gap                  : 4rem;
+
+    .title-container {
+        position       : relative;
+        display        : flex;
+        gap            : 1rem;
+        justify-content: center;
+        flex-direction : column;
+        border-right   : 1px solid $accent;
+        padding-right  : 1rem;
+
+        h2,
+        h3 {
+            margin: 0;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        gap                  : 1rem;
+        grid-template-columns: 1fr;
+
+        .title-container {
+            border-right: none;
+            padding     : 0;
+        }
+    }
+}

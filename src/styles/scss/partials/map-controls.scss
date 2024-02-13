@@ -1,0 +1,107 @@
+.controls-container {
+    display                 : grid;
+    grid-template-columns   : 10% 40% 1fr 1fr;
+    // grid-template-columns: 1fr 1fr 1fr;
+    gap                     : 3rem;
+
+    .input-group {
+        display       : flex;
+        flex-direction: column;
+        gap           : .5rem;
+    }
+
+    .input-group .input-label {
+        font-weight: bold;
+        font-size  : 1.15rem;
+    }
+
+    .play-controls {
+        flex-direction : row;
+        flex-wrap      : wrap;
+        justify-content: center;
+        align-items    : flex-end;
+
+        button {
+            position     : relative;
+            display      : grid;
+            place-content: center;
+            border       : none;
+            padding      : 0;
+            width        : 2.5rem;
+            height       : 2.5rem;
+            cursor       : pointer;
+            transition   : background-color .2s ease-in-out;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, .1);
+            }
+
+            &:focus {
+                outline-color: $primary;
+            }
+
+            &:disabled {
+                opacity   : .5;
+                background: none;
+            }
+
+            &::after {
+                content   : '';
+                background: red;
+                width     : 15px;
+                height    : 15px;
+            }
+
+            &.btn-play::after {
+                background   : none;
+                border-top   : 10px solid transparent;
+                border-left  : 15px solid black;
+                border-bottom: 10px solid transparent;
+            }
+        }
+    }
+
+    .dropdown {
+
+        .react-dropdown-select:focus-within,
+        .react-dropdown-select:hover {
+            border-color: $primary;
+        }
+
+        .react-dropdown-select-item-selected {
+            background-color: $primary;
+        }
+    }
+
+    .date-selector {
+        .rc-slider-track {
+            background-color: $accent;
+        }
+
+        .rc-slider-handle,
+        .rc-slider-dot-active {
+            border-color: $accent;
+        }
+
+        .rc-slider-handle {
+            background: $accent;
+            opacity   : 1;
+        }
+
+        .rc-slider-handle-dragging {
+            box-shadow: 0 0 0 5px $accent;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        display       : flex;
+        flex-direction: column-reverse;
+        gap           : .5rem;
+        margin        : 0 1rem;
+
+        .play-controls {
+            margin-top     : 2rem;
+            justify-content: flex-start;
+        }
+    }
+}
