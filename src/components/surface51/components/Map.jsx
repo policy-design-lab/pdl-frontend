@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MapControls from "./MapControls";
 import MapDisplay from "./MapDisplay";
 import ReactToolTip from "react-tooltip";
-import "../scss/index.scss";
+import "../../../styles/scss/index.scss";
 
 const Map = () => {
   const [year, setYear] = useState(2014);

@@ -24,14 +24,8 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-    // console.log(REACT_APP_APP_ENV);
-    // console.log(REACT_APP_ENV);
-    // console.log(APP_ENV);
-    console.log(webpack_env.APP_ENV); // local worked!
-    console.log(webpack_env.REACT_APP_APP_ENV);
-    console.log(webpack_env.REACT_APP_ENV);
 
-    // In case APP_ENV is not set, we will try to determine the webpack_env.ronment based on the hostname
+    // In case APP_ENV is not set, we will try to determine the environment based on the hostname
     if (!webpack_env.APP_ENV) {
         const hostname = window && window.location && window.location.hostname;
         if (hostname === "localhost") {
