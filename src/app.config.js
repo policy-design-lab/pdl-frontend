@@ -1,5 +1,3 @@
-import { Warning } from "@mui/icons-material";
-
 const baseConfig = {
     // put any unchanging configuration information in here
 };
@@ -24,9 +22,8 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-
     // In case APP_ENV is not set, we will try to determine the environment based on the hostname
-    if (!webpack_env.APP_ENV) {
+    if (!process.env.APP_ENV) {
         const hostname = window && window.location && window.location.hostname;
         if (hostname === "localhost") {
             return localConfig;
@@ -35,10 +32,10 @@ function getConfig() {
             return developConfig;
         }
     } else {
-        if (webpack_env.APP_ENV === "local") {
+        if (process.env.APP_ENV === "local") {
             return localConfig;
         }
-        if (webpack_env.APP_ENV === "development") {
+        if (process.env.APP_ENV === "development") {
             return developConfig;
         }
     }

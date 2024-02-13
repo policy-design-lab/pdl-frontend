@@ -20,7 +20,7 @@ const navItems = [
     { title: "HOME", link: "/" },
     { title: "ISSUES & WHITE PAPERS", link: "/issue_whitepaper" },
     { title: "ABOUT PDL" },
-    {title: "MODEL PROJECTION", link: "/model_projection"}
+    { title: "MODEL PROJECTION", link: "/model_projection" }
 ];
 export default function NavBar({
     bkColor = "rgba(255, 255, 255, 1)",

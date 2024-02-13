@@ -9,7 +9,6 @@ import LandingPageMapTab from "../components/LandingPageMapTab";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 
-
 export default function LandingPage(): JSX.Element {
     // connect to api endpoint
     const [stateCodes, setStateCodes] = React.useState([]);

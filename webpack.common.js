@@ -45,10 +45,6 @@ module.exports = {
                 test: /\.svg$/,
                 loader: "svg-inline-loader"
             },
-            // {
-            //     test: /\.csv$/,
-            //     use: ['csv-loader']
-            // },
             {
                 test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pdf|txt|csv|mmdb)$/,
                 use: [
@@ -90,7 +86,7 @@ module.exports = {
             template: "src/index.html"
         }),
         new Webpack.DefinePlugin({
-            "webpack_env": {
+            "process.env": {
                 APP_ENV: JSON.stringify(process.env.APP_ENV)
             },
             "PUBLIC_PATH": JSON.stringify(process.env.PUBLIC_PATH || "/") // The base path for the app. It must end with a slash.
