@@ -22,6 +22,8 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
+    console.log("process.env.APP_ENV", process.env.APP_ENV);
+    console.log("process.env.PUBLIC_PATH",PUBLIC_PATH);
     if (!process.env.APP_ENV) {
         throw new Error(
             "APP_ENV environment variable not set or being detected. You will not be able to parse your json"
