@@ -8,12 +8,12 @@ FROM node:16-alpine3.18 AS builder
 RUN apk --no-cache add --virtual .builds-deps build-base python3 
 WORKDIR /usr/src/app
 
-ARG REACT_APP_APP_ENV=""
-ENV REACT_APP_APP_ENV=${REACT_APP_APP_ENV}
+# ARG REACT_APP_APP_ENV=""
+# ENV REACT_APP_APP_ENV=${REACT_APP_APP_ENV}
 
-# test APP_ENV instead of REACT_APP_ENV
-ARG REACT_APP_ENV=""
-ENV REACT_APP_ENV=${REACT_APP_ENV}
+# # test APP_ENV instead of REACT_APP_ENV
+# ARG REACT_APP_ENV=""
+# ENV REACT_APP_ENV=${REACT_APP_ENV}
 
 
 # Copy only the necessary files and folders

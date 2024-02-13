@@ -1,3 +1,5 @@
+import { Warning } from "@mui/icons-material";
+
 const baseConfig = {
     // put any unchanging configuration information in here
 };
@@ -22,16 +24,29 @@ const localConfig = {
 
 // eslint-disable-next-line no-unused-vars
 function getConfig() {
-    if (!process.env.APP_ENV) {
-        throw new Error(
-            "APP_ENV environment variable not set or being detected. You will not be able to parse your json"
-        );
-    }
-    if (process.env.APP_ENV === "local") {
-        return localConfig;
-    }
-    if (process.env.APP_ENV === "development") {
-        return developConfig;
+    // console.log(REACT_APP_APP_ENV);
+    // console.log(REACT_APP_ENV);
+    // console.log(APP_ENV);
+    console.log(webpack_env.APP_ENV); // local worked!
+    console.log(webpack_env.REACT_APP_APP_ENV);
+    console.log(webpack_env.REACT_APP_ENV);
+
+    // In case APP_ENV is not set, we will try to determine the webpack_env.ronment based on the hostname
+    if (!webpack_env.APP_ENV) {
+        const hostname = window && window.location && window.location.hostname;
+        if (hostname === "localhost") {
+            return localConfig;
+        }
+        if (hostname === "policydesignlab-dev.ncsa.illinois.edu") {
+            return developConfig;
+        }
+    } else {
+        if (webpack_env.APP_ENV === "local") {
+            return localConfig;
+        }
+        if (webpack_env.APP_ENV === "development") {
+            return developConfig;
+        }
     }
     return deployConfig;
 }
