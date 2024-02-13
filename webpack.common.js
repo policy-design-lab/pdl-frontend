@@ -45,13 +45,17 @@ module.exports = {
                 test: /\.svg$/,
                 loader: "svg-inline-loader"
             },
+            // {
+            //     test: /\.csv$/,
+            //     use: ['csv-loader']
+            // },
             {
-                test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pdf)$/,
+                test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pdf|txt|csv|mmdb)$/,
                 use: [
                     {
                         loader: "file-loader",
                         options: {
-                            name: "files/[name]-[hash].[ext]"
+                            name: "files/[name].[ext]"
                         }
                     }
                 ]

@@ -1,5 +1,4 @@
 import React from "react";
-
 import { renderToStaticMarkup } from "react-dom/server";
 import { useEffect, useState, memo } from "react";
 import {
@@ -12,6 +11,10 @@ import { scaleQuantize } from "d3-scale";
 import { csv, json } from "d3-fetch";
 import { geoCentroid } from "d3-geo";
 import allStates from "../data/allstates.json";
+import counties_10m from "../data/counties-10m.json";
+import states_10m from "../data/states-10m.json";
+import Papa from 'papaparse';
+import { set } from "react-ga";
 
 const colorScale = scaleQuantize()
   .domain([0, 100])
@@ -63,25 +66,41 @@ const MapDisplay = ({ year, crop, state, setState, setTooltipContent }) => {
   };
 
   useEffect(() => {
-    json("assets/json/counties-10m.json").then((data) => {
-      setGeo(data);
-      console.log("Geo county data loaded!");
-    });
+    // json(counties_10m).then((data) => {
+    //   setGeo(data);
+    //   console.log("Geo county data loaded!");
+    // });
+    setGeo(counties_10m);
   }, []);
 
   useEffect(() => {
-    json("assets/json/states-10m.json").then((data) => {
-      setStateGeo(data);
-      console.log("Geo state data loaded!");
-    });
+    // json(states_10m).then((data) => {
+    //   setStateGeo(data);
+    //   console.log("Geo state data loaded!");
+    // });
+    setStateGeo(states_10m);
+    console.log("Geo state data loaded!");
   }, []);
 
   useEffect(() => {
     const years = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
-    const promises = years.map((year) =>
-      csv(`assets/csv/all_${year}.csv`).then((data) => {
-        return data;
-      })
+
+    const promises = years.map(async (year) =>{
+      try{
+        const csvModule = await import(`../../../files/all_${year}.csv`);
+        const csvText = await fetch(csvModule.default).then(response => response.text());
+                        // Parse CSV data using papaparse
+                        const parsedData = Papa.parse(csvText, { header: true }).data;
+        console.log('parseData:',parsedData); // Log the parsed data
+        return parsedData; // Return the parsed data
+      }catch (error) {
+        console.error('Error importing or processing CSV data:', error);
+        throw error; // Rethrow the error to propagate it
+    }
+      // const csvData = ;
+      console.log(year);
+      
+      }
     );
     Promise.all(promises).then((results) => {
       // Create an object with the year as the key and the data as the value

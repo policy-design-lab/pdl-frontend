@@ -97,7 +97,7 @@ fs.readFile('assets/json/counties-10m.json', 'utf8', (err, data) => {
     };
 
 
-    const filename = 'assets/json/new-geo-states.json';
+    const filename = '../files/new-geo-states.json';
 
     // Write the filtered data to a new JSON file
     fs.writeFile(filename, JSON.stringify(rearrangedJsonObject, null, 2), 'utf8', (err) => {
