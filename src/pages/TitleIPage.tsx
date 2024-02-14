@@ -20,6 +20,8 @@ import SideBar from "../components/title1/sideBar/SideBar";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import "../styles/subpage.css";
+import LandingPageMap from "../components/LandingPageMap";
+import LandingPageTable from "../components/shared/LandingPgaeTable";
 
 export default function TitleIPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
@@ -28,6 +30,11 @@ export default function TitleIPage(): JSX.Element {
     const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
+
+    const [allPrograms, setAllPrograms] = React.useState([]);
+    const [summary, setSummary] = React.useState([]);
+    const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#F9F9D3", "#F9D48B", "#F59020", "#D95F0E", "#993404"];
@@ -39,6 +46,16 @@ export default function TitleIPage(): JSX.Element {
     const subtitleDYear = "2014-2021";
 
     React.useEffect(() => {
+        // For landing page map only.
+        const allprograms_url = `${config.apiUrl}/allprograms`;
+        getJsonDataFromUrl(allprograms_url).then((response) => {
+            setAllPrograms(response);
+        });
+        const summary_url = `${config.apiUrl}/summary`;
+        getJsonDataFromUrl(summary_url).then((response) => {
+            setSummary(response);
+        });
+
         const allstates_url = `${config.apiUrl}/states`;
         getJsonDataFromUrl(allstates_url).then((response) => {
             setAllStatesData(response);
@@ -138,6 +155,69 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
+                            {/* landing page map has margin top of 4 in its component, thus reverse it */}
+                            <Box sx={{ mt: -4 }}>
+                                <LandingPageMap
+                                    programTitle="Title I: Commodities"
+                                    allStates={allStatesData}
+                                    stateCodes={stateCodesData}
+                                    allPrograms={allPrograms}
+                                    summary={summary}
+                                    containerWidth={windowWidth * 0.75}
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                height: 50
+                            }}
+                        />
+                        <Box
+                            className="chartArea"
+                            component="div"
+                            ref={title1Div}
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
+                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                <Typography className="stateTitle" variant="h4">
+                                    Performance by States
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                container
+                                columns={{ xs: 12 }}
+                                sx={{
+                                    paddingTop: 6,
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <LandingPageTable
+                                    TableTitle="Total Commodities Programs (Title I) from 2018 - 2022"
+                                    TableData={allPrograms}
+                                    stateCodes={stateCodesData}
+                                    SummaryKey="Title I Total"
+                                />
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Box
+                        component="div"
+                        className="halfWidthMainContent"
+                        sx={{ display: checked !== "1" ? "none" : "block" }}
+                    >
+                        <Box
+                            className="mapArea"
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto"
+                            }}
+                        >
                             <Title1Map
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program={undefined}
@@ -197,7 +277,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "1" ? "none" : "block" }}
+                        sx={{ display: checked !== "2" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -298,7 +378,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "10" ? "none" : "block" }}
+                        sx={{ display: checked !== "20" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -398,7 +478,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "11" ? "none" : "block" }}
+                        sx={{ display: checked !== "21" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -499,7 +579,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "2" ? "none" : "block" }}
+                        sx={{ display: checked !== "3" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -600,7 +680,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "3" ? "none" : "block" }}
+                        sx={{ display: checked !== "4" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -670,7 +750,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "4" ? "none" : "block" }}
+                        sx={{ display: checked !== "5" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -739,7 +819,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "40" ? "none" : "block" }}
+                        sx={{ display: checked !== "50" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -808,7 +888,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "41" ? "none" : "block" }}
+                        sx={{ display: checked !== "51" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -877,7 +957,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "42" ? "none" : "block" }}
+                        sx={{ display: checked !== "52" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"
@@ -946,7 +1026,7 @@ export default function TitleIPage(): JSX.Element {
                     <Box
                         component="div"
                         className="halfWidthMainContent"
-                        sx={{ display: checked !== "43" ? "none" : "block" }}
+                        sx={{ display: checked !== "53" ? "none" : "block" }}
                     >
                         <Box
                             className="mapArea"

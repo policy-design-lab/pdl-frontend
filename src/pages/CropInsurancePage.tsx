@@ -44,7 +44,8 @@ export default function CropInsurancePage(): JSX.Element {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
-        const statedistribution_url = `${config.apiUrl}/programs/crop-insurance/state-distribution`;
+        // const statedistribution_url = `${config.apiUrl}/programs/crop-insurance/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });

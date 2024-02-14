@@ -27,7 +27,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setReactTooltipContent, category, statePerformance, allStates, colorScale } = props;
+    const {year, setReactTooltipContent, category, statePerformance, stateCodes, allStates, colorScale } = props;
     const classes = useStyles();
     return (
         <div data-tip="">
@@ -37,18 +37,25 @@ const MapChart = (props) => {
                         <>
                             {geographies.map((geo) => {
                                 if (statePerformance !== undefined) {
-                                    if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                    // if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                    //     return null;
+                                    // }
+                                    const record = statePerformance[year].filter(
+                                        (v) => stateCodes[v.state] === geo.properties.name
+                                    )[0];
+                                    if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const statuteRecord = statePerformance[geo.properties.name][0].statutes;
+                                    console.log("record", record);
+                                    const statuteRecord = record.statutes;
                                     const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
                                     const AArray = ACur.practiceCategories;
                                     const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
                                     const BArray = BCur.practiceCategories;
                                     const TotalArray = AArray.concat(BArray);
                                     const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-                                    const categoryPayment = categoryRecord.paymentInDollars;
-                                    const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
+                                    const categoryPayment = categoryRecord.totalPaymentInDollars;
+                                    const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -155,31 +162,27 @@ MapChart.propTypes = {
 const CategoryMap = ({
     category,
     statePerformance,
-    allStates
+    allStates,
+    year,
+    stateCodes
 }: {
     category: string;
     statePerformance: any;
     allStates: any;
+    year: string;
+    stateCodes: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
-    let years = "2018-2022";
-    if (
-        Object.keys(statePerformance).length !== 0 &&
-        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
-    ) {
-        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
-    }
     const quantizeArray: number[] = [];
-    Object.values(statePerformance).map((value) => {
-        const statuteRecord = value[0].statutes;
+    statePerformance[year].map((value) => {
+        const statuteRecord = value.statutes;
         const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;
         const BCur = statuteRecord.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-        quantizeArray.push(categoryRecord.paymentInDollars);
+        quantizeArray.push(categoryRecord.totalPaymentInDollars);
         return null;
     });
     const maxValue = Math.max(...quantizeArray);
@@ -193,7 +196,7 @@ const CategoryMap = ({
                 {maxValue !== 0 ? (
                     <DrawLegend
                         colorScale={colorScale}
-                        title={titleElement(category, years)}
+                        title={titleElement(category, year)}
                         programData={quantizeArray}
                         prepColor={mapColor}
                         initRatioLarge={0.6}
@@ -204,10 +207,10 @@ const CategoryMap = ({
                     />
                 ) : (
                     <div>
-                        {titleElement(category, years)}
+                        {titleElement(category, year)}
                         <Box display="flex" justifyContent="center">
                             <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                {category} data in {years} is unavailable for all states.
+                                {category} data in {year} is unavailable for all states.
                             </Typography>
                         </Box>
                     </div>
@@ -219,6 +222,8 @@ const CategoryMap = ({
                 statePerformance={statePerformance}
                 allStates={allStates}
                 colorScale={colorScale}
+                year={year}
+                stateCodes={stateCodes}
             />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>

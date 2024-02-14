@@ -9,7 +9,7 @@ import EqipTotalMap from "../components/eqip/EQIPTotalMap";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
-import { getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function EQIPPage(): JSX.Element {
@@ -33,6 +33,8 @@ export default function EQIPPage(): JSX.Element {
     // connect to api endpoint
     const [statePerformance, setStatePerformance] = React.useState({});
     const [allStates, setAllStates] = React.useState({});
+    const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [sixAChartData, setSixAChartData] = React.useState([{}]);
     const [sixBChartData, setSixBChartData] = React.useState([{}]);
@@ -40,20 +42,30 @@ export default function EQIPPage(): JSX.Element {
     const [bTotal, setBTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
 
+
+    const eqip_year = "2018-2022";
     React.useEffect(() => {
-        const state_perf_url = `${config.apiUrl}/programs/conservation/eqip/state-distribution`;
-        getJsonDataFromUrl(state_perf_url).then((response) => {
+        //const state_perf_url = `${config.apiUrl}/programs/conservation/eqip/state-distribution`;
+        const state_perf_url =`${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`;
+        https: getJsonDataFromUrl(state_perf_url).then((response) => {
             const converted_perf_json = response;
             setStatePerformance(converted_perf_json);
         });
 
-        const statecode_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
+        const allstates_url = `${config.apiUrl}/states`;
+        getJsonDataFromUrl(allstates_url).then((response) => {
             const converted_json = response;
             setAllStates(converted_json);
         });
 
-        const chartdata_url = `${config.apiUrl}/programs/conservation/eqip/practice-categories`;
+        const statecode_url = `${config.apiUrl}/statecodes`;
+        getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
+            const converted_json = convertAllState(response);
+            setStateCodesData(converted_json);
+        });
+
+        const chartdata_url = `${config.apiUrl}/titles/title-ii/programs/eqip/summary`;
         getJsonDataFromUrl(chartdata_url).then((response) => {
             const converted_chart_json = response;
             processData(converted_chart_json);
@@ -148,7 +160,7 @@ export default function EQIPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined && zeroCategories.length > 0 ? (
+            {allStates.length > 0 && statePerformance[eqip_year] !== undefined && zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -159,12 +171,12 @@ export default function EQIPPage(): JSX.Element {
                     </Box>
                     <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} zeroCategories={zeroCategories} />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box
+                        {/* <Box
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
                         >
                             <EqipTotalMap statePerformance={statePerformance} allStates={allStates} />
-                        </Box>
+                        </Box> */}
                         <Box
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
@@ -173,6 +185,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Land management"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -183,6 +197,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Forest management"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -193,6 +209,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Structural"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -203,6 +221,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Soil remediation"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -213,6 +233,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Vegetative"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -223,6 +245,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Other improvement"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -233,6 +257,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Soil testing"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -243,6 +269,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Other planning"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -253,6 +281,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Conservation planning assessment"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -263,6 +293,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Resource-conserving crop rotation"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -273,6 +305,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Soil health"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -283,6 +317,8 @@ export default function EQIPPage(): JSX.Element {
                                 category="Comprehensive Nutrient Mgt."
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
@@ -308,25 +344,25 @@ export default function EQIPPage(): JSX.Element {
                         {aTotal >= 0 || bTotal >= 0 ? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                                    <SemiDonutChart
+                                    {/* <SemiDonutChart
                                         data={totalChartData}
                                         label1={(aTotal + bTotal).toString()}
                                         label2="EQIP TOTAL BENEFITS"
-                                    />
+                                    /> */}
                                 </Box>
                                 <Box component="div" sx={{ display: checked >= 1 && checked <= 7 ? "block" : "none" }}>
-                                    <SemiDonutChart
+                                    {/* <SemiDonutChart
                                         data={sixAChartData}
                                         label1={aTotal.toString()}
                                         label2="6(A) TOTAL BENEFITS"
-                                    />
+                                    /> */}
                                 </Box>
                                 <Box component="div" sx={{ display: checked >= 8 ? "block" : "none" }}>
-                                    <SemiDonutChart
+                                    {/* <SemiDonutChart
                                         data={sixBChartData}
                                         label1={bTotal.toString()}
                                         label2="6(B) TOTAL BENEFITS"
-                                    />
+                                    /> */}
                                 </Box>
                             </div>
                         ) : null}
@@ -339,46 +375,100 @@ export default function EQIPPage(): JSX.Element {
                             <DataTable statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
-                            <CategoryTable category="Land management" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Land management"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
-                            <CategoryTable category="Forest management" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Forest management"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
-                            <CategoryTable category="Structural" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Structural"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
-                            <CategoryTable category="Soil remediation" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Soil remediation"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
-                            <CategoryTable category="Vegetative" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Vegetative"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
-                            <CategoryTable category="Other improvement" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Other improvement"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 7 ? "none" : "block" }}>
-                            <CategoryTable category="Soil testing" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Soil testing"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryTable category="Other planning" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Other planning"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Conservation planning assessment"
                                 statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Resource-conserving crop rotation"
                                 statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
-                            <CategoryTable category="Soil health" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Soil health"
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
-                            <CategoryTable category="Comprehensive Nutrient Mgt." statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Comprehensive Nutrient Mgt."
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                     </Box>
                 </Box>

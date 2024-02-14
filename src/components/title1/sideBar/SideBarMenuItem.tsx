@@ -2,6 +2,10 @@
 export const menu = [
     {
         icon: "",
+        title: "Total Commodities Programs (Title I)"
+    },
+    {
+        icon: "",
         title: "Total Commodities Programs, Subtitle A"
     },
     {

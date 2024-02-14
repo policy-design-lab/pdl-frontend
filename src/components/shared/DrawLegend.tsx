@@ -18,27 +18,18 @@ export default function DrawLegend({
     prepColor,
     emptyState,
     initRatioLarge,
-    initRatioSmall
-}: {
-    isRatio: boolean;
-    notDollar: boolean;
-    colorScale: d3.ScaleThreshold<number, string>;
-    title: React.ReactElement;
-    programData: number[];
-    prepColor: string[];
-    emptyState: string[];
-    initRatioLarge: number;
-    initRatioSmall: number;
+    initRatioSmall,
+    screenWidth = window.innerWidth
 }): JSX.Element {
     const legendRn = React.useRef(null);
     const margin = 40;
     let cut_points: number[] = [];
     const [width, setWidth] = React.useState(
-        window.innerWidth >= 1679 ? window.innerWidth * initRatioLarge : window.innerWidth * initRatioSmall
+        screenWidth >= 1679 ? screenWidth * initRatioLarge : screenWidth * initRatioSmall
     );
     React.useEffect(() => {
-        if (window.innerWidth > 1679) setWidth(window.innerWidth * initRatioLarge);
-        else setWidth(window.innerWidth * initRatioSmall);
+        if (screenWidth > 1679) setWidth(screenWidth * initRatioLarge);
+        else setWidth(screenWidth * initRatioSmall);
         drawLegend();
     });
     const drawLegend = () => {
@@ -104,7 +95,7 @@ export default function DrawLegend({
                         legendRectX[legendRectX.length - 1] +
                         data_distribution[data_distribution.length - 1] * svgWidth;
                     legendRectX.push(last);
-                    if (window.innerWidth > 1679) {
+                    if (screenWidth > 1679) {
                         baseSVG
                             .selectAll(null)
                             .data(legendRectX)
