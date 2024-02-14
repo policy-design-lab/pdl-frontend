@@ -37,9 +37,6 @@ const MapChart = (props) => {
                         <>
                             {geographies.map((geo) => {
                                 if (statePerformance !== undefined) {
-                                    // if (!Object.keys(statePerformance).includes(geo.properties.name)) {
-                                    //     return null;
-                                    // }
                                     const record = statePerformance[year].filter(
                                         (v) => stateCodes[v.state] === geo.properties.name
                                     )[0];

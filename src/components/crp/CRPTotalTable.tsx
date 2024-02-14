@@ -152,10 +152,10 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                crpBenefit: `$${totalCrp.paymentInDollars
+                crpBenefit: `$${totalCrp.totalPaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                percentage: `${totalCrp.paymentInPercentageNationwide.toString()}%`,
+                percentage: `${totalCrp.totalPaymentInPercentageNationwide.toString()}%`,
                 noContract: `${totalCrp.totalContracts
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,

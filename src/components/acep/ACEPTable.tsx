@@ -25,7 +25,12 @@ function AcepProgramTable({
     const hashmap = {};
     // eslint-disable-next-line no-restricted-syntax
     AcepData[year].forEach((stateData) => {
-        const state = stateData.state;
+        let state;
+         stateCodes.forEach((sValue) => {
+             if (sValue.code.toUpperCase() === stateData.state.toUpperCase()) {
+                 state = sValue.name;
+             }
+         });
         let programData = null;
         programData = stateData.programs.filter((p) => {
             return p.programName.toString() === program;
@@ -38,9 +43,7 @@ function AcepProgramTable({
     });
     Object.keys(hashmap).forEach((s) => {
         const newRecord = {
-            state: Object.values(stateCodes).filter((stateCode) => {
-                return stateCode === s;
-            })[0]
+            state: s
         };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr.includes("Percentage")) {

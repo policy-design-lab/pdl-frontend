@@ -45,12 +45,12 @@ export default function RCPPPage(): JSX.Element {
             setStateCodesData(converted_json);
         });
 
-        const statedistribution_url = `${config.apiUrl}/programs/conservation/rcpp/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/rcpp/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/programs/conservation/rcpp/subprograms`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/rcpp/state-distribution`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });
@@ -61,7 +61,7 @@ export default function RCPPPage(): JSX.Element {
 
         const cur1 = chartData.programs.find((s) => s.programName === "RCPP");
 
-        totalRCPPPaymentInDollars = cur1.paymentInDollars;
+        totalRCPPPaymentInDollars = cur1.totalPaymentInDollars;
         setTotalRcpp(totalRCPPPaymentInDollars);
         if (totalRCPPPaymentInDollars === 0) zeroCategory.push("RCPP");
         totalContracts = cur1.totalContracts;

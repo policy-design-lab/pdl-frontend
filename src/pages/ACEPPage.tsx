@@ -48,12 +48,12 @@ export default function ACEPPage(): JSX.Element {
             setStateCodesData(converted_json);
         });
 
-        const statedistribution_url = `${config.apiUrl}/programs/conservation/acep/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/acep/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/programs/conservation/acep/subprograms`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/acep/state-distribution`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });
@@ -235,7 +235,7 @@ export default function ACEPPage(): JSX.Element {
                                             "contractsInPercentageNationwide"
                                         ]}
                                         skipColumns={[]}
-                                        stateCodes={stateCodesData}
+                                        stateCodes={stateCodesArray}
                                         AcepData={stateDistributionData}
                                         year="2018-2022"
                                         colors={["#1F78B433", "#C8119526", "#66BB6A40"]}

@@ -27,7 +27,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setReactTooltipContent, category, allStates, statePerformance, colorScale } = props;
+    const { setReactTooltipContent, category, allStates, statePerformance, stateCodes, colorScale, year} = props;
     let categoryRecord;
     const classes = useStyles();
     return (
@@ -37,10 +37,13 @@ const MapChart = (props) => {
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
-                                if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                const record = statePerformance[year].filter(
+                                    (v) => stateCodes[v.state] === geo.properties.name
+                                )[0];
+                                if (record === undefined || record.length === 0) {
                                     return null;
                                 }
-                                const statuteRecord = statePerformance[geo.properties.name][0].statutes;
+                                const statuteRecord = record.statutes;
                                 const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
                                 const AArray = ACur.practiceCategories;
                                 const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
@@ -53,18 +56,9 @@ const MapChart = (props) => {
                                 } else {
                                     categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
                                 }
-                                const categoryPayment =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInDollars
-                                        : categoryRecord.paymentInDollars;
-                                const nationwidePercentage =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInPercentageNationwide
-                                        : categoryRecord.paymentInPercentageNationwide;
-                                const withinStatePercentage =
-                                    category === "2018 Practices" || category === "2014 Eligible Land"
-                                        ? categoryRecord.statutePaymentInPercentageWithinState
-                                        : categoryRecord.paymentInPercentageWithinState;
+                                const categoryPayment = categoryRecord.totalPaymentInDollars;
+                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
+                                const withinStatePercentage = categoryRecord.totalPaymentInPercentageWithinState;
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
@@ -168,46 +162,37 @@ MapChart.propTypes = {
 const CategoryMap = ({
     category,
     statePerformance,
-    allStates
+    allStates,
+    year,
+    stateCodes
 }: {
     category: string;
     statePerformance: any;
     allStates: any;
+    year: string;
+    stateCodes: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
-    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
-    let years = "2018-2022";
-    if (
-        Object.keys(statePerformance).length !== 0 &&
-        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
-    ) {
-        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
-    }
-    const title = `${category} Benefits from ${years}`;
+
+    const title = `${category} Benefits from ${year}`;
     const quantizeArray: number[] = [];
     let categoryRecord = {};
-    Object.values(statePerformance).map((value) => {
-        if (Array.isArray(value)) {
-            const statuteRecord = value[0].statutes;
-            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-            const AArray = ACur.practiceCategories;
-            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-            const BArray = BCur.practiceCategories;
-            const TotalArray = AArray.concat(BArray);
-            if (category === "2018 Practices") {
-                categoryRecord = statuteRecord[0];
-            } else if (category === "2014 Eligible Land") {
-                categoryRecord = statuteRecord[1];
-            } else {
-                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-            }
-            if (categoryRecord !== undefined) {
-                if (category === "2018 Practices" || category === "2014 Eligible Land")
-                    quantizeArray.push(categoryRecord.statutePaymentInDollars);
-                else quantizeArray.push(categoryRecord.paymentInDollars);
-            }
+    statePerformance[year].map((value) => {
+        const statuteRecord = value.statutes;
+        const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
+        const AArray = ACur.practiceCategories;
+        const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
+        const BArray = BCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray);
+        
+        if (category === "2018 Practices") {
+            categoryRecord = statuteRecord[0];
+        } else if (category === "2014 Eligible Land") {
+            categoryRecord = statuteRecord[1];
+        } else {
+            categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
-        return null;
+        quantizeArray.push(categoryRecord.totalPaymentInDollars);
     });
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
@@ -228,7 +213,7 @@ const CategoryMap = ({
                     {maxValue !== 0 ? (
                         <DrawLegend
                             colorScale={colorScale}
-                            title={titleElement(category, years)}
+                            title={titleElement(category, year)}
                             programData={quantizeArray}
                             prepColor={mapColor}
                             initRatioLarge={0.6}
@@ -239,10 +224,10 @@ const CategoryMap = ({
                         />
                     ) : (
                         <div>
-                            {titleElement(category, years)}
+                            {titleElement(category, year)}
                             <Box display="flex" justifyContent="center">
                                 <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                    {category} data in {years} is unavailable for all states.
+                                    {category} data in {year} is unavailable for all states.
                                 </Typography>
                             </Box>
                         </div>

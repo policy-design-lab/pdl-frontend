@@ -45,9 +45,8 @@ export default function EQIPPage(): JSX.Element {
 
     const eqip_year = "2018-2022";
     React.useEffect(() => {
-        //const state_perf_url = `${config.apiUrl}/programs/conservation/eqip/state-distribution`;
         const state_perf_url =`${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`;
-        https: getJsonDataFromUrl(state_perf_url).then((response) => {
+        getJsonDataFromUrl(state_perf_url).then((response) => {
             const converted_perf_json = response;
             setStatePerformance(converted_perf_json);
         });
@@ -349,25 +348,25 @@ export default function EQIPPage(): JSX.Element {
                         {aTotal >= 0 || bTotal >= 0 ? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                                    {/* <SemiDonutChart
+                                    <SemiDonutChart
                                         data={totalChartData}
                                         label1={(aTotal + bTotal).toString()}
                                         label2="EQIP TOTAL BENEFITS"
-                                    /> */}
+                                    />
                                 </Box>
                                 <Box component="div" sx={{ display: checked >= 1 && checked <= 7 ? "block" : "none" }}>
-                                    {/* <SemiDonutChart
+                                    <SemiDonutChart
                                         data={sixAChartData}
                                         label1={aTotal.toString()}
                                         label2="6(A) TOTAL BENEFITS"
-                                    /> */}
+                                    />
                                 </Box>
                                 <Box component="div" sx={{ display: checked >= 8 ? "block" : "none" }}>
-                                    {/* <SemiDonutChart
+                                    <SemiDonutChart
                                         data={sixBChartData}
                                         label1={bTotal.toString()}
                                         label2="6(B) TOTAL BENEFITS"
-                                    /> */}
+                                    />
                                 </Box>
                             </div>
                         ) : null}

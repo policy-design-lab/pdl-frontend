@@ -9,13 +9,15 @@ import CSPTotalMap from "../components/csp/CSPTotalMap";
 import CategoryTable from "../components/csp/CategoryTable";
 import CategoryMap from "../components/csp/CategoryMap";
 import { config } from "../app.config";
-import { getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function CSPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
     const [statePerformance, setStatePerformance] = React.useState({});
     const [allStates, setAllStates] = React.useState([]);
+    const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [old2014ChartData, setOld2014ChartData] = React.useState([{}]);
     const [new2018ChartData, setNew2018ChartData] = React.useState([{}]);
@@ -43,20 +45,47 @@ export default function CSPPage(): JSX.Element {
     let old2014Total = 0;
     const zeroCategory = [];
 
+    const csp_year = "2018-2022";
+
     React.useEffect(() => {
-        const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setStatePerformance(response);
+        // const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
+        // getJsonDataFromUrl(allprograms_url).then((response) => {
+        //     setStatePerformance(response);
+        // });
+
+        // const allstates_url = `${config.apiUrl}/states`;
+        // getJsonDataFromUrl(allstates_url).then((response) => {
+        //     setAllStates(response);
+        // });
+
+        // const chartData_url = `${config.apiUrl}/programs/conservation/csp/practice-categories`;
+        // getJsonDataFromUrl(chartData_url).then((response) => {
+        //     processData(response);
+        // });
+
+        const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`;
+        getJsonDataFromUrl(state_perf_url).then((response) => {
+            const converted_perf_json = response;
+            setStatePerformance(converted_perf_json);
         });
 
         const allstates_url = `${config.apiUrl}/states`;
         getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
+            const converted_json = response;
+            setAllStates(converted_json);
         });
 
-        const chartData_url = `${config.apiUrl}/programs/conservation/csp/practice-categories`;
-        getJsonDataFromUrl(chartData_url).then((response) => {
-            processData(response);
+        const statecode_url = `${config.apiUrl}/statecodes`;
+        getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
+            const converted_json = convertAllState(response);
+            setStateCodesData(converted_json);
+        });
+
+        const chartdata_url = `${config.apiUrl}/titles/title-ii/programs/csp/summary`;
+        getJsonDataFromUrl(chartdata_url).then((response) => {
+            const converted_chart_json = response;
+            processData(converted_chart_json);
         });
     }, []);
 
@@ -177,7 +206,7 @@ export default function CSPPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance.Wisconsin !== undefined && zeroCategories.length > 0 ? (
+            {allStates.length > 0 && statePerformance[csp_year] !== undefined && zeroCategories.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -196,7 +225,7 @@ export default function CSPPage(): JSX.Element {
                                 display: checked !== 0 ? "none" : "block"
                             }}
                         >
-                            <CSPTotalMap statePerformance={statePerformance} allStates={allStates} />
+                            {/* <CSPTotalMap statePerformance={statePerformance} allStates={allStates} /> */}
                         </Box>
                         <Box
                             component="div"
@@ -210,6 +239,8 @@ export default function CSPPage(): JSX.Element {
                                 category="2018 Practices"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -224,6 +255,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Structural"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
 
@@ -239,6 +272,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Vegetative"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -253,6 +288,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Land management"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
 
@@ -268,6 +305,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Forest management"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -282,6 +321,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Soil remediation"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -296,6 +337,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Existing activity payments"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -306,7 +349,13 @@ export default function CSPPage(): JSX.Element {
                                 display: checked !== 8 ? "none" : "block"
                             }}
                         >
-                            <CategoryMap category="Bundles" statePerformance={statePerformance} allStates={allStates} />
+                            <CategoryMap
+                                category="Bundles"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
                         </Box>
                         <Box
                             component="div"
@@ -320,6 +369,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Soil testing"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -334,6 +385,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Other improvement"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
 
@@ -349,6 +402,8 @@ export default function CSPPage(): JSX.Element {
                                 category="2014 Eligible Land"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -363,6 +418,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Cropland"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -377,6 +434,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Grassland"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -391,6 +450,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Rangeland"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -405,6 +466,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Pastureland"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -419,6 +482,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Non-industrial private forestland"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box
@@ -433,6 +498,8 @@ export default function CSPPage(): JSX.Element {
                                 category="Other: supplemental, adjustment & other"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
                             />
                         </Box>
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
@@ -483,7 +550,7 @@ export default function CSPPage(): JSX.Element {
                                 <strong>Performance by States</strong>
                             </Typography>
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
+                        {/* <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                             <DataTable statePerformance={statePerformance} />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
@@ -544,7 +611,7 @@ export default function CSPPage(): JSX.Element {
                                 category="Other: supplemental, adjustment & other"
                                 statePerformance={statePerformance}
                             />
-                        </Box>
+                        </Box> */}
                     </Box>
                 </Box>
             ) : (
