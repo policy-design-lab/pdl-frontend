@@ -46,7 +46,6 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    console.log("record", record);
                                     const statuteRecord = record.statutes;
                                     const ACur = statuteRecord.find((s) => s.statuteName === "(6)(A) Practices");
                                     const AArray = ACur.practiceCategories;

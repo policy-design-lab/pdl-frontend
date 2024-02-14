@@ -147,7 +147,6 @@ function App({
         const BCur = value.statutes.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
-        console.log('TotalArray', TotalArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         const newRecord = () => {
             return {

@@ -44,9 +44,9 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].paymentInDollars;
+                                    const totalPaymentInDollars = record.programs[0].totalPaymentInDollars;
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].paymentInPercentageNationwide;
+                                        record.programs[0].totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>

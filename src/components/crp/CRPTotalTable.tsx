@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithNumber, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -136,29 +137,6 @@ function App({
     year: any;
     stateCodes: any;
 }): JSX.Element {
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareNumber(rowA, rowB, id, desc) {
-        const a = Number.parseInt(rowA.values[id].replaceAll(",", ""), 10);
-        const b = Number.parseInt(rowB.values[id].replaceAll(",", ""), 10);
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
 
     const crpTableData: any[] = [];
 
@@ -251,7 +229,7 @@ function App({
                     </Box>
                 ),
                 accessor: "noContract",
-                sortType: compareNumber,
+                sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
@@ -271,7 +249,7 @@ function App({
                     </Box>
                 ),
                 accessor: "noFarm",
-                sortType: compareNumber,
+                sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }
@@ -291,7 +269,7 @@ function App({
                     </Box>
                 ),
                 accessor: "totAcre",
-                sortType: compareNumber,
+                sortType: compareWithNumber,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;
                 }

@@ -26,7 +26,7 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({ setReactTooltipContent, maxValue, allStates, statePerformance, colorScale }) => {
+const MapChart = ({ setReactTooltipContent, maxValue, allStates, statePerformance, year, stateCodes, colorScale }) => {
     const classes = useStyles();
     return (
         <div data-tip="">
@@ -35,10 +35,12 @@ const MapChart = ({ setReactTooltipContent, maxValue, allStates, statePerformanc
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
-                                if (!Object.keys(statePerformance).includes(geo.properties.name)) {
+                                const record = statePerformance[year].filter(
+                                    (v) => stateCodes[v.state] === geo.properties.name
+                                )[0];
+                                if (record === undefined || record.length === 0) {
                                     return null;
                                 }
-                                const record = statePerformance[geo.properties.name][0];
                                 const totalPaymentInDollars = record.totalPaymentInDollars;
                                 const totalPaymentInPercentageNationwide = record.totalPaymentInPercentageNationwide;
                                 const hoverContent = (
@@ -136,23 +138,26 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; allStates: any }): JSX.Element => {
+const EQIPTotalMap = ({
+    statePerformance,
+    allStates,
+    year,
+    stateCodes
+}: {
+    statePerformance: any;
+    allStates: any;
+    year: string;
+    stateCodes: any;
+}): JSX.Element => {
     const quantizeArray: number[] = [];
     const category = "Total EQIP";
-    Object.values(statePerformance).map((value) => quantizeArray.push(value[0].totalPaymentInDollars));
+    statePerformance[year].forEach((value) => quantizeArray.push(value.totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const [content, setContent] = useState("");
-    // issue158: since eqip and csp are using old data structure (i.e. year is not the first level of data structure), going into array to find the year
-    let years = "2018-2022";
-    if (
-        Object.keys(statePerformance).length !== 0 &&
-        Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0]
-    ) {
-        years = Array(Array(Array(Object.values(statePerformance)[0])[0])[0])[0][0].years;
-    }
+    
     const classes = useStyles();
     return (
         <div>
@@ -160,7 +165,7 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
                 {maxValue !== 0 ? (
                     <DrawLegend
                         colorScale={colorScale}
-                        title={titleElement(category, years)}
+                        title={titleElement(category, year)}
                         programData={quantizeArray}
                         prepColor={mapColor}
                         initRatioLarge={0.6}
@@ -171,10 +176,10 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
                     />
                 ) : (
                     <div>
-                        {titleElement(category, years)}
+                        {titleElement(category, year)}
                         <Box display="flex" justifyContent="center">
                             <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                {category} data in {years} is unavailable for all states.
+                                {category} data in {year} is unavailable for all states.
                             </Typography>
                         </Box>
                     </div>
@@ -186,6 +191,8 @@ const EQIPTotalMap = ({ statePerformance, allStates }: { statePerformance: any; 
                 allStates={allStates}
                 statePerformance={statePerformance}
                 colorScale={colorScale}
+                year={year}
+                stateCodes={stateCodes}
             />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>

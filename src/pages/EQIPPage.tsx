@@ -171,12 +171,17 @@ export default function EQIPPage(): JSX.Element {
                     </Box>
                     <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} zeroCategories={zeroCategories} />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        {/* <Box
+                        <Box
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
                         >
-                            <EqipTotalMap statePerformance={statePerformance} allStates={allStates} />
-                        </Box> */}
+                            <EqipTotalMap
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={eqip_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
                         <Box
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 1 ? "none" : "block" }}
@@ -372,7 +377,11 @@ export default function EQIPPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <DataTable statePerformance={statePerformance} />
+                            <DataTable
+                                statePerformance={statePerformance}
+                                year={eqip_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
                             <CategoryTable
