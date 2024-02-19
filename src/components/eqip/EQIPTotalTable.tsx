@@ -127,19 +127,26 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ statePerformance, year, stateCodes }: { statePerformance: any; year:string; stateCodes:any }): JSX.Element {
-
+function App({
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    statePerformance: any;
+    year: string;
+    stateCodes: any;
+}): JSX.Element {
     const eqipTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
         const newRecord = () => {
-          let stateName = "";
-           stateCodes.forEach((sValue) => {
-               if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
-                   stateName = sValue.name;
-               }
-           });
+            let stateName = "";
+            stateCodes.forEach((sValue) => {
+                if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                    stateName = sValue.name;
+                }
+            });
             return {
                 state: stateName,
                 eqipBenefit: `$${value.totalPaymentInDollars

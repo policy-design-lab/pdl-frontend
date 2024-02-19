@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Title I page added the total subsection based on the summary data for landing page [#239](https://github.com/policy-design-lab/pdl-frontend/issues/239)
+- Title II page added the total subsection based on the summary data for landing page [#253](https://github.com/policy-design-lab/pdl-frontend/issues/253)
+
+### Changed
+- Updated Title I, Title II and Crop Insurance to use new API endpoints [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
+- Revised the EQIP and CSP code to follow the same pattern as new pages, allowing `map` endpoint to retire [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
+
+### Fixed
+- Removed the `$` in total policies earning premium section at the Crop Insurance page [#252](https://github.com/policy-design-lab/pdl-frontend/issues/252) 
+
 ## [0.15.0] - 2024-02-09
 
 ### Added

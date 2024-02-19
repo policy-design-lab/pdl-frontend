@@ -137,7 +137,6 @@ function App({
     year: any;
     stateCodes: any;
 }): JSX.Element {
-
     const crpTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax

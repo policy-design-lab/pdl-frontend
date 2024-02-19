@@ -26,11 +26,11 @@ function AcepProgramTable({
     // eslint-disable-next-line no-restricted-syntax
     AcepData[year].forEach((stateData) => {
         let state;
-         stateCodes.forEach((sValue) => {
-             if (sValue.code.toUpperCase() === stateData.state.toUpperCase()) {
-                 state = sValue.name;
-             }
-         });
+        stateCodes.forEach((sValue) => {
+            if (sValue.code.toUpperCase() === stateData.state.toUpperCase()) {
+                state = sValue.name;
+            }
+        });
         let programData = null;
         programData = stateData.programs.filter((p) => {
             return p.programName.toString() === program;

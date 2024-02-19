@@ -27,7 +27,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const { setReactTooltipContent, category, allStates, statePerformance, stateCodes, colorScale, year} = props;
+    const { setReactTooltipContent, category, allStates, statePerformance, stateCodes, colorScale, year } = props;
     let categoryRecord;
     const classes = useStyles();
     return (
@@ -58,7 +58,6 @@ const MapChart = (props) => {
                                 }
                                 const categoryPayment = categoryRecord.totalPaymentInDollars;
                                 const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
-                                const withinStatePercentage = categoryRecord.totalPaymentInPercentageWithinState;
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
@@ -176,15 +175,14 @@ const CategoryMap = ({
 
     const title = `${category} Benefits from ${year}`;
     const quantizeArray: number[] = [];
-    let categoryRecord = {};
     statePerformance[year].map((value) => {
+        let categoryRecord = {};
         const statuteRecord = value.statutes;
         const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
         const AArray = ACur.practiceCategories;
         const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
-        
         if (category === "2018 Practices") {
             categoryRecord = statuteRecord[0];
         } else if (category === "2014 Eligible Land") {
@@ -192,7 +190,8 @@ const CategoryMap = ({
         } else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
-        quantizeArray.push(categoryRecord.totalPaymentInDollars);
+        if (categoryRecord !== undefined) quantizeArray.push(categoryRecord.totalPaymentInDollars);
+        return null;
     });
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
@@ -260,6 +259,8 @@ const CategoryMap = ({
                 statePerformance={statePerformance}
                 allStates={allStates}
                 colorScale={colorScale}
+                year={year}
+                stateCodes={stateCodes}
             />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>

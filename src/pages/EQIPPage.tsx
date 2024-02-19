@@ -42,10 +42,9 @@ export default function EQIPPage(): JSX.Element {
     const [bTotal, setBTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
 
-
     const eqip_year = "2018-2022";
     React.useEffect(() => {
-        const state_perf_url =`${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`;
+        const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`;
         getJsonDataFromUrl(state_perf_url).then((response) => {
             const converted_perf_json = response;
             setStatePerformance(converted_perf_json);

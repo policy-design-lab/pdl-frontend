@@ -34,6 +34,9 @@ export default function TitleIPage(): JSX.Element {
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
     const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+    const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+    };
 
     const title1Div = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
@@ -44,7 +47,6 @@ export default function TitleIPage(): JSX.Element {
     const subtitleAYear = "2014-2021";
     const subtitleEYear = "2014-2021";
     const subtitleDYear = "2014-2021";
-
     React.useEffect(() => {
         // For landing page map only.
         const allprograms_url = `${config.apiUrl}/allprograms`;
@@ -78,6 +80,9 @@ export default function TitleIPage(): JSX.Element {
         getJsonDataFromUrl(subtitleE_url).then((response) => {
             setSubtitleEStateDistributionData(response);
         });
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     const switchChartTable = (event, newTab) => {

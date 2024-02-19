@@ -579,11 +579,30 @@ export default function ProgramDrawer({
 }: ProgramDrawerProps): JSX.Element {
     const location = useLocation();
     const navigate = useNavigate();
+    const classes = useStyles();
     const [zeroCategory, setZeroCategory] = React.useState(zeroCategories);
+    // Total Menu
+    const [totalOpen, setTotalOpen] = React.useState(false);
+    const totalRef = React.useRef<HTMLLIElement>(null);
+    const handleTotalClick = () => {
+        if (location.pathname !== "/title2") {
+            navigate("/title2");
+            window.location.reload(false);
+        } else {
+            setTotalOpen((prevTotalOpen) => !prevTotalOpen);
+        }
+    };
+    const prevTotalOpen = React.useRef(totalOpen);
+    React.useEffect(() => {
+        if (prevTotalOpen.current && !totalOpen) {
+            totalRef.current.focus();
+        }
+
+        prevTotalOpen.current = totalOpen;
+    }, [totalOpen]);
+    // EQIP Menu
     const [eqipOpen, setEqipOpen] = React.useState(false);
     const eqipRef = React.useRef<HTMLLIElement>(null);
-
-    const classes = useStyles();
     const handleEqipClick = () => {
         if (location.pathname !== "/eqip") {
             navigate("/eqip");
@@ -600,7 +619,7 @@ export default function ProgramDrawer({
 
         prevEqipOpen.current = eqipOpen;
     }, [eqipOpen]);
-
+    // CSP
     const [cspOpen, setCspOpen] = React.useState(false);
     const cspRef = React.useRef<HTMLLIElement>(null);
     const handleCspClick = () => {
@@ -689,12 +708,25 @@ export default function ProgramDrawer({
             open
         >
             <Box id="filler" sx={{ minHeight: 100 }} />
-            <MenuItem
-                style={{ whiteSpace: "normal" }}
-                className={`${classes.bk_off} ${classes.disabled_top} ${classes.disabled}  ${classes.no_statue}`}
-            >
-                <Typography>Total Conservation Programs Benefits</Typography>
-            </MenuItem>
+            <Box>
+                <MenuItem
+                    ref={totalRef}
+                    style={{ whiteSpace: "normal" }}
+                    className={location.pathname === "/title2" ? classes.bk_on : classes.bk_off}
+                    onClick={handleTotalClick}
+                >
+                    <Box
+                        sx={{ display: "flex", flexDirection: "horizontal", alignItems: "center" }}
+                        className={
+                            location.pathname === "/title2"
+                                ? `${classes.selected} ${classes.selected_top}  ${classes.no_statue}`
+                                : `${classes.regular} ${classes.regular_top}  ${classes.no_statue}`
+                        }
+                    >
+                        <Typography>Total Conservation Program Benefits</Typography>
+                    </Box>
+                </MenuItem>
+            </Box>
             <Box>
                 <MenuItem
                     ref={eqipRef}

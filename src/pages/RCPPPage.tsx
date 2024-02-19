@@ -50,7 +50,7 @@ export default function RCPPPage(): JSX.Element {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/rcpp/state-distribution`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/rcpp/summary`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });

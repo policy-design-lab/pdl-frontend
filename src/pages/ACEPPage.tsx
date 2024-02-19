@@ -53,7 +53,7 @@ export default function ACEPPage(): JSX.Element {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/acep/state-distribution`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/acep/summary`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });
@@ -67,7 +67,6 @@ export default function ACEPPage(): JSX.Element {
     const processData = (chartData) => {
         if (chartData.programs === undefined) return;
         const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
-
         totalACEPPaymentInDollars = cur1.assistancePaymentInDollars;
         setTotalAcep(totalACEPPaymentInDollars);
         if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
@@ -214,7 +213,7 @@ export default function ACEPPage(): JSX.Element {
                                     <AcepTreeMap
                                         program="ACEP"
                                         TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
-                                        stateCodes={stateCodesData}
+                                        stateCodes={stateCodesArray}
                                         year="2018-2022"
                                         svgW={
                                             window.innerWidth > 1440 ? window.innerWidth * 0.7 : window.innerWidth * 0.6

@@ -48,21 +48,6 @@ export default function CSPPage(): JSX.Element {
     const csp_year = "2018-2022";
 
     React.useEffect(() => {
-        // const allprograms_url = `${config.apiUrl}/programs/conservation/csp/state-distribution`;
-        // getJsonDataFromUrl(allprograms_url).then((response) => {
-        //     setStatePerformance(response);
-        // });
-
-        // const allstates_url = `${config.apiUrl}/states`;
-        // getJsonDataFromUrl(allstates_url).then((response) => {
-        //     setAllStates(response);
-        // });
-
-        // const chartData_url = `${config.apiUrl}/programs/conservation/csp/practice-categories`;
-        // getJsonDataFromUrl(chartData_url).then((response) => {
-        //     processData(response);
-        // });
-
         const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`;
         getJsonDataFromUrl(state_perf_url).then((response) => {
             const converted_perf_json = response;
@@ -225,7 +210,12 @@ export default function CSPPage(): JSX.Element {
                                 display: checked !== 0 ? "none" : "block"
                             }}
                         >
-                            {/* <CSPTotalMap statePerformance={statePerformance} allStates={allStates} /> */}
+                            <CSPTotalMap
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
                         </Box>
                         <Box
                             component="div"
@@ -550,68 +540,151 @@ export default function CSPPage(): JSX.Element {
                                 <strong>Performance by States</strong>
                             </Typography>
                         </Box>
-                        {/* <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <DataTable statePerformance={statePerformance} />
+                        <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
+                            <DataTable
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
-                            <CategoryTable category="2018 Practices" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="2018 Practices"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
-                            <CategoryTable category="Structural" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Structural"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
-                            <CategoryTable category="Vegetative" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Vegetative"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
-                            <CategoryTable category="Land management" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Land management"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
-                            <CategoryTable category="Forest management" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Forest management"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
-                            <CategoryTable category="Soil remediation" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Soil remediation"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 7 ? "none" : "block" }}>
-                            <CategoryTable category="Existing activity payments" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Existing activity payments"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryTable category="Bundles" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Bundles"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
-                            <CategoryTable category="Soil testing" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Soil testing"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
-                            <CategoryTable category="Other improvement" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Other improvement"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
 
                         <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
-                            <CategoryTable category="2014 Eligible Land" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="2014 Eligible Land"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
-                            <CategoryTable category="Cropland" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Cropland"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
 
                         <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
-                            <CategoryTable category="Grassland" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Grassland"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
-                            <CategoryTable category="Rangeland" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Rangeland"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 15 ? "none" : "block" }}>
-                            <CategoryTable category="Pastureland" statePerformance={statePerformance} />
+                            <CategoryTable
+                                category="Pastureland"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 16 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Non-industrial private forestland"
                                 statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 17 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Other: supplemental, adjustment & other"
                                 statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
                             />
-                        </Box> */}
+                        </Box>
                     </Box>
                 </Box>
             ) : (

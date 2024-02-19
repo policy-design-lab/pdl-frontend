@@ -27,7 +27,7 @@ const offsets = {
 };
 
 const MapChart = (props) => {
-    const {year, setReactTooltipContent, category, statePerformance, stateCodes, allStates, colorScale } = props;
+    const { year, setReactTooltipContent, category, statePerformance, stateCodes, allStates, colorScale } = props;
     const classes = useStyles();
     return (
         <div data-tip="">

@@ -157,7 +157,7 @@ const EQIPTotalMap = ({
     const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const [content, setContent] = useState("");
-    
+
     const classes = useStyles();
     return (
         <div>

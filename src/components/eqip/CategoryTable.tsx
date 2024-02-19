@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -44,7 +45,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
+function Table({ columns, data }: { columns: any; data: any; }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -150,7 +151,7 @@ function App({
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         const newRecord = () => {
             return {
-                state: stateCodes.find(s=>s.code === value.state).name,
+                state: stateCodes.find((s) => s.code === value.state).name,
                 categoryBenefit: `$${Number(categoryRecord.totalPaymentInDollars).toLocaleString(undefined, {
                     minimumFractionDigits: 2
                 })}`,
@@ -163,22 +164,6 @@ function App({
         };
         eqipTableData.push(newRecord());
     });
-
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
 
     const columns = React.useMemo(
         () => [
@@ -323,7 +308,7 @@ function App({
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} statePerformance={statePerformance} />
+                <Table columns={columns} data={eqipTableData} />
             </Styles>
         </Box>
     );
