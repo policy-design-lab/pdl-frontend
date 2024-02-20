@@ -723,7 +723,7 @@ export default function ProgramDrawer({
                                 : `${classes.regular} ${classes.regular_top}  ${classes.no_statue}`
                         }
                     >
-                        <Typography>Total Conservation Program Benefits</Typography>
+                        <Typography>Total Conservation Programs Benefits</Typography>
                     </Box>
                 </MenuItem>
             </Box>

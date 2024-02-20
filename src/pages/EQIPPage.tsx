@@ -34,7 +34,7 @@ export default function EQIPPage(): JSX.Element {
     const [statePerformance, setStatePerformance] = React.useState({});
     const [allStates, setAllStates] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
-    const [stateCodesArray, setStateCodesArray] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState([]);
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [sixAChartData, setSixAChartData] = React.useState([{}]);
     const [sixBChartData, setSixBChartData] = React.useState([{}]);
@@ -158,7 +158,10 @@ export default function EQIPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 && statePerformance[eqip_year] !== undefined && zeroCategories.length > 0 ? (
+            {allStates.length > 0 &&
+            statePerformance[eqip_year] !== undefined &&
+            zeroCategories.length > 0 &&
+            stateCodesArray.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
