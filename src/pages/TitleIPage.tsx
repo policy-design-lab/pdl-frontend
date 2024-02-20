@@ -132,7 +132,20 @@ export default function TitleIPage(): JSX.Element {
         });
         return [organizedData, originalData];
     }
-
+    const subtextMatch = {
+        0: "Total Commodities Programs (Title I)",
+        1: "Total Commodities Programs, Subtitle A",
+        2: "Agriculture Risk Coverage (ARC)",
+        20: "Agriculture Risk Coverage County Option (ARC-CO)",
+        21: "Agriculture Risk Coverage Individual Coverage (ARC-IC)",
+        3: "Price Loss Coverage (PLC)",
+        4: "Dairy Margin Coverage, Subtitle D",
+        5: "Supplemental Agricultural Disaster Assistance, Subtitle E",
+        50: "Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)",
+        51: "Livestock Forage Program (LFP)",
+        52: "Livestock Indemnity Payments (LIP)",
+        53: "Tree Assistance Program (TAP)"
+    };
     return (
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
@@ -143,7 +156,7 @@ export default function TitleIPage(): JSX.Element {
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                        <NavSearchBar text="Commodities Programs (Title I)" />
+                        <NavSearchBar text="Commodities Programs (Title I)" subtext={subtextMatch[checked]} />
                     </Box>
                     <Box sx={{ height: "64px" }} />
                     <SideBar setTitle1Checked={setChecked} />

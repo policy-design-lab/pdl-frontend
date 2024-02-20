@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Title I page added the total subsection based on the summary data for landing page [#239](https://github.com/policy-design-lab/pdl-frontend/issues/239)
 - Title II page added the total subsection based on the summary data for landing page [#253](https://github.com/policy-design-lab/pdl-frontend/issues/253)
+- Added sub title in nav bar for the Title I and Crop Insurance Page [#255](https://github.com/policy-design-lab/pdl-frontend/issues/255)
 
 ### Changed
 - Updated Title I, Title II and Crop Insurance to use new API endpoints [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
