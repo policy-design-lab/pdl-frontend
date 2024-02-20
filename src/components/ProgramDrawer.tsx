@@ -912,12 +912,6 @@ export default function ProgramDrawer({
                     </Box>
                 </MenuItem>
             </Box>
-            <MenuItem
-                className={`${classes.bk_off} ${classes.disabled_top} ${classes.disabled} ${classes.no_statue}`}
-                style={{ whiteSpace: "normal" }}
-            >
-                <Typography>Other Conservation</Typography>
-            </MenuItem>
         </Drawer>
     );
 }

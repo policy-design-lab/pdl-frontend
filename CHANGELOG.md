@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Updated Title I, Title II and Crop Insurance to use new API endpoints [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
 - Revised the EQIP and CSP code to follow the same pattern as new pages, allowing `map` endpoint to retire [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
+- Removed the 'Other Conservation' section out of Title II menu [#256](https://github.com/policy-design-lab/pdl-frontend/issues/256)
 
 ### Fixed
 - Removed the `$` in total policies earning premium section at the Crop Insurance page [#252](https://github.com/policy-design-lab/pdl-frontend/issues/252) 
