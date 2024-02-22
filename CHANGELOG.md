@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added sub title in nav bar for the Title I and Crop Insurance Page [#255](https://github.com/policy-design-lab/pdl-frontend/issues/255)
 
 ### Changed
-- Updated Title I, Title II and Crop Insurance to use new API endpoints [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
+- Updated Title I, Title II and Crop Insurance pages to use new API endpoints [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
+- Updated the SNAP page to use new API endpoints [#257](https://github.com/policy-design-lab/pdl-frontend/issues/257) 
 - Revised the EQIP and CSP code to follow the same pattern as new pages, allowing `map` endpoint to retire [#249](https://github.com/policy-design-lab/pdl-frontend/issues/249) 
 - Removed the 'Other Conservation' section out of Title II menu [#256](https://github.com/policy-design-lab/pdl-frontend/issues/256)
 
