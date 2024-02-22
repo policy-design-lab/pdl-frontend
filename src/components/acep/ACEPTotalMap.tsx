@@ -38,7 +38,7 @@ const MapChart = (props) => {
                             <>
                                 {geographies.map((geo) => {
                                     const record = statePerformance[year].filter(
-                                        (v) => v.state === geo.properties.name
+                                        (v) => stateCodes[v.state] === geo.properties.name
                                     )[0];
                                     if (record === undefined || record.length === 0) {
                                         return null;
@@ -179,7 +179,6 @@ const ACEPTotalMap = ({
         return null;
     });
     const category = "Total ACEP";
-    const years = "2018-2022";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
@@ -191,7 +190,7 @@ const ACEPTotalMap = ({
                 {maxValue !== 0 ? (
                     <DrawLegend
                         colorScale={colorScale}
-                        title={titleElement(category, years)}
+                        title={titleElement(category, year)}
                         programData={quantizeArray}
                         prepColor={mapColor}
                         initRatioLarge={0.6}
@@ -202,10 +201,10 @@ const ACEPTotalMap = ({
                     />
                 ) : (
                     <div>
-                        {titleElement(category, years)}
+                        {titleElement(category, year)}
                         <Box display="flex" justifyContent="center">
                             <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                {category} data in {years} is unavailable for all states.
+                                {category} data in {year} is unavailable for all states.
                             </Typography>
                         </Box>
                     </div>

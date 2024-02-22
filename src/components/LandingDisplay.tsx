@@ -59,7 +59,7 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
             boldText = "What is Title II, conservation programs?";
             bodyText =
                 "Title II of the law authorizes the Farm Bill’s conservation programs. The programs in this title programs help agricultural producers and landowners adopt conservation activities on private farm and forest lands. In general, conservation activities are intended to protect and improve water quality and quantity, soil health, wildlife habitat, and air quality. The map shows the total benefit of the conservation program by state from 2018-2022.";
-            route = "/eqip";
+            route = "/title2";
             buttonText = "Explore Maps of Conservation Programs";
             button = (
                 <Button

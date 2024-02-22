@@ -23,7 +23,7 @@ export default function NavSearchBar({
             <Grid
                 container
                 item
-                xs={7}
+                xs={9}
                 justifyContent="flex-start"
                 sx={{ my: 1, paddingLeft: 3, paddingTop: "0.25em" }}
             >
@@ -62,7 +62,7 @@ export default function NavSearchBar({
                     ) : null}
                 </Box>
             </Grid>
-            <Grid container item xs={5} sx={{ flexDirection: "row", my: 1, paddingRight: 3 }} justifyContent="flex-end">
+            <Grid container item xs={3} sx={{ flexDirection: "row", my: 1, paddingRight: 3 }} justifyContent="flex-end">
                 <Box display="flex" alignItems="center">
                     <SearchIcon
                         sx={{

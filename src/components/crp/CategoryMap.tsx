@@ -81,8 +81,8 @@ const MapChart = (props) => {
                                 } else {
                                     categoryRecord = FCur;
                                 }
-                                const categoryPayment = categoryRecord.paymentInDollars;
-                                const nationwidePercentage = categoryRecord.paymentInPercentageNationwide;
+                                const categoryPayment = categoryRecord.totalPaymentInDollars;
+                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>

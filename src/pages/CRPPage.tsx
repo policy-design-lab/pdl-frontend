@@ -14,7 +14,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function CRPPage(): JSX.Element {
     const year = "2018-2022";
-    const attribute = "paymentInDollars";
+    const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
@@ -50,12 +50,12 @@ export default function CRPPage(): JSX.Element {
             setStateCodesData(converted_json);
         });
 
-        const statedistribution_url = `${config.apiUrl}/programs/conservation/crp/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/crp/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/programs/conservation/crp/subprograms`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/crp/summary`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });
@@ -84,21 +84,21 @@ export default function CRPPage(): JSX.Element {
                 }
             });
 
-            totalCRPPaymentInDollars = cur1.paymentInDollars;
+            totalCRPPaymentInDollars = cur1.totalPaymentInDollars;
             setTotalCrp(totalCRPPaymentInDollars);
             if (totalCRPPaymentInDollars === 0) zeroCategory.push("Total CRP");
-            generalSignUpPaymentInDollars = cur2.paymentInDollars;
+            generalSignUpPaymentInDollars = cur2.totalPaymentInDollars;
             if (generalSignUpPaymentInDollars === 0) zeroCategory.push("Total General Sign-Up");
-            continuousSingUpPaymentInDollars = cur3.paymentInDollars;
+            continuousSingUpPaymentInDollars = cur3.totalPaymentInDollars;
             if (continuousSingUpPaymentInDollars === 0) zeroCategory.push("Total Continuous");
             setTotalSub(continuousSingUpPaymentInDollars);
-            crepPaymentInDollars = cur4.paymentInDollars;
+            crepPaymentInDollars = cur4.totalPaymentInDollars;
             if (crepPaymentInDollars === 0) zeroCategory.push("CREP Only");
-            nocCrepPaymentInDollars = cur5.paymentInDollars;
+            nocCrepPaymentInDollars = cur5.totalPaymentInDollars;
             if (nocCrepPaymentInDollars === 0) zeroCategory.push("Continuous Non-CREP");
-            wetlandPaymentInDollars = cur6.paymentInDollars;
+            wetlandPaymentInDollars = cur6.totalPaymentInDollars;
             if (wetlandPaymentInDollars === 0) zeroCategory.push("Farmable Wetland");
-            grasslandPyamentInDollars = cur7.paymentInDollars;
+            grasslandPyamentInDollars = cur7.totalPaymentInDollars;
             if (grasslandPyamentInDollars === 0) zeroCategory.push("Grassland");
 
             if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
@@ -306,7 +306,7 @@ export default function CRPPage(): JSX.Element {
                             <Box component="div" sx={{ display: checked > 2 && checked < 6 ? "block" : "none" }}>
                                 <SemiDonutChart
                                     data={subChartData}
-                                    label1={totalSub.toString()}
+                                    label1={totalSub}
                                     label2="CRP TOTAL CONTINUOS BENEFITS"
                                 />
                             </Box>

@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -126,38 +127,36 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ statePerformance }: { statePerformance: any }): JSX.Element {
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
+function App({
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    statePerformance: any;
+    year: string;
+    stateCodes: any;
+}): JSX.Element {
     const cspTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
+    statePerformance[year].forEach((value) => {
         const newRecord = () => {
+            let stateName = "";
+            stateCodes.forEach((sValue) => {
+                if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                    stateName = sValue.name;
+                }
+            });
             return {
-                state: key,
-                cspBenefit: `$${value[0].totalPaymentInDollars
+                state: stateName,
+                cspBenefit: `$${value.totalPaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                percentage: `${value.totalPaymentInPercentageNationwide.toString()}%`
             };
         };
         cspTableData.push(newRecord());
-    }
+    });
 
     const columns = React.useMemo(
         () => [
@@ -202,7 +201,7 @@ function App({ statePerformance }: { statePerformance: any }): JSX.Element {
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={cspTableData} />
+                <Table columns={columns} data={cspTableData.filter((obj) => Object.keys(obj).length > 0)} />
             </Styles>
         </Box>
     );

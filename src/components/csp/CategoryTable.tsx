@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -127,68 +128,59 @@ function Table({ columns, data }: { columns: any; data: any; statePerformance: a
     );
 }
 
-function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
+function App({
+    category,
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    category: string;
+    statePerformance: any;
+    year: any;
+    stateCodes: any;
+}): JSX.Element {
     const cspTableData: any[] = [];
     let categoryRecord = [];
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
-        if (Array.isArray(value)) {
-            const statuteRecord = value[0].statutes;
-            const ACur = statuteRecord.find((s) => s.statuteName === "2018 Practices");
-            const AArray = ACur.practiceCategories;
-            const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
-            const BArray = BCur.practiceCategories;
-            const TotalArray = AArray.concat(BArray);
-            if (category === "2018 Practices") {
-                categoryRecord = statuteRecord[0];
-            } else if (category === "2014 Eligible Land") {
-                categoryRecord = statuteRecord[1];
-            } else {
-                categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
-            }
-            if (categoryRecord !== undefined) {
-                const paymentInDollars =
-                    category === "2018 Practices" || category === "2014 Eligible Land"
-                        ? categoryRecord.statutePaymentInDollars
-                        : categoryRecord.paymentInDollars;
-                const paymentInPercentageWithinState =
-                    category === "2018 Practices" || category === "2014 Eligible Land"
-                        ? categoryRecord.statutePaymentInPercentageWithinState
-                        : categoryRecord.paymentInPercentageWithinState;
-                const newRecord = () => {
-                    return {
-                        state: key,
-                        categoryBenefit: `$${Number(paymentInDollars).toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`,
-                        categoryPercentage: `${paymentInPercentageWithinState.toString()}%`,
-                        cspBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
-                            minimumFractionDigits: 2
-                        })}`,
-                        percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
-                    };
-                };
-                cspTableData.push(newRecord());
-            }
+    statePerformance[year].forEach((value) => {
+        const statuteRecord = value.statutes;
+        const ACur = value.statutes.find((s) => s.statuteName === "2018 Practices");
+        const AArray = ACur.practiceCategories;
+        const BCur = value.statutes.find((s) => s.statuteName === "2014 Eligible Land");
+        const BArray = BCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray);
+        if (category === "2018 Practices") {
+            categoryRecord = statuteRecord[0];
+        } else if (category === "2014 Eligible Land") {
+            categoryRecord = statuteRecord[1];
+        } else {
+            categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
-    }
-
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
+        if (categoryRecord !== undefined) {
+            const totalPaymentInDollars = categoryRecord.totalPaymentInDollars;
+            const totalPaymentInPercentageWithinState = categoryRecord.totalPaymentInPercentageWithinState;
+            let stateName = "";
+            stateCodes.forEach((sValue) => {
+                if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                    stateName = sValue.name;
+                }
+            });
+            const newRecord = () => {
+                return {
+                    state: stateName,
+                    categoryBenefit: `$${Number(totalPaymentInDollars).toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}`,
+                    categoryPercentage: `${totalPaymentInPercentageWithinState.toString()}%`,
+                    cspBenefit: `$${value.totalPaymentInDollars.toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}`,
+                    percentage: `${value.totalPaymentInPercentageNationwide.toString()}%`
+                };
+            };
+            cspTableData.push(newRecord());
+        }
+    });
     const columns = React.useMemo(
         () => [
             {
@@ -328,7 +320,6 @@ function App({ category, statePerformance }: { category: string; statePerformanc
         ],
         []
     );
-
     return (
         <Box display="flex" justifyContent="center">
             <Styles>

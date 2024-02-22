@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -44,7 +45,7 @@ const Styles = styled.div`
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data, statePerformance }: { columns: any; data: any; statePerformance: any }) {
+function Table({ columns, data }: { columns: any; data: any; }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -127,48 +128,42 @@ function Table({ columns, data, statePerformance }: { columns: any; data: any; s
     );
 }
 
-function App({ category, statePerformance }: { category: string; statePerformance: any }): JSX.Element {
+function App({
+    category,
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    category: string;
+    statePerformance: any;
+    year: any;
+    stateCodes: any;
+}): JSX.Element {
     const eqipTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === "(6)(A) Practices");
+    statePerformance[year].forEach((value) => {
+        const ACur = value.statutes.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === "(6)(B) Practices");
+        const BCur = value.statutes.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         const newRecord = () => {
             return {
-                state: key,
-                categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
+                state: stateCodes.find((s) => s.code === value.state).name,
+                categoryBenefit: `$${Number(categoryRecord.totalPaymentInDollars).toLocaleString(undefined, {
                     minimumFractionDigits: 2
                 })}`,
-                categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                categoryPercentage: `${categoryRecord.totalPaymentInPercentageWithinState.toString()}%`,
+                eqipBenefit: `$${value.totalPaymentInDollars.toLocaleString(undefined, {
                     minimumFractionDigits: 2
                 })}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                percentage: `${value.totalPaymentInPercentageNationwide.toString()}%`
             };
         };
         eqipTableData.push(newRecord());
-    }
-
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
-        const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
+    });
 
     const columns = React.useMemo(
         () => [
@@ -313,7 +308,7 @@ function App({ category, statePerformance }: { category: string; statePerformanc
     return (
         <Box display="flex" justifyContent="center">
             <Styles>
-                <Table columns={columns} data={eqipTableData} statePerformance={statePerformance} />
+                <Table columns={columns} data={eqipTableData} />
             </Styles>
         </Box>
     );

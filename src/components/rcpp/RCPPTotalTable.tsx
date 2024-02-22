@@ -141,12 +141,17 @@ function App({
     // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
         const totalRcpp = value.programs.find((s) => s.programName === "RCPP");
-        const stateName = value.state;
+        let stateName;
+        stateCodes.forEach((sValue) => {
+            if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
+                stateName = sValue.name;
+            }
+        });
         const newRecord = () => {
             return {
                 state: stateName,
                 rcppBenefit: `$${
-                    totalRcpp.paymentInDollars
+                    totalRcpp.totalPaymentInDollars
                         .toLocaleString(undefined, { minimumFractionDigits: 2 })
                         .toString()
                         .split(".")[0]
