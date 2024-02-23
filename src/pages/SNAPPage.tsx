@@ -67,7 +67,7 @@ export default function SNAPPage(): JSX.Element {
             setSummary(response);
         });
 
-        getJsonDataFromUrl(`${config.apiUrl}/programs/snap/state-distribution`).then((response) => {
+        getJsonDataFromUrl(`${config.apiUrl}/titles/title-iv/programs/snap/state-distribution`).then((response) => {
             setData(response);
         });
     }, []);

@@ -87,7 +87,7 @@ const MapChart = ({
                                                     {attr === 2 ? (
                                                         <tr>
                                                             <td className={classes.tooltip_topcell_left}>
-                                                                ${ShortFormat(programPayment)}
+                                                                {ShortFormat(programPayment)}
                                                             </td>
                                                             <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                                         </tr>

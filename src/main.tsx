@@ -10,6 +10,7 @@ import TitleIPage from "./pages/TitleIPage";
 import CropInsurancePage from "./pages/CropInsurancePage";
 import ACEPPage from "./pages/ACEPPage";
 import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
+import TitleIIPage from "./pages/TitleIIPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();
@@ -26,6 +27,7 @@ export default function Main(): JSX.Element {
         <ScrollToTop>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
+                <Route path="/title2" element={<TitleIIPage />} />
                 <Route path="/eqip" element={<EQIPPage />} />
                 <Route path="/csp" element={<CSPPage />} />
                 <Route path="/crp" element={<CRPPage />} />

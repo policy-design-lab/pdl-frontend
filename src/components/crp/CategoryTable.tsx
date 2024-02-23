@@ -161,9 +161,9 @@ function App({
 
         let stateName;
         // let percentageValue = 0;
-        // if (Number.parseInt(totalCrp.paymentInDollars, 10) > 0) {
+        // if (Number.parseInt(totalCrp.totalPaymentInDollars, 10) > 0) {
         //     percentageValue =
-        //         (Number.parseInt(categoryCrp.paymentInDollars, 10) / Number.parseInt(totalCrp.paymentInDollars, 10)) *
+        //         (Number.parseInt(categoryCrp.totalPaymentInDollars, 10) / Number.parseInt(totalCrp.totalPaymentInDollars, 10)) *
         //         100;
         // }
 
@@ -175,16 +175,16 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                categoryBenefit: `$${categoryCrp.paymentInDollars
+                categoryBenefit: `$${categoryCrp.totalPaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                categoryPercentage: `${categoryCrp.paymentInPercentageWithinState
+                categoryPercentage: `${categoryCrp.totalPaymentInPercentageWithinState
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}%`,
-                crpBenefit: `$${totalCrp.paymentInDollars
+                crpBenefit: `$${totalCrp.totalPaymentInDollars
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
-                percentage: `${categoryCrp.paymentInPercentageNationwide.toString()}%`
+                percentage: `${categoryCrp.totalPaymentInPercentageNationwide.toString()}%`
             };
         };
         crpTableData.push(newRecord());

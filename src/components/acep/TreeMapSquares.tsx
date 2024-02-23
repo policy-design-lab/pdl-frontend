@@ -122,13 +122,7 @@ export default function TreeMapSquares({
                                 .style("z-index", 100000);
                             tipGroup
                                 .append("text")
-                                .text(
-                                    `${
-                                        Object.values(stateCodes).filter(
-                                            (stateCode) => stateCode === stateData.state
-                                        )[0]
-                                    }`
-                                )
+                                .text(`${stateCodes.find((s) => s.code === stateData.state).name}`)
                                 .attr("x", xPosition + baseSize)
                                 .attr("y", mousePos[1] + stepSize * 1)
                                 .style("font-size", "0.9em")

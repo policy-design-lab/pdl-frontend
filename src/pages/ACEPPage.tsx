@@ -48,12 +48,12 @@ export default function ACEPPage(): JSX.Element {
             setStateCodesData(converted_json);
         });
 
-        const statedistribution_url = `${config.apiUrl}/programs/conservation/acep/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/acep/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
 
-        const chartData_url = `${config.apiUrl}/programs/conservation/acep/subprograms`;
+        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/acep/summary`;
         getJsonDataFromUrl(chartData_url).then((response) => {
             processData(response);
         });
@@ -67,7 +67,6 @@ export default function ACEPPage(): JSX.Element {
     const processData = (chartData) => {
         if (chartData.programs === undefined) return;
         const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
-
         totalACEPPaymentInDollars = cur1.assistancePaymentInDollars;
         setTotalAcep(totalACEPPaymentInDollars);
         if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
@@ -214,7 +213,7 @@ export default function ACEPPage(): JSX.Element {
                                     <AcepTreeMap
                                         program="ACEP"
                                         TreeMapData={prepData("ACEP", undefined, stateDistributionData, "2018-2022")}
-                                        stateCodes={stateCodesData}
+                                        stateCodes={stateCodesArray}
                                         year="2018-2022"
                                         svgW={
                                             window.innerWidth > 1440 ? window.innerWidth * 0.7 : window.innerWidth * 0.6
@@ -235,7 +234,7 @@ export default function ACEPPage(): JSX.Element {
                                             "contractsInPercentageNationwide"
                                         ]}
                                         skipColumns={[]}
-                                        stateCodes={stateCodesData}
+                                        stateCodes={stateCodesArray}
                                         AcepData={stateDistributionData}
                                         year="2018-2022"
                                         colors={["#1F78B433", "#C8119526", "#66BB6A40"]}

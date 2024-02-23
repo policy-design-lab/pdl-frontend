@@ -1,81 +1,29 @@
+/**
+ * Based on landing page map data (before api revision), create corresponding table
+ */
+import { Grid, TableContainer, Typography } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Grid, TableContainer, Typography, Box } from "@mui/material";
-import {
-    compareWithNumber,
-    compareWithAlphabetic,
-    compareWithDollarSign,
-    compareWithPercentSign,
-    sortByDollars
-} from "../shared/TableCompareFunctions";
+import Box from "@mui/material/Box";
+import { compareWithAlphabetic, compareWithDollarSign } from "./TableCompareFunctions";
 import "../../styles/table.css";
-import { ShortFormat } from "../shared/ConvertionFormats";
 
-function CropInsuranceProgramTable({
-    tableTitle,
-    program,
-    attributes,
+/**
+ * SummaryKey: "Title I Total", "SNAP Total", etc
+ */
+export default function LandingPageTable({
+    TableTitle,
+    TableData,
     stateCodes,
-    CropInsuranceData,
-    year,
-    colors,
-    skipColumns
+    SummaryKey
+}: {
+    TableTitle: string;
+    TableData: any;
+    stateCodes: any;
+    SummaryKey: string;
 }): JSX.Element {
-    const resultData = [];
-    const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
-    CropInsuranceData[year].forEach((stateData) => {
-        const state = stateData.state;
-        let programData = null;
-        programData = stateData.programs.filter((p) => {
-            return p.programName.toString() === program;
-        });
-        hashmap[state] = {};
-        attributes.forEach((attribute) => {
-            const attributeData = programData[0][attribute];
-            hashmap[state][attribute] = attributeData;
-        });
-    });
-    Object.keys(hashmap).forEach((s) => {
-        const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
-        Object.entries(hashmap[s]).forEach(([attr, value]) => {
-            if (attr === "lossRatio") {
-                newRecord[attr] = `${ShortFormat((Number(value) * 100).toString(), undefined, 1)}%`;
-            } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
-                newRecord[attr] = `${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
-            } else {
-                newRecord[attr] = `$${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
-            }
-        });
-        resultData.push(newRecord);
-    });
-    const columnPrep = [];
-    columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-    attributes.forEach((attribute) => {
-        let sortMethod = compareWithDollarSign;
-        if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
-        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
-            sortMethod = compareWithNumber;
-        const json = {
-            Header: attribute
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-                .split(" ")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-                .toUpperCase(),
-            accessor: attribute,
-            sortType: sortMethod
-        };
-        columnPrep.push(json);
-    });
-    const columns = React.useMemo(() => columnPrep, []);
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -113,9 +61,7 @@ function CropInsuranceProgramTable({
             td[class$="cell1"],
             td[class$="cell2"],
             td[class$="cell3"],
-            td[class$="cell4"],
-            td[class$="cell5"],
-            td[class$="cell6"] {
+            td[class$="cell4"] {
                 text-align: right;
             }
 
@@ -129,6 +75,7 @@ function CropInsuranceProgramTable({
                 }
             }
         }
+
         .pagination {
             margin-top: 1.5em;
         }
@@ -146,9 +93,40 @@ function CropInsuranceProgramTable({
             }
         }
     `;
+    const resultData = [];
+    TableData.sort((a, b) => b[SummaryKey] - a[SummaryKey]);
+    // eslint-disable-next-line no-restricted-syntax
+    TableData.forEach((d) => {
+        if (d.State.length === 2) {
+            const newRecord = () => {
+                return {
+                    state: stateCodes[d.State],
+                    totalPaymentInDollars: `$${d[SummaryKey].toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    }).toString()}`
+                };
+            };
+            resultData.push(newRecord());
+        }
+    });
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: "STATE",
+                accessor: "state",
+                sortType: compareWithAlphabetic
+            },
+            {
+                Header: "TOTAL BENEFITS IN DOLLARS",
+                accessor: "totalPaymentInDollars",
+                sortType: compareWithDollarSign
+            }
+        ],
+        []
+    );
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
-            <Styles value={attributes[0]}>
+            <Styles>
                 <Grid
                     container
                     columns={{ xs: 12 }}
@@ -158,10 +136,10 @@ function CropInsuranceProgramTable({
                         justifyContent: "space-between"
                     }}
                 >
-                    <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
-                        <Box id="cropInsuranceTableHeader" sx={{ width: "100%" }}>
+                    <Grid item xs={12} justifyContent="center" alignItems="center" sx={{ display: "flex" }}>
+                        <Box id="LandingPageTableHeader" sx={{ width: "100%" }}>
                             <Typography
-                                id="cropInsuranceBarHeader"
+                                id="LandingPageBarHeader"
                                 variant="h6"
                                 sx={{
                                     fontWeight: 400,
@@ -172,29 +150,14 @@ function CropInsuranceProgramTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                Comparing {tableTitle}
+                                {TableTitle}
                             </Typography>
-                            {attributes.includes("lossRatio") ? (
-                                <Box display="flex" justifyContent="center" style={{ marginTop: "0.5em" }}>
-                                    <Typography variant="h5" sx={{ mb: 1, fontSize: "1.2em" }}>
-                                        Loss Ratio = Total Indemnities / Total Premium
-                                    </Typography>
-                                </Box>
-                            ) : null}
-                            {attributes.includes("averageInsuredAreaInAcres") ? (
-                                <Box display="flex" justifyContent="start">
-                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
-                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
-                                        policies)
-                                    </Typography>
-                                </Box>
-                            ) : null}
                         </Box>
                     </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
-                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
+                        columns={columns}
                         data={resultData}
                         initialState={{
                             pageSize: 5,
@@ -206,7 +169,6 @@ function CropInsuranceProgramTable({
         </Box>
     );
 }
-
 // eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
@@ -361,5 +323,3 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         </div>
     );
 }
-
-export default CropInsuranceProgramTable;

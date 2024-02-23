@@ -44,7 +44,7 @@ export default function CropInsurancePage(): JSX.Element {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
-        const statedistribution_url = `${config.apiUrl}/programs/crop-insurance/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
@@ -74,6 +74,17 @@ export default function CropInsurancePage(): JSX.Element {
         });
         return res;
     };
+    const subtextMatch = {
+        "0": "Total Net Farmer Benefits",
+        "01": "Total Farmer Paid Premium",
+        "00": "Total Indemnities",
+        "02": "Total Premium",
+        "03": "Total Premium Subsidy",
+        "1": "Loss Ratio",
+        "2": "Average Liabilities",
+        "3": "Total Policies Earning Premium",
+        "4": "Average Acres Insured"
+    };
     return (
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
@@ -82,7 +93,7 @@ export default function CropInsurancePage(): JSX.Element {
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-                        <NavSearchBar text="Crop Insurance" />
+                        <NavSearchBar text="Crop Insurance" subtext={subtextMatch[checked]} />
                     </Box>
                     <Box sx={{ height: "64px" }} />
                     {/* Net Farmer Premium Section */}

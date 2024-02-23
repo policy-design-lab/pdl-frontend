@@ -154,6 +154,7 @@ const MapChart = (props) => {
                     emptyState={zeroPoints}
                     initRatioLarge={0.75}
                     initRatioSmall={0.8}
+                    screenWidth={screenWidth}
                 />
             </Box>
             <ComposableMap projection="geoAlbersUsa">
@@ -428,35 +429,28 @@ const LandingPageMap = ({
     allStates,
     stateCodes,
     allPrograms,
-    summary
-}: {
-    programTitle: string;
-    allStates: any;
-    stateCodes: any;
-    allPrograms: any;
-    summary: any;
+    summary,
+    containerWidth = window.innerWidth
 }): JSX.Element => {
     const classes = useStyles();
     const [content, setContent] = useState("");
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [screenWidth, setScreenWidth] = useState(containerWidth);
     return (
         <div>
-            <div>
-                <MapChart
-                    setReactTooltipContent={setContent}
-                    title={programTitle}
-                    stateCodes={stateCodes}
-                    allPrograms={allPrograms}
-                    allStates={allStates}
-                    summary={summary}
-                    screenWidth={screenWidth}
-                />
-                <div className="tooltip-container">
-                    {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
-                    <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
-                        {content}
-                    </ReactTooltip>
-                </div>
+            <MapChart
+                setReactTooltipContent={setContent}
+                title={programTitle}
+                stateCodes={stateCodes}
+                allPrograms={allPrograms}
+                allStates={allStates}
+                summary={summary}
+                screenWidth={screenWidth}
+            />
+            <div className="tooltip-container">
+                {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
+                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
+                    {content}
+                </ReactTooltip>
             </div>
         </div>
     );
