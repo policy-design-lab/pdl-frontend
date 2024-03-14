@@ -4,7 +4,6 @@ import { Box, createTheme, ThemeProvider, Typography, Grid, Tabs, Tab } from "@m
 import NavBar from "../components/NavBar";
 import "../styles/issueWhitePaper.css";
 import Footer from "../components/Footer";
-import CardPaper from "../components/issueWhitePaper/cardPaper";
 import CardIFrame from "../components/issueWhitePaper/cardIframe";
 import PDF from "../files/ISSUE.pdf";
 

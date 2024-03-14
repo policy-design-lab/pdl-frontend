@@ -38,7 +38,7 @@ export default function Main(): JSX.Element {
                 <Route path="/cropinsurance" element={<CropInsurancePage />} />
                 <Route path="/snap" element={<SNAPPage />} />
                 <Route path="/issue_whitepaper" element={<IssueWhitePaperPage />} />
-                <Route path="/predetermined_prediction" element={<Surface51Page />} />
+                <Route path="/policy_lab" element={<Surface51Page />} />
             </Routes>
         </ScrollToTop>
     );
