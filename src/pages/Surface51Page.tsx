@@ -2,8 +2,9 @@ import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import NavBar from "../components/NavBar";
+import AleskiThesis from "../files/Aleski_Thesis.pdf";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     iframeContainer: {
         "height": window.innerHeight > 900 ? "150vh" : "100vh",
         "backgroundColor": "white",
@@ -172,16 +173,19 @@ export default function Surface51Page(): JSX.Element {
                         item
                         xs={12}
                         sx={{
-                            textAlign: "center"
+                            textAlign: "center",
+                            py: "1rem"
                         }}
                     >
-                        <Typography
-                            sx={{ fontWeight: 700, fontSize: "1.125rem", px: 3, pt: 1, pb: 0.5, color: "#2F7164" }}
-                        >
+                        <Typography sx={{ fontWeight: 700, fontSize: "1.125rem", px: 3, py: 0.5, color: "#2F7164" }}>
                             Related Paper:
                         </Typography>
-                        <Typography sx={{ fontWeight: 400, fontSize: "1.125rem", px: 3, pb: 3, color: "#333333" }}>
-                            Paper link: pdf of Knepp thesis.
+
+                        <Typography sx={{ fontWeight: 400, fontSize: "1.125rem", color: "#333333" }}>
+                            <a href={AleskiThesis} target="blank" style={{ color: "#333333" }}>
+                                Harvesting Data A Methodology For Analyzing Innovations In Agricultural Policy
+                            </a>{" "}
+                            By Aleksi Knepp
                         </Typography>
                     </Grid>
                     <Grid
