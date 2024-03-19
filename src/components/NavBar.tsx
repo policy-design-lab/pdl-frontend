@@ -18,6 +18,7 @@ import PDLLogo from "./PDLLogo";
 const drawerWidth = 240;
 const navItems = [
     { title: "HOME", link: "/" },
+    { title: "POLICY LAB".toUpperCase(), link: "/policy_lab" },
     { title: "ISSUES & WHITE PAPERS", link: "/issue_whitepaper" },
     { title: "ABOUT PDL" }
 ];
