@@ -55,7 +55,7 @@ export default function Surface51Page(): JSX.Element {
                         textAlign: "center"
                     }}
                 >
-                    Adjusted ARC-CO Payments
+                    Proof-of-Concept: Policy Design
                 </Typography>
                 <Typography
                     sx={{
@@ -66,7 +66,7 @@ export default function Surface51Page(): JSX.Element {
                         textAlign: "center"
                     }}
                 >
-                    Title II Commodities Programs Policy Design
+                    Visualizing potential design changes for a farm payment program
                 </Typography>
             </Box>
             <Box>
@@ -79,12 +79,13 @@ export default function Surface51Page(): JSX.Element {
                         sx={{ backgroundColor: "#2F7164", color: "white", borderRadius: 1, mb: 4.5 }}
                     >
                         <Typography sx={{ fontWeight: 500, fontSize: "1.25rem", px: 3, py: 0.5 }}>
-                            Why we redesign this policy?
+                            Demonstrating the potential impacts of changes to farm policy design
                         </Typography>
                         <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
-                            Agriculture Risk Coverage, County Option (ARC-CO): Revising program calculations will change
-                            payment rates and expectations; policy design can help encourage practice adoption or
-                            improve expected benefits to farmers
+                            The following visualizes the modeling of possible changes in the policy design of a specific
+                            farm payment program, Agriculture Risk Coverage, County Option (ARC-CO). It provides an
+                            initial demonstration or example for how revising program calculations can impact payments
+                            to farmers
                         </Typography>
                     </Grid>
                 </Grid>
@@ -107,7 +108,7 @@ export default function Surface51Page(): JSX.Element {
                     >
                         <Grid item md={6}>
                             <Typography sx={{ fontWeight: 600, fontSize: "1.25rem", px: 3, pt: 1, pb: 0.5 }}>
-                                What is Agriculture Risk Coverage, County Option (ARC-CO)?
+                                Current policy design for ARC-CO
                             </Typography>
                             <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
                                 It provides income supporting payments to farmers who enroll eligible acres. Payments
@@ -130,16 +131,20 @@ export default function Surface51Page(): JSX.Element {
                             </Typography>
                         </Grid>
                         <Grid item md={6} sx={{ borderLeft: "1px solid #0000001F" }}>
-                            <Typography sx={{ fontWeight: 600, fontSize: "1.25rem", px: 3, pt: 1, pb: 0.5 }}>
-                                What is Adjusted ARC-CO?
+                            <Typography sx={{ color: "#000000DE", fontSize: "1.125rem", px: 3, pt: 1, pb: 3 }}>
+                                The visualization below presents two different design options for ARC-CO:
                             </Typography>
-                            <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
+
+                            <Typography sx={{ fontWeight: 600, fontSize: "1.25rem", px: 3, py: 0.5 }}>
+                                (1) Redesigned policy: Adjusted ARC-CO
+                            </Typography>
+                            <Typography sx={{ fontSize: "1.125rem", px: 3, pb: 3, pt: 0.5 }}>
                                 For farmers enrolling in program and adopting cover crops on acres associated, the
                                 actual revenue calculation in the crop year is discounted or reduced by <b>$50</b> per
                                 acre to account for cost of cover crop adoption.
                             </Typography>
                             <Typography sx={{ fontWeight: 600, fontSize: "1.25rem", px: 3, py: 0.5 }}>
-                                Enhanced ARC-CO (EARC-CO) calculation:
+                                (2) Redesigned policy: Enhanced ARC-CO
                             </Typography>
                             <Typography sx={{ fontSize: "1.125rem", px: 3, py: 0.5 }}>
                                 Benchmark = 5-year Olympic (drop highest and lowest year) average of national average
