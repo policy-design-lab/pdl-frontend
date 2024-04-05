@@ -4,9 +4,8 @@ import { Box, createTheme, ThemeProvider, Typography, Grid, Tabs, Tab } from "@m
 import NavBar from "../components/NavBar";
 import "../styles/issueWhitePaper.css";
 import Footer from "../components/Footer";
-import CardPaper from "../components/issueWhitePaper/cardPaper";
 import CardIFrame from "../components/issueWhitePaper/cardIframe";
-import PDF from "../files/ISSUE.pdf";
+import WhatFarmsStand from "../files/issues/What_Farmers_Stand.pdf";
 
 export default function IssueWhitePaperPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
@@ -119,7 +118,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                             author="Professor Jonathan Coppess"
                                             date="Nov. 15 2023"
-                                            link={PDF}
+                                            link={WhatFarmsStand}
                                             iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
                                             iframeWidth={iframeWidth}
                                             iframeHeight={iframeHeight}
