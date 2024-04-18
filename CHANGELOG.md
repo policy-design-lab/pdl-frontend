@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added a new white paper to the Issue/White Paper page [#262](https://github.com/policy-design-lab/pdl-frontend/issues/262)
+
+### Changed
+- Removed the copyright section on the Policy Lab page [#263](https://github.com/policy-design-lab/pdl-frontend/issues/263) 
+- Changed the '_' in the URLs of Issue/White Paper page and Policy Lab page to '-' [#266](https://github.com/policy-design-lab/pdl-frontend/issues/266) 
+
 ## [0.17.0] - 2024-04-09
 
 ### Added

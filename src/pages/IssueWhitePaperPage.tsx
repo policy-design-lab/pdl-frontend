@@ -150,9 +150,9 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                         >
                                             <CardPaper
                                                 title="Know the Score: The Hidden Costs of Repurposing Farm Conservation Investments"
-                                                description="18 billion in vital assistance for farmers and ranchers is at risk if Congress repurposes the funding for conservation agriculture programs in the the Farm Bill reauthorization."
+                                                description="In the pending farm bill reauthorization, potential efforts to repurpose recent investments in farm conservation programs are plagued by hidden costs from obscure budget rules that risk farmers losing much, if not all, of the investments; this white paper discusses those hidden costs and the risks to conservation assistance to farmers."
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
-                                                date="September 28 2023"
+                                                date="March 2024"
                                                 link={KnowTheScore}
                                             />
                                         </Grid>
