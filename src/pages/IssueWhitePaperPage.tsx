@@ -44,7 +44,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                             columns={{ xs: 12 }}
                             sx={{
                                 pt: 3.5,
-                                display: "none"
+                                //display: "none"
                             }}
                         >
                             <Tabs
