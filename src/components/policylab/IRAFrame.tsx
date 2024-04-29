@@ -10,24 +10,36 @@ export default function IRAFrame(): JSX.Element {
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-    function TabPanel({ value, index, title }: { value: any; index: any; title: string }) {
+    function TabPanel({ v, index, title }: { v: any; index: any; title: string }) {
         return (
-            <Box role="tabpanel" hidden={value !== index}>
-                {value === index && (
-                    <Box
+            <Box role="tabpanel" hidden={v !== index}>
+                {v === index && (
+                    <Grid
+                        container
+                        xs={12}
                         sx={{
+                            display: "flex",
                             my: 3,
-                            mx: 6,
                             backgroundColor: "white",
-                            minHeight: "50vh"
+                            minHeight: "50vh",
+                            justifyContent: "center"
                         }}
                     >
-                        <Box component="img" sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "contain"
-                        }} src={mockup} />
-                    </Box>
+                        <Grid>
+                            <h2>{title}</h2>
+                        </Grid>
+                        <Grid>
+                            <Box
+                                component="img"
+                                sx={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "contain"
+                                }}
+                                src={mockup}
+                            />
+                        </Grid>
+                    </Grid>
                 )}
             </Box>
         );
@@ -36,7 +48,7 @@ export default function IRAFrame(): JSX.Element {
     return (
         <Box sx={{ width: "100%", mt: 1, backgroundColor: "white" }}>
             <Box display="flex" justifyContent="center" sx={{ borderBottom: 1, borderColor: "divider", mx: 6 }}>
-                <Tabs variant="scrollable" value={value} onChange={handleChange} scrollButtons="auto" sx={{ mt: 3}}>
+                <Tabs variant="scrollable" value={value} onChange={handleChange} scrollButtons="auto" sx={{ mt: 3 }}>
                     <CustomTab label={<Box>EQIP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <CustomTab label={<Box>CSP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
@@ -45,9 +57,9 @@ export default function IRAFrame(): JSX.Element {
                 </Tabs>
             </Box>
             {/* NOTE: Because of divider, the index are increased by 2 */}
-            <TabPanel value={value} index={0} title="Index0" />
-            <TabPanel value={value} index={2} title="Index2" />
-            <TabPanel value={value} index={4} title="Index4" />
+            <TabPanel v={value} index={0} title="EQIP" />
+            <TabPanel v={value} index={2} title="CSP" />
+            <TabPanel v={value} index={4} title="RCPP" />
         </Box>
     );
 }

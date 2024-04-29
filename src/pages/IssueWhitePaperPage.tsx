@@ -43,8 +43,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                             container
                             columns={{ xs: 12 }}
                             sx={{
-                                pt: 3.5,
-                                //display: "none"
+                                pt: 3.5
+                                // display: "none"
                             }}
                         >
                             <Tabs

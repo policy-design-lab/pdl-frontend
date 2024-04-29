@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import AleskiThesis from "../files/Aleski_Thesis.pdf";
 import "../styles/issueWhitePaper.css";
 import IRAFrame from "../components/policylab/IRAFrame";
+
 const useStyles = makeStyles(() => ({
     iframeContainer: {
         "height": window.innerHeight > 900 ? "150vh" : "100vh",
@@ -280,7 +281,7 @@ export default function PolicyLabPage(): JSX.Element {
                             <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
                                 On August 16, 2022, President Biden signed the Inflation Reduction Act (IRA) into law,
                                 marking one of the largest investments in the American economy, energy security, and
-                                climate that Congress has made in the nation's history.
+                                climate that Congress has made in the nation&apos;s history.
                             </Typography>
                         </Grid>
                     </Grid>
@@ -333,7 +334,7 @@ export default function PolicyLabPage(): JSX.Element {
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={2} />
                         <Grid xs={12} md={8}>
-                           <IRAFrame />
+                            <IRAFrame />
                         </Grid>
                     </Grid>
                 </Box>
