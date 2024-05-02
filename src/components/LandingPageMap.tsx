@@ -60,9 +60,6 @@ const MapChart = (props) => {
                     <Typography noWrap variant="h6">
                         Total Farm Bill Benefits from <strong>2018 - 2022</strong>
                     </Typography>
-                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                        <i>2022 payments for Title I have not yet been paid</i>
-                    </Typography>
                 </Box>
             );
             break;
@@ -77,9 +74,6 @@ const MapChart = (props) => {
                 <Box>
                     <Typography noWrap variant="h6">
                         Total Commodities Programs (Title I) from <strong>2018 - 2022</strong>
-                    </Typography>
-                    <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                        <i>2022 payments for Title I have not yet been paid</i>
                     </Typography>
                 </Box>
             );
@@ -214,14 +208,7 @@ const MapChart = (props) => {
                                                                             : classes.tooltip_regularcell_right
                                                                     }
                                                                 >
-                                                                    {String(record["Fiscal Year"]) === "2022" &&
-                                                                    title.includes("Title I")
-                                                                        ? "Not Available"
-                                                                        : `$${ShortFormat(
-                                                                              record.Amount,
-                                                                              undefined,
-                                                                              2
-                                                                          )}`}
+                                                                    {`$${ShortFormat(record.Amount, undefined, 2)}`}
                                                                 </td>
                                                             </tr>
                                                         ))}

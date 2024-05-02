@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Changed
+- Updated landing page maps to reflect the 2022 data [#272](https://github.com/policy-design-lab/pdl-frontend/issues/272)
+
 ## [0.17.0] - 2024-04-09
 
 ### Added
