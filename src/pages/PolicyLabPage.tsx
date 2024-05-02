@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
         }
     }
 }));
-export default function Surface51Page(): JSX.Element {
+export default function PolicyLabPage(): JSX.Element {
     const classes = useStyles();
     const iframeLink = "https://surface51.github.io/policy-design-lab/";
     const iframeTitle = "Surface51 Policy Design Lab";
@@ -192,20 +192,6 @@ export default function Surface51Page(): JSX.Element {
                             </a>{" "}
                             By Aleksi Knepp
                         </Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sx={{
-                            borderTop: "1px solid #0000001F",
-                            textAlign: "center",
-                            color: "#00000080",
-                            fontSize: "0.75rem",
-                            textTransform: "uppercase",
-                            mb: 3
-                        }}
-                    >
-                        Copyright
                     </Grid>
                 </Grid>
             </Box>
