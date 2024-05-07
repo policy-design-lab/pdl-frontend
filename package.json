@@ -1,6 +1,6 @@
 {
   "name": "policy-design-lab",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "the front end of policy design lab",
   "repository": "https://github.com/policy-design-lab/pdl-frontend",
   "main": "src/app.tsx",

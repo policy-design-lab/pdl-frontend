@@ -93,6 +93,7 @@ export default function CardIFrame({
                         width={iframeWidth}
                         height={iframeHeight}
                         src={iframeLink}
+                        style={{ border: "none" }}
                         allowFullScreen
                     />
                 </Grid>
