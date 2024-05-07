@@ -151,7 +151,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 title="Know the Score: The Hidden Costs of Repurposing Farm Conservation Investments"
                                                 description="In the pending farm bill reauthorization, potential efforts to repurpose recent investments in farm conservation programs are plagued by hidden costs from obscure budget rules that risk farmers losing much, if not all, of the investments; this white paper discusses those hidden costs and the risks to conservation assistance to farmers."
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
-                                                date="March 2024"
+                                                date="May 2024"
                                                 link={KnowTheScore}
                                             />
                                         </Grid>
