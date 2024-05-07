@@ -193,20 +193,6 @@ export default function Surface51Page(): JSX.Element {
                             By Aleksi Knepp
                         </Typography>
                     </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sx={{
-                            borderTop: "1px solid #0000001F",
-                            textAlign: "center",
-                            color: "#00000080",
-                            fontSize: "0.75rem",
-                            textTransform: "uppercase",
-                            mb: 3
-                        }}
-                    >
-                        Copyright
-                    </Grid>
                 </Grid>
             </Box>
         </Box>
