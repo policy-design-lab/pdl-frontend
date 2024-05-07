@@ -1,4 +1,3 @@
-// RELEASE NOTE Nov 16: hide issue/switch panel because client only has one issue brief available. Unhide this after white paper is available.
 import * as React from "react";
 import { Box, createTheme, ThemeProvider, Typography, Grid, Tabs, Tab } from "@mui/material";
 import NavBar from "../components/NavBar";
