@@ -19,7 +19,7 @@ const drawerWidth = 240;
 const navItems = [
     { title: "HOME", link: "/" },
     { title: "POLICY LAB".toUpperCase(), link: "/policy-lab" },
-    { title: "ISSUES & WHITE PAPERS", link: "/issue-whitepaper" },
+    { title: "ISSUES & WHITE PAPERS", link: "/issues-whitepapers" },
     { title: "ABOUT PDL" }
 ];
 export default function NavBar({
