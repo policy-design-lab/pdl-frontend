@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 import * as React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 
-export default function CardPaper({ title, description, author, date, link }): JSX.Element {
+export default function CardPaper({ id, title, description, author, date, link }): JSX.Element {
     const useStyles = makeStyles(() => ({
         downloadButton: {
             "&:hover": {
@@ -21,6 +21,7 @@ export default function CardPaper({ title, description, author, date, link }): J
             <Grid container xs={12} sm={12}>
                 <Grid className="inCardContainer mainItems" container xs={12} sm={12}>
                     <Grid
+                        id={id}
                         container
                         xs={12}
                         sm={12}

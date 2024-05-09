@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Box, createTheme, ThemeProvider, Typography, Grid, Tabs, Tab } from "@mui/material";
+import { useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../styles/issueWhitePaper.css";
 import Footer from "../components/Footer";
@@ -9,6 +10,8 @@ import CardPaper from "../components/issueWhitePaper/cardPaper";
 import KnowTheScore from "../files/issues/Know_the_Score.pdf";
 
 export default function IssueWhitePaperPage(): JSX.Element {
+    const { id } = useParams();
+    const [cardId, setCardId] = React.useState<string>("");
     const [tab, setTab] = React.useState(0);
 
     const defaultTheme = createTheme({
@@ -22,6 +25,30 @@ export default function IssueWhitePaperPage(): JSX.Element {
     const iframeWidth = window.innerWidth * 0.9;
     const iframeHeight = window.innerWidth > 1679 ? window.innerHeight * 0.92 : window.innerHeight * 0.95;
 
+    React.useEffect(() => {
+        if (id) {
+            setCardId(id);
+        }
+    }, [id]);
+    React.useEffect(() => {
+        if (cardId) {
+            if (cardId.includes("white-paper")) setTab(1);
+            else setTab(0);
+            const element = document.getElementById(cardId);
+            if (element) {
+                let offsetPosition = 0;
+                if (cardId.includes("white-paper")) {
+                    const offset = 20; // offset for white paper because of the iframe on the issue part
+                    const elementPosition = element.getBoundingClientRect().top;
+                    offsetPosition = elementPosition - offset;
+                }
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+    }, [cardId]);
     return (
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ width: "100%" }}>
@@ -119,6 +146,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardIFrame
+                                                id="issue-what-farmers-stand"
                                                 title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
@@ -148,6 +176,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardPaper
+                                                id="white-paper-know-the-score"
                                                 title="Know the Score: The Hidden Costs of Repurposing Farm Conservation Investments"
                                                 description="In the pending farm bill reauthorization, potential efforts to repurpose recent investments in farm conservation programs are plagued by hidden costs from obscure budget rules that risk farmers losing much, if not all, of the investments; this white paper discusses those hidden costs and the risks to conservation assistance to farmers."
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"

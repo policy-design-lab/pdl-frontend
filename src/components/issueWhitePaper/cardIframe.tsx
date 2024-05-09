@@ -4,6 +4,7 @@ import * as React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 
 export default function CardIFrame({
+    id,
     title,
     author,
     date,
@@ -23,7 +24,7 @@ export default function CardIFrame({
     const classes = useStyles();
 
     return (
-        <Grid container className="paperCard" sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Grid id={id} container className="paperCard" sx={{ display: "flex", justifyContent: "space-between" }}>
             <Grid container xs={12} sm={12}>
                 <Grid className="inCardContainer mainItems" container xs={12} sm={12}>
                     <Grid
