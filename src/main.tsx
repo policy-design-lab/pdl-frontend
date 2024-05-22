@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import EQIPPage from "./pages/EQIPPage";
 import CSPPage from "./pages/CSPPage";
@@ -37,8 +37,9 @@ export default function Main(): JSX.Element {
                 <Route path="/title1" element={<TitleIPage />} />
                 <Route path="/cropinsurance" element={<CropInsurancePage />} />
                 <Route path="/snap" element={<SNAPPage />} />
-                <Route path="/issue_whitepaper" element={<IssueWhitePaperPage />} />
-                <Route path="/policy_lab" element={<Surface51Page />} />
+                <Route path="/issues-whitepapers" element={<IssueWhitePaperPage />} />
+                <Route path="/issues-whitepapers/:id" element={<IssueWhitePaperPage />} />
+                <Route path="/policy-lab" element={<Surface51Page />} />
             </Routes>
         </ScrollToTop>
     );

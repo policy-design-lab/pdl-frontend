@@ -139,10 +139,9 @@ export default function LandingPageMapTab({
                             <Typography variant="h4" className="smallCaps" style={{ textAlign: "center" }}>
                                 <strong>Farm Bill Data</strong>
                             </Typography>
-                            <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
-                                <strong>Map visualization</strong>{" "}
-                                <b style={{ color: "lightgrey" }}>(Numbers have not yet been finalized)</b>
-                            </Typography>
+                            {/* <Typography variant="h6" className="allSmallCaps" sx={{ mt: 1 }}>
+                                <strong>Map visualization</strong>
+                            </Typography> */}
                         </Box>
                         <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                         <CustomTab
