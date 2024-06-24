@@ -19,6 +19,7 @@ const drawerWidth = 240;
 const navItems = [
     { title: "HOME", link: "/" },
     { title: "POLICY LAB".toUpperCase(), link: "/policy-lab" },
+    { title: "INFLATION REDUCTION ACT".toUpperCase(), link: "/ira" },
     { title: "ISSUES & WHITE PAPERS", link: "/issues-whitepapers" },
     { title: "ABOUT PDL" }
 ];

@@ -1,4 +1,5 @@
 export function compareWithDollarSign(rowA, rowB, id, desc) {
+    console.log("compareWithDollarSign", rowA.values[id], rowB.values[id]);
     const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(",", ""));
     const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(",", ""));
     if (a > b) return 1;
