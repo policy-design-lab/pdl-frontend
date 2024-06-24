@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { styled } from "@mui/system";
-import IRAMap from "./IRAMap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollar, faPercentage } from "@fortawesome/free-solid-svg-icons";
+import IRAMap from "./IRAMap";
 import IRADollarTable from "./IRADollarTable";
 import IRAPercentageTable from "./IRAPercentageTable";
 
@@ -32,7 +32,7 @@ function TabPanel({
     v: any;
     index: any;
     title: string;
-    stateDistributionData: {};
+    stateDistributionData: any;
     stateCodes: any;
     allStates: any;
     practiceNames: any;
@@ -176,7 +176,7 @@ function TabPanel({
                                 <Typography variant="h6">No data.</Typography>
                             )}
                         </Grid>
-                        <Grid item xs={1}></Grid>
+                        <Grid item xs={1} />
                         <Grid item xs={2}>
                             <FormControl fullWidth>
                                 <Typography variant="h6" sx={{ mb: 1 }}>

@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import NavBar from "../../components/NavBar";
 import "../../styles/issueWhitePaper.css";
 import Surface51SubPage from "./Surface51SubPage";
+
 const useStyles = makeStyles(() => ({
     iframeContainer: {
         "height": window.innerHeight > 900 ? "150vh" : "100vh",
@@ -39,13 +40,13 @@ const useStyles = makeStyles(() => ({
 export default function PolicyLabPage(): JSX.Element {
     // const [tab, setTab] = React.useState(0);
     const classes = useStyles();
-   
+
     // const switchTab = (event, newTab) => {
     //     if (newTab !== null) {
     //         setTab(newTab);
     //     }
     // };
-    
+
     return (
         <Box sx={{ width: "100%", backgroundColor: "#ECF0EE" }}>
             <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
@@ -71,9 +72,8 @@ export default function PolicyLabPage(): JSX.Element {
                 </Grid>
             </Box> */}
             {/* <Box sx={{ display: tab !== 0 ? "none" : "div" }}> */}
-                <Surface51SubPage styleClass={classes} />
+            <Surface51SubPage styleClass={classes} />
             {/* </Box> */}
         </Box>
     );
 }
-

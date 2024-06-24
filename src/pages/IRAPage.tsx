@@ -1,11 +1,11 @@
 import { Box, Typography, Grid, Tabs, Button, Modal, IconButton } from "@mui/material";
 import * as React from "react";
+import InfoIcon from "@mui/icons-material/Info";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavBar from "../components/NavBar";
 import TabPanel from "../components/ira/TabPanel";
 import { CustomTab } from "../components/shared/CustomTab";
-import InfoIcon from '@mui/icons-material/Info';
 import IRAModal from "../components/ira/IRAModal";
 
 export default function IRAPage(): JSX.Element {
@@ -44,7 +44,7 @@ export default function IRAPage(): JSX.Element {
         getJsonDataFromUrl(eqip_statedistribution_url).then((response) => {
             setEqipStateDistributionData(response);
         });
-         const eqip_summary_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`;
+        const eqip_summary_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`;
         getJsonDataFromUrl(eqip_summary_url).then((response) => {
             setEqipSummaryData(response);
         });
@@ -186,13 +186,14 @@ export default function IRAPage(): JSX.Element {
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <CustomTab label={<Box>ACEP</Box>} customSx={tabStyle} selectedSX={selectedStyle} /> */}
                                     <IconButton color="primary" onClick={handleOpen}>
-                                        <InfoIcon sx={{color: "#2F7164", fontSize: 30}}/>
+                                        <InfoIcon sx={{ color: "#2F7164", fontSize: 30 }} />
                                     </IconButton>
                                     <IRAModal open={isModalOpen} handleClose={handleClose} />
                                 </Tabs>
                             </Box>
                             {/* NOTE: Because of divider, the index are increased by 2 */}
-                            {Object.keys(eqipStateDistributionData).length > 0 && Object.keys(stateCodesData).length > 0 ? (
+                            {Object.keys(eqipStateDistributionData).length > 0 &&
+                            Object.keys(stateCodesData).length > 0 ? (
                                 <span>
                                     <TabPanel
                                         v={value}

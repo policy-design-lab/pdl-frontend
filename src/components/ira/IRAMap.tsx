@@ -6,12 +6,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
+import { BorderTop } from "@mui/icons-material";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
-import { BorderTop } from "@mui/icons-material";
 import { maxCompletedSubmitJobs } from "../../../../../../BC/fabric-samples/asset-transfer-basic/rest-api-typescript/src/config";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
@@ -63,7 +63,7 @@ const MapChart = ({
                                             return null;
                                         }
                                         // For list of practices, calculate the total of all practices if not "Total"
-                                        let practiceRecord = state;
+                                        const practiceRecord = state;
                                         practicePayment = practiceRecord.totalPaymentInDollars;
                                         if (!practices.includes("Total")) {
                                             practicePayment = 0;
@@ -127,30 +127,29 @@ const MapChart = ({
                                                                                     </td>
                                                                                 </tr>
                                                                             );
-                                                                        } else {
-                                                                            return (
-                                                                                <tr style={topTipStyle}>
-                                                                                    <td
-                                                                                        className={
-                                                                                            index === 0
-                                                                                                ? classes.tooltip_topcell_left
-                                                                                                : classes.tooltip_regularcell_left
-                                                                                        }
-                                                                                    >
-                                                                                        {practice} Benefits:
-                                                                                    </td>
-                                                                                    <td
-                                                                                        className={
-                                                                                            index === 0
-                                                                                                ? classes.tooltip_topcell_right
-                                                                                                : classes.tooltip_regularcell_right
-                                                                                        }
-                                                                                    >
-                                                                                        No Data
-                                                                                    </td>
-                                                                                </tr>
-                                                                            );
                                                                         }
+                                                                        return (
+                                                                            <tr style={topTipStyle} key={practice}>
+                                                                                <td
+                                                                                    className={
+                                                                                        index === 0
+                                                                                            ? classes.tooltip_topcell_left
+                                                                                            : classes.tooltip_regularcell_left
+                                                                                    }
+                                                                                >
+                                                                                    {practice} Benefits:
+                                                                                </td>
+                                                                                <td
+                                                                                    className={
+                                                                                        index === 0
+                                                                                            ? classes.tooltip_topcell_right
+                                                                                            : classes.tooltip_regularcell_right
+                                                                                    }
+                                                                                >
+                                                                                    No Data
+                                                                                </td>
+                                                                            </tr>
+                                                                        );
                                                                     })}
 
                                                                 {practices.length > 1 ? (
@@ -395,8 +394,6 @@ const MapChart = ({
 
 MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func,
-    subpractice: PropTypes.string,
-    practice: PropTypes.string,
     maxValue: PropTypes.number
 };
 
@@ -428,9 +425,11 @@ const IRAMap = ({
             });
         } else {
             statePerformance[year].forEach((value) => {
-                predict === "Min"
-                    ? quantizeArray.push(value.predictedMinimumTotalPaymentInDollars)
-                    : quantizeArray.push(value.predictedMaximumTotalPaymentInDollars);
+                if (predict === "Min") {
+                    quantizeArray.push(value.predictedMinimumTotalPaymentInDollars);
+                } else {
+                    quantizeArray.push(value.predictedMaximumTotalPaymentInDollars);
+                }
             });
         }
     } else {
@@ -457,15 +456,13 @@ const IRAMap = ({
     const maxValue = Math.max(...quantizeArray);
     // if (year !== "2023") searchKey = predict === "Min" ? searchKey + "_min" : searchKey + "_max";
 
-    //const customScale = legendConfig[searchKey];
+    // const customScale = legendConfig[searchKey];
     // since IRA data is not predictable in legend config, separate the scale to five equal parts
     const sortedData = quantizeArray.sort((a, b) => a - b);
     const numIntervals = 5;
     const intervalSize = Math.floor(sortedData.length / numIntervals);
     const thresholds = [];
-    for (let i = 1; i < numIntervals; i++) {
-        // Pick the element that corresponds to the end of each interval
-        // Ensure that each interval has at least one entry
+    for (let i = 1; i < numIntervals; i += 1) {
         const thresholdIndex = i * intervalSize - 1;
         thresholds.push(sortedData[thresholdIndex]);
     }
@@ -477,13 +474,9 @@ const IRAMap = ({
         if (practices[0] === "Total") {
             if (year === "2023") {
                 if (state.totalPaymentInDollars === 0) zeroPoints.push(state.state);
-            } else {
-                if (predict === "Min") {
-                    if (state.predictedMinimumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
-                } else {
-                    if (state.predictedMaximumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
-                }
-            }
+            } else if (predict === "Min") {
+                if (state.predictedMinimumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
+            } else if (state.predictedMaximumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
         } else {
             practices.forEach((practice) => {
                 const practiceRecord = state.practices;
@@ -494,15 +487,14 @@ const IRAMap = ({
                         else if (zeroPoints.includes(state.state))
                             zeroPoints = zeroPoints.filter((item) => item !== state.state);
                     } else {
-                        // change this later after removing min and max value
-                        if (predict === "Min") {
-                            if (pra.predictedMinimumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
-                            else if (zeroPoints.includes(state.state))
-                                zeroPoints = zeroPoints.filter((item) => item !== state.state);
-                        } else {
-                            if (pra.predictedMaximumTotalPaymentInDollars === 0) zeroPoints.push(state.state);
-                            else if (zeroPoints.includes(state.state))
-                                zeroPoints = zeroPoints.filter((item) => item !== state.state);
+                        const paymentCondition =
+                            predict === "Min"
+                                ? pra.predictedMinimumTotalPaymentInDollars
+                                : pra.predictedMaximumTotalPaymentInDollars;
+                        if (paymentCondition === 0) {
+                            zeroPoints.push(state.state);
+                        } else if (zeroPoints.includes(state.state)) {
+                            zeroPoints = zeroPoints.filter((item) => item !== state.state);
                         }
                     }
                 } else zeroPoints.push(state.state);

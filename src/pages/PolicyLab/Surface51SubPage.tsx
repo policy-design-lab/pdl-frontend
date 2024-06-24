@@ -2,7 +2,7 @@ import { Box, Typography, Grid } from "@mui/material";
 import * as React from "react";
 import AleskiThesis from "../../files/Aleski_Thesis.pdf";
 
-export default function Surface51SubPage({styleClass}:{styleClass:any}): JSX.Element {
+export default function Surface51SubPage({ styleClass }: { styleClass: any }): JSX.Element {
     const iframeLink = "https://surface51.github.io/policy-design-lab/";
     const iframeTitle = "Surface51 Policy Design Lab";
     function TrendIcon({ bkColor, fontColor, text }) {

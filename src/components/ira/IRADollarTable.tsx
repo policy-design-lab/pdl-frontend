@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
@@ -12,7 +13,6 @@ import {
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCsvData from "../shared/GetCsvData";
-import { CSVLink } from "react-csv";
 
 function IRADollarTable({
     tableTitle,
@@ -30,19 +30,19 @@ function IRADollarTable({
 
     // eslint-disable-next-line no-restricted-syntax
     IRAData[year].forEach((stateData) => {
-        let state = stateData.state;
-        let practiceData = null;
+        const state = stateData.state;
+        let pData = null;
         if (practices.includes("Total")) {
-            practiceData = stateData;
+            pData = stateData;
             hashmap[state] = {};
             attributes
-                .filter((item) => item != "practiceInstanceCount")
+                .filter((item) => item !== "practiceInstanceCount")
                 .forEach((attribute) => {
-                    const attributeData = practiceData[attribute];
+                    const attributeData = pData[attribute];
                     hashmap[state][attribute] = attributeData;
                 });
         } else {
-            let practices_total = {};
+            const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
@@ -90,24 +90,27 @@ function IRADollarTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
-                attr.includes("Dollar")
-                    ? (newRecord[attr] = `$${
-                          value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                      }`)
-                    : (newRecord[attr] = `${
-                          value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                      }`);
+                const formattedValue = value
+                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    .toString()
+                    .split(".")[0];
+                if (attr.includes("Dollar")) {
+                    newRecord[attr] = `$$${formattedValue}`;
+                } else {
+                    newRecord[attr] = `${formattedValue}`;
+                }
             } else {
-                attr.includes("Dollar") ? (newRecord[attr] = "$0") : (newRecord[attr] = "0");
+                newRecord[attr] = attr.includes("Dollar") ? "$0" : "0";
             }
         });
         resultData.push(newRecord);
     });
+
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-    attributes = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
+    const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
     // As discussed, use 'Benefit' instead of 'Payment' to align with existing EQIP table
-    attributes.forEach((attribute) => {
+    attrs.forEach((attribute) => {
         let sortMethod = compareWithDollarSign;
         if (attribute === "practiceInstanceCount" || attribute === "totalPracticeInstanceCount")
             sortMethod = compareWithNumber;
@@ -287,7 +290,6 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         useSortBy,
         usePagination
     );
-    console.log("data",data);
     return (
         <div>
             {data && data.length > 0 ? (

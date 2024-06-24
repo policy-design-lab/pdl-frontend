@@ -1,18 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
-import {
-    compareWithNumber,
-    compareWithAlphabetic,
-    compareWithDollarSign,
-    compareWithPercentSign,
-    sortByDollars
-} from "../shared/TableCompareFunctions";
+import { compareWithAlphabetic, compareWithPercentSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCsvData from "../shared/GetCsvData";
-import { CSVLink } from "react-csv";
 
 function IRAPercentageTable({
     tableTitle,
@@ -27,31 +21,35 @@ function IRAPercentageTable({
     colors
 }): JSX.Element {
     let resultData = [];
-    let hashmap = {};
+    const hashmap = {};
 
     // eslint-disable-next-line no-restricted-syntax
     IRAData[year].forEach((stateData) => {
-        let state = stateData.state;
-        let practiceData = null;
+        const state = stateData.state;
+        let pData = null;
         if (practices.includes("Total")) {
-            practiceData = stateData;
+            pData = stateData;
             hashmap[state] = {};
             attributes
-                .filter((item) => item != "practiceInstanceCount")
+                .filter((item) => item !== "practiceInstanceCount")
                 .forEach((attribute) => {
-                    const attributeData = practiceData[attribute];
+                    const attributeData = pData[attribute];
                     hashmap[state][attribute] = attributeData;
                     // Calculate percentage nationwide
                     if (attribute === "totalPaymentInDollars") {
-                        hashmap[state][`${attribute}PercentageNationwide`] =
-                            ((attributeData / summary.totalPaymentInDollars) * 100).toFixed(2) + "%";
+                        hashmap[state][`${attribute}PercentageNationwide`] = `${(
+                            (attributeData / summary.totalPaymentInDollars) *
+                            100
+                        ).toFixed(2)}%`;
                     } else if (attribute === "totalPracticeInstanceCount") {
-                        hashmap[state][`${attribute}PercentageNationwide`] =
-                            ((attributeData / summary.totalPracticeInstanceCount) * 100).toFixed(2) + "%";
+                        hashmap[state][`${attribute}PercentageNationwide`] = `${(
+                            (attributeData / summary.totalPracticeInstanceCount) *
+                            100
+                        ).toFixed(2)}%`;
                     }
                 });
         } else {
-            let practices_total = {};
+            const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
@@ -90,8 +88,10 @@ function IRAPercentageTable({
                                         ? nationalPracticeData.totalPaymentInDollars
                                         : nationalPracticeData.totalPracticeInstanceCount;
 
-                                hashmap[state][`${new_key}PercentageNationwide`] =
-                                    ((attributeData[attribute] / nationalTotal) * 100).toFixed(2) + "%";
+                                hashmap[state][`${new_key}PercentageNationwide`] = `${(
+                                    (attributeData[attribute] / nationalTotal) *
+                                    100
+                                ).toFixed(2)}%`;
                             }
                         });
                 }
@@ -129,30 +129,16 @@ function IRAPercentageTable({
 
                         // Calculate percentage for all practices combined
                         if (attribute === "totalPaymentInDollars") {
-                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] =
-                                ((totalStatePayments / totalNationalPayments) * 100).toFixed(2) + "%";
+                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
+                                (totalStatePayments / totalNationalPayments) *
+                                100
+                            ).toFixed(2)}%`;
                         } else if (attribute === "practiceInstanceCount") {
-                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] =
-                                ((totalStateInstances / totalNationalInstances) * 100).toFixed(2) + "%";
+                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
+                                (totalStateInstances / totalNationalInstances) *
+                                100
+                            ).toFixed(2)}%`;
                         }
-
-                        // if (!practices_total[state] || practices_total[state][attribute] === undefined) {
-                        //     if (!hashmap[state]) hashmap[state] = {};
-                        //     hashmap[state][`All Practices: ${attribute}`] = 0;
-                        //     hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = "0.00";
-                        // } else {
-                        //     hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
-                        //     // Calculate percentage for all practices combined
-                        //     const nationalTotal =
-                        //         attribute === "totalPaymentInDollars"
-                        //             ? summary.totalPaymentInDollars
-                        //             : summary.totalPracticeInstanceCount;
-
-                        //     hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = (
-                        //         (practices_total[state][attribute] / nationalTotal) *
-                        //         100
-                        //     ).toFixed(2);
-                        // }
                     }
                 });
         }
@@ -174,12 +160,10 @@ function IRAPercentageTable({
                 } else {
                     newRecord[attr] = parseFloat(value).toLocaleString(undefined, { minimumFractionDigits: 2 });
                 }
+            } else if (attr.includes("Dollar")) {
+                newRecord[attr] = "$0";
             } else {
-                if (attr.includes("Dollar")) {
-                    newRecord[attr] = "$0";
-                } else {
-                    newRecord[attr] = "0";
-                }
+                newRecord[attr] = "0";
             }
         });
         resultData.push(newRecord);
@@ -187,18 +171,21 @@ function IRAPercentageTable({
 
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-    //filter out all data attributes with the word "percentage" in them
-    resultData = resultData.map((item) =>
-        Object.keys(item)
-            .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
-            .reduce((obj, key) => {
-                obj[key] = item[key];
-                return obj;
-            }, {} as any)
+    // filter out all data attributes with the word "percentage" in them
+
+    resultData = resultData.map(
+        (item) =>
+            Object.keys(item)
+                .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
+                .reduce((obj, key) => {
+                    obj[key] = item[key];
+                    return obj;
+                }, {} as any)
+        /* eslint-disable-next-line function-paren-newline */
     );
-    attributes = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
-    attributes.forEach((attribute) => {
-        let sortMethod = compareWithPercentSign;
+    const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
+    attrs.forEach((attribute) => {
+        const sortMethod = compareWithPercentSign;
         const json = {
             Header: attribute
                 .replace("Payment", "Benefit")

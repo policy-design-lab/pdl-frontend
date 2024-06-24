@@ -95,7 +95,7 @@ export default function DrawLegend({
                         legendRectX[legendRectX.length - 1] +
                         data_distribution[data_distribution.length - 1] * svgWidth;
                     legendRectX.push(last);
-                    if ( svgWidth > 1690 ) {
+                    if (svgWidth > 1690) {
                         baseSVG
                             .selectAll(null)
                             .data(legendRectX)
@@ -143,7 +143,7 @@ export default function DrawLegend({
                             });
                     }
                     if (emptyState.length !== 0) {
-                        let zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
+                        const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
                         const middleText = baseSVG
                             .append("text")
                             .attr("class", "legendTextSide")
