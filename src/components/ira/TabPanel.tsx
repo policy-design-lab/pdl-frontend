@@ -1,4 +1,6 @@
 import {
+    Switch,
+    FormControlLabel,
     Box,
     Button,
     Chip,
@@ -9,12 +11,15 @@ import {
     ToggleButtonGroup,
     Select,
     Slider,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import React, { useState } from "react";
 import { styled } from "@mui/system";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollar, faPercentage } from "@fortawesome/free-solid-svg-icons";
+import useWindowSize from "../shared/WindowSizeHook";
 import IRAMap from "./IRAMap";
 import IRADollarTable from "./IRADollarTable";
 import IRAPercentageTable from "./IRAPercentageTable";
@@ -39,7 +44,9 @@ function TabPanel({
     summaryData: any;
 }): JSX.Element {
     const [tab, setTab] = React.useState(0);
+    const [isPredictionOn, setIsPredictionOn] = useState(false);
     const years = stateDistributionData ? Object.keys(stateDistributionData).map(Number) : [];
+    const [updatedData, setUpdatedData] = useState(stateDistributionData);
     const minYear = Math.min(...years);
     const maxYear = Math.max(...years);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -48,9 +55,14 @@ function TabPanel({
     const [selectedPredict, setSelectedPredict] = useState("Min");
     const [selectedPractices, setSelectedPractices] = useState([]);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]; // title II color
-
+    const the = useTheme();
+    const isSmallScreen = useMediaQuery(the.breakpoints.down("sm"));
+    const windowSize = useWindowSize();
+    const updateData = () => {
+        setUpdatedData(stateDistributionData);
+    };
     const StyledGrid = styled(Grid)(({ theme }) => ({
-        ".offset-md-1": {
+        ".offset-sm-1": {
             marginLeft: theme.spacing(1 * 8)
         }
     }));
@@ -59,11 +71,10 @@ function TabPanel({
             setTab(newTab);
         }
     };
-    React.useEffect(() => {
-        if (years.length) {
-            setSelectedYear(minYear);
-        }
-    }, [minYear]);
+    const handleSwitchChange = (event) => {
+        setIsPredictionOn(event.target.checked);
+    };
+
     const handleYearChange = (event) => {
         setSelectedYear(event.target.value);
     };
@@ -71,7 +82,6 @@ function TabPanel({
         value: year,
         label: year.toString()
     }));
-
     const currentPractices = practiceNames[selectedYear];
     const practices: any[] = ["Total", ...currentPractices];
     const handlePracticeChange = (event) => {
@@ -101,83 +111,154 @@ function TabPanel({
             return newPractices.length === 0 ? ["Total"] : newPractices;
         });
     };
-    React.useEffect(() => {
-        if (selectedPractices.length === 0) {
-            setSelectedPractices(["Total"]);
-        }
-    }, [selectedPractices]);
-
     const handlePredictChange = (event) => {
         setSelectedPredict(event.target.value);
     };
 
     // auto play settings
-    const startAutoplay = React.useCallback(() => {
-        if (!isPlaying) {
-            setIsPlaying(true);
-            const id = setInterval(() => {
-                setSelectedYear((prevYear) => {
-                    const nextYear = prevYear + 1;
-                    return nextYear > maxYear ? minYear : nextYear;
-                });
-            }, 1500); // 1.5 second autoplay interval
-            setIntervalId(id);
-        }
-    }, [isPlaying, maxYear, minYear]);
-    const stopAutoplay = React.useCallback(() => {
-        if (isPlaying && intervalId !== null) {
-            clearInterval(intervalId);
-            setIsPlaying(false);
-        }
-    }, [isPlaying, intervalId]);
+    // const startAutoplay = React.useCallback(() => {
+    //     if (!isPlaying) {
+    //         setIsPlaying(true);
+    //         const id = setInterval(() => {
+    //             setSelectedYear((prevYear) => {
+    //                 const nextYear = prevYear + 1;
+    //                 return nextYear > maxYear ? minYear : nextYear;
+    //             });
+    //         }, 1500); // 1.5 second autoplay interval
+    //         setIntervalId(id);
+    //     }
+    // }, [isPlaying, maxYear, minYear]);
+    // const stopAutoplay = React.useCallback(() => {
+    //     if (isPlaying && intervalId !== null) {
+    //         clearInterval(intervalId);
+    //         setIsPlaying(false);
+    //     }
+    // }, [isPlaying, intervalId]);
+    // React.useEffect(() => {
+    //     return () => {
+    //         if (intervalId !== null) {
+    //             clearInterval(intervalId);
+    //         }
+    //     };
+    // }, [intervalId]);
+
     React.useEffect(() => {
-        return () => {
-            if (intervalId !== null) {
-                clearInterval(intervalId);
-            }
-        };
-    }, [intervalId]);
+        if (years.length) {
+            setSelectedYear(minYear);
+        }
+        if (selectedPractices.length === 0) {
+            setSelectedPractices(["Total"]);
+        }
+    }, [minYear, selectedPractices]);
+    React.useEffect(() => {
+        updateData();
+    }, [selectedPractices, selectedYear, isPredictionOn]);
 
     return (
         <Box role="tabpanel" hidden={v !== index}>
             {v === index && (
-                <Box>
-                    <StyledGrid
-                        container
-                        spacing={2}
-                        xs={12}
-                        sx={{
-                            display: "flex",
-                            my: 3,
-                            backgroundColor: "white",
-                            minHeight: "50vh",
-                            justifyContent: "center"
-                        }}
-                    >
-                        <Grid item xs={12} md={7} className="offset-md-1">
-                            {selectedYear ? (
-                                <Box sx={{ padding: 2 }}>
-                                    {selectedYear && (
-                                        <Box>
-                                            <IRAMap
-                                                subtitle={title}
-                                                year={selectedYear.toString()}
-                                                statePerformance={stateDistributionData}
-                                                practices={selectedPractices}
-                                                stateCodes={stateCodes}
-                                                allStates={allStates}
-                                                mapColor={mapColor}
-                                                predict={selectedPredict}
-                                            />
+                <Grid container sx={{ mt: 0, mx: 40, width: "auto", justifyContent: "center" }}>
+                    {/* maps */}
+                    {isPredictionOn && <div />}
+                    {!isPredictionOn && (
+                        <Grid item xs={12} sm={isSmallScreen ? 12 : 8} className="offset-sm-1">
+                            <StyledGrid
+                                container
+                                spacing={2}
+                                xs={12}
+                                sx={{
+                                    display: "flex",
+                                    my: 3,
+                                    backgroundColor: "white",
+                                    minHeight: "50vh",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Grid item>
+                                    {selectedYear ? (
+                                        <Box sx={{ padding: 2 }}>
+                                            {selectedYear && (
+                                                <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={12}
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        position: "relative"
+                                                    }}
+                                                >
+                                                    <IRAMap
+                                                        subtitle={title}
+                                                        year={selectedYear.toString()}
+                                                        statePerformance={updatedData}
+                                                        practices={selectedPractices}
+                                                        stateCodes={stateCodes}
+                                                        allStates={allStates}
+                                                        mapColor={mapColor}
+                                                        predict={selectedPredict}
+                                                    />
+                                                </Grid>
+                                            )}
                                         </Box>
+                                    ) : (
+                                        <Typography variant="h6">No data.</Typography>
                                     )}
-                                </Box>
-                            ) : (
-                                <Typography variant="h6">No data.</Typography>
-                            )}
+                                </Grid>
+                                <Grid item xs={1} />
+                                {/* <Grid item xs={2}>
+                                     <Box sx={{ marginTop: 2, display: "flex", gap: 2 }}>
+                            <Button variant="contained" color="primary" onClick={startAutoplay} disabled={isPlaying}>
+                                Start Autoplay
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={stopAutoplay} disabled={!isPlaying}>
+                                Stop Autoplay
+                            </Button>
+                        </Box>  */}
+
+                                {/* {selectedYear !== 2023 && (
+                            <FormControl fullWidth>
+                                <InputLabel id="predict-select-label">Min/Max</InputLabel>
+                                <Select
+                                    labelId="predict-select-label"
+                                    value={selectedPredict}
+                                    label="Predict"
+                                    onChange={handlePredictChange}
+                                >
+                                    {["Min", "Max"].map((predict) => (
+                                        <MenuItem key={predict} value={predict}>
+                                            {predict}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
+                                </Grid> 
+                                */}
+                            </StyledGrid>
                         </Grid>
-                        <Grid item xs={1} />
-                        <Grid item xs={2}>
+                    )}
+                    <Grid item sm={2} />
+
+                    {/* controls */}
+                    <Grid item xs={12} sm={2}>
+                        <StyledGrid
+                            container
+                            spacing={2}
+                            xs={12}
+                            sx={{
+                                display: "flex",
+                                my: 3,
+                                ml: 10,
+                                backgroundColor: "white",
+                                justifyContent: "left"
+                            }}
+                        >
+                            <FormControlLabel
+                                control={<Switch checked={isPredictionOn} onChange={handleSwitchChange} />}
+                                label="Prediction"
+                            />
                             <FormControl fullWidth>
                                 <Typography variant="h6" sx={{ mb: 1 }}>
                                     Select Practice
@@ -242,119 +323,98 @@ function TabPanel({
                                 valueLabelDisplay="on"
                                 sx={{ marginTop: 2, marginBottom: 4, display: "none" }}
                             />
-                            {/* <Box sx={{ marginTop: 2, display: "flex", gap: 2 }}>
-                            <Button variant="contained" color="primary" onClick={startAutoplay} disabled={isPlaying}>
-                                Start Autoplay
-                            </Button>
-                            <Button variant="contained" color="secondary" onClick={stopAutoplay} disabled={!isPlaying}>
-                                Stop Autoplay
-                            </Button>
-                        </Box>  */}
+                        </StyledGrid>
+                    </Grid>
 
-                            {/* {selectedYear !== 2023 && (
-                            <FormControl fullWidth>
-                                <InputLabel id="predict-select-label">Min/Max</InputLabel>
-                                <Select
-                                    labelId="predict-select-label"
-                                    value={selectedPredict}
-                                    label="Predict"
-                                    onChange={handlePredictChange}
-                                >
-                                    {["Min", "Max"].map((predict) => (
-                                        <MenuItem key={predict} value={predict}>
-                                            {predict}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        )} */}
-                        </Grid>
-                    </StyledGrid>
-                    <StyledGrid
-                        container
-                        spacing={2}
-                        xs={12}
-                        sx={{
-                            display: "flex",
-                            my: 3,
-                            backgroundColor: "white",
-                            minHeight: "50vh",
-                            justifyContent: "center",
-                            position: "relative"
-                        }}
-                    >
-                        <Grid
-                            item
-                            xs={12}
-                            md={9}
-                            className="offset-md-1"
-                            sx={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                alignItems: "center",
-                                position: "relative"
-                            }}
-                        >
-                            <ToggleButtonGroup
-                                className="ChartTableToggle"
-                                value={tab}
-                                exclusive
-                                onChange={switchChartTable}
-                                aria-label="CropInsurance toggle button group"
+                    {/* Tables */}
+                    {isPredictionOn && <div />}
+                    {!isPredictionOn && (
+                        <Grid item xs={12} sm={12} className="offset-sm-1">
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
                                 sx={{
-                                    mr: 2,
-                                    mb: -7, // fake the button to align with the table header
-                                    position: "relative",
-                                    backgroundColor: "white",
-                                    borderRadius: "4px",
-                                    boxShadow: 1
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                    alignItems: "center",
+                                    position: "relative"
                                 }}
                             >
-                                <ToggleButton value={0}>
-                                    <FontAwesomeIcon icon={faDollar} />
-                                </ToggleButton>
-                                <ToggleButton value={1}>
-                                    <FontAwesomeIcon icon={faPercentage} />
-                                </ToggleButton>
-                            </ToggleButtonGroup>
+                                <ToggleButtonGroup
+                                    className="ChartTableToggle"
+                                    value={tab}
+                                    exclusive
+                                    onChange={switchChartTable}
+                                    aria-label="CropInsurance toggle button group"
+                                    sx={{
+                                        position: "relative",
+                                        backgroundColor: "white",
+                                        borderRadius: "4px",
+                                        boxShadow: 1
+                                    }}
+                                >
+                                    <ToggleButton value={0}>
+                                        <FontAwesomeIcon icon={faDollar} />
+                                    </ToggleButton>
+                                    <ToggleButton value={1}>
+                                        <FontAwesomeIcon icon={faPercentage} />
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
+                                sx={{ display: tab !== 0 ? "none" : "div" }}
+                            >
+                                <IRADollarTable
+                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                    tableTitle={`${title} IRA Data ($) By States in ${selectedYear}`}
+                                    year={selectedYear.toString()}
+                                    IRAData={updatedData}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodes}
+                                    practices={selectedPractices}
+                                    predict={selectedPredict}
+                                    colors={[]}
+                                    attributes={[
+                                        "totalPaymentInDollars",
+                                        "practiceInstanceCount",
+                                        "totalPracticeInstanceCount"
+                                    ]}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
+                                sx={{ display: tab !== 1 ? "none" : "div" }}
+                            >
+                                <IRAPercentageTable
+                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                    tableTitle={`${title} IRA Data (%) By States in ${selectedYear}`}
+                                    year={selectedYear.toString()}
+                                    IRAData={updatedData}
+                                    summary={summaryData}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodes}
+                                    practices={selectedPractices}
+                                    predict={selectedPredict}
+                                    colors={[]}
+                                    attributes={[
+                                        "totalPaymentInDollars",
+                                        "practiceInstanceCount",
+                                        "totalPracticeInstanceCount"
+                                    ]}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={9} className="offset-md-1" sx={{ display: tab !== 0 ? "none" : "div" }}>
-                            <IRADollarTable
-                                tableTitle={`${title} IRA Data ($) By States in ${selectedYear}`}
-                                year={selectedYear.toString()}
-                                IRAData={stateDistributionData}
-                                skipColumns={[]}
-                                stateCodes={stateCodes}
-                                practices={selectedPractices}
-                                predict={selectedPredict}
-                                colors={[]}
-                                attributes={[
-                                    "totalPaymentInDollars",
-                                    "practiceInstanceCount",
-                                    "totalPracticeInstanceCount"
-                                ]}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={9} className="offset-md-1" sx={{ display: tab !== 1 ? "none" : "div" }}>
-                            <IRAPercentageTable
-                                tableTitle={`${title} IRA Data (%) By States in ${selectedYear}`}
-                                year={selectedYear.toString()}
-                                IRAData={stateDistributionData}
-                                summary={summaryData}
-                                skipColumns={[]}
-                                stateCodes={stateCodes}
-                                practices={selectedPractices}
-                                predict={selectedPredict}
-                                colors={[]}
-                                attributes={[
-                                    "totalPaymentInDollars",
-                                    "practiceInstanceCount",
-                                    "totalPracticeInstanceCount"
-                                ]}
-                            />
-                        </Grid>
-                    </StyledGrid>
-                </Box>
+                    )}
+                </Grid>
             )}
         </Box>
     );

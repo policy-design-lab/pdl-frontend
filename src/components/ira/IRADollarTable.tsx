@@ -95,7 +95,7 @@ function IRADollarTable({
                     .toString()
                     .split(".")[0];
                 if (attr.includes("Dollar")) {
-                    newRecord[attr] = `$$${formattedValue}`;
+                    newRecord[attr] = `$${formattedValue}`;
                 } else {
                     newRecord[attr] = `${formattedValue}`;
                 }

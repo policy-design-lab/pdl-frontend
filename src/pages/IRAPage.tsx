@@ -210,7 +210,9 @@ export default function IRAPage(): JSX.Element {
                     <TabPanel v={value} index={6} title="ACEP" stateDistributionData={{}} /> */}
                                 </span>
                             ) : (
-                                <Typography>Loading IRA Data...</Typography>
+                                <Box sx={{ display: "flex", justifyContent: "center", mx: 10, my: 3 }}>
+                                    <Typography variant="h6">Loading IRA Data...</Typography>
+                                </Box>
                             )}
                         </Box>
                     </Grid>
