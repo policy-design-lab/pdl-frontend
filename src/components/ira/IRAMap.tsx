@@ -6,15 +6,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
-import { BorderTop } from "@mui/icons-material";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
-import legendConfig from "../../utils/legendConfig.json";
-import { ShortFormat } from "../shared/ConvertionFormats";
-import { maxCompletedSubmitJobs } from "../../../../../../BC/fabric-samples/asset-transfer-basic/rest-api-typescript/src/config";
-
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const offsets = {
     VT: [50, -8],

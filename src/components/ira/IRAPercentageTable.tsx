@@ -6,7 +6,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
 import { compareWithAlphabetic, compareWithPercentSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import getCsvData from "../shared/GetCsvData";
+import getCSVData from "../shared/getCSVData";
 
 function IRAPercentageTable({
     tableTitle,
@@ -367,7 +367,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         <div>
             {data && data.length > 0 ? (
                 <div style={{ width: "100%" }}>
-                    <CSVLink className="downloadbtn" filename="pdl-data.csv" data={getCsvData(headerGroups, data)}>
+                    <CSVLink className="downloadbtn" filename="pdl-data.csv" data={getCSVData(headerGroups, data)}>
                         Export This Table to CSV
                     </CSVLink>
 

@@ -1,4 +1,4 @@
-const getCsvData = (headerGroups, data) => {
+const getCSVData = (headerGroups, data) => {
     if (!data || !data.length) {
         return [];
     }
@@ -16,4 +16,4 @@ const getCsvData = (headerGroups, data) => {
     return csvData;
 };
 
-export default getCsvData;
+export default getCSVData;
