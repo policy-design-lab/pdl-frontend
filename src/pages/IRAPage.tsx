@@ -19,6 +19,7 @@ export default function IRAPage(): JSX.Element {
 
     // Fetching Data
     const [eqipStateDistributionData, setEqipStateDistributionData] = React.useState({});
+    const [eqipPredictedData, setEqipPredictedDData] = React.useState({});
     const [eqipSummaryData, setEqipSummaryData] = React.useState({});
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
@@ -43,6 +44,10 @@ export default function IRAPage(): JSX.Element {
         const eqip_statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/state-distribution`;
         getJsonDataFromUrl(eqip_statedistribution_url).then((response) => {
             setEqipStateDistributionData(response);
+        });
+        const eqip_predicted_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/predicted`;
+        getJsonDataFromUrl(eqip_predicted_url).then((response) => {
+            setEqipPredictedDData(response);
         });
         const eqip_summary_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`;
         getJsonDataFromUrl(eqip_summary_url).then((response) => {
@@ -200,6 +205,8 @@ export default function IRAPage(): JSX.Element {
                                         index={0}
                                         title="EQIP"
                                         stateDistributionData={eqipStateDistributionData}
+                                        predictedData={eqipPredictedData}
+                                        predictedYear={Object.keys(eqipPredictedData)[0]}
                                         practiceNames={eqipPracticeNames}
                                         stateCodes={stateCodesData}
                                         allStates={allStatesData}

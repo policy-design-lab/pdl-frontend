@@ -7,7 +7,8 @@ const style = {
     "top": "50%",
     "left": "50%",
     "transform": "translate(-50%, -50%)",
-    "width": 1000,
+    "width": "60vw",
+    "overflowY": "auto",
     "bgcolor": "rgba(47, 113, 100, 0.9)",
     "border": "none",
     "boxShadow": 24,
@@ -15,6 +16,10 @@ const style = {
     "outline": "none",
     "& a": {
         color: "#CCC"
+    },
+    "@media (max-width: 1280px)": {
+        maxWidth: "600px",
+        maxHeight: "80vh"
     }
 };
 const IRAModal = ({ open, handleClose }) => {

@@ -23,12 +23,17 @@ import useWindowSize from "../shared/WindowSizeHook";
 import IRAMap from "./IRAMap";
 import IRADollarTable from "./IRADollarTable";
 import IRAPercentageTable from "./IRAPercentageTable";
+import IRAPredictedMap from "./IRAPredictedMap";
+import IRAPredictedDollarTable from "./IRAPredictedDollarTable";
+import IRAPredictedPercentageTable from "./IRAPredictedPercentageTable";
 
 function TabPanel({
     v,
     index,
     title,
     stateDistributionData,
+    predictedData,
+    predictedYear, // Make predictedYear as a fixed string for version 1
     stateCodes,
     allStates,
     practiceNames,
@@ -38,6 +43,8 @@ function TabPanel({
     index: any;
     title: string;
     stateDistributionData: any;
+    predictedData: any;
+    predictedYear: string;
     stateCodes: any;
     allStates: any;
     practiceNames: any;
@@ -47,6 +54,7 @@ function TabPanel({
     const [isPredictionOn, setIsPredictionOn] = useState(false);
     const years = stateDistributionData ? Object.keys(stateDistributionData).map(Number) : [];
     const [updatedData, setUpdatedData] = useState(stateDistributionData);
+    const [updatedPredictedData, setUpdatedPredictedData] = useState(predictedData);
     const minYear = Math.min(...years);
     const maxYear = Math.max(...years);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -60,6 +68,9 @@ function TabPanel({
     const windowSize = useWindowSize();
     const updateData = () => {
         setUpdatedData(stateDistributionData);
+    };
+    const updatePredictedData = () => {
+        setUpdatedPredictedData(predictedData);
     };
     const StyledGrid = styled(Grid)(({ theme }) => ({
         ".offset-sm-1": {
@@ -159,7 +170,56 @@ function TabPanel({
             {v === index && (
                 <Grid container sx={{ mt: 0, mx: 40, width: "auto", justifyContent: "center" }}>
                     {/* maps */}
-                    {isPredictionOn && <div />}
+                    {isPredictionOn && (
+                        <Grid item xs={12} sm={isSmallScreen ? 12 : 8} className="offset-sm-1">
+                            <StyledGrid
+                                container
+                                spacing={2}
+                                xs={12}
+                                sx={{
+                                    display: "flex",
+                                    my: 3,
+                                    backgroundColor: "white",
+                                    minHeight: "50vh",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Grid item>
+                                    {selectedYear ? (
+                                        <Box sx={{ padding: 2 }}>
+                                            {selectedYear && (
+                                                <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={12}
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        position: "relative"
+                                                    }}
+                                                >
+                                                    <IRAPredictedMap
+                                                        subtitle={title}
+                                                        year={predictedYear}
+                                                        predictedPerformance={updatedPredictedData}
+                                                        practices={selectedPractices}
+                                                        stateCodes={stateCodes}
+                                                        allStates={allStates}
+                                                        mapColor={mapColor}
+                                                        predict={selectedPredict}
+                                                    />
+                                                </Grid>
+                                            )}
+                                        </Box>
+                                    ) : (
+                                        <Typography variant="h6">No data.</Typography>
+                                    )}
+                                </Grid>
+                                <Grid item xs={1} />
+                            </StyledGrid>
+                        </Grid>
+                    )}
                     {!isPredictionOn && (
                         <Grid item xs={12} sm={isSmallScreen ? 12 : 8} className="offset-sm-1">
                             <StyledGrid
@@ -240,7 +300,6 @@ function TabPanel({
                         </Grid>
                     )}
                     <Grid item sm={2} />
-
                     {/* controls */}
                     <Grid item xs={12} sm={2}>
                         <StyledGrid
@@ -257,7 +316,14 @@ function TabPanel({
                         >
                             <FormControlLabel
                                 control={<Switch checked={isPredictionOn} onChange={handleSwitchChange} />}
-                                label="Prediction"
+                                label={
+                                    <Typography
+                                        sx={{ fontWeight: "bold", fontSize: "1.25rem", color: "rgba(47, 113, 100, 1)" }}
+                                    >
+                                        {`${predictedYear} Prediction`}
+                                    </Typography>
+                                }
+                                sx={{ mt: 3, mb: 10, fontStyle: "bold", color: "rgba(47, 113, 100, 1)" }}
                             />
                             <FormControl fullWidth>
                                 <Typography variant="h6" sx={{ mb: 1 }}>
@@ -327,7 +393,84 @@ function TabPanel({
                     </Grid>
 
                     {/* Tables */}
-                    {isPredictionOn && <div />}
+                    {isPredictionOn && (
+                        <Grid item xs={12} sm={12} className="offset-sm-1">
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                    alignItems: "center",
+                                    position: "relative"
+                                }}
+                            >
+                                <ToggleButtonGroup
+                                    className="ChartTableToggle"
+                                    value={tab}
+                                    exclusive
+                                    onChange={switchChartTable}
+                                    aria-label="IRA toggle button group"
+                                    sx={{
+                                        position: "relative",
+                                        backgroundColor: "white",
+                                        borderRadius: "4px",
+                                        boxShadow: 1
+                                    }}
+                                >
+                                    <ToggleButton value={0}>
+                                        <FontAwesomeIcon icon={faDollar} />
+                                    </ToggleButton>
+                                    <ToggleButton value={1}>
+                                        <FontAwesomeIcon icon={faPercentage} />
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
+                                sx={{ display: tab !== 0 ? "none" : "div" }}
+                            >
+                                <IRAPredictedDollarTable
+                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                    tableTitle={`${title} IRA Predicted Data ($) By States in ${predictedYear}`}
+                                    year={predictedYear}
+                                    IRAPredictedData={updatedPredictedData}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodes}
+                                    practices={selectedPractices}
+                                    predict={selectedPredict}
+                                    colors={[]}
+                                    attributes={["predictedTotalPaymentInDollars"]}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="offset-sm-1"
+                                sx={{ display: tab !== 1 ? "none" : "div" }}
+                            >
+                                <IRAPredictedPercentageTable
+                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                    tableTitle={`${title} IRA Predicted Data (%) By States in ${selectedYear}`}
+                                    year={predictedYear}
+                                    IRAPredictedData={updatedPredictedData}
+                                    summary={summaryData}
+                                    skipColumns={[]}
+                                    stateCodes={stateCodes}
+                                    practices={selectedPractices}
+                                    predict={selectedPredict}
+                                    colors={[]}
+                                    attributes={["predictedTotalPaymentInDollars"]}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
                     {!isPredictionOn && (
                         <Grid item xs={12} sm={12} className="offset-sm-1">
                             <Grid
@@ -347,7 +490,7 @@ function TabPanel({
                                     value={tab}
                                     exclusive
                                     onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
+                                    aria-label="IRA toggle button group"
                                     sx={{
                                         position: "relative",
                                         backgroundColor: "white",
