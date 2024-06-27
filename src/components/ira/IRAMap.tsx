@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
+import { ShortFormat } from "../shared/ConvertionFormats";
 
 const offsets = {
     VT: [50, -8],
@@ -36,6 +37,7 @@ const MapChart = ({
     colorScale
 }) => {
     const classes = useStyles();
+    const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
     return (
         <div data-tip="">
             {

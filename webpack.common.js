@@ -1,26 +1,26 @@
-const path = require('path');
-const Webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const Webpack = require("webpack");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-    target: 'web',
+    target: "web",
 
     context: __dirname,
 
     entry: {
-        polyfill: './src/polyfill.js',
-        style: './src/styles/main.css',
-        app: './src/index.tsx'
+        polyfill: "./src/polyfill.js",
+        style: "./src/styles/main.css",
+        app: "./src/index.tsx"
     },
 
     output: {
-        path: path.resolve(__dirname, 'build'),
-        publicPath: process.env.PUBLIC_PATH || '/',
-        filename: 'js/[name]-[fullhash].js',
-        crossOriginLoading: 'anonymous'
+        path: path.resolve(__dirname, "build"),
+        publicPath: process.env.PUBLIC_PATH || "/",
+        filename: "js/[name]-[fullhash].js",
+        crossOriginLoading: "anonymous"
     },
 
     module: {
@@ -31,24 +31,23 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: '../'
+                            publicPath: "../"
                         }
                     },
-                    'css-loader',
-                    
+                    "css-loader"
                 ]
             },
             {
                 test: /\.svg$/,
-                loader: 'svg-inline-loader'
+                loader: "svg-inline-loader"
             },
             {
                 test: /\.(jpg|jpeg|png|eot|ttf|woff|woff2|pdf)$/,
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: "file-loader",
                         options: {
-                            name: 'files/[name]-[hash].[ext]'
+                            name: "files/[name]-[hash].[ext]"
                         }
                     }
                 ]
@@ -58,20 +57,22 @@ module.exports = {
 
     resolve: {
         alias: {
-            '@components': path.resolve(__dirname, 'src/components/')
+            "@": path.resolve(__dirname, "src"),
+            "font-awesome": path.resolve(__dirname, "node_modules/font-awesome"),
+            "@components": path.resolve(__dirname, "src/components/")
         },
-        modules: ['node_modules', 'src'],
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        modules: ["node_modules", "src"],
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
 
     optimization: {
         splitChunks: {
-            chunks: 'all',
+            chunks: "all",
             cacheGroups: {
                 // Create a commons chunk, which includes all code shared between entry points.
                 commons: {
-                    name: 'commons',
-                    chunks: 'initial',
+                    name: "commons",
+                    chunks: "initial",
                     minChunks: 2
                 }
             }
@@ -80,17 +81,17 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: "src/index.html"
         }),
         new Webpack.DefinePlugin({
             "process.env": {
-                "APP_ENV": JSON.stringify(process.env.APP_ENV)
+                APP_ENV: JSON.stringify(process.env.APP_ENV)
             },
-            PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH || '/')   // The base path for the app. It must end with a slash.
+            "PUBLIC_PATH": JSON.stringify(process.env.PUBLIC_PATH || "/") // The base path for the app. It must end with a slash.
         }),
         new FaviconsWebpackPlugin({
-            logo: './src/images/favicon.png',
-            prefix: 'icons/',
+            logo: "./src/images/favicon.png",
+            prefix: "icons/",
             emitStats: false,
             inject: true,
             favicons: {
@@ -106,7 +107,7 @@ module.exports = {
                 }
             }
         }),
-        new MiniCssExtractPlugin({ filename: 'css/[name]-[fullhash].css' }),
+        new MiniCssExtractPlugin({ filename: "css/[name]-[fullhash].css" }),
         new CleanWebpackPlugin()
     ]
 };
