@@ -57,8 +57,6 @@ module.exports = {
 
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "src"),
-            "font-awesome": path.resolve(__dirname, "node_modules/font-awesome"),
             "@components": path.resolve(__dirname, "src/components/")
         },
         modules: ["node_modules", "src"],

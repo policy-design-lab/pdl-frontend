@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { styled } from "@mui/system";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDollar, faPercentage } from "@fortawesome/free-solid-svg-icons";
+import { CurrencyDollar, Percent } from "react-bootstrap-icons";
+
 import useWindowSize from "../shared/WindowSizeHook";
 import IRAMap from "./IRAMap";
 import IRADollarTable from "./IRADollarTable";
@@ -414,6 +414,7 @@ function TabPanel({
                                     onChange={switchChartTable}
                                     aria-label="IRA toggle button group"
                                     sx={{
+                                        mb: -3,
                                         position: "relative",
                                         backgroundColor: "white",
                                         borderRadius: "4px",
@@ -421,10 +422,10 @@ function TabPanel({
                                     }}
                                 >
                                     <ToggleButton value={0}>
-                                        <FontAwesomeIcon icon={faDollar} />
+                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: "#2F7164" }} />
                                     </ToggleButton>
                                     <ToggleButton value={1}>
-                                        <FontAwesomeIcon icon={faPercentage} />
+                                        <Percent style={{ fontSize: "1.25rem", color: "#2F7164" }} />
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Grid>
@@ -492,6 +493,7 @@ function TabPanel({
                                     onChange={switchChartTable}
                                     aria-label="IRA toggle button group"
                                     sx={{
+                                        mb: -3,
                                         position: "relative",
                                         backgroundColor: "white",
                                         borderRadius: "4px",
@@ -499,10 +501,10 @@ function TabPanel({
                                     }}
                                 >
                                     <ToggleButton value={0}>
-                                        <FontAwesomeIcon icon={faDollar} />
+                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: "#2F7164" }} />
                                     </ToggleButton>
                                     <ToggleButton value={1}>
-                                        <FontAwesomeIcon icon={faPercentage} />
+                                        <Percent style={{ fontSize: "1.25rem", color: "#2F7164" }} />
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Grid>
