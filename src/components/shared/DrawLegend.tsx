@@ -159,7 +159,7 @@ export default function DrawLegend({
                             .attr("y", 80)
                             .text(`${zeroState.join(", ")} has no data available`);
                     } else {
-                      const middleText = baseSVG
+                        const middleText = baseSVG
                             .append("text")
                             .attr("class", "legendTextSide")
                             .attr("x", -1000)
