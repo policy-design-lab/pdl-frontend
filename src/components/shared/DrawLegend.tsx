@@ -16,7 +16,7 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState,
+    emptyState = [],
     initRatioLarge,
     initRatioSmall,
     screenWidth = window.innerWidth
@@ -149,7 +149,7 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", -1000)
                             .attr("y", -1000)
-                            .text(`${zeroState.join(", ")} doesn't include all data or has no data available`);
+                            .text(`${zeroState.join(", ")} has no data available`);
                         const middleBox = middleText.node().getBBox();
                         middleText.remove();
                         baseSVG
@@ -157,7 +157,22 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
                             .attr("y", 80)
-                            .text(`${zeroState.join(", ")} doesn't include all data or has no data available`);
+                            .text(`${zeroState.join(", ")} has no data available`);
+                    } else {
+                      const middleText = baseSVG
+                            .append("text")
+                            .attr("class", "legendTextSide")
+                            .attr("x", -1000)
+                            .attr("y", -1000)
+                            .text("In any state that appears in grey, there is no available data");
+                        const middleBox = middleText.node().getBBox();
+                        middleText.remove();
+                        baseSVG
+                            .append("text")
+                            .attr("class", "legendTextSide")
+                            .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
+                            .attr("y", 80)
+                            .text("In any state that appears in grey, there is no available data");
                     }
                 } else {
                     baseSVG.attr("height", 40);

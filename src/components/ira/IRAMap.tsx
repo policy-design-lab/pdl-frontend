@@ -507,7 +507,7 @@ const IRAMap = ({
                     title={titleElement({ subtitle, year })}
                     programData={quantizeArray}
                     prepColor={mapColor}
-                    emptyState={zeroPoints}
+                    emptyState={[]}
                     initRatioLarge={0.6}
                     initRatioSmall={0.5}
                 />

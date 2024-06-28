@@ -168,7 +168,7 @@ function TabPanel({
     return (
         <Box role="tabpanel" hidden={v !== index}>
             {v === index && (
-                <Grid container sx={{ mt: 0, mx: 40, width: "auto", justifyContent: "center" }}>
+                <Grid container sx={{ mt: 0, mx: 20, width: "auto", justifyContent: "center" }}>
                     {/* maps */}
                     {isPredictionOn && (
                         <Grid item xs={12} sm={isSmallScreen ? 12 : 8} className="offset-sm-1">
@@ -299,7 +299,7 @@ function TabPanel({
                             </StyledGrid>
                         </Grid>
                     )}
-                    <Grid item sm={2} />
+                    <Grid item sm={1} />
                     {/* controls */}
                     <Grid item xs={12} sm={2}>
                         <StyledGrid
@@ -394,12 +394,11 @@ function TabPanel({
 
                     {/* Tables */}
                     {isPredictionOn && (
-                        <Grid item xs={12} sm={12} className="offset-sm-1">
+                        <Grid item xs={12} sm={12}>
                             <Grid
                                 item
                                 xs={12}
                                 sm={12}
-                                className="offset-sm-1"
                                 sx={{
                                     display: "flex",
                                     justifyContent: "flex-end",
@@ -473,12 +472,11 @@ function TabPanel({
                         </Grid>
                     )}
                     {!isPredictionOn && (
-                        <Grid item xs={12} sm={12} className="offset-sm-1">
+                        <Grid item xs={12} sm={12}>
                             <Grid
                                 item
                                 xs={12}
                                 sm={12}
-                                className="offset-sm-1"
                                 sx={{
                                     display: "flex",
                                     justifyContent: "flex-end",
