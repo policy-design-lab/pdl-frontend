@@ -16,7 +16,7 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState,
+    emptyState = [],
     initRatioLarge,
     initRatioSmall,
     screenWidth = window.innerWidth
@@ -95,7 +95,7 @@ export default function DrawLegend({
                         legendRectX[legendRectX.length - 1] +
                         data_distribution[data_distribution.length - 1] * svgWidth;
                     legendRectX.push(last);
-                    if (screenWidth > 1679) {
+                    if (svgWidth > 1690) {
                         baseSVG
                             .selectAll(null)
                             .data(legendRectX)
@@ -115,7 +115,7 @@ export default function DrawLegend({
                                     const res = ShortFormat(Math.round(cut_points[i]), i);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(Math.round(cut_points[i]), i);
+                                return ShortFormat(Math.round(cut_points[i]), i, 1);
                             });
                     } else {
                         baseSVG
@@ -139,16 +139,17 @@ export default function DrawLegend({
                                     const res = ShortFormat(Math.round(cut_points[i]), i);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(Math.round(cut_points[i]), i);
+                                return ShortFormat(Math.round(cut_points[i]), i, 2);
                             });
                     }
                     if (emptyState.length !== 0) {
+                        const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
                         const middleText = baseSVG
                             .append("text")
                             .attr("class", "legendTextSide")
                             .attr("x", -1000)
                             .attr("y", -1000)
-                            .text(`${emptyState.join(", ")}'s data is not available`);
+                            .text(`${zeroState.join(", ")} has no data available`);
                         const middleBox = middleText.node().getBBox();
                         middleText.remove();
                         baseSVG
@@ -156,7 +157,22 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
                             .attr("y", 80)
-                            .text(`${emptyState.join(", ")}'s data is not available`);
+                            .text(`${zeroState.join(", ")} has no data available`);
+                    } else {
+                        const middleText = baseSVG
+                            .append("text")
+                            .attr("class", "legendTextSide")
+                            .attr("x", -1000)
+                            .attr("y", -1000)
+                            .text("In any state that appears in grey, there is no available data");
+                        const middleBox = middleText.node().getBBox();
+                        middleText.remove();
+                        baseSVG
+                            .append("text")
+                            .attr("class", "legendTextSide")
+                            .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
+                            .attr("y", 80)
+                            .text("In any state that appears in grey, there is no available data");
                     }
                 } else {
                     baseSVG.attr("height", 40);

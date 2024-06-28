@@ -1,24 +1,8 @@
-import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
-import { makeStyles } from "@mui/styles";
-import NavBar from "../components/NavBar";
-import AleskiThesis from "../files/Aleski_Thesis.pdf";
+import { Box, Typography, Grid } from "@mui/material";
+import * as React from "react";
+import AleskiThesis from "../../files/Aleski_Thesis.pdf";
 
-const useStyles = makeStyles(() => ({
-    iframeContainer: {
-        "height": window.innerHeight > 900 ? "150vh" : "100vh",
-        "backgroundColor": "white",
-        "padding": 0,
-        "margin": 0,
-        "& iframe": {
-            "width": "100%",
-            "min-height": "100%",
-            "border": "none"
-        }
-    }
-}));
-export default function Surface51Page(): JSX.Element {
-    const classes = useStyles();
+export default function Surface51SubPage({ styleClass }: { styleClass: any }): JSX.Element {
     const iframeLink = "https://surface51.github.io/policy-design-lab/";
     const iframeTitle = "Surface51 Policy Design Lab";
     function TrendIcon({ bkColor, fontColor, text }) {
@@ -40,11 +24,7 @@ export default function Surface51Page(): JSX.Element {
         );
     }
     return (
-        <Box sx={{ width: "100%", backgroundColor: "#ECF0EE" }}>
-            <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
-            </Box>
-            <Box sx={{ height: "64px" }} />
+        <div>
             <Box>
                 <Typography
                     sx={{
@@ -167,8 +147,8 @@ export default function Surface51Page(): JSX.Element {
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={2} />
-                    <Grid item xs={12} md={8}>
-                        <div className={classes.iframeContainer}>
+                    <Grid xs={12} md={8}>
+                        <div className={styleClass.iframeContainer}>
                             <iframe id="surface51-iframe" title={iframeTitle} src={iframeLink} allowFullScreen />
                         </div>
                     </Grid>
@@ -195,6 +175,6 @@ export default function Surface51Page(): JSX.Element {
                     </Grid>
                 </Grid>
             </Box>
-        </Box>
+        </div>
     );
 }
