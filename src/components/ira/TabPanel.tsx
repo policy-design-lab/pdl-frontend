@@ -93,7 +93,7 @@ function TabPanel({
         value: year,
         label: year.toString()
     }));
-    const currentPractices = practiceNames[selectedYear];
+    const currentPractices = practiceNames[selectedYear].sort((a, b) => a.localeCompare(b)); //sort the practice list from a to z
     const practices: any[] = ["Total", ...currentPractices];
     const handlePracticeChange = (event) => {
         const {
