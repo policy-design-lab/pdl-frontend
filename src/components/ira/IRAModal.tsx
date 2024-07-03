@@ -92,14 +92,13 @@ const IRAModal = ({ open, handleClose }) => {
                     </a>
                     ).
                 </Typography>
-                {/* <Typography id="modal-modal-description" sx={{ my: 2 }}>
-                    The IRA funding provides a policy design case study because Congress both added funding and limited
-                    the use of that funding, offering a comparison with the same programs with different funding levels
-                    provided by Congress in the Farm Bill and for more practices. Farm Bill funds for these conservation
-                    programs include, but are not limited to, the subset of practices that are eligible for IRA funds.
-                    The following provides analysis of these conservation policies under the different scenarios of
-                    funding and eligible practices, using the data reported by USDA’s Natural Resources Conservation
-                    Services (NRCS:{" "}
+                <Typography id="modal-modal-description" sx={{ my: 2 }}>
+                    The IRA funding provides a policy design case study because Congress both added new funding and
+                    limited the practices for which the additional funds could be used. It will allow for a comparison
+                    of Farm Bill and IRA fund allocations based eligible practices because Farm Bill funds include, but
+                    are not limited to, the subset of practices eligible for IRA funds. This page is being developed to
+                    provide analysis of conservation policies under different scenarios for funding and eligible
+                    practices, using the data reported by USDA&apos;s Natural Resources Conservation Service (NRCS:{" "}
                     <a
                         target="_blank"
                         href="https://www.nrcs.usda.gov/resources/data-and-reports/rca-data-viewer"
@@ -107,38 +106,16 @@ const IRAModal = ({ open, handleClose }) => {
                     >
                         RCA Data Viewer
                     </a>
-                    ). The information visualized below applies the allocation of funds by NRCS for Fiscal Year (FY)
-                    2023, the first year of the IRA appropriations, to the total Budget Authority to project the
-                    allocations by State and conservation practices. Users can select multiple practices to provide
-                    comparisons and performance analysis.
-                </Typography> */}
-                <Typography id="modal-modal-description" sx={{ my: 2 }}>
-                    The IRA funding provides a policy design case study because Congress both added new funding and
-                    limited the practices for which the additional funds could be used. It will allow for a comparison
-                    of Farm Bill and IRA fund allocations based eligible practices because Farm Bill funds include, but
-                    are not limited to, the subset of practices eligible for IRA funds. This page is being developed to
-                    provide analysis of conservation policies under different scenarios for funding and eligible
-                    practices, using the data reported by USDA's Natural Resources Conservation Service (link). Analysis
-                    begins with the allocation of IRA funds by NRCS for Fiscal Year (FY) 2023. An initial projection for
-                    the allocation among the States is provided based on the entire Budget Authority (BA) for the
-                    program in the IRA and the FY2023 allocation. Note that BA is the total amount appropriated by
-                    Congress and available to be spent by USDA.
+                    ). Analysis begins with the allocation of IRA funds by NRCS for Fiscal Year (FY) 2023. An initial
+                    projection for the allocation among the States is provided based on the entire Budget Authority (BA)
+                    for the program in the IRA and the FY2023 allocation. Note that BA is the total amount appropriated
+                    by Congress and available to be spent by USDA.
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ my: 2 }}>
                     Future developments on this page will permit visualizations and analysis of alternative projections,
                     such as the amount projected to be spent from IRA funds that are reported by the Congressional
                     Budget Office (CBO) and are known as outlays. CBO generally projects spending over 10 years into the
-                    future in what is known as a baseline (link). CBO's most recent baseline projections were released
-                    in June 2024 (link). Future releases will allow visualizations based on these and other projections,
-                    as well as updated reporting on actual spending as reported by USDA. For all visualizations, users
-                    will be able to select allocations by State and conservation practice, as well as by selecting
-                    multiple conservation practices.
-                </Typography>
-                {/* <Typography id="modal-modal-description" sx={{ my: 2 }}>
-                    In addition to the Budget Authority, or the amount appropriated by Congress and available to be
-                    spent by USDA, the Congressional Budget Office (CBO) also projects the amount of spending from that
-                    BA, which is known as the outlays. CBO projects spending amounts through FY2034 and the amount is
-                    known as the baseline (CBO:{" "}
+                    future in what is known as a baseline (CBO:{" "}
                     <a
                         target="_blank"
                         href="https://www.cbo.gov/data/baseline-projections-selected-programs"
@@ -146,7 +123,7 @@ const IRAModal = ({ open, handleClose }) => {
                     >
                         Details About Baseline Projections for Selected Programs
                     </a>
-                    ). CBO’s most recent baseline projections were released in June 2024 (CBO:{" "}
+                    ). CBO&apos;s most recent baseline projections were released in June 2024 (CBO:{" "}
                     <a
                         target="_blank"
                         href="https://www.cbo.gov/system/files/2024-06/51317-2024-06-usda.pdf"
@@ -154,9 +131,11 @@ const IRAModal = ({ open, handleClose }) => {
                     >
                         USDA Mandatory Farm Programs
                     </a>
-                    ). Similar as with BA, users can select visualizations and analysis of the IRA projected outlays by
-                    State and conservation practice.
-                </Typography> */}
+                    ). Future releases will allow visualizations based on these and other projections, as well as
+                    updated reporting on actual spending as reported by USDA. For all visualizations, users will be able
+                    to select allocations by State and conservation practice, as well as by selecting multiple
+                    conservation practices.
+                </Typography>
                 <Button
                     onClick={handleClose}
                     sx={{
