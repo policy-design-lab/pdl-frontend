@@ -26,6 +26,8 @@ import IRAPercentageTable from "./IRAPercentageTable";
 import IRAPredictedMap from "./IRAPredictedMap";
 import IRAPredictedDollarTable from "./IRAPredictedDollarTable";
 import IRAPredictedPercentageTable from "./IRAPredictedPercentageTable";
+import { parse } from "../../../../../../BC/fabric-samples/asset-transfer-secured-agreement/application-gateway-typescript/src/utils";
+import ParagraphCard from "../../../../../HEROP/place-discovery/src/components/search/detailPanel/paragraphCard/paragraphCard";
 
 function TabPanel({
     v,
@@ -55,11 +57,11 @@ function TabPanel({
     const years = stateDistributionData ? Object.keys(stateDistributionData).map(Number) : [];
     const [updatedData, setUpdatedData] = useState(stateDistributionData);
     const [updatedPredictedData, setUpdatedPredictedData] = useState(predictedData);
-    const minYear = Math.min(...years);
+    const minYear = Math.min(...years).toString();
     const maxYear = Math.max(...years);
     const [isPlaying, setIsPlaying] = useState(false);
     const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
-    const [selectedYear, setSelectedYear] = useState(minYear);
+    const [selectedYear, setSelectedYear] = useState(minYear.toString());
     const [selectedPredict, setSelectedPredict] = useState("Min");
     const [selectedPractices, setSelectedPractices] = useState<string[]>([]);
     const [practices, setPractices] = useState<string[]>([]);
@@ -84,11 +86,12 @@ function TabPanel({
         }
     };
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsPredictionOn(event.target.checked);
-        const currentPractices: string[] = practiceNames[event.target.checked ? predictedYear : minYear]
-            .slice()
-            .sort((a, b) => a.localeCompare(b));
-        const newPractices: string[] = ["Total", ...currentPractices];
+        const isOn = event.target.checked;
+        setIsPredictionOn(isOn);
+        const year = isOn ? predictedYear : minYear;
+        setSelectedYear(year);
+        const currentPractices = practiceNames[year].slice().sort((a, b) => a.localeCompare(b));
+        const newPractices = ["Total", ...currentPractices];
         setPractices(newPractices);
         const overlapped_practices: string[] = newPractices.filter((element) => selectedPractices.includes(element));
         setSelectedPractices(overlapped_practices.length === 0 ? ["Total"] : overlapped_practices);
@@ -163,12 +166,14 @@ function TabPanel({
         if (years.length) {
             setSelectedYear(minYear);
         }
-        const currentPractices = practiceNames[selectedYear].sort((a, b) => a.localeCompare(b)); // sort the practice list from a to z
+        const currentPractices = isPredictionOn
+            ? practiceNames[predictedYear].sort((a, b) => a.localeCompare(b))
+            : practiceNames[minYear].sort((a, b) => a.localeCompare(b));
         setPractices(["Total", ...currentPractices]);
         if (selectedPractices.length === 0) {
             setSelectedPractices(["Total"]);
         }
-    }, [minYear, selectedPractices]);
+    }, [minYear, selectedYear, selectedPractices, practiceNames]);
     React.useEffect(() => {
         updateData();
     }, [selectedPractices, selectedYear, isPredictionOn]);
