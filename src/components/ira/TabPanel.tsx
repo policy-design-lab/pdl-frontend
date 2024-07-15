@@ -20,7 +20,7 @@ import { styled } from "@mui/system";
 import { CurrencyDollar, Percent } from "react-bootstrap-icons";
 
 import useWindowSize from "../shared/WindowSizeHook";
-import IRAMap from "./IRAMap";
+import IRADollarMap from "./IRADollarMap";
 import IRADollarTable from "./IRADollarTable";
 import IRAPercentageTable from "./IRAPercentageTable";
 import IRAPredictedMap from "./IRAPredictedMap";
@@ -61,7 +61,8 @@ function TabPanel({
     const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
     const [selectedYear, setSelectedYear] = useState(minYear);
     const [selectedPredict, setSelectedPredict] = useState("Min");
-    const [selectedPractices, setSelectedPractices] = useState([]);
+    const [selectedPractices, setSelectedPractices] = useState<string[]>([]);
+    const [practices, setPractices] = useState<string[]>([]);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]; // title II color
     const the = useTheme();
     const isSmallScreen = useMediaQuery(the.breakpoints.down("sm"));
@@ -82,8 +83,15 @@ function TabPanel({
             setTab(newTab);
         }
     };
-    const handleSwitchChange = (event) => {
+    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsPredictionOn(event.target.checked);
+        const currentPractices: string[] = practiceNames[event.target.checked ? predictedYear : minYear]
+            .slice()
+            .sort((a, b) => a.localeCompare(b));
+        const newPractices: string[] = ["Total", ...currentPractices];
+        setPractices(newPractices);
+        const overlapped_practices: string[] = newPractices.filter((element) => selectedPractices.includes(element));
+        setSelectedPractices(overlapped_practices.length === 0 ? ["Total"] : overlapped_practices);
     };
 
     const handleYearChange = (event) => {
@@ -93,8 +101,6 @@ function TabPanel({
         value: year,
         label: year.toString()
     }));
-    const currentPractices = practiceNames[selectedYear].sort((a, b) => a.localeCompare(b)); // sort the practice list from a to z
-    const practices: any[] = ["Total", ...currentPractices];
     const handlePracticeChange = (event) => {
         const {
             target: { value }
@@ -157,6 +163,8 @@ function TabPanel({
         if (years.length) {
             setSelectedYear(minYear);
         }
+        const currentPractices = practiceNames[selectedYear].sort((a, b) => a.localeCompare(b)); // sort the practice list from a to z
+        setPractices(["Total", ...currentPractices]);
         if (selectedPractices.length === 0) {
             setSelectedPractices(["Total"]);
         }
@@ -208,6 +216,7 @@ function TabPanel({
                                                         allStates={allStates}
                                                         mapColor={mapColor}
                                                         predict={selectedPredict}
+                                                        summary={summaryData}
                                                     />
                                                 </Grid>
                                             )}
@@ -249,7 +258,7 @@ function TabPanel({
                                                         position: "relative"
                                                     }}
                                                 >
-                                                    <IRAMap
+                                                    <IRADollarMap
                                                         subtitle={title}
                                                         year={selectedYear.toString()}
                                                         statePerformance={updatedData}
@@ -258,6 +267,7 @@ function TabPanel({
                                                         allStates={allStates}
                                                         mapColor={mapColor}
                                                         predict={selectedPredict}
+                                                        summary={summaryData}
                                                     />
                                                 </Grid>
                                             )}
