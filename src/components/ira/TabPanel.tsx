@@ -26,8 +26,6 @@ import IRAPercentageTable from "./IRAPercentageTable";
 import IRAPredictedMap from "./IRAPredictedMap";
 import IRAPredictedDollarTable from "./IRAPredictedDollarTable";
 import IRAPredictedPercentageTable from "./IRAPredictedPercentageTable";
-import { parse } from "../../../../../../BC/fabric-samples/asset-transfer-secured-agreement/application-gateway-typescript/src/utils";
-import ParagraphCard from "../../../../../HEROP/place-discovery/src/components/search/detailPanel/paragraphCard/paragraphCard";
 
 function TabPanel({
     v,
