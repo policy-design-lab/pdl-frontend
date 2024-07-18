@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added the percentage display into the EQIP IRA map tips [#285](https://github.com/policy-design-lab/pdl-frontend/issues/285) 
+
+### Changed
+- Update the practice list to reflect current and predicted practices for EQIP IRA[#286](https://github.com/policy-design-lab/pdl-frontend/issues/286) 
+
+### Fixed
+- Fixed the NaN values in percentage table in the EQIP IRA page [#290](https://github.com/policy-design-lab/pdl-frontend/issues/290) 
+
 ## [1.0.0] - 2024-07-03
 
 ### Added
