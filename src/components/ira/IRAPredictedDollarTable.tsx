@@ -80,10 +80,10 @@ function IRAPredictedDollarTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
-                const formattedValue = value
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()
-                    .split(".")[0];
+                const formattedValue = value.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
                 if (attr.includes("Dollar")) {
                     newRecord[attr] = `$${formattedValue}`;
                 } else {
@@ -95,7 +95,6 @@ function IRAPredictedDollarTable({
         });
         resultData.push(newRecord);
     });
-
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];

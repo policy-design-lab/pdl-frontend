@@ -85,9 +85,7 @@ function IRAPredictedPercentageTable({
             });
 
             let totalStatePayments = 0;
-            const totalStateInstances = 0;
             let totalNationalPayments = 0;
-            const totalNationalInstances = 0;
 
             practices.forEach((practice) => {
                 const statePracticeData = stateData.practices.find((p) => p.practiceName === practice);
@@ -153,7 +151,6 @@ function IRAPredictedPercentageTable({
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     // filter out all data attributes with the word "percentage" in them
-
     resultData = resultData.map(
         (item) =>
             Object.keys(item)
