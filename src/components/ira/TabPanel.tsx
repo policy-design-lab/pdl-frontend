@@ -20,7 +20,7 @@ import { styled } from "@mui/system";
 import { CurrencyDollar, Percent } from "react-bootstrap-icons";
 
 import useWindowSize from "../shared/WindowSizeHook";
-import IRAMap from "./IRAMap";
+import IRADollarMap from "./IRADollarMap";
 import IRADollarTable from "./IRADollarTable";
 import IRAPercentageTable from "./IRAPercentageTable";
 import IRAPredictedMap from "./IRAPredictedMap";
@@ -55,13 +55,14 @@ function TabPanel({
     const years = stateDistributionData ? Object.keys(stateDistributionData).map(Number) : [];
     const [updatedData, setUpdatedData] = useState(stateDistributionData);
     const [updatedPredictedData, setUpdatedPredictedData] = useState(predictedData);
-    const minYear = Math.min(...years);
+    const minYear = Math.min(...years).toString();
     const maxYear = Math.max(...years);
     const [isPlaying, setIsPlaying] = useState(false);
     const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
-    const [selectedYear, setSelectedYear] = useState(minYear);
+    const [selectedYear, setSelectedYear] = useState(minYear.toString());
     const [selectedPredict, setSelectedPredict] = useState("Min");
-    const [selectedPractices, setSelectedPractices] = useState([]);
+    const [selectedPractices, setSelectedPractices] = useState<string[]>([]);
+    const [practices, setPractices] = useState<string[]>([]);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"]; // title II color
     const the = useTheme();
     const isSmallScreen = useMediaQuery(the.breakpoints.down("sm"));
@@ -82,8 +83,16 @@ function TabPanel({
             setTab(newTab);
         }
     };
-    const handleSwitchChange = (event) => {
-        setIsPredictionOn(event.target.checked);
+    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const isOn = event.target.checked;
+        setIsPredictionOn(isOn);
+        const year = isOn ? predictedYear : minYear;
+        setSelectedYear(year);
+        const currentPractices = practiceNames[year].slice().sort((a, b) => a.localeCompare(b));
+        const newPractices = ["Total", ...currentPractices];
+        setPractices(newPractices);
+        const overlapped_practices: string[] = newPractices.filter((element) => selectedPractices.includes(element));
+        setSelectedPractices(overlapped_practices.length === 0 ? ["Total"] : overlapped_practices);
     };
 
     const handleYearChange = (event) => {
@@ -93,8 +102,6 @@ function TabPanel({
         value: year,
         label: year.toString()
     }));
-    const currentPractices = practiceNames[selectedYear].sort((a, b) => a.localeCompare(b)); // sort the practice list from a to z
-    const practices: any[] = ["Total", ...currentPractices];
     const handlePracticeChange = (event) => {
         const {
             target: { value }
@@ -157,14 +164,20 @@ function TabPanel({
         if (years.length) {
             setSelectedYear(minYear);
         }
-        if (selectedPractices.length === 0) {
-            setSelectedPractices(["Total"]);
+        if (Object.keys(practiceNames).length > 0) {
+            const currentPractices = isPredictionOn
+                ? practiceNames[predictedYear].sort((a, b) => a.localeCompare(b))
+                : practiceNames[minYear].sort((a, b) => a.localeCompare(b));
+            setPractices(["Total", ...currentPractices]);
+            if (selectedPractices.length === 0) {
+                setSelectedPractices(["Total"]);
+            }
         }
-    }, [minYear, selectedPractices]);
+    }, [minYear, selectedYear, selectedPractices, practiceNames]);
     React.useEffect(() => {
         updateData();
+        updatePredictedData();
     }, [selectedPractices, selectedYear, isPredictionOn]);
-
     return (
         <Box role="tabpanel" hidden={v !== index}>
             {v === index && (
@@ -199,16 +212,19 @@ function TabPanel({
                                                         position: "relative"
                                                     }}
                                                 >
-                                                    <IRAPredictedMap
-                                                        subtitle={title}
-                                                        year={predictedYear}
-                                                        predictedPerformance={updatedPredictedData}
-                                                        practices={selectedPractices}
-                                                        stateCodes={stateCodes}
-                                                        allStates={allStates}
-                                                        mapColor={mapColor}
-                                                        predict={selectedPredict}
-                                                    />
+                                                    {Object.keys(updatedPredictedData).length > 0 && (
+                                                        <IRAPredictedMap
+                                                            subtitle={title}
+                                                            year={predictedYear}
+                                                            predictedPerformance={updatedPredictedData}
+                                                            practices={selectedPractices}
+                                                            stateCodes={stateCodes}
+                                                            allStates={allStates}
+                                                            mapColor={mapColor}
+                                                            predict={selectedPredict}
+                                                            summary={summaryData}
+                                                        />
+                                                    )}
                                                 </Grid>
                                             )}
                                         </Box>
@@ -249,7 +265,7 @@ function TabPanel({
                                                         position: "relative"
                                                     }}
                                                 >
-                                                    <IRAMap
+                                                    <IRADollarMap
                                                         subtitle={title}
                                                         year={selectedYear.toString()}
                                                         statePerformance={updatedData}
@@ -258,6 +274,7 @@ function TabPanel({
                                                         allStates={allStates}
                                                         mapColor={mapColor}
                                                         predict={selectedPredict}
+                                                        summary={summaryData}
                                                     />
                                                 </Grid>
                                             )}
@@ -435,18 +452,20 @@ function TabPanel({
                                 className="offset-sm-1"
                                 sx={{ display: tab !== 0 ? "none" : "div" }}
                             >
-                                <IRAPredictedDollarTable
-                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
-                                    tableTitle={`${title} IRA Predicted Data ($) By States in ${predictedYear}`}
-                                    year={predictedYear}
-                                    IRAPredictedData={updatedPredictedData}
-                                    skipColumns={[]}
-                                    stateCodes={stateCodes}
-                                    practices={selectedPractices}
-                                    predict={selectedPredict}
-                                    colors={[]}
-                                    attributes={["predictedTotalPaymentInDollars"]}
-                                />
+                                {Object.keys(updatedPredictedData).length > 0 && (
+                                    <IRAPredictedDollarTable
+                                        key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                        tableTitle={`${title} IRA Predicted Data ($) By States in ${predictedYear}`}
+                                        year={predictedYear}
+                                        IRAPredictedData={updatedPredictedData}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodes}
+                                        practices={selectedPractices}
+                                        predict={selectedPredict}
+                                        colors={[]}
+                                        attributes={["predictedTotalPaymentInDollars"]}
+                                    />
+                                )}
                             </Grid>
                             <Grid
                                 item
@@ -455,19 +474,21 @@ function TabPanel({
                                 className="offset-sm-1"
                                 sx={{ display: tab !== 1 ? "none" : "div" }}
                             >
-                                <IRAPredictedPercentageTable
-                                    key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
-                                    tableTitle={`${title} IRA Predicted Data (%) By States in ${selectedYear}`}
-                                    year={predictedYear}
-                                    IRAPredictedData={updatedPredictedData}
-                                    summary={summaryData}
-                                    skipColumns={[]}
-                                    stateCodes={stateCodes}
-                                    practices={selectedPractices}
-                                    predict={selectedPredict}
-                                    colors={[]}
-                                    attributes={["predictedTotalPaymentInDollars"]}
-                                />
+                                {Object.keys(updatedPredictedData).length > 0 && (
+                                    <IRAPredictedPercentageTable
+                                        key={`${selectedPractices.join(",")}-${selectedYear}-${isPredictionOn}`}
+                                        tableTitle={`${title} IRA Predicted Data (%) By States in ${selectedYear}`}
+                                        year={predictedYear}
+                                        IRAPredictedData={updatedPredictedData}
+                                        summary={summaryData}
+                                        skipColumns={[]}
+                                        stateCodes={stateCodes}
+                                        practices={selectedPractices}
+                                        predict={selectedPredict}
+                                        colors={[]}
+                                        attributes={["predictedTotalPaymentInDollars"]}
+                                    />
+                                )}
                             </Grid>
                         </Grid>
                     )}
