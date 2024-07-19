@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [1.0.1] - 2024-07-19
 
 ### Added
 - Added the percentage display into the EQIP IRA map tips [#285](https://github.com/policy-design-lab/pdl-frontend/issues/285) 
@@ -257,6 +257,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.0.1]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.20.0...1.0.0
 [0.20.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/policy-design-lab/pdl-frontend/compare/0.18.0...0.19.0
