@@ -95,7 +95,6 @@ function IRAPredictedDollarTable({
         });
         resultData.push(newRecord);
     });
-
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];

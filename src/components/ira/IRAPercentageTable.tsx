@@ -165,6 +165,7 @@ function IRAPercentageTable({
             } else {
                 newRecord[attr] = "0";
             }
+            newRecord[attr] = newRecord[attr].includes("NaN") ? "0.00%" : newRecord[attr];
         });
         resultData.push(newRecord);
     });

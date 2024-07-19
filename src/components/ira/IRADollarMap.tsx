@@ -34,7 +34,8 @@ const MapChart = ({
     statePerformance,
     stateCodes,
     allStates,
-    colorScale
+    colorScale,
+    summary
 }) => {
     const classes = useStyles();
     const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
@@ -72,6 +73,20 @@ const MapChart = ({
                                                 }
                                             });
                                         }
+                                        // calculate the total of all practices and get the percentage of the practices
+                                        const totalNationwidePayment = practices.includes("Total")
+                                            ? summary[year].totalPaymentInDollars
+                                            : summary[year].practices
+                                                  .filter((p) => practices.includes(p.practiceName))
+                                                  .reduce((acc, p) => acc + p.totalPaymentInDollars, 0);
+                                        let totalPaymentPercentageNationwide = (
+                                            (practicePayment / totalNationwidePayment) *
+                                            100
+                                        ).toFixed(2);
+                                        totalPaymentPercentageNationwide =
+                                            totalPaymentPercentageNationwide === "NaN"
+                                                ? "0"
+                                                : totalPaymentPercentageNationwide;
                                         const hoverContent = (
                                             <div className="map_tooltip">
                                                 <div className={classes.tooltip_header}>
@@ -80,14 +95,24 @@ const MapChart = ({
                                                 <table className={classes.tooltip_table}>
                                                     <tbody key={geo.properties.name}>
                                                         {practices.includes("Total") ? (
-                                                            <tr style={topTipStyle}>
-                                                                <td className={classes.tooltip_topcell_left}>
-                                                                    Total Benefits:
-                                                                </td>
-                                                                <td className={classes.tooltip_topcell_right}>
-                                                                    ${ShortFormat(practicePayment, undefined, 2)}
-                                                                </td>
-                                                            </tr>
+                                                            <span>
+                                                                <tr style={topTipStyle}>
+                                                                    <td className={classes.tooltip_topcell_left}>
+                                                                        Total Benefits:
+                                                                    </td>
+                                                                    <td className={classes.tooltip_topcell_right}>
+                                                                        ${ShortFormat(practicePayment, undefined, 2)}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr style={topTipStyle}>
+                                                                    <td className={classes.tooltip_bottomcell_left}>
+                                                                        PCT. Nationwide:
+                                                                    </td>
+                                                                    <td className={classes.tooltip_bottomcell_right}>
+                                                                        {totalPaymentPercentageNationwide}%
+                                                                    </td>
+                                                                </tr>
+                                                            </span>
                                                         ) : (
                                                             <span>
                                                                 {practices.length > 1 &&
@@ -175,17 +200,18 @@ const MapChart = ({
                                                                         </td>
                                                                     </tr>
                                                                 )}
+                                                                <tr style={topTipStyle}>
+                                                                    <td className={classes.tooltip_bottomcell_left}>
+                                                                        {practices.length === 1
+                                                                            ? "PCT. Nationwide:"
+                                                                            : "PCT. Nationwide (All Practices):"}
+                                                                    </td>
+                                                                    <td className={classes.tooltip_bottomcell_right}>
+                                                                        {totalPaymentPercentageNationwide}%
+                                                                    </td>
+                                                                </tr>
                                                             </span>
                                                         )}
-
-                                                        {/* <tr>
-                                                        <td className={classes.tooltip_regularcell_left}>
-                                                            PCT. Nationwide:
-                                                        </td>
-                                                        <td className={classes.tooltip_regularcell_right}>
-                                                            {totalPaymentInPercentage} %
-                                                        </td>
-                                                    </tr> */}
                                                     </tbody>
                                                 </table>
                                                 {/* )} */}
@@ -393,7 +419,7 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const IRAMap = ({
+const IRADollarMap = ({
     subtitle,
     practices,
     predict,
@@ -401,7 +427,8 @@ const IRAMap = ({
     mapColor,
     statePerformance,
     stateCodes,
-    allStates
+    allStates,
+    summary
 }: {
     subtitle: string;
     practices: any;
@@ -411,6 +438,7 @@ const IRAMap = ({
     statePerformance: any;
     stateCodes: any;
     allStates: any;
+    summary: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
@@ -524,6 +552,7 @@ const IRAMap = ({
                 stateCodes={stateCodes}
                 allStates={allStates}
                 colorScale={colorScale}
+                summary={summary}
             />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
@@ -550,4 +579,4 @@ const titleElement = ({ subtitle, year }): JSX.Element => {
         </Box>
     );
 };
-export default IRAMap;
+export default IRADollarMap;

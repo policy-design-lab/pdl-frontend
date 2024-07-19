@@ -35,7 +35,7 @@ function IRAPredictedPercentageTable({
                 hashmap[state][attribute] = attributeData;
                 // Calculate percentage nationwide
                 if (attribute === "predictedTotalPaymentInDollars") {
-                    hashmap[state][`${attribute}PercentageNationwide`] = `${(
+                    hashmap[state][`${attribute}PredictedPercentageNationwide`] = `${(
                         (attributeData / summary[year].predictedTotalPaymentInDollars) *
                         100
                     ).toFixed(2)}%`;
@@ -60,7 +60,7 @@ function IRAPredictedPercentageTable({
                         hashmap[state][new_key] = 0;
                         practices_total[state][attribute] += 0;
                         // Set percentage to 0 for missing practices
-                        hashmap[state][`${new_key}PercentageNationwide`] = "0.00%";
+                        hashmap[state][`${new_key}PredictedPercentageNationwide`] = "0.00%";
                     });
                 } else {
                     const attributeData = practiceData[0];
@@ -75,7 +75,7 @@ function IRAPredictedPercentageTable({
                                     ? nationalPracticeData.predictedTotalPaymentInDollars
                                     : nationalPracticeData.totalPracticeInstanceCount;
 
-                            hashmap[state][`${new_key}PercentageNationwide`] = `${(
+                            hashmap[state][`${new_key}PredictedPercentageNationwide`] = `${(
                                 (attributeData[attribute] / nationalTotal) *
                                 100
                             ).toFixed(2)}%`;
@@ -85,9 +85,7 @@ function IRAPredictedPercentageTable({
             });
 
             let totalStatePayments = 0;
-            const totalStateInstances = 0;
             let totalNationalPayments = 0;
-            const totalNationalInstances = 0;
 
             practices.forEach((practice) => {
                 const statePracticeData = stateData.practices.find((p) => p.practiceName === practice);
@@ -108,13 +106,13 @@ function IRAPredictedPercentageTable({
                 if (!practices_total[state] || practices_total[state][attribute] === undefined) {
                     if (!hashmap[state]) hashmap[state] = {};
                     hashmap[state][`All Practices: ${attribute}`] = 0;
-                    hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = "0.00%";
+                    hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = "0.00%";
                 } else {
                     hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
 
                     // Calculate percentage for all practices combined
                     if (attribute === "predictedTotalPaymentInDollars") {
-                        hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
+                        hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = `${(
                             (totalStatePayments / totalNationalPayments) *
                             100
                         ).toFixed(2)}%`;
@@ -128,14 +126,14 @@ function IRAPredictedPercentageTable({
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
                 if (attr.includes("Dollar")) {
-                    if (attr.includes("PercentageNationwide")) {
+                    if (attr.includes("PredictedPercentageNationwide")) {
                         newRecord[attr] = value; // Keep as percentage
                     } else {
                         newRecord[attr] = `$${parseFloat(value).toLocaleString(undefined, {
                             minimumFractionDigits: 2
                         })}`;
                     }
-                } else if (attr.includes("PercentageNationwide")) {
+                } else if (attr.includes("PredictedPercentageNationwide")) {
                     newRecord[attr] = value; // Keep as percentage
                 } else {
                     newRecord[attr] = parseFloat(value).toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -145,6 +143,7 @@ function IRAPredictedPercentageTable({
             } else {
                 newRecord[attr] = "0";
             }
+            newRecord[attr] = newRecord[attr].includes("NaN") ? "0.00%" : newRecord[attr];
         });
         resultData.push(newRecord);
     });
@@ -152,7 +151,6 @@ function IRAPredictedPercentageTable({
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     // filter out all data attributes with the word "percentage" in them
-
     resultData = resultData.map(
         (item) =>
             Object.keys(item)
