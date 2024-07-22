@@ -16,41 +16,40 @@ export default function TitleIIPage(): JSX.Element {
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
     const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
-    const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-    };
+    const [isDataReady, setIsDataReady] = React.useState(false);
 
     const total_year = "2018-2022";
     React.useEffect(() => {
-        // For landing page map only.
-        const allprograms_url = `${config.apiUrl}/allprograms`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setAllPrograms(response);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            const converted_json = response;
-            setAllStates(converted_json);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        const summary_url = `${config.apiUrl}/summary`;
-        getJsonDataFromUrl(summary_url).then((response) => {
-            setSummary(response);
-        });
-
+        const fetchData = async () => {
+            try {
+                const [allProgramsResponse, allStatesResponse, stateCodesResponse, summaryResponse] = await Promise.all(
+                    [
+                        getJsonDataFromUrl(`${config.apiUrl}/allprograms`),
+                        getJsonDataFromUrl(`${config.apiUrl}/states`),
+                        getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                        getJsonDataFromUrl(`${config.apiUrl}/summary`)
+                    ]
+                );
+                setAllPrograms(allProgramsResponse);
+                setAllStates(allStatesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                setSummary(summaryResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

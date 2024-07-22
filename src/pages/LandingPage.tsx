@@ -11,39 +11,38 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 
 export default function LandingPage(): JSX.Element {
     // connect to api endpoint
-    const [stateCodes, setStateCodes] = React.useState([]);
+    const [stateCodes, setStateCodes] = React.useState({});
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
-
+    const [isDataReady, setIsDataReady] = React.useState(false);
     const defaultTheme = createTheme();
 
     React.useEffect(() => {
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = convertAllState(response);
-            setStateCodes(converted_json);
-        });
-
-        const allprograms_url = `${config.apiUrl}/allprograms`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setAllPrograms(response);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
-        });
-
-        const summary_url = `${config.apiUrl}/summary`;
-        getJsonDataFromUrl(summary_url).then((response) => {
-            setSummary(response);
-        });
+        const fetchData = async () => {
+            try {
+                const [stateCodesResponse, allProgramsResponse, allStatesResponse, summaryResponse] = await Promise.all(
+                    [
+                        getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                        getJsonDataFromUrl(`${config.apiUrl}/allprograms`),
+                        getJsonDataFromUrl(`${config.apiUrl}/states`),
+                        getJsonDataFromUrl(`${config.apiUrl}/summary`)
+                    ]
+                );
+                setStateCodes(convertAllState(stateCodesResponse));
+                setAllPrograms(allProgramsResponse);
+                setAllStates(allStatesResponse);
+                setSummary(summaryResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
-
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 ? (
+            {isDataReady && (
                 <Box sx={{ width: "100%" }}>
                     <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
                     <div style={{ position: "relative" }}>
@@ -104,9 +103,8 @@ export default function LandingPage(): JSX.Element {
                     <News />
                     <Footer />
                 </Box>
-            ) : (
-                <h1>Loading data...</h1>
             )}
+            {!isDataReady && <h1>Loading map data...</h1>}
         </ThemeProvider>
     );
 }

@@ -44,33 +44,37 @@ export default function SNAPPage(): JSX.Element {
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
+    const [isDataReady, setIsDataReady] = React.useState(false);
 
     React.useEffect(() => {
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = convertAllState(response);
-            setStateCodes(converted_json);
-        });
-
-        const allprograms_url = `${config.apiUrl}/allprograms`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setAllPrograms(response);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStates(response);
-        });
-
-        const summary_url = `${config.apiUrl}/summary`;
-        getJsonDataFromUrl(summary_url).then((response) => {
-            setSummary(response);
-        });
-
-        getJsonDataFromUrl(`${config.apiUrl}/titles/title-iv/programs/snap/state-distribution`).then((response) => {
-            setData(response);
-        });
+        const fetchData = async () => {
+            try {
+                const [
+                    stateCodesResponse,
+                    allProgramsResponse,
+                    allStatesResponse,
+                    summaryResponse,
+                    snapStateDistributionResponse
+                ] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/allprograms`),
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-iv/programs/snap/state-distribution`)
+                ]);
+                setStateCodes(convertAllState(stateCodesResponse));
+                setAllPrograms(allProgramsResponse);
+                setAllStates(allStatesResponse);
+                setSummary(summaryResponse);
+                setData(snapStateDistributionResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
+
     const defaultTheme = createTheme({
         spacing: 8
     });
@@ -119,9 +123,7 @@ export default function SNAPPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodes).length > 0 &&
-            Object.keys(allStates).length > 0 &&
-            Object.keys(summary).length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

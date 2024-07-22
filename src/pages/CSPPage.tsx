@@ -24,6 +24,7 @@ export default function CSPPage(): JSX.Element {
     const [firstTotal, setFirstTotal] = React.useState(0);
     const [secondTotal, setSecondTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
+    const [isDataReady, setIsDataReady] = React.useState(false);
 
     const defaultTheme = createTheme();
     let landManagementTotal = 0;
@@ -46,32 +47,27 @@ export default function CSPPage(): JSX.Element {
     const zeroCategory = [];
 
     const csp_year = "2018-2022";
-
     React.useEffect(() => {
-        const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`;
-        getJsonDataFromUrl(state_perf_url).then((response) => {
-            const converted_perf_json = response;
-            setStatePerformance(converted_perf_json);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            const converted_json = response;
-            setAllStates(converted_json);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            setStateCodesArray(response);
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        const chartdata_url = `${config.apiUrl}/titles/title-ii/programs/csp/summary`;
-        getJsonDataFromUrl(chartdata_url).then((response) => {
-            const converted_chart_json = response;
-            processData(converted_chart_json);
-        });
+        const fetchData = async () => {
+            try {
+                const [statePerformanceResponse, allStatesResponse, stateCodesResponse, summaryResponse] =
+                    await Promise.all([
+                        getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`),
+                        getJsonDataFromUrl(`${config.apiUrl}/states`),
+                        getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                        getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp/summary`)
+                    ]);
+                setStatePerformance(statePerformanceResponse);
+                setAllStates(allStatesResponse);
+                setStateCodesArray(stateCodesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                processData(summaryResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     const processData = (chartData) => {
@@ -191,10 +187,7 @@ export default function CSPPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 &&
-            statePerformance[csp_year] !== undefined &&
-            zeroCategories.length > 0 &&
-            stateCodesArray.length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

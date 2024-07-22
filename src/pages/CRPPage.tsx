@@ -16,7 +16,7 @@ export default function CRPPage(): JSX.Element {
     const year = "2018-2022";
     const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
-
+    const [isDataReady, setIsDataReady] = React.useState(false);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState({});
@@ -38,29 +38,27 @@ export default function CRPPage(): JSX.Element {
     let grasslandPyamentInDollars = 0;
 
     React.useEffect(() => {
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStatesData(response);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            setStateCodesArray(response);
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        const statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/crp/state-distribution`;
-        getJsonDataFromUrl(statedistribution_url).then((response) => {
-            setStateDistributionData(response);
-        });
-
-        const chartData_url = `${config.apiUrl}/titles/title-ii/programs/crp/summary`;
-        getJsonDataFromUrl(chartData_url).then((response) => {
-            processData(response);
-        });
+        const fetchData = async () => {
+            try {
+                const [allStatesResponse, stateCodesResponse, stateDistributionResponse, chartDataResponse] =
+                    await Promise.all([
+                        getJsonDataFromUrl(`${config.apiUrl}/states`),
+                        getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                        getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/crp/state-distribution`),
+                        getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/crp/summary`)
+                    ]);
+                setAllStatesData(allStatesResponse);
+                setStateCodesArray(stateCodesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                setStateDistributionData(stateDistributionResponse);
+                processData(chartDataResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
-
     const processData = (chartData) => {
         if (chartData.programs === undefined) return;
 
@@ -120,10 +118,7 @@ export default function CRPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodesData).length > 0 &&
-            Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 &&
-            zeroCategories.length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

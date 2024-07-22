@@ -33,21 +33,25 @@ export default function CropInsurancePage(): JSX.Element {
     const cropInsuranceDiv = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
+    const [isDataReady, setIsDataReady] = React.useState(false);
 
     React.useEffect(() => {
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStatesData(response);
-        });
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-        const statedistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution`;
-        getJsonDataFromUrl(statedistribution_url).then((response) => {
-            setStateDistributionData(response);
-        });
+        const fetchData = async () => {
+            try {
+                const [allStatesResponse, stateCodesResponse, stateDistributionResponse] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution`)
+                ]);
+                setAllStatesData(allStatesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                setStateDistributionData(stateDistributionResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     const switchChartTable = (event, newTab) => {
@@ -87,9 +91,7 @@ export default function CropInsurancePage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodesData).length > 0 &&
-            Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

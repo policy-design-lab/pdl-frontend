@@ -30,7 +30,7 @@ export default function TitleIPage(): JSX.Element {
     const [subtitleDStateDistributionData, setSubtitleDStateDistributionData] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
-
+    const [isDataReady, setIsDataReady] = React.useState(false);
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
     const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
@@ -47,40 +47,40 @@ export default function TitleIPage(): JSX.Element {
     const subtitleAYear = "2014-2021";
     const subtitleEYear = "2014-2021";
     const subtitleDYear = "2014-2021";
+
     React.useEffect(() => {
-        // For landing page map only.
-        const allprograms_url = `${config.apiUrl}/allprograms`;
-        getJsonDataFromUrl(allprograms_url).then((response) => {
-            setAllPrograms(response);
-        });
-        const summary_url = `${config.apiUrl}/summary`;
-        getJsonDataFromUrl(summary_url).then((response) => {
-            setSummary(response);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStatesData(response);
-        });
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-        const subtitleA_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/state-distribution`;
-        getJsonDataFromUrl(subtitleA_url).then((response) => {
-            setSubtitleADistributionData(response);
-        });
-
-        const subtitleD_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-d/state-distribution`;
-        getJsonDataFromUrl(subtitleD_url).then((response) => {
-            setSubtitleDStateDistributionData(response);
-        });
-        const subtitleE_url = `${config.apiUrl}/titles/title-i/subtitles/subtitle-e/state-distribution`;
-        getJsonDataFromUrl(subtitleE_url).then((response) => {
-            setSubtitleEStateDistributionData(response);
-        });
-
+        const fetchData = async () => {
+            try {
+                const [
+                    allProgramsResponse,
+                    summaryResponse,
+                    allStatesResponse,
+                    stateCodesResponse,
+                    subtitleADistributionResponse,
+                    subtitleDStateDistributionResponse,
+                    subtitleEDistributionResponse
+                ] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/allprograms`),
+                    getJsonDataFromUrl(`${config.apiUrl}/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-d/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-e/state-distribution`)
+                ]);
+                setAllPrograms(allProgramsResponse);
+                setSummary(summaryResponse);
+                setAllStatesData(allStatesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                setSubtitleADistributionData(subtitleADistributionResponse);
+                setSubtitleDStateDistributionData(subtitleDStateDistributionResponse);
+                setSubtitleEStateDistributionData(subtitleEDistributionResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
@@ -148,11 +148,7 @@ export default function TitleIPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodesData).length > 0 &&
-            Object.keys(allStatesData).length > 0 &&
-            Object.keys(subtitleADistributionData).length > 0 &&
-            Object.keys(subtitleEStateDistributionData).length > 0 &&
-            Object.keys(subtitleDStateDistributionData).length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
