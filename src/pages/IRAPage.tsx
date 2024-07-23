@@ -19,7 +19,7 @@ export default function IRAPage(): JSX.Element {
 
     // Fetching Data
     const [eqipStateDistributionData, setEqipStateDistributionData] = React.useState({});
-    const [eqipPredictedData, setEqipPredictedDData] = React.useState({});
+    const [eqipPredictedData, setEqipPredictedData] = React.useState({});
     const [eqipSummaryData, setEqipSummaryData] = React.useState({});
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
@@ -27,42 +27,39 @@ export default function IRAPage(): JSX.Element {
     const [allStatesData, setAllStatesData] = React.useState([]);
     const [zeroCategories, setZeroCategories] = React.useState([]);
     const [totalAcep, setTotalAcep] = React.useState(0);
+    const [isDataReady, setIsDataReady] = React.useState(false);
+
     React.useEffect(() => {
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            setAllStatesData(response);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            setStateCodesArray(response);
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        // eqip IRA data
-        const eqip_statedistribution_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/state-distribution`;
-        getJsonDataFromUrl(eqip_statedistribution_url).then((response) => {
-            setEqipStateDistributionData(response);
-        });
-        const eqip_predicted_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/predicted`;
-        getJsonDataFromUrl(eqip_predicted_url).then((response) => {
-            setEqipPredictedDData(response);
-        });
-        const eqip_summary_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`;
-        getJsonDataFromUrl(eqip_summary_url).then((response) => {
-            setEqipSummaryData(response);
-        });
-        const eqip_practicenames_url = `${config.apiUrl}/titles/title-ii/programs/eqip-ira/practice-names`;
-        getJsonDataFromUrl(eqip_practicenames_url).then((response) => {
-            setEqipPracticeNames(response);
-        });
-
-        // csp IRA data
-
-        // rccp IRA data
-
-        // acep IRA data
+        const fetchData = async () => {
+            try {
+                const [
+                    allStatesResponse,
+                    stateCodesResponse,
+                    eqipStateDistributionResponse,
+                    eqipPredictedResponse,
+                    eqipSummaryResponse,
+                    eqipPracticeNamesResponse
+                ] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/predicted`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/practice-names`)
+                ]);
+                setAllStatesData(allStatesResponse);
+                setStateCodesArray(stateCodesResponse);
+                setStateCodesData(convertAllState(stateCodesResponse));
+                setEqipStateDistributionData(eqipStateDistributionResponse);
+                setEqipPredictedData(eqipPredictedResponse);
+                setEqipSummaryData(eqipSummaryResponse);
+                setEqipPracticeNames(eqipPracticeNamesResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     // Modal
@@ -112,8 +109,7 @@ export default function IRAPage(): JSX.Element {
                                 </Tabs>
                             </Box>
                             {/* NOTE: Because of divider, the index are increased by 2 */}
-                            {Object.keys(eqipStateDistributionData).length > 0 &&
-                            Object.keys(stateCodesData).length > 0 ? (
+                            {isDataReady ? (
                                 <span>
                                     <TabPanel
                                         v={value}
