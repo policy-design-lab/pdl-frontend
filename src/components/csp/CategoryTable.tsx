@@ -171,7 +171,9 @@ function App({
                     categoryBenefit: `$${Number(totalPaymentInDollars).toLocaleString(undefined, {
                         minimumFractionDigits: 2
                     })}`,
-                    categoryPercentage: `${totalPaymentInPercentageWithinState.toString()}%`,
+                    categoryPercentage: `${
+                        totalPaymentInPercentageWithinState ? totalPaymentInPercentageWithinState.toString() : "0"
+                    }%`,
                     cspBenefit: `$${value.totalPaymentInDollars.toLocaleString(undefined, {
                         minimumFractionDigits: 2
                     })}`,
