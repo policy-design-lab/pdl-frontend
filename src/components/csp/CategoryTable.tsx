@@ -157,8 +157,7 @@ function App({
             categoryRecord = statuteRecord[1];
         } else if (category === "Miscellaneous Practices") {
             categoryRecord = statuteRecord[2];
-        }
-        else {
+        } else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
         if (categoryRecord !== undefined) {

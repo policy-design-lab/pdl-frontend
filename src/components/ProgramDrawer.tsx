@@ -405,7 +405,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                         </ListItem>
                     );
                 }
-                if (category === "2018 Practices" || category === "2014 Eligible Land" || category === "Miscellaneous Practices") {
+                if (
+                    category === "2018 Practices" ||
+                    category === "2014 Eligible Land" ||
+                    category === "Miscellaneous Practices"
+                ) {
                     return (
                         <Box key={category}>
                             <ListItem key={category} disablePadding>

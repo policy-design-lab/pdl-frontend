@@ -57,8 +57,7 @@ const MapChart = (props) => {
                                     categoryRecord = statuteRecord[1];
                                 } else if (category === "Miscellaneous Practices") {
                                     categoryRecord = statuteRecord[2];
-                                }
-                                else {
+                                } else {
                                     categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
                                 }
                                 const categoryPayment = categoryRecord.totalPaymentInDollars;
@@ -196,8 +195,7 @@ const CategoryMap = ({
             categoryRecord = statuteRecord[1];
         } else if (category === "Miscellaneous Practices") {
             categoryRecord = statuteRecord[2];
-        }
-        else {
+        } else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
         if (categoryRecord !== undefined) quantizeArray.push(categoryRecord.totalPaymentInDollars);

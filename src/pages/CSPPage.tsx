@@ -45,8 +45,8 @@ export default function CSPPage(): JSX.Element {
     let grasslandTotal = 0;
     let new2018Total = 0;
     let old2014Total = 0;
-    let miscellaneousPracticesTotal=0;
-    let miscellaneousTotal=0;
+    let miscellaneousPracticesTotal = 0;
+    let miscellaneousTotal = 0;
     const zeroCategory = [];
 
     const csp_year = "2018-2022";
@@ -87,7 +87,7 @@ export default function CSPPage(): JSX.Element {
         const cur3 = chartData.statutes.find((s) => s.statuteName === "Miscellaneous Practices");
         new2018Total = cur1.totalPaymentInDollars;
         old2014Total = cur2.totalPaymentInDollars;
-        miscellaneousPracticesTotal=cur3.totalPaymentInDollars;
+        miscellaneousPracticesTotal = cur3.totalPaymentInDollars;
         setFirstTotal(new2018Total);
         setSecondTotal(old2014Total);
         setThirdTotal(miscellaneousPracticesTotal);
@@ -193,9 +193,7 @@ export default function CSPPage(): JSX.Element {
             { name: "Grassland", value: grasslandTotal, color: "#CDDBD8" }
         ]);
 
-        setNewMiscellaneousChartData([
-          {name : "Miscellaneous", value: miscellaneousTotal, color: "#2F7164"}
-        ])
+        setNewMiscellaneousChartData([{ name: "Miscellaneous", value: miscellaneousTotal, color: "#2F7164" }]);
         setTotalChartData([
             { name: "2018 Practices", value: new2018Total, color: "#2F7164" },
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
@@ -519,7 +517,7 @@ export default function CSPPage(): JSX.Element {
                                 display: checked !== 18 ? "none" : "block"
                             }}
                         >
-                             <CategoryMap
+                            <CategoryMap
                                 category="Miscellaneous Practices"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
@@ -555,7 +553,7 @@ export default function CSPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        {firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0? (
+                        {firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0 ? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
@@ -576,14 +574,20 @@ export default function CSPPage(): JSX.Element {
                                         label2="2018 Practices"
                                     />
                                 </Box>
-                                <Box component="div" sx={{ display: checked >= 11 && checked <=17 ? "block" : "none" }}>
+                                <Box
+                                    component="div"
+                                    sx={{ display: checked >= 11 && checked <= 17 ? "block" : "none" }}
+                                >
                                     <SemiDonutChart
                                         data={old2014ChartData}
                                         label1={secondTotal.toString()}
                                         label2="2014 Eligible Land"
                                     />
                                 </Box>
-                                <Box component="div" sx={{ display: checked >= 18 && checked <=19 ? "block" : "none" }}>
+                                <Box
+                                    component="div"
+                                    sx={{ display: checked >= 18 && checked <= 19 ? "block" : "none" }}
+                                >
                                     <SemiDonutChart
                                         data={newMiscellaneousChartData}
                                         label1={thirdTotal.toString()}
@@ -751,7 +755,7 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 19? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 19 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Miscellaneous"
                                 statePerformance={statePerformance}
