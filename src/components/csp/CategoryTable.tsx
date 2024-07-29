@@ -148,12 +148,17 @@ function App({
         const AArray = ACur.practiceCategories;
         const BCur = value.statutes.find((s) => s.statuteName === "2014 Eligible Land");
         const BArray = BCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray);
+        const CCur = value.statutes.find((s) => s.statuteName === "Miscellaneous Practices");
+        const CArray = CCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray).concat(CArray);
         if (category === "2018 Practices") {
             categoryRecord = statuteRecord[0];
         } else if (category === "2014 Eligible Land") {
             categoryRecord = statuteRecord[1];
-        } else {
+        } else if (category === "Miscellaneous Practices") {
+            categoryRecord = statuteRecord[2];
+        }
+        else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
         if (categoryRecord !== undefined) {

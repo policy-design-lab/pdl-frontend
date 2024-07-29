@@ -21,8 +21,10 @@ export default function CSPPage(): JSX.Element {
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [old2014ChartData, setOld2014ChartData] = React.useState([{}]);
     const [new2018ChartData, setNew2018ChartData] = React.useState([{}]);
+    const [newMiscellaneousChartData, setNewMiscellaneousChartData] = React.useState([{}]);
     const [firstTotal, setFirstTotal] = React.useState(0);
     const [secondTotal, setSecondTotal] = React.useState(0);
+    const [thirdTotal, setThirdTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
 
     const defaultTheme = createTheme();
@@ -43,6 +45,8 @@ export default function CSPPage(): JSX.Element {
     let grasslandTotal = 0;
     let new2018Total = 0;
     let old2014Total = 0;
+    let miscellaneousPracticesTotal=0;
+    let miscellaneousTotal=0;
     const zeroCategory = [];
 
     const csp_year = "2018-2022";
@@ -80,13 +84,16 @@ export default function CSPPage(): JSX.Element {
         // eslint-disable-next-line
         const cur1 = chartData.statutes.find((s) => s.statuteName === "2018 Practices");
         const cur2 = chartData.statutes.find((s) => s.statuteName === "2014 Eligible Land");
+        const cur3 = chartData.statutes.find((s) => s.statuteName === "Miscellaneous Practices");
         new2018Total = cur1.totalPaymentInDollars;
         old2014Total = cur2.totalPaymentInDollars;
+        miscellaneousPracticesTotal=cur3.totalPaymentInDollars;
         setFirstTotal(new2018Total);
         setSecondTotal(old2014Total);
+        setThirdTotal(miscellaneousPracticesTotal);
         const ACur = cur1.practiceCategories;
         const BCur = cur2.practiceCategories;
-
+        const CCur = cur3.practiceCategories;
         const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
         const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvement");
         const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
@@ -103,6 +110,8 @@ export default function CSPPage(): JSX.Element {
         const SAOCur = BCur.find((s) => s.practiceCategoryName === "Other: supplemental, adjustment & other");
         const NIPFCur = BCur.find((s) => s.practiceCategoryName === "Non-industrial private forestland");
         const grasslandCur = BCur.find((s) => s.practiceCategoryName === "Grassland");
+
+        const miscellaneousCur = CCur.find((s) => s.practiceCategoryName === "Miscellaneous");
 
         landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
         if (landManagementTotal === 0) zeroCategory.push("Land management");
@@ -135,6 +144,9 @@ export default function CSPPage(): JSX.Element {
         if (NIPFTotal === 0) zeroCategory.push("Non-industrial private forestland");
         if (grasslandCur !== undefined) grasslandTotal += Number(grasslandCur.totalPaymentInDollars);
         if (grasslandTotal === 0) zeroCategory.push("Grassland");
+
+        miscellaneousTotal += Number(miscellaneousCur.totalPaymentInDollars);
+        if (miscellaneousTotal === 0) zeroCategory.push("Miscellaneous");
 
         setNew2018ChartData([
             { name: "Land management", value: landManagementTotal, color: "#2F7164" },
@@ -181,9 +193,13 @@ export default function CSPPage(): JSX.Element {
             { name: "Grassland", value: grasslandTotal, color: "#CDDBD8" }
         ]);
 
+        setNewMiscellaneousChartData([
+          {name : "Miscellaneous", value: miscellaneousTotal, color: "#2F7164"}
+        ])
         setTotalChartData([
             { name: "2018 Practices", value: new2018Total, color: "#2F7164" },
-            { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" }
+            { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
+            { name: "Miscellaneous Practices", value: miscellaneousPracticesTotal, color: "#4D847A" }
         ]);
 
         if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
@@ -495,6 +511,38 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesData}
                             />
                         </Box>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 18 ? "none" : "block"
+                            }}
+                        >
+                             <CategoryMap
+                                category="Miscellaneous Practices"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 19 ? "none" : "block"
+                            }}
+                        >
+                            <CategoryMap
+                                category="Miscellaneous"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
@@ -507,7 +555,7 @@ export default function CSPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        {firstTotal >= 0 || secondTotal >= 0 ? (
+                        {firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
@@ -528,11 +576,18 @@ export default function CSPPage(): JSX.Element {
                                         label2="2018 Practices"
                                     />
                                 </Box>
-                                <Box component="div" sx={{ display: checked >= 11 ? "block" : "none" }}>
+                                <Box component="div" sx={{ display: checked >= 11 && checked <=17 ? "block" : "none" }}>
                                     <SemiDonutChart
                                         data={old2014ChartData}
                                         label1={secondTotal.toString()}
                                         label2="2014 Eligible Land"
+                                    />
+                                </Box>
+                                <Box component="div" sx={{ display: checked >= 18 && checked <=19 ? "block" : "none" }}>
+                                    <SemiDonutChart
+                                        data={newMiscellaneousChartData}
+                                        label1={thirdTotal.toString()}
+                                        label2="Miscellaneous Practices"
                                     />
                                 </Box>
                             </div>
@@ -683,6 +738,22 @@ export default function CSPPage(): JSX.Element {
                         <Box component="div" sx={{ display: checked !== 17 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Other: supplemental, adjustment & other"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 18 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Miscellaneous Practices"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 19? "none" : "block" }}>
+                            <CategoryTable
+                                category="Miscellaneous"
                                 statePerformance={statePerformance}
                                 year={csp_year}
                                 stateCodes={stateCodesArray}

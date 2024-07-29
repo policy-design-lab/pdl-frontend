@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added null value handling for new CSP data [#301](https://github.com/policy-design-lab/pdl-frontend/issues/301) 
+- Added Miscellaneous Practices as a new CSP practice category [#303](https://github.com/policy-design-lab/pdl-frontend/issues/303) 
 
 ## [1.0.2] - 2024-07-23
 

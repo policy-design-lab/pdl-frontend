@@ -314,7 +314,11 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
         "Rangeland",
         "Pastureland",
         "Non-industrial private forestland",
-        "Other: supplemental, adjustment & other"
+        "Other: supplemental, adjustment & other",
+
+        // PR303-Add Miscellaneous category
+        "Miscellaneous Practices",
+        "Miscellaneous"
     ];
     const classes = useStyles();
     return (
@@ -349,6 +353,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                 if (
                     category !== "2018 Practices" &&
                     category !== "2014 Eligible Land" &&
+                    category !== "Miscellaneous Practices" &&
                     category !== "Total CSP Benefits"
                 ) {
                     return (
@@ -400,7 +405,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                         </ListItem>
                     );
                 }
-                if (category === "2018 Practices" || category === "2014 Eligible Land") {
+                if (category === "2018 Practices" || category === "2014 Eligible Land" || category === "Miscellaneous Practices") {
                     return (
                         <Box key={category}>
                             <ListItem key={category} disablePadding>
