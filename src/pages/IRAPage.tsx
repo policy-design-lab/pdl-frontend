@@ -64,7 +64,7 @@ export default function IRAPage(): JSX.Element {
 
     // Modal
     React.useEffect(() => {
-        //setModalOpen(true); // #306: Block the model to be auto-opened due to the size of iframe
+        // setModalOpen(true); // #306: Block the model to be auto-opened due to the size of iframe
     }, []);
     const handleOpen = () => {
         setModalOpen(true);
