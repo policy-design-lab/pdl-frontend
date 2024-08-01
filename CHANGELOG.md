@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Fixed
+- Block the EQIP IRA information modal from opening automatically when the page loads due to the size of the article's iframe. [#306](https://github.com/policy-design-lab/pdl-frontend/issues/306) 
+
 ## [1.0.2] - 2024-07-23
 
 ### Fixed
