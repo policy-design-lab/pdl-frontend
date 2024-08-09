@@ -88,7 +88,7 @@ export default function EQIPPage(): JSX.Element {
         const vegetativeCur = ACur.find((s) => s.practiceCategoryName === "Vegetative");
         const forestManagementCur = ACur.find((s) => s.practiceCategoryName === "Forest management");
         const soilRemediationCur = ACur.find((s) => s.practiceCategoryName === "Soil remediation");
-        const other6ACur = ACur.find((s) => s.practiceCategoryName === "Other improvement");
+        const other6ACur = ACur.find((s) => s.practiceCategoryName === "Other improvements");
         const soilTestingCur = ACur.find((s) => s.practiceCategoryName === "Soil testing");
 
         const otherPlanningCur = BCur.find((s) => s.practiceCategoryName === "Other planning");
@@ -112,7 +112,7 @@ export default function EQIPPage(): JSX.Element {
         soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
         if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
         other6ATotal += Number(other6ACur.totalPaymentInDollars);
-        if (other6ATotal === 0) zeroCategory.push("Other improvement");
+        if (other6ATotal === 0) zeroCategory.push("Other improvements");
         soilTestingTotal += Number(soilTestingCur.totalPaymentInDollars);
         if (soilTestingTotal === 0) zeroCategory.push("Soil testing");
 
@@ -132,7 +132,7 @@ export default function EQIPPage(): JSX.Element {
             { name: "Land management", value: landManagementTotal, color: "#4D847A" },
             { name: "Vegetative", value: vegetativeTotal, color: "#749F97" },
             { name: "Forest management", value: forestManagementTotal, color: "#9CBAB4" },
-            { name: "Other improvement", value: other6ATotal, color: "#B9CDC9" },
+            { name: "Other improvements", value: other6ATotal, color: "#B9CDC9" },
             { name: "Soil remediation; Soil testing", value: soilRemediationTotal + soilTestingTotal, color: "#CDDBD8" }
         ]);
 
@@ -248,7 +248,7 @@ export default function EQIPPage(): JSX.Element {
                             sx={{ width: "85%", m: "auto", display: checked !== 6 ? "none" : "block" }}
                         >
                             <CategoryMap
-                                category="Other improvement"
+                                category="Other improvements"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
                                 year={eqip_year}
@@ -426,7 +426,7 @@ export default function EQIPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Other improvement"
+                                category="Other improvements"
                                 statePerformance={statePerformance}
                                 year={eqip_year}
                                 stateCodes={stateCodesArray}

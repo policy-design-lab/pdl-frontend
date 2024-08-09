@@ -1,6 +1,5 @@
-import { Box, Typography, Grid, Tabs, Button, Modal, IconButton } from "@mui/material";
+import { Box, Typography, Grid, Tabs, Button} from "@mui/material";
 import * as React from "react";
-import InfoIcon from "@mui/icons-material/Info";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavBar from "../components/NavBar";
@@ -63,9 +62,6 @@ export default function IRAPage(): JSX.Element {
     }, []);
 
     // Modal
-    React.useEffect(() => {
-        // setModalOpen(true); // #306: Block the model to be auto-opened due to the size of iframe
-    }, []);
     const handleOpen = () => {
         setModalOpen(true);
     };
@@ -82,7 +78,82 @@ export default function IRAPage(): JSX.Element {
             <Box>
                 <Grid container spacing={2}>
                     <Grid xs={12}>
-                        <Box sx={{ width: "100%", mt: 5 }}>
+                        <Box sx={{ width: "100%", mt: 10 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={2} />
+                                <Grid item xs={12} md={8} sx={{ backgroundColor: "#ECF0EE", borderRadius: 1, mb: 4.5 }}>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 500,
+                                            fontSize: "1.125rem",
+                                            px: 3,
+                                            py: 0.25,
+                                            textAlign: "center"
+                                        }}
+                                    >
+                                        <b>Inflation Reduction Act Conservation; Policy Design Lab</b>
+                                    </Typography>
+                                    <Typography sx={{ px: 3, py: 3 }}>
+                                        On August 16, 2022, President Joe Biden signed into law the Inflation Reduction
+                                        Act of 2022 (P.L.
+                                        <a
+                                            target="_blank"
+                                            href="https://www.congress.gov/bill/117th-congress/house-bill/5376/text"
+                                            rel="noreferrer"
+                                        >
+                                            117-169
+                                        </a>
+                                        ). Among other things, the Inflation Reduction Act (IRA) included an $18 billion
+                                        investment of additional funds appropriated to four Farm Bill Conservation
+                                        programs: Environmental Quality Incentives Program (
+                                        <a
+                                            target="_blank"
+                                            href="https://farmdocdaily.illinois.edu/2023/04/a-view-of-the-farm-bill-through-policy-design-part-1-eqip.html"
+                                            rel="noreferrer"
+                                        >
+                                            EQIP
+                                        </a>
+                                        ); Conservation Stewardship Program (
+                                        <a
+                                            target="_blank"
+                                            href="https://farmdocdaily.illinois.edu/2023/05/a-view-of-the-farm-bill-through-policy-design-part-2-csp.html"
+                                            rel="noreferrer"
+                                        >
+                                            CSP
+                                        </a>
+                                        ); Agricultural Conservation Easement Program (
+                                        <a
+                                            target="_blank"
+                                            href="https://farmdocdaily.illinois.edu/2023/10/a-view-of-the-farm-bill-through-policy-design-part-7-acep-and-rcpp.html"
+                                            rel="noreferrer"
+                                        >
+                                            ACEP
+                                        </a>
+                                        ); and Regional Conservation Partnership Program (
+                                        <a
+                                            target="_blank"
+                                            href="https://farmdocdaily.illinois.edu/2023/10/a-view-of-the-farm-bill-through-policy-design-part-7-acep-and-rcpp.html"
+                                            rel="noreferrer"
+                                        >
+                                            RCPP
+                                        </a>
+                                        )...
+                                        <Button onClick={handleOpen} sx={{ padding: 0, ml: "1rem" }}>
+                                            <Typography
+                                                sx={{
+                                                    color: "#2F7164"
+                                                }}
+                                            >
+                                                Learn More
+                                            </Typography>
+                                        </Button>
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Grid>
+                    <Grid xs={12}>
+                        <Box sx={{ width: "100%", my: 2 }}>
                             <Box
                                 display="flex"
                                 justifyContent="center"
@@ -102,9 +173,6 @@ export default function IRAPage(): JSX.Element {
                     <CustomTab label={<Box>RCPP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <CustomTab label={<Box>ACEP</Box>} customSx={tabStyle} selectedSX={selectedStyle} /> */}
-                                    <IconButton color="primary" onClick={handleOpen}>
-                                        <InfoIcon sx={{ color: "#2F7164", fontSize: 30 }} />
-                                    </IconButton>
                                     <IRAModal open={isModalOpen} handleClose={handleClose} />
                                 </Tabs>
                             </Box>

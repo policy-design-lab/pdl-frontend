@@ -48,16 +48,24 @@ const MapChart = (props) => {
                                 const AArray = ACur.practiceCategories;
                                 const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
                                 const BArray = BCur.practiceCategories;
-                                const TotalArray = AArray.concat(BArray);
+                                const CCur = statuteRecord.find((s) => s.statuteName === "Other CSP");
+                                const CArray = CCur.practiceCategories;
+                                const TotalArray = AArray.concat(BArray).concat(CArray);
                                 if (category === "2018 Practices") {
                                     categoryRecord = statuteRecord[0];
                                 } else if (category === "2014 Eligible Land") {
                                     categoryRecord = statuteRecord[1];
+                                } else if (category === "Other CSP") {
+                                    categoryRecord = statuteRecord[2];
                                 } else {
                                     categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
                                 }
+                                if (categoryRecord === undefined) {
+                                    console.log(statuteRecord, category);
+                                    return null;
+                                }
                                 const categoryPayment = categoryRecord.totalPaymentInDollars;
-                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
+                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide ?categoryRecord.totalPaymentInPercentageNationwide: categoryRecord.totalPaymentInPercentage ;
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
@@ -182,11 +190,15 @@ const CategoryMap = ({
         const AArray = ACur.practiceCategories;
         const BCur = statuteRecord.find((s) => s.statuteName === "2014 Eligible Land");
         const BArray = BCur.practiceCategories;
-        const TotalArray = AArray.concat(BArray);
+        const CCur = statuteRecord.find((s) => s.statuteName === "Other CSP");
+        const CArray = CCur.practiceCategories;
+        const TotalArray = AArray.concat(BArray).concat(CArray);
         if (category === "2018 Practices") {
             categoryRecord = statuteRecord[0];
         } else if (category === "2014 Eligible Land") {
             categoryRecord = statuteRecord[1];
+        } else if (category === "Other CSP") {
+            categoryRecord = statuteRecord[2];
         } else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
@@ -201,7 +213,8 @@ const CategoryMap = ({
     if (category === "Land management") legendCategory = "Land management-CSP";
     if (category === "Forest management") legendCategory = "Forest management-CSP";
     if (category === "Soil testing") legendCategory = "Soil testing-CSP";
-    if (category === "Other improvement") legendCategory = "Other improvement-CSP";
+    if (category === "Other improvements") legendCategory = "Other improvements-CSP";
+    console.log(legendCategory);
     const customScale = legendConfig[legendCategory];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const classes = useStyles();
