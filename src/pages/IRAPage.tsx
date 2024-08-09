@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Tabs, Button} from "@mui/material";
+import { Box, Typography, Grid, Tabs, Button } from "@mui/material";
 import * as React from "react";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";

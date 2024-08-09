@@ -34,13 +34,13 @@ export default function CSPPage(): JSX.Element {
     let forestManagementTotal = 0;
     let soilRemediationTotal = 0;
     let existingAPTotal = 0;
-    let structuralTotal = 0;
+    const structuralTotal = 0;
     let croplandTotal = 0;
     let rangelandTotal = 0;
     let soilTestingTotal = 0;
     let NIPFTotal = 0;
     let pasturelandTotal = 0;
-    let SAOTotal = 0;
+    const SAOTotal = 0;
     let grasslandTotal = 0;
     let bundlesTotal = 0;
     let miscellaneousTotal = 0;

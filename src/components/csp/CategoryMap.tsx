@@ -61,11 +61,12 @@ const MapChart = (props) => {
                                     categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
                                 }
                                 if (categoryRecord === undefined) {
-                                    console.log(statuteRecord, category);
                                     return null;
                                 }
                                 const categoryPayment = categoryRecord.totalPaymentInDollars;
-                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide ?categoryRecord.totalPaymentInPercentageNationwide: categoryRecord.totalPaymentInPercentage ;
+                                const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide
+                                    ? categoryRecord.totalPaymentInPercentageNationwide
+                                    : categoryRecord.totalPaymentInPercentage;
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
@@ -214,7 +215,6 @@ const CategoryMap = ({
     if (category === "Forest management") legendCategory = "Forest management-CSP";
     if (category === "Soil testing") legendCategory = "Soil testing-CSP";
     if (category === "Other improvements") legendCategory = "Other improvements-CSP";
-    console.log(legendCategory);
     const customScale = legendConfig[legendCategory];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const classes = useStyles();
