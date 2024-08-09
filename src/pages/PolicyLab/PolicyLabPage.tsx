@@ -53,27 +53,7 @@ export default function PolicyLabPage(): JSX.Element {
                 <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
             </Box>
             <Box sx={{ height: "64px" }} />
-            {/* Based on Jun 10 meeting, moving IRA out of Policy Lab page. Leave the code frame here so that it can be re-used for other model predictions. */}
-            {/* <Box>
-                <Grid
-                    container
-                    columns={{ xs: 12 }}
-                    sx={{
-                        pt: 3.5,
-                        display: "flex",
-                        justifyContent: "center"
-                    }}
-                >
-                    <Tabs className={classes.titleTabGroup} value={tab} onChange={switchTab}>
-                        <Tab className={classes.titleTab} value={0} label="Policy Design" />
-
-                        <Tab className={classes.titleTab} value={1} label="Inflation Reduction Act" />
-                    </Tabs>
-                </Grid>
-            </Box> */}
-            {/* <Box sx={{ display: tab !== 0 ? "none" : "div" }}> */}
             <Surface51SubPage styleClass={classes} />
-            {/* </Box> */}
         </Box>
     );
 }
