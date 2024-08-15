@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added the top info session for IRA page [#309](https://github.com/policy-design-lab/pdl-frontend/issues/309) 
+- Added "Other CSP" statues and related categories to the CSP pages [#303](https://github.com/policy-design-lab/pdl-frontend/issues/303) 
+- Added null value handling for the latest CSP data [#301](https://github.com/policy-design-lab/pdl-frontend/issues/301) 
+
+### Changed
+- Changed the "Other Improvement" in the EQIP page categories to "Other Improvements" [#311](https://github.com/policy-design-lab/pdl-frontend/issues/311) 
+- Updated CSP category list to match latest data [#305](https://github.com/policy-design-lab/pdl-frontend/issues/305) 
+- Updated the color legends for the EQIP and CSP maps to match latest data [#304](https://github.com/policy-design-lab/pdl-frontend/issues/304) 
+
 ## [1.0.3] - 2024-08-01
 
 ### Fixed

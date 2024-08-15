@@ -128,7 +128,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
         "Structural",
         "Soil remediation",
         "Vegetative",
-        "Other improvement",
+        "Other improvements",
         "Soil testing",
         "Other planning",
         "Conservation planning assessment",
@@ -297,6 +297,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
     // Match PR89 suggestions
     const CSPList = [
         "Total CSP Benefits",
+
         "2018 Practices",
         "Structural",
         "Vegetative",
@@ -304,17 +305,20 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
         "Forest management",
         "Soil remediation",
         "Existing activity payments",
-        "Bundles",
         "Soil testing",
-        "Other improvement",
+        "Other improvements",
 
         "2014 Eligible Land",
         "Cropland",
         "Grassland",
         "Rangeland",
         "Pastureland",
-        "Non-industrial private forestland",
-        "Other: supplemental, adjustment & other"
+        "Non-Industrial Private Forestland (NIPF)",
+
+        "Other CSP",
+        "Miscellaneous",
+        "Bundles",
+        "(6)(B) Planning"
     ];
     const classes = useStyles();
     return (
@@ -349,7 +353,8 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                 if (
                     category !== "2018 Practices" &&
                     category !== "2014 Eligible Land" &&
-                    category !== "Total CSP Benefits"
+                    category !== "Total CSP Benefits" &&
+                    category !== "Other CSP"
                 ) {
                     return (
                         <ListItem key={category} disablePadding>
@@ -400,7 +405,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
                         </ListItem>
                     );
                 }
-                if (category === "2018 Practices" || category === "2014 Eligible Land") {
+                if (category === "2018 Practices" || category === "2014 Eligible Land" || category === "Other CSP") {
                     return (
                         <Box key={category}>
                             <ListItem key={category} disablePadding>
