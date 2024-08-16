@@ -21,8 +21,10 @@ export default function CSPPage(): JSX.Element {
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [old2014ChartData, setOld2014ChartData] = React.useState([{}]);
     const [new2018ChartData, setNew2018ChartData] = React.useState([{}]);
+    const [otherCSPChartData, setOtherCSPChartData] = React.useState([{}]);
     const [firstTotal, setFirstTotal] = React.useState(0);
     const [secondTotal, setSecondTotal] = React.useState(0);
+    const [thirdTotal, setThirdTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
 
     const defaultTheme = createTheme();
@@ -35,14 +37,17 @@ export default function CSPPage(): JSX.Element {
     let structuralTotal = 0;
     let croplandTotal = 0;
     let rangelandTotal = 0;
-    let bundlesTotal = 0;
     let soilTestingTotal = 0;
     let NIPFTotal = 0;
     let pasturelandTotal = 0;
-    let SAOTotal = 0;
+    const SAOTotal = 0;
     let grasslandTotal = 0;
+    let bundlesTotal = 0;
+    let miscellaneousTotal = 0;
+    let sixBPlanningTotal = 0;
     let new2018Total = 0;
     let old2014Total = 0;
+    let otherCSPTotal = 0;
     const zeroCategory = [];
 
     const csp_year = "2018-2022";
@@ -80,48 +85,53 @@ export default function CSPPage(): JSX.Element {
         // eslint-disable-next-line
         const cur1 = chartData.statutes.find((s) => s.statuteName === "2018 Practices");
         const cur2 = chartData.statutes.find((s) => s.statuteName === "2014 Eligible Land");
+        const cur3 = chartData.statutes.find((s) => s.statuteName === "Other CSP");
         new2018Total = cur1.totalPaymentInDollars;
         old2014Total = cur2.totalPaymentInDollars;
+        otherCSPTotal = cur3.totalPaymentInDollars;
         setFirstTotal(new2018Total);
         setSecondTotal(old2014Total);
+        setThirdTotal(otherCSPTotal);
         const ACur = cur1.practiceCategories;
         const BCur = cur2.practiceCategories;
+        const CCur = cur3.practiceCategories;
 
-        const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
-        const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvement");
-        const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
+        const structuralCur = ACur.find((s) => s.practiceCategoryName === "Structural");
         const vegetativeCur = ACur.find((s) => s.practiceCategoryName === "Vegetative");
+        const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
         const forestManagementCur = ACur.find((s) => s.practiceCategoryName === "Forest management");
         const soilRemediationCur = ACur.find((s) => s.practiceCategoryName === "Soil remediation");
-        const structuralCur = ACur.find((s) => s.practiceCategoryName === "Structural");
-        const bundlesCur = ACur.find((s) => s.practiceCategoryName === "Bundles");
+        const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
         const soilTestingCur = ACur.find((s) => s.practiceCategoryName === "Soil testing");
+        const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvements");
 
         const croplandCur = BCur.find((s) => s.practiceCategoryName === "Cropland");
         const rangelandCur = BCur.find((s) => s.practiceCategoryName === "Rangeland");
         const pasturelandCur = BCur.find((s) => s.practiceCategoryName === "Pastureland");
-        const SAOCur = BCur.find((s) => s.practiceCategoryName === "Other: supplemental, adjustment & other");
-        const NIPFCur = BCur.find((s) => s.practiceCategoryName === "Non-industrial private forestland");
+        const NIPFCur = BCur.find((s) => s.practiceCategoryName === "Non-Industrial Private Forestland (NIPF)");
         const grasslandCur = BCur.find((s) => s.practiceCategoryName === "Grassland");
 
-        landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
-        if (landManagementTotal === 0) zeroCategory.push("Land management");
-        otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
-        if (otherImprovementTotal === 0) zeroCategory.push("Other improvement");
-        existingAPTotal += Number(existingAPCur.totalPaymentInDollars);
-        if (existingAPTotal === 0) zeroCategory.push("Existing activity payments");
+        const miscellaneousCur = CCur.find((s) => s.practiceCategoryName === "Miscellaneous");
+        const bundlesCur = CCur.find((s) => s.practiceCategoryName === "Bundles");
+        const sixBlanningCur = CCur.find((s) => s.practiceCategoryName === "(6)(B) Planning");
+
+        structuralTotal += Number(structuralCur.totalPaymentInDollars);
+        if (structuralTotal === 0) zeroCategory.push("Structural");
+        if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
         vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
         if (vegetativeTotal === 0) zeroCategory.push("Vegetative");
+        landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
+        if (landManagementTotal === 0) zeroCategory.push("Land management");
         forestManagementTotal += Number(forestManagementCur.totalPaymentInDollars);
         if (forestManagementTotal === 0) zeroCategory.push("Forest management");
         soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
         if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
-        structuralTotal += Number(structuralCur.totalPaymentInDollars);
-        if (structuralTotal === 0) zeroCategory.push("Structural");
-        bundlesTotal += Number(bundlesCur.totalPaymentInDollars);
-        if (bundlesTotal === 0) zeroCategory.push("Bundles");
+        existingAPTotal += Number(existingAPCur.totalPaymentInDollars);
+        if (existingAPTotal === 0) zeroCategory.push("Existing activity payments");
         soilTestingTotal = Number(soilTestingCur.totalPaymentInDollars);
         if (soilTestingTotal === 0) zeroCategory.push("Soil testing");
+        otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
+        if (otherImprovementTotal === 0) zeroCategory.push("Other improvements");
 
         croplandTotal += Number(croplandCur.totalPaymentInDollars);
         if (croplandTotal === 0) zeroCategory.push("Cropland");
@@ -129,63 +139,68 @@ export default function CSPPage(): JSX.Element {
         if (rangelandTotal === 0) zeroCategory.push("Rangeland");
         pasturelandTotal += Number(pasturelandCur.totalPaymentInDollars);
         if (pasturelandTotal === 0) zeroCategory.push("Pastureland");
-        SAOTotal += Number(SAOCur.totalPaymentInDollars);
-        if (SAOTotal === 0) zeroCategory.push("Other: supplemental, adjustment & other");
         NIPFTotal += Number(NIPFCur.totalPaymentInDollars);
-        if (NIPFTotal === 0) zeroCategory.push("Non-industrial private forestland");
+        if (NIPFTotal === 0) zeroCategory.push("Non-Industrial Private Forestland (NIPF)");
         if (grasslandCur !== undefined) grasslandTotal += Number(grasslandCur.totalPaymentInDollars);
         if (grasslandTotal === 0) zeroCategory.push("Grassland");
 
+        miscellaneousTotal += Number(miscellaneousCur.totalPaymentInDollars);
+        if (miscellaneousTotal === 0) zeroCategory.push("Miscellaneous");
+        sixBPlanningTotal += Number(sixBlanningCur.totalPaymentInDollars);
+        if (sixBPlanningTotal === 0) zeroCategory.push("(6)(B) Planning");
+        bundlesTotal += Number(bundlesCur.totalPaymentInDollars);
+        if (bundlesTotal === 0) zeroCategory.push("Bundles");
+
         setNew2018ChartData([
-            { name: "Land management", value: landManagementTotal, color: "#2F7164" },
-            {
-                name: "Other Improvement",
-                value: otherImprovementTotal,
-                color: "#4D847A"
-            },
             {
                 name: "Existing activity payments",
                 value: existingAPTotal,
-                color: "#749F97"
+                color: "#2F7164"
             },
-            { name: "Vegetative", value: vegetativeTotal, color: "#9CBAB4" },
+            { name: "Structural", value: structuralTotal, color: "#4D847A" },
+            { name: "Land management", value: landManagementTotal, color: "#749F97" },
+            {
+                name: "Other Improvements",
+                value: otherImprovementTotal,
+                color: "#9CBAB4"
+            },
+            { name: "Vegetative", value: vegetativeTotal, color: "#B9CDC9" },
             {
                 name: "Forest management",
                 value: forestManagementTotal,
-                color: "#B9CDC9"
+                color: "#CDDBD8"
             },
             {
                 name: "Soil remediation",
                 value: soilRemediationTotal,
-                color: "#CDDBD8"
+                color: "#E2E8E7"
             },
-            { name: "Structural", value: structuralTotal, color: "#E2E8E7" },
-            { name: "Bundles", value: bundlesTotal, color: "#C3C5C4" },
-            { name: "Soil Testing", value: soilTestingTotal, color: "#CAD4C5" }
+            { name: "Soil Testing", value: soilTestingTotal, color: "#F3F6F5" }
         ]);
 
         setOld2014ChartData([
             { name: "Cropland", value: croplandTotal, color: "#2F7164" },
-            { name: "Rangeland", value: rangelandTotal, color: "#4D847A" },
-            { name: "Pastureland", value: pasturelandTotal, color: "#749F97" },
             {
-                name: "Other: supplemental, adjustment & other",
-                value: SAOTotal,
-                color: "#9CBAB4"
-            },
-            {
-                name: "Non-industrial private forestland",
+                name: "Non-Industrial Private Forestland (NIPF)",
                 value: NIPFTotal,
-                color: "#B9CDC9"
+                color: "#4D847A"
             },
-            { name: "Grassland", value: grasslandTotal, color: "#CDDBD8" }
+            { name: "Rangeland", value: rangelandTotal, color: "#749F97" },
+            { name: "Pastureland", value: pasturelandTotal, color: "#B9CDC9" },
+            { name: "Grassland", value: grasslandTotal, color: "#CAD4C5" }
+        ]);
+
+        setOtherCSPChartData([
+            { name: "Miscellaneous", value: miscellaneousTotal, color: "#2F7164" },
+            { name: "Bundles", value: bundlesTotal, color: "#9CBAB4" },
+            { name: "(6)(B) Planning", value: sixBPlanningTotal, color: "#CAD4C5" }
         ]);
 
         setTotalChartData([
             { name: "2018 Practices", value: new2018Total, color: "#2F7164" },
-            { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" }
+            { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
+            { name: "Other CSP", value: otherCSPTotal, color: "#B9CDC9" }
         ]);
-
         if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
         else setZeroCategories(["None"]);
     };
@@ -334,28 +349,13 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesData}
                             />
                         </Box>
+
                         <Box
                             component="div"
                             sx={{
                                 width: "85%",
                                 m: "auto",
                                 display: checked !== 8 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Bundles"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 9 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -371,24 +371,23 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 10 ? "none" : "block"
+                                display: checked !== 9 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
-                                category="Other improvement"
+                                category="Other improvements"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
                                 year={csp_year}
                                 stateCodes={stateCodesData}
                             />
                         </Box>
-
                         <Box
                             component="div"
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 11 ? "none" : "block"
+                                display: checked !== 10 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -404,7 +403,7 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 12 ? "none" : "block"
+                                display: checked !== 11 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -420,7 +419,7 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 13 ? "none" : "block"
+                                display: checked !== 12 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -436,7 +435,7 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 14 ? "none" : "block"
+                                display: checked !== 13 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -452,7 +451,7 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
-                                display: checked !== 15 ? "none" : "block"
+                                display: checked !== 14 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
@@ -468,11 +467,27 @@ export default function CSPPage(): JSX.Element {
                             sx={{
                                 width: "85%",
                                 m: "auto",
+                                display: checked !== 15 ? "none" : "block"
+                            }}
+                        >
+                            <CategoryMap
+                                category="Non-Industrial Private Forestland (NIPF)"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto",
                                 display: checked !== 16 ? "none" : "block"
                             }}
                         >
                             <CategoryMap
-                                category="Non-industrial private forestland"
+                                category="Other CSP"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
                                 year={csp_year}
@@ -488,7 +503,39 @@ export default function CSPPage(): JSX.Element {
                             }}
                         >
                             <CategoryMap
-                                category="Other: supplemental, adjustment & other"
+                                category="Miscellaneous"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 18 ? "none" : "block"
+                            }}
+                        >
+                            <CategoryMap
+                                category="Bundles"
+                                statePerformance={statePerformance}
+                                allStates={allStates}
+                                year={csp_year}
+                                stateCodes={stateCodesData}
+                            />
+                        </Box>
+                        <Box
+                            component="div"
+                            sx={{
+                                width: "85%",
+                                m: "auto",
+                                display: checked !== 19 ? "none" : "block"
+                            }}
+                        >
+                            <CategoryMap
+                                category="(6)(B) Planning"
                                 statePerformance={statePerformance}
                                 allStates={allStates}
                                 year={csp_year}
@@ -507,19 +554,19 @@ export default function CSPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        {firstTotal >= 0 || secondTotal >= 0 ? (
+                        {firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0 ? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
                                         data={totalChartData}
-                                        label1={(firstTotal + secondTotal).toString()}
+                                        label1={(firstTotal + secondTotal + thirdTotal).toString()}
                                         label2="CSP TOTAL BENEFITS"
                                     />
                                 </Box>
                                 <Box
                                     component="div"
                                     sx={{
-                                        display: checked >= 1 && checked <= 10 ? "block" : "none"
+                                        display: checked >= 1 && checked < 10 ? "block" : "none"
                                     }}
                                 >
                                     <SemiDonutChart
@@ -528,11 +575,18 @@ export default function CSPPage(): JSX.Element {
                                         label2="2018 Practices"
                                     />
                                 </Box>
-                                <Box component="div" sx={{ display: checked >= 11 ? "block" : "none" }}>
+                                <Box component="div" sx={{ display: checked >= 10 && checked < 16 ? "block" : "none" }}>
                                     <SemiDonutChart
                                         data={old2014ChartData}
                                         label1={secondTotal.toString()}
                                         label2="2014 Eligible Land"
+                                    />
+                                </Box>
+                                <Box component="div" sx={{ display: checked >= 16 ? "block" : "none" }}>
+                                    <SemiDonutChart
+                                        data={otherCSPChartData}
+                                        label1={thirdTotal.toString()}
+                                        label2="Other CSP"
                                     />
                                 </Box>
                             </div>
@@ -606,15 +660,8 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+
                         <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Bundles"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Soil testing"
                                 statePerformance={statePerformance}
@@ -622,16 +669,16 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Other improvement"
+                                category="Other improvements"
                                 statePerformance={statePerformance}
                                 year={csp_year}
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
 
-                        <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
                             <CategoryTable
                                 category="2014 Eligible Land"
                                 statePerformance={statePerformance}
@@ -639,7 +686,7 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Cropland"
                                 statePerformance={statePerformance}
@@ -648,7 +695,7 @@ export default function CSPPage(): JSX.Element {
                             />
                         </Box>
 
-                        <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Grassland"
                                 statePerformance={statePerformance}
@@ -656,7 +703,7 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Rangeland"
                                 statePerformance={statePerformance}
@@ -664,7 +711,7 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 15 ? "none" : "block" }}>
+                        <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
                             <CategoryTable
                                 category="Pastureland"
                                 statePerformance={statePerformance}
@@ -672,9 +719,17 @@ export default function CSPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+                        <Box component="div" sx={{ display: checked !== 15 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Non-Industrial Private Forestland (NIPF)"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
                         <Box component="div" sx={{ display: checked !== 16 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Non-industrial private forestland"
+                                category="Other CSP"
                                 statePerformance={statePerformance}
                                 year={csp_year}
                                 stateCodes={stateCodesArray}
@@ -682,7 +737,23 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 17 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Other: supplemental, adjustment & other"
+                                category="Miscellaneous"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 18 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="Bundles"
+                                statePerformance={statePerformance}
+                                year={csp_year}
+                                stateCodes={stateCodesArray}
+                            />
+                        </Box>
+                        <Box component="div" sx={{ display: checked !== 19 ? "none" : "block" }}>
+                            <CategoryTable
+                                category="(6)(B) Planning"
                                 statePerformance={statePerformance}
                                 year={csp_year}
                                 stateCodes={stateCodesArray}
