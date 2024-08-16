@@ -34,7 +34,7 @@ export default function CSPPage(): JSX.Element {
     let forestManagementTotal = 0;
     let soilRemediationTotal = 0;
     let existingAPTotal = 0;
-    const structuralTotal = 0;
+    let structuralTotal = 0;
     let croplandTotal = 0;
     let rangelandTotal = 0;
     let soilTestingTotal = 0;
@@ -96,13 +96,14 @@ export default function CSPPage(): JSX.Element {
         const BCur = cur2.practiceCategories;
         const CCur = cur3.practiceCategories;
 
-        const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
-        const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
-        const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvements");
+        const structuralCur = ACur.find((s) => s.practiceCategoryName === "Structural");
         const vegetativeCur = ACur.find((s) => s.practiceCategoryName === "Vegetative");
+        const landManagementCur = ACur.find((s) => s.practiceCategoryName === "Land management");
         const forestManagementCur = ACur.find((s) => s.practiceCategoryName === "Forest management");
         const soilRemediationCur = ACur.find((s) => s.practiceCategoryName === "Soil remediation");
+        const existingAPCur = ACur.find((s) => s.practiceCategoryName === "Existing activity payments");
         const soilTestingCur = ACur.find((s) => s.practiceCategoryName === "Soil testing");
+        const otherImprovementCur = ACur.find((s) => s.practiceCategoryName === "Other improvements");
 
         const croplandCur = BCur.find((s) => s.practiceCategoryName === "Cropland");
         const rangelandCur = BCur.find((s) => s.practiceCategoryName === "Rangeland");
@@ -114,20 +115,23 @@ export default function CSPPage(): JSX.Element {
         const bundlesCur = CCur.find((s) => s.practiceCategoryName === "Bundles");
         const sixBlanningCur = CCur.find((s) => s.practiceCategoryName === "(6)(B) Planning");
 
-        landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
-        if (landManagementTotal === 0) zeroCategory.push("Land management");
-        otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
-        if (otherImprovementTotal === 0) zeroCategory.push("Other improvements");
-        existingAPTotal += Number(existingAPCur.totalPaymentInDollars);
-        if (existingAPTotal === 0) zeroCategory.push("Existing activity payments");
+        structuralTotal += Number(structuralCur.totalPaymentInDollars);
+        if (structuralTotal === 0) zeroCategory.push("Structural");
+        if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
         vegetativeTotal += Number(vegetativeCur.totalPaymentInDollars);
         if (vegetativeTotal === 0) zeroCategory.push("Vegetative");
+        landManagementTotal += Number(landManagementCur.totalPaymentInDollars);
+        if (landManagementTotal === 0) zeroCategory.push("Land management");
         forestManagementTotal += Number(forestManagementCur.totalPaymentInDollars);
         if (forestManagementTotal === 0) zeroCategory.push("Forest management");
         soilRemediationTotal += Number(soilRemediationCur.totalPaymentInDollars);
         if (soilRemediationTotal === 0) zeroCategory.push("Soil remediation");
+        existingAPTotal += Number(existingAPCur.totalPaymentInDollars);
+        if (existingAPTotal === 0) zeroCategory.push("Existing activity payments");
         soilTestingTotal = Number(soilTestingCur.totalPaymentInDollars);
         if (soilTestingTotal === 0) zeroCategory.push("Soil testing");
+        otherImprovementTotal += Number(otherImprovementCur.totalPaymentInDollars);
+        if (otherImprovementTotal === 0) zeroCategory.push("Other improvements");
 
         croplandTotal += Number(croplandCur.totalPaymentInDollars);
         if (croplandTotal === 0) zeroCategory.push("Cropland");
@@ -148,30 +152,30 @@ export default function CSPPage(): JSX.Element {
         if (bundlesTotal === 0) zeroCategory.push("Bundles");
 
         setNew2018ChartData([
-            { name: "Land management", value: landManagementTotal, color: "#2F7164" },
-            {
-                name: "Other Improvements",
-                value: otherImprovementTotal,
-                color: "#4D847A"
-            },
             {
                 name: "Existing activity payments",
                 value: existingAPTotal,
-                color: "#749F97"
+                color: "#2F7164"
             },
-            { name: "Vegetative", value: vegetativeTotal, color: "#9CBAB4" },
+            { name: "Structural", value: structuralTotal, color: "#4D847A" },
+            { name: "Land management", value: landManagementTotal, color: "#749F97" },
+            {
+                name: "Other Improvements",
+                value: otherImprovementTotal,
+                color: "#9CBAB4"
+            },
+            { name: "Vegetative", value: vegetativeTotal, color: "#B9CDC9" },
             {
                 name: "Forest management",
                 value: forestManagementTotal,
-                color: "#B9CDC9"
+                color: "#CDDBD8"
             },
             {
                 name: "Soil remediation",
                 value: soilRemediationTotal,
-                color: "#CDDBD8"
+                color: "#E2E8E7"
             },
-            { name: "Structural", value: structuralTotal, color: "#E2E8E7" },
-            { name: "Soil Testing", value: soilTestingTotal, color: "#CAD4C5" }
+            { name: "Soil Testing", value: soilTestingTotal, color: "#F3F6F5" }
         ]);
 
         setOld2014ChartData([
@@ -197,7 +201,6 @@ export default function CSPPage(): JSX.Element {
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
             { name: "Other CSP", value: otherCSPTotal, color: "#B9CDC9" }
         ]);
-
         if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
         else setZeroCategories(["None"]);
     };
@@ -556,7 +559,7 @@ export default function CSPPage(): JSX.Element {
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
                                         data={totalChartData}
-                                        label1={(firstTotal + secondTotal).toString()}
+                                        label1={(firstTotal + secondTotal + thirdTotal).toString()}
                                         label2="CSP TOTAL BENEFITS"
                                     />
                                 </Box>
