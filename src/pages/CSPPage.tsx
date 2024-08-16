@@ -201,7 +201,6 @@ export default function CSPPage(): JSX.Element {
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
             { name: "Other CSP", value: otherCSPTotal, color: "#B9CDC9" }
         ]);
-
         if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
         else setZeroCategories(["None"]);
     };
@@ -560,7 +559,7 @@ export default function CSPPage(): JSX.Element {
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
                                         data={totalChartData}
-                                        label1={(firstTotal + secondTotal).toString()}
+                                        label1={(firstTotal + secondTotal + thirdTotal).toString()}
                                         label2="CSP TOTAL BENEFITS"
                                     />
                                 </Box>
