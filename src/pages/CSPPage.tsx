@@ -40,7 +40,7 @@ export default function CSPPage(): JSX.Element {
     let soilTestingTotal = 0;
     let NIPFTotal = 0;
     let pasturelandTotal = 0;
-    let SAOTotal = 0;
+    const SAOTotal = 0;
     let grasslandTotal = 0;
     let bundlesTotal = 0;
     let miscellaneousTotal = 0;
