@@ -484,13 +484,14 @@ const IRADollarMap = ({
     // since IRA data is not predictable in legend config, separate the scale to five equal parts
     const sortedData = quantizeArray.sort((a, b) => a - b);
     const numIntervals = 5;
-    const intervalSize = Math.floor(sortedData.length / numIntervals);
-    const thresholds = [];
+    const nonZeroData = sortedData.filter((value) => value > 0);
+    const intervalSize = Math.ceil(nonZeroData.length / numIntervals);
+    const thresholds: number[] = [];
     for (let i = 1; i < numIntervals; i += 1) {
         const thresholdIndex = i * intervalSize - 1;
-        thresholds.push(sortedData[thresholdIndex]);
+        const adjustedIndex = Math.min(thresholdIndex, nonZeroData.length - 1);
+        thresholds.push(nonZeroData[adjustedIndex]);
     }
-    if (thresholds[0] === 0) thresholds.unshift(1000);
     const colorScale = d3.scaleThreshold().domain(thresholds).range(mapColor);
     // For IRA, only if all practices are zero, the state will be colored as grey
     let zeroPoints = [];

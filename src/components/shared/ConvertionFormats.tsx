@@ -36,10 +36,14 @@ export function ShortFormat(labelValue, position?: number, decimal?: number) {
     }
     if (decimalPart.length > 0) {
         const numberPart = result.match(/^(.*).$/)?.[1];
+        if (position === -1) {
+            return result;
+        }
         if (position === 0) {
-            result = result.replace(/^(.*)(.)$/, `${Math.floor(Number(numberPart))}$2`);
-        } else if (position !== undefined) {
-            result = result.replace(/^(.*)(.)$/, `${Math.ceil(Number(numberPart))}$2`);
+            return result.replace(/^(.*)(.)$/, `${Math.floor(Number(numberPart))}$2`);
+        }
+        if (position !== undefined) {
+            return result.replace(/^(.*)(.)$/, `${Math.ceil(Number(numberPart))}$2`);
         }
     }
     return result;

@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Tabs, Button } from "@mui/material";
+import { Box, Typography, Grid, Tabs, Button, Divider } from "@mui/material";
 import * as React from "react";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
@@ -21,6 +21,10 @@ export default function IRAPage(): JSX.Element {
     const [eqipPredictedData, setEqipPredictedData] = React.useState({});
     const [eqipSummaryData, setEqipSummaryData] = React.useState({});
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState({});
+    const [cspStateDistributionData, setCspStateDistributionData] = React.useState({});
+    const [cspPredictedData, setCspPredictedData] = React.useState({});
+    const [cspSummaryData, setCspSummaryData] = React.useState({});
+    const [cspPracticeNames, setCspPracticeNames] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
@@ -37,14 +41,22 @@ export default function IRAPage(): JSX.Element {
                     eqipStateDistributionResponse,
                     eqipPredictedResponse,
                     eqipSummaryResponse,
-                    eqipPracticeNamesResponse
+                    eqipPracticeNamesResponse,
+                    cspStateDistributionResponse,
+                    cspPredictedResponse,
+                    cspSummaryResponse,
+                    cspPracticeNamesResponse
                 ] = await Promise.all([
                     getJsonDataFromUrl(`${config.apiUrl}/states`),
                     getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/state-distribution`),
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/predicted`),
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/summary`),
-                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/practice-names`)
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip-ira/practice-names`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp-ira/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp-ira/predicted`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp-ira/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp-ira/practice-names`)
                 ]);
                 setAllStatesData(allStatesResponse);
                 setStateCodesArray(stateCodesResponse);
@@ -53,6 +65,10 @@ export default function IRAPage(): JSX.Element {
                 setEqipPredictedData(eqipPredictedResponse);
                 setEqipSummaryData(eqipSummaryResponse);
                 setEqipPracticeNames(eqipPracticeNamesResponse);
+                setCspStateDistributionData(cspStateDistributionResponse);
+                setCspPredictedData(cspPredictedResponse);
+                setCspSummaryData(cspSummaryResponse);
+                setCspPracticeNames(cspPracticeNamesResponse);
                 setIsDataReady(true);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -167,9 +183,9 @@ export default function IRAPage(): JSX.Element {
                                     sx={{ mb: 1 }}
                                 >
                                     <CustomTab label={<Box>EQIP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
+                                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                                    <CustomTab label={<Box>CSP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
                                     {/* <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab label={<Box>CSP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
-                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <CustomTab label={<Box>RCPP</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
                     <CustomTab label={<Box>ACEP</Box>} customSx={tabStyle} selectedSX={selectedStyle} /> */}
@@ -191,8 +207,19 @@ export default function IRAPage(): JSX.Element {
                                         allStates={allStatesData}
                                         summaryData={eqipSummaryData}
                                     />
-                                    {/* <TabPanel v={value} index={2} title="CSP" stateDistributionData={{}} />
-                    <TabPanel v={value} index={4} title="RCPP" stateDistributionData={{}} />
+                                    <TabPanel
+                                        v={value}
+                                        index={2}
+                                        title="CSP"
+                                        stateDistributionData={cspStateDistributionData}
+                                        predictedData={cspPredictedData}
+                                        predictedYear={Object.keys(cspPredictedData)[0]}
+                                        stateCodes={stateCodesData}
+                                        allStates={allStatesData}
+                                        practiceNames={cspPracticeNames}
+                                        summaryData={cspSummaryData}
+                                    />
+                                    {/* <TabPanel v={value} index={4} title="RCPP" stateDistributionData={{}} />
                     <TabPanel v={value} index={6} title="ACEP" stateDistributionData={{}} /> */}
                                 </span>
                             ) : (
