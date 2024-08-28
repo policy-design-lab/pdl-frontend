@@ -55,7 +55,7 @@ function TabPanel({
     const years = stateDistributionData ? Object.keys(stateDistributionData).map(Number) : [];
     const [updatedData, setUpdatedData] = useState(stateDistributionData);
     const [updatedPredictedData, setUpdatedPredictedData] = useState(predictedData);
-    const minYear = Math.min(...years).toString();
+    const minYear = 2023;
     const maxYear = Math.max(...years);
     const [isPlaying, setIsPlaying] = useState(false);
     const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);

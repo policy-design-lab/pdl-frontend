@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2024-08-28
+
+### Added
+- Added the CSP session to the IRA page [#299](https://github.com/policy-design-lab/pdl-frontend/issues/299) 
+- Improved the map legend to cover more maps on the IRA page [#313](https://github.com/policy-design-lab/pdl-frontend/issues/313) 
+
 ## [1.0.4] - 2024-08-16
 
 ### Added
@@ -280,6 +286,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.0.5]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.4...1.0.5
 [1.0.4]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.3...1.0.4
 [1.0.3]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.1...1.0.2
