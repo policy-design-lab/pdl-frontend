@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.4] - 2024-08-16
 
 ### Added
+- Added the CSP session to the IRA page [#299](https://github.com/policy-design-lab/pdl-frontend/issues/299) 
+- Improved the map legend to cover more maps on the IRA page [#313](https://github.com/policy-design-lab/pdl-frontend/issues/313) 
+
+## [1.0.4] - 2024-08-16
+
+### Added
 - Added the top info session for IRA page [#309](https://github.com/policy-design-lab/pdl-frontend/issues/309) 
 - Added "Other CSP" statues and related categories to the CSP pages [#303](https://github.com/policy-design-lab/pdl-frontend/issues/303) 
 - Added null value handling for the latest CSP data [#301](https://github.com/policy-design-lab/pdl-frontend/issues/301) 
