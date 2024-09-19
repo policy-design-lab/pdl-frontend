@@ -6,7 +6,7 @@ import Drawer from "../components/ProgramDrawer";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
-import LandingPageMap from "../components/LandingPageMap";
+import LandingPageMap from "../components/LandingPageMap-Old";
 import LandingPageTable from "../components/shared/LandingPgaeTable";
 
 export default function TitleIIPage(): JSX.Element {
