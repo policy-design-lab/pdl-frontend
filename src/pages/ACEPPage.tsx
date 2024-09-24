@@ -30,10 +30,7 @@ export default function ACEPPage(): JSX.Element {
     const zeroCategory = [];
     let totalACEPPaymentInDollars = 0;
     let totalContracts = 0;
-    let totalAcres = 0;
-    const assistancePaymentInDollars = 0;
-    const reimbursePaymentInDollars = 0;
-    const techPaymentInDollars = 0;
+    let totalAreaInAcres = 0;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -65,21 +62,15 @@ export default function ACEPPage(): JSX.Element {
         }
     };
     const processData = (chartData) => {
-        if (chartData.programs === undefined) return;
-        const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
-        totalACEPPaymentInDollars = cur1.assistancePaymentInDollars;
+        if (chartData === undefined) return;
+        const cur1 = chartData;
+        totalACEPPaymentInDollars = cur1.totalPaymentInDollars;
         setTotalAcep(totalACEPPaymentInDollars);
         if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
         totalContracts = cur1.totalContracts;
         if (totalContracts === 0) zeroCategory.push("Total Contracts");
-        totalAcres = cur1.totalAcre;
-        if (totalAcres === 0) zeroCategory.push("Total Acres");
-        // assistancePaymentInDollars = cur1.assistancePaymentInDollars;
-        // if (assistancePaymentInDollars === 0) zeroCategory.push("Assistance Payment");
-        // reimbursePaymentInDollars = cur1.reimbursePaymentInDollars;
-        // if (reimbursePaymentInDollars === 0) zeroCategory.push("Reimburse Payment");
-        // techPaymentInDollars = cur1.techPaymentInDollars;
-        // if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
+        totalAreaInAcres = cur1.totalAreaInAcres;
+        if (totalAreaInAcres === 0) zeroCategory.push("Total Acres");
         setZeroCategories(zeroCategory);
     };
     function prepData(program, subprogram, data, dataYear) {
@@ -87,20 +78,18 @@ export default function ACEPPage(): JSX.Element {
         const originalData: Record<string, unknown>[] = [];
         data[dataYear].forEach((stateData) => {
             const state = stateData.state;
-            const programData = stateData.programs.filter((p) => {
-                return p.programName.toString() === program;
-            });
+            const programData = stateData;
             organizedData.push({
                 state,
-                acres: programData[0].totalAcres,
-                payments: programData[0].assistancePaymentInDollars,
-                contracts: programData[0].totalContracts
+                acres: programData.totalAreaInAcres,
+                payments: programData.totalPaymentInDollars,
+                contracts: programData.totalContracts
             });
             originalData.push({
                 state,
-                acres: programData[0].totalAcres,
-                payments: programData[0].assistancePaymentInDollars,
-                contracts: programData[0].totalContracts
+                acres: programData.totalAreaInAcres,
+                payments: programData.totalPaymentInDollars,
+                contracts: programData.totalContracts
             });
         });
         return [organizedData, originalData];
@@ -226,12 +215,12 @@ export default function ACEPPage(): JSX.Element {
                                         tableTitle="Total ACEP Benefits, Acres and No. of Contracts"
                                         program="ACEP"
                                         attributes={[
-                                            "assistancePaymentInDollars",
-                                            "assistancePaymentInPercentageNationwide",
-                                            "totalAcres",
-                                            "acresInPercentageNationwide",
+                                            "totalPaymentInDollars",
+                                            "totalPaymentInPercentageNationwide",
+                                            "totalAreaInAcres",
+                                            "totalAreaInPercentageNationwide",
                                             "totalContracts",
-                                            "contractsInPercentageNationwide"
+                                            "totalContractsInPercentageNationwide"
                                         ]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesArray}

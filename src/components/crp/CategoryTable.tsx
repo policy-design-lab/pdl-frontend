@@ -141,37 +141,35 @@ function App({
 }): JSX.Element {
     const crpTableData: any[] = [];
     statePerformance[year].forEach((value) => {
-        const totalCrp = value.programs.find((s) => s.programName === "Total CRP");
+        const totalCrp = value;
         let categoryCrp;
-        if (
-            category === "Total General Sign-Up" ||
-            category === "Total Continuous Sign-Up" ||
-            category === "Grassland"
-        ) {
-            categoryCrp = value.programs.find((s) => s.programName === category);
+        if (category === "General Sign-up" || category === "Continuous Sign-up" || category === "Grassland") {
+            categoryCrp = value.subPrograms.find((s) => s.subProgramName === category);
         } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
-            const contSingUp = value.programs.find((s) => s.programName === "Total Continuous Sign-Up");
-            const subPrograms = contSingUp.subPrograms;
-            subPrograms.forEach((subValue) => {
-                if (subValue.programName === category) {
-                    categoryCrp = subValue;
-                }
-            });
+            const contSingUp = value.subPrograms.find((s) => s.subProgramName === "Continuous Sign-up");
+            if (contSingUp) {
+                const subSubPrograms = contSingUp.subSubPrograms;
+                subSubPrograms.forEach((subValue) => {
+                    if (subValue.subSubProgramName === category) {
+                        categoryCrp = subValue;
+                    }
+                });
+            }
         }
 
         let stateName;
-        // let percentageValue = 0;
-        // if (Number.parseInt(totalCrp.totalPaymentInDollars, 10) > 0) {
-        //     percentageValue =
-        //         (Number.parseInt(categoryCrp.totalPaymentInDollars, 10) / Number.parseInt(totalCrp.totalPaymentInDollars, 10)) *
-        //         100;
-        // }
-
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
                 stateName = sValue.name;
             }
         });
+        if (categoryCrp === undefined) {
+            categoryCrp = {
+                totalPaymentInDollars: 0,
+                totalPaymentInPercentageWithinState: 0,
+                totalPaymentInPercentageNationwide: 0
+            };
+        }
         const newRecord = () => {
             return {
                 state: stateName,

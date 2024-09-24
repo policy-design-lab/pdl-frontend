@@ -475,8 +475,8 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
 
     const CRPList = [
         "Total CRP",
-        "Total General Sign-up",
-        "Total Continuous Sign-Up",
+        "General Sign-up",
+        "Continuous Sign-up",
         "CREP Only",
         "Continuous Non-CREP",
         "Farmable Wetland",
@@ -512,10 +512,10 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
                         </ListItem>
                     );
                 }
-                if (category !== "CREP Only" && category !== "Continuous Non-CREP" && category !== "Farmable Wetland") {
+                if (category === "Total CRP") {
                     return (
                         <ListItem key={category} disablePadding>
-                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
+                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                                 <Radio
                                     edge="start"
                                     checked={checked === value}
@@ -535,6 +535,34 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
                                 />
                             </ListItemButton>
                         </ListItem>
+                    );
+                }
+                if (category === "General Sign-up" || category === "Continuous Sign-up" || category === "Grassland") {
+                    return (
+                        <Box key={category}>
+                            <ListItem key={category} disablePadding>
+                                <ListItemButton role={undefined} onClick={handleToggle(value)} dense sx={{ pl: 4 }}>
+                                    <Radio
+                                        edge="start"
+                                        checked={checked === value}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ "aria-labelledby": labelId }}
+                                        sx={{
+                                            "&.Mui-checked": {
+                                                color: "#2f7164"
+                                            }
+                                        }}
+                                    />
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={category}
+                                        primaryTypographyProps={{ fontWeight: 700 }}
+                                        className={checked === value ? classes.selected : classes.regular}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        </Box>
                     );
                 }
                 return (

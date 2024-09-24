@@ -141,7 +141,7 @@ function App({
 
     // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
-        const totalCrp = value.programs.find((s) => s.programName === "Total CRP");
+        const totalCrp = value;
         let stateName;
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
@@ -159,7 +159,9 @@ function App({
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,
                 noFarm: `${totalCrp.totalFarms.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                totAcre: `${totalCrp.totalAcre.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`
+                totAcre: `${totalCrp.totalAreaInAcres
+                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                    .toString()}`
             };
         };
         crpTableData.push(newRecord());

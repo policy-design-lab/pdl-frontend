@@ -62,35 +62,33 @@ export default function CRPPage(): JSX.Element {
     }, []);
 
     const processData = (chartData) => {
-        if (chartData.programs === undefined) return;
+        if (chartData.subPrograms === undefined) return;
 
-        const cur1 = chartData.programs.find((s) => s.programName === "Total CRP");
-        const cur2 = chartData.programs.find((s) => s.programName === "Total General Sign-Up");
-        const cur3 = chartData.programs.find((s) => s.programName === "Total Continuous");
+        const cur1 = chartData.subPrograms.find((s) => s.subProgramName === "General Sign-up");
+        const cur2 = chartData.subPrograms.find((s) => s.subProgramName === "Continuous Sign-up");
+        const cur3 = chartData.subPrograms.find((s) => s.subProgramName === "Grassland");
         let cur4;
         let cur5;
         let cur6;
-        const cur7 = chartData.programs.find((s) => s.programName === "Grassland");
-        const subCurs = cur3.subPrograms;
-
+        const subCurs = cur2.subSubPrograms;
         if (subCurs !== undefined) {
             subCurs.forEach((value) => {
-                if (value.programName === "CREP Only") {
+                if (value.subSubProgramName === "CREP Only") {
                     cur4 = value;
-                } else if (value.programName === "Continuous Non-CREP") {
+                } else if (value.subSubProgramName === "Continuous Non-CREP") {
                     cur5 = value;
-                } else if (value.programName === "Farmable Wetland") {
+                } else if (value.subSubProgramName === "Farmable Wetland") {
                     cur6 = value;
                 }
             });
 
-            totalCRPPaymentInDollars = cur1.totalPaymentInDollars;
+            totalCRPPaymentInDollars = chartData.totalPaymentInDollars;
             setTotalCrp(totalCRPPaymentInDollars);
             if (totalCRPPaymentInDollars === 0) zeroCategory.push("Total CRP");
-            generalSignUpPaymentInDollars = cur2.totalPaymentInDollars;
-            if (generalSignUpPaymentInDollars === 0) zeroCategory.push("Total General Sign-Up");
-            continuousSingUpPaymentInDollars = cur3.totalPaymentInDollars;
-            if (continuousSingUpPaymentInDollars === 0) zeroCategory.push("Total Continuous");
+            generalSignUpPaymentInDollars = cur1.totalPaymentInDollars;
+            if (generalSignUpPaymentInDollars === 0) zeroCategory.push("General Sign-up");
+            continuousSingUpPaymentInDollars = cur2.totalPaymentInDollars;
+            if (continuousSingUpPaymentInDollars === 0) zeroCategory.push("Continuous Sign-up");
             setTotalSub(continuousSingUpPaymentInDollars);
             crepPaymentInDollars = cur4.totalPaymentInDollars;
             if (crepPaymentInDollars === 0) zeroCategory.push("CREP Only");
@@ -98,15 +96,15 @@ export default function CRPPage(): JSX.Element {
             if (nocCrepPaymentInDollars === 0) zeroCategory.push("Continuous Non-CREP");
             wetlandPaymentInDollars = cur6.totalPaymentInDollars;
             if (wetlandPaymentInDollars === 0) zeroCategory.push("Farmable Wetland");
-            grasslandPyamentInDollars = cur7.totalPaymentInDollars;
+            grasslandPyamentInDollars = cur3.totalPaymentInDollars;
             if (grasslandPyamentInDollars === 0) zeroCategory.push("Grassland");
 
             if (zeroCategory.length > 0) setZeroCategories(zeroCategory);
             else setZeroCategories(["None"]);
 
             setTotalChartData([
-                { name: "Total General Sign-Up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
-                { name: "Total Continuous", value: continuousSingUpPaymentInDollars, color: "#9CBAB4" },
+                { name: "General Sign-up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
+                { name: "Continuous Sign-up", value: continuousSingUpPaymentInDollars, color: "#9CBAB4" },
                 { name: "Grassland", value: grasslandPyamentInDollars, color: "#CDDBD8" }
             ]);
 
@@ -123,7 +121,7 @@ export default function CRPPage(): JSX.Element {
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
             Object.keys(stateDistributionData).length > 0 &&
-            zeroCategories.length > 0 ? (
+            zeroCategories.length >= 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -158,7 +156,7 @@ export default function CRPPage(): JSX.Element {
                         >
                             <CategoryMap
                                 year={year}
-                                category="Total General Sign-Up"
+                                category="General Sign-up"
                                 attribute={attribute}
                                 statePerformance={stateDistributionData}
                                 allStates={allStatesData}
@@ -171,7 +169,7 @@ export default function CRPPage(): JSX.Element {
                         >
                             <CategoryMap
                                 year={year}
-                                category="Total Continuous Sign-Up"
+                                category="Continuous Sign-up"
                                 attribute={attribute}
                                 statePerformance={stateDistributionData}
                                 allStates={allStatesData}
@@ -326,7 +324,7 @@ export default function CRPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Total General Sign-Up"
+                                category="General Sign-up"
                                 statePerformance={stateDistributionData}
                                 year={year}
                                 stateCodes={stateCodesArray}
@@ -334,7 +332,7 @@ export default function CRPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
                             <CategoryTable
-                                category="Total Continuous Sign-Up"
+                                category="Continuous Sign-up"
                                 statePerformance={stateDistributionData}
                                 year={year}
                                 stateCodes={stateCodesArray}
