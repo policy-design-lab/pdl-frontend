@@ -5,14 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [unreleased]
+
+### Changed
 - Updated the CRP page to use the latest data structure from the API endpoint [#320](https://github.com/policy-design-lab/pdl-frontend/issues/320) 
 - Updated the ACEP and RCPP page to use the latest data from the API endpoint [#322](https://github.com/policy-design-lab/pdl-frontend/issues/322) 
 - Updated the Crop Insurance page to use the latest data from the API endpoint [#324](https://github.com/policy-design-lab/pdl-frontend/issues/324) 
 - Replaced the treemap on the ACEP page with the table [#325](https://github.com/policy-design-lab/pdl-frontend/issues/325) 
-
-### Changed
-- Changed the "Other Improvement" in the EQIP page categories to "Other Improvements" [#311](https://github.com/policy-design-lab/pdl-frontend/issues/311) 
-- Updated CSP category list to match latest data [#305](https://github.com/policy-design-lab/pdl-frontend/issues/305) 
 
 ## [1.0.5] - 2024-08-28
 
