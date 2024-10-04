@@ -50,27 +50,29 @@ const MapChart = (props) => {
                                 let DCur = {};
                                 let ECur = {};
                                 let FCur = {};
-                                record.programs.forEach((value) => {
-                                    if (value.programName === "Total General Sign-Up") {
+                                record.subPrograms.forEach((value) => {
+                                    if (value.subProgramName === "General Sign-up") {
                                         ACur = value;
-                                    } else if (value.programName === "Total Continuous Sign-Up") {
+                                    } else if (value.subProgramName === "Continuous Sign-up") {
                                         BCur = value;
-                                        value.subPrograms.forEach((subValue) => {
-                                            if (subValue.programName === "CREP Only") {
-                                                CCur = subValue;
-                                            } else if (subValue.programName === "Continuous Non-CREP") {
-                                                DCur = subValue;
-                                            } else if (subValue.programName === "Farmable Wetland") {
-                                                ECur = subValue;
-                                            }
-                                        });
-                                    } else if (value.programName === "Grassland") {
+                                        if (BCur.subSubPrograms !== undefined) {
+                                            BCur.subSubPrograms.forEach((subSubValue) => {
+                                                if (subSubValue.subSubProgramName === "CREP Only") {
+                                                    CCur = subSubValue;
+                                                } else if (subSubValue.subSubProgramName === "Continuous Non-CREP") {
+                                                    DCur = subSubValue;
+                                                } else if (subSubValue.subSubProgramName === "Farmable Wetland") {
+                                                    ECur = subSubValue;
+                                                }
+                                            });
+                                        }
+                                    } else if (value.subProgramName === "Grassland") {
                                         FCur = value;
                                     }
                                 });
-                                if (category === "Total General Sign-Up") {
+                                if (category === "General Sign-up") {
                                     categoryRecord = ACur;
-                                } else if (category === "Total Continuous Sign-Up") {
+                                } else if (category === "Continuous Sign-up") {
                                     categoryRecord = BCur;
                                 } else if (category === "CREP Only") {
                                     categoryRecord = CCur;
@@ -80,6 +82,12 @@ const MapChart = (props) => {
                                     categoryRecord = ECur;
                                 } else {
                                     categoryRecord = FCur;
+                                }
+                                if (categoryRecord === undefined || Object.values(categoryRecord).length === 0) {
+                                    categoryRecord = {
+                                        totalPaymentInDollars: 0,
+                                        totalPaymentInPercentageNationwide: 0
+                                    };
                                 }
                                 const categoryPayment = categoryRecord.totalPaymentInDollars;
                                 const nationwidePercentage = categoryRecord.totalPaymentInPercentageNationwide;
@@ -205,28 +213,29 @@ const CategoryMap = ({
     const zeroPoints = [];
 
     statePerformance[year].forEach((value) => {
-        const programRecord = value.programs;
+        const programRecord = value.subPrograms;
         let ACur = {};
-        if (
-            category === "Total General Sign-Up" ||
-            category === "Total Continuous Sign-Up" ||
-            category === "Grassland"
-        ) {
-            ACur = programRecord.find((s) => s.programName === category);
+        if (category === "General Sign-up" || category === "Continuous Sign-up" || category === "Grassland") {
+            ACur = programRecord.find((s) => s.subProgramName === category);
         } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
-            const contSingUp = programRecord.find((s) => s.programName === "Total Continuous Sign-Up");
-            const subPrograms = contSingUp.subPrograms;
-            title = `CRP Total Continuous, ${category} from ${year}`;
-            subPrograms.forEach((subValue) => {
-                if (subValue.programName === category) {
-                    ACur = subValue;
-                }
-            });
+            const contSingUp = programRecord.find((s) => s.subProgramName === "Continuous Sign-up");
+            if (contSingUp) {
+                const subSubPrograms = contSingUp.subSubPrograms;
+                title = `CRP Continuous Sign-up, ${category} from ${year}`;
+
+                subSubPrograms.forEach((subValue) => {
+                    if (subValue.subSubProgramName === category) {
+                        ACur = subValue;
+                    }
+                });
+            }
         }
-        let key = getValueFromAttrDollar(ACur, attribute);
-        key = key !== "" ? key : attribute;
-        quantizeArray.push(ACur[key]);
-        ACur[key] === 0 && zeroPoints.push(value.state);
+        if (ACur) {
+            let key = getValueFromAttrDollar(ACur, attribute);
+            key = key !== "" ? key : attribute;
+            quantizeArray.push(ACur[key]);
+            ACur[key] === 0 && zeroPoints.push(value.state);
+        }
         return null;
     });
     const years = "2018-2022";

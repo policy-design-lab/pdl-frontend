@@ -43,9 +43,9 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].assistancePaymentInDollars;
-                                    const assistancePaymentInPercentageNationwide =
-                                        record.programs[0].assistancePaymentInPercentageNationwide;
+                                    const totalPaymentInDollars = record.totalPaymentInDollars;
+                                    const totalPaymentInPercentageNationwide =
+                                        record.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -64,8 +64,8 @@ const MapChart = (props) => {
                                                             PCT. Nationwide:
                                                         </td>
                                                         <td className={classes.tooltip_regularcell_right}>
-                                                            {assistancePaymentInPercentageNationwide
-                                                                ? `${assistancePaymentInPercentageNationwide} %`
+                                                            {totalPaymentInPercentageNationwide
+                                                                ? `${totalPaymentInPercentageNationwide} %`
                                                                 : "0%"}
                                                         </td>
                                                     </tr>
@@ -171,9 +171,8 @@ const ACEPTotalMap = ({
     const quantizeArray: number[] = [];
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
-        const programRecord = value.programs;
-        const ACur = programRecord.find((s) => s.programName === program);
-        const key = "assistancePaymentInDollars";
+        const ACur = value;
+        const key = "totalPaymentInDollars";
         quantizeArray.push(ACur[key]);
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;

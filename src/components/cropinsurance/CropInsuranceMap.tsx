@@ -57,10 +57,10 @@ const MapChart = ({
                                     return null;
                                 }
                                 const key =
-                                    getValueFromAttrDollar(state.programs[0], attribute) !== ""
-                                        ? getValueFromAttrDollar(state.programs[0], attribute)
+                                    getValueFromAttrDollar(state, attribute) !== ""
+                                        ? getValueFromAttrDollar(state, attribute)
                                         : "totalNetFarmerBenefit";
-                                programPayment = state.programs[0][key];
+                                programPayment = state[key];
                                 const hoverContent = (
                                     <div className="map_tooltip">
                                         <div className={classes.tooltip_header}>
@@ -199,8 +199,7 @@ const CropInsuranceMap = ({
     const quantizeArray: number[] = [];
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
-        const programRecord = value.programs;
-        const ACur = programRecord.find((s) => s.programName === program);
+        const ACur = value;
         let key = getValueFromAttrDollar(ACur, attribute);
         key = key !== "" ? key : "totalNetFarmerBenefit";
         quantizeArray.push(ACur[key]);
