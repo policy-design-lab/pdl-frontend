@@ -140,7 +140,7 @@ function App({
 
     // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
-        const totalRcpp = value.programs.find((s) => s.programName === "RCPP");
+        const totalRcpp = value;
         let stateName;
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
@@ -156,29 +156,13 @@ function App({
                         .toString()
                         .split(".")[0]
                 }`,
-                percentage: `${totalRcpp.assistancePaymentInPercentageNationwide.toString()}%`,
+                percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
                 noContract: `${totalRcpp.totalContracts
                     .toLocaleString(undefined, { minimumFractionDigits: 0 })
                     .toString()}`,
-                totAcre: `${totalRcpp.totalAcres.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                finPayment: `$${
-                    totalRcpp.assistancePaymentInDollars
-                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                        .toString()
-                        .split(".")[0]
-                }`,
-                reimbursePayment: `$${
-                    totalRcpp.reimbursePaymentInDollars
-                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                        .toString()
-                        .split(".")[0]
-                }`,
-                techPayment: `$${
-                    totalRcpp.techPaymentInDollars
-                        .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                        .toString()
-                        .split(".")[0]
-                }`
+                totAcre: `${totalRcpp.totalAreaInAcres
+                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
+                    .toString()}`
             };
         };
         rcppTableData.push(newRecord());
@@ -207,7 +191,7 @@ function App({
                         TOTAL RCPP BENEFITS
                     </Box>
                 ),
-                accessor: "finPayment",
+                accessor: "rcppBenefit",
                 sortType: compareWithDollarSign,
                 Cell: function styleCells(row) {
                     return <div style={{ textAlign: "right" }}>{row.value}</div>;

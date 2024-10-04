@@ -1,9 +1,8 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
-import { randomBytes } from "crypto";
 import { Box, Typography } from "@mui/material";
-import { ShortFormat, ToPercentageString, ToDollarString } from "../../shared/ConvertionFormats";
+import { ShortFormat, ToDollarString } from "../../shared/ConvertionFormats";
 
 export default function CropInsuranceBar({
     CIData,
@@ -132,29 +131,29 @@ export default function CropInsuranceBar({
 
     const prepStackedBarData = (data) => {
         data.sort(function (a, b) {
-            if (a.programs[0].totalPremiumInDollars === b.programs[0].totalPremiumInDollars) return 0;
-            if (a.programs[0].totalPremiumInDollars > b.programs[0].totalPremiumInDollars) return -1;
+            if (a.totalPremiumInDollars === b.totalPremiumInDollars) return 0;
+            if (a.totalPremiumInDollars > b.totalPremiumInDollars) return -1;
             return 1;
         });
         const states = data.map((d) => d.state);
         const res = states.map((state, i) => ({
             state,
-            totalFarmerPaidPremiumInDollars: data[i].programs[0].totalFarmerPaidPremiumInDollars,
-            totalPremiumSubsidyInDollars: data[i].programs[0].totalPremiumSubsidyInDollars
+            totalFarmerPaidPremiumInDollars: data[i].totalFarmerPaidPremiumInDollars,
+            totalPremiumSubsidyInDollars: data[i].totalPremiumSubsidyInDollars
         }));
         return res;
     };
     const prepDueBarData = (data, sortedAttr) => {
         data.sort(function (a, b) {
-            if (a.programs[0][sortedAttr] === b.programs[0][sortedAttr]) return 0;
-            if (a.programs[0][sortedAttr] > b.programs[0][sortedAttr]) return -1;
+            if (a[sortedAttr] === b[sortedAttr]) return 0;
+            if (a[sortedAttr] > b[sortedAttr]) return -1;
             return 1;
         });
         const states = data.map((d) => d.state);
         const res = states.map((state, i) => ({
             state,
-            totalPoliciesEarningPremium: data[i].programs[0].totalPoliciesEarningPremium,
-            totalIndemnitiesInDollars: data[i].programs[0].totalIndemnitiesInDollars
+            totalPoliciesEarningPremium: data[i].totalPoliciesEarningPremium,
+            totalIndemnitiesInDollars: data[i].totalIndemnitiesInDollars
         }));
         return res;
     };

@@ -65,9 +65,9 @@ export default function CropInsurancePage(): JSX.Element {
         stateDistributionData[year].forEach((stateData) => {
             const initObject = {
                 State: stateData.state,
-                TotalIndemnities: stateData.programs[0].totalIndemnitiesInDollars,
-                TotalFarmerPaidPremium: stateData.programs[0].totalFarmerPaidPremiumInDollars,
-                OriginalNetFarmerBenefit: stateData.programs[0].totalNetFarmerBenefitInDollars,
+                TotalIndemnities: stateData.totalIndemnitiesInDollars,
+                TotalFarmerPaidPremium: stateData.totalFarmerPaidPremiumInDollars,
+                OriginalNetFarmerBenefit: stateData.totalNetFarmerBenefitInDollars,
                 NetFarmerBenefit: 0
             };
             res.push(initObject);

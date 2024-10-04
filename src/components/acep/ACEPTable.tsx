@@ -31,13 +31,9 @@ function AcepProgramTable({
                 state = sValue.name;
             }
         });
-        let programData = null;
-        programData = stateData.programs.filter((p) => {
-            return p.programName.toString() === program;
-        });
         hashmap[state] = {};
         attributes.forEach((attribute) => {
-            const attributeData = programData[0][attribute];
+            const attributeData = stateData[attribute];
             hashmap[state][attribute] = attributeData;
         });
     });
@@ -48,7 +44,7 @@ function AcepProgramTable({
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr.includes("Percentage")) {
                 newRecord[attr] = `${value.toString()}%`;
-            } else if (attr === "totalAcres" || attr === "totalContracts") {
+            } else if (attr === "totalAreaInAcres" || attr === "totalContracts") {
                 newRecord[attr] = `${
                     value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
                 }`;
@@ -65,7 +61,8 @@ function AcepProgramTable({
     attributes.forEach((attribute) => {
         let sortMethod = compareWithDollarSign;
         if (attribute.includes("Percentage")) sortMethod = compareWithPercentSign;
-        if (attribute.includes("totalContracts") || attribute.includes("totalAcres")) sortMethod = compareWithNumber;
+        if (attribute.includes("totalContracts") || attribute.includes("totalAreaInAcres"))
+            sortMethod = compareWithNumber;
         let attrName = attribute
             .replace(/([A-Z])/g, " $1")
             .trim()
@@ -73,8 +70,8 @@ function AcepProgramTable({
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")
             .toUpperCase();
-        if (attribute === "assistancePaymentInDollars") attrName = "Total Payment in Dollars".toUpperCase();
-        if (attribute === "assistancePaymentInPercentageNationwide")
+        if (attribute === "totalPaymentInDollars") attrName = "Total Payment in Dollars".toUpperCase();
+        if (attribute === "totalPaymentInPercentageNationwide")
             attrName = "Total Payment In Percentage Nationwide".toUpperCase();
         const json = {
             Header: attrName,
@@ -84,12 +81,12 @@ function AcepProgramTable({
         columnPrep.push(json);
     });
     const columns = React.useMemo(() => columnPrep, []);
-    const paymentsIndex = columns.findIndex((c) => c.accessor === "assistancePaymentInDollars");
-    const acresIndex = columns.findIndex((c) => c.accessor === "totalAcres");
+    const paymentsIndex = columns.findIndex((c) => c.accessor === "totalPaymentInDollars");
+    const acresIndex = columns.findIndex((c) => c.accessor === "totalAreaInAcres");
     const contractsIndex = columns.findIndex((c) => c.accessor === "totalContracts");
-    const paymentsPercentageIndex = columns.findIndex((c) => c.accessor === "assistancePaymentInPercentageNationwide");
-    const contractsPercentageIndex = columns.findIndex((c) => c.accessor === "contractsInPercentageNationwide");
-    const acresPercentageIndex = columns.findIndex((c) => c.accessor === "acresInPercentageNationwide");
+    const paymentsPercentageIndex = columns.findIndex((c) => c.accessor === "totalPaymentInPercentageNationwide");
+    const contractsPercentageIndex = columns.findIndex((c) => c.accessor === "totalContractsInPercentageNationwide");
+    const acresPercentageIndex = columns.findIndex((c) => c.accessor === "totalAreaInPercentageNationwide");
     const Styles = styled.div`
         padding: 0;
         margin: 0;

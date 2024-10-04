@@ -11,7 +11,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function RCPPPage(): JSX.Element {
     const year = "2018-2022";
-    const attribute = "assistancePaymentInDollars";
+    const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
@@ -27,11 +27,7 @@ export default function RCPPPage(): JSX.Element {
     const zeroCategory = [];
     let totalRCPPPaymentInDollars = 0;
     let totalContracts = 0;
-    let totalAcres = 0;
-    let assistancePayments = 0;
-    let reimbursePayments = 0;
-    let techPayments = 0;
-
+    let totalAreaInAcres = 0;
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
         getJsonDataFromUrl(allstates_url).then((response) => {
@@ -57,30 +53,16 @@ export default function RCPPPage(): JSX.Element {
     }, []);
 
     const processData = (chartData) => {
-        if (chartData.programs === undefined) return;
-
-        const cur1 = chartData.programs.find((s) => s.programName === "RCPP");
-
+        if (chartData === undefined) return;
+        const cur1 = chartData;
         totalRCPPPaymentInDollars = cur1.totalPaymentInDollars;
         setTotalRcpp(totalRCPPPaymentInDollars);
         if (totalRCPPPaymentInDollars === 0) zeroCategory.push("RCPP");
         totalContracts = cur1.totalContracts;
-        totalAcres = cur1.totalAcres;
-        assistancePayments = cur1.assistancePaymentInDollars;
-        reimbursePayments = cur1.reimbursePaymentInDollars;
-        techPayments = cur1.techPaymentInDollars;
-
+        totalAreaInAcres = cur1.totalAreaInAcres;
         setZeroCategories(zeroCategory);
-
-        setTotalChartData([
-            { name: "Total Financial Assistance Payments", value: assistancePayments, color: "#2F7164" },
-            { name: "Total Reimbursable Payments", value: reimbursePayments, color: "#9CBAB4" },
-            { name: "Total Techinical Assistance Payments", value: techPayments, color: "#CDDBD8" }
-        ]);
-
         setTotalBenefit(
-            // total benefit should be financial assistance payment
-            assistancePayments.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
+            totalRCPPPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
         );
     };
 
