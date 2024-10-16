@@ -105,7 +105,7 @@ export default function LandingPage(): JSX.Element {
                     <Footer />
                 </Box>
             ) : (
-                <h1>Loading data...</h1>
+                <h1>Loading map data...</h1>
             )}
         </ThemeProvider>
     );

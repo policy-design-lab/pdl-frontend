@@ -384,7 +384,6 @@ const IRAPredictedMap = ({
         </div>
     );
 };
-// PENDING: adjust use title element after the component is fully functional
 const titleElement = ({ subtitle, year }): JSX.Element => {
     return (
         <Box sx={{ ml: 10 }}>

@@ -4,7 +4,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { createTheme, styled, Typography, ThemeProvider } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import LandingPageMap from "./LandingPageMap";
+import LandingPageTotalMap from "./LandingPageTotalMap";
+import LandingPageProgramMap from "./LandingPageProgramMap";
 import LandingDisplay from "./LandingDisplay";
 
 const theme = createTheme({
@@ -43,13 +44,24 @@ function TabPanel({
                                 mx: "auto"
                             }}
                         >
-                            <LandingPageMap
-                                programTitle={title}
-                                allStates={allStates}
-                                stateCodes={stateCodes}
-                                allPrograms={allPrograms}
-                                summary={summary}
-                            />
+                            {title.includes("All Programs") && (
+                                <LandingPageTotalMap
+                                    programTitle={title}
+                                    allStates={allStates}
+                                    stateCodes={stateCodes}
+                                    allPrograms={allPrograms}
+                                    summary={summary}
+                                />
+                            )}
+                            {!title.includes("All Programs") && (
+                                <LandingPageProgramMap
+                                    programTitle={title}
+                                    allStates={allStates}
+                                    stateCodes={stateCodes}
+                                    allPrograms={allPrograms}
+                                    summary={summary}
+                                />
+                            )}
                         </Box>
                     )}
                 </Box>
@@ -62,13 +74,24 @@ function TabPanel({
                                 mx: "auto"
                             }}
                         >
-                            <LandingPageMap
-                                programTitle={title}
-                                allStates={allStates}
-                                stateCodes={stateCodes}
-                                allPrograms={allPrograms}
-                                summary={summary}
-                            />
+                            {title.includes("All Programs") && (
+                                <LandingPageTotalMap
+                                    programTitle={title}
+                                    allStates={allStates}
+                                    stateCodes={stateCodes}
+                                    allPrograms={allPrograms}
+                                    summary={summary}
+                                />
+                            )}
+                            {!title.includes("All Programs") && (
+                                <LandingPageProgramMap
+                                    programTitle={title}
+                                    allStates={allStates}
+                                    stateCodes={stateCodes}
+                                    allPrograms={allPrograms}
+                                    summary={summary}
+                                />
+                            )}
                         </Box>
                     )}
                 </Box>
