@@ -71,3 +71,12 @@ export function ToDollarString(value: string, decimals: number): string {
         maximumFractionDigits: 2
     });
 }
+export function CurrencyFormat(value: number, currency = "USD", locale = "en-US"): string {
+    const isWholeNumber = value % 1 === 0;
+    return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+        minimumFractionDigits: isWholeNumber ? 0 : 2,
+        maximumFractionDigits: 2
+    }).format(value);
+}

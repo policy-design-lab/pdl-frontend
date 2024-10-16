@@ -411,7 +411,7 @@ MapChart.propTypes = {
     title: PropTypes.string
 };
 
-const LandingPageMapOld = ({
+const LandingPageProgramMap = ({
     programTitle,
     allStates,
     stateCodes,
@@ -443,4 +443,4 @@ const LandingPageMapOld = ({
     );
 };
 
-export default LandingPageMapOld;
+export default LandingPageProgramMap;

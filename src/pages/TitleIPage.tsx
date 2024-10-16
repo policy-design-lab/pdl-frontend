@@ -20,7 +20,7 @@ import SideBar from "../components/title1/sideBar/SideBar";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import "../styles/subpage.css";
-import LandingPageMap from "../components/LandingPageMap-Old";
+import LandingPageMap from "../components/LandingPageProgramMap";
 import LandingPageTable from "../components/shared/LandingPgaeTable";
 
 export default function TitleIPage(): JSX.Element {

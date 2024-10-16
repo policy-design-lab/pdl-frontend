@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
-import LandingPageMap from "../components/LandingPageMap-Old";
+import LandingPageMap from "../components/LandingPageProgramMap";
 import SnapTable from "../components/snap/SNAPTable";
 import SNAPBar from "../components/snap/SNAPBar";
 import NavBar from "../components/NavBar";
