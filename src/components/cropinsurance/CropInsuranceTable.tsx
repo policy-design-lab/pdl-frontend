@@ -7,8 +7,7 @@ import {
     compareWithNumber,
     compareWithAlphabetic,
     compareWithDollarSign,
-    compareWithPercentSign,
-    sortByDollars
+    compareWithPercentSign
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import { ShortFormat } from "../shared/ConvertionFormats";
@@ -28,13 +27,9 @@ function CropInsuranceProgramTable({
     // eslint-disable-next-line no-restricted-syntax
     CropInsuranceData[year].forEach((stateData) => {
         const state = stateData.state;
-        let programData = null;
-        programData = stateData.programs.filter((p) => {
-            return p.programName.toString() === program;
-        });
         hashmap[state] = {};
         attributes.forEach((attribute) => {
-            const attributeData = programData[0][attribute];
+            const attributeData = stateData[attribute];
             hashmap[state][attribute] = attributeData;
         });
     });

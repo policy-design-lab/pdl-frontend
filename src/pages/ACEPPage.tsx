@@ -1,17 +1,14 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { createTheme, Grid, ThemeProvider, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import TableChartIcon from "@mui/icons-material/TableChart";
-import InsertChartIcon from "@mui/icons-material/InsertChart";
+
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import ACEPTotalMap from "../components/acep/ACEPTotalMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
-import ACEPTable from "../components/acep/ACEPTable";
-import AcepTreeMap from "../components/acep/AcepTreeMap";
-
+import DataTable from "../components/acep/ACEPTotalTable";
 import "../styles/subpage.css";
 
 export default function ACEPPage(): JSX.Element {
@@ -30,10 +27,7 @@ export default function ACEPPage(): JSX.Element {
     const zeroCategory = [];
     let totalACEPPaymentInDollars = 0;
     let totalContracts = 0;
-    let totalAcres = 0;
-    const assistancePaymentInDollars = 0;
-    const reimbursePaymentInDollars = 0;
-    const techPaymentInDollars = 0;
+    let totalAreaInAcres = 0;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -65,21 +59,15 @@ export default function ACEPPage(): JSX.Element {
         }
     };
     const processData = (chartData) => {
-        if (chartData.programs === undefined) return;
-        const cur1 = chartData.programs.find((s) => s.programName === "ACEP");
-        totalACEPPaymentInDollars = cur1.assistancePaymentInDollars;
+        if (chartData === undefined) return;
+        const cur1 = chartData;
+        totalACEPPaymentInDollars = cur1.totalPaymentInDollars;
         setTotalAcep(totalACEPPaymentInDollars);
         if (totalACEPPaymentInDollars === 0) zeroCategory.push("ACEP");
         totalContracts = cur1.totalContracts;
         if (totalContracts === 0) zeroCategory.push("Total Contracts");
-        totalAcres = cur1.totalAcre;
-        if (totalAcres === 0) zeroCategory.push("Total Acres");
-        // assistancePaymentInDollars = cur1.assistancePaymentInDollars;
-        // if (assistancePaymentInDollars === 0) zeroCategory.push("Assistance Payment");
-        // reimbursePaymentInDollars = cur1.reimbursePaymentInDollars;
-        // if (reimbursePaymentInDollars === 0) zeroCategory.push("Reimburse Payment");
-        // techPaymentInDollars = cur1.techPaymentInDollars;
-        // if (techPaymentInDollars === 0) zeroCategory.push("Tech Payment");
+        totalAreaInAcres = cur1.totalAreaInAcres;
+        if (totalAreaInAcres === 0) zeroCategory.push("Total Acres");
         setZeroCategories(zeroCategory);
     };
     function prepData(program, subprogram, data, dataYear) {
@@ -87,20 +75,18 @@ export default function ACEPPage(): JSX.Element {
         const originalData: Record<string, unknown>[] = [];
         data[dataYear].forEach((stateData) => {
             const state = stateData.state;
-            const programData = stateData.programs.filter((p) => {
-                return p.programName.toString() === program;
-            });
+            const programData = stateData;
             organizedData.push({
                 state,
-                acres: programData[0].totalAcres,
-                payments: programData[0].assistancePaymentInDollars,
-                contracts: programData[0].totalContracts
+                acres: programData.totalAreaInAcres,
+                payments: programData.totalPaymentInDollars,
+                contracts: programData.totalContracts
             });
             originalData.push({
                 state,
-                acres: programData[0].totalAcres,
-                payments: programData[0].assistancePaymentInDollars,
-                contracts: programData[0].totalContracts
+                acres: programData.totalAreaInAcres,
+                payments: programData.totalPaymentInDollars,
+                contracts: programData.totalContracts
             });
         });
         return [organizedData, originalData];
@@ -182,22 +168,10 @@ export default function ACEPPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <ACEPTable
-                                tableTitle="Total ACEP Benefits, Acres and No. of Contracts"
-                                program="ACEP"
-                                attributes={[
-                                    "assistancePaymentInDollars",
-                                    "assistancePaymentInPercentageNationwide",
-                                    "totalAcres",
-                                    "acresInPercentageNationwide",
-                                    "totalContracts",
-                                    "contractsInPercentageNationwide"
-                                ]}
-                                skipColumns={[]}
+                            <DataTable
+                                statePerformance={stateDistributionData}
+                                year={year}
                                 stateCodes={stateCodesArray}
-                                AcepData={stateDistributionData}
-                                year="2018-2022"
-                                colors={["#1F78B433", "#C8119526", "#66BB6A40"]}
                             />
                         </Box>
                     </Box>

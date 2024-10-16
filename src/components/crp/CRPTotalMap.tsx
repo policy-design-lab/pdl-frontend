@@ -44,9 +44,9 @@ const MapChart = (props) => {
                                     if (record === undefined || record.length === 0) {
                                         return null;
                                     }
-                                    const totalPaymentInDollars = record.programs[0].totalPaymentInDollars;
+                                    const totalPaymentInDollars = record.totalPaymentInDollars;
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].totalPaymentInPercentageNationwide;
+                                        record.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -171,17 +171,18 @@ const CRPTotalMap = ({
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
     const zeroPoints = [];
-    statePerformance[year].forEach((value) => {
-        const programRecord = value.programs;
-        const ACur = programRecord.find((s) => s.programName === program);
-        let key = getValueFromAttrDollar(ACur, attribute);
-        key = key !== "" ? key : attribute;
-        quantizeArray.push(ACur[key]);
-        ACur[key] === 0 && zeroPoints.push(value.state);
-        return null;
-    });
+    // statePerformance[year].forEach((value) => {
+    //     const programRecord = value.programs;
+    //     const ACur = programRecord.find((s) => s.programName === program);
+    //     let key = getValueFromAttrDollar(ACur, attribute);
+    //     key = key !== "" ? key : attribute;
+    //     quantizeArray.push(ACur[key]);
+    //     ACur[key] === 0 && zeroPoints.push(value.state);
+    //     return null;
+    // });
     const category = "Total CRP";
     const years = "2018-2022";
+    statePerformance[year].forEach((value) => quantizeArray.push(value.totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];

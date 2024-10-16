@@ -45,10 +45,10 @@ const MapChart = (props) => {
                                         return null;
                                     }
                                     // the totalPaymentInDolloars in RCPP is financial assistancePaymentInDollars
-                                    const totalPaymentInDollars = record.programs[0].assistancePaymentInDollars;
+                                    const totalPaymentInDollars = record.totalPaymentInDollars;
                                     // since the total is financial assistance, the percentage should also be financial one
                                     const totalPaymentInPercentageNationwide =
-                                        record.programs[0].assistancePaymentInPercentageNationwide;
+                                        record.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -174,8 +174,7 @@ const RCPPTotalMap = ({
     const quantizeArray: number[] = [];
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
-        const programRecord = value.programs;
-        const ACur = programRecord.find((s) => s.programName === program);
+        const ACur = value;
         let key = getValueFromAttrDollar(ACur, attribute);
         key = key !== "" ? key : attribute;
         quantizeArray.push(ACur[key]);
