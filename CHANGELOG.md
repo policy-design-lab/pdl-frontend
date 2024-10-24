@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2024-10-24
+
+### Added
+- Add selector to the landing page total map for users to select the program they want to see and get the total amount of the selected programs in the map [#317](https://github.com/policy-design-lab/pdl-frontend/issues/317) 
+
 ## [1.1.0] - 2024-10-04
 
 ### Changed
@@ -294,6 +299,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.2.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.5...1.1.0
 [1.0.5]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.4...1.0.5
 [1.0.4]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.3...1.0.4
