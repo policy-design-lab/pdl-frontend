@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -8,9 +8,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { FormControl, Select, Chip, MenuItem, Button, FormLabel } from "@mui/material";
-import { inherits } from "util";
 import DrawLegend from "./shared/DrawLegend";
-import legendConfig from "../utils/legendConfig.json";
 import { CurrencyFormat } from "./shared/ConvertionFormats";
 import { useStyles, tooltipBkgColor } from "./shared/MapTooltip";
 import "../styles/map.css";
@@ -257,40 +255,32 @@ const LandingPageTotalMap = ({
         const uniquePrograms = [...new Set(summary.map((item) => item.Title))];
         return ["All Programs", ...uniquePrograms];
     }, [summary]);
-    const calculateTotal = (state) => {
-        if (selectedPrograms.includes("All Programs")) {
-            if (allPrograms.find((s) => s.State === state)) {
-                return allPrograms.find((s) => s.State === state)["18-22 All Programs Total"];
+    const calculateTotal = useCallback(
+        (state) => {
+            if (selectedPrograms.includes("All Programs")) {
+                const stateProgram = allPrograms.find((s) => s.State === state);
+                return stateProgram ? stateProgram["18-22 All Programs Total"] : 0;
             }
-            return 0;
-        }
-        const newTotal = selectedPrograms.reduce((total, program) => {
-            const programTotal = summary
-                .filter((item) => item.State === state && item.Title === program)
-                .reduce((sum, item) => sum + item.Amount, 0);
-            return total + programTotal;
-        }, 0);
-        return newTotal;
-    };
-    const calculateNationwideTotal = () => {
+            return selectedPrograms.reduce((total, program) => {
+                const programTotal = summary
+                    .filter((item) => item.State === state && item.Title === program)
+                    .reduce((sum, item) => sum + item.Amount, 0);
+                return total + programTotal;
+            }, 0);
+        },
+        [selectedPrograms, allPrograms, summary]
+    );
+    const calculateNationwideTotal = useCallback(() => {
         if (selectedPrograms.includes("All Programs")) {
-            // Sum all state totals for "All Programs"
             return allStates.reduce((total, state) => {
-                return total + (allPrograms.find((s) => s.State === state.id)?.["18-22 All Programs Total"] || 0);
+                const stateProgram = allPrograms.find((s) => s.State === state.id);
+                return total + (stateProgram?.["18-22 All Programs Total"] || 0);
             }, 0);
         }
         return allStates.reduce((total, state) => {
-            return (
-                total +
-                selectedPrograms.reduce((stateTotal, program) => {
-                    const programTotal = summary
-                        .filter((item) => item.State === state.id && item.Title === program)
-                        .reduce((sum, item) => sum + item.Amount, 0);
-                    return stateTotal + programTotal;
-                }, 0)
-            );
+            return total + calculateTotal(state.id);
         }, 0);
-    };
+    }, [selectedPrograms, allStates, allPrograms, calculateTotal]);
     const colorScale = useMemo(() => {
         const allTotals = allStates.map((state) => calculateTotal(state.id)).sort((a, b) => a - b);
         const nonZeroData = allTotals.filter((value) => value > 0);
@@ -304,7 +294,7 @@ const LandingPageTotalMap = ({
         }
         const customScale = d3.scaleThreshold().domain(thresholds).range(mapColor);
         return customScale;
-    }, [allStates, selectedPrograms, summary]);
+    }, [[allStates, calculateTotal, mapColor]]);
 
     const handleProgramChange = (event) => {
         const {
@@ -343,7 +333,11 @@ const LandingPageTotalMap = ({
         };
     }, []);
     useEffect(() => {
-        // console.log(selectedPrograms);
+        // force trigger the color scale to update
+        setSelectedPrograms((prev) => [...prev]);
+    }, []);
+    useEffect(() => {
+        // console.log("selectedPrograms", selectedPrograms);
     }, [selectedPrograms]);
     return (
         <div>
