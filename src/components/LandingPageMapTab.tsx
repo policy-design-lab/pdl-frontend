@@ -131,20 +131,21 @@ export default function LandingPageMapTab({
         textTransform: "none"
     });
 
-    const cur = allPrograms.find((s) => s.State === "Total");
-
-    let allProgramTotal = "";
-    let titleITotal = "";
-    let titleIITotal = "";
-    let cropTotal = "";
-    let snapTotal = "";
-    if (cur !== undefined) {
-        allProgramTotal = cur["18-22 All Programs Total"];
-        titleITotal = cur["Title I Total"];
-        titleIITotal = cur["Title II Total"];
-        cropTotal = cur["Crop Insurance Total"];
-        snapTotal = cur["SNAP Total"];
-    }
+    const totals = React.useMemo(() => {
+        return {
+            allProgramTotal: allPrograms.reduce(
+                (sum, state) => sum + Number(state["18-22 All Programs Total"] || 0),
+                0
+            ),
+            titleITotal: allPrograms.reduce((sum, state) => sum + Number(state["Title I Total"] || 0), 0),
+            titleIITotal: allPrograms.reduce((sum, state) => sum + Number(state["Title II Total"] || 0), 0),
+            cropTotal: allPrograms.reduce((sum, state) => sum + Number(state["Crop Insurance Total"] || 0), 0),
+            snapTotal: allPrograms.reduce((sum, state) => sum + Number(state["SNAP Total"] || 0), 0)
+        };
+    }, [allPrograms]);
+    const formatBillions = (value: number) => {
+        return `$${(value / 1000000000.0).toFixed(2)}B`;
+    };
 
     return (
         <Box sx={{ width: "100%", mt: 5 }}>
@@ -175,7 +176,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>All Programs</Typography>
                                     <br />
-                                    <Typography>${Number(allProgramTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                    <Typography>{formatBillions(totals.allProgramTotal)}</Typography>
                                 </Box>
                             }
                         />
@@ -185,7 +186,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Title I: Commodities</Typography>
                                     <br />
-                                    <Typography>${Number(titleITotal / 1000000000.0).toFixed(2)}B</Typography>
+                                    <Typography>{formatBillions(totals.titleITotal)}</Typography>
                                 </Box>
                             }
                         />
@@ -195,7 +196,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Title II: Conservation</Typography>
                                     <br />
-                                    <Typography>${Number(titleIITotal / 1000000000.0).toFixed(2)}B</Typography>
+                                    <Typography>{formatBillions(totals.titleIITotal)}</Typography>
                                 </Box>
                             }
                         />
@@ -205,7 +206,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Crop Insurance</Typography>
                                     <br />
-                                    <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                    <Typography>{formatBillions(totals.cropTotal)}</Typography>
                                 </Box>
                             }
                         />
@@ -215,7 +216,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Supplemental Nutrition Assistance Program</Typography>
                                     <br />
-                                    <Typography>${Number(snapTotal / 1000000000.0).toFixed(2)}B</Typography>
+                                    <Typography>{formatBillions(totals.snapTotal)}</Typography>
                                 </Box>
                             }
                         />
