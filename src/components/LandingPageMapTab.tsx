@@ -132,19 +132,18 @@ export default function LandingPageMapTab({
     });
 
     const totals = React.useMemo(() => {
-        return {
-            allProgramTotal: allPrograms.reduce(
-                (sum, state) => sum + Number(state["18-22 All Programs Total"] || 0),
-                0
-            ),
-            titleITotal: allPrograms.reduce((sum, state) => sum + Number(state["Title I Total"] || 0), 0),
-            titleIITotal: allPrograms.reduce((sum, state) => sum + Number(state["Title II Total"] || 0), 0),
-            cropTotal: allPrograms.reduce((sum, state) => sum + Number(state["Crop Insurance Total"] || 0), 0),
-            snapTotal: allPrograms.reduce((sum, state) => sum + Number(state["SNAP Total"] || 0), 0)
+        const sumField = (field) => allPrograms.reduce((sum, state) => sum + parseFloat(state[field] || 0), 0);
+        const res = {
+            allProgramTotal: sumField("18-22 All Programs Total"),
+            titleITotal: sumField("Title I Total"),
+            titleIITotal: sumField("Title II Total"),
+            cropTotal: sumField("Crop Insurance Total"),
+            snapTotal: sumField("SNAP Total")
         };
+        return res;
     }, [allPrograms]);
-    const formatBillions = (value: number) => {
-        return `$${(value / 1000000000.0).toFixed(2)}B`;
+    const formatBillions = (v: number) => {
+        return `$${(v / 1000000000.0).toFixed(2)}B`;
     };
 
     return (
