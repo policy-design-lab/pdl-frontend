@@ -131,20 +131,20 @@ export default function LandingPageMapTab({
         textTransform: "none"
     });
 
-    const totals = React.useMemo(() => {
-        const sumField = (field) => allPrograms.reduce((sum, state) => sum + parseFloat(state[field] || 0), 0);
-        const res = {
-            allProgramTotal: sumField("18-22 All Programs Total"),
-            titleITotal: sumField("Title I Total"),
-            titleIITotal: sumField("Title II Total"),
-            cropTotal: sumField("Crop Insurance Total"),
-            snapTotal: sumField("SNAP Total")
-        };
-        return res;
-    }, [allPrograms]);
-    const formatBillions = (v: number) => {
-        return `$${(v / 1000000000.0).toFixed(2)}B`;
-    };
+    const cur = allPrograms.find((s) => s.State === "Total");
+
+    let allProgramTotal = "";
+    let titleITotal = "";
+    let titleIITotal = "";
+    let cropTotal = "";
+    let snapTotal = "";
+    if (cur !== undefined) {
+        allProgramTotal = cur["18-22 All Programs Total"];
+        titleITotal = cur["Title I Total"];
+        titleIITotal = cur["Title II Total"];
+        cropTotal = cur["Crop Insurance Total"];
+        snapTotal = cur["SNAP Total"];
+    }
 
     return (
         <Box sx={{ width: "100%", mt: 5 }}>
@@ -175,7 +175,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>All Programs</Typography>
                                     <br />
-                                    <Typography>{formatBillions(totals.allProgramTotal)}</Typography>
+                                    <Typography>${Number(allProgramTotal / 1000000000.0).toFixed(2)}B</Typography>
                                 </Box>
                             }
                         />
@@ -185,7 +185,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Title I: Commodities</Typography>
                                     <br />
-                                    <Typography>{formatBillions(totals.titleITotal)}</Typography>
+                                    <Typography>${Number(titleITotal / 1000000000.0).toFixed(2)}B</Typography>
                                 </Box>
                             }
                         />
@@ -195,7 +195,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Title II: Conservation</Typography>
                                     <br />
-                                    <Typography>{formatBillions(totals.titleIITotal)}</Typography>
+                                    <Typography>${Number(titleIITotal / 1000000000.0).toFixed(2)}B</Typography>
                                 </Box>
                             }
                         />
@@ -205,7 +205,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Crop Insurance</Typography>
                                     <br />
-                                    <Typography>{formatBillions(totals.cropTotal)}</Typography>
+                                    <Typography>${Number(cropTotal / 1000000000.0).toFixed(2)}B</Typography>
                                 </Box>
                             }
                         />
@@ -215,7 +215,7 @@ export default function LandingPageMapTab({
                                 <Box>
                                     <Typography>Supplemental Nutrition Assistance Program</Typography>
                                     <br />
-                                    <Typography>{formatBillions(totals.snapTotal)}</Typography>
+                                    <Typography>${Number(snapTotal / 1000000000.0).toFixed(2)}B</Typography>
                                 </Box>
                             }
                         />
