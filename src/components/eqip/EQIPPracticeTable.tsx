@@ -356,12 +356,12 @@ function EQIPPracticeTable({
         if (selectedPractices.includes("All Practices")) {
             cols.push(
                 {
-                    Header: "Total Benefits",
+                    Header: "Total EQIP Benefits",
                     accessor: "Total Benefits",
                     sortType: compareWithDollarSign
                 },
                 {
-                    Header: "Pct. Nationwide",
+                    Header: "EQIP Pct. Nationwide",
                     accessor: "Percentage Nationwide",
                     sortType: compareWithPercentSign
                 }
@@ -369,12 +369,12 @@ function EQIPPracticeTable({
         } else {
             cols.push(
                 {
-                    Header: "Total Benefits",
+                    Header: "Total Benefits for Selected Practices",
                     accessor: "Total Benefits",
                     sortType: compareWithDollarSign
                 },
                 {
-                    Header: "Pct. Nationwide",
+                    Header: "Pct. Nationwide for Selected Practices",
                     accessor: "Percentage Nationwide",
                     sortType: compareWithPercentSign
                 }
