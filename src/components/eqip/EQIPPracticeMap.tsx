@@ -1,0 +1,514 @@
+import React, { useState, useMemo } from "react";
+import { geoCentroid } from "d3-geo";
+import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Chip from "@mui/material/Chip";
+import * as d3 from "d3";
+import { config } from "../../app.config";
+import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
+import "../../styles/map.css";
+import legendConfig from "../../utils/legendConfig.json";
+import DrawLegend from "../shared/DrawLegend";
+import getPracticeTotal from "../shared/titleii/GetPracticeTotal";
+import { ShortFormat } from "../shared/ConvertionFormats";
+
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+
+const offsets = {
+    VT: [50, -8],
+    NH: [34, 2],
+    MA: [30, -1],
+    RI: [28, 2],
+    CT: [35, 10],
+    NJ: [34, 1],
+    DE: [33, 0],
+    MD: [47, 10],
+    DC: [49, 21]
+};
+
+const MapChart = ({
+    getNationalTotal,
+    setReactTooltipContent,
+    maxValue,
+    allStates,
+    statePerformance,
+    year,
+    stateCodes,
+    colorScale,
+    selectedPractices
+}) => {
+    const classes = useStyles();
+    const computeTooltipContent = (geo, record) => {
+        if (!record) return "";
+        let tooltipContent = `
+        <div class="map_tooltip">
+            <div class="${classes.tooltip_header}">
+                <b>${geo.properties.name}</b>
+            </div>
+            <table class="${classes.tooltip_table}">
+                <tbody>`;
+        let practiceTotal = 0;
+        if (selectedPractices.includes("All Practices")) {
+            practiceTotal = record.totalPaymentInDollars || 0;
+            tooltipContent += `
+                <tr>
+                    <td class="${classes.tooltip_topcell_left}">All Practices:</td>
+                    <td class="${classes.tooltip_topcell_right}">
+                        $${ShortFormat(practiceTotal, undefined, 2)}
+                    </td>
+                </tr>`;
+        } else {
+            selectedPractices.forEach((practice, index) => {
+                const practiceAmount = getPracticeTotal(record, practice);
+                practiceTotal += practiceAmount;
+                const displayName = practice.replace(/\s*\(\d+\)$/, "");
+                tooltipContent += `
+                    <tr>
+                        <td class="${index === 0 ? classes.tooltip_topcell_left : classes.tooltip_regularcell_left}">
+                            ${displayName}:
+                        </td>
+                        <td class="${index === 0 ? classes.tooltip_topcell_right : classes.tooltip_regularcell_right}">
+                            $${ShortFormat(practiceAmount, undefined, 2)}
+                        </td>
+                    </tr>`;
+            });
+        }
+        const nationalTotal = getNationalTotal(selectedPractices);
+        const totalPercentage = nationalTotal > 0 ? (practiceTotal / nationalTotal) * 100 : 0;
+        tooltipContent += `
+                <tr>
+                    <td class="${classes.tooltip_footer_left}">Total Benefits:</td>
+                    <td class="${classes.tooltip_footer_right}">
+                        $${ShortFormat(practiceTotal, undefined, 2)}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="${classes.tooltip_bottomcell_left}">PCT. Nationwide:</td>
+                    <td class="${classes.tooltip_bottomcell_right}">
+                        ${totalPercentage > 0 ? `${totalPercentage.toFixed(2)}%` : "0%"}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>`;
+        return tooltipContent;
+    };
+
+    return (
+        <div data-tip="">
+            <ComposableMap projection="geoAlbersUsa">
+                <Geographies geography={geoUrl}>
+                    {({ geographies }) => (
+                        <>
+                            {geographies.map((geo) => {
+                                const record = statePerformance[year]?.find(
+                                    (v) => stateCodes[v.state] === geo.properties.name
+                                );
+                                let practiceTotal = 0;
+                                if (selectedPractices.includes("All Practices")) {
+                                    practiceTotal = record?.totalPaymentInDollars || 0;
+                                } else {
+                                    selectedPractices.forEach((practice) => {
+                                        practiceTotal += getPracticeTotal(record, practice);
+                                    });
+                                }
+                                return (
+                                    <Geography
+                                        key={geo.rsmKey}
+                                        geography={geo}
+                                        onMouseEnter={() => {
+                                            const tooltipContent = computeTooltipContent(geo, record);
+                                            ReactTooltip.rebuild();
+                                            setReactTooltipContent(tooltipContent);
+                                        }}
+                                        onMouseLeave={() => setReactTooltipContent("")}
+                                        fill={colorScale(practiceTotal || 0) || "#D2D2D2"}
+                                        stroke="#FFF"
+                                        style={{
+                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
+                                            hover: { stroke: "#232323", strokeWidth: 2, outline: "none" },
+                                            pressed: { fill: "#345feb", outline: "none" }
+                                        }}
+                                    />
+                                );
+                            })}
+                            {geographies.map((geo) => {
+                                const centroid = geoCentroid(geo);
+                                const cur = allStates.find((s) => s.val === geo.id);
+                                return (
+                                    <g key={`${geo.rsmKey}-name`}>
+                                        {cur &&
+                                            centroid[0] > -160 &&
+                                            centroid[0] < -67 &&
+                                            (Object.keys(offsets).indexOf(cur.id) === -1 ? (
+                                                <Marker coordinates={centroid}>
+                                                    <text y="2" fontSize={14} textAnchor="middle">
+                                                        {cur.id}
+                                                    </text>
+                                                </Marker>
+                                            ) : (
+                                                <Annotation
+                                                    subject={centroid}
+                                                    dx={offsets[cur.id][0]}
+                                                    dy={offsets[cur.id][1]}
+                                                >
+                                                    <text x={4} fontSize={14} alignmentBaseline="middle">
+                                                        {cur.id}
+                                                    </text>
+                                                </Annotation>
+                                            ))}
+                                    </g>
+                                );
+                            })}
+                        </>
+                    )}
+                </Geographies>
+            </ComposableMap>
+        </div>
+    );
+};
+
+interface Practice {
+    practiceName: string;
+    practiceCode: string;
+    totalPaymentInDollars: number;
+}
+
+interface PracticeCategory {
+    practiceCategoryName: string;
+    totalPaymentInDollars: number;
+    practices: Practice[];
+}
+
+interface StatePerformance {
+    state: string;
+    totalPaymentInDollars: number;
+    statutes: Array<{
+        statuteName: string;
+        totalPaymentInDollars: number;
+        practiceCategories: PracticeCategory[];
+    }>;
+}
+
+interface EQIPPracticeMapProps {
+    initialStatePerformance: Record<string, StatePerformance[]>;
+    allStates: any;
+    year: string;
+    stateCodes: any;
+    practiceNames: Array<{
+        practiceName: string;
+        practiceCode: string;
+    }>;
+    onPracticeChange?: (practices: string[]) => void;
+}
+const EQIPPracticeMap = ({
+    initialStatePerformance,
+    allStates,
+    year,
+    stateCodes,
+    practiceNames,
+    onPracticeChange
+}: EQIPPracticeMapProps) => {
+    const [content, setContent] = useState("");
+    const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
+    const classes = useStyles();
+    const [selectedPractices, setSelectedPractices] = useState<string[]>(["All Practices"]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const practiceCategories = useMemo(() => {
+        if (!practiceNames || practiceNames.length === 0) {
+            return ["All Practices"];
+        }
+        return ["All Practices", ...practiceNames];
+    }, [practiceNames]);
+    const fetchStatePerformanceData = async (selectedPracticeNames: string[]) => {
+        if (selectedPracticeNames.includes("All Practices")) {
+            setStatePerformance(initialStatePerformance);
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const selectedCodes = selectedPracticeNames
+                .map((practiceName) => {
+                    const match = practiceName.match(/\((\d+)\)$/);
+                    return match ? match[1] : null;
+                })
+                .filter((code) => code !== null);
+            if (selectedCodes.length === 0) {
+                setStatePerformance(initialStatePerformance);
+                return;
+            }
+            const url = `${
+                config.apiUrl
+            }/titles/title-ii/programs/eqip/state-distribution?practice_code=${selectedCodes.join(",")}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            setStatePerformance(data);
+        } catch (error) {
+            console.error("Error fetching state performance data:", error);
+            setStatePerformance(initialStatePerformance);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const handlePracticeChange = (event: any) => {
+        const value = event.target.value;
+        let newSelected = typeof value === "string" ? value.split(",") : value;
+        if (newSelected.includes("All Practices")) {
+            newSelected =
+                newSelected.length === 1 ? ["All Practices"] : newSelected.filter((p) => p !== "All Practices");
+        }
+        if (newSelected.length === 0) {
+            newSelected = ["All Practices"];
+        }
+        setSelectedPractices(newSelected);
+        if (onPracticeChange) {
+            onPracticeChange(newSelected);
+        }
+        fetchStatePerformanceData(newSelected);
+    };
+
+    React.useEffect(() => {
+        ReactTooltip.rebuild();
+    }, [statePerformance, selectedPractices]);
+
+    const practiceData = useMemo(() => {
+        if (!statePerformance[year]) return [];
+        return statePerformance[year]
+            .map((state) => {
+                let total = 0;
+                if (selectedPractices.includes("All Practices")) {
+                    total = state.totalPaymentInDollars || 0;
+                } else {
+                    state.statutes?.forEach((statute) => {
+                        statute.practiceCategories?.forEach((category) => {
+                            selectedPractices.forEach((practice) => {
+                                const codeMatch = practice.match(/\((\d+)\)$/);
+                                const practiceCode = codeMatch ? codeMatch[1] : null;
+
+                                if (!practiceCode) return;
+
+                                if (!category.practices || category.practices.length === 0) {
+                                    if (practice.includes(category.practiceCategoryName)) {
+                                        total += category.totalPaymentInDollars || 0;
+                                    }
+                                } else {
+                                    category.practices.forEach((p) => {
+                                        const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
+                                        if (match === practiceCode) {
+                                            total += p.totalPaymentInDollars || 0;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+                }
+                return total;
+            })
+            .filter((value) => value > 0);
+    }, [statePerformance, year, selectedPractices]);
+    const maxValue = useMemo(() => Math.max(...practiceData, 0), [practiceData]);
+    const customScale = useMemo(() => {
+        if (practiceData.length === 0) return legendConfig["Total EQIP"];
+
+        const sortedData = [...practiceData].sort((a, b) => a - b);
+        const quintileSize = Math.ceil(sortedData.length / 5);
+
+        return [
+            sortedData[quintileSize],
+            sortedData[quintileSize * 2],
+            sortedData[quintileSize * 3],
+            sortedData[quintileSize * 4]
+        ];
+    }, [practiceData]);
+    const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
+    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const getNationalTotal = React.useCallback(
+        (practices: string[]) => {
+            let total = 0;
+            if (!statePerformance[year]) return total;
+
+            statePerformance[year].forEach((state) => {
+                if (practices.includes("All Practices")) {
+                    total += state.totalPaymentInDollars || 0;
+                } else {
+                    practices.forEach((practice) => {
+                        const codeMatch = practice.match(/\((\d+)\)$/);
+                        const practiceCode = codeMatch ? codeMatch[1] : null;
+
+                        if (!practiceCode) return;
+
+                        state.statutes?.forEach((statute) => {
+                            statute.practiceCategories?.forEach((category) => {
+                                if (!category.practices || category.practices.length === 0) {
+                                    if (practice.includes(category.practiceCategoryName)) {
+                                        total += category.totalPaymentInDollars || 0;
+                                    }
+                                } else {
+                                    category.practices.forEach((p) => {
+                                        const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
+                                        if (match === practiceCode) {
+                                            total += p.totalPaymentInDollars || 0;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+            return total;
+        },
+        [statePerformance, year]
+    );
+    const handleChipDelete = (value: string) => {
+        const newSelected = selectedPractices.filter((p) => p !== value);
+        const finalSelected = newSelected.length === 0 ? ["All Practices"] : newSelected;
+        setSelectedPractices(finalSelected);
+        if (onPracticeChange) {
+            onPracticeChange(finalSelected);
+        }
+        fetchStatePerformanceData(finalSelected);
+    };
+    const shouldShowLoading = isLoading && !selectedPractices.includes("All Practices");
+    const hasValidData = statePerformance && statePerformance[year] && statePerformance[year].length > 0;
+    if (!hasValidData && !shouldShowLoading) {
+        return (
+            <Box display="flex" justifyContent="center" mt={4}>
+                <Typography>No data available</Typography>
+            </Box>
+        );
+    }
+    return (
+        <Box>
+            <Box display="flex" justifyContent="center" sx={{ pt: 30 }}>
+                {maxValue !== 0 ? (
+                    <DrawLegend
+                        colorScale={colorScale}
+                        title={titleElement(selectedPractices, year)}
+                        programData={practiceData}
+                        prepColor={mapColor}
+                        initRatioLarge={0.6}
+                        initRatioSmall={0.5}
+                        isRatio={false}
+                        notDollar={false}
+                        emptyState={[]}
+                    />
+                ) : (
+                    <div>
+                        {titleElement(selectedPractices, year)}
+                        <Box display="flex" justifyContent="center">
+                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                                Please select at least one practice category.
+                            </Typography>
+                        </Box>
+                    </div>
+                )}
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" pt={4}>
+                <FormControl sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <FormLabel
+                        component="legend"
+                        sx={{
+                            "mr": 2,
+                            "minWidth": "5em",
+                            "fontWeight": "bold",
+                            "fontSize": "1.25rem",
+                            "color": "rgba(47, 113, 100, 1)",
+                            "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
+                        }}
+                    >
+                        Select Practice
+                    </FormLabel>
+                    <Select
+                        multiple
+                        value={selectedPractices}
+                        onChange={handlePracticeChange}
+                        renderValue={(selected) => (
+                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                {selected.map((value) => (
+                                    <Chip
+                                        key={value}
+                                        label={value}
+                                        onDelete={() => handleChipDelete(value)}
+                                        onMouseDown={(event) => {
+                                            event.stopPropagation();
+                                        }}
+                                        sx={{
+                                            borderRadius: 1,
+                                            borderColor: "lightgray",
+                                            color: "rgba(47, 113, 100, 1)"
+                                        }}
+                                    />
+                                ))}
+                            </Box>
+                        )}
+                        sx={{ minWidth: 300 }}
+                    >
+                        {practiceCategories.map((practice) => (
+                            <MenuItem
+                                key={typeof practice === "string" ? practice : practice.practiceCode}
+                                value={practice}
+                            >
+                                {typeof practice === "string" ? practice : practice.practiceName}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+
+            {shouldShowLoading ? (
+                <Box display="flex" justifyContent="center" mt={4}>
+                    <Typography>Loading data...</Typography>
+                </Box>
+            ) : (
+                hasValidData && (
+                    <MapChart
+                        getNationalTotal={getNationalTotal}
+                        setReactTooltipContent={setContent}
+                        maxValue={maxValue}
+                        allStates={allStates}
+                        statePerformance={statePerformance}
+                        year={year}
+                        stateCodes={stateCodes}
+                        colorScale={colorScale}
+                        selectedPractices={selectedPractices}
+                    />
+                )
+            )}
+            <div className="tooltip-container">
+                <ReactTooltip
+                    className={`${classes.customized_tooltip} tooltip`}
+                    backgroundColor={tooltipBkgColor}
+                    html
+                >
+                    {content}
+                </ReactTooltip>
+            </div>
+        </Box>
+    );
+};
+
+const titleElement = (practices: string[], year: string): JSX.Element => {
+    const practiceLabel = practices.length > 0 ? practices.join(", ") : "No practices selected";
+    return (
+        <Box>
+            <Typography variant="h6" textAlign="center">
+                <strong>{practiceLabel === "All Practices" ? "Total EQIP" : practiceLabel}</strong> Benefits from{" "}
+                <strong>{year}</strong>
+            </Typography>
+            <Typography style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
+                <i>Grey states indicate no available data</i>
+            </Typography>
+        </Box>
+    );
+};
+
+export default EQIPPracticeMap;

@@ -4,13 +4,18 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
-import DataTable from "../components/eqip/EQIPTotalTable";
-import EqipTotalMap from "../components/eqip/EQIPTotalMap";
+import DataTable from "../components/eqip/EQIPPracticeTable";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import EQIPPracticeMap from "../components/eqip/EQIPPracticeMap";
+
+interface PracticeName {
+    practiceName: string;
+    practiceCode: string;
+}
 
 export default function EQIPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -34,40 +39,52 @@ export default function EQIPPage(): JSX.Element {
     const [statePerformance, setStatePerformance] = React.useState({});
     const [allStates, setAllStates] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
-    const [stateCodesArray, setStateCodesArray] = React.useState([]);
+    const [stateCodesArray, setStateCodesArray] = React.useState<{ code: string; name: string }[]>([]);
     const [totalChartData, setTotalChartData] = React.useState([{}]);
     const [sixAChartData, setSixAChartData] = React.useState([{}]);
     const [sixBChartData, setSixBChartData] = React.useState([{}]);
     const [aTotal, setATotal] = React.useState(0);
     const [bTotal, setBTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
+    const [isDataReady, setIsDataReady] = React.useState(false);
 
+    // connect to selector endpoint
+    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
+    const [eqipPracticeNames, setEqipPracticeNames] = React.useState<PracticeName[]>([]);
+    const handlePracticeChange = (practices: string[]) => {
+        setSelectedPractices(practices);
+    };
     const eqip_year = "2018-2022";
+
     React.useEffect(() => {
-        const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`;
-        getJsonDataFromUrl(state_perf_url).then((response) => {
-            const converted_perf_json = response;
-            setStatePerformance(converted_perf_json);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            const converted_json = response;
-            setAllStates(converted_json);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            setStateCodesArray(response);
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        const chartdata_url = `${config.apiUrl}/titles/title-ii/programs/eqip/summary`;
-        getJsonDataFromUrl(chartdata_url).then((response) => {
-            const converted_chart_json = response;
-            processData(converted_chart_json);
-        });
+        const fetchData = async () => {
+            try {
+                const [
+                    statePerformanceResponse,
+                    allStatesResponse,
+                    stateCodesResponse,
+                    chartDataResponse,
+                    eqipPracticeNameResponse
+                ] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/eqip/practice-names`)
+                ]);
+                setStatePerformance(statePerformanceResponse);
+                setAllStates(allStatesResponse);
+                setStateCodesArray(stateCodesResponse);
+                const converted_json = convertAllState(stateCodesResponse);
+                setStateCodesData(converted_json);
+                processData(chartDataResponse);
+                setEqipPracticeNames(eqipPracticeNameResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     const processData = (chartData) => {
@@ -158,10 +175,7 @@ export default function EQIPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 &&
-            statePerformance[eqip_year] !== undefined &&
-            zeroCategories.length > 0 &&
-            stateCodesArray.length > 0 ? (
+            {isDataReady ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -176,11 +190,13 @@ export default function EQIPPage(): JSX.Element {
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
                         >
-                            <EqipTotalMap
-                                statePerformance={statePerformance}
+                            <EQIPPracticeMap
+                                initialStatePerformance={statePerformance}
                                 allStates={allStates}
                                 year={eqip_year}
                                 stateCodes={stateCodesData}
+                                practiceNames={eqipPracticeNames[eqip_year]}
+                                onPracticeChange={handlePracticeChange}
                             />
                         </Box>
                         <Box
@@ -382,6 +398,7 @@ export default function EQIPPage(): JSX.Element {
                                 statePerformance={statePerformance}
                                 year={eqip_year}
                                 stateCodes={stateCodesArray}
+                                selectedPractices={selectedPractices}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
