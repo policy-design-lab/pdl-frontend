@@ -257,16 +257,17 @@ const EQIPPracticeMap = ({
             setIsLoading(false);
         }
     };
-    const handlePracticeChange = (event: any) => {
+    const handlePracticeChange = (event) => {
         const value = event.target.value;
         let newSelected = typeof value === "string" ? value.split(",") : value;
-        if (newSelected.includes("All Practices")) {
-            newSelected =
-                newSelected.length === 1 ? ["All Practices"] : newSelected.filter((p) => p !== "All Practices");
-        }
-        if (newSelected.length === 0) {
+        if (newSelected.includes("All Practices") && !selectedPractices.includes("All Practices")) {
+            newSelected = ["All Practices"];
+        } else if (newSelected.length > 1 && newSelected.includes("All Practices")) {
+            newSelected = newSelected.filter((p) => p !== "All Practices");
+        } else if (newSelected.length === 0) {
             newSelected = ["All Practices"];
         }
+
         setSelectedPractices(newSelected);
         if (onPracticeChange) {
             onPracticeChange(newSelected);
@@ -334,7 +335,6 @@ const EQIPPracticeMap = ({
         (practices: string[]) => {
             let total = 0;
             if (!statePerformance[year]) return total;
-
             statePerformance[year].forEach((state) => {
                 if (practices.includes("All Practices")) {
                     total += state.totalPaymentInDollars || 0;
@@ -368,14 +368,18 @@ const EQIPPracticeMap = ({
         },
         [statePerformance, year]
     );
-    const handleChipDelete = (value: string) => {
-        const newSelected = selectedPractices.filter((p) => p !== value);
-        const finalSelected = newSelected.length === 0 ? ["All Practices"] : newSelected;
-        setSelectedPractices(finalSelected);
-        if (onPracticeChange) {
-            onPracticeChange(finalSelected);
+    const handleChipDelete = (practiceToDelete) => {
+        let newSelected;
+        if (selectedPractices.length === 1) {
+            newSelected = ["All Practices"];
+        } else {
+            newSelected = selectedPractices.filter((p) => p !== practiceToDelete);
         }
-        fetchStatePerformanceData(finalSelected);
+        setSelectedPractices(newSelected);
+        if (onPracticeChange) {
+            onPracticeChange(newSelected);
+        }
+        fetchStatePerformanceData(newSelected);
     };
     const shouldShowLoading = isLoading && !selectedPractices.includes("All Practices");
     const hasValidData = statePerformance && statePerformance[year] && statePerformance[year].length > 0;
@@ -451,6 +455,22 @@ const EQIPPracticeMap = ({
                             </Box>
                         )}
                         sx={{ minWidth: 300 }}
+                        MenuProps={{
+                            PaperProps: {
+                                sx: {
+                                    maxHeight: 500,
+                                    overflowY: "auto",
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    border: "1px solid lightgray",
+                                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                                    bgcolor: "background.paper"
+                                    // extra style for menu since the length of the list is long
+                                }
+                            }
+                        }}
                     >
                         {practiceCategories.map((practice) => (
                             <MenuItem
