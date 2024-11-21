@@ -505,7 +505,7 @@ function TitleIIPracticeTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                ${programName} Practice Benefits by State
+                                {programName} Practice Benefits by State
                             </Typography>
                         </Box>
                     </Grid>
