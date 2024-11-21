@@ -10,13 +10,19 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Chip from "@mui/material/Chip";
 import * as d3 from "d3";
-import { config } from "../../app.config";
-import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
-import "../../styles/map.css";
-import legendConfig from "../../utils/legendConfig.json";
-import DrawLegend from "../shared/DrawLegend";
-import getPracticeTotal from "../shared/titleii/GetPracticeTotal";
-import { ShortFormat } from "../shared/ConvertionFormats";
+import { config } from "../../../app.config";
+import { useStyles, tooltipBkgColor } from "../MapTooltip";
+import "../../../styles/map.css";
+import DrawLegend from "../DrawLegend";
+import {
+    getPracticeTotal,
+    calculateNationalTotalMap,
+    getPracticeCategories,
+    getPracticeData,
+    getCustomScale,
+    computeTooltipContent
+} from "./PracticeMethods";
+import { PracticeMapProps } from "./Interface";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -44,62 +50,6 @@ const MapChart = ({
     selectedPractices
 }) => {
     const classes = useStyles();
-    const computeTooltipContent = (geo, record) => {
-        if (!record) return "";
-        let tooltipContent = `
-        <div class="map_tooltip">
-            <div class="${classes.tooltip_header}">
-                <b>${geo.properties.name}</b>
-            </div>
-            <table class="${classes.tooltip_table}">
-                <tbody>`;
-        let practiceTotal = 0;
-        if (selectedPractices.includes("All Practices")) {
-            practiceTotal = record.totalPaymentInDollars || 0;
-            tooltipContent += `
-                <tr>
-                    <td class="${classes.tooltip_topcell_left}">All Practices:</td>
-                    <td class="${classes.tooltip_topcell_right}">
-                        $${ShortFormat(practiceTotal, undefined, 2)}
-                    </td>
-                </tr>`;
-        } else {
-            selectedPractices.forEach((practice, index) => {
-                const practiceAmount = getPracticeTotal(record, practice);
-                practiceTotal += practiceAmount;
-                const displayName = practice.replace(/\s*\(\d+\)$/, "");
-                tooltipContent += `
-                    <tr>
-                        <td class="${index === 0 ? classes.tooltip_topcell_left : classes.tooltip_regularcell_left}">
-                            ${displayName}:
-                        </td>
-                        <td class="${index === 0 ? classes.tooltip_topcell_right : classes.tooltip_regularcell_right}">
-                            $${ShortFormat(practiceAmount, undefined, 2)}
-                        </td>
-                    </tr>`;
-            });
-        }
-        const nationalTotal = getNationalTotal(selectedPractices);
-        const totalPercentage = nationalTotal > 0 ? (practiceTotal / nationalTotal) * 100 : 0;
-        tooltipContent += `
-                <tr>
-                    <td class="${classes.tooltip_footer_left}">Total Benefits:</td>
-                    <td class="${classes.tooltip_footer_right}">
-                        $${ShortFormat(practiceTotal, undefined, 2)}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="${classes.tooltip_bottomcell_left}">PCT. Nationwide:</td>
-                    <td class="${classes.tooltip_bottomcell_right}">
-                        ${totalPercentage > 0 ? `${totalPercentage.toFixed(2)}%` : "0%"}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>`;
-        return tooltipContent;
-    };
-
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -123,7 +73,13 @@ const MapChart = ({
                                         key={geo.rsmKey}
                                         geography={geo}
                                         onMouseEnter={() => {
-                                            const tooltipContent = computeTooltipContent(geo, record);
+                                            const tooltipContent = computeTooltipContent(
+                                                geo,
+                                                record,
+                                                selectedPractices,
+                                                classes,
+                                                getNationalTotal
+                                            );
                                             ReactTooltip.rebuild();
                                             setReactTooltipContent(tooltipContent);
                                         }}
@@ -174,47 +130,15 @@ const MapChart = ({
     );
 };
 
-interface Practice {
-    practiceName: string;
-    practiceCode: string;
-    totalPaymentInDollars: number;
-}
-
-interface PracticeCategory {
-    practiceCategoryName: string;
-    totalPaymentInDollars: number;
-    practices: Practice[];
-}
-
-interface StatePerformance {
-    state: string;
-    totalPaymentInDollars: number;
-    statutes: Array<{
-        statuteName: string;
-        totalPaymentInDollars: number;
-        practiceCategories: PracticeCategory[];
-    }>;
-}
-
-interface EQIPPracticeMapProps {
-    initialStatePerformance: Record<string, StatePerformance[]>;
-    allStates: any;
-    year: string;
-    stateCodes: any;
-    practiceNames: Array<{
-        practiceName: string;
-        practiceCode: string;
-    }>;
-    onPracticeChange?: (practices: string[]) => void;
-}
-const EQIPPracticeMap = ({
+const TitleIIPracticeMap = ({
+    programName,
     initialStatePerformance,
     allStates,
     year,
     stateCodes,
     practiceNames,
     onPracticeChange
-}: EQIPPracticeMapProps) => {
+}: PracticeMapProps) => {
     const [content, setContent] = useState("");
     const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
     const classes = useStyles();
@@ -222,10 +146,7 @@ const EQIPPracticeMap = ({
     const [isLoading, setIsLoading] = useState(false);
 
     const practiceCategories = useMemo(() => {
-        if (!practiceNames || practiceNames.length === 0) {
-            return ["All Practices"];
-        }
-        return ["All Practices", ...practiceNames];
+        return getPracticeCategories(practiceNames);
     }, [practiceNames]);
     const fetchStatePerformanceData = async (selectedPracticeNames: string[]) => {
         if (selectedPracticeNames.includes("All Practices")) {
@@ -246,7 +167,9 @@ const EQIPPracticeMap = ({
             }
             const url = `${
                 config.apiUrl
-            }/titles/title-ii/programs/eqip/state-distribution?practice_code=${selectedCodes.join(",")}`;
+            }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${selectedCodes.join(
+                ","
+            )}`;
             const response = await fetch(url);
             const data = await response.json();
             setStatePerformance(data);
@@ -280,91 +203,17 @@ const EQIPPracticeMap = ({
     }, [statePerformance, selectedPractices]);
 
     const practiceData = useMemo(() => {
-        if (!statePerformance[year]) return [];
-        return statePerformance[year]
-            .map((state) => {
-                let total = 0;
-                if (selectedPractices.includes("All Practices")) {
-                    total = state.totalPaymentInDollars || 0;
-                } else {
-                    state.statutes?.forEach((statute) => {
-                        statute.practiceCategories?.forEach((category) => {
-                            selectedPractices.forEach((practice) => {
-                                const codeMatch = practice.match(/\((\d+)\)$/);
-                                const practiceCode = codeMatch ? codeMatch[1] : null;
-
-                                if (!practiceCode) return;
-
-                                if (!category.practices || category.practices.length === 0) {
-                                    if (practice.includes(category.practiceCategoryName)) {
-                                        total += category.totalPaymentInDollars || 0;
-                                    }
-                                } else {
-                                    category.practices.forEach((p) => {
-                                        const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
-                                        if (match === practiceCode) {
-                                            total += p.totalPaymentInDollars || 0;
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    });
-                }
-                return total;
-            })
-            .filter((value) => value > 0);
+        return getPracticeData(statePerformance, year, selectedPractices);
     }, [statePerformance, year, selectedPractices]);
     const maxValue = useMemo(() => Math.max(...practiceData, 0), [practiceData]);
     const customScale = useMemo(() => {
-        if (practiceData.length === 0) return legendConfig["Total EQIP"];
-
-        const sortedData = [...practiceData].sort((a, b) => a - b);
-        const quintileSize = Math.ceil(sortedData.length / 5);
-
-        return [
-            sortedData[quintileSize],
-            sortedData[quintileSize * 2],
-            sortedData[quintileSize * 3],
-            sortedData[quintileSize * 4]
-        ];
+        return getCustomScale(practiceData, `Total ${programName}`);
     }, [practiceData]);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const getNationalTotal = React.useCallback(
         (practices: string[]) => {
-            let total = 0;
-            if (!statePerformance[year]) return total;
-            statePerformance[year].forEach((state) => {
-                if (practices.includes("All Practices")) {
-                    total += state.totalPaymentInDollars || 0;
-                } else {
-                    practices.forEach((practice) => {
-                        const codeMatch = practice.match(/\((\d+)\)$/);
-                        const practiceCode = codeMatch ? codeMatch[1] : null;
-
-                        if (!practiceCode) return;
-
-                        state.statutes?.forEach((statute) => {
-                            statute.practiceCategories?.forEach((category) => {
-                                if (!category.practices || category.practices.length === 0) {
-                                    if (practice.includes(category.practiceCategoryName)) {
-                                        total += category.totalPaymentInDollars || 0;
-                                    }
-                                } else {
-                                    category.practices.forEach((p) => {
-                                        const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
-                                        if (match === practiceCode) {
-                                            total += p.totalPaymentInDollars || 0;
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    });
-                }
-            });
-            return total;
+            return calculateNationalTotalMap(statePerformance, practices, year);
         },
         [statePerformance, year]
     );
@@ -393,10 +242,10 @@ const EQIPPracticeMap = ({
     return (
         <Box>
             <Box display="flex" justifyContent="center" sx={{ pt: 30 }}>
-                {maxValue !== 0 ? (
+                {selectedPractices.length > 0 ? (
                     <DrawLegend
                         colorScale={colorScale}
-                        title={titleElement(selectedPractices, year)}
+                        title={titleElement(programName, selectedPractices, year)}
                         programData={practiceData}
                         prepColor={mapColor}
                         initRatioLarge={0.6}
@@ -407,7 +256,7 @@ const EQIPPracticeMap = ({
                     />
                 ) : (
                     <div>
-                        {titleElement(selectedPractices, year)}
+                        {titleElement(programName, selectedPractices, year)}
                         <Box display="flex" justifyContent="center">
                             <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
                                 Please select at least one practice category.
@@ -461,9 +310,6 @@ const EQIPPracticeMap = ({
                                     maxHeight: 500,
                                     overflowY: "auto",
                                     position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)",
                                     border: "1px solid lightgray",
                                     boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
                                     bgcolor: "background.paper"
@@ -516,13 +362,13 @@ const EQIPPracticeMap = ({
     );
 };
 
-const titleElement = (practices: string[], year: string): JSX.Element => {
+const titleElement = (programName, practices: string[], year: string): JSX.Element => {
     const practiceLabel = practices.length > 0 ? practices.join(", ") : "No practices selected";
     return (
         <Box>
             <Typography variant="h6" textAlign="center">
-                <strong>{practiceLabel === "All Practices" ? "Total EQIP" : practiceLabel}</strong> Benefits from{" "}
-                <strong>{year}</strong>
+                <strong>{practiceLabel === "All Practices" ? `Total ${programName}` : practiceLabel}</strong> Benefits
+                from <strong>{year}</strong>
             </Typography>
             <Typography style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
                 <i>Grey states indicate no available data</i>
@@ -531,4 +377,4 @@ const titleElement = (practices: string[], year: string): JSX.Element => {
     );
 };
 
-export default EQIPPracticeMap;
+export default TitleIIPracticeMap;

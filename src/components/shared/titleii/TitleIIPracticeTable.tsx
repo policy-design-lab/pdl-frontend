@@ -4,10 +4,10 @@ import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
-import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
-import getPracticeTotal from "../shared/titleii/GetPracticeTotal";
-import "../../styles/table.css";
-import getCSVData from "../shared/getCSVData";
+import { compareWithDollarSign, compareWithPercentSign } from "../TableCompareFunctions";
+import "../../../styles/table.css";
+import getCSVData from "../getCSVData";
+import { getPracticeTotal } from "./PracticeMethods";
 
 const Styles = styled.div`
     padding: 0;
@@ -94,8 +94,7 @@ const Styles = styled.div`
     }
 `;
 
-function Table({ columns, data, initialState }) {
-    const state = React.useMemo(() => initialState, []);
+function Table({ programName, columns, data }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -121,16 +120,12 @@ function Table({ columns, data, initialState }) {
         useSortBy,
         usePagination
     );
-
+    const fileName = `${programName}-practice-data.csv`;
     return (
         <div>
             {data && data.length > 0 ? (
                 <div style={{ width: "100%" }}>
-                    <CSVLink
-                        className="downloadbtn"
-                        filename="eqip-practice-data.csv"
-                        data={getCSVData(headerGroups, data)}
-                    >
+                    <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
                         Export This Table to CSV
                     </CSVLink>
 
@@ -266,12 +261,14 @@ function Table({ columns, data, initialState }) {
     );
 }
 
-function EQIPPracticeTable({
+function TitleIIPracticeTable({
+    programName,
     statePerformance,
     year,
     stateCodes,
     selectedPractices
 }: {
+    programName: string;
     statePerformance: any;
     year: string;
     stateCodes: any;
@@ -356,12 +353,12 @@ function EQIPPracticeTable({
         if (selectedPractices.includes("All Practices")) {
             cols.push(
                 {
-                    Header: "Total EQIP Benefits",
+                    Header: `Total ${programName} Benefits`,
                     accessor: "Total Benefits",
                     sortType: compareWithDollarSign
                 },
                 {
-                    Header: "EQIP Pct. Nationwide",
+                    Header: `${programName} Pct. Nationwide`,
                     accessor: "Percentage Nationwide",
                     sortType: compareWithPercentSign
                 }
@@ -416,23 +413,16 @@ function EQIPPracticeTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                EQIP Practice Benefits by State
+                                ${programName} Practice Benefits by State
                             </Typography>
                         </Box>
                     </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
-                    <Table
-                        columns={columns}
-                        data={resultData}
-                        initialState={{
-                            pageSize: 10,
-                            pageIndex: 0
-                        }}
-                    />
+                    <Table programName={programName} columns={columns} data={resultData} />
                 </TableContainer>
             </Styles>
         </Box>
     );
 }
-export default EQIPPracticeTable;
+export default TitleIIPracticeTable;

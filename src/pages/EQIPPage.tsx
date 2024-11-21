@@ -4,18 +4,14 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
-import DataTable from "../components/eqip/EQIPPracticeTable";
+import DataTable from "../components/shared/titleii/TitleIIPracticeTable";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
-import EQIPPracticeMap from "../components/eqip/EQIPPracticeMap";
-
-interface PracticeName {
-    practiceName: string;
-    practiceCode: string;
-}
+import { PracticeName } from "../components/shared/titleii/Interface";
+import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
 
 export default function EQIPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -190,7 +186,8 @@ export default function EQIPPage(): JSX.Element {
                             component="div"
                             sx={{ width: "85%", m: "auto", display: checked !== 0 ? "none" : "block" }}
                         >
-                            <EQIPPracticeMap
+                            <TitleIIPracticeMap
+                                programName="EQIP"
                                 initialStatePerformance={statePerformance}
                                 allStates={allStates}
                                 year={eqip_year}
@@ -395,6 +392,7 @@ export default function EQIPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                             <DataTable
+                                programName="EQIP"
                                 statePerformance={statePerformance}
                                 year={eqip_year}
                                 stateCodes={stateCodesArray}
