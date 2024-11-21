@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
@@ -95,6 +95,15 @@ const Styles = styled.div`
 `;
 
 function Table({ programName, columns, data }) {
+    const [columnPage, setColumnPage] = useState(0);
+    const columnsPerPage = 6;
+    const visibleColumnIndices = React.useMemo(() => {
+        const startIndex = columnPage * columnsPerPage + 1;
+        const endIndex = Math.min(startIndex + columnsPerPage, columns.length);
+        return Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex);
+    }, [columnPage, columnsPerPage, columns.length]);
+
+    const totalColumnPages = Math.ceil((columns.length - 1) / columnsPerPage);
     const {
         getTableProps,
         getTableBodyProps,
@@ -128,45 +137,116 @@ function Table({ programName, columns, data }) {
                     <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
                         Export This Table to CSV
                     </CSVLink>
-
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginBottom: 2
+                        }}
+                    >
+                        <button type="button" onClick={() => setColumnPage(0)} disabled={columnPage === 0}>
+                            {"<<"}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setColumnPage((prev) => Math.max(0, prev - 1))}
+                            disabled={columnPage === 0}
+                        >
+                            {"<"}
+                        </button>
+                        <span style={{ paddingLeft: 8 }}>
+                            Column Page
+                            <strong style={{ padding: "0px 8px" }}>
+                                {columnPage + 1} of {totalColumnPages}
+                            </strong>
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setColumnPage((prev) => Math.min(totalColumnPages - 1, prev + 1))}
+                            disabled={columnPage === totalColumnPages - 1}
+                        >
+                            {">"}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setColumnPage(totalColumnPages - 1)}
+                            disabled={columnPage === totalColumnPages - 1}
+                        >
+                            {">>"}
+                        </button>
+                    </Box>
                     <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                         <thead>
                             {headerGroups.map((headerGroup) => (
-                                <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map((column) => (
-                                        <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup}>
+                                    <th
+                                        {...headerGroup.headers[0].getHeaderProps(
+                                            headerGroup.headers[0].getSortByToggleProps()
+                                        )}
+                                        style={{
+                                            position: "sticky",
+                                            left: 0,
+                                            background: "rgba(241, 241, 241, 1)",
+                                            zIndex: 2
+                                        }}
+                                    >
+                                        {headerGroup.headers[0].render("Header")}
+                                        <span>
                                             {(() => {
-                                                const headerText = column.render("Header");
-                                                if (typeof headerText === "string" && headerText.includes(":")) {
-                                                    const [beforeColon, afterColon] = headerText.split(":");
+                                                const column = headerGroup.headers[0];
+                                                if (!column.isSorted)
                                                     return (
-                                                        <>
-                                                            <div>
-                                                                <strong>{beforeColon}</strong>
-                                                            </div>
-                                                            <span>{afterColon.trim()}</span>
-                                                        </>
+                                                        <Box sx={{ ml: 1, display: "inline" }}>
+                                                            <SwapVertIcon />
+                                                        </Box>
                                                     );
-                                                }
-                                                return headerText;
+                                                if (column.isSortedDesc)
+                                                    return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
+                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
                                             })()}
-                                            <span>
+                                        </span>
+                                    </th>
+                                    {headerGroup.headers
+                                        .filter((_, index) => visibleColumnIndices.includes(index))
+                                        .map((column) => (
+                                            <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column}>
                                                 {(() => {
-                                                    if (!column.isSorted)
+                                                    const headerText = column.render("Header");
+                                                    if (typeof headerText === "string" && headerText.includes(":")) {
+                                                        const [beforeColon, afterColon] = headerText.split(":");
                                                         return (
-                                                            <Box sx={{ ml: 1, display: "inline" }}>
-                                                                <SwapVertIcon />
-                                                            </Box>
+                                                            <>
+                                                                <div>
+                                                                    <strong>{beforeColon}</strong>
+                                                                </div>
+                                                                <span>{afterColon.trim()}</span>
+                                                            </>
                                                         );
-                                                    if (column.isSortedDesc)
-                                                        return (
-                                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>
-                                                        );
-                                                    return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
+                                                    }
+                                                    return headerText;
                                                 })()}
-                                            </span>
-                                        </th>
-                                    ))}
+                                                <span>
+                                                    {(() => {
+                                                        if (!column.isSorted)
+                                                            return (
+                                                                <Box sx={{ ml: 1, display: "inline" }}>
+                                                                    <SwapVertIcon />
+                                                                </Box>
+                                                            );
+                                                        if (column.isSortedDesc)
+                                                            return (
+                                                                <Box sx={{ ml: 1, display: "inline" }}>
+                                                                    {"\u{25BC}"}
+                                                                </Box>
+                                                            );
+                                                        return (
+                                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>
+                                                        );
+                                                    })()}
+                                                </span>
+                                            </th>
+                                        ))}
                                 </tr>
                             ))}
                         </thead>
@@ -174,23 +254,35 @@ function Table({ programName, columns, data }) {
                             {page.map((row, i) => {
                                 prepareRow(row);
                                 return (
-                                    <tr key={row.id} {...row.getRowProps()}>
-                                        {row.cells.map((cell, j) => (
-                                            <td
-                                                className={`cell${j}`}
-                                                key={cell.id}
-                                                {...cell.getCellProps()}
-                                                style={{ width: "100%", whiteSpace: "nowrap" }}
-                                            >
-                                                {cell.render("Cell")}
-                                            </td>
-                                        ))}
+                                    <tr {...row.getRowProps()} key={row}>
+                                        <td
+                                            {...row.cells[0].getCellProps()}
+                                            style={{
+                                                position: "sticky",
+                                                left: 0,
+                                                background: "white",
+                                                zIndex: 1
+                                            }}
+                                        >
+                                            {row.cells[0].render("Cell")}
+                                        </td>
+                                        {row.cells
+                                            .filter((_, index) => visibleColumnIndices.includes(index))
+                                            .map((cell, j) => (
+                                                <td
+                                                    key={`cell${j + 1}`}
+                                                    className={`cell${j + 1}`}
+                                                    {...cell.getCellProps()}
+                                                    style={{ width: "100%", whiteSpace: "nowrap" }}
+                                                >
+                                                    {cell.render("Cell")}
+                                                </td>
+                                            ))}
                                     </tr>
                                 );
                             })}
                         </tbody>
                     </table>
-
                     <Box
                         className="pagination"
                         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
@@ -198,24 +290,24 @@ function Table({ programName, columns, data }) {
                         <Box>
                             <button type="button" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                                 {"<<"}
-                            </button>{" "}
+                            </button>
                             <button type="button" onClick={() => previousPage()} disabled={!canPreviousPage}>
                                 {"<"}
-                            </button>{" "}
+                            </button>
                             <button type="button" onClick={() => nextPage()} disabled={!canNextPage}>
                                 {">"}
-                            </button>{" "}
+                            </button>
                             <button type="button" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
                                 {">>"}
-                            </button>{" "}
-                            <span>
-                                Page{" "}
-                                <strong>
+                            </button>
+                            <span style={{ paddingLeft: 8 }}>
+                                Page
+                                <strong style={{ padding: 8 }}>
                                     {pageIndex + 1} of {pageOptions.length}
-                                </strong>{" "}
+                                </strong>
                             </span>
                             <span>
-                                | Go to page:{" "}
+                                | Go to page:
                                 <input
                                     type="number"
                                     defaultValue={pageIndex + 1}
@@ -225,9 +317,9 @@ function Table({ programName, columns, data }) {
                                         if (p < 0) p = 0;
                                         gotoPage(p);
                                     }}
-                                    style={{ width: "3em" }}
+                                    style={{ width: "3em", marginLeft: 8 }}
                                 />
-                            </span>{" "}
+                            </span>
                             <select
                                 value={pageSize}
                                 onChange={(e) => {
