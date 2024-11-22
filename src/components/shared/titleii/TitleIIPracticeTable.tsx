@@ -400,7 +400,6 @@ function TitleIIPracticeTable({
 
     const resultData = React.useMemo(() => {
         if (!statePerformance[year]) return [];
-
         return statePerformance[year].map((stateData) => {
             const stateCode = stateCodes.find((obj) => obj.code === stateData.state);
             const stateName = stateCode ? stateCode.name : stateData.state;

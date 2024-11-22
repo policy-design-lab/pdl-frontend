@@ -2,14 +2,16 @@ const getCSVData = (headerGroups, data) => {
     if (!data || !data.length) {
         return [];
     }
+    const headers = headerGroups[0].headers;
     const csvData = [
-        headerGroups[0].headers.map((column) => column.render("Header")),
+        headers.map((column) => column.render("Header")),
         ...data.map((row) => {
             if (!row) {
                 return [];
             }
-            return Object.entries(row).map(([key, cell]) => {
-                return cell || "";
+            return headers.map((column) => {
+                const value = row[column.id] || "";
+                return value;
             });
         })
     ];
