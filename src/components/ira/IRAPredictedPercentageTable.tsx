@@ -323,6 +323,9 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         return Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex);
     }, [columnPage, columnsPerPage, columns.length]);
     const totalColumnPages = Math.ceil((columns.length - 1) / columnsPerPage);
+    React.useEffect(() => {
+        setColumnPage(0);
+    }, [columns.length]);
     const {
         getTableProps,
         getTableBodyProps,

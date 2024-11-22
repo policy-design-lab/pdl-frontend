@@ -102,7 +102,9 @@ function Table({ programName, columns, data }) {
         const endIndex = Math.min(startIndex + columnsPerPage, columns.length);
         return Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex);
     }, [columnPage, columnsPerPage, columns.length]);
-
+    React.useEffect(() => {
+        setColumnPage(0);
+    }, [columns.length]);
     const totalColumnPages = Math.ceil((columns.length - 1) / columnsPerPage);
     const {
         getTableProps,
