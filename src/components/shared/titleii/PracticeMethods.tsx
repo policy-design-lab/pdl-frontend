@@ -45,24 +45,50 @@ export const getPracticeCategories = (practiceNames) => {
     }
     return ["All Practices", ...practiceNames];
 };
+export const calculateNationalTotalMap = (statePerformance, practices, year) => {
+    let total = 0;
+    if (!statePerformance[year]) return total;
+    if (practices.includes("All Practices")) {
+        statePerformance[year].forEach((state) => {
+            total += state.totalPaymentInDollars || 0;
+        });
+        return total;
+    }
+    statePerformance[year].forEach((state) => {
+        practices.forEach((practice) => {
+            const practiceAmount = getPracticeTotal(state, practice);
+            total += practiceAmount;
+        });
+    });
+
+    return total;
+};
 export const getPracticeTotal = (record, practiceName) => {
     if (!record || !record.statutes) return 0;
     if (practiceName === "All Practices") {
         return record.totalPaymentInDollars || 0;
     }
+
+    // Use PracticeNameMatch for consistent code extraction
     const codeMatch = PracticeNameMatch(practiceName);
     const practiceCode = codeMatch || null;
-    const practiceName_noCode = practiceName.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
+    // Strip anything in parentheses at the end
+    const practiceName_noCode = practiceName.replace(/\s*\([^)]*\)$/, "");
+
     let total = 0;
     record.statutes?.forEach((statute) => {
         if (!statute.practiceCategories) return;
         statute.practiceCategories.forEach((category) => {
+            // Match for category totals
             if (practiceName_noCode === category.practiceCategoryName) {
                 total += category.totalPaymentInDollars || 0;
                 return;
             }
+
+            // Match for specific practices
             if (practiceCode && Array.isArray(category.practices) && category.practices.length > 0) {
                 category.practices.forEach((practice) => {
+                    // Use same PracticeNameMatch for consistent comparison
                     const currentPracticeCode = PracticeNameMatch(practice.practiceName);
                     if (currentPracticeCode === practiceCode) {
                         total += practice.totalPaymentInDollars || 0;
@@ -71,43 +97,9 @@ export const getPracticeTotal = (record, practiceName) => {
             }
         });
     });
+
     return total;
 };
-
-export const calculateNationalTotalMap = (statePerformance, practices, year) => {
-    let total = 0;
-    if (!statePerformance[year]) return total;
-    statePerformance[year].forEach((state) => {
-        if (practices.includes("All Practices")) {
-            total += state.totalPaymentInDollars || 0;
-        } else {
-            practices.forEach((practice) => {
-                const practiceCode = PracticeNameMatch(practice);
-                if (!practiceCode) return;
-
-                state.statutes?.forEach((statute) => {
-                    statute.practiceCategories?.forEach((category) => {
-                        if (!category.practices || category.practices.length === 0) {
-                            const categoryMatch = practice.includes(category.practiceCategoryName);
-                            if (categoryMatch) {
-                                total += category.totalPaymentInDollars || 0;
-                            }
-                        } else {
-                            category.practices.forEach((p) => {
-                                const practiceMatch = PracticeNameMatch(p.practiceName);
-                                if (practiceMatch === practiceCode) {
-                                    total += p.totalPaymentInDollars || 0;
-                                }
-                            });
-                        }
-                    });
-                });
-            });
-        }
-    });
-    return total;
-};
-
 export const getCustomScale = (practiceData, configName) => {
     if (practiceData.length === 0) return legendConfig[configName];
 
@@ -132,6 +124,7 @@ export const computeTooltipContent = (geo, record, selectedPractices, classes, g
             <table class="${classes.tooltip_table}">
                 <tbody>`;
     let practiceTotal = 0;
+    const nationalTotal = getNationalTotal(selectedPractices);
     if (selectedPractices.includes("All Practices")) {
         practiceTotal = record.totalPaymentInDollars || 0;
         tooltipContent += `
@@ -146,18 +139,22 @@ export const computeTooltipContent = (geo, record, selectedPractices, classes, g
             const practiceAmount = getPracticeTotal(record, practice);
             practiceTotal += practiceAmount;
             const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
+
+            // Calculate individual practice percentage
+            const practiceNationalTotal = getNationalTotal([practice]);
+            const practicePercentage = practiceNationalTotal > 0 ? (practiceAmount / practiceNationalTotal) * 100 : 0;
+
             tooltipContent += `
                     <tr>
                         <td class="${index === 0 ? classes.tooltip_topcell_left : classes.tooltip_regularcell_left}">
                             ${displayName}:
                         </td>
                         <td class="${index === 0 ? classes.tooltip_topcell_right : classes.tooltip_regularcell_right}">
-                            $${ShortFormat(practiceAmount, undefined, 2)}
+                            $${ShortFormat(practiceAmount, undefined, 2)} (${practicePercentage.toFixed(2)}%)
                         </td>
                     </tr>`;
         });
     }
-    const nationalTotal = getNationalTotal(selectedPractices);
     const totalPercentage = nationalTotal > 0 ? (practiceTotal / nationalTotal) * 100 : 0;
     tooltipContent += `
                 <tr>
@@ -167,7 +164,7 @@ export const computeTooltipContent = (geo, record, selectedPractices, classes, g
                     </td>
                 </tr>
                 <tr>
-                    <td class="${classes.tooltip_bottomcell_left}">PCT. Nationwide:</td>
+                    <td class="${classes.tooltip_bottomcell_left}">PCT. of Selected Practice(s):</td>
                     <td class="${classes.tooltip_bottomcell_right}">
                         ${totalPercentage > 0 ? `${totalPercentage.toFixed(2)}%` : "0%"}
                     </td>
@@ -175,5 +172,6 @@ export const computeTooltipContent = (geo, record, selectedPractices, classes, g
             </tbody>
         </table>
     </div>`;
+
     return tooltipContent;
 };

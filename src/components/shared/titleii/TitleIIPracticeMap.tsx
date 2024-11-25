@@ -131,6 +131,19 @@ const MapChart = ({
     );
 };
 
+function encodeQueryParams(params) {
+    return Object.entries(params)
+        .map(([key, value]) => {
+            const encodedValue = encodeURIComponent(value);
+            return `${key}=${encodedValue}`;
+        })
+        .join("&");
+}
+
+function buildURL(baseUrl, params) {
+    const encodedParams = encodeQueryParams(params);
+    return `${baseUrl}?${encodedParams}`;
+}
 const TitleIIPracticeMap = ({
     programName,
     initialStatePerformance,
@@ -170,11 +183,11 @@ const TitleIIPracticeMap = ({
                 setStatePerformance(initialStatePerformance);
                 return;
             }
+            window.alert(selectedCodes);
+            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join(",");
             const url = `${
                 config.apiUrl
-            }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${selectedCodes.join(
-                ","
-            )}`;
+            }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${encodedCodes}`;
             const response = await fetch(url);
             const data = await response.json();
             setStatePerformance(data);
