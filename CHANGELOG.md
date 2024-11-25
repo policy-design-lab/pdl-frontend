@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Add selector to the EQIP and CSO total page for users to select the program and get the total amount of the selected programs in both the map and the table [#329](https://github.com/policy-design-lab/pdl-frontend/issues/329) 
+- Add table column pagination to the EQIP and CSO total page to allow users to navigate through the table columns [#331](https://github.com/policy-design-lab/pdl-frontend/issues/331) 
+
 ## [1.3.0] - 2024-11-04
 
 ### Changed

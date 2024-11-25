@@ -74,7 +74,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     />
                     <Label value={label2} position="center" dy={-15} />
                     {data.map((entry) => (
-                        <Cell key={entry.id} fill={entry.color} />
+                        <Cell key={entry.color} fill={entry.color} />
                     ))}
                 </Pie>
                 <Pie
@@ -90,7 +90,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
                     label={renderCustomizedLabel2}
                 >
                     {data.map((entry) => (
-                        <Cell key={entry.id} fillOpacity={0} />
+                        <Cell key={entry.color} fillOpacity={0} />
                     ))}
                 </Pie>
                 <Tooltip
