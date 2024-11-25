@@ -1,5 +1,5 @@
 const PracticeNameMatch = (practiceName: string) => {
-    if (!practiceName.includes('(')) {
+    if (!practiceName.includes("(")) {
         return practiceName;
     }
     // The outermost parentheses are captured, and everything inside those parentheses got returned
