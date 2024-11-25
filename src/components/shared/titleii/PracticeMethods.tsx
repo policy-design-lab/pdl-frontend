@@ -52,7 +52,7 @@ export const getPracticeTotal = (record, practiceName) => {
     }
     const codeMatch = PracticeNameMatch(practiceName);
     const practiceCode = codeMatch || null;
-    const practiceName_noCode = practiceName.replace(/\s*\(\d+\)$/, "");
+    const practiceName_noCode = practiceName.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
     let total = 0;
     record.statutes?.forEach((statute) => {
         if (!statute.practiceCategories) return;
@@ -145,7 +145,7 @@ export const computeTooltipContent = (geo, record, selectedPractices, classes, g
         selectedPractices.forEach((practice, index) => {
             const practiceAmount = getPracticeTotal(record, practice);
             practiceTotal += practiceAmount;
-            const displayName = practice.replace(/\s*\(\d+\)$/, "");
+            const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
             tooltipContent += `
                     <tr>
                         <td class="${index === 0 ? classes.tooltip_topcell_left : classes.tooltip_regularcell_left}">

@@ -420,8 +420,7 @@ function TitleIIPracticeTable({
                     const practiceNationalTotal = getNationalTotalForPractice(practice);
                     const practicePercentage =
                         practiceNationalTotal > 0 ? (practiceBenefits / practiceNationalTotal) * 100 : 0;
-
-                    const displayName = practice.replace(/\s*\(\d+\)$/, "");
+                    const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
                     row[`${displayName}: Benefits`] = `$${practiceBenefits.toLocaleString(undefined, {
                         minimumFractionDigits: 2
                     })}`;
@@ -470,7 +469,7 @@ function TitleIIPracticeTable({
                 }
             );
             selectedPractices.forEach((practice) => {
-                const displayName = practice.replace(/\s*\(\d+\)$/, "");
+                const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
                 cols.push(
                     {
                         Header: `${displayName}: Benefits`,
