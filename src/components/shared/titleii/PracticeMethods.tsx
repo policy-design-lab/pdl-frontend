@@ -1,30 +1,31 @@
 import legendConfig from "../../../utils/legendConfig.json";
 import { ShortFormat } from "../ConvertionFormats";
+import PracticeNameMatch from "./PracticeNameMatch";
 
 export const getPracticeData = (statePerformance, year, selectedPractices) => {
     if (!statePerformance[year]) return [];
+
     return statePerformance[year]
         .map((state) => {
             let total = 0;
             if (selectedPractices.includes("All Practices")) {
                 total = state.totalPaymentInDollars || 0;
             } else {
-                state.statutes?.forEach((statute) => {
-                    statute.practiceCategories?.forEach((category) => {
-                        selectedPractices.forEach((practice) => {
-                            const codeMatch = practice.match(/\((\d+)\)$/);
-                            const practiceCode = codeMatch ? codeMatch[1] : null;
-
-                            if (!practiceCode) return;
-
+                selectedPractices.forEach((practice) => {
+                    const practiceCode = PracticeNameMatch(practice);
+                    if (!practiceCode) return;
+                    state.statutes?.forEach((statute) => {
+                        statute.practiceCategories?.forEach((category) => {
                             if (!category.practices || category.practices.length === 0) {
-                                if (practice.includes(category.practiceCategoryName)) {
+                                // Handle category level match
+                                const categoryMatch = practice.includes(category.practiceCategoryName);
+                                if (categoryMatch) {
                                     total += category.totalPaymentInDollars || 0;
                                 }
                             } else {
                                 category.practices.forEach((p) => {
-                                    const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
-                                    if (match === practiceCode) {
+                                    const practiceMatch = PracticeNameMatch(p.practiceName);
+                                    if (practiceMatch === practiceCode) {
                                         total += p.totalPaymentInDollars || 0;
                                     }
                                 });
@@ -44,14 +45,13 @@ export const getPracticeCategories = (practiceNames) => {
     }
     return ["All Practices", ...practiceNames];
 };
-
 export const getPracticeTotal = (record, practiceName) => {
     if (!record || !record.statutes) return 0;
     if (practiceName === "All Practices") {
         return record.totalPaymentInDollars || 0;
     }
-    const codeMatch = practiceName.match(/\((\d+)\)$/);
-    const practiceCode = codeMatch ? codeMatch[1] : null;
+    const codeMatch = PracticeNameMatch(practiceName);
+    const practiceCode = codeMatch ? codeMatch : null;
     const practiceName_noCode = practiceName.replace(/\s*\(\d+\)$/, "");
     let total = 0;
     record.statutes?.forEach((statute) => {
@@ -61,10 +61,9 @@ export const getPracticeTotal = (record, practiceName) => {
                 total += category.totalPaymentInDollars || 0;
                 return;
             }
-
             if (practiceCode && Array.isArray(category.practices) && category.practices.length > 0) {
                 category.practices.forEach((practice) => {
-                    const currentPracticeCode = practice.practiceName?.match(/\((\d+)\)$/)?.[1];
+                    const currentPracticeCode = PracticeNameMatch(practice.practiceName);
                     if (currentPracticeCode === practiceCode) {
                         total += practice.totalPaymentInDollars || 0;
                     }
@@ -83,19 +82,20 @@ export const calculateNationalTotalMap = (statePerformance, practices, year) => 
             total += state.totalPaymentInDollars || 0;
         } else {
             practices.forEach((practice) => {
-                const codeMatch = practice.match(/\((\d+)\)$/);
-                const practiceCode = codeMatch ? codeMatch[1] : null;
+                const practiceCode = PracticeNameMatch(practice);
                 if (!practiceCode) return;
+
                 state.statutes?.forEach((statute) => {
                     statute.practiceCategories?.forEach((category) => {
                         if (!category.practices || category.practices.length === 0) {
-                            if (practice.includes(category.practiceCategoryName)) {
+                            const categoryMatch = practice.includes(category.practiceCategoryName);
+                            if (categoryMatch) {
                                 total += category.totalPaymentInDollars || 0;
                             }
                         } else {
                             category.practices.forEach((p) => {
-                                const match = p.practiceName?.match(/\((\d+)\)$/)?.[1];
-                                if (match === practiceCode) {
+                                const practiceMatch = PracticeNameMatch(p.practiceName);
+                                if (practiceMatch === practiceCode) {
                                     total += p.totalPaymentInDollars || 0;
                                 }
                             });
@@ -105,6 +105,7 @@ export const calculateNationalTotalMap = (statePerformance, practices, year) => 
             });
         }
     });
+    console.log("calculateNationalTotalMap: " + total);
     return total;
 };
 

@@ -23,6 +23,7 @@ import {
     computeTooltipContent
 } from "./PracticeMethods";
 import { PracticeMapProps } from "./Interface";
+import PracticeNameMatch from "./PracticeNameMatch";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -157,8 +158,12 @@ const TitleIIPracticeMap = ({
         try {
             const selectedCodes = selectedPracticeNames
                 .map((practiceName) => {
-                    const match = practiceName.match(/\((\d+)\)$/);
-                    return match ? match[1] : null;
+                    const match = PracticeNameMatch(practiceName);
+                    if (match === null) {
+                        console.error(`Could not match practice name: ${practiceName}`);
+                        return null;
+                    }
+                    return match;
                 })
                 .filter((code) => code !== null);
             if (selectedCodes.length === 0) {
