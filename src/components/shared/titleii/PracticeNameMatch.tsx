@@ -1,5 +1,5 @@
 const PracticeNameMatch = (practiceName: string) => {
-   if (/^[A-Z]+$/.test(practiceName)) {
+    if (/^[A-Z]+$/.test(practiceName)) {
         return practiceName;
     }
     const match = practiceName.match(/\(([^)]+)\)$/);

@@ -51,7 +51,7 @@ export const getPracticeTotal = (record, practiceName) => {
         return record.totalPaymentInDollars || 0;
     }
     const codeMatch = PracticeNameMatch(practiceName);
-    const practiceCode = codeMatch ? codeMatch : null;
+    const practiceCode = codeMatch || null;
     const practiceName_noCode = practiceName.replace(/\s*\(\d+\)$/, "");
     let total = 0;
     record.statutes?.forEach((statute) => {
@@ -105,7 +105,6 @@ export const calculateNationalTotalMap = (statePerformance, practices, year) => 
             });
         }
     });
-    console.log("calculateNationalTotalMap: " + total);
     return total;
 };
 
