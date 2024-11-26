@@ -4,13 +4,14 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import SemiDonutChart from "../components/SemiDonutChart";
-import DataTable from "../components/csp/CSPTotalTable";
-import CSPTotalMap from "../components/csp/CSPTotalMap";
+import DataTable from "../components/shared/titleii/TitleIIPracticeTable";
 import CategoryTable from "../components/csp/CategoryTable";
 import CategoryMap from "../components/csp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import { PracticeName } from "../components/shared/titleii/Interface";
+import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
 
 export default function CSPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -26,6 +27,14 @@ export default function CSPPage(): JSX.Element {
     const [secondTotal, setSecondTotal] = React.useState(0);
     const [thirdTotal, setThirdTotal] = React.useState(0);
     const [zeroCategories, setZeroCategories] = React.useState([]);
+    const [isDataReady, setIsDataReady] = React.useState(false);
+
+    // connect to selector endpoint
+    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
+    const [cspPracticeNames, setCspPracticeNames] = React.useState<PracticeName[]>([]);
+    const handlePracticeChange = (practices: string[]) => {
+        setSelectedPractices(practices);
+    };
 
     const defaultTheme = createTheme();
     let landManagementTotal = 0;
@@ -53,30 +62,34 @@ export default function CSPPage(): JSX.Element {
     const csp_year = "2018-2022";
 
     React.useEffect(() => {
-        const state_perf_url = `${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`;
-        getJsonDataFromUrl(state_perf_url).then((response) => {
-            const converted_perf_json = response;
-            setStatePerformance(converted_perf_json);
-        });
-
-        const allstates_url = `${config.apiUrl}/states`;
-        getJsonDataFromUrl(allstates_url).then((response) => {
-            const converted_json = response;
-            setAllStates(converted_json);
-        });
-
-        const statecode_url = `${config.apiUrl}/statecodes`;
-        getJsonDataFromUrl(statecode_url).then((response) => {
-            setStateCodesArray(response);
-            const converted_json = convertAllState(response);
-            setStateCodesData(converted_json);
-        });
-
-        const chartdata_url = `${config.apiUrl}/titles/title-ii/programs/csp/summary`;
-        getJsonDataFromUrl(chartdata_url).then((response) => {
-            const converted_chart_json = response;
-            processData(converted_chart_json);
-        });
+        const fetchData = async () => {
+            try {
+                const [
+                    statePerformanceResponse,
+                    allStatesResponse,
+                    stateCodesResponse,
+                    chartDataResponse,
+                    cspPracticeNameResponse
+                ] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp/state-distribution`),
+                    getJsonDataFromUrl(`${config.apiUrl}/states`),
+                    getJsonDataFromUrl(`${config.apiUrl}/statecodes`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp/summary`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-ii/programs/csp/practice-names`)
+                ]);
+                setStatePerformance(statePerformanceResponse);
+                setAllStates(allStatesResponse);
+                setStateCodesArray(stateCodesResponse);
+                const converted_json = convertAllState(stateCodesResponse);
+                setStateCodesData(converted_json);
+                processData(chartDataResponse);
+                setCspPracticeNames(cspPracticeNameResponse);
+                setIsDataReady(true);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     const processData = (chartData) => {
@@ -228,11 +241,14 @@ export default function CSPPage(): JSX.Element {
                                 display: checked !== 0 ? "none" : "block"
                             }}
                         >
-                            <CSPTotalMap
-                                statePerformance={statePerformance}
+                            <TitleIIPracticeMap
+                                programName="CSP"
+                                initialStatePerformance={statePerformance}
                                 allStates={allStates}
                                 year={csp_year}
                                 stateCodes={stateCodesData}
+                                practiceNames={cspPracticeNames[csp_year]}
+                                onPracticeChange={handlePracticeChange}
                             />
                         </Box>
                         <Box
@@ -599,9 +615,11 @@ export default function CSPPage(): JSX.Element {
                         </Box>
                         <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                             <DataTable
+                                programName="CSP"
                                 statePerformance={statePerformance}
                                 year={csp_year}
                                 stateCodes={stateCodesArray}
+                                selectedPractices={selectedPractices}
                             />
                         </Box>
                         <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
