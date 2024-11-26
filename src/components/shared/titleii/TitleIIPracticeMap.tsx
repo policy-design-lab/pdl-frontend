@@ -183,7 +183,6 @@ const TitleIIPracticeMap = ({
                 setStatePerformance(initialStatePerformance);
                 return;
             }
-            window.alert(selectedCodes);
             const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join(",");
             const url = `${
                 config.apiUrl
