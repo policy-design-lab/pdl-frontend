@@ -132,20 +132,6 @@ const MapChart = ({
         </div>
     );
 };
-
-function encodeQueryParams(params) {
-    return Object.entries(params)
-        .map(([key, value]) => {
-            const encodedValue = encodeURIComponent(value);
-            return `${key}=${encodedValue}`;
-        })
-        .join("&");
-}
-
-function buildURL(baseUrl, params) {
-    const encodedParams = encodeQueryParams(params);
-    return `${baseUrl}?${encodedParams}`;
-}
 const TitleIIPracticeMap = ({
     programName,
     initialStatePerformance,
@@ -217,7 +203,7 @@ const TitleIIPracticeMap = ({
                 setStatePerformance(initialStatePerformance);
                 return;
             }
-            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join(",");
+            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join("|");
             const url = `${
                 config.apiUrl
             }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${encodedCodes}`;
