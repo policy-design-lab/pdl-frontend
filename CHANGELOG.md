@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Changed all 'grey' word of the site into 'gray' to accommodate US language practice [#341](https://github.com/policy-design-lab/pdl-frontend/issues/341) 
+- Changed comma-handled multi-practice selecting query to delimiter-handled query for EQIP and CSP total page selector [#344](https://github.com/policy-design-lab/pdl-frontend/issues/344) 
 
 ### Fixed
 - Fixed the bug where the map tips lagged in rendering HTML code and processing styles on the EQIP and CSO total page [#345](https://github.com/policy-design-lab/pdl-frontend/issues/345) 
