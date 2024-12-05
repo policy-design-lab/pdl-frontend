@@ -235,7 +235,7 @@ const titleElement = (attribute, year): JSX.Element => {
                 <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
             </Typography>{" "}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
-                <i>In any state that appears in grey, there is no available data</i>
+                <i>In any state that appears in gray, there is no available data</i>
             </Typography>
         </Box>
     );
