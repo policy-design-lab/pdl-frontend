@@ -44,6 +44,20 @@ function IRADollarTable({
         } else {
             const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
+
+            // Handle "All Practices" first
+            attributes
+                .filter((item) => item !== "totalPracticeInstanceCount")
+                .forEach((attribute) => {
+                    if (!practices_total[state] || practices_total[state][attribute] === undefined) {
+                        if (!hashmap[state]) hashmap[state] = {};
+                        hashmap[state][`All Practices: ${attribute}`] = 0;
+                    } else {
+                        hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
+                    }
+                });
+
+            // Then handle individual practices
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
                 if (!hashmap[state]) hashmap[state] = {};
@@ -74,16 +88,6 @@ function IRADollarTable({
                         });
                 }
             });
-            attributes
-                .filter((item) => item !== "totalPracticeInstanceCount")
-                .forEach((attribute) => {
-                    if (!practices_total[state] || practices_total[state][attribute] === undefined) {
-                        if (!hashmap[state]) hashmap[state] = {};
-                        hashmap[state][`All Practices: ${attribute}`] = 0;
-                    } else {
-                        hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
-                    }
-                });
         }
     });
     Object.keys(hashmap).forEach((s) => {
