@@ -164,7 +164,7 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", -1000)
                             .attr("y", -1000)
-                            .text("In any state that appears in grey, there is no available data");
+                            .text("In any state that appears in gray, there is no available data");
                         const middleBox = middleText.node().getBBox();
                         middleText.remove();
                         baseSVG
@@ -172,7 +172,7 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
                             .attr("y", 80)
-                            .text("In any state that appears in grey, there is no available data");
+                            .text("In any state that appears in gray, there is no available data");
                     }
                 } else {
                     baseSVG.attr("height", 40);
