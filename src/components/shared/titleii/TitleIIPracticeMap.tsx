@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { CircularProgress } from "@mui/material";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -48,11 +49,22 @@ const MapChart = ({
     year,
     stateCodes,
     colorScale,
-    selectedPractices
+    selectedPractices,
+    classes
 }) => {
-    const classes = useStyles();
+    const handleMouseEnter = React.useCallback(
+        (geo, record) => {
+            const tooltipContent = computeTooltipContent(geo, record, selectedPractices, classes, getNationalTotal);
+            setReactTooltipContent(tooltipContent);
+        },
+        [selectedPractices, classes, getNationalTotal]
+    );
+    const handleMouseLeave = React.useCallback(() => {
+        setReactTooltipContent("");
+    }, []);
+
     return (
-        <div data-tip="">
+        <div data-tip="" data-for="map-tooltip">
             <ComposableMap projection="geoAlbersUsa">
                 <Geographies geography={geoUrl}>
                     {({ geographies }) => (
@@ -73,18 +85,8 @@ const MapChart = ({
                                     <Geography
                                         key={geo.rsmKey}
                                         geography={geo}
-                                        onMouseEnter={() => {
-                                            const tooltipContent = computeTooltipContent(
-                                                geo,
-                                                record,
-                                                selectedPractices,
-                                                classes,
-                                                getNationalTotal
-                                            );
-                                            ReactTooltip.rebuild();
-                                            setReactTooltipContent(tooltipContent);
-                                        }}
-                                        onMouseLeave={() => setReactTooltipContent("")}
+                                        onMouseEnter={() => handleMouseEnter(geo, record)}
+                                        onMouseLeave={handleMouseLeave}
                                         fill={colorScale(practiceTotal || 0) || "#D2D2D2"}
                                         stroke="#FFF"
                                         style={{
@@ -130,20 +132,6 @@ const MapChart = ({
         </div>
     );
 };
-
-function encodeQueryParams(params) {
-    return Object.entries(params)
-        .map(([key, value]) => {
-            const encodedValue = encodeURIComponent(value);
-            return `${key}=${encodedValue}`;
-        })
-        .join("&");
-}
-
-function buildURL(baseUrl, params) {
-    const encodedParams = encodeQueryParams(params);
-    return `${baseUrl}?${encodedParams}`;
-}
 const TitleIIPracticeMap = ({
     programName,
     initialStatePerformance,
@@ -158,6 +146,38 @@ const TitleIIPracticeMap = ({
     const classes = useStyles();
     const [selectedPractices, setSelectedPractices] = useState<string[]>(["All Practices"]);
     const [isLoading, setIsLoading] = useState(false);
+    const [tooltipVisible, setTooltipVisible] = useState(false);
+    // help tooltip style to load without lag
+    React.useEffect(() => {
+        if (content) {
+            ReactTooltip.hide();
+            ReactTooltip.rebuild();
+            setTooltipVisible(true);
+        } else {
+            setTooltipVisible(false);
+        }
+    }, [content]);
+    React.useEffect(() => {
+        const style = document.createElement("style");
+        style.innerHTML = `
+            .__react_component_tooltip {
+                padding: 0 !important;
+                margin: 0 !important;
+                opacity: 1 !important;
+            }
+            .__react_component_tooltip.show {
+                opacity: 1 !important;
+            }
+        `;
+        document.head.appendChild(style);
+        return () => {
+            ReactTooltip.hide();
+            document.head.removeChild(style);
+        };
+    }, []);
+    const setTooltipContent = React.useCallback((newContent) => {
+        setContent(newContent);
+    }, []);
 
     const practiceCategories = useMemo(() => {
         return getPracticeCategories(practiceNames);
@@ -183,7 +203,7 @@ const TitleIIPracticeMap = ({
                 setStatePerformance(initialStatePerformance);
                 return;
             }
-            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join(",");
+            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join("|");
             const url = `${
                 config.apiUrl
             }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${encodedCodes}`;
@@ -214,11 +234,6 @@ const TitleIIPracticeMap = ({
         }
         fetchStatePerformanceData(newSelected);
     };
-
-    React.useEffect(() => {
-        ReactTooltip.rebuild();
-    }, [statePerformance, selectedPractices]);
-
     const practiceData = useMemo(() => {
         return getPracticeData(statePerformance, year, selectedPractices);
     }, [statePerformance, year, selectedPractices]);
@@ -247,6 +262,38 @@ const TitleIIPracticeMap = ({
         }
         fetchStatePerformanceData(newSelected);
     };
+    const tooltipComponent = useMemo(
+        () => (
+            <ReactTooltip
+                id="map-tooltip"
+                className={`${classes.customized_tooltip} tooltip`}
+                backgroundColor={tooltipBkgColor}
+                effect="float"
+                html
+                getContent={() => (tooltipVisible ? content : null)}
+                overridePosition={({ left, top }, _e, _t, node) => {
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+                    if (!node) return { left, top };
+                    const tooltipRect = node.getBoundingClientRect();
+
+                    let updatedLeft = left;
+                    let updatedTop = top;
+
+                    if (left + tooltipRect.width > viewportWidth) {
+                        updatedLeft = viewportWidth - tooltipRect.width - 10;
+                    }
+                    if (top + tooltipRect.height > viewportHeight) {
+                        updatedTop = viewportHeight - tooltipRect.height - 10;
+                    }
+
+                    return { left: updatedLeft, top: updatedTop };
+                }}
+            />
+        ),
+        [classes, content, tooltipVisible]
+    );
+
     const shouldShowLoading = isLoading && !selectedPractices.includes("All Practices");
     const hasValidData = statePerformance && statePerformance[year] && statePerformance[year].length > 0;
     if (!hasValidData && !shouldShowLoading) {
@@ -349,32 +396,27 @@ const TitleIIPracticeMap = ({
 
             {shouldShowLoading ? (
                 <Box display="flex" justifyContent="center" mt={4}>
-                    <Typography>Loading data...</Typography>
+                    <CircularProgress />
                 </Box>
             ) : (
                 hasValidData && (
-                    <MapChart
-                        getNationalTotal={getNationalTotal}
-                        setReactTooltipContent={setContent}
-                        maxValue={maxValue}
-                        allStates={allStates}
-                        statePerformance={statePerformance}
-                        year={year}
-                        stateCodes={stateCodes}
-                        colorScale={colorScale}
-                        selectedPractices={selectedPractices}
-                    />
+                    <>
+                        <MapChart
+                            getNationalTotal={getNationalTotal}
+                            setReactTooltipContent={setTooltipContent}
+                            maxValue={maxValue}
+                            allStates={allStates}
+                            statePerformance={statePerformance}
+                            year={year}
+                            stateCodes={stateCodes}
+                            colorScale={colorScale}
+                            selectedPractices={selectedPractices}
+                            classes={classes}
+                        />
+                        {tooltipComponent}
+                    </>
                 )
             )}
-            <div className="tooltip-container">
-                <ReactTooltip
-                    className={`${classes.customized_tooltip} tooltip`}
-                    backgroundColor={tooltipBkgColor}
-                    html
-                >
-                    {content}
-                </ReactTooltip>
-            </div>
         </Box>
     );
 };
@@ -384,11 +426,11 @@ const titleElement = (programName, practices: string[], year: string): JSX.Eleme
     return (
         <Box>
             <Typography variant="h6" textAlign="center">
-                <strong>{practiceLabel === "All Practices" ? `Total ${programName}` : practiceLabel}</strong> Benefits
-                from <strong>{year}</strong>
+                <strong>{practiceLabel === "All Practices" ? `Total ${programName}` : "Selected Practices"}</strong>{" "}
+                Benefits from <strong>{year}</strong>
             </Typography>
             <Typography style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
-                <i>Grey states indicate no available data</i>
+                <i>Gray states indicate no available data</i>
             </Typography>
         </Box>
     );

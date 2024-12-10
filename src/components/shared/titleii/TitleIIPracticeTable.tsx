@@ -180,83 +180,97 @@ function Table({ programName, columns, data }) {
                     </Box>
                     <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                         <thead>
-                            {headerGroups.map((headerGroup) => (
-                                <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup}>
-                                    <th
-                                        {...headerGroup.headers[0].getHeaderProps(
-                                            headerGroup.headers[0].getSortByToggleProps()
-                                        )}
-                                        style={{
-                                            position: "sticky",
-                                            left: 0,
-                                            background: "rgba(241, 241, 241, 1)",
-                                            zIndex: 2
-                                        }}
-                                    >
-                                        {headerGroup.headers[0].render("Header")}
-                                        <span>
-                                            {(() => {
-                                                const column = headerGroup.headers[0];
-                                                if (!column.isSorted)
-                                                    return (
-                                                        <Box sx={{ ml: 1, display: "inline" }}>
-                                                            <SwapVertIcon />
-                                                        </Box>
-                                                    );
-                                                if (column.isSortedDesc)
-                                                    return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
-                                            })()}
-                                        </span>
-                                    </th>
-                                    {headerGroup.headers
-                                        .filter((_, index) => visibleColumnIndices.includes(index))
-                                        .map((column) => (
-                                            <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column}>
+                            {headerGroups.map((headerGroup) => {
+                                const headerGroupProps = headerGroup.getHeaderGroupProps();
+                                return (
+                                    <tr {...headerGroupProps} key={`header-${headerGroupProps.key}`}>
+                                        <th
+                                            {...headerGroup.headers[0].getHeaderProps(
+                                                headerGroup.headers[0].getSortByToggleProps()
+                                            )}
+                                            style={{
+                                                position: "sticky",
+                                                left: 0,
+                                                background: "rgba(241, 241, 241, 1)",
+                                                zIndex: 2
+                                            }}
+                                        >
+                                            {headerGroup.headers[0].render("Header")}
+                                            <span>
                                                 {(() => {
-                                                    const headerText = column.render("Header");
-                                                    if (typeof headerText === "string" && headerText.includes(":")) {
-                                                        const [beforeColon, afterColon] = headerText.split(":");
+                                                    const column = headerGroup.headers[0];
+                                                    if (!column.isSorted)
                                                         return (
-                                                            <>
-                                                                <div>
-                                                                    <strong>{beforeColon}</strong>
-                                                                </div>
-                                                                <span>{afterColon.trim()}</span>
-                                                            </>
+                                                            <Box sx={{ ml: 1, display: "inline" }}>
+                                                                <SwapVertIcon />
+                                                            </Box>
                                                         );
-                                                    }
-                                                    return headerText;
+                                                    if (column.isSortedDesc)
+                                                        return (
+                                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>
+                                                        );
+                                                    return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
                                                 })()}
-                                                <span>
+                                            </span>
+                                        </th>
+                                        {headerGroup.headers
+                                            .filter((_, index) => visibleColumnIndices.includes(index))
+                                            .map((column) => (
+                                                <th
+                                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                                    key={column.id || column.Header}
+                                                >
                                                     {(() => {
-                                                        if (!column.isSorted)
+                                                        const headerText = column.render("Header");
+                                                        if (
+                                                            typeof headerText === "string" &&
+                                                            headerText.includes(":")
+                                                        ) {
+                                                            const [beforeColon, afterColon] = headerText.split(":");
                                                             return (
-                                                                <Box sx={{ ml: 1, display: "inline" }}>
-                                                                    <SwapVertIcon />
-                                                                </Box>
+                                                                <>
+                                                                    <div>
+                                                                        <strong>{beforeColon}</strong>
+                                                                    </div>
+                                                                    <span>{afterColon.trim()}</span>
+                                                                </>
                                                             );
-                                                        if (column.isSortedDesc)
-                                                            return (
-                                                                <Box sx={{ ml: 1, display: "inline" }}>
-                                                                    {"\u{25BC}"}
-                                                                </Box>
-                                                            );
-                                                        return (
-                                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>
-                                                        );
+                                                        }
+                                                        return headerText;
                                                     })()}
-                                                </span>
-                                            </th>
-                                        ))}
-                                </tr>
-                            ))}
+                                                    <span>
+                                                        {(() => {
+                                                            if (!column.isSorted)
+                                                                return (
+                                                                    <Box sx={{ ml: 1, display: "inline" }}>
+                                                                        <SwapVertIcon />
+                                                                    </Box>
+                                                                );
+                                                            if (column.isSortedDesc)
+                                                                return (
+                                                                    <Box sx={{ ml: 1, display: "inline" }}>
+                                                                        {"\u{25BC}"}
+                                                                    </Box>
+                                                                );
+                                                            return (
+                                                                <Box sx={{ ml: 1, display: "inline" }}>
+                                                                    {"\u{25B2}"}
+                                                                </Box>
+                                                            );
+                                                        })()}
+                                                    </span>
+                                                </th>
+                                            ))}
+                                    </tr>
+                                );
+                            })}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                            {page.map((row, i) => {
+                            {page.map((row) => {
                                 prepareRow(row);
+                                const rowProps = row.getRowProps();
                                 return (
-                                    <tr {...row.getRowProps()} key={row}>
+                                    <tr {...rowProps} key={`row-${row.id}`}>
                                         <td
                                             {...row.cells[0].getCellProps()}
                                             style={{
@@ -270,10 +284,10 @@ function Table({ programName, columns, data }) {
                                         </td>
                                         {row.cells
                                             .filter((_, index) => visibleColumnIndices.includes(index))
-                                            .map((cell, j) => (
+                                            .map((cell, cellIndex) => (
                                                 <td
-                                                    key={`cell${j + 1}`}
-                                                    className={`cell${j + 1}`}
+                                                    key={`${row.id}-${cell.column.id}`}
+                                                    className={`cell${cellIndex + 1}`}
                                                     {...cell.getCellProps()}
                                                     style={{ width: "100%", whiteSpace: "nowrap" }}
                                                 >
@@ -329,7 +343,7 @@ function Table({ programName, columns, data }) {
                                 }}
                             >
                                 {[10, 25, 40, 51].map((size) => (
-                                    <option key={size} value={size}>
+                                    <option key={`size-${size}`} value={size}>
                                         Show {size}
                                     </option>
                                 ))}
