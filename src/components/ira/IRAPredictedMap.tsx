@@ -330,7 +330,7 @@ const IRAPredictedMap = ({
         thresholds.push(nonZeroData[adjustedIndex]);
     }
     const colorScale = d3.scaleThreshold().domain(thresholds).range(mapColor);
-    // For IRA, only if all practices are zero, the state will be colored as grey
+    // For IRA, only if all practices are zero, the state will be colored as gray
     let zeroPoints = [];
     predictedPerformance[year].forEach((state) => {
         if (practices[0] === "Total") {

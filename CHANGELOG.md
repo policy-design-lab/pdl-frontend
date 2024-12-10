@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2024-12-10
+
+### Changed
+- Changed all 'grey' word of the site into 'gray' to accommodate US language practice [#341](https://github.com/policy-design-lab/pdl-frontend/issues/341) 
+- Changed comma-handled multi-practice selecting query to delimiter-handled query for EQIP and CSP total page selector [#344](https://github.com/policy-design-lab/pdl-frontend/issues/344) 
+
+### Fixed
+- Fixed the bug where the map tips lagged in rendering HTML code and processing styles on the EQIP and CSO total page [#345](https://github.com/policy-design-lab/pdl-frontend/issues/345) 
+
+## [1.4.0] - 2024-11-26
+
+### Added
+- Add selector to the EQIP and CSO total page for users to select the program and get the total amount of the selected programs in both the map and the table [#329](https://github.com/policy-design-lab/pdl-frontend/issues/329) 
+- Add table column pagination to the EQIP and CSO total page to allow users to navigate through the table columns [#331](https://github.com/policy-design-lab/pdl-frontend/issues/331) 
+
 ## [1.3.0] - 2024-11-04
 
 ### Changed
@@ -304,6 +319,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.4.0...1.5.0
+[1.4.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.0.5...1.1.0

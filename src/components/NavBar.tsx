@@ -75,6 +75,7 @@ export default function NavBar({
                 <AppBar
                     variant="outlined"
                     component="nav"
+                    elevation={0}
                     sx={{ position: "relative", border: "1px solid transparent" }}
                 >
                     <Toolbar>
