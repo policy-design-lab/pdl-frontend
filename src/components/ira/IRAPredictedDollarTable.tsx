@@ -42,6 +42,18 @@ function IRAPredictedDollarTable({
         } else {
             const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
+
+            // Handle "All Practices" first
+            attributes.forEach((attribute) => {
+                if (!practices_total[state] || practices_total[state][attribute] === undefined) {
+                    if (!hashmap[state]) hashmap[state] = {};
+                    hashmap[state][`All Practices: ${attribute}`] = 0;
+                } else {
+                    hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
+                }
+            });
+
+            // Then handle individual practices
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
                 if (!hashmap[state]) hashmap[state] = {};
@@ -64,14 +76,6 @@ function IRAPredictedDollarTable({
                         hashmap[state][new_key] = attributeData[attribute] || 0;
                         practices_total[state][attribute] += attributeData[attribute] || 0;
                     });
-                }
-            });
-            attributes.forEach((attribute) => {
-                if (!practices_total[state] || practices_total[state][attribute] === undefined) {
-                    if (!hashmap[state]) hashmap[state] = {};
-                    hashmap[state][`All Practices: ${attribute}`] = 0;
-                } else {
-                    hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
                 }
             });
         }
