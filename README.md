@@ -83,3 +83,10 @@ Use `npm run docs` to generate docs.
 
 The repo has one Github workflow that checks the linting rules and runs the tests (see `.github/workflows/test.yaml`).
 There are issue and PR templates in `.github`.
+
+### Run Docker container locally for development
+
+- In a terminal, `export APP_ENV=development` to point to development environment
+- Build the image and pass in the build environment `docker build --no-cache --build-arg APP_ENV="${APP_ENV}" --progress=plain --tag pdl/pdl-frontend .`
+- Run the container `docker run -p 3000:80 pdl/pdl-frontend:latest`
+- Go to http://localhost:3000

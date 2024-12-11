@@ -51,6 +51,39 @@ function IRAPercentageTable({
         } else {
             const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
+
+            let totalStatePayments = 0;
+            let totalStateInstances = 0;
+            let totalNationalPayments = 0;
+            let totalNationalInstances = 0;
+
+            // Handle "All Practices" first
+            attributes
+                .filter((item) => item !== "totalPracticeInstanceCount")
+                .forEach((attribute) => {
+                    if (!practices_total[state] || practices_total[state][attribute] === undefined) {
+                        if (!hashmap[state]) hashmap[state] = {};
+                        hashmap[state][`All Practices: ${attribute}`] = 0;
+                        hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = "0.00%";
+                    } else {
+                        hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
+
+                        // Calculate percentage for all practices combined
+                        if (attribute === "totalPaymentInDollars") {
+                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
+                                (totalStatePayments / totalNationalPayments) *
+                                100
+                            ).toFixed(2)}%`;
+                        } else if (attribute === "practiceInstanceCount") {
+                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
+                                (totalStateInstances / totalNationalInstances) *
+                                100
+                            ).toFixed(2)}%`;
+                        }
+                    }
+                });
+
+            // Then handle individual practices
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
                 const nationalPracticeData = summary[year].practices.find((p) => p.practiceName === practice);
@@ -97,11 +130,6 @@ function IRAPercentageTable({
                 }
             });
 
-            let totalStatePayments = 0;
-            let totalStateInstances = 0;
-            let totalNationalPayments = 0;
-            let totalNationalInstances = 0;
-
             practices.forEach((practice) => {
                 const statePracticeData = stateData.practices.find((p) => p.practiceName === practice);
                 const nationalPracticeData = summary[year].practices.find((p) => p.practiceName === practice);
@@ -116,31 +144,6 @@ function IRAPercentageTable({
                     totalNationalInstances += nationalPracticeData.totalPracticeInstanceCount || 0;
                 }
             });
-
-            attributes
-                .filter((item) => item !== "totalPracticeInstanceCount")
-                .forEach((attribute) => {
-                    if (!practices_total[state] || practices_total[state][attribute] === undefined) {
-                        if (!hashmap[state]) hashmap[state] = {};
-                        hashmap[state][`All Practices: ${attribute}`] = 0;
-                        hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = "0.00%";
-                    } else {
-                        hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
-
-                        // Calculate percentage for all practices combined
-                        if (attribute === "totalPaymentInDollars") {
-                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
-                                (totalStatePayments / totalNationalPayments) *
-                                100
-                            ).toFixed(2)}%`;
-                        } else if (attribute === "practiceInstanceCount") {
-                            hashmap[state][`All Practices: ${attribute}PercentageNationwide`] = `${(
-                                (totalStateInstances / totalNationalInstances) *
-                                100
-                            ).toFixed(2)}%`;
-                        }
-                    }
-                });
         }
     });
     Object.keys(hashmap).forEach((s) => {
