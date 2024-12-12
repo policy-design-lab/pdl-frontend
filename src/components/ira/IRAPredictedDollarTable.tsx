@@ -72,14 +72,14 @@ function IRAPredictedDollarTable({
             });
 
             // Reorder the hashmap[state] keys, move All Practices columns to the leftmost
-            const allPracticesKeys = Object.keys(hashmap[state]).filter(key => key.startsWith("All Practices:"));
-            const otherKeys = Object.keys(hashmap[state]).filter(key => !key.startsWith("All Practices:"));
+            const allPracticesKeys = Object.keys(hashmap[state]).filter((key) => key.startsWith("All Practices:"));
+            const otherKeys = Object.keys(hashmap[state]).filter((key) => !key.startsWith("All Practices:"));
             const reorderedHashmap = {};
 
-            allPracticesKeys.forEach(key => {
+            allPracticesKeys.forEach((key) => {
                 reorderedHashmap[key] = hashmap[state][key];
             });
-            otherKeys.forEach(key => {
+            otherKeys.forEach((key) => {
                 reorderedHashmap[key] = hashmap[state][key];
             });
             hashmap[state] = reorderedHashmap;
