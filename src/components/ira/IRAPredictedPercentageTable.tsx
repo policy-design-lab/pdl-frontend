@@ -48,26 +48,6 @@ function IRAPredictedPercentageTable({
             let totalStatePayments = 0;
             let totalNationalPayments = 0;
 
-            // Handle "All Practices" first
-            attributes.forEach((attribute) => {
-                if (!practices_total[state] || practices_total[state][attribute] === undefined) {
-                    if (!hashmap[state]) hashmap[state] = {};
-                    hashmap[state][`All Practices: ${attribute}`] = 0;
-                    hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = "0.00%";
-                } else {
-                    hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
-
-                    // Calculate percentage for all practices combined
-                    if (attribute === "predictedTotalPaymentInDollars") {
-                        hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = `${(
-                            (totalStatePayments / totalNationalPayments) *
-                            100
-                        ).toFixed(2)}%`;
-                    }
-                }
-            });
-
-            // Then handle individual practices
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
                 const nationalPracticeData = summary[year].practices.find((p) => p.practiceName === practice);
@@ -122,6 +102,37 @@ function IRAPredictedPercentageTable({
                     // totalNationalInstances += nationalPracticeData.totalPracticeInstanceCount || 0;
                 }
             });
+
+            attributes.forEach((attribute) => {
+                if (!practices_total[state] || practices_total[state][attribute] === undefined) {
+                    if (!hashmap[state]) hashmap[state] = {};
+                    hashmap[state][`All Practices: ${attribute}`] = 0;
+                    hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = "0.00%";
+                } else {
+                    hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
+
+                    // Calculate percentage for all practices combined
+                    if (attribute === "predictedTotalPaymentInDollars") {
+                        hashmap[state][`All Practices: ${attribute}PredictedPercentageNationwide`] = `${(
+                            (totalStatePayments / totalNationalPayments) *
+                            100
+                        ).toFixed(2)}%`;
+                    }
+                }
+            });
+
+            // Reorder the hashmap[state] keys, move All Practices columns to the leftmost
+            const allPracticesKeys = Object.keys(hashmap[state]).filter(key => key.startsWith("All Practices:"));
+            const otherKeys = Object.keys(hashmap[state]).filter(key => !key.startsWith("All Practices:"));
+            const reorderedHashmap = {};
+
+            allPracticesKeys.forEach(key => {
+                reorderedHashmap[key] = hashmap[state][key];
+            });
+            otherKeys.forEach(key => {
+                reorderedHashmap[key] = hashmap[state][key];
+            });
+            hashmap[state] = reorderedHashmap;
         }
     });
     Object.keys(hashmap).forEach((s) => {
