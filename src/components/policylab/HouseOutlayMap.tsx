@@ -243,6 +243,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
     const MenuItemWithTooltip = ({ practice, description }) => (
         <MenuItem
             value={practice}
+            onClick={() => handlePracticeChange(practice)}
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -254,6 +255,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
             <span>{practice}</span>
             <Tooltip title={description || "No description available"} placement="right" arrow>
                 <InfoIcon
+                    onClick={(e) => e.stopPropagation()}
                     sx={{
                         "cursor": "help",
                         "ml": 1,
@@ -294,20 +296,22 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
 
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const colorScale = d3.scaleThreshold().domain(practiceData.thresholds).range(mapColor);
-
-    const handlePracticeChange = (event) => {
-        const value = event.target.value;
-        let newSelected = typeof value === "string" ? value.split(",") : value;
-        if (newSelected.includes("All Practices") && !selectedPractices.includes("All Practices")) {
+    const handlePracticeChange = (selectedPractice) => {
+        let newSelected;
+        if (selectedPractice === "All Practices") {
             newSelected = ["All Practices"];
-        } else if (newSelected.length > 1 && newSelected.includes("All Practices")) {
-            newSelected = newSelected.filter((p) => p !== "All Practices");
-        } else if (newSelected.length === 0) {
-            newSelected = ["All Practices"];
+        } else if (selectedPractices.includes(selectedPractice)) {
+            newSelected = selectedPractices.filter((p) => p !== selectedPractice);
+            if (newSelected.length === 0) {
+                newSelected = ["All Practices"];
+            }
+        } else {
+            newSelected = selectedPractices.includes("All Practices")
+                ? [selectedPractice]
+                : [...selectedPractices, selectedPractice];
         }
         setSelectedPractices(newSelected);
     };
-
     const handleChipDelete = (practiceToDelete) => {
         let newSelected;
         if (selectedPractices.length === 1) {
@@ -317,7 +321,6 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
         }
         setSelectedPractices(newSelected);
     };
-
     const titleElement = (
         <Box sx={{ ml: 10 }}>
             <Typography noWrap variant="h6">
@@ -328,7 +331,6 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
             </Typography>
         </Box>
     );
-
     return (
         <div className="house-outlay-map" style={{ width: "100%" }}>
             <Box display="flex" justifyContent="center">
@@ -364,6 +366,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
                         placement="top"
                     >
                         <InfoIcon
+                            onClick={(e) => e.stopPropagation()}
                             sx={{
                                 "mr": 1,
                                 "fontSize": "1.25rem",
