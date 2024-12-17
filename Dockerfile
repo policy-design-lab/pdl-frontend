@@ -8,7 +8,7 @@ ENV APP_ENV=${APP_ENV}
 
 COPY package.json package-lock.json /usr/src/app/
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 ENV PATH="./node_modules/.bin:$PATH"
 
