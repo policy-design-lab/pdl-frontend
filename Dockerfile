@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------
 FROM node:14.5.0-alpine AS builder
 WORKDIR /usr/src/app
-ARG REACT_APP_ENV=""
-ENV REACT_APP_ENV=${REACT_APP_ENV}
+ARG APP_ENV=""
+ENV APP_ENV=${APP_ENV}
 
 COPY package.json package-lock.json /usr/src/app/
 

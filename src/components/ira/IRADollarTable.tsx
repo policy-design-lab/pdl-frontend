@@ -38,6 +38,7 @@ function IRADollarTable({
         } else {
             const practices_total = {};
             if (!practices_total[state]) practices_total[state] = {};
+
             practices.forEach((practice) => {
                 const practiceData = stateData.practices.filter((p) => p.practiceName.toString() === practice);
                 if (!hashmap[state]) hashmap[state] = {};
@@ -68,6 +69,7 @@ function IRADollarTable({
                         });
                 }
             });
+
             attributes
                 .filter((item) => item !== "totalPracticeInstanceCount")
                 .forEach((attribute) => {
@@ -78,6 +80,19 @@ function IRADollarTable({
                         hashmap[state][`All Practices: ${attribute}`] = practices_total[state][attribute];
                     }
                 });
+
+            // Reorder the hashmap[state] keys, move All Practices columns to the leftmost
+            const allPracticesKeys = Object.keys(hashmap[state]).filter((key) => key.startsWith("All Practices:"));
+            const otherKeys = Object.keys(hashmap[state]).filter((key) => !key.startsWith("All Practices:"));
+            const reorderedHashmap = {};
+
+            allPracticesKeys.forEach((key) => {
+                reorderedHashmap[key] = hashmap[state][key];
+            });
+            otherKeys.forEach((key) => {
+                reorderedHashmap[key] = hashmap[state][key];
+            });
+            hashmap[state] = reorderedHashmap;
         }
     });
     Object.keys(hashmap).forEach((s) => {
