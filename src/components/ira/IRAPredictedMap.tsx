@@ -116,7 +116,7 @@ const MapChart = ({
                                                                 );
                                                                 if (pra) {
                                                                     return (
-                                                                        <tr style={topTipStyle}>
+                                                                        <tr style={topTipStyle} key={practice}>
                                                                             <td
                                                                                 className={
                                                                                     index === 0
@@ -331,7 +331,7 @@ const IRAPredictedMap = ({
     }
     const colorScale = d3.scaleThreshold().domain(thresholds).range(mapColor);
     // For IRA, only if all practices are zero, the state will be colored as gray
-    let zeroPoints = [];
+    let zeroPoints: string[] = [];
     predictedPerformance[year].forEach((state) => {
         if (practices[0] === "Total") {
             if (state.predictedTotalPaymentInDollars === 0) zeroPoints.push(state.state);
