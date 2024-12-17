@@ -14,9 +14,19 @@ export const CustomTab = styled((props: StyledTabProps) => (
         {...props}
         sx={{
             "&.Mui-selected": {
+                color: "#1976d2",
+                fontWeight: 600,
                 ...props.selectedSX
             },
-
+            "&:hover": {
+                backgroundColor: "rgba(25, 118, 210, 0.04)",
+                transition: "background-color 0.3s ease"
+            },
+            "textTransform": "none",
+            "minWidth": 120,
+            "padding": "12px 24px",
+            "margin": "0 8px",
+            "fontSize": "0.975rem",
             ...props.customSx
         }}
     />

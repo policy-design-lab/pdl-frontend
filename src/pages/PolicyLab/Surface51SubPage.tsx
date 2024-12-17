@@ -2,7 +2,15 @@ import { Box, Typography, Grid } from "@mui/material";
 import * as React from "react";
 import AleskiThesis from "../../files/Aleski_Thesis.pdf";
 
-export default function Surface51SubPage({ styleClass }: { styleClass: any }): JSX.Element {
+export default function Surface51SubPage({
+    styleClass,
+    v,
+    index
+}: {
+    styleClass: any;
+    v: any;
+    index: any;
+}): JSX.Element {
     const iframeLink = "https://surface51.github.io/policy-design-lab/";
     const iframeTitle = "Surface51 Policy Design Lab";
     function TrendIcon({ bkColor, fontColor, text }) {
@@ -24,7 +32,7 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
         );
     }
     return (
-        <div>
+        <Box role="tabpanel" hidden={v !== index}>
             <Box>
                 <Typography
                     sx={{
@@ -175,6 +183,6 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
                     </Grid>
                 </Grid>
             </Box>
-        </div>
+        </Box>
     );
 }

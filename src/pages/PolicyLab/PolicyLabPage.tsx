@@ -1,9 +1,11 @@
-import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Divider, Tabs } from "@mui/material";
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import NavBar from "../../components/NavBar";
 import "../../styles/issueWhitePaper.css";
 import Surface51SubPage from "./Surface51SubPage";
+import { CustomTab } from "../../components/shared/CustomTab";
+import HouseProjectionSubPage from "./HouseProjectionSubPage";
 
 const useStyles = makeStyles(() => ({
     iframeContainer: {
@@ -38,22 +40,33 @@ const useStyles = makeStyles(() => ({
     }
 }));
 export default function PolicyLabPage(): JSX.Element {
-    // const [tab, setTab] = React.useState(0);
+    const [value, setValue] = React.useState(0);
     const classes = useStyles();
-
-    // const switchTab = (event, newTab) => {
-    //     if (newTab !== null) {
-    //         setTab(newTab);
-    //     }
-    // };
-
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
+    const tabStyle = { fontSize: "1.5em" };
+    const selectedStyle = { color: "#2F7164 !important", fontWeight: 600 };
     return (
         <Box sx={{ width: "100%", backgroundColor: "#ECF0EE" }}>
             <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                 <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
             </Box>
             <Box sx={{ height: "64px" }} />
-            <Surface51SubPage styleClass={classes} />
+            <Box display="flex" justifyContent="center" sx={{ borderBottom: 0, borderColor: "divider", mx: 4 }}>
+                {" "}
+                <Tabs variant="scrollable" value={value} onChange={handleChange} scrollButtons="auto" sx={{ mt: 4 }}>
+                    <CustomTab label={<Box>Policy Design</Box>} customSx={tabStyle} selectedSX={selectedStyle} />
+                    <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
+                    <CustomTab
+                        label={<Box>House Outlay Projection</Box>}
+                        customSx={tabStyle}
+                        selectedSX={selectedStyle}
+                    />
+                </Tabs>
+            </Box>
+            <Surface51SubPage styleClass={classes} v={value} index={0} />
+            <HouseProjectionSubPage styleClass={classes} v={value} index={2} />
         </Box>
     );
 }
