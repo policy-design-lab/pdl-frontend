@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------
 # Build application using node
 # ----------------------------------------------------------------------
-FROM node:14.5.0-alpine AS builder
+FROM node:22.12.0-alpine AS builder
 WORKDIR /usr/src/app
-ARG REACT_APP_ENV=""
-ENV REACT_APP_ENV=${REACT_APP_ENV}
+ARG APP_ENV=""
+ENV APP_ENV=${APP_ENV}
 
 COPY package.json package-lock.json /usr/src/app/
 
@@ -20,6 +20,6 @@ RUN npm run build
 # ----------------------------------------------------------------------
 # Include nginx web server and host the build
 # ----------------------------------------------------------------------
-FROM nginx:1.19.1-alpine
+FROM nginx
 COPY --from=builder /usr/src/app/build/ /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/conf.d/default.conf

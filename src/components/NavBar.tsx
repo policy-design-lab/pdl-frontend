@@ -1,35 +1,44 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { CardMedia, createTheme, ThemeProvider } from '@mui/material';
-import { Link } from 'react-router-dom';
-import PDLLogo from './PDLLogo';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { Link } from "react-router-dom";
+import PDLLogo from "./PDLLogo";
 
 const drawerWidth = 240;
-const navItems = ['HOME', 'EXPLORE FARM BILL DATA', 'ABOUT PDL'];
-const theme = createTheme({
-    components: {
-        MuiAppBar: {
-            styleOverrides: {
-                colorPrimary: {
-                    backgroundColor: '#2F7164'
+const navItems = [
+    { title: "HOME", link: "/" },
+    { title: "POLICY LAB".toUpperCase(), link: "/policy-lab" },
+    { title: "INFLATION REDUCTION ACT".toUpperCase(), link: "/ira" },
+    { title: "ISSUES & WHITE PAPERS", link: "/issues-whitepapers" },
+    { title: "ABOUT PDL" }
+];
+export default function NavBar({
+    bkColor = "rgba(255, 255, 255, 1)",
+    ftColor = "rgba(255, 255, 255, 1)",
+    logo = "Dark"
+}): JSX.Element {
+    const theme = createTheme({
+        components: {
+            MuiAppBar: {
+                styleOverrides: {
+                    colorPrimary: {
+                        backgroundColor: bkColor
+                    }
                 }
             }
         }
-    }
-});
-
-export default function NavBar(): JSX.Element {
+    });
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -37,16 +46,22 @@ export default function NavBar(): JSX.Element {
     };
 
     const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ my: 2 }}>
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+            <Typography variant="h6" sx={{ my: 2, color: ftColor }}>
                 Policy Design Lab
             </Typography>
             <Divider />
             <List>
                 {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
+                    <ListItem key={item.title} disablePadding>
+                        <ListItemButton sx={{ textAlign: "center" }}>
+                            {item.link ? (
+                                // <a href={item.link}>
+                                <ListItemText primary={item.title} />
+                            ) : (
+                                // </a>
+                                <ListItemText primary={item.title} />
+                            )}
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -55,42 +70,56 @@ export default function NavBar(): JSX.Element {
     );
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: "flex" }}>
             <ThemeProvider theme={theme}>
-                <AppBar variant="outlined" component="nav" sx={{ position: 'relative' }}>
+                <AppBar
+                    variant="outlined"
+                    component="nav"
+                    elevation={0}
+                    sx={{ position: "relative", border: "1px solid transparent" }}
+                >
                     <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             edge="start"
                             onClick={handleDrawerToggle}
-                            sx={{ mr: 2, display: { sm: 'none' } }}
+                            sx={{ mr: 2, display: { sm: "none" } }}
                         />
                         <Button
                             disableRipple
                             component={Link}
+                            style={{ backgroundColor: "transparent" }}
                             to="/"
-                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', color: '#fff' } }}
+                            sx={{
+                                flexGrow: 1,
+                                display: { xs: "none", sm: "block", color: ftColor }
+                            }}
                         >
-                            <Box sx={{ display: 'flex', flexDirection: 'horizontal' }}>
-                                <PDLLogo width="60" height="60" />
+                            <Box sx={{ display: "flex", flexDirection: "horizontal" }}>
+                                <PDLLogo width="60" height="60" theme={logo} />
                                 <Typography variant="h6" component="div" sx={{ pt: 1.6, ml: 1 }}>
                                     Policy Design Lab
                                 </Typography>
                             </Box>
                         </Button>
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Box sx={{ display: { xs: "none", sm: "block" } }}>
                             {navItems.map((item) => {
-                                if (item === 'HOME') {
+                                if (item.link) {
                                     return (
-                                        <Button component={Link} to="/" key={item} sx={{ color: '#fff' }}>
-                                            {item}
+                                        <Button
+                                            component={Link}
+                                            to={item.link}
+                                            key={item.title}
+                                            sx={{ color: ftColor }}
+                                        >
+                                            {item.title}
                                         </Button>
                                     );
                                 }
                                 return (
-                                    <Button key={item} sx={{ color: '#fff' }}>
-                                        {item}
+                                    <Button key={item.title} sx={{ color: ftColor }}>
+                                        {item.title}
                                     </Button>
                                 );
                             })}
@@ -106,8 +135,11 @@ export default function NavBar(): JSX.Element {
                             keepMounted: true // Better open performance on mobile.
                         }}
                         sx={{
-                            'display': { xs: 'block', sm: 'none' },
-                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
+                            "display": { xs: "block", sm: "none" },
+                            "& .MuiDrawer-paper": {
+                                boxSizing: "border-box",
+                                width: drawerWidth
+                            }
                         }}
                     >
                         {drawer}

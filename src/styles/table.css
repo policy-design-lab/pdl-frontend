@@ -1,0 +1,8 @@
+th {
+  font-weight: 300;
+}
+
+th svg{
+  vertical-align: text-bottom;
+  margin-bottom: -0.1em; /* visually make the icon to be align with the text */
+}

@@ -41,6 +41,12 @@
   },
   "settings": {
     "import/resolver": {
+      "alias" : {
+        "map" : [
+          ["@components","./src/components/"]
+        ],
+        "extensions": [".js"]
+      },
       "node": {
         "moduleDirectory": [
           "src",
@@ -87,6 +93,10 @@
       }
     ],
     "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": [
+      2,
+      { "caseSensitive": false }
+    ],
     "import/prefer-default-export": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "max-len": [
@@ -143,7 +153,7 @@
     "prefer-destructuring": "off",
     "quotes": [
       "error",
-      "single",
+      "double",
       {
         "avoidEscape": true
       }
@@ -187,6 +197,7 @@
     "react/jsx-uses-vars": 2,
     "react/jsx-uses-react": 2,
     "react/require-default-props": "off",
+    "react/prop-types": "off",
     "react/static-property-placement": [
       "warn",
       "static public field"

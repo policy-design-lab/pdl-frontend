@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useTable, useSortBy } from 'react-table';
-import Box from '@mui/material/Box';
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
-import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
-import statePerformance from '../../data/eqip/EQIP_STATE_PERFORMANCE_DATA.json';
+import React from "react";
+import styled from "styled-components";
+import { useTable, useSortBy } from "react-table";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import Box from "@mui/material/Box";
+import "../../styles/table.css";
+import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -25,26 +25,27 @@ const Styles = styled.div`
 
         th {
             background-color: #f1f1f1;
-            padding: 1rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         td {
             margin: 0;
-            padding: 1rem;
-            padding-left: 5rem;
-            padding-right: 5rem;
+            padding: 0rem;
+            padding-left: 3rem;
+            padding-right: 3rem;
             border-bottom: 1px solid #e4ebe7;
             border-right: none;
 
             :last-child {
-                border-right: 0;
+                border-right: 2rem;
             }
         }
     }
 `;
 
 // eslint-disable-next-line
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data }: { columns: any; data: any; }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
             columns,
@@ -67,19 +68,33 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                     {...column.getHeaderProps({
-                                        style: { paddingLeft: column.paddingLeft, paddingRight: column.paddingRight }
+                                        style: {
+                                            paddingLeft: column.paddingLeft,
+                                            paddingRight: column.paddingRight
+                                        }
                                     })}
                                 >
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {(() => {
-                                            if (!column.isSorted) return '';
-                                            if (column.isSortedDesc)
-                                                return <ArrowDropDownOutlinedIcon fontSize="inherit" />;
-                                            return <ArrowDropUpOutlinedIcon fontSize="inherit" />;
-                                        })()}
-                                    </span>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "horizontal",
+                                            alignItems: "center"
+                                        }}
+                                    >
+                                        {column.render("Header")}
+                                        <div>
+                                            {(() => {
+                                                if (!column.isSorted)
+                                                    return (
+                                                        <Box sx={{ ml: 1 }}>
+                                                            <SwapVertIcon />
+                                                        </Box>
+                                                    );
+                                                if (column.isSortedDesc) return <Box sx={{ ml: 1 }}>{"\u{25BC}"}</Box>;
+                                                return <Box sx={{ ml: 1 }}>{"\u{25B2}"}</Box>;
+                                            })()}
+                                        </div>
+                                    </Box>
                                 </th>
                             ))}
                         </tr>
@@ -88,14 +103,14 @@ function Table({ columns, data }: { columns: any; data: any }) {
                 <tbody {...getTableBodyProps()}>
                     {
                         // eslint-disable-next-line
-                    firstPageRows.map((row, i) => {
+                        firstPageRows.map((row, i) => {
                             prepareRow(row);
                             return (
                                 <tr key={row.id} {...row.getRowProps()}>
                                     {row.cells.map((cell) => {
                                         return (
                                             <td key={cell.id} {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
+                                                {cell.render("Cell")}
                                             </td>
                                         );
                                     })}
@@ -113,76 +128,178 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function App({ category }: { category: string }): JSX.Element {
+function App({
+    category,
+    statePerformance,
+    year,
+    stateCodes
+}: {
+    category: string;
+    statePerformance: any;
+    year: any;
+    stateCodes: any;
+}): JSX.Element {
     const eqipTableData: any[] = [];
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [key, value] of Object.entries(statePerformance)) {
-        const ACur = value[0].statutes.find((s) => s.statuteName === '(6)(A) Practices');
+    statePerformance[year].forEach((value) => {
+        const ACur = value.statutes.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;
-        const BCur = value[0].statutes.find((s) => s.statuteName === '(6)(B) Practices');
+        const BCur = value.statutes.find((s) => s.statuteName === "(6)(B) Practices");
         const BArray = BCur.practiceCategories;
         const TotalArray = AArray.concat(BArray);
         const categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         const newRecord = () => {
             return {
-                state: key,
-                categoryBenefit: `$${Number(categoryRecord.paymentInDollars).toLocaleString(undefined, {
+                state: stateCodes.find((s) => s.code === value.state).name,
+                categoryBenefit: `$${Number(categoryRecord.totalPaymentInDollars).toLocaleString(undefined, {
                     minimumFractionDigits: 2
                 })}`,
-                categoryPercentage: `${categoryRecord.paymentInPercentageWithinState.toString()}%`,
-                eqipBenefit: `$${value[0].totalPaymentInDollars.toLocaleString(undefined, {
+                categoryPercentage: `${categoryRecord.totalPaymentInPercentageWithinState.toString()}%`,
+                eqipBenefit: `$${value.totalPaymentInDollars.toLocaleString(undefined, {
                     minimumFractionDigits: 2
                 })}`,
-                percentage: `${value[0].totalPaymentInPercentageNationwide.toString()}%`
+                percentage: `${value.totalPaymentInPercentageNationwide.toString()}%`
             };
         };
         eqipTableData.push(newRecord());
-    }
-
-    function compareWithDollarSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].substring(1).replaceAll(',', ''));
-        const b = Number.parseFloat(rowB.values[id].substring(1).replaceAll(',', ''));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
-
-    function compareWithPercentSign(rowA, rowB, id, desc) {
-        const a = Number.parseFloat(rowA.values[id].replaceAll('%', ''));
-        const b = Number.parseFloat(rowB.values[id].replaceAll('%', ''));
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-    }
+    });
 
     const columns = React.useMemo(
         () => [
             {
-                Header: 'STATES',
-                accessor: 'state',
-                paddingLeft: '5rem',
-                paddingRight: '10rem'
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{
+                            maxWidth: 240,
+                            pl: 12,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
+                    >
+                        STATES
+                    </Box>
+                ),
+                accessor: "state",
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return (
+                        <div style={{ textAlign: "left" }}>
+                            <Box
+                                sx={{
+                                    py: 2,
+                                    pl: 6,
+                                    display: "flex",
+                                    justifyContent: "flex-start"
+                                }}
+                            >
+                                {props.value}
+                            </Box>
+                        </div>
+                    );
+                }
             },
             {
-                Header: `${category} Benefit`,
-                accessor: 'categoryBenefit',
-                sortType: compareWithDollarSign
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{
+                            maxWidth: 240,
+                            pl: 6,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
+                    >
+                        {`${category} Benefit`.toUpperCase()}
+                    </Box>
+                ),
+                accessor: "categoryBenefit",
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return (
+                        <div style={{ textAlign: "right" }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: "#fff0e2",
+                                    py: 3,
+                                    width: 240,
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Box sx={{ textAlign: "right", width: 120 }}>{props.value}</Box>
+                            </Box>
+                        </div>
+                    );
+                }
             },
             {
-                Header: `${category} Percentage Within State`,
-                accessor: 'categoryPercentage',
-                sortType: compareWithPercentSign
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{
+                            maxWidth: 240,
+                            pl: 6,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
+                    >
+                        {`${category} Percentage Within State`.toUpperCase()}
+                    </Box>
+                ),
+                accessor: "categoryPercentage",
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(props: {
+                    value: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+                }) {
+                    return (
+                        <div style={{ textAlign: "right" }}>
+                            <Box
+                                sx={{
+                                    backgroundColor: "#fff0e2",
+                                    py: 3,
+                                    width: 280,
+                                    display: "flex",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Box sx={{ textAlign: "right", width: 80 }}>{props.value}</Box>
+                            </Box>
+                        </div>
+                    );
+                }
             },
             {
-                Header: 'EQIP BENEFITS',
-                accessor: 'eqipBenefit',
-                sortType: compareWithDollarSign
+                Header: (
+                    <Box
+                        className="tableHeader"
+                        sx={{
+                            maxWidth: 240,
+                            pl: 7,
+                            display: "flex",
+                            justifyContent: "center"
+                        }}
+                    >
+                        EQIP BENEFITS
+                    </Box>
+                ),
+                accessor: "eqipBenefit",
+                sortType: compareWithDollarSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
             },
             {
-                Header: 'PCT. NATIONWIDE',
-                accessor: 'percentage',
-                sortType: compareWithPercentSign
+                Header: <Box className="tableHeader">PCT. NATIONWIDE</Box>,
+                accessor: "percentage",
+                sortType: compareWithPercentSign,
+                Cell: function styleCells(row) {
+                    return <div style={{ textAlign: "right" }}>{row.value}</div>;
+                }
             }
         ],
         []

@@ -5,8 +5,12 @@ build/
 coverage/
 node_modules/
 
+# IDEA:
+.idea/
+**.iml
+
 .env
-*.log
+.huskyrc
 *.DS_Store
 
 .nvmrc

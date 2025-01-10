@@ -1,0 +1,82 @@
+.sideBar-short .MuiPaper-root {
+  box-sizing: border-box;
+  width: 300px;
+  height: auto;
+  overflow-x: hidden;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 0.1em solid #DDD;
+}
+
+  .fullWidthMainContent {
+    padding: 6em;
+  }
+  .fullWidthMainContent .mapArea, .fullWidthMainContent .narrowChartArea{
+    padding: 3em 1em 0 20em;
+    max-width: 65%;
+  }
+
+  .halfWidthMainContent {
+    padding: 10em 10em 6em 25em;
+  }
+  .halfWidthMainContent .categoryMapHeader,
+  .halfWidthMainContent .eqipTotalMainHeader {
+    padding-top: 0px;
+  }
+
+  .stateTitleContainer {
+    justify-content: space-between;
+    border-bottom: 1px solid #e4ebe7;
+    padding: 1em 0;
+    display: flex;
+  }
+
+  .stateTitleContainer > .stateTitle {
+    font-weight: 700;
+    margin-top: 1em;
+    font-size: 1.2em;
+  }
+
+@media only screen and (max-width: 1440px) {
+  
+  .sideBar-short .MuiPaper-root {
+    max-height: 99vh;
+  }
+
+  .fullWidthMainContent {
+    padding: 5em;
+  }
+
+  .fullWidthMainContent .mapArea, .fullWidthMainContent .narrowChartArea{
+    padding: 3em 1em 0 15em;
+    max-width: 65%;
+  }
+  
+  .halfWidthMainContent {
+    padding: 10em 5em 6em 25em;
+  }
+  .halfWidthMainContent .categoryMapHeader,
+  .halfWidthMainContent .eqipTotalMainHeader {
+    padding-top: 0px;
+  }
+
+  .stateTitleContainer {
+    justify-content: space-between;
+    border-bottom: 1px solid #e4ebe7;
+    padding: 1em 0;
+    display: flex;
+  }
+
+
+  .stateTitleContainer > .stateTitle {
+    margin-top: 0.5em;
+  }
+  
+  
+  .sideBar-short .MuiPaper-root {
+    max-height: 99vh;
+  }
+}
+
+
+
