@@ -25,42 +25,8 @@ export default function HouseProjectionSubPage({
         practices: true,
         performance: true
     });
-
-    // cache for 1 hour
-    const CACHE_KEY = "house-outlay-data";
-    const CACHE_DURATION = 1000 * 60 * 60;
-    const checkCachedData = () => {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (cached) {
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < CACHE_DURATION) {
-                return data;
-            }
-            localStorage.removeItem(CACHE_KEY);
-        }
-        return null;
-    };
-    const cacheData = (data) => {
-        const cacheObject = {
-            data,
-            timestamp: Date.now()
-        };
-        try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheObject));
-        } catch (e) {
-            console.warn("Failed to cache data:", e);
-        }
-    };
     React.useEffect(() => {
         const fetchData = async () => {
-            const cachedData = checkCachedData();
-            if (cachedData) {
-                setStatePerformance(cachedData.statePerformance);
-                setPracticeNames(cachedData.practiceNames);
-                setMetaData(cachedData.metaData);
-                setLoadingStates({ metadata: false, practices: false, performance: false });
-                return;
-            }
             try {
                 const [allStatesResponse, stateCodesResponse] = await Promise.all([
                     getJsonDataFromUrl(`${config.apiUrl}/states`),
@@ -74,24 +40,15 @@ export default function HouseProjectionSubPage({
                 });
                 setLoadingStates((prev) => ({ ...prev, metadata: false }));
                 const practiceNamesResponse = await getJsonDataFromUrl(
-                    `${config.apiUrl}/titles/title-ii/programs/house-outlay/practice-names`
+                    `${config.apiUrl}/titles/title-ii/proposals/2024/house/eqip/practice-names`
                 );
                 setPracticeNames(practiceNamesResponse);
                 setLoadingStates((prev) => ({ ...prev, practices: false }));
                 const statePerformanceResponse = await getJsonDataFromUrl(
-                    `${config.apiUrl}/titles/title-ii/programs/house-outlay/predicted`
+                    `${config.apiUrl}/titles/title-ii/proposals/2024/house/eqip/predicted`
                 );
                 setStatePerformance(statePerformanceResponse);
                 setLoadingStates((prev) => ({ ...prev, performance: false }));
-                cacheData({
-                    statePerformance: statePerformanceResponse,
-                    practiceNames: practiceNamesResponse,
-                    metaData: {
-                        allStates: allStatesResponse,
-                        stateCodesData: converted_json,
-                        stateCodesArray: stateCodesResponse
-                    }
-                });
             } catch (err) {
                 console.error("Error fetching data:", err);
                 setLoadingStates({ metadata: false, practices: false, performance: false });
