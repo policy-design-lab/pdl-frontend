@@ -1,0 +1,22 @@
+name: danger
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@master
+        with:
+          node-version: 20.x
+      - name: npm install
+        run: npm install
+      - name: Danger
+        run: npm danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
