@@ -14,10 +14,10 @@ if (github.pr_body.length < 3) {
     warn('Please add a detailed summary in the description.') 
 }
 
-//Warn when there is a big PR
-if (git.lines_of_code > 500) {
-    warn('This PR is too big! Consider breaking it down into smaller PRs.') 
-}
+//Temporary disable this since tasks like create new page may include more than 500 lines of code
+// if (git.lines_of_code > 500) {
+//     warn('This PR is too big! Consider breaking it down into smaller PRs.') 
+// }
 
 //Make it more obvious that a PR is a work in progress and shouldn't be merged yet
 if (github.pr_title.includes('[WIP]')) {
