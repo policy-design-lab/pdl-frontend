@@ -9,14 +9,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
       - name: Use Node.js 20.x
-        uses: actions/setup-node@master
+        uses: actions/setup-node@v3
         with:
           node-version: 20.x
+          cache: 'npm'
+      
       - name: Install Dependencies
         run: npm ci
-      - name: Danger
-        run: npm danger ci
+      
+      - name: Run Danger
+        run: npx danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
