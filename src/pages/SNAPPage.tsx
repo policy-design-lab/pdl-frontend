@@ -6,7 +6,6 @@ import {
     createTheme,
     ThemeProvider,
     Typography,
-    CardMedia,
     Grid,
     RadioGroup,
     FormControlLabel,

@@ -4,8 +4,8 @@ import React from "react";
 
 interface StyledTabProps {
     label: JSX.Element;
-    customSx?: Record<string, any>;
-    selectedSX?: Record<string, any>;
+    customsx?: Record<string, any>;
+    selectedsx?: Record<string, any>;
 }
 
 export const CustomTab = styled((props: StyledTabProps) => (
@@ -14,9 +14,9 @@ export const CustomTab = styled((props: StyledTabProps) => (
         {...props}
         sx={{
             "&.Mui-selected": {
-                color: "#1976d2",
+                color: "#2f7164",
                 fontWeight: 600,
-                ...props.selectedSX
+                ...props.selectedsx
             },
             "&:hover": {
                 backgroundColor: "rgba(25, 118, 210, 0.04)",
@@ -26,8 +26,8 @@ export const CustomTab = styled((props: StyledTabProps) => (
             "minWidth": 120,
             "padding": "12px 24px",
             "margin": "0 8px",
-            "fontSize": "0.975rem",
-            ...props.customSx
+            "fontSize": "1.5rem",
+            ...props.customsx
         }}
     />
 ))({});

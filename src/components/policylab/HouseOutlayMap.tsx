@@ -1,8 +1,7 @@
-import { FormControl, FormLabel, Select, Chip, MenuItem, Box, Typography, Tooltip } from "@mui/material";
+import { FormControl, FormLabel, Select, Chip, MenuItem, Box, Typography } from "@mui/material";
 import React, { useState, useMemo } from "react";
 import { geoCentroid } from "d3-geo";
 import * as d3 from "d3";
-import InfoIcon from "@mui/icons-material/Info";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
@@ -31,6 +30,7 @@ const MapChart = ({
     stateCodes,
     colorScale,
     selectedPractices,
+    onPracticeChange,
     classes
 }) => {
     const calculateNationalTotal = (performance, practices, y) => {
@@ -225,13 +225,20 @@ const MapChart = ({
     );
 };
 
-const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, stateCodes, year = "2024-2033" }) => {
+const HouseOutlayMap = ({
+    practiceNames,
+    initialStatePerformance,
+    allStates,
+    stateCodes,
+    year = "2024-2033",
+    selectedPractices,
+    onPracticeChange
+}) => {
     const [content, setContent] = useState("");
     const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
     const classes = useStyles();
-    const [selectedPractices, setSelectedPractices] = useState(["All Practices"]);
+    // const [selectedPractices, setSelectedPractices] = useState(["All Practices"]);
 
-    // test description tooltip
     const practiceDescriptions = {
         "All Practices": "View the combined total of all conservation practices and their projected maximum payments",
         "CNMP Design and Implementation Activity (101)":
@@ -253,20 +260,6 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
             }}
         >
             <span>{practice}</span>
-            <Tooltip title={description || "No description available"} placement="right" arrow>
-                <InfoIcon
-                    onClick={(e) => e.stopPropagation()}
-                    sx={{
-                        "cursor": "help",
-                        "ml": 1,
-                        "fontSize": "1rem",
-                        "color": "rgba(47, 113, 100, 0.7)",
-                        "&:hover": {
-                            color: "rgba(47, 113, 100, 1)"
-                        }
-                    }}
-                />
-            </Tooltip>
         </MenuItem>
     );
 
@@ -310,7 +303,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
                 ? [selectedPractice]
                 : [...selectedPractices, selectedPractice];
         }
-        setSelectedPractices(newSelected);
+        onPracticeChange(newSelected);
     };
     const handleChipDelete = (practiceToDelete) => {
         let newSelected;
@@ -319,7 +312,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
         } else {
             newSelected = selectedPractices.filter((p) => p !== practiceToDelete);
         }
-        setSelectedPractices(newSelected);
+        onPracticeChange(newSelected);
     };
     const titleElement = (
         <Box sx={{ ml: 10 }}>
@@ -360,28 +353,10 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
                     >
                         Select Practice
                     </FormLabel>
-                    <Tooltip
-                        title="Choose one or multiple practices to view their projected maximum payments across states. Select 'All Practices' to see combined totals."
-                        arrow
-                        placement="top"
-                    >
-                        <InfoIcon
-                            onClick={(e) => e.stopPropagation()}
-                            sx={{
-                                "mr": 1,
-                                "fontSize": "1.25rem",
-                                "color": "rgba(47, 113, 100, 0.7)",
-                                "cursor": "help",
-                                "&:hover": {
-                                    color: "rgba(47, 113, 100, 1)"
-                                }
-                            }}
-                        />
-                    </Tooltip>
                     <Select
                         multiple
                         value={selectedPractices}
-                        onChange={handlePracticeChange}
+                        onChange={(event) => onPracticeChange(event.target.value)}
                         renderValue={(selected) => (
                             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                 {selected.map((value) => (
@@ -446,6 +421,7 @@ const HouseOutlayMap = ({ practiceNames, initialStatePerformance, allStates, sta
                     colorScale={colorScale}
                     selectedPractices={selectedPractices}
                     classes={classes}
+                    onPracticeChange={onPracticeChange}
                 />
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
