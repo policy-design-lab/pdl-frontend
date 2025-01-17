@@ -55,6 +55,7 @@ export default function DrawLegend({
             .attr("height", 90)
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", `0 0 ${width} 90`);
+        const svgWidth = width - margin * 2;
         const customScale = colorScale.domain();
         cut_points.push(Math.min(...programData));
         cut_points = cut_points.concat(customScale);
@@ -72,7 +73,7 @@ export default function DrawLegend({
             data_distribution.push(
                 programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
             );
-            const svgWidth = baseSVG.attr("width") - margin * 2;
+            const newWidth = baseSVG.attr("width") - margin * 2;
             // No need to show color length if there are less than five colors (i.e. not enough data points or label is not correctly identified)
             if (!data_distribution.includes(0)) {
                 baseSVG
@@ -87,13 +88,13 @@ export default function DrawLegend({
                             return margin;
                         }
                         const sum = data_distribution.slice(0, i).reduce((acc, curr) => acc + curr, 0);
-                        return margin + svgWidth * sum;
+                        return margin + newWidth * sum;
                     })
                     .attr("y", () => {
                         return 20;
                     })
                     .attr("width", (d) => {
-                        return d * svgWidth;
+                        return d * newWidth;
                     })
                     .attr("height", 10)
                     .style("fill", (d, i) => prepColor[i]);
@@ -105,7 +106,7 @@ export default function DrawLegend({
                         legendRectX.push(Number(d3.select(d).attr("x")));
                     });
                 const last =
-                    legendRectX[legendRectX.length - 1] + data_distribution[data_distribution.length - 1] * svgWidth;
+                    legendRectX[legendRectX.length - 1] + data_distribution[data_distribution.length - 1] * newWidth;
                 legendRectX.push(last);
                 if (svgWidth > 1690) {
                     baseSVG
