@@ -69,7 +69,7 @@ const MapChart = ({
                             ? `
                             <tr style="${topTipStyle}">
                                 <td class="${classes.tooltip_topcell_left}">
-                                    Total Projected Maximum Payment:
+                                    Total Projected Maximum Financial Assistance:
                                 </td>
                                 <td class="${classes.tooltip_topcell_right}">
                                     $${ShortFormat(stateValue, undefined, 2)}
@@ -322,7 +322,7 @@ const HouseOutlayMap = ({
                     <FormLabel
                         component="legend"
                         sx={{
-                            "mr": 0.5,
+                            "mr": "1em",
                             "minWidth": "5em",
                             "fontWeight": "bold",
                             "fontSize": "1.25rem",
