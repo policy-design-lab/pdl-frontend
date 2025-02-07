@@ -11,6 +11,7 @@ import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { compareWithDollarSign } from "../shared/TableCompareFunctions";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 

@@ -6,6 +6,7 @@ import { convertAllState, getJsonDataFromUrl } from "../../../utils/apiutil";
 import { houseProjectionMenu } from "./Menu";
 import { Sidebar } from "./SideBar";
 import HouseOutlayTable from "../../../components/policylab/HouseOutlayTable";
+import ExpandableDescription from "../../../components/shared/ExplainationDescription";
 
 export default function HouseProjectionSubPageProps({ v, index }: { v: number; index: number }): JSX.Element {
     const [statePerformance, setStatePerformance] = React.useState({});
@@ -63,7 +64,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         setSelectedItem(value);
     };
     const isLoading = Object.values(loadingStates).some((state) => state);
-
     return (
         <Box role="tabpanel" hidden={v !== index && !isLoading}>
             <Box>
@@ -87,17 +87,17 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                             backgroundColor: "#2F7164",
                             color: "white",
                             borderRadius: 1,
-                            mb: 3
+                            mb: 5
                         }}
                     >
                         <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the 1500s, when an unknown printer took a
-                            galley of type and scrambled it to make a type specimen book. It has survived not only five
-                            centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
-                            passages, and more recently with desktop publishing software like Aldus PageMaker including
-                            versions of Lorem Ipsum.
+                            Overall description. Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when
+                            an unknown printer took a galley of type and scrambled it to make a type specimen book. It
+                            has survived not only five centuries, but also the leap into electronic typesetting,
+                            remaining essentially unchanged. It was popularised in the 1960s with the release of
+                            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
+                            software like Aldus PageMaker including versions of Lorem Ipsum.
                         </Typography>
                     </Box>
 
@@ -126,11 +126,12 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                 "minWidth": 0,
                                 "flexDirection": "column",
                                 "gap": 3,
+                                "overflow": "hidden",
+                                "width": "100%",
                                 "& .house-outlay-map": {
                                     "width": "100%",
                                     "& > div": {
                                         "width": "100%",
-                                        // avoid overflow of the map legend
                                         "& svg": {
                                             maxWidth: "100%"
                                         }
@@ -151,22 +152,28 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     <CircularProgress />
                                 </Box>
                             ) : (
-                                <Box
-                                    sx={{
-                                        backgroundColor: "white",
-                                        borderRadius: 1,
-                                        p: 3
-                                    }}
-                                >
-                                    <HouseOutlayMap
-                                        practiceNames={practiceNames}
-                                        initialStatePerformance={statePerformance}
-                                        allStates={metaData.allStates}
-                                        stateCodes={metaData.stateCodesData}
-                                        selectedPractices={selectedPractices}
-                                        onPracticeChange={handlePracticeChange}
+                                <>
+                                    <ExpandableDescription
+                                        shortDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry "
+                                        longDescription=" Long description. Lorem Ipsum is simply dummy text of the printing and typesetting. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when"
                                     />
-                                </Box>
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: 1,
+                                            p: 3
+                                        }}
+                                    >
+                                        <HouseOutlayMap
+                                            practiceNames={practiceNames}
+                                            initialStatePerformance={statePerformance}
+                                            allStates={metaData.allStates}
+                                            stateCodes={metaData.stateCodesData}
+                                            selectedPractices={selectedPractices}
+                                            onPracticeChange={handlePracticeChange}
+                                        />
+                                    </Box>
+                                </>
                             )}
                         </Box>
                     </Box>

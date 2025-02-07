@@ -36,15 +36,12 @@ const MapChart = ({
     const calculateNationalTotal = (performance, practices, y) => {
         if (!performance[y]) return 0;
         if (practices.includes("All Practices")) {
-            return performance[y].reduce(
-                (total, state) => total + Math.abs(state.predictedMaximumTotalPaymentInDollars || 0),
-                0
-            );
+            return performance[y].reduce((total, state) => total + state.predictedMaximumTotalPaymentInDollars, 0);
         }
         return performance[y].reduce((total, state) => {
             const practiceSum = practices.reduce((sum, practice) => {
                 const practiceData = state.practices.find((p) => p.practiceName === practice);
-                return sum + Math.abs(practiceData?.predictedMaximumTotalPaymentInDollars || 0);
+                return sum + practiceData?.predictedMaximumTotalPaymentInDollars;
             }, 0);
             return total + practiceSum;
         }, 0);
@@ -52,18 +49,13 @@ const MapChart = ({
     const handleMouseEnter = (geo, state) => {
         if (!state) return;
         let stateValue;
-        let percentageNationwide;
-        const nationalTotal = calculateNationalTotal(statePerformance, selectedPractices, year);
         if (selectedPractices.includes("All Practices")) {
             stateValue = state.predictedMaximumTotalPaymentInDollars;
-            percentageNationwide = state.predictedMaximumTotalPaymentPercentageNationwide.toFixed(2);
         } else {
             stateValue = selectedPractices.reduce((sum, practice) => {
                 const practiceData = state.practices.find((p) => p.practiceName === practice);
                 return sum + (practiceData?.predictedMaximumTotalPaymentInDollars || 0);
             }, 0);
-            percentageNationwide =
-                nationalTotal > 0 ? ((Math.abs(stateValue) / nationalTotal) * 100).toFixed(2) : "0.00";
         }
         const content = `
             <div class="${classes.tooltip_overall}">
@@ -80,15 +72,7 @@ const MapChart = ({
                                     Total Projected Maximum Payment:
                                 </td>
                                 <td class="${classes.tooltip_topcell_right}">
-                                    $${ShortFormat(Math.abs(stateValue), undefined, 2)}
-                                </td>
-                            </tr>
-                            <tr style="${topTipStyle}">
-                                <td class="${classes.tooltip_bottomcell_left}">
-                                    PCT. Nationwide:
-                                </td>
-                                <td class="${classes.tooltip_bottomcell_right}">
-                                    ${percentageNationwide}%
+                                    $${ShortFormat(stateValue, undefined, 2)}
                                 </td>
                             </tr>
                         `
@@ -131,14 +115,6 @@ const MapChart = ({
                                 `
                                     : ""
                             }
-                            <tr style="${topTipStyle}">
-                                <td class="${classes.tooltip_bottomcell_left}">
-                                    PCT. Nationwide:
-                                </td>
-                                <td class="${classes.tooltip_bottomcell_right}">
-                                    ${percentageNationwide}%
-                                </td>
-                            </tr>
                         `
                     }
                 </tbody>
@@ -179,7 +155,7 @@ const MapChart = ({
                                         geography={geo}
                                         onMouseEnter={() => handleMouseEnter(geo, state)}
                                         onMouseLeave={handleMouseLeave}
-                                        fill={value === 0 ? "#CCC" : colorScale(Math.abs(value))}
+                                        fill={value === 0 ? "#CCC" : colorScale(value)}
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
@@ -237,7 +213,6 @@ const HouseOutlayMap = ({
     const [content, setContent] = useState("");
     const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
     const classes = useStyles();
-    // const [selectedPractices, setSelectedPractices] = useState(["All Practices"]);
 
     const practiceDescriptions = {
         "All Practices": "View the combined total of all conservation practices and their projected maximum payments",
@@ -267,27 +242,30 @@ const HouseOutlayMap = ({
         if (!statePerformance[year]) return { data: [], thresholds: [] };
         const data = statePerformance[year].map((state) => {
             if (selectedPractices.includes("All Practices")) {
-                return Math.abs(state.predictedMaximumTotalPaymentInDollars);
+                return state.predictedMaximumTotalPaymentInDollars;
             }
             return selectedPractices.reduce((sum, practice) => {
                 const practiceRecord = state.practices.find((p) => p.practiceName === practice);
-                return sum + Math.abs(practiceRecord?.predictedMaximumTotalPaymentInDollars || 0);
+                return sum + practiceRecord?.predictedMaximumTotalPaymentInDollars;
             }, 0);
         });
         const sortedData = data.sort((a, b) => a - b);
-        const nonZeroData = sortedData.filter((value) => value > 0);
         const numIntervals = 5;
-        const intervalSize = Math.ceil(nonZeroData.length / numIntervals);
+        const intervalSize = Math.ceil(sortedData.length / numIntervals);
+
         const thresholds: number[] = [];
         for (let i = 1; i < numIntervals; i += 1) {
             const thresholdIndex = i * intervalSize - 1;
-            const adjustedIndex = Math.min(thresholdIndex, nonZeroData.length - 1);
-            thresholds.push(nonZeroData[adjustedIndex]);
+
+            const adjustedIndex = Math.min(thresholdIndex, sortedData.length - 1);
+            thresholds.push(sortedData[adjustedIndex]);
         }
+        // if there are numbers less or larger than 0, replace one of the thresholds with 0 if it is not already included by replacing the one is closest to 0
+        const closestToZero = thresholds.reduce((acc, val) => (Math.abs(val) < Math.abs(acc) ? val : acc), Infinity);
+        if (thresholds.some((val) => val < 0)) thresholds[thresholds.indexOf(closestToZero)] = 0;
         return { data, thresholds };
     }, [statePerformance, year, selectedPractices]);
-
-    const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
+    const mapColor = ["#D95F0E", "#F59020", "#F9D48B", "#F9F9D3", "#F0F9E8"];
     const colorScale = d3.scaleThreshold().domain(practiceData.thresholds).range(mapColor);
     const handlePracticeChange = (selectedPractice) => {
         let newSelected;
@@ -315,24 +293,25 @@ const HouseOutlayMap = ({
         onPracticeChange(newSelected);
     };
     const titleElement = (
-        <Box sx={{ ml: 10 }}>
+        <Box display="flex" justifyContent="center" sx={{ ml: 10 }}>
             <Typography noWrap variant="h6">
                 {selectedPractices.includes("All Practices")
-                    ? "Total Projected Maximum Payment"
-                    : "Selected Practices Projected Payment"}{" "}
+                    ? "Total Projected Maximum Financial Assistance"
+                    : "Selected Practices Projected Financial Assistance"}{" "}
                 for <strong>{year}</strong>
             </Typography>
         </Box>
     );
     return (
-        <div className="house-outlay-map" style={{ width: "100%" }}>
+        <Box className="house-outlay-map">
             <Box display="flex" justifyContent="center">
                 <DrawLegend
+                    key={selectedPractices.join(",")}
                     colorScale={colorScale}
                     title={titleElement}
                     programData={practiceData.data}
                     prepColor={mapColor}
-                    initRatioLarge={0.6}
+                    initRatioLarge={0.8}
                     initRatioSmall={0.5}
                     emptyState={[]}
                 />
@@ -390,12 +369,6 @@ const HouseOutlayMap = ({
                             }
                         }}
                     >
-                        {/* <MenuItem value="All Practices">All Practices</MenuItem>
-                        {practiceNames[year]?.map((practice) => (
-                            <MenuItem key={practice} value={practice}>
-                                {practice}
-                            </MenuItem>
-                        ))} */}
                         <MenuItemWithTooltip
                             practice="All Practices"
                             description={practiceDescriptions["All Practices"]}
@@ -433,7 +406,7 @@ const HouseOutlayMap = ({
                     {content}
                 </ReactTooltip>
             </Box>
-        </div>
+        </Box>
     );
 };
 

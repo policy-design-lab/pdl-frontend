@@ -308,6 +308,7 @@ const TitleIIPracticeMap = ({
             <Box display="flex" justifyContent="center" sx={{ pt: 30 }}>
                 {selectedPractices.length > 0 ? (
                     <DrawLegend
+                        key={selectedPractices.join(",")}
                         colorScale={colorScale}
                         title={titleElement(programName, selectedPractices, year)}
                         programData={practiceData}

@@ -4,8 +4,8 @@ import styled from "@emotion/styled";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { CSVLink } from "react-csv";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { ShortFormat } from "../shared/ConvertionFormats";
-import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
+import { compareWithDollarSign } from "../shared/TableCompareFunctions";
+import getCSVData from "../shared/getCSVData";
 
 const Styles = styled.div`
     padding: 0;
@@ -133,7 +133,11 @@ function Table({ columns, data }) {
         <div>
             {data && data.length > 0 ? (
                 <div style={{ width: "100%" }}>
-                    <CSVLink className="downloadbtn" filename="house-outlay-data.csv" data={data}>
+                    <CSVLink
+                        className="downloadbtn"
+                        filename="house-outlay-data.csv"
+                        data={getCSVData(headerGroups, data)}
+                    >
                         Export Table to CSV
                     </CSVLink>
 
@@ -389,35 +393,22 @@ const HouseOutlayTable = ({
 
             if (selectedPractices.includes("All Practices")) {
                 const totalPayments = stateData.predictedMaximumTotalPaymentInDollars || 0;
-                const nationalTotal = getNationalTotal();
-                const totalPercentage = (totalPayments / nationalTotal) * 100;
-
-                row["Total Projected Payments"] = `$${ShortFormat(Math.abs(totalPayments), undefined, 2)}`;
-                row["Percentage Nationwide"] = `${totalPercentage.toFixed(2)}%`;
+                row["Total Projected Payments"] = `$${totalPayments.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                })}`;
             } else {
                 let totalPayments = 0;
                 selectedPractices.forEach((practice) => {
                     const practiceData = stateData.practices.find((p) => p.practiceName === practice);
                     const practicePayments = practiceData?.predictedMaximumTotalPaymentInDollars || 0;
                     totalPayments += practicePayments;
-
-                    const practiceNationalTotal = getNationalTotalForPractice(practice);
-                    const practicePercentage =
-                        practiceNationalTotal > 0 ? (practicePayments / practiceNationalTotal) * 100 : 0;
-
-                    row[`${practice}: Projected Payments`] = `$${ShortFormat(
-                        Math.abs(practicePayments),
-                        undefined,
-                        2
-                    )}`;
-                    row[`${practice}: Percentage`] = `${practicePercentage.toFixed(2)}%`;
+                    row[`${practice}: Projected Payments`] = `$${practicePayments.toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    })}`;
                 });
-
-                const totalNational = getNationalTotal();
-                const totalPercentage = totalNational > 0 ? (totalPayments / totalNational) * 100 : 0;
-
-                row["Total Projected Payments"] = `$${ShortFormat(Math.abs(totalPayments), undefined, 2)}`;
-                row["Percentage Nationwide"] = `${totalPercentage.toFixed(2)}%`;
+                row["Total Projected Payments"] = `$${totalPayments.toLocaleString(undefined, {
+                    minimumFractionDigits: 2
+                })}`;
             }
 
             return row;
@@ -431,45 +422,24 @@ const HouseOutlayTable = ({
             }
         ];
         if (selectedPractices.includes("All Practices")) {
-            cols.push(
-                {
-                    Header: `Total ${programName} Projected Payments`,
-                    accessor: "Total Projected Payments",
-                    sortType: compareWithDollarSign
-                },
-                {
-                    Header: `${programName} Projected Payments Pct. Nationwide`,
-                    accessor: "Percentage Nationwide",
-                    sortType: compareWithPercentSign
-                }
-            );
+            cols.push({
+                Header: `Total ${programName} Projected Financial Assistance`,
+                accessor: "Total Projected Payments",
+                sortType: compareWithDollarSign
+            });
         } else {
-            cols.push(
-                {
-                    Header: "Total Projected Payments for Selected Practices",
-                    accessor: "Total Projected Payments",
-                    sortType: compareWithDollarSign
-                },
-                {
-                    Header: "Total Projected Payments Pct. Nationwide for Selected Practices",
-                    accessor: "Percentage Nationwide",
-                    sortType: compareWithPercentSign
-                }
-            );
+            cols.push({
+                Header: "Total Projected Financial Assistance for Selected Practices",
+                accessor: "Total Projected Payments",
+                sortType: compareWithDollarSign
+            });
             selectedPractices.forEach((practice) => {
                 const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
-                cols.push(
-                    {
-                        Header: `${displayName} Projected Payments`,
-                        accessor: `${practice}: Projected Payments`,
-                        sortType: compareWithDollarSign
-                    },
-                    {
-                        Header: `${displayName} Projected Payments Pct. Nationwide`,
-                        accessor: `${practice}: Percentage`,
-                        sortType: compareWithPercentSign
-                    }
-                );
+                cols.push({
+                    Header: `${displayName} Projected Financial Assistance`,
+                    accessor: `${practice}: Projected Payments`,
+                    sortType: compareWithDollarSign
+                });
             });
         }
 

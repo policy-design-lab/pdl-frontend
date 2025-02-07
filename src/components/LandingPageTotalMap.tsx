@@ -67,6 +67,7 @@ const MapChart = (props) => {
         <div data-tip="">
             <Box id="TopMapContainer" display="flex" justifyContent="center" sx={{ mt: 4 }}>
                 <DrawLegend
+                    key={selectedPrograms.join(",")}
                     colorScale={colorScale}
                     title={titleElement({ selectedPrograms })}
                     programData={allStates.map((state) => calculateTotal(state.id))}
@@ -257,6 +258,7 @@ const LandingPageTotalMap = ({
     }, [summary]);
     const calculateTotal = useCallback(
         (state) => {
+            if (!allPrograms || !summary) return 0;
             if (selectedPrograms.includes("All Programs")) {
                 const stateProgram = allPrograms.find((s) => s.State === state);
                 return stateProgram ? stateProgram["18-22 All Programs Total"] : 0;
@@ -332,13 +334,19 @@ const LandingPageTotalMap = ({
             window.removeEventListener("resize", handleResize);
         };
     }, []);
+    const [isDataReady, setIsDataReady] = useState(false);
     useEffect(() => {
-        // force trigger the color scale to update
-        setSelectedPrograms((prev) => [...prev]);
-    }, []);
-    useEffect(() => {
-        // console.log("selectedPrograms", selectedPrograms);
-    }, [selectedPrograms]);
+        if (!isDataReady && allPrograms && allStates && summary) {
+            const hasData = allStates.some((state) => {
+                const stateProgram = allPrograms.find((s) => s.State === state.id);
+                return stateProgram && stateProgram["18-22 All Programs Total"] > 0;
+            });
+            if (hasData) {
+                setIsDataReady(true);
+            }
+        }
+    }, [allPrograms, allStates, summary, isDataReady, selectedPrograms]);
+
     return (
         <div>
             <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
@@ -417,7 +425,7 @@ const LandingPageTotalMap = ({
             </Box>
 
             {/* Ensure the MapChart renders when selectedPrograms is updated */}
-            {selectedPrograms && (
+            {isDataReady && (
                 <MapChart
                     setReactTooltipContent={setContent}
                     title={programTitle}
