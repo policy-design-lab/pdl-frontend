@@ -260,11 +260,14 @@ const HouseOutlayMap = ({
             thresholds.push(sortedData[adjustedIndex]);
         }
         // if there are numbers less or larger than 0, replace one of the thresholds with 0 if it is not already included by replacing the one is closest to 0
-        const closestToZero = thresholds.reduce((acc, val) => (Math.abs(val) < Math.abs(acc) ? val : acc), Infinity);
-        if (thresholds.some((val) => val < 0)) thresholds[thresholds.indexOf(closestToZero)] = 0;
+        const closestToZero = thresholds.reduce((prev, curr) => {
+            return Math.abs(curr) < Math.abs(prev) ? curr : prev;
+        });
+        if (thresholds.some((val) => val < 0) && thresholds.some((val) => val > 0))
+            thresholds[thresholds.indexOf(closestToZero)] = 0;
         return { data, thresholds };
     }, [statePerformance, year, selectedPractices]);
-    const mapColor = ["#D95F0E", "#F59020", "#F9D48B", "#F9F9D3", "#F0F9E8"];
+    const mapColor = ["#993404", "#D95F0E", "#F59020", "#F9D48B", "#F9F9D3"];
     const colorScale = d3.scaleThreshold().domain(practiceData.thresholds).range(mapColor);
     const handlePracticeChange = (selectedPractice) => {
         let newSelected;
