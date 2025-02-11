@@ -206,14 +206,13 @@ const HouseOutlayMap = ({
     initialStatePerformance,
     allStates,
     stateCodes,
-    year = "2024-2033",
+    year = "2025-2033",
     selectedPractices,
     onPracticeChange
 }) => {
     const [content, setContent] = useState("");
     const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
     const classes = useStyles();
-
     const practiceDescriptions = {
         "All Practices": "View the combined total of all conservation practices and their projected maximum payments",
         "CNMP Design and Implementation Activity (101)":

@@ -166,6 +166,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     >
                                         <HouseOutlayMap
                                             practiceNames={practiceNames}
+                                            year={Object.keys(statePerformance)[0] ? Object.keys(statePerformance)[0] : "2025-2033"}
                                             initialStatePerformance={statePerformance}
                                             allStates={metaData.allStates}
                                             stateCodes={metaData.stateCodesData}
@@ -188,7 +189,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                         <HouseOutlayTable
                             programName="House EQIP Projection"
                             statePerformance={statePerformance}
-                            year="2024-2033"
+                            year={Object.keys(statePerformance)[0] ? Object.keys(statePerformance)[0] : "2025-2033"}
                             stateCodes={metaData.stateCodesArray}
                             selectedPractices={selectedPractices}
                         />
