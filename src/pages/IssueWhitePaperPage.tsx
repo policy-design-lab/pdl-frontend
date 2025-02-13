@@ -151,6 +151,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
                                                 date="Nov. 15 2023"
+                                                description="As Congress considers reauthorizing the Farm Bill, vital resources that are available to farmers and ranchers today are at risk — specifically the $18 billion investment from the Inflation Reduction Act (IRA) for the U.S. Department of Agriculture’s (USDA) popular conservation programs. This issue brief provides a first look at what farmers stand to lose in each state if these investments are eliminated by Congress."
                                                 link={WhatFarmsStand}
                                                 iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
                                                 iframeWidth={iframeWidth}

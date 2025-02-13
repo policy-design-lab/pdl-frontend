@@ -8,6 +8,7 @@ export default function CardIFrame({
     title,
     author,
     date,
+    description,
     link,
     iframeTitle,
     iframeLink,
@@ -75,11 +76,7 @@ export default function CardIFrame({
                 </Grid>
                 <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
                     <Typography variant="body1" component="div">
-                        As Congress considers reauthorizing the Farm Bill, vital resources that are available to farmers
-                        and ranchers today are at risk — specifically the $18 billion investment from the Inflation
-                        Reduction Act (IRA) for the U.S. Department of Agriculture’s (USDA) popular conservation
-                        programs. This issue brief provides a first look at what farmers stand to lose in each state if
-                        these investments are eliminated by Congress.
+                        {description}
                     </Typography>
                 </Grid>
                 <Grid
