@@ -21,7 +21,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         practices: true,
         performance: true
     });
-    const [selectedItem, setSelectedItem] = React.useState("0");
+    const [selectedItem, setSelectedItem] = React.useState("0-0-0");
     const [selectedPractices, setSelectedPractices] = React.useState(["All Practices"]);
     const handlePracticeChange = (practices) => {
         setSelectedPractices(practices);
@@ -59,11 +59,11 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         };
         fetchData();
     }, []);
-
     const handleMenuSelect = (value: string) => {
         setSelectedItem(value);
     };
     const isLoading = Object.values(loadingStates).some((state) => state);
+
     return (
         <Box role="tabpanel" hidden={v !== index && !isLoading}>
             <Grid container spacing={2} sx={{ my: 4.5 }}>

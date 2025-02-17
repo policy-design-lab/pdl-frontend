@@ -1,6 +1,5 @@
-import { ListItemButton, ListItemText, Collapse, List } from "@mui/material";
+import { ListItemButton, Box, ListItemText, Collapse, List } from "@mui/material";
 import React, { useState } from "react";
-import { Box } from "react-bootstrap-icons";
 
 export interface MenuItem {
     title: string;
@@ -10,21 +9,18 @@ export interface MenuItem {
 // Menu items. Extend this one in the future if adding more items.
 export const houseProjectionMenu: MenuItem[] = [
     {
-        title: "2024 Proposals"
+        title: "House Ag Committee",
+        items: [
+            {
+                title: "EQIP Projection",
+                items: [
+                    {
+                        title: "2024 Proposals"
+                    }
+                ]
+            }
+        ]
     }
-    // {
-    //     title: "House Ag Committee",
-    //     items: [
-    //         {
-    //             title: "EQIP Projection",
-    //             items: [
-    //                 {
-    //                     title: "2024 Proposals"
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
 ];
 
 export function MenuItem({
@@ -40,27 +36,48 @@ export function MenuItem({
     onMenuSelect: (i: string) => void;
     level: number;
 }): JSX.Element {
-    const [isOpen, setIsOpen] = useState(false);
-
+    const isParentLevel = level < 2;
+    const [isOpen, setIsOpen] = useState(isParentLevel);
+    const isExactlySelected = selectedItem === index && !isParentLevel;
     const handleClick = () => {
-        if (item.items) {
-            setIsOpen(!isOpen);
+        if (!isParentLevel) {
+            onMenuSelect(index);
         }
-        onMenuSelect(index);
     };
-
-    const isSelected = selectedItem.startsWith(index);
-
+    const getTextColor = () => {
+        if (isParentLevel) return "#666666";
+        if (isExactlySelected) return "#2F7164";
+        return "#272727";
+    };
+    const getBackgroundColor = () => {
+        return "#ECF0EE";
+    };
+    const getHoverBackgroundColor = () => {
+        if (isParentLevel) return "inherit";
+        if (isExactlySelected) return "#ECF0EE";
+        return "rgba(0, 0, 0, 0.04)";
+    };
+    const showBorder = level > 0;
     return (
         <>
             <ListItemButton
                 onClick={handleClick}
+                disabled={isParentLevel}
                 sx={{
-                    my: 0,
-                    py: 3,
-                    pl: level * 3,
-                    color: isSelected ? "#2F7164" : "#272727",
-                    backgroundColor: isSelected ? "#ECF0EE" : "inherit"
+                    "my": 0,
+                    "py": 2,
+                    "pl": level * 3,
+                    "color": getTextColor(),
+                    "backgroundColor": getBackgroundColor(),
+                    "borderBottom": "1px solid #ccd7d1",
+                    "&:hover": {
+                        backgroundColor: getHoverBackgroundColor()
+                    },
+                    "&.Mui-disabled": {
+                        opacity: 1,
+                        color: "#666666"
+                    },
+                    "cursor": isParentLevel ? "default" : "pointer"
                 }}
             >
                 <ListItemText
@@ -69,9 +86,12 @@ export function MenuItem({
                             sx={{
                                 mx: 3,
                                 fontFamily: '"Roboto", sans-serif',
-                                fontWeight: isSelected ? 600 : 400,
-                                borderLeft: level > 0 ? `4px solid ${isSelected ? "#2F7164" : "#ccd7d1"}` : "none",
-                                paddingLeft: level > 0 ? 2 : 0
+                                fontWeight: 600,
+                                borderLeft: showBorder
+                                    ? `4px solid ${isExactlySelected ? "#2F7164" : "#ccd7d1"}`
+                                    : "none",
+                                paddingLeft: showBorder ? 2 : 0,
+                                color: "inherit"
                             }}
                         >
                             {item.title}

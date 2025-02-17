@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added the House Outlay Projection to 2024 Proposal tab and added this tab to Policy Lab page [#330](https://github.com/policy-design-lab/pdl-frontend/issues/330)
+- Add danger github action to enforce code contribution practices, such as detecting changes in ESLint rule, updating CHANGELOG, including proper descriptions for PRs, etc [#70](https://github.com/policy-design-lab/pdl-frontend/issues/70) 
 
 ### Changed
 - Adjusted IRA table columns [#338](https://github.com/policy-design-lab/pdl-frontend/issues/338)
