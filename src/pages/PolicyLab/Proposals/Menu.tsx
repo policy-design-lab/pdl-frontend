@@ -10,8 +10,14 @@ export interface MenuItem {
 // Menu items. Extend this one in the future if adding more items.
 export const houseProjectionMenu: MenuItem[] = [
     {
-        title: "House EQIP Projection"
+        title: "2024 Proposals"
     }
+    // {
+    //    title: "House Ag Committee"
+    // },
+    // {
+    //   title: "EQIP Projection"
+    // }
 ];
 
 export function MenuItem({

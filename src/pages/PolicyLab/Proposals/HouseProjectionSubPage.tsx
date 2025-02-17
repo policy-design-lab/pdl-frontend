@@ -66,20 +66,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     const isLoading = Object.values(loadingStates).some((state) => state);
     return (
         <Box role="tabpanel" hidden={v !== index && !isLoading}>
-            <Box>
-                <Typography
-                    sx={{
-                        fontWeight: 400,
-                        fontSize: "1.5rem",
-                        color: "#242424",
-                        my: 4.5,
-                        textAlign: "center"
-                    }}
-                >
-                    Page Title
-                </Typography>
-            </Box>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ my: 4.5 }}>
                 <Grid item xs={12} md={2} />
                 <Grid item xs={12} md={8}>
                     <Box
@@ -91,13 +78,14 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                         }}
                     >
                         <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
-                            Overall description. Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when
-                            an unknown printer took a galley of type and scrambled it to make a type specimen book. It
-                            has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining essentially unchanged. It was popularised in the 1960s with the release of
-                            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-                            software like Aldus PageMaker including versions of Lorem Ipsum.
+                            In this space, a variety of policy design proposals will be evaluated and analyzed. Some
+                            analysis is of existing or previous bills in Congress, others will be modifications to
+                            existing bills or laws, as well as alternatives to proposed or existing policies or bills.
+                            The goal is to provide a space for policy design analysis, to further creativity and
+                            innovation in policy design. The tabs along the left-hand side of the page correspond to
+                            different design proposals or categories of proposals. Interactive maps and other
+                            visualizations accompany the proposals, providing analysis and perspectives on the impacts
+                            of different policy designs.
                         </Typography>
                     </Box>
 
@@ -119,7 +107,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                 onMenuSelect={handleMenuSelect}
                             />
                         </Box>
-
                         <Box
                             sx={{
                                 "flex": 1,
@@ -154,8 +141,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                             ) : (
                                 <>
                                     <ExpandableDescription
-                                        shortDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry "
-                                        longDescription=" Long description. Lorem Ipsum is simply dummy text of the printing and typesetting. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when"
+                                        shortDescription="The following visualizations provide projections and analysis of the proposal in the House Ag Committee’s 2024 Farm Bill "
+                                        longDescription="to rescind Inflation Reduction Act appropriations and reinvest a portion of them in Farm Bill conservation baseline."
                                     />
                                     <Box
                                         sx={{
@@ -191,7 +178,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                         }}
                     >
                         <HouseOutlayTable
-                            programName="House EQIP Projection"
+                            programName=""
                             statePerformance={statePerformance}
                             year={Object.keys(statePerformance)[0] ? Object.keys(statePerformance)[0] : "2025-2033"}
                             stateCodes={metaData.stateCodesArray}

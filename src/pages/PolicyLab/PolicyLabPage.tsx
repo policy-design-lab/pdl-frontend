@@ -58,7 +58,7 @@ export default function PolicyLabPage(): JSX.Element {
                 <Tabs variant="scrollable" value={value} onChange={handleChange} scrollButtons="auto" sx={{ mt: 4 }}>
                     <CustomTab label={<Box>Proof of Concept</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
                     <Divider sx={{ mx: 1 }} orientation="vertical" variant="middle" flexItem />
-                    <CustomTab label={<Box>2024 Proposals</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
+                    <CustomTab label={<Box>Proposal Analysis</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
                 </Tabs>
             </Box>
             <Surface51SubPage styleClass={classes} v={value} index={0} />

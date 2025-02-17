@@ -69,7 +69,7 @@ const MapChart = ({
                             ? `
                             <tr style="${topTipStyle}">
                                 <td class="${classes.tooltip_topcell_left}">
-                                    Total Projected Maximum Financial Assistance:
+                                    Total Projected Change in Financial Assistance:
                                 </td>
                                 <td class="${classes.tooltip_topcell_right}">
                                     $${ShortFormat(stateValue, undefined, 2)}
@@ -298,8 +298,8 @@ const HouseOutlayMap = ({
         <Box display="flex" justifyContent="center" sx={{ ml: 10 }}>
             <Typography noWrap variant="h6">
                 {selectedPractices.includes("All Practices")
-                    ? "Total Projected Maximum Financial Assistance"
-                    : "Selected Practices Projected Financial Assistance"}{" "}
+                    ? "Total Projected Change in Financial Assistance"
+                    : "Selected Projected Change in Financial Assistance"}{" "}
                 for <strong>{year}</strong>
             </Typography>
         </Box>

@@ -423,20 +423,20 @@ const HouseOutlayTable = ({
         ];
         if (selectedPractices.includes("All Practices")) {
             cols.push({
-                Header: `Total ${programName} Projected Financial Assistance`,
+                Header: `Total ${programName} Projected Change in Financial Assistance`,
                 accessor: "Total Projected Payments",
                 sortType: compareWithDollarSign
             });
         } else {
             cols.push({
-                Header: "Total Projected Financial Assistance for Selected Practices",
+                Header: "Total Projected Change in Financial Assistance for Selected Practices",
                 accessor: "Total Projected Payments",
                 sortType: compareWithDollarSign
             });
             selectedPractices.forEach((practice) => {
                 const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
                 cols.push({
-                    Header: `${displayName} Projected Financial Assistance`,
+                    Header: `${displayName} Projected Change in Financial Assistance`,
                     accessor: `${practice}: Projected Payments`,
                     sortType: compareWithDollarSign
                 });
@@ -463,7 +463,7 @@ const HouseOutlayTable = ({
                                     paddingTop: 0.6
                                 }}
                             >
-                                {programName} Projected Payments by State
+                                {programName} Projected Changes by State
                             </Typography>
                         </Box>
                     </Grid>
