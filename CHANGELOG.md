@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Add danger github action to enforce code contribution practices, such as detecting changes in ESLint rule, updating CHANGELOG, including proper descriptions for PRs, etc [#70](https://github.com/policy-design-lab/pdl-frontend/issues/70) 
+
 ### Changed
 - Move IRA table columns [#338](https://github.com/policy-design-lab/pdl-frontend/issues/338)
 - Upgraded the node version from 16 to 22, including Dockerfile and GitHub Actions [#352](https://github.com/policy-design-lab/pdl-frontend/issues/352)
