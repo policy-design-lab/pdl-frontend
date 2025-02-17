@@ -48,9 +48,18 @@ export default function TitleIIPage(): JSX.Element {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+    const isDataLoaded = React.useMemo(() => {
+        return (
+            allStates.length > 0 &&
+            allPrograms.length > 0 &&
+            summary.length > 0 &&
+            Object.keys(stateCodesData).length > 0
+        );
+    }, [allStates, allPrograms, summary, stateCodesData]);
+
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 ? (
+            {isDataLoaded ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
@@ -61,17 +70,15 @@ export default function TitleIIPage(): JSX.Element {
                     </Box>
                     <Drawer />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box component="div" sx={{ width: "85%", m: "auto" }}>
-                            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
-                                <LandingPageMap
-                                    programTitle="Title II: Conservation"
-                                    allStates={allStates}
-                                    stateCodes={stateCodesData}
-                                    allPrograms={allPrograms}
-                                    summary={summary}
-                                    containerWidth={windowWidth * 0.75}
-                                />
-                            </Box>
+                        <Box component="div" sx={{ width: "100%", m: "auto", pt: 20 }}>
+                            <LandingPageMap
+                                programTitle="Title II: Conservation"
+                                allStates={allStates}
+                                stateCodes={stateCodesData}
+                                allPrograms={allPrograms}
+                                summary={summary}
+                                containerWidth={windowWidth * 0.75}
+                            />
                         </Box>
 
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>

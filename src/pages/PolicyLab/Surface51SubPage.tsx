@@ -1,8 +1,17 @@
 import { Box, Typography, Grid } from "@mui/material";
 import * as React from "react";
+import { ClassNameMap } from "@mui/styles";
 import AleskiThesis from "../../files/Aleski_Thesis.pdf";
 
-export default function Surface51SubPage({ styleClass }: { styleClass: any }): JSX.Element {
+export default function Surface51SubPage({
+    styleClass,
+    v,
+    index
+}: {
+    styleClass: ClassNameMap<"iframeContainer" | "titleTab" | "titleTabGroup">;
+    v: number;
+    index: number;
+}): JSX.Element {
     const iframeLink = "https://surface51.github.io/policy-design-lab/";
     const iframeTitle = "Surface51 Policy Design Lab";
     function TrendIcon({ bkColor, fontColor, text }) {
@@ -24,7 +33,7 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
         );
     }
     return (
-        <div>
+        <Box role="tabpanel" hidden={v !== index}>
             <Box>
                 <Typography
                     sx={{
@@ -79,7 +88,7 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
                         md={8}
                         sx={{
                             color: "#000000B2 !important",
-                            backgroundColor: "white",
+                            backgroundColor: "#ECF0EE",
                             borderRadius: 1,
                             mb: 4.5,
                             px: 3,
@@ -147,13 +156,14 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={2} />
-                    <Grid xs={12} md={8}>
+                    <Grid xs={12} md={8} style={{ border: "8px solid #ECF0EE", borderBottom: "none" }}>
                         <div className={styleClass.iframeContainer}>
                             <iframe id="surface51-iframe" title={iframeTitle} src={iframeLink} allowFullScreen />
                         </div>
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} sx={{ backgroundColor: "white", borderRadius: 1, mt: 4.5 }}>
+                {/* prevent the overlapping between the iframe and footer */}
+                <Grid container spacing={2} sx={{ backgroundColor: "#ECF0EE", mt: 0.01 }}>
                     <Grid
                         item
                         xs={12}
@@ -175,6 +185,6 @@ export default function Surface51SubPage({ styleClass }: { styleClass: any }): J
                     </Grid>
                 </Grid>
             </Box>
-        </div>
+        </Box>
     );
 }
