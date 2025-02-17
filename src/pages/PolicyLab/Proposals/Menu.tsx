@@ -13,10 +13,17 @@ export const houseProjectionMenu: MenuItem[] = [
         title: "2024 Proposals"
     }
     // {
-    //    title: "House Ag Committee"
-    // },
-    // {
-    //   title: "EQIP Projection"
+    //     title: "House Ag Committee",
+    //     items: [
+    //         {
+    //             title: "EQIP Projection",
+    //             items: [
+    //                 {
+    //                     title: "2024 Proposals"
+    //                 }
+    //             ]
+    //         }
+    //     ]
     // }
 ];
 
