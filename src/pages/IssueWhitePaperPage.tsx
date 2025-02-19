@@ -146,11 +146,23 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardIFrame
+                                                id="issue-projected-allocation-of-remaining-ira"
+                                                title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
+                                                iframeTitle="Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
+                                                author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
+                                                date="February 2025"
+                                                description="The interactive map updates earlier projections of the potential allocation of remaining Inflation Reduction Act appropriations for conservation programs based on an estimate of how much funding may remain that could potentially be spent; projected allocations were made using a combination of historic allocations from both the Farm Bill and the IRA."
+                                                iframeLink="https://datawrapper.dwcdn.net/8siz1/7/"
+                                                iframeWidth={iframeWidth}
+                                                iframeHeight={iframeHeight}
+                                            />
+                                            <CardIFrame
                                                 id="issue-what-farmers-stand"
                                                 title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
                                                 date="Nov. 15 2023"
+                                                description="As Congress considers reauthorizing the Farm Bill, vital resources that are available to farmers and ranchers today are at risk — specifically the $18 billion investment from the Inflation Reduction Act (IRA) for the U.S. Department of Agriculture’s (USDA) popular conservation programs. This issue brief provides a first look at what farmers stand to lose in each state if these investments are eliminated by Congress."
                                                 link={WhatFarmsStand}
                                                 iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
                                                 iframeWidth={iframeWidth}

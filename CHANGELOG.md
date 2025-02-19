@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2025-02-19
+
+### Added
+- Add a new issue brief to the Issue/White Paper page [#357](https://github.com/policy-design-lab/pdl-frontend/issues/357)
+- Add danger github action to enforce code contribution practices, such as detecting changes in ESLint rule, updating CHANGELOG, including proper descriptions for PRs, etc [#70](https://github.com/policy-design-lab/pdl-frontend/issues/70) 
+
+### Changed
+- Move IRA table columns [#338](https://github.com/policy-design-lab/pdl-frontend/issues/338)
+- Upgraded the node version from 16 to 22, including Dockerfile and GitHub Actions [#352](https://github.com/policy-design-lab/pdl-frontend/issues/352)
+- Body description of issue brief component to a parameter [#358](https://github.com/policy-design-lab/pdl-frontend/issues/358)
+
+### Removed
+- Remove unused math functions [#71](https://github.com/policy-design-lab/pdl-frontend/issues/71)
+
 ## [1.5.0] - 2024-12-10
 
 ### Changed
@@ -319,6 +333,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.6.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.2.0...1.3.0

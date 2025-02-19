@@ -322,7 +322,7 @@ const Title1Map = ({
     const searchKey = !subprogram ? program || subtitle : subprogram;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
-    const zeroPoints = [];
+    const zeroPoints: string[] = [];
     statePerformance[year].forEach((state) => {
         if (subtitle && program) {
             const programList = state.programs;
