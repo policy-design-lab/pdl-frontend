@@ -8,8 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Add a new issue brief to the Issue/White Paper page [#357](https://github.com/policy-design-lab/pdl-frontend/issues/357)
-
-### Added
 - Add danger github action to enforce code contribution practices, such as detecting changes in ESLint rule, updating CHANGELOG, including proper descriptions for PRs, etc [#70](https://github.com/policy-design-lab/pdl-frontend/issues/70) 
 
 ### Changed
