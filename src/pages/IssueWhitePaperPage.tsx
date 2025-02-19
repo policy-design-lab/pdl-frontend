@@ -146,6 +146,17 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardIFrame
+                                                id="issue-projected-allocation-of-remaining-ira"
+                                                title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
+                                                iframeTitle="Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
+                                                author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
+                                                date="February 2025"
+                                                description="The interactive map updates earlier projections of the potential allocation of remaining Inflation Reduction Act appropriations for conservation programs based on an estimate of how much funding may remain that could potentially be spent; projected allocations were made using a combination of historic allocations from both the Farm Bill and the IRA."
+                                                iframeLink="https://datawrapper.dwcdn.net/8siz1/7/"
+                                                iframeWidth={iframeWidth}
+                                                iframeHeight={iframeHeight}
+                                            />
+                                            <CardIFrame
                                                 id="issue-what-farmers-stand"
                                                 title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
                                                 iframeTitle="What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"
