@@ -30,22 +30,8 @@ const MapChart = ({
     stateCodes,
     colorScale,
     selectedPractices,
-    onPracticeChange,
     classes
 }) => {
-    const calculateNationalTotal = (performance, practices, y) => {
-        if (!performance[y]) return 0;
-        if (practices.includes("All Practices")) {
-            return performance[y].reduce((total, state) => total + state.predictedMaximumTotalPaymentInDollars, 0);
-        }
-        return performance[y].reduce((total, state) => {
-            const practiceSum = practices.reduce((sum, practice) => {
-                const practiceData = state.practices.find((p) => p.practiceName === practice);
-                return sum + practiceData?.predictedMaximumTotalPaymentInDollars;
-            }, 0);
-            return total + practiceSum;
-        }, 0);
-    };
     const handleMouseEnter = (geo, state) => {
         if (!state) return;
         let stateValue;
@@ -396,7 +382,6 @@ const HouseOutlayMap = ({
                     colorScale={colorScale}
                     selectedPractices={selectedPractices}
                     classes={classes}
-                    onPracticeChange={onPracticeChange}
                 />
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
