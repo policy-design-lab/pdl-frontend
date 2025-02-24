@@ -3,6 +3,19 @@ import { makeStyles } from "@mui/styles";
 import * as React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 
+interface CardIFrameProps {
+    id: string;
+    title: string;
+    author: string;
+    date: string;
+    description?: string | undefined;
+    link?: any;
+    iframeTitle: string;
+    iframeLink: string;
+    iframeWidth: number;
+    iframeHeight: number;
+}
+
 export default function CardIFrame({
     id,
     title,
@@ -14,7 +27,7 @@ export default function CardIFrame({
     iframeLink,
     iframeWidth,
     iframeHeight
-}): JSX.Element {
+}: CardIFrameProps): JSX.Element {
     const useStyles = makeStyles(() => ({
         downloadButton: {
             "&:hover": {
@@ -39,27 +52,29 @@ export default function CardIFrame({
                                 {title}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sm={3} sx={{ display: "flex", justifyContent: "end" }}>
-                            <a href={link} target="_blank" rel="noopener noreferrer">
-                                <Button
-                                    variant="contained"
-                                    className={classes.downloadButton}
-                                    sx={{
-                                        border: "2px solid #2F7164",
-                                        backgroundColor: "transparent",
-                                        color: "#2F7164",
-                                        minWidth: 15,
-                                        minHeight: 4,
-                                        borderRadius: 0
-                                    }}
-                                >
-                                    <Typography variant="subtitle1">
-                                        <strong>Download PDF</strong>
-                                    </Typography>{" "}
-                                    <DownloadIcon sx={{ mx: 1, my: 2 }} />
-                                </Button>
-                            </a>
-                        </Grid>
+                        {link && (
+                            <Grid item xs={12} sm={3} sx={{ display: "flex", justifyContent: "end" }}>
+                                <a href={link} target="_blank" rel="noopener noreferrer">
+                                    <Button
+                                        variant="contained"
+                                        className={classes.downloadButton}
+                                        sx={{
+                                            border: "2px solid #2F7164",
+                                            backgroundColor: "transparent",
+                                            color: "#2F7164",
+                                            minWidth: 15,
+                                            minHeight: 4,
+                                            borderRadius: 0
+                                        }}
+                                    >
+                                        <Typography variant="subtitle1">
+                                            <strong>Download PDF</strong>
+                                        </Typography>{" "}
+                                        <DownloadIcon sx={{ mx: 1, my: 2 }} />
+                                    </Button>
+                                </a>
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
                 <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex" }}>
@@ -74,11 +89,13 @@ export default function CardIFrame({
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
-                    <Typography variant="body1" component="div">
-                        {description}
-                    </Typography>
-                </Grid>
+                {description && (
+                    <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
+                        <Typography variant="body1" component="div">
+                            {description}
+                        </Typography>
+                    </Grid>
+                )}
                 <Grid
                     className="inCardContainer subItems"
                     container
