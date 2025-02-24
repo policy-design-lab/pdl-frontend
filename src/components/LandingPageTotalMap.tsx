@@ -338,6 +338,7 @@ const LandingPageTotalMap = ({
     useEffect(() => {
         if (!isDataReady && allPrograms && allStates && summary) {
             const hasData = allStates.some((state) => {
+                setSelectedPrograms((prev) => [...prev]);
                 const stateProgram = allPrograms.find((s) => s.State === state.id);
                 return stateProgram && stateProgram["18-22 All Programs Total"] > 0;
             });
@@ -345,110 +346,111 @@ const LandingPageTotalMap = ({
                 setIsDataReady(true);
             }
         }
-    }, [allPrograms, allStates, summary, isDataReady, selectedPrograms]);
-
+    }, [allPrograms, allStates, summary, isDataReady]);
     return (
-        <div>
-            <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
-                <FormControl sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            "mr": 2,
-                            "minWidth": "5em",
-                            "fontWeight": "bold",
-                            "fontSize": "1.25rem",
-                            "color": "rgba(47, 113, 100, 1)",
-                            "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
-                        }}
-                    >
-                        Select Program
-                    </FormLabel>
-                    <Select
-                        labelId="program-select-label"
-                        id="program-select"
-                        multiple
-                        value={selectedPrograms}
-                        onChange={handleProgramChange}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip
-                                        key={value}
-                                        label={value}
-                                        sx={{
-                                            "borderRadius": 1,
-                                            "borderColor": "lightgray",
-                                            "color": "rgba(47, 113, 100, 1)",
-                                            "&.Mui-focused": {
-                                                color: "rgba(47, 113, 100, 1) !important"
-                                            }
-                                        }}
-                                    />
-                                ))}
-                            </Box>
-                        )}
-                        MenuProps={{
-                            PaperProps: {
-                                style: {
-                                    maxHeight: 600
-                                }
-                            }
-                        }}
-                        sx={{
-                            "minWidth": 300,
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderRadius: 1,
-                                borderColor: "lightgray"
-                            }
-                        }}
-                    >
-                        {programOptions.map((program) => (
-                            <MenuItem key={program} value={program}>
-                                {program}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-            <Box display="flex" justifyContent="center" alignItems="center" my={2}>
-                {selectedPrograms.map((program) => (
-                    <Button
-                        key={program}
-                        variant="contained"
-                        onClick={() => handleRemoveProgram(program)}
-                        sx={{ mr: 1, mb: 1, backgroundColor: "rgba(47, 113, 100, 1)" }}
-                    >
-                        {program} &times;
-                    </Button>
-                ))}
-            </Box>
-
-            {/* Ensure the MapChart renders when selectedPrograms is updated */}
+        <>
             {isDataReady && (
-                <MapChart
-                    setReactTooltipContent={setContent}
-                    title={programTitle}
-                    stateCodes={stateCodes}
-                    allPrograms={allPrograms}
-                    allStates={allStates}
-                    summary={summary}
-                    screenWidth={screenWidth}
-                    calculateTotal={calculateTotal}
-                    selectedPrograms={selectedPrograms}
-                    colorScale={colorScale}
-                    calculateNationwideTotal={calculateNationwideTotal}
-                    mapColor={mapColor}
-                />
+                <div>
+                    <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+                        <FormControl sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                            <FormLabel
+                                component="legend"
+                                sx={{
+                                    "mr": 2,
+                                    "minWidth": "5em",
+                                    "fontWeight": "bold",
+                                    "fontSize": "1.25rem",
+                                    "color": "rgba(47, 113, 100, 1)",
+                                    "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
+                                }}
+                            >
+                                Select Program
+                            </FormLabel>
+                            <Select
+                                labelId="program-select-label"
+                                id="program-select"
+                                multiple
+                                value={selectedPrograms}
+                                onChange={handleProgramChange}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                        {selected.map((value) => (
+                                            <Chip
+                                                key={value}
+                                                label={value}
+                                                sx={{
+                                                    "borderRadius": 1,
+                                                    "borderColor": "lightgray",
+                                                    "color": "rgba(47, 113, 100, 1)",
+                                                    "&.Mui-focused": {
+                                                        color: "rgba(47, 113, 100, 1) !important"
+                                                    }
+                                                }}
+                                            />
+                                        ))}
+                                    </Box>
+                                )}
+                                MenuProps={{
+                                    PaperProps: {
+                                        style: {
+                                            maxHeight: 600
+                                        }
+                                    }
+                                }}
+                                sx={{
+                                    "minWidth": 300,
+                                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                        borderRadius: 1,
+                                        borderColor: "lightgray"
+                                    }
+                                }}
+                            >
+                                {programOptions.map((program) => (
+                                    <MenuItem key={program} value={program}>
+                                        {program}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box display="flex" justifyContent="center" alignItems="center" my={2}>
+                        {selectedPrograms.map((program) => (
+                            <Button
+                                key={program}
+                                variant="contained"
+                                onClick={() => handleRemoveProgram(program)}
+                                sx={{ mr: 1, mb: 1, backgroundColor: "rgba(47, 113, 100, 1)" }}
+                            >
+                                {program} &times;
+                            </Button>
+                        ))}
+                    </Box>
+                    <MapChart
+                        setReactTooltipContent={setContent}
+                        title={programTitle}
+                        stateCodes={stateCodes}
+                        allPrograms={allPrograms}
+                        allStates={allStates}
+                        summary={summary}
+                        screenWidth={screenWidth}
+                        calculateTotal={calculateTotal}
+                        selectedPrograms={selectedPrograms}
+                        colorScale={colorScale}
+                        calculateNationwideTotal={calculateNationwideTotal}
+                        mapColor={mapColor}
+                    />
+                    <div className="tooltip-container">
+                        {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
+                        <ReactTooltip
+                            className={`${classes.customized_tooltip} tooltip`}
+                            backgroundColor={tooltipBkgColor}
+                        >
+                            {content}
+                        </ReactTooltip>
+                    </div>
+                </div>
             )}
-
-            <div className="tooltip-container">
-                {/* Note that react-tooltip v4 has to use inline background color to style the tooltip arrow */}
-                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
-                    {content}
-                </ReactTooltip>
-            </div>
-        </div>
+        </>
     );
 };
 const titleElement = ({ selectedPrograms }): JSX.Element => {

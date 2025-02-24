@@ -60,11 +60,11 @@ export default function Surface51SubPage({
             </Box>
             <Box>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={2} />
+                    <Grid item xs={12} md={1} />
                     <Grid
                         item
                         xs={12}
-                        md={8}
+                        md={10}
                         sx={{ backgroundColor: "#2F7164", color: "white", borderRadius: 1, mb: 4.5 }}
                     >
                         <Typography sx={{ fontWeight: 500, fontSize: "1.25rem", px: 3, py: 0.5 }}>
@@ -81,11 +81,11 @@ export default function Surface51SubPage({
             </Box>
             <Box>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={2} />
+                    <Grid item xs={12} md={1} />
                     <Grid
                         container
                         xs={12}
-                        md={8}
+                        md={10}
                         sx={{
                             color: "#000000B2 !important",
                             backgroundColor: "#ECF0EE",
@@ -155,8 +155,8 @@ export default function Surface51SubPage({
             </Box>
             <Box>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={2} />
-                    <Grid xs={12} md={8} style={{ border: "8px solid #ECF0EE", borderBottom: "none" }}>
+                    <Grid item xs={12} md={1} />
+                    <Grid xs={12} md={10} style={{ border: "8px solid #ECF0EE", borderBottom: "none" }}>
                         <div className={styleClass.iframeContainer}>
                             <iframe id="surface51-iframe" title={iframeTitle} src={iframeLink} allowFullScreen />
                         </div>

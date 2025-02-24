@@ -67,8 +67,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     return (
         <Box role="tabpanel" hidden={v !== index && !isLoading}>
             <Grid container spacing={2} sx={{ my: 4.5 }}>
-                <Grid item xs={12} md={2} />
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={1} />
+                <Grid item xs={12} md={10}>
                     <Box
                         sx={{
                             backgroundColor: "#2F7164",
@@ -79,13 +79,11 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                     >
                         <Typography sx={{ fontSize: "1.125rem", px: 3, py: 3 }}>
                             In this space, a variety of policy design proposals will be evaluated and analyzed. Some
-                            analysis is of existing or previous bills in Congress, others will be modifications to
-                            existing bills or laws, as well as alternatives to proposed or existing policies or bills.
-                            The goal is to provide a space for policy design analysis, to further creativity and
-                            innovation in policy design. The tabs along the left-hand side of the page correspond to
-                            different design proposals or categories of proposals. Interactive maps and other
-                            visualizations accompany the proposals, providing analysis and perspectives on the impacts
-                            of different policy designs.
+                            analysis is of existing or previous bills in Congress, as well as modifications or
+                            alternatives to proposed or existing policies. Overall, the goal is to provide a space for
+                            policy design analysis to further creativity and innovation. Interactive maps and other
+                            visualizations accompany the various proposals, providing analysis and perspectives on
+                            policy design.
                         </Typography>
                     </Box>
 
@@ -186,7 +184,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={2} />
+                <Grid item xs={12} md={1} />
             </Grid>
         </Box>
     );
