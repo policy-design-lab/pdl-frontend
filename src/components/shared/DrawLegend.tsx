@@ -188,7 +188,7 @@ export default function DrawLegend({
                             .attr("class", "legendTextSide")
                             .attr("x", width / 2 - 150)
                             .attr("y", 80)
-                            .text("In any state that appears in gray, there is no available data");
+                            .text("Gray states indicate no available data or a value of 0");
                     }
                 } else {
                     baseSVG.attr("height", 90);

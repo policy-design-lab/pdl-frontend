@@ -4,9 +4,11 @@ import { geoCentroid } from "d3-geo";
 import * as d3 from "d3";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
+import { Check } from "react-bootstrap-icons";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import DrawLegend from "../shared/DrawLegend";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { CheckAddZero } from "../shared/ColorFunctions";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -238,19 +240,13 @@ const HouseOutlayMap = ({
         const numIntervals = 5;
         const intervalSize = Math.ceil(sortedData.length / numIntervals);
 
-        const thresholds: number[] = [];
+        let thresholds: number[] = [];
         for (let i = 1; i < numIntervals; i += 1) {
             const thresholdIndex = i * intervalSize - 1;
-
             const adjustedIndex = Math.min(thresholdIndex, sortedData.length - 1);
             thresholds.push(sortedData[adjustedIndex]);
         }
-        // if there are numbers less or larger than 0, replace one of the thresholds with 0 if it is not already included by replacing the one is closest to 0
-        const closestToZero = thresholds.reduce((prev, curr) => {
-            return Math.abs(curr) < Math.abs(prev) ? curr : prev;
-        });
-        if (thresholds.some((val) => val < 0) && thresholds.some((val) => val > 0))
-            thresholds[thresholds.indexOf(closestToZero)] = 0;
+        thresholds = CheckAddZero(thresholds);
         return { data, thresholds };
     }, [statePerformance, year, selectedPractices]);
     const mapColor = ["#993404", "#D95F0E", "#F59020", "#F9D48B", "#F9F9D3"];
@@ -299,12 +295,9 @@ const HouseOutlayMap = ({
                     title={titleElement}
                     programData={practiceData.data}
                     prepColor={mapColor}
-                    initRatioLarge={0.8}
-                    initRatioSmall={0.5}
                     emptyState={[]}
                 />
             </Box>
-
             <Box display="flex" justifyContent="center" alignItems="center" pt={4} pb={4}>
                 <FormControl sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                     <FormLabel

@@ -87,7 +87,11 @@ const MapChart = ({
                                         geography={geo}
                                         onMouseEnter={() => handleMouseEnter(geo, record)}
                                         onMouseLeave={handleMouseLeave}
-                                        fill={colorScale(practiceTotal || 0) || "#D2D2D2"}
+                                        fill={
+                                            !practiceTotal || practiceTotal === 0
+                                                ? "#D2D2D2"
+                                                : colorScale(practiceTotal)
+                                        }
                                         stroke="#FFF"
                                         style={{
                                             default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
@@ -313,8 +317,6 @@ const TitleIIPracticeMap = ({
                         title={titleElement(programName, selectedPractices, year)}
                         programData={practiceData}
                         prepColor={mapColor}
-                        initRatioLarge={0.6}
-                        initRatioSmall={0.5}
                         isRatio={false}
                         notDollar={false}
                         emptyState={[]}

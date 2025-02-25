@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added the House Outlay Projection to 2024 Proposal tab and added this tab to Policy Lab page [#330](https://github.com/policy-design-lab/pdl-frontend/issues/330)
+- Added the mechanism for the divide negative and positive numbers in a dynamically generated House Outlay Map [#363])(https://github.com/policy-design-lab/pdl-frontend/issues/363)
 
 ### Changed
 - Hide the issue brief released in 1.6.0 until further notice from collaborators

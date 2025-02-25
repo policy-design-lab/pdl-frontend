@@ -3,6 +3,9 @@
   "printWidth": 120,
   "trailingComma": "none",
   "tabWidth": 4,
-  "doubleQuote": true,
-  "quoteProps": "consistent"
+   "singleQuote": false,
+  "quoteProps": "consistent",
+  "bracketSpacing": true,
+  "endOfLine": "auto",
+  "operatorLinebreak": "after"
 }

@@ -73,9 +73,6 @@ const MapChart = (props) => {
                     programData={allStates.map((state) => calculateTotal(state.id))}
                     prepColor={mapColor}
                     emptyState={[]}
-                    initRatioLarge={0.75}
-                    initRatioSmall={0.8}
-                    screenWidth={screenWidth}
                 />
             </Box>
 

@@ -223,8 +223,6 @@ const CropInsuranceMap = ({
                         programData={quantizeArray}
                         prepColor={mapColor}
                         emptyState={zeroPoints}
-                        initRatioLarge={0.6}
-                        initRatioSmall={0.5}
                     />
                 ) : (
                     <div>
@@ -237,8 +235,6 @@ const CropInsuranceMap = ({
                                 programData={quantizeArray}
                                 prepColor={mapColor}
                                 emptyState={zeroPoints}
-                                initRatioLarge={0.6}
-                                initRatioSmall={0.5}
                             />
                         ) : (
                             <DrawLegend
@@ -248,8 +244,6 @@ const CropInsuranceMap = ({
                                 programData={quantizeArray}
                                 prepColor={mapColor}
                                 emptyState={zeroPoints}
-                                initRatioLarge={0.6}
-                                initRatioSmall={0.5}
                             />
                         )}
                     </div>
