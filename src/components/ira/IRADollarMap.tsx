@@ -537,8 +537,6 @@ const IRADollarMap = ({
                     programData={quantizeArray}
                     prepColor={mapColor}
                     emptyState={[]}
-                    initRatioLarge={0.6}
-                    initRatioSmall={0.5}
                 />
             </Box>
             <MapChart

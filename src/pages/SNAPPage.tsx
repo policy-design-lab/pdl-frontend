@@ -6,7 +6,6 @@ import {
     createTheme,
     ThemeProvider,
     Typography,
-    CardMedia,
     Grid,
     RadioGroup,
     FormControlLabel,
@@ -117,11 +116,20 @@ export default function SNAPPage(): JSX.Element {
             </SvgIcon>
         );
     };
+    const isDataLoaded = React.useMemo(() => {
+        return (
+            Object.keys(stateCodes).length > 0 &&
+            Array.isArray(allStates) &&
+            allStates.length > 0 &&
+            Array.isArray(allPrograms) &&
+            allPrograms.length > 0 &&
+            Array.isArray(summary) &&
+            summary.length > 0
+        );
+    }, [stateCodes, allStates, allPrograms, summary]);
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodes).length > 0 &&
-            Object.keys(allStates).length > 0 &&
-            Object.keys(summary).length > 0 ? (
+            {isDataLoaded ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />

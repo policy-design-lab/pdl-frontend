@@ -322,7 +322,7 @@ const Title1Map = ({
     const searchKey = !subprogram ? program || subtitle : subprogram;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
-    const zeroPoints: string[] = [];
+    const zeroPoints = [];
     statePerformance[year].forEach((state) => {
         if (subtitle && program) {
             const programList = state.programs;
@@ -348,8 +348,6 @@ const Title1Map = ({
                     programData={quantizeArray}
                     prepColor={mapColor}
                     emptyState={zeroPoints}
-                    initRatioLarge={0.6}
-                    initRatioSmall={0.5}
                 />
             </Box>
             <MapChart
