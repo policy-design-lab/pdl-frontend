@@ -17,5 +17,5 @@ export const CheckAddZero = (thresholds: number[]) => {
             }
         }
     }
-    return thresholds;
+    return thresholds.slice(1, thresholds.length - 2);
 };

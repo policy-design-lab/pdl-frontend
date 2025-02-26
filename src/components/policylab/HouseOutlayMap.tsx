@@ -237,7 +237,7 @@ const HouseOutlayMap = ({
             }, 0);
         });
         const sortedData = data.sort((a, b) => a - b);
-        const numIntervals = 5;
+        const numIntervals = 6;
         const intervalSize = Math.ceil(sortedData.length / numIntervals);
 
         let thresholds: number[] = [];
@@ -246,7 +246,9 @@ const HouseOutlayMap = ({
             const adjustedIndex = Math.min(thresholdIndex, sortedData.length - 1);
             thresholds.push(sortedData[adjustedIndex]);
         }
-        thresholds = CheckAddZero(thresholds);
+        thresholds.push(Math.min(...data));
+        thresholds.push(Math.max(...data));
+        thresholds = CheckAddZero(thresholds.sort((a, b) => a - b));
         return { data, thresholds };
     }, [statePerformance, year, selectedPractices]);
     const mapColor = ["#993404", "#D95F0E", "#F59020", "#F9D48B", "#F9F9D3"];
