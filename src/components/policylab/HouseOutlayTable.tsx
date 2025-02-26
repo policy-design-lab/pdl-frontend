@@ -434,9 +434,8 @@ const HouseOutlayTable = ({
                 sortType: compareWithDollarSign
             });
             selectedPractices.forEach((practice) => {
-                const displayName = practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "");
                 cols.push({
-                    Header: `${displayName} Projected Change in Financial Assistance`,
+                    Header: `${practice} Projected Change in Financial Assistance`,
                     accessor: `${practice}: Projected Payments`,
                     sortType: compareWithDollarSign
                 });
