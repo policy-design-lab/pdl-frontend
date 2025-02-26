@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2025-02-26
+
+### Added
+- Added the House Outlay Projection to 2024 Proposal tab and added this tab to Policy Lab page [#330](https://github.com/policy-design-lab/pdl-frontend/issues/330)
+- Added the mechanism for the divide negative and positive numbers in a dynamically generated House Outlay Map [#363](https://github.com/policy-design-lab/pdl-frontend/issues/363)
+
+### Changed
+- Hide the issue brief released in 1.6.0 until further notice from collaborators
+
 ## [1.6.0] - 2025-02-19
 
 ### Added
@@ -333,6 +342,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.7.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.3.0...1.4.0

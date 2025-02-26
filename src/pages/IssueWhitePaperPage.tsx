@@ -145,7 +145,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             justifyContent="flex-start"
                                             sx={{ display: "flex", width: "100%" }}
                                         >
-                                            <CardIFrame
+                                            {/* <CardIFrame
                                                 id="issue-projected-allocation-of-remaining-ira"
                                                 title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
                                                 iframeTitle="Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
@@ -155,7 +155,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 iframeLink="https://datawrapper.dwcdn.net/8siz1/7/"
                                                 iframeWidth={iframeWidth}
                                                 iframeHeight={iframeHeight}
-                                            />
+                                            /> */}
                                             <CardIFrame
                                                 id="issue-what-farmers-stand"
                                                 title="ISSUE BRIEF: What Farmers Stand to Lose in the Farm Bill If Congress Eliminates Conservation Investments"

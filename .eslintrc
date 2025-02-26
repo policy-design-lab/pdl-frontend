@@ -62,26 +62,28 @@
     }
   },
   "rules": {
-    "prettier/prettier": ["error",{
-      "endOfLine": "auto"}
-    ],
-    "brace-style": [
-      "error",
-      "1tbs",
-      {
-        "allowSingleLine": true
-      }
-    ],
+    "prettier/prettier": ["error", {
+      "endOfLine": "auto",
+      "operatorLinebreak": "after",
+      "printWidth": 120
+    }],
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "no-confusing-arrow": "off",
+    "operator-linebreak": ["warn", "after"],
+      "brace-style": [
+        "error",
+        "1tbs",
+        {
+          "allowSingleLine": true
+        }
+      ],
     "camelcase": "off",
     "comma-dangle": [
       "error",
       "never"
     ],
     "default-case": "off",
-    "function-paren-newline": [
-      "error",
-      "consistent"
-    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -145,10 +147,6 @@
     "object-curly-spacing": [
       "error",
       "always"
-    ],
-    "operator-linebreak": [
-      "warn",
-      "after"
     ],
     "prefer-destructuring": "off",
     "quotes": [

@@ -16,26 +16,50 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState = [],
-    initRatioLarge,
-    initRatioSmall,
-    screenWidth = window.innerWidth
+    emptyState = []
 }): JSX.Element {
-    const legendRn = React.useRef(null);
+    const legendRn = React.useRef<HTMLDivElement>(null);
     const margin = 40;
     let cut_points: number[] = [];
-    const [width, setWidth] = React.useState(
-        screenWidth >= 1679 ? screenWidth * initRatioLarge : screenWidth * initRatioSmall
-    );
+    const [width, setWidth] = React.useState(992);
+
     React.useEffect(() => {
-        if (screenWidth > 1679) setWidth(screenWidth * initRatioLarge);
-        else setWidth(screenWidth * initRatioSmall);
+        const updateWidth = () => {
+            if (legendRn.current) {
+                requestAnimationFrame(() => {
+                    const containerWidth = legendRn.current
+                        ? (legendRn.current as HTMLElement).parentElement?.offsetWidth ?? 0
+                        : 0;
+                    if (containerWidth > 0 && containerWidth !== width) {
+                        setWidth(containerWidth);
+                    }
+                });
+            }
+        };
+        updateWidth();
+        const observer = new ResizeObserver(() => {
+            updateWidth();
+        });
+        if (legendRn.current?.parentElement) {
+            observer.observe(legendRn.current.parentElement);
+        }
+        return () => observer.disconnect();
+    }, []);
+
+    React.useEffect(() => {
         drawLegend();
-    });
+    }, [width]); // Run drawLegend when width updates
+
     const drawLegend = () => {
-        if (legendRn.current) {
+        if (legendRn.current && width > 0) {
             d3.select(legendRn.current).selectAll("svg").remove();
-            const baseSVG = d3.select(legendRn.current).append("svg").attr("width", width).attr("height", 90);
+            const baseSVG = d3
+                .select(legendRn.current)
+                .append("svg")
+                .attr("width", "100%")
+                .attr("height", 90)
+                .attr("viewBox", `0 0 ${width} 90`)
+                .attr("preserveAspectRatio", "xMinYMid meet");
             const customScale = colorScale.domain();
             cut_points.push(Math.min(...programData));
             cut_points = cut_points.concat(customScale);
@@ -59,7 +83,7 @@ export default function DrawLegend({
                 data_distribution.push(
                     programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
                 );
-                const svgWidth = baseSVG.attr("width") - margin * 2;
+                const svgWidth = width - margin * 2;
                 // No need to show color length if there are less than five colors (i.e. not enough data points or label is not correctly identified)
                 if (!data_distribution.includes(0)) {
                     baseSVG
@@ -159,36 +183,22 @@ export default function DrawLegend({
                             .attr("y", 80)
                             .text(`${zeroState.join(", ")} has no data available`);
                     } else {
-                        const middleText = baseSVG
-                            .append("text")
-                            .attr("class", "legendTextSide")
-                            .attr("x", -1000)
-                            .attr("y", -1000)
-                            .text("In any state that appears in gray, there is no available data");
-                        const middleBox = middleText.node().getBBox();
-                        middleText.remove();
                         baseSVG
                             .append("text")
                             .attr("class", "legendTextSide")
-                            .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
+                            .attr("x", width / 2 - 150)
                             .attr("y", 80)
-                            .text("In any state that appears in gray, there is no available data");
+                            .text("Gray states indicate no available data or a value of 0");
                     }
                 } else {
-                    baseSVG.attr("height", 40);
-                    const middleText = baseSVG
-                        .append("text")
-                        .attr("class", "legendTextSide")
-                        .attr("x", -1000)
-                        .attr("y", -1000)
-                        .text("There isn't sufficient data to display the legend");
-                    const middleBox = middleText.node().getBBox();
-                    middleText.remove();
+                    baseSVG.attr("height", 90);
                     baseSVG
                         .append("text")
                         .attr("class", "legendTextSide")
-                        .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
-                        .attr("y", 16)
+                        .attr("text-anchor", "middle")
+                        .attr("x", width / 2)
+                        .attr("y", 45)
+                        .style("font-size", "14px")
                         .text("There isn't sufficient data to display the legend");
                 }
             }
