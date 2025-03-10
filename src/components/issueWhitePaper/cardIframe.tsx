@@ -70,7 +70,7 @@ export default function CardIFrame({
                                         <Typography variant="subtitle1">
                                             <strong>Download PDF</strong>
                                         </Typography>{" "}
-                                        <DownloadIcon sx={{ mx: 1, my: 2 }} />
+                                        <DownloadIcon sx={{ mx: 1, mt: 2 }} />
                                     </Button>
                                 </a>
                             </Grid>
