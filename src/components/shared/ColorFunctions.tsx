@@ -19,3 +19,29 @@ export const CheckAddZero = (thresholds: number[]) => {
     }
     return thresholds.slice(1, thresholds.length - 2);
 };
+
+/**
+ * Calculate thresholds for color mapping based on data values
+ * @param dataValues - Array of numbers representing data values
+ * @returns Array of thresholds for color mapping
+ */
+export const calculateThresholds = (dataValues: number[]) => {
+    const sortedData = [...dataValues].sort((a, b) => a - b);
+    if (sortedData.length === 0) {
+        return [];
+    }
+    const numIntervals = 6;
+    const intervalSize = Math.ceil(sortedData.length / numIntervals);
+    let thresholds: number[] = [];
+    for (let i = 1; i < numIntervals; i += 1) {
+        const thresholdIndex = i * intervalSize - 1;
+        const adjustedIndex = Math.min(thresholdIndex, sortedData.length - 1);
+        thresholds.push(sortedData[adjustedIndex]);
+    }
+    if (sortedData.length > 0) {
+        thresholds.push(Math.min(...sortedData));
+        thresholds.push(Math.max(...sortedData));
+    }
+    thresholds = CheckAddZero(thresholds.sort((a, b) => a - b));
+    return thresholds;
+};
