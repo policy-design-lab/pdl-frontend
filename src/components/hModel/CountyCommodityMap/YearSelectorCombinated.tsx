@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Box, FormLabel, Slider, Typography, Switch, FormControlLabel } from "@mui/material";
-
 const YearSelectorCombined = ({
     availableYears,
     yearRange,
@@ -9,7 +8,6 @@ const YearSelectorCombined = ({
     setAggregationEnabled,
     setYearAggregation,
     showMeanValues,
-    
 }) => {
     useEffect(() => {
         if (aggregationEnabled && !showMeanValues) {
@@ -23,7 +21,6 @@ const YearSelectorCombined = ({
     const handleAggregationToggle = (event) => {
         const isEnabled = event.target.checked;
         setAggregationEnabled(isEnabled);
-
         if (isEnabled && !showMeanValues) {
             setYearAggregation(yearRange[0]);
         } else {

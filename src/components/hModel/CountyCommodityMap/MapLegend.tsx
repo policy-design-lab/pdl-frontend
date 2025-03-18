@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import * as d3 from "d3";
 import DrawLegend from "../../shared/DrawLegend";
-
 const MapLegend = ({
     mapData,
     mapColor,
@@ -59,5 +58,4 @@ const MapLegend = ({
         </Box>
     );
 };
-
 export default MapLegend;

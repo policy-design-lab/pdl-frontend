@@ -1,6 +1,5 @@
 import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } from "@mui/material";
 import React from "react";
-
 interface FilterSelectorsProps {
     availableCommodities: string[];
     availablePrograms: string[];
@@ -12,7 +11,6 @@ interface FilterSelectorsProps {
     setSelectedPrograms: (value: string[]) => void;
     setSelectedState: (value: string) => void;
 }
-
 const FilterSelectors: React.FC<FilterSelectorsProps> = ({
     availableCommodities,
     availablePrograms,
@@ -36,7 +34,6 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
             setSelectedCommodities(value);
         }
     };
-    
     const handleProgramChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
         if (value.includes("All Programs") && selectedPrograms.length > 1) {
@@ -49,11 +46,9 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
             setSelectedPrograms(value);
         }
     };
-    
     const handleStateChange = (event: { target: { value: unknown } }) => {
         setSelectedState(event.target.value as string);
     };
-    
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
@@ -171,8 +166,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                     </Select>
                 </FormControl>
             </Grid>
-
-            {/* Program Selector */}
+            {}
             <Grid item xs={12} md={4}>
                 <FormControl fullWidth>
                     <FormLabel
@@ -237,5 +231,4 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
         </Grid>
     );
 };
-
 export default FilterSelectors;

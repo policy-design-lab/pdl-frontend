@@ -1,7 +1,6 @@
 import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
 import { ShortFormat } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
-
 export const CountyTooltipContent = ({
     countyData,
     countyFIPS,
@@ -14,11 +13,14 @@ export const CountyTooltipContent = ({
 }) => {
     if (!countyData) return "";
     const countyName = countyFipsMapping[countyFIPS] || `County ${countyFIPS}`;
-    
+    const syntheticDataNote = countyData.isSyntheticData ? 
+        `<div style="color: #666; margin-top: 8px; font-style: italic; font-size: 0.9em;">
+            Note: This is sample data for display purposes only.
+         </div>` : '';
     let tooltipContent = `
         <div class="${classes.tooltip_overall}">
             <div class="${classes.tooltip_header}">
-                <b>${countyName} (FIPS: ${countyData.name})</b>
+                <b>${countyName} (FIPS: ${countyFIPS || countyData.name})</b>
             </div>
             <table class="${classes.tooltip_table}">
             <tbody>`;
@@ -29,11 +31,9 @@ export const CountyTooltipContent = ({
         (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, shouldShowMeanValues);
-        
         if (selectedCommodities && !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
             tooltipContent += generateCommodityDifferenceContent(countyData, selectedCommodities, classes, shouldShowMeanValues);
         }
-        
         if (selectedPrograms && !selectedPrograms.includes("All Programs") && selectedPrograms.length > 1) {
             tooltipContent += generateProgramDifferenceContent(
                 countyData,
@@ -44,7 +44,6 @@ export const CountyTooltipContent = ({
         }
     } else {
         tooltipContent += generateRegularTooltipContent(countyData, classes, shouldShowMeanValues, yearAggregation, selectedCommodities, selectedPrograms);
-        
         if (selectedPrograms && !selectedPrograms.includes("All Programs") && selectedPrograms.length > 1) {
             tooltipContent += generateProgramRegularContent(
                 countyData,
@@ -57,11 +56,11 @@ export const CountyTooltipContent = ({
     tooltipContent += `
             </tbody>
             </table>
+            ${syntheticDataNote}
         </div>
     `;
     return tooltipContent;
 };
-
 function generateDifferenceTooltipContent(countyData, classes, shouldShowMeanValues) {
     let content = "";
     if (shouldShowMeanValues) {
@@ -134,11 +133,9 @@ function generateDifferenceTooltipContent(countyData, classes, shouldShowMeanVal
             </tr>
     `;
 }
-
 function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues, yearAggregation, selectedCommodities, selectedPrograms) {
     const meanRate = shouldShowMeanValues ? countyData.meanPaymentRateInDollarsPerAcre || 0 : countyData.meanRate || 0;
     const medianRate = shouldShowMeanValues ? countyData.medianPaymentRateInDollarsPerAcre || 0 : countyData.medianRate || 0;
-    
     let content = `
         <tr style="${topTipStyle}">
             <td class="${classes.tooltip_topcell_left}">
@@ -169,12 +166,9 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
         </tr>
         ` : ''}
     `;
-    
     if (yearAggregation > 0 && !shouldShowMeanValues && countyData.yearlyData) {
         content += `<tr><td colspan="2" class="${classes.tooltip_section_header}">Yearly Breakdown</td></tr>`;
-        
         const years = Object.keys(countyData.yearlyData).sort((a, b) => b.localeCompare(a));
-        
         content += `
         <tr>
             <td class="${classes.tooltip_topcell_left}">
@@ -184,7 +178,6 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                 <b>$${ShortFormat(countyData.value, undefined, 2)}</b>
             </td>
         </tr>`;
-        
         years.forEach(year => {
             const yearData = countyData.yearlyData[year];
             if (yearData && yearData.value > 0) {
@@ -200,17 +193,13 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
             }
         });
     }
-    
     if (selectedCommodities && 
         !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
-        
         const commoditiesToDisplay = selectedCommodities.includes("All Commodities") 
             ? Object.keys(countyData.commodities)
             : selectedCommodities;
-        
         if (commoditiesToDisplay.length > 0) {
             content += `<tr><td colspan="2" class="${classes.tooltip_section_header}">Commodity Breakdown</td></tr>`;
-            
             if (commoditiesToDisplay.length > 1) {
                 content += `
                 <tr>
@@ -224,14 +213,11 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                     </td>
                 </tr>`;
             }
-            
             commoditiesToDisplay.forEach(commodity => {
                 const commodityData = countyData.commodities[commodity];
-                
                 if (commodityData) {
                     let commodityMeanRate = 0;
                     let commodityValue = commodityData.value;
-                    
                     if (shouldShowMeanValues && commodityData.baseAcres > 0) {
                         if (selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")) {
                             commodityMeanRate = commodityData.value / commodityData.baseAcres;
@@ -239,7 +225,6 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                             commodityMeanRate = commodityData.value / commodityData.baseAcres;
                         }
                     }
-                    
                     content += `
                     <tr>
                         <td class="${classes.tooltip_regularcell_left}">
@@ -251,7 +236,6 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                                 `$${ShortFormat(commodityValue, undefined, 2)}`}
                         </td>
                     </tr>`;
-                    
                     content += `
                     <tr>
                         <td class="${classes.tooltip_regularcell_left}">
@@ -275,21 +259,16 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
             });
         }
     }
-    
     return content;
 }
-
 function generateCommodityDifferenceContent(countyData, selectedCommodities, classes, shouldShowMeanValues) {
     const commoditiesToDisplay = selectedCommodities.includes("All Commodities") 
         ? Object.keys(countyData.commodities)
         : selectedCommodities;
-    
     if (commoditiesToDisplay.length === 0) {
         return '';
     }
-    
     let content = `<tr><td colspan="2" class="${classes.tooltip_section_header}">Selected Commodities</td></tr>`;
-    
     if (commoditiesToDisplay.length > 1) {
         if (shouldShowMeanValues) {
             const meanRateDiff = countyData.meanRateDifference || 0;
@@ -297,7 +276,6 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
                 const sign = value >= 0 ? "+" : "";
                 return `${sign}${ShortFormat(value, undefined, 2)}`;
             };
-            
             content += `
             <tr>
                 <td class="${classes.tooltip_topcell_left}">
@@ -319,7 +297,6 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
             </tr>`;
         }
     }
-    
     commoditiesToDisplay.forEach((commodity) => {
         const commodityData = countyData.commodities[commodity];
         if (commodityData) {
@@ -327,12 +304,10 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
                 const currentMeanRate = commodityData.currentValue / commodityData.currentBaseAcres || 0;
                 const proposedMeanRate = commodityData.proposedValue / commodityData.proposedBaseAcres || 0;
                 const meanRateDiff = proposedMeanRate - currentMeanRate;
-                
                 const formatDiff = (value) => {
                     const sign = value >= 0 ? "+" : "";
                     return `${sign}${ShortFormat(value, undefined, 2)}`;
                 };
-                
                 content += `
                 <tr>
                     <td class="${classes.tooltip_regularcell_left}">
@@ -354,7 +329,6 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
                 const percentChange = commodityData.currentValue !== 0 
                     ? (commodityData.value / commodityData.currentValue) * 100 
                     : 0;
-                
                 content += `
                 <tr>
                     <td class="${classes.tooltip_regularcell_left}">
@@ -387,7 +361,6 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
     });
     return content;
 }
-
 function generateProgramDifferenceContent(countyData, selectedPrograms, classes, showMeanValues) {
     let content = `<tr><td colspan="2" class="${classes.tooltip_section_header}">Selected Programs</td></tr>`;
     selectedPrograms.forEach((program) => {
@@ -400,7 +373,6 @@ function generateProgramDifferenceContent(countyData, selectedPrograms, classes,
                     const sign = value >= 0 ? "+" : "";
                     return `${sign}${ShortFormat(value, undefined, 2)}`;
                 };
-
                 content += `
                 <tr>
                   <td class="${classes.tooltip_regularcell_left}">
@@ -433,7 +405,6 @@ function generateProgramDifferenceContent(countyData, selectedPrograms, classes,
     });
     return content;
 }
-
 function generateProgramRegularContent(countyData, selectedPrograms, classes, showMeanValues) {
     let content = `<tr><td colspan="2" class="${classes.tooltip_section_header}">Selected Programs</td></tr>`;
     selectedPrograms.forEach((program) => {
@@ -458,7 +429,6 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
                     </td>
                 </tr>`;
             }
-
             content += `
             <tr>
                 <td class="${classes.tooltip_regularcell_left}">

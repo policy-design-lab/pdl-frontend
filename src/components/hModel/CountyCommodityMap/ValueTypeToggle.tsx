@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, FormLabel, FormControlLabel, Switch } from "@mui/material";
-
 const ValueTypeToggle = ({ showMeanValues, setShowMeanValues, disabled = false }) => {
     const handleMeanValueToggle = (event) => {
         setShowMeanValues(event.target.checked);
@@ -10,7 +9,6 @@ const ValueTypeToggle = ({ showMeanValues, setShowMeanValues, disabled = false }
             setShowMeanValues(false);
         }
     }, [disabled, showMeanValues, setShowMeanValues]);
-
     return (
         <Box>
             <FormLabel
@@ -46,5 +44,4 @@ const ValueTypeToggle = ({ showMeanValues, setShowMeanValues, disabled = false }
         </Box>
     );
 };
-
 export default ValueTypeToggle;

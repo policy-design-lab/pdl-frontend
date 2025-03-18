@@ -4,7 +4,6 @@ import FilterSelectors from "./FilterSelectors";
 import ValueTypeToggle from "./ValueTypeToggle";
 import ViewModeSelector from "./ViewModelSelector";
 import YearSelectorCombined from "./YearSelectorCombinated";
-
 const MapControls = ({
     availableYears,
     availableCommodities,
@@ -34,7 +33,6 @@ const MapControls = ({
             selectedPrograms.length === 1 &&
             !selectedPrograms.includes("All Programs") &&
             (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
-
         return !hasSpecificProgram;
     }, [selectedPrograms]);
     return (
@@ -73,5 +71,4 @@ const MapControls = ({
         </Box>
     );
 };
-
 export default MapControls;

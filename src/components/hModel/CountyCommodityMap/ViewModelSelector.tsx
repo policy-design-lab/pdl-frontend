@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, FormLabel, ToggleButton, ToggleButtonGroup } from "@mui/material";
-
 const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setProposedPolicyName }) => {
     const handleViewModeChange = (event, newValue) => {
         event.preventDefault();
@@ -24,7 +23,6 @@ const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setPropos
             >
                 Data View Mode
             </FormLabel>
-
             <ToggleButtonGroup
                 value={viewMode}
                 exclusive
@@ -52,7 +50,6 @@ const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setPropos
                 >
                     Current Policy
                 </ToggleButton>
-
                 <ToggleButton
                     value="proposed"
                     sx={{
@@ -69,7 +66,6 @@ const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setPropos
                 >
                     Proposed: 2025 Policy
                 </ToggleButton>
-
                 <ToggleButton
                     value="difference"
                     sx={{
@@ -90,5 +86,4 @@ const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setPropos
         </Box>
     );
 };
-
 export default ViewModeSelector;
