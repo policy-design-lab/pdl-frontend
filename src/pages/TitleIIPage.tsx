@@ -20,7 +20,7 @@ export default function TitleIIPage(): JSX.Element {
         setWindowWidth(window.innerWidth);
     };
 
-    const total_year = "2018-2022";
+    const total_year = "2014-2023";
     React.useEffect(() => {
         // For landing page map only.
         const allprograms_url = `${config.apiUrl}/allprograms`;

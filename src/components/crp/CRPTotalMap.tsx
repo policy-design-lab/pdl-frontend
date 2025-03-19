@@ -181,7 +181,7 @@ const CRPTotalMap = ({
     //     return null;
     // });
     const category = "Total CRP";
-    const years = "2018-2022";
+    const years = "2014-2023";
     statePerformance[year].forEach((value) => quantizeArray.push(value.totalPaymentInDollars));
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];

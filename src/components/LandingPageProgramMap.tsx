@@ -87,7 +87,7 @@ const MapChart = (props) => {
             color5 = "#0868AC";
             legendTitle = (
                 <Typography noWrap variant="h6">
-                    Total Conservation Programs (Title II) Benefits from <strong>2018 - 2022</strong>
+                    Total Conservation Programs (Title II) Benefits from <strong>2014 - 2023</strong>
                 </Typography>
             );
             break;
