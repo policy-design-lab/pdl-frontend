@@ -98,7 +98,9 @@ export default function HModelTestPage(): JSX.Element {
                                 backgroundColor: "white",
                                 borderRadius: 1,
                                 p: 3,
-                                mt: 3
+                                pb: 5,
+                                mt: 3,
+                                mb: 4
                             }}
                         >
                             {isDataReady ? (
@@ -131,7 +133,7 @@ export default function HModelTestPage(): JSX.Element {
                 </Grid>
             </Box>
             <Box>
-                <Grid container spacing={2} sx={{ backgroundColor: "#ECF0EE", mt: 0.01 }}>
+                <Grid container spacing={2} sx={{ backgroundColor: "#ECF0EE", mt: 3 }}>
                     <Grid
                         item
                         xs={12}

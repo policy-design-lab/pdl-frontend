@@ -24,25 +24,30 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
 }) => {
     const handleCommodityChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
-        if (value.includes("All Commodities") && selectedCommodities.length > 1) {
+        if (value.includes("All Commodities")) {
+            if (!(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities")) {
+                setSelectedCommodities(["All Commodities"]);
+            }
+        } 
+        else if (value.length === 0) {
             setSelectedCommodities(["All Commodities"]);
-        } else if (value.includes("All Commodities") && value.length > 1) {
-            setSelectedCommodities(value.filter((v) => v !== "All Commodities"));
-        } else if (value.length === 0) {
-            setSelectedCommodities(["All Commodities"]);
-        } else {
+        }
+        else {
             setSelectedCommodities(value);
         }
     };
     const handleProgramChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
-        if (value.includes("All Programs") && selectedPrograms.length > 1) {
+        if (value.includes("All Programs")) {
+            // If All Programs wasn't already the only selection, make it the only selection
+            if (!(selectedPrograms.length === 1 && selectedPrograms[0] === "All Programs")) {
+                setSelectedPrograms(["All Programs"]);
+            }
+        } 
+        else if (value.length === 0) {
             setSelectedPrograms(["All Programs"]);
-        } else if (value.includes("All Programs") && value.length > 1) {
-            setSelectedPrograms(value.filter((v) => v !== "All Programs"));
-        } else if (value.length === 0) {
-            setSelectedPrograms(["All Programs"]);
-        } else {
+        }
+        else {
             setSelectedPrograms(value);
         }
     };
@@ -62,7 +67,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             mb: 1
                         }}
                     >
-                        Select State
+                        Select State to View/Zoom
                     </FormLabel>
                     <Select
                         value={selectedState}
@@ -157,9 +162,26 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         }}
                         sx={{ width: "100%" }}
                     >
-                        <MenuItem value="All Commodities">All Commodities</MenuItem>
+                        <MenuItem 
+                            value="All Commodities"
+                            sx={{
+                                fontWeight: 'bold',
+                                bgcolor: selectedCommodities[0] !== "All Commodities" ? 'rgba(47, 113, 100, 0.1)' : 'inherit'
+                            }}
+                        >
+                            All Commodities
+                        </MenuItem>
+                        <Divider sx={{ my: 1 }} />
                         {availableCommodities.map((commodity) => (
-                            <MenuItem key={commodity} value={commodity}>
+                            <MenuItem 
+                                key={commodity} 
+                                value={commodity}
+                                sx={{
+                                    ...(selectedCommodities.includes(commodity) && {
+                                        backgroundColor: 'rgba(47, 113, 100, 0.1)'
+                                    })
+                                }}
+                            >
                                 {commodity}
                             </MenuItem>
                         ))}
@@ -184,6 +206,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         multiple
                         value={selectedPrograms}
                         onChange={handleProgramChange}
+                        displayEmpty={false}
                         renderValue={(selected) => (
                             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                 {(selected as string[]).map((value) => (
@@ -219,9 +242,26 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         }}
                         sx={{ width: "100%" }}
                     >
-                        <MenuItem value="All Programs">All Programs</MenuItem>
+                        <MenuItem 
+                            value="All Programs"
+                            sx={{
+                                fontWeight: 'bold',
+                                bgcolor: selectedPrograms[0] !== "All Programs" ? 'rgba(47, 113, 100, 0.1)' : 'inherit'
+                            }}
+                        >
+                            All Programs
+                        </MenuItem>
+                        <Divider sx={{ my: 1 }} />
                         {availablePrograms.map((program) => (
-                            <MenuItem key={program} value={program}>
+                            <MenuItem 
+                                key={program} 
+                                value={program}
+                                sx={{
+                                    ...(selectedPrograms.includes(program) && {
+                                        backgroundColor: 'rgba(47, 113, 100, 0.1)'
+                                    })
+                                }}
+                            >
                                 {program}
                             </MenuItem>
                         ))}

@@ -4,29 +4,6 @@ import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
-const debugCountyData = (data, year) => {
-    if (!data || !data[year]) {
-        console.log("No county data available for year:", year);
-        return;
-    }
-    console.log("County data structure:", {
-        year,
-        stateCount: data[year].length,
-        sampleState: data[year][0],
-        stateNames: data[year].map(state => state.stateName || state.stateCode).slice(0, 5),
-        georgiaData: data[year].find(state => state.stateCode === "13" || state.stateName === "Georgia")
-    });
-    const georgiaData = data[year].find(state => state.stateCode === "13" || state.stateName === "Georgia");
-    if (georgiaData) {
-        console.log("Georgia data found:", {
-            stateCode: georgiaData.stateCode,
-            counties: georgiaData.counties?.length || 0,
-            sampleCounty: georgiaData.counties?.[0]
-        });
-    } else {
-        console.log("Georgia data not found in year:", year);
-    }
-};
 const CountyCommodityMap = ({
     countyData,
     stateCodesData,
@@ -48,25 +25,7 @@ const CountyCommodityMap = ({
     const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
     const [yearAggregation, setYearAggregation] = useState(0);
     const [aggregationEnabled, setAggregationEnabled] = useState(false);
-    useEffect(() => {
-        if (availableYears.length > 0) {
-            console.log("Available years:", availableYears);
-            console.log("State codes:", stateCodesData);
-            debugCountyData(countyData, availableYears[0]);
-        }
-    }, [countyData, availableYears, stateCodesData]);
-    useEffect(() => {
-        if (selectedState !== "All States") {
-            console.log(`State selected: ${selectedState}`);
-            const stateCode = Object.entries(stateCodesData)
-                .find(([_, name]) => name === selectedState)?.[0];
-            if (stateCode) {
-                console.log(`State code for ${selectedState}: ${stateCode}`);
-            } else {
-                console.warn(`Could not find state code for ${selectedState}`);
-            }
-        }
-    }, [selectedState, stateCodesData]);
+
     useEffect(() => {
         setSelectedYear(availableYears[yearRange[0]] || "2024");
     }, [yearRange, availableYears]);
@@ -118,7 +77,7 @@ const CountyCommodityMap = ({
         setContent(content);
     };
     return (
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", mb: 5 }}>
             <MapControls
                 availableYears={availableYears}
                 availableCommodities={availableCommodities}
@@ -154,6 +113,7 @@ const CountyCommodityMap = ({
                 proposedPolicyName={proposedPolicyName}
             />
             <CountyMap
+                key={`${selectedState}-${viewMode}-${selectedCommodities.join('-')}-${selectedPrograms.join('-')}-${selectedYear}`}
                 mapData={mapData}
                 mapColor={mapColor}
                 viewMode={viewMode}

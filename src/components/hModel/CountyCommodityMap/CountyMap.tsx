@@ -9,21 +9,8 @@ import { CountyTooltipContent } from "./CountyTooltipContent";
 import { useStyles, tooltipBkgColor } from "../../shared/MapTooltip";
 const geoCountyUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
 const geoStateUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
-const knownCountyNames = {
-    "AL": ["Autauga", "Baldwin", "Barbour", "Bibb", "Blount", "Bullock", "Butler", "Calhoun", 
-           "Chambers", "Cherokee", "Chilton", "Choctaw", "Clarke", "Clay", "Cleburne", "Coffee",
-           "Colbert", "Conecuh", "Coosa", "Covington", "Crenshaw", "Cullman", "Dale", "Dallas",
-           "DeKalb", "Elmore", "Escambia", "Etowah", "Fayette", "Franklin", "Geneva", "Greene",
-           "Hale", "Henry", "Houston", "Jackson", "Jefferson", "Lamar", "Lauderdale", "Lawrence",
-           "Lee", "Limestone", "Lowndes", "Macon", "Madison", "Marengo", "Marion", "Marshall",
-           "Mobile", "Monroe", "Montgomery", "Morgan", "Perry", "Pickens", "Pike", "Randolph",
-           "Russell", "St. Clair", "Shelby", "Sumter", "Talladega", "Tallapoosa", "Tuscaloosa", 
-           "Walker", "Washington", "Wilcox", "Winston"],
-    "GA": ["Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks", "Barrow", "Bartow",
-           "Ben Hill", "Berrien", "Bibb", "Bleckley", "Brantley", "Brooks", "Bryan", "Bulloch"],
-    "AZ": ["Apache", "Cochise", "Coconino", "Gila", "Graham", "Greenlee", "La Paz", "Maricopa",
-           "Mohave", "Navajo", "Pima", "Pinal", "Santa Cruz", "Yavapai", "Yuma"]
-};
+
+
 const stateViewSettings = {
     "Alabama": { center: [-86.8, 32.7], zoom: 5 },
     "Alaska": { center: [-150, 63], zoom: 3 },
@@ -116,10 +103,6 @@ const findCountyData = (counties, countyFIPS, debug = false) => {
             }
         }
     }
-    if (debug && !countyData) {
-        console.log(`County data not found for FIPS ${countyFIPS}. Available keys:`, 
-            Object.keys(counties).slice(0, 20));
-    }
     return { countyData, usedKey };
 };
 const CountyMap = ({
@@ -143,23 +126,6 @@ const CountyMap = ({
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
     useEffect(() => {
         if (Object.keys(stateCodesData).length > 0) {
-            const stateCodeEntries = Object.entries(stateCodesData);
-            const georgiaEntry = stateCodeEntries.find(([code, name]) => name === "Georgia");
-            const numericStateCodeMap = {
-                "GA": "13"
-            };
-            if (georgiaEntry) {
-                const [stateCode, stateName] = georgiaEntry;
-                const numericFIPS = numericStateCodeMap[stateCode];
-                if (numericFIPS && !stateCodeEntries.some(([code]) => code === numericFIPS)) {
-                    console.log("Georgia state code mismatch detected. Adding numeric mapping:", {
-                        alphaCode: stateCode,
-                        numericFIPS,
-                        stateName
-                    });
-                    stateCodesData["13"] = "Georgia";
-                }
-            }
             Object.entries(stateCodesData).forEach(([code, name]) => {
                 if (code.length === 2 && /^[A-Z]{2}$/.test(code)) {
                     const numericCodeMap = {
@@ -180,45 +146,12 @@ const CountyMap = ({
                     }
                 }
             });
-            console.log("State codes mapping check:", {
-                totalStateCount: stateCodeEntries.length,
-                georgiaInfo: georgiaEntry,
-                hasNumericCode: stateCodeEntries.some(([code]) => code === "13"),
-                reverseLookup: stateCodeEntries.filter(([code, name]) => 
-                    name === "Georgia" || code === "13" || code === "GA"
-                )
-            });
         }
         if (selectedState === "All States") {
             setPosition({ coordinates: [-95, 40], zoom: 1 });
         } else if (stateViewSettings[selectedState]) {
             const { center, zoom } = stateViewSettings[selectedState];
             setPosition({ coordinates: center, zoom });
-            console.log(`Zooming to ${selectedState}: center=${center}, zoom=${zoom}`);
-            console.log("Counties data for selected state:", {
-                selectedState,
-                countiesCount: Object.keys(mapData.counties).length,
-                firstFewCounties: Object.entries(mapData.counties).slice(0, 5),
-                sampleKeys: Object.keys(mapData.counties).slice(0, 10)
-            });
-            if (Object.keys(mapData.counties).length === 0) {
-                console.log("WARNING: No county data available. Check the following:");
-                console.log("1. mapData object:", mapData);
-                console.log("2. Is data being filtered out for this state?");
-                fetch(geoCountyUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("GeoJSON counties loaded:", data);
-                        const georgiaCounties = data.objects?.counties?.geometries?.filter(geo => {
-                            return geo.id && geo.id.toString().startsWith('13');
-                        });
-                        console.log("Georgia counties in GeoJSON:", {
-                            count: georgiaCounties?.length || 0,
-                            counties: georgiaCounties?.slice(0, 5)
-                        });
-                    })
-                    .catch(error => console.error("Error loading county data:", error));
-            }
         }
     }, [selectedState, mapData, stateCodesData]);
     const handleMouseEnter = useCallback((geo, countyFIPS) => {
@@ -236,27 +169,11 @@ const CountyMap = ({
         const stateFIPS = localCountyFIPS?.substring(0, 2);
         const stateName = stateFIPS ? (stateCodesData[stateFIPS] || "Unknown State") : "Unknown State";
         const { countyData, usedKey } = findCountyData(mapData.counties, localCountyFIPS);
-        const isSyntheticCounty = countyData && countyData.name && 
-                                 typeof countyData.name === 'string' &&
-                                 selectedState !== "All States" &&
-                                 !countyData.name.includes(" - ") &&
-                                 (countyData.name.startsWith('County ') || 
-                                  knownCountyNames[selectedState]?.some(name => name === countyData.name));
-        const isGeorgiaCounty = stateFIPS === "13" || stateName === "Georgia";
         if (!countyData) {
             const isFallbackMode = selectedState !== "All States" && 
                                   Object.keys(mapData.counties).length === 0;
             let tooltipHtml;
-            if (isGeorgiaCounty && selectedState === "Georgia") {
-                tooltipHtml = `
-                    <div>
-                        <h3>${countyName}, Georgia</h3>
-                        <p>FIPS Code: ${localCountyFIPS || 'Unknown'}</p>
-                        <p style="color: #666;">No payment data is available for Georgia counties in this dataset.</p>
-                        <p style="color: #666; font-size: 0.9em;">County is displayed for geographical reference only.</p>
-                    </div>
-                `;
-            } else if (isFallbackMode) {
+            if (isFallbackMode) {
                 tooltipHtml = `
                     <div>
                         <h3>${countyName}, ${stateName}</h3>
@@ -274,24 +191,6 @@ const CountyMap = ({
                     </div>
                 `;
             }
-            onTooltipChange(tooltipHtml);
-            return;
-        }
-        if (isSyntheticCounty) {
-            const countyDataWithNote = {
-                ...countyData,
-                isSyntheticData: true 
-            };
-            const tooltipHtml = CountyTooltipContent({
-                countyData: countyDataWithNote,
-                countyFIPS: localCountyFIPS,
-                viewMode,
-                selectedCommodities,
-                selectedPrograms,
-                classes,
-                showMeanValues,
-                yearAggregation
-            });
             onTooltipChange(tooltipHtml);
             return;
         }
@@ -314,16 +213,23 @@ const CountyMap = ({
         setSelectedState("All States");
     }, [setSelectedState]);
     const handleMoveEnd = useCallback((positionObj) => {
-        setPosition(positionObj);
-    }, []);
+        if (selectedState === "All States") {
+            if (positionObj.zoom !== 1 || 
+                positionObj.coordinates[0] !== -95 || 
+                positionObj.coordinates[1] !== 40) {
+                setPosition({ coordinates: [-95, 40], zoom: 1 });
+            }
+        } else if (stateViewSettings[selectedState]) {
+            const { center, zoom } = stateViewSettings[selectedState];
+            if (positionObj.zoom !== zoom || 
+                positionObj.coordinates[0] !== center[0] || 
+                positionObj.coordinates[1] !== center[1]) {
+                setPosition({ coordinates: center, zoom });
+            }
+        }
+    }, [selectedState]);
     const getCountyFillColor = useCallback((countyData) => {
         if (!countyData) return "#EEE"; 
-        const isSyntheticCounty = countyData.name && 
-                                  typeof countyData.name === 'string' &&
-                                  selectedState !== "All States" &&
-                                  !countyData.name.includes(" - ") &&
-                                  (countyData.name.startsWith('County ') || 
-                                   knownCountyNames[selectedState]?.some(name => name === countyData.name));
         let valueToUse;
         const shouldShowMeanValues =
             showMeanValues &&
@@ -365,15 +271,46 @@ const CountyMap = ({
                     </IconButton>
                 </Box>
             )}
-            <Box sx={{ width: "100%" }}>
-                <div data-tip="" data-for="map-tooltip" style={{ width: "100%" }}>
+            <Box sx={{ 
+                width: "100%",
+                position: "relative" 
+            }}>
+                <div 
+                    data-tip="" 
+                    data-for="map-tooltip" 
+                    style={{ 
+                        width: "100%",
+                        position: "relative"
+                    }}
+                >
+                    <div 
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 10,
+                            pointerEvents: "none"
+                        }}
+                        onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }}
+                        onMouseUp={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }}
+                    />
                     <ComposableMap 
                         projection="geoAlbersUsa"
                         width={800}
-                        height={500}
+                        height={550}
                         style={{
                             width: "100%",
-                            height: "auto"
+                            height: "auto",
+                            touchAction: "none",
+                            marginBottom: "20px"
                         }}
                     >
                         <ZoomableGroup 
@@ -383,58 +320,13 @@ const CountyMap = ({
                             minZoom={position.zoom}
                             maxZoom={position.zoom}
                             translateExtent={[
-                                [position.coordinates[0] - 0.001, position.coordinates[1] - 0.001],
-                                [position.coordinates[0] + 0.001, position.coordinates[1] + 0.001]
+                                [position.coordinates[0] - 0.000001, position.coordinates[1] - 0.000001],
+                                [position.coordinates[0] + 0.000001, position.coordinates[1] + 0.000001]
                             ]}
                         >
                             {}
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => {
-                                    if (selectedState !== "All States") {
-                                        if (selectedState === "Georgia") {
-                                            const georgiaCounties = geographies.filter(geo => {
-                                                const fips = geo.id;
-                                                return fips && fips.startsWith("13"); 
-                                            });
-                                            console.log(`Found ${georgiaCounties.length} Georgia counties in topology.`);
-                                            if (georgiaCounties.length > 0) {
-                                                console.log("Sample Georgia counties:", 
-                                                    georgiaCounties.slice(0, 5).map(g => ({
-                                                        id: g.id,
-                                                        name: g.properties?.name
-                                                    }))
-                                                );
-                                            }
-                                        }
-                                        const filteredGeos = geographies.filter(geo => {
-                                            const countyFIPS = geo.id;
-                                            if (!countyFIPS) return false;
-                                            const stateId = countyFIPS.substring(0, 2);
-                                            if (selectedState === "Georgia" && stateId === "13") {
-                                                return true;
-                                            }
-                                            return stateCodesData[stateId] === selectedState;
-                                        });
-                                        const georgiaFipsCode = Object.entries(stateCodesData)
-                                            .find(([code, name]) => name === "Georgia")?.[0];
-                                        console.log(`Found ${filteredGeos.length} counties in ${selectedState} (via stateCodesData). First few:`, 
-                                            filteredGeos.slice(0, 3).map(g => ({ 
-                                                id: g.id, 
-                                                name: g.properties?.name,
-                                                hasData: !!mapData.counties[g.id]
-                                            }))
-                                        );
-                                        if (selectedState === "Georgia") {
-                                            console.log("Georgia specific debug:", {
-                                                georgiaCode: georgiaFipsCode,
-                                                stateCodesForGeorgia: Object.entries(stateCodesData)
-                                                    .filter(([_, name]) => name === "Georgia")
-                                                    .map(([code]) => code),
-                                                filteredCountyCount: filteredGeos.length,
-                                                countyDataKeys: Object.keys(mapData.counties).filter(fips => fips.startsWith(georgiaFipsCode || "13"))
-                                            });
-                                        }
-                                    }
                                     return (
                                     <>
                                         {geographies.map((geo) => {
@@ -443,8 +335,7 @@ const CountyMap = ({
                                             const stateId = countyFIPS.substring(0, 2);
                                             if (selectedState !== "All States") {
                                                 let stateName = stateCodesData[stateId];
-                                                const isGeorgiaCounty = (selectedState === "Georgia" && stateId === "13");
-                                                if (!isGeorgiaCounty && stateName !== selectedState) {
+                                                if (stateName !== selectedState) {
                                                     return null;
                                                 }
                                                 const { countyData, usedKey } = findCountyData(
@@ -456,13 +347,7 @@ const CountyMap = ({
                                                 if (!countyData) {
                                                     fillColor = "#d9d9d9";
                                                 } else {
-                                                    const isSyntheticCounty = countyData.name && 
-                                                                             typeof countyData.name === 'string' &&
-                                                                             selectedState !== "All States" &&
-                                                                             !countyData.name.includes(" - ") &&
-                                                                             (countyData.name.startsWith('County ') || 
-                                                                              knownCountyNames[selectedState]?.some(name => name === countyData.name));
-                                                    if (isSyntheticCounty && countyData.value) {
+                                                    if ( countyData.value) {
                                                         fillColor = getCountyFillColor(countyData);
                                                     } else {
                                                         fillColor = getCountyFillColor(countyData);
@@ -480,7 +365,7 @@ const CountyMap = ({
                                                         style={{
                                                             default: { outline: "none" },
                                                             hover: { stroke: "#232323", strokeWidth: 0.5, outline: "none" },
-                                                            pressed: { fill: "#345feb", outline: "none" }
+                                                            pressed: { outline: "none", stroke: "#FFFFFF", strokeWidth: 0.15 }
                                                         }}
                                                     />
                                                 );
@@ -502,7 +387,7 @@ const CountyMap = ({
                                                     style={{
                                                         default: { outline: "none" },
                                                         hover: { stroke: "#232323", strokeWidth: 0.5, outline: "none" },
-                                                        pressed: { fill: "#345feb", outline: "none" }
+                                                        pressed: { outline: "none", stroke: "#FFFFFF", strokeWidth: 0.15 }
                                                     }}
                                                 />
                                             );
@@ -517,6 +402,11 @@ const CountyMap = ({
                                                         fill="none"
                                                         stroke="#000"
                                                         strokeWidth={0.5}
+                                                        style={{
+                                                            default: { outline: "none" },
+                                                            hover: { outline: "none" },
+                                                            pressed: { outline: "none" }
+                                                        }}
                                                     />
                                                 ))
                                             }
@@ -576,6 +466,7 @@ const CountyMap = ({
                     effect="float"
                     html
                     id="map-tooltip"
+                    clickable={false}
                 >
                     {tooltipContent}
                 </ReactTooltip>
