@@ -38,7 +38,6 @@ export default function SNAPPage(): JSX.Element {
     const heightPercentage = 0.4;
     const [data, setData] = React.useState(null);
 
-
     const [stateCodes, setStateCodes] = React.useState([]);
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);

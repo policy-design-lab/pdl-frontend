@@ -1,6 +1,7 @@
 import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
 import { ShortFormat } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
+
 export const CountyTooltipContent = ({
     countyData,
     countyFIPS,
@@ -13,10 +14,11 @@ export const CountyTooltipContent = ({
 }) => {
     if (!countyData) return "";
     const countyName = countyFipsMapping[countyFIPS] || `County ${countyFIPS}`;
-    const syntheticDataNote = countyData.isSyntheticData ? 
+    const syntheticDataNote = countyData.isSyntheticData ?
         `<div style="color: #666; margin-top: 8px; font-style: italic; font-size: 0.9em;">
             Note: This is sample data for display purposes only.
-         </div>` : '';
+         </div>` :
+        "";
     let tooltipContent = `
         <div class="${classes.tooltip_overall}">
             <div class="${classes.tooltip_header}">
@@ -31,8 +33,16 @@ export const CountyTooltipContent = ({
         (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, shouldShowMeanValues);
-        if (selectedCommodities && !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
-            tooltipContent += generateCommodityDifferenceContent(countyData, selectedCommodities, classes, shouldShowMeanValues);
+        if (
+            selectedCommodities &&
+            !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))
+        ) {
+            tooltipContent += generateCommodityDifferenceContent(
+                countyData,
+                selectedCommodities,
+                classes,
+                shouldShowMeanValues
+            );
         }
         if (selectedPrograms && !selectedPrograms.includes("All Programs") && selectedPrograms.length > 1) {
             tooltipContent += generateProgramDifferenceContent(
@@ -43,7 +53,14 @@ export const CountyTooltipContent = ({
             );
         }
     } else {
-        tooltipContent += generateRegularTooltipContent(countyData, classes, shouldShowMeanValues, yearAggregation, selectedCommodities, selectedPrograms);
+        tooltipContent += generateRegularTooltipContent(
+            countyData,
+            classes,
+            shouldShowMeanValues,
+            yearAggregation,
+            selectedCommodities,
+            selectedPrograms
+        );
         if (selectedPrograms && !selectedPrograms.includes("All Programs") && selectedPrograms.length > 1) {
             tooltipContent += generateProgramRegularContent(
                 countyData,
@@ -133,18 +150,29 @@ function generateDifferenceTooltipContent(countyData, classes, shouldShowMeanVal
             </tr>
     `;
 }
-function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues, yearAggregation, selectedCommodities, selectedPrograms) {
+function generateRegularTooltipContent(
+    countyData,
+    classes,
+    shouldShowMeanValues,
+    yearAggregation,
+    selectedCommodities,
+    selectedPrograms
+) {
     const meanRate = shouldShowMeanValues ? countyData.meanPaymentRateInDollarsPerAcre || 0 : countyData.meanRate || 0;
-    const medianRate = shouldShowMeanValues ? countyData.medianPaymentRateInDollarsPerAcre || 0 : countyData.medianRate || 0;
+    const medianRate = shouldShowMeanValues ?
+        countyData.medianPaymentRateInDollarsPerAcre || 0 :
+        countyData.medianRate || 0;
     let content = `
         <tr style="${topTipStyle}">
             <td class="${classes.tooltip_topcell_left}">
-                ${shouldShowMeanValues ? 'Mean Payment Rate:' : 'Total Payment:'}
+                ${shouldShowMeanValues ? "Mean Payment Rate:" : "Total Payment:"}
             </td>
             <td class="${classes.tooltip_topcell_right}">
-                ${shouldShowMeanValues ? 
-                    `$${ShortFormat(meanRate, undefined, 2)}/acre` : 
-                    `$${ShortFormat(countyData.value, undefined, 2)}`}
+                ${
+                    shouldShowMeanValues ?
+                        `$${ShortFormat(meanRate, undefined, 2)}/acre` :
+                        `$${ShortFormat(countyData.value, undefined, 2)}`
+                }
             </td>
         </tr>
         <tr>
@@ -155,7 +183,9 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                 ${ShortFormat(countyData.baseAcres, undefined, 1)}
             </td>
         </tr>
-        ${shouldShowMeanValues ? `
+        ${
+            shouldShowMeanValues ?
+                `
         <tr>
             <td class="${classes.tooltip_regularcell_left}">
                 Median Payment Rate:
@@ -164,7 +194,9 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                 $${ShortFormat(medianRate, undefined, 2)}/acre
             </td>
         </tr>
-        ` : ''}
+        ` :
+                ""
+        }
     `;
     if (yearAggregation > 0 && !shouldShowMeanValues && countyData.yearlyData) {
         content += `<tr><td colspan="2" class="${classes.tooltip_section_header}">Yearly Breakdown</td></tr>`;
@@ -178,7 +210,7 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                 <b>$${ShortFormat(countyData.value, undefined, 2)}</b>
             </td>
         </tr>`;
-        years.forEach(year => {
+        years.forEach((year) => {
             const yearData = countyData.yearlyData[year];
             if (yearData && yearData.value > 0) {
                 content += `
@@ -193,10 +225,9 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
             }
         });
     }
-    if (selectedCommodities && 
-        !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
-        const commoditiesToDisplay = selectedCommodities.includes("All Commodities") 
-            ? Object.keys(countyData.commodities)
+    if (selectedCommodities && !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
+        const commoditiesToDisplay = selectedCommodities.includes("All Commodities") ?
+            Object.keys(countyData.commodities)
             : selectedCommodities;
         if (commoditiesToDisplay.length > 0) {
             content += `<tr><td colspan="2" class="${classes.tooltip_section_header}">Commodity Breakdown</td></tr>`;
@@ -207,33 +238,36 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                         <b>Total (All Commodities):</b>
                     </td>
                     <td class="${classes.tooltip_topcell_right}">
-                        <b>${shouldShowMeanValues ? 
-                            `$${ShortFormat(meanRate, undefined, 2)}/acre` : 
-                            `$${ShortFormat(countyData.value, undefined, 2)}`}</b>
+                        <b>${
+                            shouldShowMeanValues ?
+                                `$${ShortFormat(meanRate, undefined, 2)}/acre` :
+                                `$${ShortFormat(countyData.value, undefined, 2)}`
+                        }</b>
                     </td>
                 </tr>`;
             }
-            commoditiesToDisplay.forEach(commodity => {
+            commoditiesToDisplay.forEach((commodity) => {
                 const commodityData = countyData.commodities[commodity];
                 if (commodityData) {
                     let commodityMeanRate = 0;
-                    let commodityValue = commodityData.value;
-                    if (shouldShowMeanValues && commodityData.baseAcres > 0) {
-                        if (selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")) {
-                            commodityMeanRate = commodityData.value / commodityData.baseAcres;
-                        } else {
-                            commodityMeanRate = commodityData.value / commodityData.baseAcres;
-                        }
+                    const commodityValue = commodityData.value || 0;
+                    const commodityBaseAcres = commodityData.baseAcres || 0;
+                    
+                    if (shouldShowMeanValues && commodityBaseAcres > 0) {
+                        commodityMeanRate = commodityValue / commodityBaseAcres;
                     }
+                    
                     content += `
                     <tr>
                         <td class="${classes.tooltip_regularcell_left}">
                             ${commodity}:
                         </td>
                         <td class="${classes.tooltip_regularcell_right}">
-                            ${shouldShowMeanValues ? 
-                                `$${ShortFormat(commodityMeanRate, undefined, 2)}/acre` : 
-                                `$${ShortFormat(commodityValue, undefined, 2)}`}
+                            ${
+                                shouldShowMeanValues ?
+                                    `$${ShortFormat(commodityMeanRate, undefined, 2)}/acre` :
+                                    `$${ShortFormat(commodityValue, undefined, 2)}`
+                            }
                         </td>
                     </tr>`;
                     content += `
@@ -242,7 +276,7 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
                             ${commodity} Base Acres:
                         </td>
                         <td class="${classes.tooltip_regularcell_right}">
-                            ${ShortFormat(commodityData.baseAcres, undefined, 1)}
+                            ${ShortFormat(commodityBaseAcres, undefined, 1)}
                         </td>
                     </tr>`;
                 } else {
@@ -262,11 +296,11 @@ function generateRegularTooltipContent(countyData, classes, shouldShowMeanValues
     return content;
 }
 function generateCommodityDifferenceContent(countyData, selectedCommodities, classes, shouldShowMeanValues) {
-    const commoditiesToDisplay = selectedCommodities.includes("All Commodities") 
-        ? Object.keys(countyData.commodities)
+    const commoditiesToDisplay = selectedCommodities.includes("All Commodities") ?
+        Object.keys(countyData.commodities)
         : selectedCommodities;
     if (commoditiesToDisplay.length === 0) {
-        return '';
+        return "";
     }
     let content = `<tr><td colspan="2" class="${classes.tooltip_section_header}">Selected Commodities</td></tr>`;
     if (commoditiesToDisplay.length > 1) {
@@ -326,9 +360,8 @@ function generateCommodityDifferenceContent(countyData, selectedCommodities, cla
                     </td>
                 </tr>`;
             } else {
-                const percentChange = commodityData.currentValue !== 0 
-                    ? (commodityData.value / commodityData.currentValue) * 100 
-                    : 0;
+                const percentChange =
+                    commodityData.currentValue !== 0 ? (commodityData.value / commodityData.currentValue) * 100 : 0;
                 content += `
                 <tr>
                     <td class="${classes.tooltip_regularcell_left}">

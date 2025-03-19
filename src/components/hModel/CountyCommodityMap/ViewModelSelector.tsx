@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, FormLabel, ToggleButton, ToggleButtonGroup } from "@mui/material";
+
 const ViewModeSelector = ({ viewMode, setViewMode, proposedPolicyName, setProposedPolicyName }) => {
     const handleViewModeChange = (event, newValue) => {
         event.preventDefault();

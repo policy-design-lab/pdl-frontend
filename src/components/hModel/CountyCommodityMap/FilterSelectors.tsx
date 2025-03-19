@@ -1,5 +1,6 @@
 import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+
 interface FilterSelectorsProps {
     availableCommodities: string[];
     availablePrograms: string[];
@@ -11,6 +12,7 @@ interface FilterSelectorsProps {
     setSelectedPrograms: (value: string[]) => void;
     setSelectedState: (value: string) => void;
 }
+
 const FilterSelectors: React.FC<FilterSelectorsProps> = ({
     availableCommodities,
     availablePrograms,
@@ -24,36 +26,36 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
 }) => {
     const handleCommodityChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
-        if (value.includes("All Commodities")) {
-            if (!(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities")) {
-                setSelectedCommodities(["All Commodities"]);
-            }
-        } 
-        else if (value.length === 0) {
+        if (value.includes("All Commodities") && !selectedCommodities.includes("All Commodities")) {
             setSelectedCommodities(["All Commodities"]);
+            return;
         }
-        else {
-            setSelectedCommodities(value);
+        if (value.length === 0) {
+            setSelectedCommodities(["All Commodities"]);
+            return;
         }
+        const filtered = value.filter((item) => item !== "All Commodities");
+        setSelectedCommodities(filtered);
     };
+
     const handleProgramChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
-        if (value.includes("All Programs")) {
-            // If All Programs wasn't already the only selection, make it the only selection
-            if (!(selectedPrograms.length === 1 && selectedPrograms[0] === "All Programs")) {
-                setSelectedPrograms(["All Programs"]);
-            }
-        } 
-        else if (value.length === 0) {
+        if (value.includes("All Programs") && !selectedPrograms.includes("All Programs")) {
             setSelectedPrograms(["All Programs"]);
+            return;
         }
-        else {
-            setSelectedPrograms(value);
+        if (value.length === 0) {
+            setSelectedPrograms(["All Programs"]);
+            return;
         }
+        const filtered = value.filter((item) => item !== "All Programs");
+        setSelectedPrograms(filtered);
     };
+
     const handleStateChange = (event: { target: { value: unknown } }) => {
         setSelectedState(event.target.value as string);
     };
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
@@ -85,20 +87,18 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             }
                         }}
                     >
-                        <MenuItem 
+                        <MenuItem
                             value="All States"
                             sx={{
-                                fontWeight: 'bold',
-                                bgcolor: selectedState !== "All States" ? 'rgba(47, 113, 100, 0.1)' : 'inherit'
+                                fontWeight: "bold",
+                                bgcolor: selectedState !== "All States" ? "rgba(47, 113, 100, 0.1)" : "inherit"
                             }}
                         >
                             All States (US Map)
                         </MenuItem>
                         <Divider sx={{ my: 1 }} />
                         {Object.entries(stateCodesData)
-                            .filter(([, name], index, self) => 
-                                self.findIndex((item) => item[1] === name) === index
-                            )
+                            .filter(([, name], index, self) => self.findIndex((item) => item[1] === name) === index)
                             .sort((a, b) => String(a[1]).localeCompare(String(b[1])))
                             .map(([code, name]) => (
                                 <MenuItem key={code} value={String(name)}>
@@ -161,24 +161,26 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             }
                         }}
                         sx={{ width: "100%" }}
+                        key={`commodity-select-${selectedCommodities.join("|")}`}
                     >
-                        <MenuItem 
+                        <MenuItem
                             value="All Commodities"
                             sx={{
-                                fontWeight: 'bold',
-                                bgcolor: selectedCommodities[0] !== "All Commodities" ? 'rgba(47, 113, 100, 0.1)' : 'inherit'
+                                fontWeight: "bold",
+                                bgcolor:
+                                    selectedCommodities[0] !== "All Commodities" ? "rgba(47, 113, 100, 0.1)" : "inherit"
                             }}
                         >
                             All Commodities
                         </MenuItem>
                         <Divider sx={{ my: 1 }} />
                         {availableCommodities.map((commodity) => (
-                            <MenuItem 
-                                key={commodity} 
+                            <MenuItem
+                                key={commodity}
                                 value={commodity}
                                 sx={{
                                     ...(selectedCommodities.includes(commodity) && {
-                                        backgroundColor: 'rgba(47, 113, 100, 0.1)'
+                                        backgroundColor: "rgba(47, 113, 100, 0.1)"
                                     })
                                 }}
                             >
@@ -188,7 +190,6 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                     </Select>
                 </FormControl>
             </Grid>
-            {}
             <Grid item xs={12} md={4}>
                 <FormControl fullWidth>
                     <FormLabel
@@ -241,24 +242,25 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             }
                         }}
                         sx={{ width: "100%" }}
+                        key={`program-select-${selectedPrograms.join("|")}`}
                     >
-                        <MenuItem 
+                        <MenuItem
                             value="All Programs"
                             sx={{
-                                fontWeight: 'bold',
-                                bgcolor: selectedPrograms[0] !== "All Programs" ? 'rgba(47, 113, 100, 0.1)' : 'inherit'
+                                fontWeight: "bold",
+                                bgcolor: selectedPrograms[0] !== "All Programs" ? "rgba(47, 113, 100, 0.1)" : "inherit"
                             }}
                         >
                             All Programs
                         </MenuItem>
                         <Divider sx={{ my: 1 }} />
                         {availablePrograms.map((program) => (
-                            <MenuItem 
-                                key={program} 
+                            <MenuItem
+                                key={program}
                                 value={program}
                                 sx={{
                                     ...(selectedPrograms.includes(program) && {
-                                        backgroundColor: 'rgba(47, 113, 100, 0.1)'
+                                        backgroundColor: "rgba(47, 113, 100, 0.1)"
                                     })
                                 }}
                             >
@@ -271,4 +273,5 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
         </Grid>
     );
 };
+
 export default FilterSelectors;

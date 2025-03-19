@@ -4,6 +4,7 @@ import FilterSelectors from "./FilterSelectors";
 import ValueTypeToggle from "./ValueTypeToggle";
 import ViewModeSelector from "./ViewModelSelector";
 import YearSelectorCombined from "./YearSelectorCombinated";
+
 const MapControls = ({
     availableYears,
     availableCommodities,

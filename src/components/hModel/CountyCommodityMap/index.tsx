@@ -4,6 +4,7 @@ import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
+
 const CountyCommodityMap = ({
     countyData,
     stateCodesData,
@@ -25,22 +26,76 @@ const CountyCommodityMap = ({
     const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
     const [yearAggregation, setYearAggregation] = useState(0);
     const [aggregationEnabled, setAggregationEnabled] = useState(false);
+    const [forceUpdate, setForceUpdate] = useState(0);
 
     useEffect(() => {
-        setSelectedYear(availableYears[yearRange[0]] || "2024");
-    }, [yearRange, availableYears]);
+        let mounted = true;
+        return () => {
+            mounted = false;
+        };
+    }, [selectedCommodities]);
+
     useEffect(() => {
-        const isMeanValueAllowed =
-            selectedPrograms.length === 1 &&
-            !selectedPrograms.includes("All Programs") &&
-            (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
-        if (showMeanValues && !isMeanValueAllowed) {
-            setShowMeanValues(false);
+        let mounted = true;
+        return () => {
+            mounted = false;
+        };
+    }, [selectedPrograms]);
+
+    useEffect(() => {
+        let mounted = true;
+        if (mounted) {
+            setSelectedYear(availableYears[yearRange[0]] || "2024");
         }
+        return () => {
+            mounted = false;
+        };
+    }, [yearRange, availableYears]);
+
+    useEffect(() => {
+        let mounted = true;
+        if (mounted) {
+            const isMeanValueAllowed =
+                selectedPrograms.length === 1 &&
+                !selectedPrograms.includes("All Programs") &&
+                (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
+            if (showMeanValues && !isMeanValueAllowed) {
+                setShowMeanValues(false);
+            }
+        }
+        return () => {
+            mounted = false;
+        };
     }, [selectedPrograms, showMeanValues]);
+
+    const handleSetSelectedCommodities = (newValue) => {
+        if (JSON.stringify(selectedCommodities) !== JSON.stringify(newValue)) {
+            setSelectedCommodities(newValue);
+            setForceUpdate((prev) => prev + 1);
+        }
+    };
+
+    const handleSetSelectedPrograms = (newValue) => {
+        if (JSON.stringify(selectedPrograms) !== JSON.stringify(newValue)) {
+            setSelectedPrograms(newValue);
+            setForceUpdate((prev) => prev + 1);
+        }
+    };
+
+    const handleSetSelectedState = (newValue) => {
+        if (selectedState !== newValue) {
+            setSelectedState(newValue);
+            setForceUpdate((prev) => prev + 1);
+        }
+    };
+
+    const handleTooltipChange = (newContent) => {
+        setContent(newContent);
+    };
+
     const mapData = useMemo(() => {
         if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
-        return processMapData({
+        const result = processMapData({
             countyData,
             countyDataProposed,
             selectedYear,
@@ -52,6 +107,7 @@ const CountyCommodityMap = ({
             yearAggregation,
             showMeanValues
         });
+        return result;
     }, [
         countyData,
         countyDataProposed,
@@ -62,8 +118,16 @@ const CountyCommodityMap = ({
         selectedState,
         stateCodesData,
         yearAggregation,
-        showMeanValues
+        showMeanValues,
+        forceUpdate
     ]);
+
+    const mapKey = useMemo(() => {
+        return `${selectedCommodities.join("|")}-${selectedPrograms.join(
+            "|"
+        )}-${selectedState}-${viewMode}-${selectedYear}-${forceUpdate}`;
+    }, [selectedCommodities, selectedPrograms, selectedState, viewMode, selectedYear, forceUpdate]);
+
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
             return ["#8B0000", "#D43D51", "#F7F7F7", "#4E9FD1", "#084594"];
@@ -73,47 +137,46 @@ const CountyCommodityMap = ({
         }
         return ["#993404", "#D95F0E", "#F59020", "#F9D48B", "#F9F9D3"];
     }, [viewMode, showMeanValues]);
-    const handleTooltipChange = (content) => {
-        setContent(content);
-    };
+
     return (
-        <Box sx={{ width: "100%", mb: 5 }}>
-            <MapControls
-                availableYears={availableYears}
-                availableCommodities={availableCommodities}
-                availablePrograms={availablePrograms}
-                stateCodesData={stateCodesData}
-                selectedCommodities={selectedCommodities}
-                selectedPrograms={selectedPrograms}
-                selectedState={selectedState}
-                viewMode={viewMode}
-                yearRange={yearRange}
-                yearAggregation={yearAggregation}
-                showMeanValues={showMeanValues}
-                proposedPolicyName={proposedPolicyName}
-                setSelectedCommodities={setSelectedCommodities}
-                setSelectedPrograms={setSelectedPrograms}
-                setSelectedState={setSelectedState}
-                setViewMode={setViewMode}
-                setYearRange={setYearRange}
-                setYearAggregation={setYearAggregation}
-                setShowMeanValues={setShowMeanValues}
-                setProposedPolicyName={setProposedPolicyName}
-                aggregationEnabled={aggregationEnabled}
-                setAggregationEnabled={setAggregationEnabled}
-            />
-            <MapLegend
-                mapData={mapData}
-                mapColor={mapColor}
-                viewMode={viewMode}
-                selectedYear={selectedYear}
-                selectedState={selectedState}
-                yearAggregation={yearAggregation}
-                showMeanValues={showMeanValues}
-                proposedPolicyName={proposedPolicyName}
-            />
+        <Box sx={{ width: "100%" }}>
+            <Box sx={{ mb: 4 }}>
+                <MapControls
+                    availableYears={availableYears}
+                    availableCommodities={availableCommodities}
+                    availablePrograms={availablePrograms}
+                    stateCodesData={stateCodesData}
+                    selectedCommodities={selectedCommodities}
+                    selectedPrograms={selectedPrograms}
+                    selectedState={selectedState}
+                    viewMode={viewMode}
+                    yearRange={yearRange}
+                    yearAggregation={yearAggregation}
+                    showMeanValues={showMeanValues}
+                    proposedPolicyName={proposedPolicyName}
+                    setSelectedCommodities={handleSetSelectedCommodities}
+                    setSelectedPrograms={handleSetSelectedPrograms}
+                    setSelectedState={handleSetSelectedState}
+                    setViewMode={setViewMode}
+                    setYearRange={setYearRange}
+                    setYearAggregation={setYearAggregation}
+                    setShowMeanValues={setShowMeanValues}
+                    setProposedPolicyName={setProposedPolicyName}
+                    aggregationEnabled={aggregationEnabled}
+                    setAggregationEnabled={setAggregationEnabled}
+                />
+                <MapLegend
+                    mapData={mapData}
+                    mapColor={mapColor}
+                    viewMode={viewMode}
+                    selectedYear={selectedYear}
+                    selectedState={selectedState}
+                    yearAggregation={yearAggregation}
+                    showMeanValues={showMeanValues}
+                    proposedPolicyName={proposedPolicyName}
+                />
+            </Box>
             <CountyMap
-                key={`${selectedState}-${viewMode}-${selectedCommodities.join('-')}-${selectedPrograms.join('-')}-${selectedYear}`}
                 mapData={mapData}
                 mapColor={mapColor}
                 viewMode={viewMode}
@@ -127,9 +190,11 @@ const CountyCommodityMap = ({
                 selectedPrograms={selectedPrograms}
                 yearAggregation={yearAggregation}
                 selectedCommodities={selectedCommodities}
-                setSelectedState={setSelectedState}
+                setSelectedState={handleSetSelectedState}
+                key={mapKey}
             />
         </Box>
     );
 };
+
 export default CountyCommodityMap;

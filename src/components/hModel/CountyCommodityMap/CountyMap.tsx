@@ -7,9 +7,9 @@ import * as d3 from "d3";
 import CloseIcon from "@mui/icons-material/Close";
 import { CountyTooltipContent } from "./CountyTooltipContent";
 import { useStyles, tooltipBkgColor } from "../../shared/MapTooltip";
+
 const geoCountyUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
 const geoStateUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
-
 
 const stateViewSettings = {
     "Alabama": { center: [-86.8, 32.7], zoom: 5 },
@@ -94,9 +94,7 @@ const findCountyData = (counties, countyFIPS, debug = false) => {
         if (!countyData && countyFIPS.length === 5) {
             const statePrefix = countyFIPS.substring(0, 2);
             const countyPart = countyFIPS.substring(2);
-            const matchingKey = Object.keys(counties).find(key => 
-                key.endsWith(countyPart) || key === countyPart
-            );
+            const matchingKey = Object.keys(counties).find((key) => key.endsWith(countyPart) || key === countyPart);
             if (matchingKey) {
                 countyData = counties[matchingKey];
                 usedKey = matchingKey;
@@ -125,21 +123,63 @@ const CountyMap = ({
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
     useEffect(() => {
+        let mounted = true;
         if (Object.keys(stateCodesData).length > 0) {
             Object.entries(stateCodesData).forEach(([code, name]) => {
+                if (!mounted) return;
                 if (code.length === 2 && /^[A-Z]{2}$/.test(code)) {
                     const numericCodeMap = {
-                        "AL": "01", "AK": "02", "AZ": "04", "AR": "05", "CA": "06",
-                        "CO": "08", "CT": "09", "DE": "10", "FL": "12", "GA": "13",
-                        "HI": "15", "ID": "16", "IL": "17", "IN": "18", "IA": "19",
-                        "KS": "20", "KY": "21", "LA": "22", "ME": "23", "MD": "24",
-                        "MA": "25", "MI": "26", "MN": "27", "MS": "28", "MO": "29",
-                        "MT": "30", "NE": "31", "NV": "32", "NH": "33", "NJ": "34",
-                        "NM": "35", "NY": "36", "NC": "37", "ND": "38", "OH": "39",
-                        "OK": "40", "OR": "41", "PA": "42", "RI": "44", "SC": "45",
-                        "SD": "46", "TN": "47", "TX": "48", "UT": "49", "VT": "50",
-                        "VA": "51", "WA": "53", "WV": "54", "WI": "55", "WY": "56",
-                        "DC": "11"
+                        AL: "01",
+                        AK: "02",
+                        AZ: "04",
+                        AR: "05",
+                        CA: "06",
+                        CO: "08",
+                        CT: "09",
+                        DE: "10",
+                        FL: "12",
+                        GA: "13",
+                        HI: "15",
+                        ID: "16",
+                        IL: "17",
+                        IN: "18",
+                        IA: "19",
+                        KS: "20",
+                        KY: "21",
+                        LA: "22",
+                        ME: "23",
+                        MD: "24",
+                        MA: "25",
+                        MI: "26",
+                        MN: "27",
+                        MS: "28",
+                        MO: "29",
+                        MT: "30",
+                        NE: "31",
+                        NV: "32",
+                        NH: "33",
+                        NJ: "34",
+                        NM: "35",
+                        NY: "36",
+                        NC: "37",
+                        ND: "38",
+                        OH: "39",
+                        OK: "40",
+                        OR: "41",
+                        PA: "42",
+                        RI: "44",
+                        SC: "45",
+                        SD: "46",
+                        TN: "47",
+                        TX: "48",
+                        UT: "49",
+                        VT: "50",
+                        VA: "51",
+                        WA: "53",
+                        WV: "54",
+                        WI: "55",
+                        WY: "56",
+                        DC: "11"
                     };
                     if (numericCodeMap[code] && !stateCodesData[numericCodeMap[code]]) {
                         stateCodesData[numericCodeMap[code]] = name;
@@ -147,107 +187,142 @@ const CountyMap = ({
                 }
             });
         }
-        if (selectedState === "All States") {
-            setPosition({ coordinates: [-95, 40], zoom: 1 });
-        } else if (stateViewSettings[selectedState]) {
-            const { center, zoom } = stateViewSettings[selectedState];
-            setPosition({ coordinates: center, zoom });
-        }
-    }, [selectedState, mapData, stateCodesData]);
-    const handleMouseEnter = useCallback((geo, countyFIPS) => {
-        let localCountyFIPS = countyFIPS;
-        if (!localCountyFIPS && geo.properties) {
-            if (geo.properties.GEOID) {
-                localCountyFIPS = geo.properties.GEOID;
-            } else if (geo.properties.id) {
-                localCountyFIPS = geo.properties.id;
-            } else if (geo.properties.fips) {
-                localCountyFIPS = geo.properties.fips;
+        if (mounted) {
+            if (selectedState === "All States") {
+                setPosition({ coordinates: [-95, 40], zoom: 1 });
+            } else if (stateViewSettings[selectedState]) {
+                const { center, zoom } = stateViewSettings[selectedState];
+                setPosition({ coordinates: center, zoom });
             }
         }
-        const countyName = geo.properties?.name || "Unknown County";
-        const stateFIPS = localCountyFIPS?.substring(0, 2);
-        const stateName = stateFIPS ? (stateCodesData[stateFIPS] || "Unknown State") : "Unknown State";
-        const { countyData, usedKey } = findCountyData(mapData.counties, localCountyFIPS);
-        if (!countyData) {
-            const isFallbackMode = selectedState !== "All States" && 
-                                  Object.keys(mapData.counties).length === 0;
-            let tooltipHtml;
-            if (isFallbackMode) {
-                tooltipHtml = `
+        return () => {
+            mounted = false;
+        };
+    }, [selectedState, mapData, stateCodesData]);
+    const handleMouseEnter = useCallback(
+        (geo, countyFIPS) => {
+            let mounted = true;
+            let localCountyFIPS = countyFIPS;
+            if (!localCountyFIPS && geo.properties) {
+                if (geo.properties.GEOID) {
+                    localCountyFIPS = geo.properties.GEOID;
+                } else if (geo.properties.id) {
+                    localCountyFIPS = geo.properties.id;
+                } else if (geo.properties.fips) {
+                    localCountyFIPS = geo.properties.fips;
+                }
+            }
+            const countyName = geo.properties?.name || "Unknown County";
+            const stateFIPS = localCountyFIPS?.substring(0, 2);
+            const stateName = stateFIPS ? stateCodesData[stateFIPS] || "Unknown State" : "Unknown State";
+            const { countyData, usedKey } = findCountyData(mapData.counties, localCountyFIPS);
+            if (!countyData) {
+                const isFallbackMode = selectedState !== "All States" && Object.keys(mapData.counties).length === 0;
+                let tooltipHtml;
+                if (isFallbackMode) {
+                    tooltipHtml = `
                     <div>
                         <h3>${countyName}, ${stateName}</h3>
-                        <p>FIPS Code: ${localCountyFIPS || 'Unknown'}</p>
+                        <p>FIPS Code: ${localCountyFIPS || "Unknown"}</p>
                         <p style="color: #666;">No payment data is available for this county.</p>
                         <p style="color: #666; font-size: 0.9em;">Displaying fallback county outlines for ${selectedState}.</p>
                     </div>
                 `;
-            } else {
-                tooltipHtml = `
+                } else {
+                    tooltipHtml = `
                     <div>
                         <h3>${countyName}, ${stateName}</h3>
-                        <p>FIPS Code: ${localCountyFIPS || 'Unknown'}</p>
+                        <p>FIPS Code: ${localCountyFIPS || "Unknown"}</p>
                         <p>No payment data available for this county.</p>
                     </div>
                 `;
+                }
+                if (mounted) {
+                    onTooltipChange(tooltipHtml);
+                }
+                return;
             }
-            onTooltipChange(tooltipHtml);
-            return;
-        }
-        const tooltipHtml = CountyTooltipContent({
-            countyData,
-            countyFIPS: localCountyFIPS,
-            viewMode,
+            const tooltipHtml = CountyTooltipContent({
+                countyData,
+                countyFIPS: localCountyFIPS,
+                viewMode,
+                selectedCommodities,
+                selectedPrograms,
+                classes,
+                showMeanValues,
+                yearAggregation
+            });
+            if (mounted) {
+                onTooltipChange(tooltipHtml);
+            }
+            return () => {
+                mounted = false;
+            };
+        },
+        [
+            mapData,
+            onTooltipChange,
             selectedCommodities,
             selectedPrograms,
             classes,
             showMeanValues,
-            yearAggregation
-        });
-        onTooltipChange(tooltipHtml);
-    }, [mapData, onTooltipChange, selectedCommodities, selectedPrograms, classes, showMeanValues, viewMode, yearAggregation, selectedState, stateCodesData]);
+            viewMode,
+            yearAggregation,
+            selectedState,
+            stateCodesData
+        ]
+    );
     const handleMouseLeave = useCallback(() => {
         onTooltipChange("");
     }, [onTooltipChange]);
     const handleCloseStateView = useCallback(() => {
         setSelectedState("All States");
     }, [setSelectedState]);
-    const handleMoveEnd = useCallback((positionObj) => {
-        if (selectedState === "All States") {
-            if (positionObj.zoom !== 1 || 
-                positionObj.coordinates[0] !== -95 || 
-                positionObj.coordinates[1] !== 40) {
-                setPosition({ coordinates: [-95, 40], zoom: 1 });
+    const handleMoveEnd = useCallback(
+        (positionObj) => {
+            let mounted = true;
+            if (selectedState === "All States") {
+                if (positionObj.zoom !== 1 || positionObj.coordinates[0] !== -95 || positionObj.coordinates[1] !== 40) {
+                    setPosition({ coordinates: [-95, 40], zoom: 1 });
+                }
+            } else if (stateViewSettings[selectedState]) {
+                const { center, zoom } = stateViewSettings[selectedState];
+                if (
+                    positionObj.zoom !== zoom ||
+                    positionObj.coordinates[0] !== center[0] ||
+                    positionObj.coordinates[1] !== center[1]
+                ) {
+                    setPosition({ coordinates: center, zoom });
+                }
             }
-        } else if (stateViewSettings[selectedState]) {
-            const { center, zoom } = stateViewSettings[selectedState];
-            if (positionObj.zoom !== zoom || 
-                positionObj.coordinates[0] !== center[0] || 
-                positionObj.coordinates[1] !== center[1]) {
-                setPosition({ coordinates: center, zoom });
-            }
-        }
-    }, [selectedState]);
-    const getCountyFillColor = useCallback((countyData) => {
-        if (!countyData) return "#EEE"; 
-        let valueToUse;
-        const shouldShowMeanValues =
-            showMeanValues &&
-            selectedPrograms.length === 1 &&
-            !selectedPrograms.includes("All Programs") &&
-            (selectedPrograms[0].includes("ARC") ||
-                selectedPrograms[0].includes("PLC"));
-        if (shouldShowMeanValues) {
-            if (viewMode === "difference") {
-                valueToUse = countyData.meanRateDifference || 0;
+            return () => {
+                mounted = false;
+            };
+        },
+        [selectedState]
+    );
+    const getCountyFillColor = useCallback(
+        (countyData) => {
+            if (!countyData) return "#EEE";
+            let valueToUse;
+            const shouldShowMeanValues =
+                showMeanValues &&
+                selectedPrograms.length === 1 &&
+                !selectedPrograms.includes("All Programs") &&
+                (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
+            if (shouldShowMeanValues) {
+                if (viewMode === "difference") {
+                    valueToUse = countyData.meanRateDifference || 0;
+                } else {
+                    valueToUse = countyData.meanPaymentRateInDollarsPerAcre || 0;
+                }
             } else {
-                valueToUse = countyData.meanPaymentRateInDollarsPerAcre || 0;
+                valueToUse = countyData.value || 0;
             }
-        } else {
-            valueToUse = countyData.value || 0;
-        }
-        return valueToUse === 0 ? "#CCC" : colorScale(valueToUse);
-    }, [showMeanValues, selectedPrograms, viewMode, colorScale, selectedState]);
+            return valueToUse === 0 ? "#CCC" : colorScale(valueToUse);
+        },
+        [showMeanValues, selectedPrograms, viewMode, colorScale, selectedState]
+    );
     if (isLoading) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -259,31 +334,33 @@ const CountyMap = ({
         <Box className="county-commodity-map" sx={{ position: "relative" }}>
             {selectedState !== "All States" && (
                 <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
-                    <IconButton 
-                        onClick={handleCloseStateView} 
+                    <IconButton
+                        onClick={handleCloseStateView}
                         aria-label="return to US map"
-                        sx={{ 
-                            bgcolor: "rgba(255, 255, 255, 0.8)", 
-                            "&:hover": { bgcolor: "rgba(255, 255, 255, 0.9)" } 
+                        sx={{
+                            "bgcolor": "rgba(255, 255, 255, 0.8)",
+                            "&:hover": { bgcolor: "rgba(255, 255, 255, 0.9)" }
                         }}
                     >
                         <CloseIcon />
                     </IconButton>
                 </Box>
             )}
-            <Box sx={{ 
-                width: "100%",
-                position: "relative" 
-            }}>
-                <div 
-                    data-tip="" 
-                    data-for="map-tooltip" 
-                    style={{ 
+            <Box
+                sx={{
+                    width: "100%",
+                    position: "relative"
+                }}
+            >
+                <div
+                    data-tip=""
+                    data-for="map-tooltip"
+                    style={{
                         width: "100%",
                         position: "relative"
                     }}
                 >
-                    <div 
+                    <div
                         style={{
                             position: "absolute",
                             top: 0,
@@ -302,7 +379,7 @@ const CountyMap = ({
                             e.preventDefault();
                         }}
                     />
-                    <ComposableMap 
+                    <ComposableMap
                         projection="geoAlbersUsa"
                         width={800}
                         height={550}
@@ -313,7 +390,7 @@ const CountyMap = ({
                             marginBottom: "20px"
                         }}
                     >
-                        <ZoomableGroup 
+                        <ZoomableGroup
                             center={position.coordinates}
                             zoom={position.zoom}
                             onMoveEnd={handleMoveEnd}
@@ -328,31 +405,56 @@ const CountyMap = ({
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => {
                                     return (
-                                    <>
-                                        {geographies.map((geo) => {
-                                            const countyFIPS = geo.id;
-                                            if (!countyFIPS) return null;
-                                            const stateId = countyFIPS.substring(0, 2);
-                                            if (selectedState !== "All States") {
-                                                let stateName = stateCodesData[stateId];
-                                                if (stateName !== selectedState) {
-                                                    return null;
-                                                }
-                                                const { countyData, usedKey } = findCountyData(
-                                                    mapData.counties, 
-                                                    countyFIPS, 
-                                                    selectedState !== "All States" 
-                                                );
-                                                let fillColor;
-                                                if (!countyData) {
-                                                    fillColor = "#d9d9d9";
-                                                } else {
-                                                    if ( countyData.value) {
+                                        <>
+                                            {geographies.map((geo) => {
+                                                const countyFIPS = geo.id;
+                                                if (!countyFIPS) return null;
+                                                const stateId = countyFIPS.substring(0, 2);
+                                                if (selectedState !== "All States") {
+                                                    const stateName = stateCodesData[stateId];
+                                                    if (stateName !== selectedState) {
+                                                        return null;
+                                                    }
+                                                    const { countyData, usedKey } = findCountyData(
+                                                        mapData.counties,
+                                                        countyFIPS,
+                                                        selectedState !== "All States"
+                                                    );
+                                                    let fillColor;
+                                                    if (!countyData) {
+                                                        fillColor = "#d9d9d9";
+                                                    } else if (countyData.value) {
                                                         fillColor = getCountyFillColor(countyData);
                                                     } else {
                                                         fillColor = getCountyFillColor(countyData);
                                                     }
+                                                    return (
+                                                        <Geography
+                                                            key={geo.rsmKey}
+                                                            geography={geo}
+                                                            onMouseEnter={() => handleMouseEnter(geo, countyFIPS)}
+                                                            onMouseLeave={handleMouseLeave}
+                                                            fill={fillColor}
+                                                            stroke="#FFFFFF"
+                                                            strokeWidth={0.15}
+                                                            style={{
+                                                                default: { outline: "none" },
+                                                                hover: {
+                                                                    stroke: "#232323",
+                                                                    strokeWidth: 0.5,
+                                                                    outline: "none"
+                                                                },
+                                                                pressed: {
+                                                                    outline: "none",
+                                                                    stroke: "#FFFFFF",
+                                                                    strokeWidth: 0.15
+                                                                }
+                                                            }}
+                                                        />
+                                                    );
                                                 }
+                                                const { countyData } = findCountyData(mapData.counties, countyFIPS);
+                                                const fillColor = getCountyFillColor(countyData);
                                                 return (
                                                     <Geography
                                                         key={geo.rsmKey}
@@ -364,96 +466,82 @@ const CountyMap = ({
                                                         strokeWidth={0.15}
                                                         style={{
                                                             default: { outline: "none" },
-                                                            hover: { stroke: "#232323", strokeWidth: 0.5, outline: "none" },
-                                                            pressed: { outline: "none", stroke: "#FFFFFF", strokeWidth: 0.15 }
+                                                            hover: {
+                                                                stroke: "#232323",
+                                                                strokeWidth: 0.5,
+                                                                outline: "none"
+                                                            },
+                                                            pressed: {
+                                                                outline: "none",
+                                                                stroke: "#FFFFFF",
+                                                                strokeWidth: 0.15
+                                                            }
                                                         }}
                                                     />
                                                 );
-                                            }
-                                            const { countyData } = findCountyData(
-                                                mapData.counties, 
-                                                countyFIPS
-                                            );
-                                            const fillColor = getCountyFillColor(countyData);
-                                            return (
-                                                <Geography
-                                                    key={geo.rsmKey}
-                                                    geography={geo}
-                                                    onMouseEnter={() => handleMouseEnter(geo, countyFIPS)}
-                                                    onMouseLeave={handleMouseLeave}
-                                                    fill={fillColor}
-                                                    stroke="#FFFFFF"
-                                                    strokeWidth={0.15}
-                                                    style={{
-                                                        default: { outline: "none" },
-                                                        hover: { stroke: "#232323", strokeWidth: 0.5, outline: "none" },
-                                                        pressed: { outline: "none", stroke: "#FFFFFF", strokeWidth: 0.15 }
-                                                    }}
-                                                />
-                                            );
-                                        })}
-                                        {}
-                                        <Geographies geography={geoStateUrl}>
-                                            {({ geographies: stateGeographies }) =>
-                                                stateGeographies.map((geo) => (
-                                                    <Geography
-                                                        key={`state-${geo.rsmKey}`}
-                                                        geography={geo}
-                                                        fill="none"
-                                                        stroke="#000"
-                                                        strokeWidth={0.5}
-                                                        style={{
-                                                            default: { outline: "none" },
-                                                            hover: { outline: "none" },
-                                                            pressed: { outline: "none" }
-                                                        }}
-                                                    />
-                                                ))
-                                            }
-                                        </Geographies>
-                                        {}
-                                        {selectedState === "All States" && (
+                                            })}
+                                            {}
                                             <Geographies geography={geoStateUrl}>
-                                                {({ geographies: labelGeographies }) =>
-                                                    labelGeographies.map((geo) => {
-                                                        const centroid = geoCentroid(geo);
-                                                        const cur = allStates.find((s) => s.val === geo.id);
-                                                        if (!cur || centroid[0] < -160 || centroid[0] > -67) {
-                                                            return null;
-                                                        }
-                                                        return (
-                                                            <g key={`${geo.rsmKey}-name`}>
-                                                                <Marker coordinates={centroid}>
-                                                                    {}
-                                                                    <rect
-                                                                        x="-10"
-                                                                        y="-6"
-                                                                        width="20"
-                                                                        height="14"
-                                                                        fill="white"
-                                                                        opacity="0.7"
-                                                                        style={{ pointerEvents: "none" }}
-                                                                    />
-                                                                    <text
-                                                                        y="2"
-                                                                        fontSize={12}
-                                                                        textAnchor="middle"
-                                                                        fill="#555"
-                                                                        style={{ 
-                                                                            fontWeight: "bold",
-                                                                            pointerEvents: "none" 
-                                                                        }}
-                                                                    >
-                                                                        {cur.id}
-                                                                    </text>
-                                                                </Marker>
-                                                            </g>
-                                                        );
-                                                    })
+                                                {({ geographies: stateGeographies }) =>
+                                                    stateGeographies.map((geo) => (
+                                                        <Geography
+                                                            key={`state-${geo.rsmKey}`}
+                                                            geography={geo}
+                                                            fill="none"
+                                                            stroke="#000"
+                                                            strokeWidth={0.5}
+                                                            style={{
+                                                                default: { outline: "none" },
+                                                                hover: { outline: "none" },
+                                                                pressed: { outline: "none" }
+                                                            }}
+                                                        />
+                                                    ))
                                                 }
                                             </Geographies>
-                                        )}
-                                    </>
+                                            {}
+                                            {selectedState === "All States" && (
+                                                <Geographies geography={geoStateUrl}>
+                                                    {({ geographies: labelGeographies }) =>
+                                                        labelGeographies.map((geo) => {
+                                                            const centroid = geoCentroid(geo);
+                                                            const cur = allStates.find((s) => s.val === geo.id);
+                                                            if (!cur || centroid[0] < -160 || centroid[0] > -67) {
+                                                                return null;
+                                                            }
+                                                            return (
+                                                                <g key={`${geo.rsmKey}-name`}>
+                                                                    <Marker coordinates={centroid}>
+                                                                        {}
+                                                                        <rect
+                                                                            x="-10"
+                                                                            y="-6"
+                                                                            width="20"
+                                                                            height="14"
+                                                                            fill="white"
+                                                                            opacity="0.7"
+                                                                            style={{ pointerEvents: "none" }}
+                                                                        />
+                                                                        <text
+                                                                            y="2"
+                                                                            fontSize={12}
+                                                                            textAnchor="middle"
+                                                                            fill="#555"
+                                                                            style={{
+                                                                                fontWeight: "bold",
+                                                                                pointerEvents: "none"
+                                                                            }}
+                                                                        >
+                                                                            {cur.id}
+                                                                        </text>
+                                                                    </Marker>
+                                                                </g>
+                                                            );
+                                                        })
+                                                    }
+                                                </Geographies>
+                                            )}
+                                        </>
                                     );
                                 }}
                             </Geographies>
