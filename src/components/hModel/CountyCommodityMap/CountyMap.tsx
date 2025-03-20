@@ -65,40 +65,22 @@ const stateViewSettings = {
     "District of Columbia": { center: [-77, 38.9], zoom: 9 }
 };
 const findCountyData = (counties, countyFIPS, debug = false) => {
+    if (!countyFIPS) return { countyData: null, usedKey: null };
     let countyData = counties[countyFIPS];
     let usedKey = countyFIPS;
-    if (!countyData && countyFIPS) {
-        if (countyFIPS.length < 5) {
-            const paddedFIPS = countyFIPS.padStart(5, "0");
-            countyData = counties[paddedFIPS];
-            if (countyData) usedKey = paddedFIPS;
+    if (countyData) {
+        let hasRealData = false;
+        if (countyData.value && parseFloat(countyData.value) > 0) {
+            hasRealData = true;
+        } else if (countyData.commodities && Object.keys(countyData.commodities).length > 0) {
+            Object.values(countyData.commodities).forEach((commodity: any) => {
+                if (commodity.value && parseFloat(commodity.value) > 0) {
+                    hasRealData = true;
+                }
+            });
         }
-        if (!countyData && countyFIPS.length === 5) {
-            const countyCode = countyFIPS.substring(2);
-            const paddedCountyCode = countyCode.padStart(3, "0");
-            if (counties[countyCode]) {
-                countyData = counties[countyCode];
-                usedKey = countyCode;
-            } else if (counties[paddedCountyCode]) {
-                countyData = counties[paddedCountyCode];
-                usedKey = paddedCountyCode;
-            }
-        }
-        if (!countyData) {
-            const numericFIPS = parseInt(countyFIPS, 10).toString();
-            if (counties[numericFIPS]) {
-                countyData = counties[numericFIPS];
-                usedKey = numericFIPS;
-            }
-        }
-        if (!countyData && countyFIPS.length === 5) {
-            const statePrefix = countyFIPS.substring(0, 2);
-            const countyPart = countyFIPS.substring(2);
-            const matchingKey = Object.keys(counties).find((key) => key.endsWith(countyPart) || key === countyPart);
-            if (matchingKey) {
-                countyData = counties[matchingKey];
-                usedKey = matchingKey;
-            }
+        if (!hasRealData) {
+            countyData.hasData = false;
         }
     }
     return { countyData, usedKey };
@@ -212,10 +194,17 @@ const CountyMap = ({
                     localCountyFIPS = geo.properties.fips;
                 }
             }
+
             const countyName = geo.properties?.name || "Unknown County";
             const stateFIPS = localCountyFIPS?.substring(0, 2);
             const stateName = stateFIPS ? stateCodesData[stateFIPS] || "Unknown State" : "Unknown State";
-            const { countyData, usedKey } = findCountyData(mapData.counties, localCountyFIPS);
+
+            let lookupFIPS = localCountyFIPS;
+            const { countyData, usedKey } = findCountyData(
+                mapData.counties,
+                lookupFIPS,
+                selectedState !== "All States"
+            );
             if (!countyData) {
                 const isFallbackMode = selectedState !== "All States" && Object.keys(mapData.counties).length === 0;
                 let tooltipHtml;
@@ -242,6 +231,7 @@ const CountyMap = ({
                 }
                 return;
             }
+            
             const tooltipHtml = CountyTooltipContent({
                 countyData,
                 countyFIPS: localCountyFIPS,
@@ -303,25 +293,38 @@ const CountyMap = ({
     );
     const getCountyFillColor = useCallback(
         (countyData) => {
-            if (!countyData) return "#EEE";
+            if (!countyData || countyData.hasData === false) return "#EEE";
             let valueToUse;
             const shouldShowMeanValues =
                 showMeanValues &&
                 selectedPrograms.length === 1 &&
                 !selectedPrograms.includes("All Programs") &&
                 (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
+                
             if (shouldShowMeanValues) {
                 if (viewMode === "difference") {
                     valueToUse = countyData.meanRateDifference || 0;
                 } else {
-                    valueToUse = countyData.meanPaymentRateInDollarsPerAcre || 0;
+                    valueToUse = countyData.meanPaymentRateInDollarsPerAcre;
+
+                    if ((valueToUse === undefined || valueToUse === 0) && selectedPrograms.length === 1) {
+                        const programName = selectedPrograms[0];
+                        if (countyData.programs && countyData.programs[programName]) {
+                            valueToUse = viewMode === "proposed" 
+                                ? countyData.programs[programName].proposedMeanRate
+                                : countyData.programs[programName].currentMeanRate;
+                        }
+                    }
                 }
             } else {
                 valueToUse = countyData.value || 0;
             }
-            return valueToUse === 0 ? "#CCC" : colorScale(valueToUse);
+            if (valueToUse === undefined || valueToUse === null || !isFinite(valueToUse) || valueToUse < 0.01) {
+                return "#EEE";
+            }
+            return colorScale(valueToUse);
         },
-        [showMeanValues, selectedPrograms, viewMode, colorScale, selectedState]
+        [showMeanValues, selectedPrograms, viewMode, colorScale]
     );
     if (isLoading) {
         return (
@@ -415,16 +418,20 @@ const CountyMap = ({
                                                     if (stateName !== selectedState) {
                                                         return null;
                                                     }
+
+                                                    let lookupFIPS = countyFIPS;
+                                                    
                                                     const { countyData, usedKey } = findCountyData(
                                                         mapData.counties,
-                                                        countyFIPS,
+                                                        lookupFIPS,
                                                         selectedState !== "All States"
                                                     );
                                                     let fillColor;
+
                                                     if (!countyData) {
                                                         fillColor = "#d9d9d9";
-                                                    } else if (countyData.value) {
-                                                        fillColor = getCountyFillColor(countyData);
+                                                    } else if (countyData.hasData === false) {
+                                                        fillColor = "#d9d9d9"; 
                                                     } else {
                                                         fillColor = getCountyFillColor(countyData);
                                                     }
@@ -454,7 +461,15 @@ const CountyMap = ({
                                                     );
                                                 }
                                                 const { countyData } = findCountyData(mapData.counties, countyFIPS);
-                                                const fillColor = getCountyFillColor(countyData);
+                                                let fillColor;
+                                                
+                                                if (!countyData) {
+                                                    fillColor = "#d9d9d9";
+                                                } else if (countyData.hasData === false) {
+                                                    fillColor = "#d9d9d9"; 
+                                                } else {
+                                                    fillColor = getCountyFillColor(countyData);
+                                                }
                                                 return (
                                                     <Geography
                                                         key={geo.rsmKey}
