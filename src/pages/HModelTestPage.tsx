@@ -5,6 +5,7 @@ import "../styles/issueWhitePaper.css";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import CountyCommodityMap from "../components/hModel/CountyCommodityMap";
+import CountyCommodityTable from "../components/hModel/CountyCommodityTable";
 
 export default function HModelTestPage(): JSX.Element {
     const [hModelDistributionData, setHModelDistributionData] = React.useState({});
@@ -16,6 +17,11 @@ export default function HModelTestPage(): JSX.Element {
     const [allStates, setAllStates] = React.useState([]);
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState<{ code: string; name: string }[]>([]);
+    const [selectedYear, setSelectedYear] = React.useState("");
+    const [selectedCommodities, setSelectedCommodities] = React.useState<string[]>(["All Commodities"]);
+    const [selectedPrograms, setSelectedPrograms] = React.useState<string[]>(["All Programs"]);
+    const [selectedState, setSelectedState] = React.useState("All States");
+    const [viewMode, setViewMode] = React.useState("current");
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -41,6 +47,7 @@ export default function HModelTestPage(): JSX.Element {
                 setStateCodesData(convertedStateCodes);
                 const years = Object.keys(hModelDistributionResponse).sort();
                 setAvailableYears(years.length > 0 ? years : ["2024"]);
+                setSelectedYear(years.length > 0 ? years[0] : "2024");
                 const commoditiesSet = new Set<string>();
                 const programsSet = new Set<string>();
                 if (years.length > 0) {
@@ -70,6 +77,14 @@ export default function HModelTestPage(): JSX.Element {
 
         fetchData();
     }, []);
+
+    const handleMapUpdate = (year, commodities, programs, state, mode) => {
+        setSelectedYear(year);
+        setSelectedCommodities(commodities);
+        setSelectedPrograms(programs);
+        setSelectedState(state);
+        setViewMode(mode);
+    };
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -113,6 +128,7 @@ export default function HModelTestPage(): JSX.Element {
                                     availablePrograms={availablePrograms}
                                     availableYears={availableYears}
                                     isLoading={!isDataReady}
+                                    onMapUpdate={handleMapUpdate}
                                 />
                             ) : (
                                 <Box
@@ -128,6 +144,30 @@ export default function HModelTestPage(): JSX.Element {
                                 </Box>
                             )}
                         </Box>
+
+                        {isDataReady && (
+                            <Box
+                                sx={{
+                                    backgroundColor: "white",
+                                    borderRadius: 1,
+                                    p: 3,
+                                    pb: 5,
+                                    mt: 3,
+                                    mb: 4
+                                }}
+                            >
+                                <CountyCommodityTable
+                                    countyData={hModelDistributionData}
+                                    countyDataProposed={hModelDistributionProposedData}
+                                    selectedYear={selectedYear}
+                                    viewMode={viewMode}
+                                    selectedCommodities={selectedCommodities}
+                                    selectedPrograms={selectedPrograms}
+                                    selectedState={selectedState}
+                                    stateCodesData={stateCodesData}
+                                />
+                            </Box>
+                        )}
                     </Grid>
                     <Grid item xs={12} md={1} />
                 </Grid>

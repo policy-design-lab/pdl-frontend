@@ -66,8 +66,8 @@ const stateViewSettings = {
 };
 const findCountyData = (counties, countyFIPS, debug = false) => {
     if (!countyFIPS) return { countyData: null, usedKey: null };
-    let countyData = counties[countyFIPS];
-    let usedKey = countyFIPS;
+    const countyData = counties[countyFIPS];
+    const usedKey = countyFIPS;
     if (countyData) {
         let hasRealData = false;
         if (countyData.value && parseFloat(countyData.value) > 0) {
@@ -199,7 +199,7 @@ const CountyMap = ({
             const stateFIPS = localCountyFIPS?.substring(0, 2);
             const stateName = stateFIPS ? stateCodesData[stateFIPS] || "Unknown State" : "Unknown State";
 
-            let lookupFIPS = localCountyFIPS;
+            const lookupFIPS = localCountyFIPS;
             const { countyData, usedKey } = findCountyData(
                 mapData.counties,
                 lookupFIPS,
@@ -231,7 +231,7 @@ const CountyMap = ({
                 }
                 return;
             }
-            
+
             const tooltipHtml = CountyTooltipContent({
                 countyData,
                 countyFIPS: localCountyFIPS,
@@ -300,7 +300,7 @@ const CountyMap = ({
                 selectedPrograms.length === 1 &&
                 !selectedPrograms.includes("All Programs") &&
                 (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
-                
+
             if (shouldShowMeanValues) {
                 if (viewMode === "difference") {
                     valueToUse = countyData.meanRateDifference || 0;
@@ -310,9 +310,10 @@ const CountyMap = ({
                     if ((valueToUse === undefined || valueToUse === 0) && selectedPrograms.length === 1) {
                         const programName = selectedPrograms[0];
                         if (countyData.programs && countyData.programs[programName]) {
-                            valueToUse = viewMode === "proposed" 
-                                ? countyData.programs[programName].proposedMeanRate
-                                : countyData.programs[programName].currentMeanRate;
+                            valueToUse =
+                                viewMode === "proposed" ?
+                                    countyData.programs[programName].proposedMeanRate
+                                    : countyData.programs[programName].currentMeanRate;
                         }
                     }
                 }
@@ -419,8 +420,8 @@ const CountyMap = ({
                                                         return null;
                                                     }
 
-                                                    let lookupFIPS = countyFIPS;
-                                                    
+                                                    const lookupFIPS = countyFIPS;
+
                                                     const { countyData, usedKey } = findCountyData(
                                                         mapData.counties,
                                                         lookupFIPS,
@@ -431,7 +432,7 @@ const CountyMap = ({
                                                     if (!countyData) {
                                                         fillColor = "#d9d9d9";
                                                     } else if (countyData.hasData === false) {
-                                                        fillColor = "#d9d9d9"; 
+                                                        fillColor = "#d9d9d9";
                                                     } else {
                                                         fillColor = getCountyFillColor(countyData);
                                                     }
@@ -462,11 +463,11 @@ const CountyMap = ({
                                                 }
                                                 const { countyData } = findCountyData(mapData.counties, countyFIPS);
                                                 let fillColor;
-                                                
+
                                                 if (!countyData) {
                                                     fillColor = "#d9d9d9";
                                                 } else if (countyData.hasData === false) {
-                                                    fillColor = "#d9d9d9"; 
+                                                    fillColor = "#d9d9d9";
                                                 } else {
                                                     fillColor = getCountyFillColor(countyData);
                                                 }

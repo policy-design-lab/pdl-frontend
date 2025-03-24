@@ -356,21 +356,19 @@ export const processMapData = ({
         if (showMeanValues) {
             if (viewMode === "difference") {
                 dataValues.push(county.meanRateDifference);
-            } else {
-                if (selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")) {
-                    const programName = selectedPrograms[0];
-                    const programData = county.programs[programName];
-                    if (programData) {
-                        const programMeanRate =
-                            viewMode === "proposed" ? programData.proposedMeanRate : programData.currentMeanRate;
+            } else if (selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")) {
+                const programName = selectedPrograms[0];
+                const programData = county.programs[programName];
+                if (programData) {
+                    const programMeanRate =
+                        viewMode === "proposed" ? programData.proposedMeanRate : programData.currentMeanRate;
 
-                        if (programMeanRate !== undefined) {
-                            dataValues.push(programMeanRate);
-                        }
+                    if (programMeanRate !== undefined) {
+                        dataValues.push(programMeanRate);
                     }
-                } else {
-                    dataValues.push(county.meanPaymentRateInDollarsPerAcre || 0);
                 }
+            } else {
+                dataValues.push(county.meanPaymentRateInDollarsPerAcre || 0);
             }
         } else if (viewMode === "current") {
             dataValues.push(county.currentValue);
@@ -386,12 +384,12 @@ export const processMapData = ({
             Object.values(county.commodities).forEach((commodity: any) => {
                 const commodityValue = parseFloat(commodity.value || 0);
                 const commodityBaseAcres = parseFloat(commodity.baseAcres || 0);
-                
+
                 if (commodityValue > 0) {
                     hasAnyRealData = true;
                     totalRealPayment += commodityValue;
                 }
-                
+
                 if (commodityBaseAcres > 0) {
                     totalRealBaseAcres += commodityBaseAcres;
                 }
@@ -450,15 +448,20 @@ export const processMapData = ({
                     ) {
                         state.counties.forEach((county) => {
                             if (!counties[county.countyFIPS]) {
-                                const hasAnyData = county.scenarios && 
-                                    county.scenarios.some(scenario => 
-                                        scenario.commodities && 
-                                        scenario.commodities.some(commodity => 
-                                            commodity.programs && 
-                                            commodity.programs.some(program => 
-                                                program.totalPaymentInDollars > 0)));
-                                
-                                // Only add counties that actually have payment data
+                                const hasAnyData =
+                                    county.scenarios &&
+                                    county.scenarios.some(
+                                        (scenario) =>
+                                            scenario.commodities &&
+                                            scenario.commodities.some(
+                                                (commodity) =>
+                                                    commodity.programs &&
+                                                    commodity.programs.some(
+                                                        (program) => program.totalPaymentInDollars > 0
+                                                    )
+                                            )
+                                    );
+
                                 if (hasAnyData) {
                                     if (viewMode === "difference") {
                                         counties[county.countyFIPS] = {
@@ -542,9 +545,9 @@ export const processMapData = ({
                 }
             });
         }
-        
+
         county.hasData = hasRealData && totalRealValue > 0;
-        
+
         if (!county.hasData) {
             county.value = 0;
             county.currentValue = 0;

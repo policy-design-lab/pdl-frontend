@@ -84,8 +84,8 @@ export default function DrawLegend({
                     programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
                 );
                 const svgWidth = width - margin * 2;
-                const hasValidDistribution = data_distribution.some(d => d > 0.01) && programData.length > 0;
-                
+                const hasValidDistribution = data_distribution.some((d) => d > 0.01) && programData.length > 0;
+
                 if (hasValidDistribution) {
                     baseSVG
                         .selectAll(null)
@@ -193,9 +193,10 @@ export default function DrawLegend({
                     }
                 } else {
                     baseSVG.attr("height", 90);
-                    const noDataMessage = programData.length === 0 
-                        ? "There is no data available for the current selection"
-                        : "There isn't sufficient data distribution to display a detailed legend";
+                    const noDataMessage =
+                        programData.length === 0 ?
+                            "There is no data available for the current selection"
+                            : "There isn't sufficient data distribution to display a detailed legend";
                     baseSVG
                         .append("text")
                         .attr("class", "legendTextSide")
@@ -207,7 +208,7 @@ export default function DrawLegend({
                     if (programData.length > 0) {
                         const minValue = Math.min(...programData);
                         const maxValue = Math.max(...programData);
-                        
+
                         if (isFinite(minValue) && isFinite(maxValue)) {
                             baseSVG
                                 .append("text")
@@ -216,7 +217,17 @@ export default function DrawLegend({
                                 .attr("x", width / 2)
                                 .attr("y", 70)
                                 .style("font-size", "12px")
-                                .text(`Range: ${isRatio ? `${Math.round(minValue * 100)}%` : ShortFormat(minValue.toFixed(2), -1, 2)} to ${isRatio ? `${Math.round(maxValue * 100)}%` : ShortFormat(maxValue.toFixed(2), -1, 2)}`);
+                                .text(
+                                    `Range: ${
+                                        isRatio ?
+                                            `${Math.round(minValue * 100)}%` :
+                                            ShortFormat(minValue.toFixed(2), -1, 2)
+                                    } to ${
+                                        isRatio ?
+                                            `${Math.round(maxValue * 100)}%` :
+                                            ShortFormat(maxValue.toFixed(2), -1, 2)
+                                    }`
+                                );
                         }
                     }
                 }

@@ -252,11 +252,11 @@ function generateRegularTooltipContent(
                     let commodityMeanRate = 0;
                     const commodityValue = commodityData.value || 0;
                     const commodityBaseAcres = commodityData.baseAcres || 0;
-                    
+
                     if (shouldShowMeanValues && commodityBaseAcres > 0) {
                         commodityMeanRate = commodityValue / commodityBaseAcres;
                     }
-                    
+
                     content += `
                     <tr>
                         <td class="${classes.tooltip_regularcell_left}">

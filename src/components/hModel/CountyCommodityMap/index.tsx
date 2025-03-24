@@ -13,7 +13,8 @@ const CountyCommodityMap = ({
     availableYears,
     availableCommodities,
     availablePrograms,
-    isLoading
+    isLoading,
+    onMapUpdate
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[0] || "2024");
@@ -45,12 +46,16 @@ const CountyCommodityMap = ({
     useEffect(() => {
         let mounted = true;
         if (mounted) {
-            setSelectedYear(availableYears[yearRange[0]] || "2024");
+            const newYear = availableYears[yearRange[0]] || "2024";
+            setSelectedYear(newYear);
+            if (onMapUpdate) {
+                onMapUpdate(newYear, selectedCommodities, selectedPrograms, selectedState, viewMode);
+            }
         }
         return () => {
             mounted = false;
         };
-    }, [yearRange, availableYears]);
+    }, [yearRange, availableYears, onMapUpdate, selectedCommodities, selectedPrograms, selectedState, viewMode]);
 
     useEffect(() => {
         let mounted = true;
@@ -68,10 +73,19 @@ const CountyCommodityMap = ({
         };
     }, [selectedPrograms, showMeanValues]);
 
+    useEffect(() => {
+        if (onMapUpdate) {
+            onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode);
+        }
+    }, [selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode, onMapUpdate]);
+
     const handleSetSelectedCommodities = (newValue) => {
         if (JSON.stringify(selectedCommodities) !== JSON.stringify(newValue)) {
             setSelectedCommodities(newValue);
             setForceUpdate((prev) => prev + 1);
+            if (onMapUpdate) {
+                onMapUpdate(selectedYear, newValue, selectedPrograms, selectedState, viewMode);
+            }
         }
     };
 
@@ -79,6 +93,9 @@ const CountyCommodityMap = ({
         if (JSON.stringify(selectedPrograms) !== JSON.stringify(newValue)) {
             setSelectedPrograms(newValue);
             setForceUpdate((prev) => prev + 1);
+            if (onMapUpdate) {
+                onMapUpdate(selectedYear, selectedCommodities, newValue, selectedState, viewMode);
+            }
         }
     };
 
@@ -86,11 +103,21 @@ const CountyCommodityMap = ({
         if (selectedState !== newValue) {
             setSelectedState(newValue);
             setForceUpdate((prev) => prev + 1);
+            if (onMapUpdate) {
+                onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, newValue, viewMode);
+            }
         }
     };
 
     const handleTooltipChange = (newContent) => {
         setContent(newContent);
+    };
+
+    const handleSetViewMode = (newValue) => {
+        setViewMode(newValue);
+        if (onMapUpdate) {
+            onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, newValue);
+        }
     };
 
     const mapData = useMemo(() => {
@@ -157,7 +184,7 @@ const CountyCommodityMap = ({
                     setSelectedCommodities={handleSetSelectedCommodities}
                     setSelectedPrograms={handleSetSelectedPrograms}
                     setSelectedState={handleSetSelectedState}
-                    setViewMode={setViewMode}
+                    setViewMode={handleSetViewMode}
                     setYearRange={setYearRange}
                     setYearAggregation={setYearAggregation}
                     setShowMeanValues={setShowMeanValues}
