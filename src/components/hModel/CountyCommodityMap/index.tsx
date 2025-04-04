@@ -4,6 +4,7 @@ import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
+import { calculateYearRange } from "../utils";
 
 const CountyCommodityMap = ({
     countyData,
@@ -56,22 +57,6 @@ const CountyCommodityMap = ({
             mounted = false;
         };
     }, [yearRange, availableYears, onMapUpdate, selectedCommodities, selectedPrograms, selectedState, viewMode]);
-
-    useEffect(() => {
-        let mounted = true;
-        if (mounted) {
-            const isMeanValueAllowed =
-                selectedPrograms.length === 1 &&
-                !selectedPrograms.includes("All Programs") &&
-                (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
-            if (showMeanValues && !isMeanValueAllowed) {
-                setShowMeanValues(false);
-            }
-        }
-        return () => {
-            mounted = false;
-        };
-    }, [selectedPrograms, showMeanValues]);
 
     useEffect(() => {
         if (onMapUpdate) {
@@ -157,12 +142,20 @@ const CountyCommodityMap = ({
 
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
-            return ["#8B0000", "#D43D51", "#F7F7F7", "#4E9FD1", "#084594"];
+            return ["#f3e5f5", "#ce93d8", "#9c27b0", "#7b1fa2", "#4a148c"];
         }
+        if (viewMode === "current") {
+            return ["#c8e6c9", "#81c784", "#4caf50", "#2e7d32", "#1b5e20"];
+        }
+        if (viewMode === "proposed") {
+            return ["#e3f2fd", "#90caf9", "#42a5f5", "#1976d2", "#0d47a1"];
+        }
+
         if (showMeanValues) {
-            return ["#2c7fb8", "#41a0c2", "#7fcdbb", "#c7e9b4", "#ffffcc"];
+            return ["#c6dbef", "#6baed6", "#4292c6", "#2171b5", "#08306b"];
         }
-        return ["#993404", "#D95F0E", "#F59020", "#F9D48B", "#F9F9D3"];
+
+        return ["#fdd0a2", "#f16913", "#d94801", "#a63603", "#7f2704"];
     }, [viewMode, showMeanValues]);
 
     return (

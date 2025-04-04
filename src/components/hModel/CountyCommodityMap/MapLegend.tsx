@@ -36,8 +36,9 @@ const MapLegend = ({
         }
         return title;
     };
+
     return (
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" flexDirection="column" alignItems="center">
             <DrawLegend
                 key={`${selectedYear}-${viewMode}-${showMeanValues}-${mapData.thresholds.join(
                     ","

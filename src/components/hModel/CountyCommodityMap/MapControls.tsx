@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import FilterSelectors from "./FilterSelectors";
 import ValueTypeToggle from "./ValueTypeToggle";
@@ -29,13 +29,6 @@ const MapControls = ({
     aggregationEnabled,
     setAggregationEnabled
 }) => {
-    const isMeanToggleDisabled = useMemo(() => {
-        const hasSpecificProgram =
-            selectedPrograms.length === 1 &&
-            !selectedPrograms.includes("All Programs") &&
-            (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
-        return !hasSpecificProgram;
-    }, [selectedPrograms]);
     return (
         <Box sx={{ my: 4, display: "flex", flexDirection: "column", gap: 3 }}>
             <ViewModeSelector
@@ -47,7 +40,7 @@ const MapControls = ({
             <ValueTypeToggle
                 showMeanValues={showMeanValues}
                 setShowMeanValues={setShowMeanValues}
-                disabled={isMeanToggleDisabled}
+                disabled={false}
             />
             <YearSelectorCombined
                 availableYears={availableYears}

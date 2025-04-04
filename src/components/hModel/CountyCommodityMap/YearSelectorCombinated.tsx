@@ -11,27 +11,31 @@ const YearSelectorCombined = ({
     showMeanValues
 }) => {
     useEffect(() => {
-        if (aggregationEnabled && !showMeanValues) {
+        if (aggregationEnabled) {
             setYearAggregation(yearRange[0]);
         }
-    }, [yearRange, aggregationEnabled, showMeanValues, setYearAggregation]);
+    }, [yearRange, aggregationEnabled, setYearAggregation]);
+    
     const handleYearChange = (event, newValue) => {
         event.preventDefault();
         setYearRange([newValue]);
     };
+    
     const handleAggregationToggle = (event) => {
         const isEnabled = event.target.checked;
         setAggregationEnabled(isEnabled);
-        if (isEnabled && !showMeanValues) {
+        if (isEnabled) {
             setYearAggregation(yearRange[0]);
         } else {
             setYearAggregation(0);
         }
     };
+    
     const selectedYear = availableYears[yearRange[0]];
     const currentYearIndex = yearRange[0];
     const earliestYearShown = aggregationEnabled ? availableYears[0] : selectedYear;
-    const isAggregationDisabled = showMeanValues || currentYearIndex === 0;
+    const isAggregationDisabled = currentYearIndex === 0;
+    
     return (
         <Box>
             <FormLabel
@@ -63,10 +67,10 @@ const YearSelectorCombined = ({
                         />
                     }
                     label={
-                        showMeanValues ?
-                            "Aggregation not available for mean values" :
+                        isAggregationDisabled ? 
+                            "Aggregation not available for earliest year" :
                             aggregationEnabled ?
-                            "Show sum of all years from earliest to selected" :
+                            "Show data aggregated from earliest to selected year" :
                             "Show selected year only"
                     }
                     sx={{
@@ -83,8 +87,8 @@ const YearSelectorCombined = ({
                         fontWeight: "medium"
                     }}
                 >
-                    {aggregationEnabled && !showMeanValues
-                        ? `Showing sum of all data from ${earliestYearShown} through ${selectedYear}`
+                    {aggregationEnabled
+                        ? `Showing ${showMeanValues ? "mean rates" : "sum"} of all data from ${earliestYearShown} through ${selectedYear}`
                         : `Showing data for ${selectedYear} only`}
                 </Typography>
                 <Slider

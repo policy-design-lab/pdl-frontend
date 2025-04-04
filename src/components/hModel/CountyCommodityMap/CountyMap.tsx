@@ -104,6 +104,35 @@ const CountyMap = ({
     const classes = useStyles();
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
+
+    useEffect(() => {
+        const handleDoubleClick = (e) => {
+            if (e.target.closest(".county-commodity-map")) {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+        };
+
+        const handleWheel = (e) => {
+            if (e.target.closest(".county-commodity-map")) {
+                if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        };
+
+        document.addEventListener("dblclick", handleDoubleClick, { capture: true });
+        document.addEventListener("wheel", handleWheel, { capture: true, passive: false });
+
+        return () => {
+            document.removeEventListener("dblclick", handleDoubleClick, { capture: true });
+            document.removeEventListener("wheel", handleWheel, { capture: true });
+        };
+    }, []);
+
     useEffect(() => {
         let mounted = true;
         if (Object.keys(stateCodesData).length > 0) {
@@ -206,26 +235,22 @@ const CountyMap = ({
                 selectedState !== "All States"
             );
             if (!countyData) {
-                const isFallbackMode = selectedState !== "All States" && Object.keys(mapData.counties).length === 0;
-                let tooltipHtml;
-                if (isFallbackMode) {
-                    tooltipHtml = `
-                    <div>
-                        <h3>${countyName}, ${stateName}</h3>
-                        <p>FIPS Code: ${localCountyFIPS || "Unknown"}</p>
-                        <p style="color: #666;">No payment data is available for this county.</p>
-                        <p style="color: #666; font-size: 0.9em;">Displaying fallback county outlines for ${selectedState}.</p>
-                    </div>
-                `;
-                } else {
-                    tooltipHtml = `
-                    <div>
-                        <h3>${countyName}, ${stateName}</h3>
-                        <p>FIPS Code: ${localCountyFIPS || "Unknown"}</p>
-                        <p>No payment data available for this county.</p>
-                    </div>
-                `;
-                }
+                const mockCountyData = {
+                    hasData: false,
+                    name: countyName
+                };
+
+                const tooltipHtml = CountyTooltipContent({
+                    countyData: mockCountyData,
+                    countyFIPS: localCountyFIPS,
+                    viewMode,
+                    selectedCommodities,
+                    selectedPrograms,
+                    classes,
+                    showMeanValues,
+                    yearAggregation
+                });
+
                 if (mounted) {
                     onTooltipChange(tooltipHtml);
                 }
@@ -294,14 +319,14 @@ const CountyMap = ({
     const getCountyFillColor = useCallback(
         (countyData) => {
             if (!countyData || countyData.hasData === false) return "#EEE";
-            let valueToUse;
-            const shouldShowMeanValues =
-                showMeanValues &&
-                selectedPrograms.length === 1 &&
-                !selectedPrograms.includes("All Programs") &&
-                (selectedPrograms[0].includes("ARC") || selectedPrograms[0].includes("PLC"));
 
-            if (shouldShowMeanValues) {
+            if (showMeanValues && (!countyData.hasValidBaseAcres || countyData.baseAcres <= 0)) {
+                return "#CCC";
+            }
+
+            let valueToUse;
+
+            if (showMeanValues) {
                 if (viewMode === "difference") {
                     valueToUse = countyData.meanRateDifference || 0;
                 } else {
@@ -311,8 +336,8 @@ const CountyMap = ({
                         const programName = selectedPrograms[0];
                         if (countyData.programs && countyData.programs[programName]) {
                             valueToUse =
-                                viewMode === "proposed" ?
-                                    countyData.programs[programName].proposedMeanRate
+                                viewMode === "proposed"
+                                    ? countyData.programs[programName].proposedMeanRate
                                     : countyData.programs[programName].currentMeanRate;
                         }
                     }
@@ -320,9 +345,11 @@ const CountyMap = ({
             } else {
                 valueToUse = countyData.value || 0;
             }
+
             if (valueToUse === undefined || valueToUse === null || !isFinite(valueToUse) || valueToUse < 0.01) {
                 return "#EEE";
             }
+
             return colorScale(valueToUse);
         },
         [showMeanValues, selectedPrograms, viewMode, colorScale]
@@ -352,8 +379,15 @@ const CountyMap = ({
             )}
             <Box
                 sx={{
-                    width: "100%",
-                    position: "relative"
+                    "width": "100%",
+                    "position": "relative",
+                    "& .rsm-geography": {
+                        pointerEvents: "visiblePainted",
+                        cursor: "default !important"
+                    },
+                    "& .rsm-zoomable-group": {
+                        pointerEvents: "none !important"
+                    }
                 }}
             >
                 <div
@@ -364,25 +398,6 @@ const CountyMap = ({
                         position: "relative"
                     }}
                 >
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            zIndex: 10,
-                            pointerEvents: "none"
-                        }}
-                        onMouseDown={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                        }}
-                        onMouseUp={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                        }}
-                    />
                     <ComposableMap
                         projection="geoAlbersUsa"
                         width={800}
@@ -392,6 +407,33 @@ const CountyMap = ({
                             height: "auto",
                             touchAction: "none",
                             marginBottom: "20px"
+                        }}
+                        onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onMouseUp={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onDoubleClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onWheel={(e) => {
+                            if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                return false;
+                            }
                         }}
                     >
                         <ZoomableGroup
@@ -405,7 +447,6 @@ const CountyMap = ({
                                 [position.coordinates[0] + 0.000001, position.coordinates[1] + 0.000001]
                             ]}
                         >
-                            {}
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => {
                                     return (
@@ -496,7 +537,6 @@ const CountyMap = ({
                                                     />
                                                 );
                                             })}
-                                            {}
                                             <Geographies geography={geoStateUrl}>
                                                 {({ geographies: stateGeographies }) =>
                                                     stateGeographies.map((geo) => (
@@ -515,7 +555,6 @@ const CountyMap = ({
                                                     ))
                                                 }
                                             </Geographies>
-                                            {}
                                             {selectedState === "All States" && (
                                                 <Geographies geography={geoStateUrl}>
                                                     {({ geographies: labelGeographies }) =>
@@ -528,7 +567,6 @@ const CountyMap = ({
                                                             return (
                                                                 <g key={`${geo.rsmKey}-name`}>
                                                                     <Marker coordinates={centroid}>
-                                                                        {}
                                                                         <rect
                                                                             x="-10"
                                                                             y="-6"
@@ -571,6 +609,9 @@ const CountyMap = ({
                     html
                     id="map-tooltip"
                     clickable={false}
+                    getContent={() => tooltipContent}
+                    offset={{ top: -30, bottom: 15 }}
+                    style={{ zIndex: 1000 }}
                 >
                     {tooltipContent}
                 </ReactTooltip>
