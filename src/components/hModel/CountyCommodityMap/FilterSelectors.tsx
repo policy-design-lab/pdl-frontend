@@ -1,5 +1,6 @@
 import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } from "@mui/material";
 import React, { useEffect } from "react";
+import noShowStates from "../../../files/maps/noShow-state.json";
 
 interface FilterSelectorsProps {
     availableCommodities: string[];
@@ -75,8 +76,20 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         value={selectedState}
                         onChange={handleStateChange}
                         sx={{
-                            width: "100%",
-                            color: "rgba(47, 113, 100, 1)"
+                            "width": "100%",
+                            "color": "rgba(47, 113, 100, 1)",
+                            ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "rgba(0, 0, 0, 0.23)"
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "rgba(47, 113, 100, 0.8)"
+                            },
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                minHeight: "50px", // Adjusted height to match the other two menu item height
+                                padding: "8px 32px 8px 14px"
+                            }
                         }}
                         MenuProps={{
                             PaperProps: {
@@ -99,6 +112,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         <Divider sx={{ my: 1 }} />
                         {Object.entries(stateCodesData)
                             .filter(([, name], index, self) => self.findIndex((item) => item[1] === name) === index)
+                            .filter(([, name]) => !noShowStates[name])
                             .sort((a, b) => String(a[1]).localeCompare(String(b[1])))
                             .map(([code, name]) => (
                                 <MenuItem key={code} value={String(name)}>

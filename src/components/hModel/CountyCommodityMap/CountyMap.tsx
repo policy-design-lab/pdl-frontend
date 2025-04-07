@@ -610,8 +610,8 @@ const CountyMap = ({
                     id="map-tooltip"
                     clickable={false}
                     getContent={() => tooltipContent}
-                    offset={{ top: -30, bottom: 15 }}
-                    style={{ zIndex: 1000 }}
+                    offset={{ top: 5, left: 5 }}
+                    place="right"
                 >
                     {tooltipContent}
                 </ReactTooltip>

@@ -13,7 +13,6 @@ import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
 import TitleIIPage from "./pages/TitleIIPage";
 import PolicyLabPage from "./pages/PolicyLab/PolicyLabPage";
 import IRAPage from "./pages/IRAPage";
-import HModelTestPage from "./pages/HModelTestPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();
@@ -43,7 +42,6 @@ export default function Main(): JSX.Element {
                 <Route path="/issues-whitepapers/:id" element={<IssueWhitePaperPage />} />
                 <Route path="/policy-lab" element={<PolicyLabPage />} />
                 <Route path="/ira" element={<IRAPage />} />
-                <Route path="/hmodel" element={<HModelTestPage />} />
             </Routes>
         </ScrollToTop>
     );

@@ -10,12 +10,15 @@ const ExpandableDescription = ({ shortDescription, longDescription }) => {
     return (
         <Box
             sx={{
-                color: "#2F7164",
+                backgroundColor: "#ECF0EE",
                 borderRadius: 1,
                 mb: 2,
                 pt: 1,
+                pb: 1,
                 pl: 2,
-                pr: 1
+                pr: 1,
+                border: "1px solid #c8d6d0",
+                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)"
             }}
         >
             <Box
@@ -32,7 +35,9 @@ const ExpandableDescription = ({ shortDescription, longDescription }) => {
                             lineHeight: 1.6,
                             display: "block",
                             textAlign: "left",
-                            position: "relative"
+                            position: "relative",
+                            color: "#333333",
+                            fontWeight: 500
                         }}
                     >
                         <Box component="span" sx={{ display: "inline" }}>
@@ -67,8 +72,9 @@ const ExpandableDescription = ({ shortDescription, longDescription }) => {
                     sx={{
                         "mt": -0.5,
                         "flexShrink": 0,
+                        "color": "#2F7164",
                         "&:hover": {
-                            backgroundColor: "rgba(0, 0, 0, 0.04)"
+                            backgroundColor: "rgba(47, 113, 100, 0.1)"
                         }
                     }}
                 >

@@ -6,7 +6,6 @@ export interface MenuItem {
     items?: MenuItem[];
 }
 
-// Menu items. Extend this one in the future if adding more items.
 export const houseProjectionMenu: MenuItem[] = [
     {
         title: "2024 Proposals",
@@ -16,6 +15,9 @@ export const houseProjectionMenu: MenuItem[] = [
                 items: [
                     {
                         title: "EQIP Projection"
+                    },
+                    {
+                        title: "ARC-PLC Payments"
                     }
                 ]
             }
@@ -99,18 +101,20 @@ export function MenuItem({
                     }
                 />
             </ListItemButton>
-            {item.items && (
+            {item.items && item.items.length > 0 && (
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         {item.items.map((subItem, subIndex) => (
-                            <MenuItem
-                                key={subItem.title}
-                                item={subItem}
-                                index={`${index}-${subIndex}`}
-                                selectedItem={selectedItem}
-                                onMenuSelect={onMenuSelect}
-                                level={level + 1}
-                            />
+                            subItem && (
+                                <MenuItem
+                                    key={subItem.title || `sub-item-${subIndex}`}
+                                    item={subItem}
+                                    index={`${index}-${subIndex}`}
+                                    selectedItem={selectedItem}
+                                    onMenuSelect={onMenuSelect}
+                                    level={level + 1}
+                                />
+                            )
                         ))}
                     </List>
                 </Collapse>

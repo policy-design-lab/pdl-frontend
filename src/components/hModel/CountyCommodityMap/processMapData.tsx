@@ -226,12 +226,11 @@ export const processMapData = ({
                                 }
                             }
 
+                           
                             if (isProposed) {
-                                counties[countyFIPS].commodities[commodity.commodityName].proposedBaseAcres = baseAcres;
-                                counties[countyFIPS].programs[program.programName].proposedBaseAcres = baseAcres;
+                                counties[countyFIPS].programs[program.programName].proposedBaseAcres += baseAcres;
                             } else {
-                                counties[countyFIPS].commodities[commodity.commodityName].currentBaseAcres = baseAcres;
-                                counties[countyFIPS].programs[program.programName].currentBaseAcres = baseAcres;
+                                counties[countyFIPS].programs[program.programName].currentBaseAcres += baseAcres;
                             }
 
                             if (isProposed) {
@@ -239,12 +238,6 @@ export const processMapData = ({
                                 counties[countyFIPS].value = counties[countyFIPS].proposedValue;
                                 counties[countyFIPS].commodities[commodity.commodityName].proposedValue += value;
                                 counties[countyFIPS].programs[program.programName].proposedValue += value;
-                                if (baseAcres > 0) {
-                                    counties[countyFIPS].programs[program.programName].proposedMeanRate =
-                                        value / baseAcres;
-                                } else {
-                                    counties[countyFIPS].programs[program.programName].proposedMeanRate = 0;
-                                }
                             } else {
                                 counties[countyFIPS].currentValue += value;
                                 counties[countyFIPS].value = counties[countyFIPS].currentValue;
@@ -252,12 +245,6 @@ export const processMapData = ({
                                 counties[countyFIPS].commodities[commodity.commodityName].value =
                                     counties[countyFIPS].commodities[commodity.commodityName].currentValue;
                                 counties[countyFIPS].programs[program.programName].currentValue += value;
-                                if (baseAcres > 0) {
-                                    counties[countyFIPS].programs[program.programName].currentMeanRate =
-                                        value / baseAcres;
-                                } else {
-                                    counties[countyFIPS].programs[program.programName].currentMeanRate = 0;
-                                }
                             }
 
                             if (!counties[countyFIPS].yearlyData[year]) {
@@ -334,6 +321,21 @@ export const processMapData = ({
         county.currentBaseAcres = county.baseAcres;
         county.proposedBaseAcres = county.baseAcres;
         county.hasValidBaseAcres = county.baseAcres > 0;
+
+       
+        if (county.programs) {
+            Object.entries(county.programs).forEach(([programName, programData]: [string, any]) => {
+                if (programData.currentBaseAcres > 0) {
+                    programData.currentMeanRate = programData.currentValue / programData.currentBaseAcres;
+                    programData.currentMeanRate = Math.round(programData.currentMeanRate * 100) / 100;
+                }
+                
+                if (programData.proposedBaseAcres > 0) {
+                    programData.proposedMeanRate = programData.proposedValue / programData.proposedBaseAcres;
+                    programData.proposedMeanRate = Math.round(programData.proposedMeanRate * 100) / 100;
+                }
+            });
+        }
 
         if (county.hasData && county.hasValidBaseAcres) {
             if (county.currentBaseAcres > 0) {

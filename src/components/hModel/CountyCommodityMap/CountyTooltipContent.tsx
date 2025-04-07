@@ -115,6 +115,17 @@ export const CountyTooltipContent = ({
             selectedPrograms
         );
 
+        if (selectedCommodities && !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
+            tooltipContent += generateCommodityRegularContent(
+                countyData,
+                selectedCommodities,
+                classes,
+                showMeanValues,
+                viewMode,
+                yearAggregation
+            );
+        }
+
         if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
             tooltipContent += generateProgramRegularContent(
                 countyData,
@@ -238,27 +249,27 @@ function generateRegularTooltipContent(
     selectedCommodities,
     selectedPrograms
 ) {
-    const isWeightedAvg = countyData.isMeanWeighted;
+    const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
+    const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
-
-    const sectionHeaderStyle =
-        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
-    const subSectionStyle =
-        "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
+    const baseAcres = countyData.baseAcres || 0;
 
     let content = `
-        <tr style="${topTipStyle}">
-            <td class="${
-                classes.tooltip_topcell_left
-            }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                Total Payment:
-            </td>
-            <td class="${
-                classes.tooltip_topcell_right
-            }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                $${ShortFormat(countyData.value, undefined, 2)}
-            </td>
-        </tr>
+    <tr style="${topTipStyle}">
+        <td class="${
+            classes.tooltip_topcell_left
+        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+            Total Payment:
+        </td>
+        <td class="${
+            classes.tooltip_topcell_right
+        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+            $${ShortFormat(totalPayment, undefined, 2)}
+        </td>
+    </tr>`;
+
+    if (baseAcres > 0 && showMeanValues) {
+        content += `
         <tr>
             <td class="${
                 classes.tooltip_regularcell_left
@@ -268,184 +279,16 @@ function generateRegularTooltipContent(
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                $${ShortFormat(meanRate, undefined, 2)}/acre${isWeightedAvg ? " (weighted avg)" : ""}
-            </td>
-        </tr>
-    `;
-
-    if (yearAggregation > 0 && countyData.yearlyData) {
-        content += `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
-        const years = Object.keys(countyData.yearlyData).sort((a, b) => b.localeCompare(a));
-
-        const valueLabel = showMeanValues ? "County Mean Rate" : "County Total";
-        content += `
-        <tr>
-            <td class="${
-                classes.tooltip_topcell_left
-            }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                <b>${valueLabel}:</b>
-            </td>
-            <td class="${
-                classes.tooltip_topcell_right
-            }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                <b>${
-                    showMeanValues
-                        ? `$${ShortFormat(meanRate, undefined, 2)}/acre`
-                        : `$${ShortFormat(countyData.value, undefined, 2)}`
-                }</b>
+                $${ShortFormat(meanRate, undefined, 2)}/acre${countyData.isMeanWeighted ? " (weighted avg)" : ""}
             </td>
         </tr>`;
-
-        years.forEach((year) => {
-            const yearData = countyData.yearlyData[year];
-            if (yearData) {
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${year} Payment:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormat(yearData.value, undefined, 2)}
-                    </td>
-                </tr>`;
-
-                if (yearData.baseAcres > 0) {
-                    const yearlyRate = yearData.value / yearData.baseAcres;
-                    content += `
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            ${year} Mean Rate:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
-                        </td>
-                    </tr>`;
-                }
-            }
-        });
     }
 
-    if (selectedCommodities && !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))) {
-        const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
-            ? Object.keys(countyData.commodities)
-            : selectedCommodities;
-        if (commoditiesToDisplay.length > 0) {
-            content += `<tr><td colspan="2" style="${sectionHeaderStyle}">Commodity Breakdown</td></tr>`;
-
-            commoditiesToDisplay.forEach((commodity) => {
-                const commodityData = countyData.commodities[commodity];
-                if (commodityData && commodityData.value > 0) {
-                    let commodityValue = commodityData.value;
-                    if (typeof commodityValue === "string") {
-                        commodityValue = parseFloat(commodityValue.replace(/[^0-9.-]+/g, ""));
-                    }
-
-                    const baseAcres = commodityData.baseAcres || 0;
-
-                    const commodityMeanRate = baseAcres > 0 ? commodityValue / baseAcres : 0;
-
-                    content += `
-                    <tr>
-                        <td colspan="2" style="${subSectionStyle}">
-                            ${commodity}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            Total:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            $${ShortFormat(commodityValue, undefined, 2)}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            Base Acres:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            ${ShortFormat(baseAcres, undefined, 1)}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            Mean Rate:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                            $${ShortFormat(commodityMeanRate, undefined, 2)}/acre
-                        </td>
-                    </tr>`;
-
-                    if (yearAggregation > 0 && commodityData.yearlyData) {
-                        const years = Object.keys(commodityData.yearlyData).sort((a, b) => b.localeCompare(a));
-                        if (years.length > 0) {
-                            content += `
-                            <tr>
-                                <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold;">
-                                    Yearly Breakdown:
-                                </td>
-                            </tr>`;
-
-                            years.forEach((year) => {
-                                const yearData = commodityData.yearlyData[year];
-                                if (yearData) {
-                                    content += `
-                                    <tr>
-                                        <td class="${
-                                            classes.tooltip_regularcell_left
-                                        }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                                            ${year} Payment:
-                                        </td>
-                                        <td class="${
-                                            classes.tooltip_regularcell_right
-                                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                                            $${ShortFormat(yearData.value, undefined, 2)}
-                                        </td>
-                                    </tr>`;
-
-                                    if (yearData.baseAcres > 0) {
-                                        const yearlyRate = yearData.value / yearData.baseAcres;
-                                        content += `
-                                        <tr>
-                                            <td class="${
-                                                classes.tooltip_regularcell_left
-                                            }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                                                ${year} Mean Rate:
-                                            </td>
-                                            <td class="${
-                                                classes.tooltip_regularcell_right
-                                            }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                                                $${ShortFormat(yearlyRate, undefined, 2)}/acre
-                                            </td>
-                                        </tr>`;
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-        }
+   
+    if (countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
+        content += generateYearBreakdownContent(countyData, classes, showMeanValues);
     }
+
     return content;
 }
 
@@ -651,25 +494,31 @@ function generateProgramDifferenceContent(countyData, selectedPrograms, classes,
                 </tr>`;
             }
 
-            if (programData.currentBaseAcres > 0 || programData.proposedBaseAcres > 0) {
-                const baseAcres =
-                    programData.currentBaseAcres > 0 ? programData.currentBaseAcres : programData.proposedBaseAcres;
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        Base Acres:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${ShortFormat(baseAcres, undefined, 1)}
-                    </td>
-                </tr>`;
-            }
-
             content += `
+            <tr>
+                <td class="${
+                    classes.tooltip_regularcell_left
+                }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    Current Base Acres:
+                </td>
+                <td class="${
+                    classes.tooltip_regularcell_right
+                }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    ${ShortFormat(programData.currentBaseAcres || 0, undefined, 1)}
+                </td>
+            </tr>
+            <tr>
+                <td class="${
+                    classes.tooltip_regularcell_left
+                }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    Proposed Base Acres:
+                </td>
+                <td class="${
+                    classes.tooltip_regularcell_right
+                }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    ${ShortFormat(programData.proposedBaseAcres || 0, undefined, 1)}
+                </td>
+            </tr>
             <tr>
                 <td class="${
                     classes.tooltip_regularcell_left
@@ -758,10 +607,17 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
     programsToDisplay.forEach((program) => {
         const programData = countyData.programs && countyData.programs[program];
         if (programData) {
-            const programMeanRate =
-                viewMode === "proposed" ? programData.proposedMeanRate || 0 : programData.currentMeanRate || 0;
-
-            const programValue = Math.abs(programData.value || 0);
+            const programValue = viewMode === "proposed" 
+                ? Math.abs(programData.proposedValue || 0) 
+                : Math.abs(programData.currentValue || 0);
+            
+            const baseAcresValue = viewMode === "proposed" 
+                ? programData.proposedBaseAcres || 0 
+                : programData.currentBaseAcres || 0;
+            
+            const programMeanRate = viewMode === "proposed" 
+                ? programData.proposedMeanRate || 0 
+                : programData.currentMeanRate || 0;
 
             content += `
             <tr>
@@ -780,25 +636,19 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
                 }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
                     $${ShortFormat(programValue, undefined, 2)}
                 </td>
-            </tr>`;
-
-            if (programData.baseAcres && programData.baseAcres > 0) {
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        Base Acres:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${ShortFormat(programData.baseAcres, undefined, 1)}
-                    </td>
-                </tr>`;
-            }
-
-            content += `
+            </tr>
+            <tr>
+                <td class="${
+                    classes.tooltip_regularcell_left
+                }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    Base Acres:
+                </td>
+                <td class="${
+                    classes.tooltip_regularcell_right
+                }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    ${ShortFormat(baseAcresValue, undefined, 1)}
+                </td>
+            </tr>
             <tr>
                 <td class="${
                     classes.tooltip_regularcell_left
@@ -813,5 +663,207 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
             </tr>`;
         }
     });
+    return content;
+}
+
+function generateYearBreakdownContent(countyData, classes, showMeanValues) {
+    const sectionHeaderStyle =
+        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
+    const subSectionStyle =
+        "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
+
+    let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
+
+    const valueLabel = showMeanValues ? "County Mean Rate" : "County Total";
+    content += `
+    <tr>
+        <td class="${
+            classes.tooltip_topcell_left
+        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+            <b>${valueLabel}:</b>
+        </td>
+        <td class="${
+            classes.tooltip_topcell_right
+        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+            <b>${
+                showMeanValues
+                    ? `$${ShortFormat(countyData.meanPaymentRateInDollarsPerAcre || 0, undefined, 2)}/acre`
+                    : `$${ShortFormat(countyData.value, undefined, 2)}`
+            }</b>
+        </td>
+    </tr>`;
+
+   
+    if (countyData.yearlyData) {
+        const years = Object.keys(countyData.yearlyData).sort((a, b) => b.localeCompare(a));
+        years.forEach((year) => {
+            const yearData = countyData.yearlyData[year];
+            if (yearData) {
+                content += `
+                <tr>
+                    <td class="${
+                        classes.tooltip_regularcell_left
+                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        ${year} Payment:
+                    </td>
+                    <td class="${
+                        classes.tooltip_regularcell_right
+                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        $${ShortFormat(yearData.value, undefined, 2)}
+                    </td>
+                </tr>`;
+
+                if (yearData.baseAcres > 0) {
+                    const yearlyRate = yearData.value / yearData.baseAcres;
+                    content += `
+                    <tr>
+                        <td class="${
+                            classes.tooltip_regularcell_left
+                        }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                            ${year} Mean Rate:
+                        </td>
+                        <td class="${
+                            classes.tooltip_regularcell_right
+                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
+                        </td>
+                    </tr>`;
+                }
+            }
+        });
+    }
+
+    return content;
+}
+
+function generateCommodityRegularContent(
+    countyData, 
+    selectedCommodities, 
+    classes, 
+    showMeanValues, 
+    viewMode = "current",
+    yearAggregation = 0
+) {
+    let content = "";
+    const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
+        ? Object.keys(countyData.commodities)
+        : selectedCommodities;
+
+    const sectionHeaderStyle =
+        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
+    const subSectionStyle =
+        "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
+
+    if (commoditiesToDisplay.length > 0) {
+        content += `<tr><td colspan="2" style="${sectionHeaderStyle}">Commodity Breakdown</td></tr>`;
+
+        commoditiesToDisplay.forEach((commodity) => {
+            const commodityData = countyData.commodities[commodity];
+            if (commodityData && commodityData.value > 0) {
+                let commodityValue = commodityData.value;
+                if (typeof commodityValue === "string") {
+                    commodityValue = parseFloat(commodityValue.replace(/[^0-9.-]+/g, ""));
+                }
+
+                const baseAcres = viewMode === "proposed" 
+                    ? commodityData.proposedBaseAcres || 0 
+                    : commodityData.currentBaseAcres || 0;
+                
+                const commodityMeanRate = baseAcres > 0 ? commodityValue / baseAcres : 0;
+
+                content += `
+                <tr>
+                    <td colspan="2" style="${subSectionStyle}">
+                        ${commodity}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="${
+                        classes.tooltip_regularcell_left
+                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        Total:
+                    </td>
+                    <td class="${
+                        classes.tooltip_regularcell_right
+                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        $${ShortFormat(commodityValue, undefined, 2)}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="${
+                        classes.tooltip_regularcell_left
+                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        Base Acres:
+                    </td>
+                    <td class="${
+                        classes.tooltip_regularcell_right
+                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        ${ShortFormat(baseAcres, undefined, 1)}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="${
+                        classes.tooltip_regularcell_left
+                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        Mean Rate:
+                    </td>
+                    <td class="${
+                        classes.tooltip_regularcell_right
+                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                        $${ShortFormat(commodityMeanRate, undefined, 2)}/acre
+                    </td>
+                </tr>`;
+
+               
+                if (commodityData.yearlyData && Object.keys(commodityData.yearlyData).length > 0) {
+                    const years = Object.keys(commodityData.yearlyData).sort((a, b) => b.localeCompare(a));
+                    if (years.length > 0) {
+                        content += `
+                        <tr>
+                            <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold;">
+                                Yearly Breakdown:
+                            </td>
+                        </tr>`;
+
+                        years.forEach((year) => {
+                            const yearData = commodityData.yearlyData[year];
+                            if (yearData) {
+                                content += `
+                                <tr>
+                                    <td class="${
+                                        classes.tooltip_regularcell_left
+                                    }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                                        ${year} Payment:
+                                    </td>
+                                    <td class="${
+                                        classes.tooltip_regularcell_right
+                                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                                        $${ShortFormat(yearData.value, undefined, 2)}
+                                    </td>
+                                </tr>`;
+
+                                if (yearData.baseAcres > 0) {
+                                    const yearlyRate = yearData.value / yearData.baseAcres;
+                                    content += `
+                                    <tr>
+                                        <td class="${
+                                            classes.tooltip_regularcell_left
+                                        }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                                            ${year} Mean Rate:
+                                        </td>
+                                        <td class="${
+                                            classes.tooltip_regularcell_right
+                                        }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
+                                        </td>
+                                    </tr>`;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
     return content;
 }

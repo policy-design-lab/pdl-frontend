@@ -183,7 +183,7 @@ export const getTotalBaseAcres = (
     if (!county || !county.scenarios) return 0;
 
     let totalBaseAcres = 0;
-    const processedCommodities = new Set();
+    const processedProgramCommodityPairs = new Set<string>();
 
     const targetScenario = county.scenarios.find((s) => s.scenarioName === scenarioType);
 
@@ -197,21 +197,17 @@ export const getTotalBaseAcres = (
                     return;
                 }
 
-                if (processedCommodities.has(commodity.commodityName)) {
-                    return;
-                }
-
-                let hasProgramMatch = false;
-
                 commodity.programs.forEach((program) => {
-                    if (selectedPrograms.includes("All Programs") || selectedPrograms.includes(program.programName)) {
-                        hasProgramMatch = true;
+                    if (!selectedPrograms.includes("All Programs") && !selectedPrograms.includes(program.programName)) {
+                        return;
+                    }
+
+                    const pairKey = `${commodity.commodityName}-${program.programName}`;
+                    if (!processedProgramCommodityPairs.has(pairKey)) {
+                        totalBaseAcres += program.baseAcres || 0;
+                        processedProgramCommodityPairs.add(pairKey);
                     }
                 });
-                if (hasProgramMatch) {
-                    totalBaseAcres += commodity.baseAcres || 0;
-                    processedCommodities.add(commodity.commodityName);
-                }
             });
         }
     } else {
@@ -223,24 +219,20 @@ export const getTotalBaseAcres = (
                 return;
             }
 
-            if (processedCommodities.has(commodity.commodityName)) {
-                return;
-            }
-
-            let hasProgramMatch = false;
-
             commodity.programs.forEach((program) => {
-                if (selectedPrograms.includes("All Programs") || selectedPrograms.includes(program.programName)) {
-                    hasProgramMatch = true;
+                if (!selectedPrograms.includes("All Programs") && !selectedPrograms.includes(program.programName)) {
+                    return;
+                }
+
+                const pairKey = `${commodity.commodityName}-${program.programName}`;
+                if (!processedProgramCommodityPairs.has(pairKey)) {
+                    totalBaseAcres += program.baseAcres || 0;
+                    processedProgramCommodityPairs.add(pairKey);
                 }
             });
-
-            if (hasProgramMatch) {
-                totalBaseAcres += commodity.baseAcres || 0;
-                processedCommodities.add(commodity.commodityName);
-            }
         });
     }
+    
     totalBaseAcres = Math.round(totalBaseAcres * 100) / 100;
 
     return totalBaseAcres;
