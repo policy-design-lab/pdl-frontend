@@ -59,14 +59,25 @@ const MapChart = (props) => {
                                                                     {year} Benefit:
                                                                 </td>
                                                                 <td className={classes.tooltip_regularcell_right}>
-                                                                    ${ShortFormat(data.totalPaymentInDollars,undefined,2)}
+                                                                    $
+                                                                    {ShortFormat(
+                                                                        data.totalPaymentInDollars,
+                                                                        undefined,
+                                                                        2
+                                                                    )}
                                                                 </td>
                                                             </tr>
                                                         ))}
                                                     {/* Divider line row */}
                                                     <tr>
                                                         <td colSpan={2}>
-                                                            <hr style={{ margin: "4px 0", border: "0", borderTop: "1px solid #ccc" }} />
+                                                            <hr
+                                                                style={{
+                                                                    margin: "4px 0",
+                                                                    border: "0",
+                                                                    borderTop: "1px solid #ccc"
+                                                                }}
+                                                            />
                                                         </td>
                                                     </tr>
                                                     <tr style={topTipStyle}>
