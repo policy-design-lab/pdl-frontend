@@ -6,14 +6,14 @@ import Drawer from "../components/ProgramDrawer";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
-import LandingPageMap from "../components/LandingPageProgramMap";
-import LandingPageTable from "../components/shared/LandingPgaeTable";
 import Title2TotalMap from "../components/title2/Title2TotalMap";
+import DataTable from "../components/title2/Title2TotalTable";
 
 export default function TitleIIPage(): JSX.Element {
     const defaultTheme = createTheme();
     const [allStates, setAllStates] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
     const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
@@ -37,6 +37,7 @@ export default function TitleIIPage(): JSX.Element {
 
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
@@ -116,7 +117,7 @@ export default function TitleIIPage(): JSX.Element {
                     </Box>
                     <Drawer />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box component="div" sx={{ width: "100%", m: "auto", pt: 20 }}>
+                        <Box component="div" sx={{ width: "100%", m: "auto", pt: 6 }}>
                             <Title2TotalMap
                                 program="Title II: Conservation"
                                 attribute="payments"
@@ -126,7 +127,6 @@ export default function TitleIIPage(): JSX.Element {
                                 allStates={allStates}
                             />
                         </Box>
-
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
@@ -149,11 +149,11 @@ export default function TitleIIPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box display="flex" justifyContent="center" component="div" sx={{ mt: 10, mb: 2 }}>
-                            <LandingPageTable
+                            <DataTable
                                 TableTitle={`Total Conservation Programs (Title II) from ${total_year}`}
-                                TableData={allPrograms}
-                                stateCodes={stateCodesData}
-                                SummaryKey="Title II Total"
+                                statePerformance={stateDistributionData}
+                                year={total_year}
+                                stateCodes={stateCodesArray}
                             />
                         </Box>
                     </Box>

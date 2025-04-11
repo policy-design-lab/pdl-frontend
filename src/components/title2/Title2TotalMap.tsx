@@ -176,8 +176,6 @@ const Title2TotalMap = ({
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
     const zeroPoints = [];
-    console.log("***");
-    console.log(statePerformance);
     statePerformance[year].forEach((value) => {
         const ACur = value;
         const key = "totalPaymentInDollars";
