@@ -16,11 +16,8 @@ export default function TitleIIPage(): JSX.Element {
     const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
-    const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
-    const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-    };
+
     const total_year = "2014-2023";
     React.useEffect(() => {
         // For landing page map only.
@@ -52,9 +49,6 @@ export default function TitleIIPage(): JSX.Element {
             const transformed = transformStatePerformance(response);
             setStateDistributionData(transformed);
         });
-
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
     }, []);
     const transformStatePerformance = (rawData) => {
         const years = Object.keys(rawData).filter(
