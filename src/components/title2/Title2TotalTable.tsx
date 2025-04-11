@@ -111,7 +111,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                     <Box sx={{ display: "flex", alignItems: "center" }}>
                                         {column.render("Header")}
                                         <div>
-                                          {/* eslint-disable-next-line no-nested-ternary */}
+                                            {/* eslint-disable-next-line no-nested-ternary */}
                                             {!column.isSorted ? (
                                                 <Box sx={{ ml: 1 }}>
                                                     <SwapVertIcon />
