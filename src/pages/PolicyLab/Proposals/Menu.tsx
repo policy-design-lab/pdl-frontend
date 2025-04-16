@@ -11,15 +11,10 @@ export const houseProjectionMenu: MenuItem[] = [
         title: "2024 Proposals",
         items: [
             {
-                title: "House Ag Committee",
-                items: [
-                    {
-                        title: "EQIP Projection"
-                    },
-                    {
-                        title: "ARC-PLC Payments"
-                    }
-                ]
+                title: "EQIP Projection"
+            },
+            {
+                title: "ARC-PLC Payments"
             }
         ]
     }
@@ -104,18 +99,19 @@ export function MenuItem({
             {item.items && item.items.length > 0 && (
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {item.items.map((subItem, subIndex) => (
-                            subItem && (
-                                <MenuItem
-                                    key={subItem.title || `sub-item-${subIndex}`}
-                                    item={subItem}
-                                    index={`${index}-${subIndex}`}
-                                    selectedItem={selectedItem}
-                                    onMenuSelect={onMenuSelect}
-                                    level={level + 1}
-                                />
-                            )
-                        ))}
+                        {item.items.map(
+                            (subItem, subIndex) =>
+                                subItem && (
+                                    <MenuItem
+                                        key={subItem.title || `sub-item-${subIndex}`}
+                                        item={subItem}
+                                        index={`${index}-${subIndex}`}
+                                        selectedItem={selectedItem}
+                                        onMenuSelect={onMenuSelect}
+                                        level={level + 1}
+                                    />
+                                )
+                        )}
                     </List>
                 </Collapse>
             )}

@@ -124,12 +124,34 @@ const CountyMap = ({
             }
         };
 
+        const handleDrag = (e) => {
+            if (e.target.closest(".county-commodity-map")) {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+        };
+
+        const handleMouseDown = (e) => {
+            if (e.target.closest(".county-commodity-map") && !e.target.closest(".rsm-geography")) {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+        };
+
         document.addEventListener("dblclick", handleDoubleClick, { capture: true });
         document.addEventListener("wheel", handleWheel, { capture: true, passive: false });
+        document.addEventListener("drag", handleDrag, { capture: true });
+        document.addEventListener("dragstart", handleDrag, { capture: true });
+        document.addEventListener("mousedown", handleMouseDown, { capture: true });
 
         return () => {
             document.removeEventListener("dblclick", handleDoubleClick, { capture: true });
             document.removeEventListener("wheel", handleWheel, { capture: true });
+            document.removeEventListener("drag", handleDrag, { capture: true });
+            document.removeEventListener("dragstart", handleDrag, { capture: true });
+            document.removeEventListener("mousedown", handleMouseDown, { capture: true });
         };
     }, []);
 
@@ -387,6 +409,9 @@ const CountyMap = ({
                     },
                     "& .rsm-zoomable-group": {
                         pointerEvents: "none !important"
+                    },
+                    "& .rsm-svg": {
+                        pointerEvents: "none !important"
                     }
                 }}
             >
@@ -399,16 +424,20 @@ const CountyMap = ({
                     }}
                 >
                     <ComposableMap
+                        data-tip=""
                         projection="geoAlbersUsa"
-                        width={800}
-                        height={550}
+                        className="county-commodity-map"
                         style={{
                             width: "100%",
-                            height: "auto",
-                            touchAction: "none",
-                            marginBottom: "20px"
+                            height: "100%",
+                            pointerEvents: "none"
                         }}
                         onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
+                        }}
+                        onMouseMove={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
                             return false;
@@ -428,24 +457,24 @@ const CountyMap = ({
                             e.preventDefault();
                             return false;
                         }}
-                        onWheel={(e) => {
-                            if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                return false;
-                            }
+                        onDrag={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            return false;
                         }}
                     >
                         <ZoomableGroup
-                            center={position.coordinates}
                             zoom={position.zoom}
+                            center={position.coordinates}
                             onMoveEnd={handleMoveEnd}
-                            minZoom={position.zoom}
-                            maxZoom={position.zoom}
+                            doubleClickZoom={false}
+                            disablePanning
                             translateExtent={[
                                 [position.coordinates[0] - 0.000001, position.coordinates[1] - 0.000001],
                                 [position.coordinates[0] + 0.000001, position.coordinates[1] + 0.000001]
                             ]}
+                            minZoom={position.zoom}
+                            maxZoom={position.zoom}
                         >
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => {
@@ -487,16 +516,18 @@ const CountyMap = ({
                                                             stroke="#FFFFFF"
                                                             strokeWidth={0.15}
                                                             style={{
-                                                                default: { outline: "none" },
+                                                                default: { outline: "none", pointerEvents: "auto" },
                                                                 hover: {
                                                                     stroke: "#232323",
                                                                     strokeWidth: 0.5,
-                                                                    outline: "none"
+                                                                    outline: "none",
+                                                                    pointerEvents: "auto"
                                                                 },
                                                                 pressed: {
                                                                     outline: "none",
                                                                     stroke: "#FFFFFF",
-                                                                    strokeWidth: 0.15
+                                                                    strokeWidth: 0.15,
+                                                                    pointerEvents: "auto"
                                                                 }
                                                             }}
                                                         />
@@ -522,16 +553,18 @@ const CountyMap = ({
                                                         stroke="#FFFFFF"
                                                         strokeWidth={0.15}
                                                         style={{
-                                                            default: { outline: "none" },
+                                                            default: { outline: "none", pointerEvents: "auto" },
                                                             hover: {
                                                                 stroke: "#232323",
                                                                 strokeWidth: 0.5,
-                                                                outline: "none"
+                                                                outline: "none",
+                                                                pointerEvents: "auto"
                                                             },
                                                             pressed: {
                                                                 outline: "none",
                                                                 stroke: "#FFFFFF",
-                                                                strokeWidth: 0.15
+                                                                strokeWidth: 0.15,
+                                                                pointerEvents: "auto"
                                                             }
                                                         }}
                                                     />
@@ -547,9 +580,9 @@ const CountyMap = ({
                                                             stroke="#000"
                                                             strokeWidth={0.5}
                                                             style={{
-                                                                default: { outline: "none" },
-                                                                hover: { outline: "none" },
-                                                                pressed: { outline: "none" }
+                                                                default: { outline: "none", pointerEvents: "none" },
+                                                                hover: { outline: "none", pointerEvents: "none" },
+                                                                pressed: { outline: "none", pointerEvents: "none" }
                                                             }}
                                                         />
                                                     ))
@@ -615,6 +648,17 @@ const CountyMap = ({
                 >
                     {tooltipContent}
                 </ReactTooltip>
+                <Box
+                    sx={{
+                        textAlign: "center",
+                        mt: 1,
+                        fontSize: "0.75rem",
+                        color: "rgba(0,0,0,0.6)",
+                        fontStyle: "italic"
+                    }}
+                >
+                    Note: Map zoom is only available through the state selector
+                </Box>
             </Box>
         </Box>
     );

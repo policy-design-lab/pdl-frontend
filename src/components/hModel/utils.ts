@@ -31,7 +31,7 @@ export const calculateTotals = (
     selectedPrograms: string[]
 ): { currentTotal: number; proposedTotal: number } => {
     let currentTotal = 0;
-    let proposedTotal = 0;
+    const proposedTotal = 0;
 
     county.scenarios.forEach((scenario) => {
         scenario.commodities.forEach((commodity) => {
@@ -161,7 +161,7 @@ export const calculateMeanRates = (county: any, baseAcres: number, weightedMean:
 export const calculateWeightedMeanRate = (
     totalPayments: number,
     totalBaseAcres: number,
-    isMultiSelection: boolean = false
+    isMultiSelection = false
 ): { rate: number; isWeightedAverage: boolean } => {
     if (totalBaseAcres > 0) {
         const preciseRate = totalPayments / totalBaseAcres;
@@ -178,7 +178,7 @@ export const getTotalBaseAcres = (
     county: any,
     selectedCommodities: string[] = ["All Commodities"],
     selectedPrograms: string[] = ["All Programs"],
-    scenarioType: string = "Current"
+    scenarioType = "Current"
 ): number => {
     if (!county || !county.scenarios) return 0;
 
@@ -232,7 +232,7 @@ export const getTotalBaseAcres = (
             });
         });
     }
-    
+
     totalBaseAcres = Math.round(totalBaseAcres * 100) / 100;
 
     return totalBaseAcres;

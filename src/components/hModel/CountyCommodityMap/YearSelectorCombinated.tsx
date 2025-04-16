@@ -15,12 +15,12 @@ const YearSelectorCombined = ({
             setYearAggregation(yearRange[0]);
         }
     }, [yearRange, aggregationEnabled, setYearAggregation]);
-    
+
     const handleYearChange = (event, newValue) => {
         event.preventDefault();
         setYearRange([newValue]);
     };
-    
+
     const handleAggregationToggle = (event) => {
         const isEnabled = event.target.checked;
         setAggregationEnabled(isEnabled);
@@ -30,12 +30,12 @@ const YearSelectorCombined = ({
             setYearAggregation(0);
         }
     };
-    
+
     const selectedYear = availableYears[yearRange[0]];
     const currentYearIndex = yearRange[0];
     const earliestYearShown = aggregationEnabled ? availableYears[0] : selectedYear;
     const isAggregationDisabled = currentYearIndex === 0;
-    
+
     return (
         <Box>
             <FormLabel
@@ -67,11 +67,11 @@ const YearSelectorCombined = ({
                         />
                     }
                     label={
-                        isAggregationDisabled ? 
-                            "Aggregation not available for earliest year" :
-                            aggregationEnabled ?
-                            "Show data aggregated from earliest to selected year" :
-                            "Show selected year only"
+                        isAggregationDisabled
+                            ? "Aggregation not available for earliest year"
+                            : aggregationEnabled
+                            ? "Show data aggregated from earliest to selected year"
+                            : "Show selected year only"
                     }
                     sx={{
                         color: isAggregationDisabled ? "rgba(47, 113, 100, 0.5)" : "rgba(47, 113, 100, 1)"
@@ -88,7 +88,9 @@ const YearSelectorCombined = ({
                     }}
                 >
                     {aggregationEnabled
-                        ? `Showing ${showMeanValues ? "mean rates" : "sum"} of all data from ${earliestYearShown} through ${selectedYear}`
+                        ? `Showing ${
+                              showMeanValues ? "mean rates" : "sum"
+                          } of all data from ${earliestYearShown} through ${selectedYear}`
                         : `Showing data for ${selectedYear} only`}
                 </Typography>
                 <Slider

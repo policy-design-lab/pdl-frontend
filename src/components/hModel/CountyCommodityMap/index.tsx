@@ -5,6 +5,7 @@ import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
+import TableIndicator from "./TableIndicator";
 
 const CountyCommodityMap = ({
     countyData,
@@ -15,7 +16,13 @@ const CountyCommodityMap = ({
     availableCommodities,
     availablePrograms,
     isLoading,
-    onMapUpdate
+    onMapUpdate,
+    showMeanValues,
+    setShowMeanValues,
+    yearAggregation,
+    setYearAggregation,
+    aggregationEnabled,
+    setAggregationEnabled
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[0] || "2024");
@@ -24,11 +31,11 @@ const CountyCommodityMap = ({
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
     const [proposedPolicyName, setProposedPolicyName] = useState("2025 Policy");
-    const [showMeanValues, setShowMeanValues] = useState(false);
     const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
-    const [yearAggregation, setYearAggregation] = useState(0);
-    const [aggregationEnabled, setAggregationEnabled] = useState(false);
     const [forceUpdate, setForceUpdate] = useState(0);
+    const [showTableIndicator, setShowTableIndicator] = useState(false);
+    const [indicatorMessage, setIndicatorMessage] = useState("");
+    const [isAtTop, setIsAtTop] = useState(false);
 
     useEffect(() => {
         let mounted = true;
@@ -63,6 +70,39 @@ const CountyCommodityMap = ({
             onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode);
         }
     }, [selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode, onMapUpdate]);
+
+    useEffect(() => {
+        const hasCommoditySelection =
+            selectedCommodities.length > 0 &&
+            !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
+        const hasYearSelection = yearRange.length > 1 || (aggregationEnabled && yearAggregation > 0);
+        const hasProgramSelection =
+            selectedPrograms.length > 0 && !(selectedPrograms.length === 1 && selectedPrograms[0] === "All Programs");
+
+        const shouldShowIndicator = hasCommoditySelection || hasYearSelection || hasProgramSelection;
+        setShowTableIndicator(shouldShowIndicator);
+
+        if (shouldShowIndicator) {
+            let message = "View detailed breakdown in table";
+            const breakdowns = [];
+
+            if (hasCommoditySelection) {
+                breakdowns.push("Commodity breakdown");
+            }
+            if (hasYearSelection) {
+                breakdowns.push("Yearly breakdown");
+            }
+            if (hasProgramSelection) {
+                breakdowns.push("Program breakdown");
+            }
+
+            if (breakdowns.length > 0) {
+                message += ` (${breakdowns.join(", ")})`;
+            }
+
+            setIndicatorMessage(message);
+        }
+    }, [selectedCommodities, yearRange, yearAggregation, aggregationEnabled, selectedPrograms]);
 
     const handleSetSelectedCommodities = (newValue) => {
         if (JSON.stringify(selectedCommodities) !== JSON.stringify(newValue)) {
@@ -102,6 +142,19 @@ const CountyCommodityMap = ({
         setViewMode(newValue);
         if (onMapUpdate) {
             onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, newValue);
+        }
+    };
+
+    const handleScrollToTable = () => {
+        const tableElement = document.getElementById("county-commodity-table");
+        if (tableElement) {
+            if (isAtTop) {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setIsAtTop(false);
+            } else {
+                tableElement.scrollIntoView({ behavior: "smooth" });
+                setIsAtTop(true);
+            }
         }
     };
 
@@ -158,14 +211,23 @@ const CountyCommodityMap = ({
         return ["#fdd0a2", "#f16913", "#d94801", "#a63603", "#7f2704"];
     }, [viewMode, showMeanValues]);
 
+    const effectiveYear = useMemo(() => {
+        if (aggregationEnabled && yearAggregation > 0) {
+            const startYear = availableYears[yearRange[0]];
+            const endYear = availableYears[Math.min(yearRange[0] + yearAggregation, availableYears.length - 1)];
+            return `${startYear}-${endYear}`;
+        }
+        return selectedYear;
+    }, [selectedYear, yearRange, yearAggregation, aggregationEnabled, availableYears]);
+
     return (
         <Box sx={{ width: "100%" }}>
             <Box sx={{ my: 5 }}>
-                <Box 
-                    sx={{ 
-                        p: 2, 
-                        backgroundColor: "#f5f5f5", 
-                        borderRadius: "4px", 
+                <Box
+                    sx={{
+                        p: 2,
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "4px",
                         border: "1px solid rgba(47, 113, 100, 0.2)",
                         mb: 3
                     }}
@@ -179,18 +241,20 @@ const CountyCommodityMap = ({
                         proposedPolicyName={proposedPolicyName}
                         setViewMode={handleSetViewMode}
                         setYearRange={setYearRange}
-                        setYearAggregation={setYearAggregation}
                         setShowMeanValues={setShowMeanValues}
                         setProposedPolicyName={setProposedPolicyName}
                         aggregationEnabled={aggregationEnabled}
                         setAggregationEnabled={setAggregationEnabled}
+                        setYearAggregation={setYearAggregation}
                     />
-                    
-                    <Box sx={{ 
-                        mt: 3, 
-                        pt: 3, 
-                        borderTop: "1px solid rgba(47, 113, 100, 0.2)"
-                    }}>
+
+                    <Box
+                        sx={{
+                            mt: 3,
+                            pt: 3,
+                            borderTop: "1px solid rgba(47, 113, 100, 0.2)"
+                        }}
+                    >
                         <FilterSelectors
                             availableCommodities={availableCommodities}
                             availablePrograms={availablePrograms}
@@ -204,7 +268,7 @@ const CountyCommodityMap = ({
                         />
                     </Box>
                 </Box>
-                
+
                 <Box sx={{ mt: 5 }}>
                     <MapLegend
                         mapData={mapData}
@@ -212,13 +276,13 @@ const CountyCommodityMap = ({
                         viewMode={viewMode}
                         selectedYear={selectedYear}
                         selectedState={selectedState}
-                    yearAggregation={yearAggregation}
-                    showMeanValues={showMeanValues}
+                        yearAggregation={yearAggregation}
+                        showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
                     />
                 </Box>
             </Box>
-            <Box 
+            <Box
                 sx={{
                     overflow: "hidden"
                 }}
@@ -241,6 +305,9 @@ const CountyCommodityMap = ({
                     key={mapKey}
                 />
             </Box>
+            {showTableIndicator && (
+                <TableIndicator message={indicatorMessage} onClick={handleScrollToTable} isAtTop={isAtTop} />
+            )}
         </Box>
     );
 };

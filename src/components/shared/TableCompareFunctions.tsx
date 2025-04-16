@@ -9,8 +9,8 @@ export function compareWithDollarSign(rowA, rowB, id, desc) {
         (aVal === "$0.00" || aVal === "" || aVal === undefined) &&
         (bVal === "$0.00" || bVal === "" || bVal === undefined)
     ) {
-        const countyA = rowA.values["county"] || "";
-        const countyB = rowB.values["county"] || "";
+        const countyA = rowA.values.county || "";
+        const countyB = rowB.values.county || "";
         return countyA.localeCompare(countyB);
     }
 
@@ -41,8 +41,8 @@ export function compareWithDollarSign(rowA, rowB, id, desc) {
     if (a > b) return -1 * sortOrder;
     if (a < b) return 1 * sortOrder;
 
-    const countyA = rowA.values["county"] || "";
-    const countyB = rowB.values["county"] || "";
+    const countyA = rowA.values.county || "";
+    const countyB = rowB.values.county || "";
     return countyA.localeCompare(countyB);
 }
 

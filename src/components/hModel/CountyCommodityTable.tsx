@@ -20,6 +20,24 @@ import {
     getTotalBaseAcres
 } from "./utils";
 
+interface ExtendedYearBreakdownData extends YearBreakdownData {
+    paymentRate?: number;
+}
+
+interface ExtendedCountyObject extends CountyObject {
+    yearBreakdown?: { [year: string]: ExtendedYearBreakdownData };
+    weightedAverageRate?: number;
+    aggregatedPayment?: number;
+    commodityBreakdown?: {
+        [commodity: string]: {
+            total: number;
+            baseAcres: number;
+            paymentRate?: number;
+            yearBreakdown?: { [year: string]: ExtendedYearBreakdownData };
+        };
+    };
+}
+
 interface ColumnDef {
     Header: string;
     accessor: string;
@@ -107,15 +125,30 @@ const CountyCommodityTable = ({
     selectedCommodities,
     selectedPrograms,
     selectedState,
-    stateCodesData
+    stateCodesData,
+    yearAggregation,
+    aggregationEnabled,
+    showMeanValues
 }) => {
     const isAggregatedYear = useMemo(() => {
-        return typeof selectedYear === "string" && selectedYear.includes("-");
-    }, [selectedYear]);
+        return (
+            (typeof selectedYear === "string" && selectedYear.includes("-")) ||
+            (aggregationEnabled && yearAggregation > 0)
+        );
+    }, [selectedYear, yearAggregation, aggregationEnabled]);
 
     const yearRange = useMemo(() => {
-        return calculateYearRange(selectedYear);
-    }, [selectedYear]);
+        if (aggregationEnabled && yearAggregation > 0) {
+            const startYear = 2024;
+            const endYear = parseInt(selectedYear);
+            const years: string[] = [];
+            for (let year = startYear; year <= endYear; year++) {
+                years.push(year.toString());
+            }
+            return years;
+        }
+        return [selectedYear];
+    }, [selectedYear, yearAggregation, aggregationEnabled]);
 
     const getTableTitle = useMemo(() => {
         return generateTableTitle(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
@@ -127,7 +160,7 @@ const CountyCommodityTable = ({
 
     const getTableData = React.useCallback(() => {
         if (isAggregatedYear) {
-            const result: CountyObject[] = [];
+            const result: ExtendedCountyObject[] = [];
             const stateCountyMap = new Map();
 
             yearRange.forEach((year) => {
@@ -156,7 +189,7 @@ const CountyCommodityTable = ({
                                 (c) => c.countyFIPS === county.countyFIPS
                             );
 
-                            let countyObject: CountyObject;
+                            let countyObject: ExtendedCountyObject;
                             if (stateCountyMap.has(stateCountyKey)) {
                                 countyObject = stateCountyMap.get(stateCountyKey);
                             } else {
@@ -224,14 +257,13 @@ const CountyCommodityTable = ({
 
                                         commodityCurrentTotal += program.totalPaymentInDollars || 0;
 
-                                        if (proposedCounty) {
+                                        if (viewMode === "difference" && proposedCounty) {
                                             const { proposedProgram } = findProposedCommodityAndProgram(
                                                 proposedCounty,
                                                 scenario.scenarioName,
                                                 commodity.commodityName,
                                                 program.programName
                                             );
-
                                             if (proposedProgram) {
                                                 commodityProposedTotal += proposedProgram.totalPaymentInDollars || 0;
                                             }
@@ -279,7 +311,7 @@ const CountyCommodityTable = ({
                             const countyName = getCountyNameFromFips(county.countyFIPS);
                             const stateCountyKey = `${stateCode}-${county.countyFIPS}`;
 
-                            let countyObject: CountyObject;
+                            let countyObject: ExtendedCountyObject;
                             if (stateCountyMap.has(stateCountyKey)) {
                                 countyObject = stateCountyMap.get(stateCountyKey);
                             } else {
@@ -300,7 +332,9 @@ const CountyCommodityTable = ({
 
                             if (!countyObject.yearBreakdown[year]) {
                                 countyObject.yearBreakdown[year] = {
-                                    total: 0,
+                                    current: 0,
+                                    proposed: 0,
+                                    difference: 0,
                                     baseAcres: 0
                                 };
                             }
@@ -323,8 +357,6 @@ const CountyCommodityTable = ({
                                 }
                             }
 
-                            let yearTotal = 0;
-
                             county.scenarios.forEach((scenario) => {
                                 scenario.commodities.forEach((commodity) => {
                                     if (
@@ -334,7 +366,8 @@ const CountyCommodityTable = ({
                                         return;
                                     }
 
-                                    let commodityTotal = 0;
+                                    let commodityCurrentTotal = 0;
+                                    let commodityProposedTotal = 0;
 
                                     commodity.programs.forEach((program) => {
                                         if (
@@ -344,20 +377,39 @@ const CountyCommodityTable = ({
                                             return;
                                         }
 
-                                        commodityTotal += program.totalPaymentInDollars || 0;
-                                        yearTotal += program.totalPaymentInDollars || 0;
+                                        commodityCurrentTotal += program.totalPaymentInDollars || 0;
+
+                                        if (viewMode === "difference" && proposedCounty) {
+                                            const { proposedProgram } = findProposedCommodityAndProgram(
+                                                proposedCounty,
+                                                scenario.scenarioName,
+                                                commodity.commodityName,
+                                                program.programName
+                                            );
+                                            if (proposedProgram) {
+                                                commodityProposedTotal += proposedProgram.totalPaymentInDollars || 0;
+                                            }
+                                        }
                                     });
 
                                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
-                                        (countyObject.yearBreakdown[year].total as number) += commodityTotal;
+                                        (countyObject.yearBreakdown[year].current as number) += commodityCurrentTotal;
+                                        (countyObject.yearBreakdown[year].proposed as number) += commodityProposedTotal;
+                                        (countyObject.yearBreakdown[year].difference as number) +=
+                                            commodityProposedTotal - commodityCurrentTotal;
                                     }
 
                                     const commodityKey = `${commodity.commodityName}`;
-                                    if (!countyObject[commodityKey]) {
-                                        countyObject[commodityKey] = 0;
+                                    if (!countyObject[`${commodityKey} Current`]) {
+                                        countyObject[`${commodityKey} Current`] = 0;
+                                        countyObject[`${commodityKey} Proposed`] = 0;
+                                        countyObject[`${commodityKey} Difference`] = 0;
                                     }
 
-                                    (countyObject[commodityKey] as number) += commodityTotal;
+                                    (countyObject[`${commodityKey} Current`] as number) += commodityCurrentTotal;
+                                    (countyObject[`${commodityKey} Proposed`] as number) += commodityProposedTotal;
+                                    (countyObject[`${commodityKey} Difference`] as number) +=
+                                        commodityProposedTotal - commodityCurrentTotal;
 
                                     if (commodity.baseAcres && commodity.baseAcres > 0) {
                                         if (!countyObject[`${commodity.commodityName} Base Acres`]) {
@@ -371,193 +423,56 @@ const CountyCommodityTable = ({
                 }
             });
 
-            result.forEach((county) => {
-                if (county.yearBreakdown) {
-                    Object.keys(county.yearBreakdown).forEach((year) => {
-                        if (viewMode === "difference") {
-                            if (county.yearBreakdown && county.yearBreakdown[year]) {
-                                county.yearBreakdown[year].current = formatCurrency(
-                                    county.yearBreakdown[year].current as number
-                                );
-                                county.yearBreakdown[year].proposed = formatCurrency(
-                                    county.yearBreakdown[year].proposed as number
-                                );
-                                county.yearBreakdown[year].difference = formatCurrency(
-                                    county.yearBreakdown[year].difference as number
-                                );
-                            }
-                        } else {
-                            if (county.yearBreakdown && county.yearBreakdown[year]) {
-                                county.yearBreakdown[year].total = formatCurrency(
-                                    county.yearBreakdown[year].total as number
-                                );
-                            }
-                        }
-                    });
-                }
-
-                Object.keys(county).forEach((key) => {
-                    if (
-                        key !== "state" &&
-                        key !== "county" &&
-                        key !== "fips" &&
-                        key !== "yearBreakdown" &&
-                        key !== "baseAcres"
-                    ) {
-                        if (typeof county[key] === "number") {
-                            const roundedValue = Math.round((county[key] as number) * 100) / 100;
-                            county[key] = formatCurrency(roundedValue);
-                        }
-                    }
-                });
-
-                if (viewMode === "difference" && county.yearBreakdown) {
-                    const totalCurrentPayments = Object.values(county.yearBreakdown).reduce((sum, yearData) => {
-                        const current =
-                            typeof yearData.current === "string"
-                                ? parseFloat(yearData.current.replace(/[^0-9.-]+/g, ""))
-                                : yearData.current || 0;
-                        return sum + current;
-                    }, 0);
-
-                    const totalProposedPayments = Object.values(county.yearBreakdown).reduce((sum, yearData) => {
-                        const proposed =
-                            typeof yearData.proposed === "string"
-                                ? parseFloat(yearData.proposed.replace(/[^0-9.-]+/g, ""))
-                                : yearData.proposed || 0;
-                        return sum + proposed;
-                    }, 0);
-
-                    const totalDifference = totalProposedPayments - totalCurrentPayments;
-
-                    county["Total Current"] = formatCurrency(totalCurrentPayments);
-                    county["Total Proposed"] = formatCurrency(totalProposedPayments);
-                    county["Total Difference"] = formatCurrency(totalDifference);
-
-                    if (county.baseAcres && county.baseAcres > 0) {
-                        const isMultiSelection =
-                            selectedCommodities.length > 1 ||
-                            selectedCommodities.includes("All Commodities") ||
-                            selectedPrograms.length > 1 ||
-                            selectedPrograms.includes("All Programs");
-
-                        const currentRate = calculateWeightedMeanRate(
-                            totalCurrentPayments,
-                            county.baseAcres,
-                            isMultiSelection
-                        );
-
-                        const proposedRate = calculateWeightedMeanRate(
-                            totalProposedPayments,
-                            county.baseAcres,
-                            isMultiSelection
-                        );
-
-                        county["Mean Current Rate"] = formatCurrency(currentRate.rate, { minimumFractionDigits: 2 });
-                        county["Mean Proposed Rate"] = formatCurrency(proposedRate.rate, { minimumFractionDigits: 2 });
-                    } else {
-                        county["Mean Current Rate"] = "$0.00";
-                        county["Mean Proposed Rate"] = "$0.00";
-                    }
-                } else if (county.yearBreakdown) {
-                    const totalPayments = Object.values(county.yearBreakdown).reduce((sum, yearData) => {
-                        const total =
-                            typeof yearData.total === "string"
-                                ? parseFloat(yearData.total.replace(/[^0-9.-]+/g, ""))
-                                : yearData.total || 0;
-                        return sum + total;
-                    }, 0);
-
-                    county.Total = formatCurrency(totalPayments);
-
-                    if (county.baseAcres && county.baseAcres > 0) {
-                        const isMultiSelection =
-                            selectedCommodities.length > 1 ||
-                            selectedCommodities.includes("All Commodities") ||
-                            selectedPrograms.length > 1 ||
-                            selectedPrograms.includes("All Programs");
-
-                        const rate = calculateWeightedMeanRate(totalPayments, county.baseAcres, isMultiSelection);
-
-                        county["Mean Rate"] = formatCurrency(rate.rate, { minimumFractionDigits: 2 });
-                    } else {
-                        county["Mean Rate"] = "$0.00";
-                    }
-                }
-
-                if (!selectedCommodities.includes("All Commodities")) {
-                    selectedCommodities.forEach((commodity) => {
-                        const baseAcresKey = `${commodity} Base Acres`;
-                        const currentKey = `${commodity} Current`;
-                        const proposedKey = `${commodity} Proposed`;
-                        const meanRateKey = `${commodity} Mean Rate`;
-
-                        const baseAcres =
-                            typeof county[baseAcresKey] === "string"
-                                ? parseFloat(county[baseAcresKey].replace(/[^0-9.-]+/g, ""))
-                                : Number(county[baseAcresKey]) || 0;
-
-                        if (baseAcres > 0) {
-                            if (viewMode === "difference") {
-                                const currentValue =
-                                    typeof county[currentKey] === "string"
-                                        ? parseFloat(county[currentKey].replace(/[^0-9.-]+/g, ""))
-                                        : Number(county[currentKey]) || 0;
-
-                                const proposedValue =
-                                    typeof county[proposedKey] === "string"
-                                        ? parseFloat(county[proposedKey].replace(/[^0-9.-]+/g, ""))
-                                        : Number(county[proposedKey]) || 0;
-
-                                const currentMeanRate = currentValue / baseAcres;
-                                const proposedMeanRate = proposedValue / baseAcres;
-
-                                county[meanRateKey] = formatCurrency(proposedMeanRate - currentMeanRate, {
-                                    minimumFractionDigits: 2
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-
-            const processedData = result.filter((county) => county.county !== "");
-
-            return processedData;
+            return result;
         }
-        if (!countyData[selectedYear]) return [];
 
-        const result: CountyObject[] = [];
-        const yearData = viewMode === "proposed" ? countyDataProposed[selectedYear] : countyData[selectedYear];
+        const year = selectedYear;
+        const result: ExtendedCountyObject[] = [];
+        const stateCountyMap = new Map();
+        const currentYearData = viewMode === "proposed" ? countyDataProposed[year] : countyData[year];
+        const currentData = countyData[year] || [];
+        const proposedData = countyDataProposed[year] || [];
 
         if (viewMode === "difference") {
-            const currentData = countyData[selectedYear] || [];
-            const proposedData = countyDataProposed[selectedYear] || [];
-
             currentData.forEach((state) => {
                 if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
                     return;
                 }
-
                 const stateCode = state.state;
                 const stateName = stateCodesData[stateCode] || stateCode;
-
                 state.counties.forEach((county) => {
+                    const countyName = getCountyNameFromFips(county.countyFIPS);
+                    const stateCountyKey = `${stateCode}-${county.countyFIPS}`;
                     const proposedState = proposedData.find((s) => s.state === stateCode);
                     const proposedCounty = proposedState?.counties.find((c) => c.countyFIPS === county.countyFIPS);
-                    const countyName = getCountyNameFromFips(county.countyFIPS);
-
-                    const countyObject: CountyObject = {
-                        state: stateName,
-                        county: countyName,
-                        fips: county.countyFIPS,
-                        baseAcres: 0
-                    };
-
+                    let countyObject: ExtendedCountyObject;
+                    if (stateCountyMap.has(stateCountyKey)) {
+                        countyObject = stateCountyMap.get(stateCountyKey);
+                    } else {
+                        countyObject = {
+                            state: stateName,
+                            county: countyName,
+                            fips: county.countyFIPS,
+                            yearBreakdown: {},
+                            baseAcres: 0
+                        };
+                        stateCountyMap.set(stateCountyKey, countyObject);
+                        result.push(countyObject);
+                    }
+                    if (!countyObject.yearBreakdown) {
+                        countyObject.yearBreakdown = {};
+                    }
+                    if (!countyObject.yearBreakdown[year]) {
+                        countyObject.yearBreakdown[year] = {
+                            current: 0,
+                            proposed: 0,
+                            difference: 0,
+                            baseAcres: 0
+                        };
+                    }
                     if (!countyObject.baseAcres || countyObject.baseAcres === 0) {
                         const baseAcres = getTotalBaseAcres(county, selectedCommodities, selectedPrograms, "Current");
                         countyObject.baseAcres = Math.round(baseAcres * 100) / 100;
-
                         if (countyObject.yearBreakdown) {
                             Object.keys(countyObject.yearBreakdown).forEach((yearKey) => {
                                 if (countyObject.yearBreakdown) {
@@ -566,10 +481,6 @@ const CountyCommodityTable = ({
                             });
                         }
                     }
-
-                    let currentTotal = 0;
-                    let proposedTotal = 0;
-
                     county.scenarios.forEach((scenario) => {
                         scenario.commodities.forEach((commodity) => {
                             if (
@@ -578,10 +489,8 @@ const CountyCommodityTable = ({
                             ) {
                                 return;
                             }
-
                             let commodityCurrentTotal = 0;
                             let commodityProposedTotal = 0;
-
                             commodity.programs.forEach((program) => {
                                 if (
                                     !selectedPrograms.includes("All Programs") &&
@@ -589,112 +498,82 @@ const CountyCommodityTable = ({
                                 ) {
                                     return;
                                 }
-
                                 commodityCurrentTotal += program.totalPaymentInDollars || 0;
-                                currentTotal += program.totalPaymentInDollars || 0;
-
-                                if (proposedCounty) {
+                                if (viewMode === "difference" && proposedCounty) {
                                     const { proposedProgram } = findProposedCommodityAndProgram(
                                         proposedCounty,
                                         scenario.scenarioName,
                                         commodity.commodityName,
                                         program.programName
                                     );
-
                                     if (proposedProgram) {
                                         commodityProposedTotal += proposedProgram.totalPaymentInDollars || 0;
-                                        proposedTotal += proposedProgram.totalPaymentInDollars || 0;
                                     }
                                 }
                             });
-
-                            countyObject[`${commodity.commodityName} Current`] = formatCurrency(commodityCurrentTotal);
-                            countyObject[`${commodity.commodityName} Proposed`] =
-                                formatCurrency(commodityProposedTotal);
-                            countyObject[`${commodity.commodityName} Difference`] = formatCurrency(
-                                commodityProposedTotal - commodityCurrentTotal
-                            );
-
+                            if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
+                                (countyObject.yearBreakdown[year].current as number) += commodityCurrentTotal;
+                                (countyObject.yearBreakdown[year].proposed as number) += commodityProposedTotal;
+                                (countyObject.yearBreakdown[year].difference as number) +=
+                                    commodityProposedTotal - commodityCurrentTotal;
+                            }
+                            const commodityKey = `${commodity.commodityName}`;
+                            if (!countyObject[`${commodityKey} Current`]) {
+                                countyObject[`${commodityKey} Current`] = 0;
+                                countyObject[`${commodityKey} Proposed`] = 0;
+                                countyObject[`${commodityKey} Difference`] = 0;
+                            }
+                            (countyObject[`${commodityKey} Current`] as number) += commodityCurrentTotal;
+                            (countyObject[`${commodityKey} Proposed`] as number) += commodityProposedTotal;
+                            (countyObject[`${commodityKey} Difference`] as number) +=
+                                commodityProposedTotal - commodityCurrentTotal;
                             if (commodity.baseAcres && commodity.baseAcres > 0) {
-                                countyObject[`${commodity.commodityName} Base Acres`] = commodity.baseAcres;
-
-                                if (commodity.baseAcres > 0) {
-                                    const currentMeanRate = commodityCurrentTotal / commodity.baseAcres;
-                                    const proposedMeanRate = commodityProposedTotal / commodity.baseAcres;
-                                    const meanRateDiff = proposedMeanRate - currentMeanRate;
-
-                                    countyObject[`${commodity.commodityName} Mean Rate`] = formatCurrency(
-                                        meanRateDiff,
-                                        { minimumFractionDigits: 2 }
-                                    );
-                                } else {
-                                    countyObject[`${commodity.commodityName} Mean Rate`] = "$0.00";
+                                if (!countyObject[`${commodity.commodityName} Base Acres`]) {
+                                    countyObject[`${commodity.commodityName} Base Acres`] = commodity.baseAcres;
                                 }
-                            } else {
-                                countyObject[`${commodity.commodityName} Mean Rate`] = "$0.00";
                             }
                         });
                     });
-
-                    countyObject["Total Current"] = formatCurrency(currentTotal);
-                    countyObject["Total Proposed"] = formatCurrency(proposedTotal);
-                    countyObject["Total Difference"] = formatCurrency(proposedTotal - currentTotal);
-
-                    if (countyObject.baseAcres && countyObject.baseAcres > 0) {
-                        const isMultiSelection =
-                            selectedCommodities.length > 1 ||
-                            selectedCommodities.includes("All Commodities") ||
-                            selectedPrograms.length > 1 ||
-                            selectedPrograms.includes("All Programs");
-
-                        const currentRate = calculateWeightedMeanRate(
-                            currentTotal,
-                            countyObject.baseAcres,
-                            isMultiSelection
-                        );
-
-                        const proposedRate = calculateWeightedMeanRate(
-                            proposedTotal,
-                            countyObject.baseAcres,
-                            isMultiSelection
-                        );
-
-                        countyObject["Mean Current Rate"] = formatCurrency(currentRate.rate, {
-                            minimumFractionDigits: 2
-                        });
-                        countyObject["Mean Proposed Rate"] = formatCurrency(proposedRate.rate, {
-                            minimumFractionDigits: 2
-                        });
-                    } else {
-                        countyObject["Mean Current Rate"] = "$0.00";
-                        countyObject["Mean Proposed Rate"] = "$0.00";
-                    }
-
-                    result.push(countyObject);
                 });
             });
         } else {
-            yearData.forEach((state) => {
+            currentYearData.forEach((state) => {
                 if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
                     return;
                 }
-
                 const stateCode = state.state;
                 const stateName = stateCodesData[stateCode] || stateCode;
-
                 state.counties.forEach((county) => {
                     const countyName = getCountyNameFromFips(county.countyFIPS);
-                    const countyObject: CountyObject = {
-                        state: stateName,
-                        county: countyName,
-                        fips: county.countyFIPS,
-                        baseAcres: 0
-                    };
-
+                    const stateCountyKey = `${stateCode}-${county.countyFIPS}`;
+                    let countyObject: ExtendedCountyObject;
+                    if (stateCountyMap.has(stateCountyKey)) {
+                        countyObject = stateCountyMap.get(stateCountyKey);
+                    } else {
+                        countyObject = {
+                            state: stateName,
+                            county: countyName,
+                            fips: county.countyFIPS,
+                            yearBreakdown: {},
+                            baseAcres: 0
+                        };
+                        stateCountyMap.set(stateCountyKey, countyObject);
+                        result.push(countyObject);
+                    }
+                    if (!countyObject.yearBreakdown) {
+                        countyObject.yearBreakdown = {};
+                    }
+                    if (!countyObject.yearBreakdown[year]) {
+                        countyObject.yearBreakdown[year] = {
+                            current: 0,
+                            proposed: 0,
+                            difference: 0,
+                            baseAcres: 0
+                        };
+                    }
                     if (!countyObject.baseAcres || countyObject.baseAcres === 0) {
                         const baseAcres = getTotalBaseAcres(county, selectedCommodities, selectedPrograms, "Current");
                         countyObject.baseAcres = Math.round(baseAcres * 100) / 100;
-
                         if (countyObject.yearBreakdown) {
                             Object.keys(countyObject.yearBreakdown).forEach((yearKey) => {
                                 if (countyObject.yearBreakdown) {
@@ -703,9 +582,6 @@ const CountyCommodityTable = ({
                             });
                         }
                     }
-
-                    let total = 0;
-
                     county.scenarios.forEach((scenario) => {
                         scenario.commodities.forEach((commodity) => {
                             if (
@@ -714,9 +590,8 @@ const CountyCommodityTable = ({
                             ) {
                                 return;
                             }
-
-                            let commodityTotal = 0;
-
+                            let commodityCurrentTotal = 0;
+                            let commodityProposedTotal = 0;
                             commodity.programs.forEach((program) => {
                                 if (
                                     !selectedPrograms.includes("All Programs") &&
@@ -724,59 +599,46 @@ const CountyCommodityTable = ({
                                 ) {
                                     return;
                                 }
-
-                                commodityTotal += program.totalPaymentInDollars || 0;
-                                total += program.totalPaymentInDollars || 0;
-                            });
-
-                            if (viewMode === "current") {
-                                countyObject[`${commodity.commodityName}`] = formatCurrency(commodityTotal);
-                            }
-
-                            if (viewMode === "proposed") {
-                                countyObject[`${commodity.commodityName}`] = formatCurrency(commodityTotal);
-                                countyObject[`${commodity.commodityName} Proposed`] = formatCurrency(commodityTotal);
-                            }
-
-                            if (commodity.baseAcres && commodity.baseAcres > 0) {
-                                countyObject[`${commodity.commodityName} Base Acres`] = commodity.baseAcres;
-
-                                if (commodityTotal > 0 && commodity.baseAcres > 0) {
-                                    const meanRate = commodityTotal / commodity.baseAcres;
-                                    countyObject[`${commodity.commodityName} Mean Rate`] = formatCurrency(meanRate, {
-                                        minimumFractionDigits: 2
-                                    });
-                                } else {
-                                    countyObject[`${commodity.commodityName} Mean Rate`] = "$0.00";
+                                commodityCurrentTotal += program.totalPaymentInDollars || 0;
+                                if (viewMode === "difference" && proposedCounty) {
+                                    const { proposedProgram } = findProposedCommodityAndProgram(
+                                        proposedCounty,
+                                        scenario.scenarioName,
+                                        commodity.commodityName,
+                                        program.programName
+                                    );
+                                    if (proposedProgram) {
+                                        commodityProposedTotal += proposedProgram.totalPaymentInDollars || 0;
+                                    }
                                 }
-                            } else {
-                                countyObject[`${commodity.commodityName} Mean Rate`] = "$0.00";
+                            });
+                            if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
+                                (countyObject.yearBreakdown[year].current as number) += commodityCurrentTotal;
+                                (countyObject.yearBreakdown[year].proposed as number) += commodityProposedTotal;
+                                (countyObject.yearBreakdown[year].difference as number) +=
+                                    commodityProposedTotal - commodityCurrentTotal;
+                            }
+                            const commodityKey = `${commodity.commodityName}`;
+                            if (!countyObject[`${commodityKey} Current`]) {
+                                countyObject[`${commodityKey} Current`] = 0;
+                                countyObject[`${commodityKey} Proposed`] = 0;
+                                countyObject[`${commodityKey} Difference`] = 0;
+                            }
+                            (countyObject[`${commodityKey} Current`] as number) += commodityCurrentTotal;
+                            (countyObject[`${commodityKey} Proposed`] as number) += commodityProposedTotal;
+                            (countyObject[`${commodityKey} Difference`] as number) +=
+                                commodityProposedTotal - commodityCurrentTotal;
+                            if (commodity.baseAcres && commodity.baseAcres > 0) {
+                                if (!countyObject[`${commodity.commodityName} Base Acres`]) {
+                                    countyObject[`${commodity.commodityName} Base Acres`] = commodity.baseAcres;
+                                }
                             }
                         });
                     });
-
-                    countyObject.Total = formatCurrency(total);
-
-                    if (countyObject.baseAcres && countyObject.baseAcres > 0) {
-                        const isMultiSelection =
-                            selectedCommodities.length > 1 ||
-                            selectedCommodities.includes("All Commodities") ||
-                            selectedPrograms.length > 1 ||
-                            selectedPrograms.includes("All Programs");
-
-                        const rate = calculateWeightedMeanRate(total, countyObject.baseAcres, isMultiSelection);
-
-                        countyObject["Mean Rate"] = formatCurrency(rate.rate, { minimumFractionDigits: 2 });
-                    } else {
-                        countyObject["Mean Rate"] = "$0.00";
-                    }
-
-                    result.push(countyObject);
                 });
             });
         }
-
-        return result.filter((county) => county.county !== "");
+        return result;
     }, [
         countyData,
         countyDataProposed,
@@ -787,387 +649,258 @@ const CountyCommodityTable = ({
         selectedState,
         stateCodesData,
         isAggregatedYear,
-        yearRange
+        yearRange,
+        yearAggregation,
+        aggregationEnabled
     ]);
 
-    const hasAnyData = (county) => {
-        const dataFields = Object.keys(county).filter(
-            (key) => !["state", "county", "fips", "baseAcres", "yearBreakdown"].includes(key)
-        );
-
-        return dataFields.some((field) => {
-            const value = county[field];
-
-            if (typeof value === "string" && value.startsWith("$")) {
-                return parseFloat(value.replace(/[^0-9.-]+/g, "")) !== 0;
-            }
-            return value !== 0 && value !== "$0.00" && value !== "";
-        });
-    };
-
-    const getColumns = React.useCallback(() => {
-        const tableColumns: ColumnDef[] = [
+    const columns = useMemo(() => {
+        const baseColumns: ColumnDef[] = [
             {
-                Header: "STATE",
+                Header: "State",
                 accessor: "state",
                 disableSortBy: false
             },
             {
-                Header: "COUNTY",
+                Header: "County",
                 accessor: "county",
-                disableSortBy: false
-            },
-            {
-                Header: "FIPS",
-                accessor: "fips",
-                disableSortBy: false
-            },
-            {
-                Header: "BASE ACRES",
-                accessor: "baseAcres",
-
-                sortType: (a, b) => {
-                    const aVal = parseFloat(a.values.baseAcres) || 0;
-                    const bVal = parseFloat(b.values.baseAcres) || 0;
-
-                    return bVal - aVal;
-                },
                 disableSortBy: false
             }
         ];
 
-        const isWeightedAvg =
-            selectedCommodities.length > 1 ||
-            selectedCommodities.includes("All Commodities") ||
-            selectedPrograms.length > 1 ||
-            selectedPrograms.includes("All Programs");
-
-        const weightedLabel = isWeightedAvg ? " (weighted avg)" : "";
-
         if (isAggregatedYear) {
-            if (viewMode === "difference") {
-                yearRange.forEach((year) => {
-                    tableColumns.push(
-                        {
-                            Header: `${year}: Current`,
-                            accessor: `yearBreakdown.${year}.current`,
-                            sortType: compareWithDollarSign,
-                            disableSortBy: false
-                        },
-                        {
-                            Header: `${year}: Proposed`,
-                            accessor: `yearBreakdown.${year}.proposed`,
-                            sortType: compareWithDollarSign,
-                            disableSortBy: false
-                        },
-                        {
-                            Header: `${year}: Difference`,
-                            accessor: `yearBreakdown.${year}.difference`,
-                            sortType: compareWithDollarSign,
-                            disableSortBy: false
-                        }
-                    );
+            if (showMeanValues) {
+                baseColumns.push({
+                    Header: "Aggregated Payment Rate",
+                    accessor: "weightedAverageRate",
+                    sortType: compareWithDollarSign,
+                    disableSortBy: false
                 });
-
-                tableColumns.push(
-                    {
-                        Header: "Total Current: Payments",
-                        accessor: "Total Current",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Proposed: Payments",
-                        accessor: "Total Proposed",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Difference: Payments",
-                        accessor: "Total Difference",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    }
-                );
             } else {
-                yearRange.forEach((year) => {
-                    tableColumns.push({
-                        Header: `${year}: Payments`,
-                        accessor: `yearBreakdown.${year}.total`,
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    });
-                });
-
-                tableColumns.push({
-                    Header: "Total: Payments",
-                    accessor: "Total",
+                baseColumns.push({
+                    Header: "Aggregated Total Payment",
+                    accessor: "aggregatedPayment",
                     sortType: compareWithDollarSign,
                     disableSortBy: false
                 });
             }
-        } else if (viewMode === "difference") {
-            if (selectedCommodities.includes("All Commodities")) {
-                tableColumns.push(
-                    {
-                        Header: "Total Current: Payments",
-                        accessor: "Total Current",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Proposed: Payments",
-                        accessor: "Total Proposed",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Difference: Payments",
-                        accessor: "Total Difference",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean Current Rate${weightedLabel}`,
-                        accessor: "Mean Current Rate",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean Proposed Rate${weightedLabel}`,
-                        accessor: "Mean Proposed Rate",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    }
-                );
-            } else {
-                tableColumns.push(
-                    {
-                        Header: "Total Current",
-                        accessor: "Total Current",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Proposed",
-                        accessor: "Total Proposed",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: "Total Difference",
-                        accessor: "Total Difference",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean Current Rate${weightedLabel}`,
-                        accessor: "Mean Current Rate",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean Proposed Rate${weightedLabel}`,
-                        accessor: "Mean Proposed Rate",
-                        sortType: compareWithDollarSign,
-                        disableSortBy: false
-                    }
-                );
 
-                selectedCommodities.forEach((commodity) => {
-                    tableColumns.push(
+            yearRange.forEach((year) => {
+                if (showMeanValues) {
+                    baseColumns.push(
                         {
-                            Header: `${commodity}: Current`,
-                            accessor: `${commodity} Current`,
+                            Header: `${year} Payment`,
+                            accessor: `yearBreakdown.${year}.${viewMode === "difference" ? "difference" : viewMode}`,
                             sortType: compareWithDollarSign,
                             disableSortBy: false
                         },
                         {
-                            Header: `${commodity}: Proposed`,
-                            accessor: `${commodity} Proposed`,
-                            sortType: compareWithDollarSign,
+                            Header: `${year} Base Acres`,
+                            accessor: `yearBreakdown.${year}.baseAcres`,
+                            sortType: (a, b) => a - b,
                             disableSortBy: false
                         },
                         {
-                            Header: `${commodity}: Difference`,
-                            accessor: `${commodity} Difference`,
-                            sortType: compareWithDollarSign,
-                            disableSortBy: false
-                        },
-                        {
-                            Header: `${commodity}: Base Acres`,
-                            accessor: `${commodity} Base Acres`,
-                            disableSortBy: false
-                        },
-                        {
-                            Header: `${commodity}: Mean Rate`,
-                            accessor: `${commodity} Mean Rate`,
+                            Header: `${year} Payment Rate`,
+                            accessor: `yearBreakdown.${year}.paymentRate`,
                             sortType: compareWithDollarSign,
                             disableSortBy: false
                         }
                     );
-                });
-            }
-        } else {
-            const paymentsLabel = viewMode === "current" ? "Current Payments" : "Proposed Payments";
-            const rateLabel = viewMode === "current" ? "Current Rate" : "Proposed Rate";
-
-            if (selectedCommodities.includes("All Commodities")) {
-                tableColumns.push(
-                    {
-                        Header: `Total: ${paymentsLabel}`,
-                        accessor: "Total",
-                        sortType: (a, b) => {
-                            const aStr = a.values["Total"];
-                            const bStr = b.values["Total"];
-
-                            if (!aStr || aStr === "$0.00") return 1;
-                            if (!bStr || bStr === "$0.00") return -1;
-
-                            const aVal = parseFloat(aStr.replace(/[^0-9.-]+/g, "")) || 0;
-                            const bVal = parseFloat(bStr.replace(/[^0-9.-]+/g, "")) || 0;
-
-                            return bVal - aVal;
-                        },
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean: ${rateLabel}${weightedLabel}`,
-                        accessor: "Mean Rate",
-                        sortType: (a, b) => {
-                            const aStr = a.values["Mean Rate"];
-                            const bStr = b.values["Mean Rate"];
-
-                            if (!aStr || aStr === "$0.00") return 1;
-                            if (!bStr || bStr === "$0.00") return -1;
-
-                            const aVal = parseFloat(aStr.replace(/[^0-9.-]+/g, "")) || 0;
-                            const bVal = parseFloat(bStr.replace(/[^0-9.-]+/g, "")) || 0;
-
-                            return bVal - aVal;
-                        },
-                        disableSortBy: false
-                    }
-                );
-            } else {
-                tableColumns.push(
-                    {
-                        Header: `Total: ${paymentsLabel}`,
-                        accessor: "Total",
-                        sortType: (a, b) => {
-                            const aStr = a.values["Total"];
-                            const bStr = b.values["Total"];
-
-                            if (!aStr || aStr === "$0.00") return 1;
-                            if (!bStr || bStr === "$0.00") return -1;
-
-                            const aVal = parseFloat(aStr.replace(/[^0-9.-]+/g, "")) || 0;
-                            const bVal = parseFloat(bStr.replace(/[^0-9.-]+/g, "")) || 0;
-
-                            return bVal - aVal;
-                        },
-                        disableSortBy: false
-                    },
-                    {
-                        Header: `Mean: ${rateLabel}${weightedLabel}`,
-                        accessor: "Mean Rate",
-                        sortType: (a, b) => {
-                            const aStr = a.values["Mean Rate"];
-                            const bStr = b.values["Mean Rate"];
-
-                            if (!aStr || aStr === "$0.00") return 1;
-                            if (!bStr || bStr === "$0.00") return -1;
-
-                            const aVal = parseFloat(aStr.replace(/[^0-9.-]+/g, "")) || 0;
-                            const bVal = parseFloat(bStr.replace(/[^0-9.-]+/g, "")) || 0;
-
-                            return bVal - aVal;
-                        },
-                        disableSortBy: false
-                    }
-                );
-
-                selectedCommodities.forEach((commodity) => {
-                    const commodityColumns = [
+                } else {
+                    baseColumns.push(
                         {
-                            Header: `${commodity}: ${paymentsLabel}`,
-                            accessor: commodity,
-                            sortType: (a, b) => {
-                                const aStr = a.values[commodity];
-                                const bStr = b.values[commodity];
-
-                                if (!aStr || aStr === "$0.00") return 1;
-                                if (!bStr || bStr === "$0.00") return -1;
-
-                                const aVal = parseFloat(aStr?.replace(/[^0-9.-]+/g, "") || "0") || 0;
-                                const bVal = parseFloat(bStr?.replace(/[^0-9.-]+/g, "") || "0") || 0;
-
-                                return bVal - aVal;
-                            },
+                            Header: `${year} Payment`,
+                            accessor: `yearBreakdown.${year}.${viewMode === "difference" ? "difference" : viewMode}`,
+                            sortType: compareWithDollarSign,
                             disableSortBy: false
                         },
                         {
-                            Header: `${commodity}: Base Acres`,
-                            accessor: `${commodity} Base Acres`,
-                            disableSortBy: false
-                        },
-                        {
-                            Header: `${commodity}: ${rateLabel}`,
-                            accessor: `${commodity} Mean Rate`,
-                            sortType: (a, b) => {
-                                const aStr = a.values[`${commodity} Mean Rate`];
-                                const bStr = b.values[`${commodity} Mean Rate`];
-
-                                if (!aStr || aStr === "$0.00") return 1;
-                                if (!bStr || bStr === "$0.00") return -1;
-
-                                const aVal = parseFloat(aStr?.replace(/[^0-9.-]+/g, "") || "0") || 0;
-                                const bVal = parseFloat(bStr?.replace(/[^0-9.-]+/g, "") || "0") || 0;
-
-                                return bVal - aVal;
-                            },
+                            Header: `${year} Base Acres`,
+                            accessor: `yearBreakdown.${year}.baseAcres`,
+                            sortType: (a, b) => a - b,
                             disableSortBy: false
                         }
-                    ];
+                    );
+                }
+            });
+        } else {
+            baseColumns.push(
+                {
+                    Header: "Payment",
+                    accessor: viewMode === "difference" ? "difference" : viewMode,
+                    sortType: compareWithDollarSign,
+                    disableSortBy: false
+                },
+                {
+                    Header: "Base Acres",
+                    accessor: "baseAcres",
+                    sortType: (a, b) => a - b,
+                    disableSortBy: false
+                }
+            );
 
-                    tableColumns.push(...commodityColumns);
+            if (showMeanValues) {
+                baseColumns.push({
+                    Header: "Payment Rate",
+                    accessor: "paymentRate",
+                    sortType: compareWithDollarSign,
+                    disableSortBy: false
                 });
             }
         }
 
-        return tableColumns;
-    }, [viewMode, selectedCommodities, selectedPrograms, isAggregatedYear, yearRange]);
+        if (!selectedCommodities.includes("All Commodities")) {
+            selectedCommodities.forEach((commodity) => {
+                if (showMeanValues) {
+                    baseColumns.push(
+                        {
+                            Header: `${commodity} Total`,
+                            accessor: `commodityBreakdown.${commodity}.total`,
+                            sortType: compareWithDollarSign,
+                            disableSortBy: false
+                        },
+                        {
+                            Header: `${commodity} Base Acres`,
+                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
+                            sortType: (a, b) => a - b,
+                            disableSortBy: false
+                        },
+                        {
+                            Header: `${commodity} Payment Rate`,
+                            accessor: `commodityBreakdown.${commodity}.paymentRate`,
+                            sortType: compareWithDollarSign,
+                            disableSortBy: false
+                        }
+                    );
+                } else {
+                    baseColumns.push(
+                        {
+                            Header: `${commodity} Total`,
+                            accessor: `commodityBreakdown.${commodity}.total`,
+                            sortType: compareWithDollarSign,
+                            disableSortBy: false
+                        },
+                        {
+                            Header: `${commodity} Base Acres`,
+                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
+                            sortType: (a, b) => a - b,
+                            disableSortBy: false
+                        }
+                    );
+                }
+            });
+        }
 
-    const columns = React.useMemo(() => getColumns(), [getColumns]);
-    const allData = React.useMemo(() => getTableData(), [getTableData]);
+        return baseColumns;
+    }, [selectedYear, viewMode, showMeanValues, isAggregatedYear, yearRange, selectedCommodities]);
 
-    const [data, emptyCounties] = React.useMemo(() => {
-        const withData: CountyObject[] = [];
-        const withoutData: CountyObject[] = [];
+    const data = useMemo(() => {
+        const tableData = getTableData();
+        return tableData.map((row: ExtendedCountyObject) => {
+            if (isAggregatedYear) {
+                let aggTotal = 0;
+                let aggBaseAcres = 0;
+                let weightedSum = 0;
 
-        allData.forEach((county) => {
-            if (hasAnyData(county)) {
-                withData.push(county);
+                if (!selectedCommodities.includes("All Commodities")) {
+                    row.commodityBreakdown = {};
+                    selectedCommodities.forEach((commodity) => {
+                        row.commodityBreakdown![commodity] = {
+                            total: 0,
+                            baseAcres: 0,
+                            yearBreakdown: {}
+                        };
+                    });
+                }
+
+                yearRange.forEach((year) => {
+                    const yearData = row.yearBreakdown?.[year] as ExtendedYearBreakdownData;
+                    if (yearData) {
+                        const payment =
+                            viewMode === "difference"
+                                ? (yearData.difference as number)
+                                : viewMode === "proposed"
+                                ? (yearData.proposed as number)
+                                : (yearData.current as number);
+
+                        const baseAcres = (row.yearBreakdown?.["2024"]?.baseAcres as number) || 0;
+                        yearData.baseAcres = baseAcres;
+
+                        aggTotal += payment;
+                        aggBaseAcres = baseAcres;
+                        weightedSum += payment;
+
+                        if (showMeanValues && baseAcres > 0) {
+                            yearData.paymentRate = payment / baseAcres;
+                        }
+
+                        if (!selectedCommodities.includes("All Commodities") && row.commodityBreakdown) {
+                            selectedCommodities.forEach((commodity) => {
+                                const commodityData = row.commodityBreakdown![commodity];
+                                const yearCommodityData = yearData[commodity] as any;
+                                if (yearCommodityData) {
+                                    commodityData.total += yearCommodityData.payment || 0;
+                                    commodityData.baseAcres = yearCommodityData.baseAcres || 0;
+                                    if (showMeanValues && commodityData.baseAcres > 0) {
+                                        commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+                if (showMeanValues) {
+                    row.weightedAverageRate = aggBaseAcres > 0 ? weightedSum / aggBaseAcres : 0;
+                } else {
+                    row.aggregatedPayment = aggTotal;
+                }
             } else {
-                withoutData.push(county);
+                const payment =
+                    viewMode === "difference"
+                        ? (row.difference as number)
+                        : viewMode === "proposed"
+                        ? (row.proposed as number)
+                        : (row.current as number);
+                const baseAcres = row.baseAcres as number;
+
+                if (showMeanValues && baseAcres > 0) {
+                    (row as ExtendedCountyObject).paymentRate = payment / baseAcres;
+                }
+
+                if (!selectedCommodities.includes("All Commodities")) {
+                    row.commodityBreakdown = {};
+                    const yearData = row.yearBreakdown?.[selectedYear] as ExtendedYearBreakdownData;
+                    if (yearData) {
+                        selectedCommodities.forEach((commodity) => {
+                            const commodityData = yearData[commodity] as any;
+                            if (commodityData) {
+                                row.commodityBreakdown![commodity] = {
+                                    total: commodityData.payment || 0,
+                                    baseAcres: commodityData.baseAcres || 0
+                                };
+                                if (showMeanValues && commodityData.baseAcres > 0) {
+                                    row.commodityBreakdown![commodity].paymentRate =
+                                        commodityData.payment / commodityData.baseAcres;
+                                }
+                            }
+                        });
+                    }
+                }
             }
+            return row;
         });
-
-        return [withData, withoutData];
-    }, [allData]);
-
-    const tableTitle = getTableTitle;
-    const csvFilename = getCsvFilename;
-
-    const [showAllEmptyCounties, setShowAllEmptyCounties] = useState(false);
+    }, [getTableData, isAggregatedYear, yearRange, viewMode, showMeanValues, selectedCommodities, selectedYear]);
 
     const [columnPage, setColumnPage] = useState(0);
     const columnsPerPage = 6;
-    const visibleColumnIndices = React.useMemo(() => {
-        const startIndex = columnPage * columnsPerPage + 1;
+    const visibleColumnIndices = useMemo(() => {
+        const startIndex = columnPage * columnsPerPage + 2;
         const endIndex = Math.min(startIndex + columnsPerPage, columns.length);
-        return Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex);
+        return [0, 1, ...Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex)];
     }, [columnPage, columnsPerPage, columns.length]);
+    const totalColumnPages = Math.ceil((columns.length - 2) / columnsPerPage);
 
     const {
         getTableProps,
@@ -1184,307 +917,154 @@ const CountyCommodityTable = ({
         nextPage,
         previousPage,
         setPageSize,
-        state,
+        state: { pageIndex, pageSize },
         setGlobalFilter,
-        state: { pageIndex, pageSize, globalFilter }
+        state: { globalFilter }
     } = useTable(
         {
             columns,
             data,
-            initialState: { pageSize: 10 },
-            defaultCanSort: true,
-            disableSortRemove: true
+            initialState: { pageIndex: 0, pageSize: 10 }
         },
         useGlobalFilter,
         useSortBy,
         usePagination
     );
 
-    const totalColumnPages = Math.ceil((columns.length - 1) / columnsPerPage);
+    const csvData = useMemo(() => {
+        if (!data || !columns) return [];
+        return data.map((row) => {
+            const csvRow = {};
+            columns.forEach((column) => {
+                const value = row[column.accessor];
+                csvRow[column.Header] = typeof value === "number" ? formatCurrency(value) : value;
+            });
+            return csvRow;
+        });
+    }, [data, columns]);
 
     return (
-        <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
-            <Styles>
-                <Grid container sx={{ mb: 2 }}>
-                    <Grid item xs={12}>
-                        <Box sx={{ width: "100%" }}>
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    fontWeight: 400,
-                                    paddingLeft: 0,
-                                    fontSize: "1.2em",
-                                    color: "#212121",
-                                    marginBottom: 2,
-                                    paddingTop: 0.6
-                                }}
-                            >
-                                {tableTitle}
-                            </Typography>
-                        </Box>
+        <Styles>
+            <Box sx={{ mb: 3 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                    {getTableTitle}
+                </Typography>
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                    <Grid item>
+                        <CSVLink data={csvData} filename={getCsvFilename} className="downloadbtn">
+                            Download CSV
+                        </CSVLink>
                     </Grid>
                 </Grid>
-                <TableContainer sx={{ width: "100%" }}>
-                    {data && data.length > 0 ? (
-                        <div style={{ width: "100%" }}>
-                            <CSVLink
-                                className="downloadbtn"
-                                filename={csvFilename}
-                                data={getCSVData(headerGroups, data)}
-                            >
-                                Export Table to CSV
-                            </CSVLink>
-
-                            <Box className="tableTools">
-                                <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
-                            </Box>
-
-                            {columns.length > columnsPerPage + 1 && (
-                                <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                                    <Button
-                                        sx={{
-                                            color: "#2F7164"
-                                        }}
-                                        onClick={() => setColumnPage((prev) => Math.max(0, prev - 1))}
-                                        disabled={columnPage === 0}
-                                    >
-                                        Previous Columns
-                                    </Button>
-                                    <Typography sx={{ mx: 2, alignSelf: "center" }}>
-                                        Column Page {columnPage + 1} of {totalColumnPages}
-                                    </Typography>
-                                    <Button
-                                        sx={{
-                                            color: "#2F7164"
-                                        }}
-                                        onClick={() =>
-                                            setColumnPage((prev) => Math.min(totalColumnPages - 1, prev + 1))
-                                        }
-                                        disabled={columnPage >= totalColumnPages - 1}
-                                    >
-                                        Next Columns
-                                    </Button>
-                                </Box>
-                            )}
-
-                            <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
-                                <thead>
-                                    {headerGroups.map((headerGroup) => (
-                                        <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                                            <th
-                                                {...headerGroup.headers[0].getHeaderProps(
-                                                    headerGroup.headers[0].getSortByToggleProps()
-                                                )}
-                                                style={{
-                                                    position: "sticky",
-                                                    left: 0,
-                                                    background: "rgba(241, 241, 241, 1)",
-                                                    zIndex: 2
-                                                }}
-                                            >
-                                                {headerGroup.headers[0].render("Header")}
+                <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
+                <Button onClick={() => setColumnPage(0)} disabled={columnPage === 0}>
+                    {"<<"}
+                </Button>
+                <Button onClick={() => setColumnPage((prev) => Math.max(0, prev - 1))} disabled={columnPage === 0}>
+                    {"<"}
+                </Button>
+                <span style={{ paddingLeft: 8 }}>
+                    Column Page{" "}
+                    <strong style={{ padding: "0px 8px" }}>
+                        {columnPage + 1} of {totalColumnPages}
+                    </strong>
+                </span>
+                <Button
+                    onClick={() => setColumnPage((prev) => Math.min(totalColumnPages - 1, prev + 1))}
+                    disabled={columnPage === totalColumnPages - 1}
+                >
+                    {">"}
+                </Button>
+                <Button
+                    onClick={() => setColumnPage(totalColumnPages - 1)}
+                    disabled={columnPage === totalColumnPages - 1}
+                >
+                    {">>"}
+                </Button>
+            </Box>
+            <div className="tableWrap">
+                <TableContainer>
+                    <table {...getTableProps()} id="county-commodity-table">
+                        <thead>
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers
+                                        .filter((_, index) => visibleColumnIndices.includes(index))
+                                        .map((column) => (
+                                            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                {column.render("Header")}
                                                 <span>
-                                                    {(() => {
-                                                        const column = headerGroup.headers[0];
-                                                        if (!column.isSorted)
-                                                            return (
-                                                                <Box sx={{ ml: 1, display: "inline" }}>
-                                                                    <SwapVertIcon />
-                                                                </Box>
-                                                            );
-                                                        if (column.isSortedDesc)
-                                                            return (
-                                                                <Box sx={{ ml: 1, display: "inline" }}>
-                                                                    {"\u{25BC}"}
-                                                                </Box>
-                                                            );
-                                                        return (
-                                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>
-                                                        );
-                                                    })()}
+                                                    {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
                                                 </span>
                                             </th>
-                                            {headerGroup.headers
-                                                .filter((_, index) => visibleColumnIndices.includes(index))
-                                                .map((column) => (
-                                                    <th
-                                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                                        key={column.id}
-                                                    >
-                                                        {(() => {
-                                                            const headerText = column.render("Header");
-                                                            if (
-                                                                typeof headerText === "string" &&
-                                                                headerText.includes(":")
-                                                            ) {
-                                                                const [beforeColon, afterColon] = headerText.split(":");
-                                                                return (
-                                                                    <>
-                                                                        <div>
-                                                                            <strong>{beforeColon}</strong>
-                                                                        </div>
-                                                                        <span>{afterColon.trim()}</span>
-                                                                    </>
-                                                                );
-                                                            }
-                                                            return headerText;
-                                                        })()}
-                                                        <span>
-                                                            {(() => {
-                                                                if (!column.isSorted)
-                                                                    return (
-                                                                        <Box sx={{ ml: 1, display: "inline" }}>
-                                                                            <SwapVertIcon />
-                                                                        </Box>
-                                                                    );
-                                                                if (column.isSortedDesc)
-                                                                    return (
-                                                                        <Box sx={{ ml: 1, display: "inline" }}>
-                                                                            {"\u{25BC}"}
-                                                                        </Box>
-                                                                    );
-                                                                return (
-                                                                    <Box sx={{ ml: 1, display: "inline" }}>
-                                                                        {"\u{25B2}"}
-                                                                    </Box>
-                                                                );
-                                                            })()}
-                                                        </span>
-                                                    </th>
-                                                ))}
-                                        </tr>
-                                    ))}
-                                </thead>
-                                <tbody {...getTableBodyProps()}>
-                                    {page.map((row) => {
-                                        prepareRow(row);
-                                        return (
-                                            <tr {...row.getRowProps()} key={row.id}>
-                                                <td
-                                                    {...row.cells[0].getCellProps()}
-                                                    style={{
-                                                        position: "sticky",
-                                                        left: 0,
-                                                        background: "white",
-                                                        zIndex: 1
-                                                    }}
-                                                >
-                                                    {row.cells[0].render("Cell")}
-                                                </td>
-                                                {row.cells
-                                                    .filter((_, index) => visibleColumnIndices.includes(index))
-                                                    .map((cell) => (
-                                                        <td {...cell.getCellProps()} key={cell.column.id}>
-                                                            {cell.render("Cell")}
-                                                        </td>
-                                                    ))}
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-
-                            <Box className="pagination" sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <Box>
-                                    <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                                        {"<<"}
-                                    </Button>
-                                    <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                                        {"<"}
-                                    </Button>
-                                    <Button onClick={() => nextPage()} disabled={!canNextPage}>
-                                        {">"}
-                                    </Button>
-                                    <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                                        {">>"}
-                                    </Button>
-                                    <span style={{ paddingLeft: 8 }}>
-                                        Page
-                                        <strong style={{ padding: 8 }}>
-                                            {pageIndex + 1} of {pageOptions.length}
-                                        </strong>
-                                    </span>
-                                    <span>
-                                        | Go to page:
-                                        <input
-                                            type="number"
-                                            defaultValue={pageIndex + 1}
-                                            onChange={(e) => {
-                                                const p = e.target.value ? Number(e.target.value) - 1 : 0;
-                                                gotoPage(p);
-                                            }}
-                                            style={{ width: "3em", marginLeft: 8 }}
-                                        />
-                                    </span>
-                                    <select
-                                        value={pageSize}
-                                        onChange={(e) => {
-                                            setPageSize(Number(e.target.value));
-                                        }}
-                                    >
-                                        {[10, 25, 40, 50].map((size) => (
-                                            <option key={size} value={size}>
-                                                Show {size}
-                                            </option>
                                         ))}
-                                    </select>
-                                </Box>
-                                <Box>
-                                    <Typography>
-                                        Showing {page.length} of {rows.length} results
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            {/* After the pagination controls, add the empty counties section */}
-                            {emptyCounties.length > 0 && (
-                                <Box sx={{ mt: 4, p: 2, border: "1px solid #ddd", borderRadius: "4px" }}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center",
-                                            cursor: "pointer",
-                                            mb: 1
-                                        }}
-                                        onClick={() => setShowAllEmptyCounties(!showAllEmptyCounties)}
-                                    >
-                                        <Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#2F7164" }}>
-                                            Counties with no data ({emptyCounties.length})
-                                        </Typography>
-                                        <Typography>{showAllEmptyCounties ? "−" : "+"}</Typography>
-                                    </Box>
-                                    <Box>
-                                        {(showAllEmptyCounties ? emptyCounties : emptyCounties.slice(0, 5)).map(
-                                            (county, index) => (
-                                                <Typography key={index} sx={{ mb: 0.5 }}>
-                                                    {county.county}, {county.state} (FIPS: {county.fips})
-                                                </Typography>
-                                            )
-                                        )}
-                                        {!showAllEmptyCounties && emptyCounties.length > 5 && (
-                                            <Button
-                                                sx={{ mt: 1, color: "#2F7164" }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setShowAllEmptyCounties(true);
-                                                }}
-                                            >
-                                                Show all {emptyCounties.length} counties
-                                            </Button>
-                                        )}
-                                    </Box>
-                                </Box>
-                            )}
-                        </div>
-                    ) : (
-                        <Typography variant="body1" sx={{ textAlign: "center", py: 4 }}>
-                            No data available for the selected filters.
-                        </Typography>
-                    )}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {page.map((row) => {
+                                prepareRow(row);
+                                return (
+                                    <tr {...row.getRowProps()}>
+                                        {row.cells
+                                            .filter((_, index) => visibleColumnIndices.includes(index))
+                                            .map((cell) => {
+                                                return (
+                                                    <td {...cell.getCellProps()}>
+                                                        {typeof cell.column.accessor === "string" &&
+                                                        cell.column.accessor.includes(".")
+                                                            ? formatCurrency(cell.value)
+                                                            : cell.render("Cell")}
+                                                    </td>
+                                                );
+                                            })}
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </TableContainer>
-            </Styles>
-        </Box>
+            </div>
+            <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Box>
+                    <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage} sx={{ mr: 1 }}>
+                        {"<<"}
+                    </Button>
+                    <Button onClick={() => previousPage()} disabled={!canPreviousPage} sx={{ mr: 1 }}>
+                        {"<"}
+                    </Button>
+                    <Button onClick={() => nextPage()} disabled={!canNextPage} sx={{ mr: 1 }}>
+                        {">"}
+                    </Button>
+                    <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} sx={{ mr: 1 }}>
+                        {">>"}
+                    </Button>
+                    <span style={{ paddingLeft: 8 }}>
+                        Page{" "}
+                        <strong style={{ padding: 8 }}>
+                            {pageIndex + 1} of {pageCount}
+                        </strong>
+                    </span>
+                </Box>
+                <Box>
+                    <select
+                        value={pageSize}
+                        onChange={(e) => {
+                            setPageSize(Number(e.target.value));
+                        }}
+                        style={{ padding: "4px" }}
+                    >
+                        {[10, 20, 30, 40, 50].map((pageSize) => (
+                            <option key={pageSize} value={pageSize}>
+                                Show {pageSize}
+                            </option>
+                        ))}
+                    </select>
+                </Box>
+            </Box>
+        </Styles>
     );
 };
 

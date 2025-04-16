@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, Grid, ToggleButton, ToggleButtonGroup, FormLabel, RadioGroup, FormControlLabel, Radio, Typography } from "@mui/material";
+import {
+    Box,
+    Grid,
+    ToggleButton,
+    ToggleButtonGroup,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Typography
+} from "@mui/material";
 
 const MapControls = ({
     availableYears,
@@ -92,7 +102,7 @@ const MapControls = ({
                             }
                         }}
                     >
-                        2025 Policy
+                        Proposed Policy
                     </ToggleButton>
                     <ToggleButton
                         value="difference"
@@ -107,12 +117,14 @@ const MapControls = ({
                             }
                         }}
                     >
-                        Difference
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <div>Difference</div>
+                            <div style={{ fontSize: "0.5rem" }}>(Proposed - Current)</div>
+                        </Box>
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Grid>
 
-            {/* Value Type */}
             <Grid item xs={12} md={4}>
                 <FormLabel
                     component="legend"
@@ -123,7 +135,7 @@ const MapControls = ({
                         mb: 1
                     }}
                 >
-                    Value Type
+                    Displayed Metrics
                 </FormLabel>
                 <ToggleButtonGroup
                     value={showMeanValues ? "mean" : "total"}
@@ -166,7 +178,7 @@ const MapControls = ({
                             }
                         }}
                     >
-                        Mean Rate ($/acre)
+                        Payment Rate ($/acre)
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Grid>
@@ -177,7 +189,7 @@ const MapControls = ({
                         sx={{
                             fontWeight: "bold",
                             fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)",
+                            color: "rgba(47, 113, 100, 1)"
                         }}
                     >
                         Year Selection
@@ -187,51 +199,51 @@ const MapControls = ({
                         value={aggregationEnabled ? "aggregated" : "single"}
                         onChange={handleAggregationChange}
                     >
-                        <FormControlLabel 
-                            value="single" 
+                        <FormControlLabel
+                            value="single"
                             control={
-                                <Radio 
-                                    size="small" 
-                                    sx={{ 
-                                        py: 0,
-                                        color: "rgba(47, 113, 100, 0.8)",
-                                        '&.Mui-checked': {
-                                            color: "rgba(47, 113, 100, 1)",
-                                        },
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "py": 0,
+                                        "color": "rgba(47, 113, 100, 0.8)",
+                                        "&.Mui-checked": {
+                                            color: "rgba(47, 113, 100, 1)"
+                                        }
                                     }}
                                 />
-                            } 
+                            }
                             label={
                                 <Typography variant="body2" sx={{ fontSize: "0.75rem", py: 0 }}>
                                     Single
                                 </Typography>
                             }
-                            sx={{ 
+                            sx={{
                                 mr: 1,
                                 color: "rgba(47, 113, 100, 1)"
                             }}
                         />
-                        <FormControlLabel 
-                            value="aggregated" 
+                        <FormControlLabel
+                            value="aggregated"
                             disabled={isAggregationDisabled}
                             control={
-                                <Radio 
-                                    size="small" 
-                                    sx={{ 
-                                        py: 0,
-                                        color: "rgba(47, 113, 100, 0.8)",
-                                        '&.Mui-checked': {
-                                            color: "rgba(47, 113, 100, 1)",
-                                        },
+                                <Radio
+                                    size="small"
+                                    sx={{
+                                        "py": 0,
+                                        "color": "rgba(47, 113, 100, 0.8)",
+                                        "&.Mui-checked": {
+                                            color: "rgba(47, 113, 100, 1)"
+                                        }
                                     }}
                                 />
-                            } 
+                            }
                             label={
                                 <Typography variant="body2" sx={{ fontSize: "0.75rem", py: 0 }}>
                                     Aggregated
                                 </Typography>
                             }
-                            sx={{ 
+                            sx={{
                                 color: isAggregationDisabled ? "rgba(47, 113, 100, 0.5)" : "rgba(47, 113, 100, 1)"
                             }}
                         />
@@ -259,8 +271,16 @@ const MapControls = ({
                                 "flex": "0 0 auto",
                                 "margin": "0 4px 4px 0",
                                 "color": yearRange[0] === index ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor": yearRange[0] === index ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                                "fontWeight": yearRange[0] === index ? "bold" : "normal",
+                                "backgroundColor":
+                                    yearRange[0] === index ||
+                                    (aggregationEnabled && year >= yearRange[0] && year <= selectedYear)
+                                        ? "rgba(47, 113, 100, 0.1)"
+                                        : "transparent",
+                                "fontWeight":
+                                    yearRange[0] === index ||
+                                    (aggregationEnabled && year >= yearRange[0] && year <= selectedYear)
+                                        ? "bold"
+                                        : "normal",
                                 "border": "1px solid rgba(47, 113, 100, 0.5)",
                                 "&:hover": {
                                     backgroundColor: "rgba(47, 113, 100, 0.05)"
@@ -272,13 +292,13 @@ const MapControls = ({
                     ))}
                 </ToggleButtonGroup>
                 {aggregationEnabled && !isAggregationDisabled && (
-                    <Typography 
-                        variant="caption" 
-                        sx={{ 
-                            display: "block", 
-                            mt: 0.5, 
+                    <Typography
+                        variant="caption"
+                        sx={{
+                            display: "block",
+                            mt: 0.5,
                             color: "rgba(47, 113, 100, 0.8)",
-                            fontSize: "0.75rem" 
+                            fontSize: "0.75rem"
                         }}
                     >
                         Showing data from {availableYears[0]} to {selectedYear}
