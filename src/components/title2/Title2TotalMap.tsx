@@ -10,7 +10,6 @@ import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
-import { getValueFromAttrDollar } from "../../utils/apiutil";
 import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
@@ -45,8 +44,6 @@ const MapChart = (props) => {
                                         return null;
                                     }
                                     const totalPaymentInDollars = record.totalPaymentInDollars;
-                                    const totalPaymentInPercentageNationwide =
-                                        record.totalPaymentInPercentageNationwide;
                                     const hoverContent = (
                                         <div className="map_tooltip">
                                             <div className={classes.tooltip_header}>
@@ -54,20 +51,39 @@ const MapChart = (props) => {
                                             </div>
                                             <table className={classes.tooltip_table}>
                                                 <tbody key={geo.properties.name}>
-                                                    <tr style={topTipStyle}>
-                                                        <td className={classes.tooltip_topcell_left}>Benefits:</td>
-                                                        <td className={classes.tooltip_topcell_right}>
-                                                            ${ShortFormat(totalPaymentInDollars, undefined, 2)}
+                                                    {/* Add yearly breakdown rows */}
+                                                    {record.years &&
+                                                        Object.entries(record.years).map(([each_year, data]) => (
+                                                            <tr key={each_year}>
+                                                                <td className={classes.tooltip_regularcell_left}>
+                                                                    {each_year} Benefit:
+                                                                </td>
+                                                                <td className={classes.tooltip_regularcell_right}>
+                                                                    $
+                                                                    {ShortFormat(
+                                                                        data.totalPaymentInDollars,
+                                                                        undefined,
+                                                                        2
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    {/* Divider line row */}
+                                                    <tr>
+                                                        <td colSpan={2}>
+                                                            <hr
+                                                                style={{
+                                                                    margin: "4px 0",
+                                                                    border: "0",
+                                                                    borderTop: "1px solid #ccc"
+                                                                }}
+                                                            />
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td className={classes.tooltip_regularcell_left}>
-                                                            PCT. Nationwide:
-                                                        </td>
-                                                        <td className={classes.tooltip_regularcell_right}>
-                                                            {totalPaymentInPercentageNationwide
-                                                                ? `${totalPaymentInPercentageNationwide} %`
-                                                                : "0%"}
+                                                    <tr style={topTipStyle}>
+                                                        <td className={classes.tooltip_bottomcell_left}>Benefits:</td>
+                                                        <td className={classes.tooltip_bottomcell_right}>
+                                                            ${ShortFormat(totalPaymentInDollars, undefined, 2)}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -153,7 +169,7 @@ MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func
 };
 
-const CRPTotalMap = ({
+const Title2TotalMap = ({
     program,
     attribute,
     year,
@@ -171,18 +187,14 @@ const CRPTotalMap = ({
     const [content, setContent] = useState("");
     const quantizeArray: number[] = [];
     const zeroPoints = [];
-    // statePerformance[year].forEach((value) => {
-    //     const programRecord = value.programs;
-    //     const ACur = programRecord.find((s) => s.programName === program);
-    //     let key = getValueFromAttrDollar(ACur, attribute);
-    //     key = key !== "" ? key : attribute;
-    //     quantizeArray.push(ACur[key]);
-    //     ACur[key] === 0 && zeroPoints.push(value.state);
-    //     return null;
-    // });
-    const category = "Total CRP";
-    const years = "2014-2023";
-    statePerformance[year].forEach((value) => quantizeArray.push(value.totalPaymentInDollars));
+    statePerformance[year].forEach((value) => {
+        const ACur = value;
+        const key = "totalPaymentInDollars";
+        quantizeArray.push(ACur[key]);
+        ACur[key] === 0 && zeroPoints.push(value.state);
+        return null;
+    });
+    const category = "Title II Total";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
@@ -190,45 +202,43 @@ const CRPTotalMap = ({
     const classes = useStyles();
     return (
         <div>
-            <div>
-                <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
-                    {maxValue !== 0 ? (
-                        <DrawLegend
-                            colorScale={colorScale}
-                            title={titleElement(category, years)}
-                            programData={quantizeArray}
-                            prepColor={mapColor}
-                            isRatio={false}
-                            notDollar={false}
-                            emptyState={[]}
-                        />
-                    ) : (
-                        <div>
-                            {titleElement(category, years)}
-                            <Box display="flex" justifyContent="center">
-                                <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
-                                    {category} data in {years} is unavailable for all states.
-                                </Typography>
-                            </Box>
-                        </div>
-                    )}
-                </Box>
+            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
+                {maxValue !== 0 ? (
+                    <DrawLegend
+                        colorScale={colorScale}
+                        title={titleElement(category, year)}
+                        programData={quantizeArray}
+                        prepColor={mapColor}
+                        isRatio={false}
+                        notDollar={false}
+                        emptyState={[]}
+                    />
+                ) : (
+                    <div>
+                        {titleElement(category, year)}
+                        <Box display="flex" justifyContent="center">
+                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                                {category} data in {year} is unavailable for all states.
+                            </Typography>
+                        </Box>
+                    </div>
+                )}
+            </Box>
 
-                <MapChart
-                    setReactTooltipContent={setContent}
-                    maxValue={maxValue}
-                    statePerformance={statePerformance}
-                    allStates={allStates}
-                    year={year}
-                    stateCodes={stateCodes}
-                    colorScale={colorScale}
-                />
+            <MapChart
+                setReactTooltipContent={setContent}
+                maxValue={maxValue}
+                statePerformance={statePerformance}
+                allStates={allStates}
+                year={year}
+                stateCodes={stateCodes}
+                colorScale={colorScale}
+            />
 
-                <div className="tooltip-container">
-                    <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
-                        {content}
-                    </ReactTooltip>
-                </div>
+            <div className="tooltip-container">
+                <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
+                    {content}
+                </ReactTooltip>
             </div>
         </div>
     );
@@ -245,4 +255,4 @@ const titleElement = (attribute, year): JSX.Element => {
         </Box>
     );
 };
-export default CRPTotalMap;
+export default Title2TotalMap;

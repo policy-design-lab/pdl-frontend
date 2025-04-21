@@ -50,7 +50,7 @@ export default function EQIPPage(): JSX.Element {
     const handlePracticeChange = (practices: string[]) => {
         setSelectedPractices(practices);
     };
-    const eqip_year = "2018-2022";
+    const eqip_year = "2014-2023";
 
     React.useEffect(() => {
         const fetchData = async () => {
