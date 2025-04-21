@@ -6,7 +6,7 @@ import ReactDOMServer from "react-dom/server";
 import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
 
-export default function CropInsuranceBubble({ originalData, initChartWidthRatio, stateCodesData }): JSX.Element {
+export default function CropInsuranceBubble({ originalData, initChartWidthRatio, stateCodesData, startYear, endYear }): JSX.Element {
     const rn = React.useRef(null);
     const baseColor = "#00000099";
     const lightGreen = "#66BB6A33";
@@ -497,7 +497,7 @@ export default function CropInsuranceBubble({ originalData, initChartWidthRatio,
                             color: "#212121"
                         }}
                     >
-                        How is the <b>Net Farmer Benefits</b> calculated (2018 - 2022)?
+                        How is the <b>Net Farmer Benefits</b> calculated ({startYear} - {endYear})?
                     </Typography>
                     <DownloadIcon
                         sx={{

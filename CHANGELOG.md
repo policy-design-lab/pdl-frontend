@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Support title II year range change [#371](https://github.com/policy-design-lab/pdl-frontend/issues/371)
+- Update Crop Insurance data years to 2014-2023 and make future updates easier. [#378](https://github.com/policy-design-lab/pdl-frontend/issues/378)
 
 ## [1.8.0] - 2025-03-10
 
