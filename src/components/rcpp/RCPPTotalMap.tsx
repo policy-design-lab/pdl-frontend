@@ -182,7 +182,7 @@ const RCPPTotalMap = ({
         return null;
     });
     const category = "Total RCPP";
-    const years = "2018-2022";
+    const years = "2014-2023";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];

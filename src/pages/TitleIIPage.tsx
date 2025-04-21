@@ -6,21 +6,19 @@ import Drawer from "../components/ProgramDrawer";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
-import LandingPageMap from "../components/LandingPageProgramMap";
-import LandingPageTable from "../components/shared/LandingPgaeTable";
+import Title2TotalMap from "../components/title2/Title2TotalMap";
+import DataTable from "../components/title2/Title2TotalTable";
 
 export default function TitleIIPage(): JSX.Element {
     const defaultTheme = createTheme();
     const [allStates, setAllStates] = React.useState({});
     const [stateCodesData, setStateCodesData] = React.useState({});
+    const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
-    const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
-    const handleResize = () => {
-        setWindowWidth(window.innerWidth);
-    };
+    const [stateDistributionData, setStateDistributionData] = React.useState({});
 
-    const total_year = "2018-2022";
+    const total_year = "2014-2023";
     React.useEffect(() => {
         // For landing page map only.
         const allprograms_url = `${config.apiUrl}/allprograms`;
@@ -36,6 +34,7 @@ export default function TitleIIPage(): JSX.Element {
 
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
+            setStateCodesArray(response);
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
@@ -45,17 +44,59 @@ export default function TitleIIPage(): JSX.Element {
             setSummary(response);
         });
 
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        const statedistribution_url = `${config.apiUrl}/titles/title-ii/state-distribution`;
+        getJsonDataFromUrl(statedistribution_url).then((response) => {
+            const transformed = transformStatePerformance(response);
+            setStateDistributionData(transformed);
+        });
     }, []);
+    const transformStatePerformance = (rawData) => {
+        const years = Object.keys(rawData).filter(
+            (key) => /^\d{4}$/.test(key) && Number(key) >= 2014 && Number(key) <= 2023
+        );
+
+        const summaryArray = rawData[total_year];
+        if (!Array.isArray(summaryArray)) return { [total_year]: [] };
+
+        const stateMap = {};
+        // Initialize with the summary data
+        summaryArray.forEach((entry) => {
+            const { state, totalPaymentInDollars, totalRecipients } = entry;
+            stateMap[state] = {
+                state,
+                totalPaymentInDollars,
+                totalRecipients,
+                years: {}
+            };
+        });
+
+        // Add per-year breakdown
+        years.forEach((year) => {
+            rawData[year].forEach((entry) => {
+                const { state, totalPaymentInDollars } = entry;
+                if (stateMap[state]) {
+                    stateMap[state].years[year] = {
+                        totalPaymentInDollars
+                    };
+                }
+            });
+        });
+
+        return {
+            [total_year]: Object.values(stateMap)
+        };
+    };
+
     const isDataLoaded = React.useMemo(() => {
         return (
             allStates.length > 0 &&
             allPrograms.length > 0 &&
             summary.length > 0 &&
+            stateDistributionData &&
+            Object.keys(stateDistributionData).length > 0 &&
             Object.keys(stateCodesData).length > 0
         );
-    }, [allStates, allPrograms, summary, stateCodesData]);
+    }, [allStates, allPrograms, summary, stateCodesData, stateDistributionData]);
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -70,17 +111,16 @@ export default function TitleIIPage(): JSX.Element {
                     </Box>
                     <Drawer />
                     <Box sx={{ pl: 50, pr: 20 }}>
-                        <Box component="div" sx={{ width: "100%", m: "auto", pt: 20 }}>
-                            <LandingPageMap
-                                programTitle="Title II: Conservation"
-                                allStates={allStates}
+                        <Box component="div" sx={{ width: "100%", m: "auto", pt: 6 }}>
+                            <Title2TotalMap
+                                program="Title II: Conservation"
+                                attribute="payments"
+                                year={total_year}
+                                statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
-                                allPrograms={allPrograms}
-                                summary={summary}
-                                containerWidth={windowWidth * 0.75}
+                                allStates={allStates}
                             />
                         </Box>
-
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
@@ -103,11 +143,11 @@ export default function TitleIIPage(): JSX.Element {
                             </Typography>
                         </Box>
                         <Box display="flex" justifyContent="center" component="div" sx={{ mt: 10, mb: 2 }}>
-                            <LandingPageTable
+                            <DataTable
                                 TableTitle={`Total Conservation Programs (Title II) from ${total_year}`}
-                                TableData={allPrograms}
-                                stateCodes={stateCodesData}
-                                SummaryKey="Title II Total"
+                                statePerformance={stateDistributionData}
+                                year={total_year}
+                                stateCodes={stateCodesArray}
                             />
                         </Box>
                     </Box>
