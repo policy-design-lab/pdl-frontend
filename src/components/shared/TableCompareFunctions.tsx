@@ -71,9 +71,37 @@ export function sortByDollars(jsonArray, key): void {
 }
 
 export function compareWithNumber(rowA, rowB, id, desc) {
-    const a = Number(rowA.values[id].replace(/,/g, ""));
-    const b = Number(rowB.values[id].replace(/,/g, ""));
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
+    const aVal = rowA.values[id];
+    const bVal = rowB.values[id];
+
+    if (aVal === undefined || aVal === null) return 1;
+    if (bVal === undefined || bVal === null) return -1;
+
+    let a;
+    let b;
+
+    if (typeof aVal === "number") {
+        a = aVal;
+    } else if (typeof aVal === "string") {
+        a = Number(aVal.replace(/,/g, ""));
+    } else {
+        a = 0;
+    }
+
+    if (typeof bVal === "number") {
+        b = bVal;
+    } else if (typeof bVal === "string") {
+        b = Number(bVal.replace(/,/g, ""));
+    } else {
+        b = 0;
+    }
+
+    const sortOrder = desc === false ? 1 : -1;
+
+    if (a > b) return 1 * sortOrder;
+    if (a < b) return -1 * sortOrder;
+
+    const countyA = rowA.values.county || "";
+    const countyB = rowB.values.county || "";
+    return countyA.localeCompare(countyB);
 }

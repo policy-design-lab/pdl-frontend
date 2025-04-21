@@ -1,5 +1,5 @@
 import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import noShowStates from "../../../files/maps/noShow-state.json";
 
 interface FilterSelectorsProps {

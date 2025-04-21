@@ -648,17 +648,6 @@ const CountyMap = ({
                 >
                     {tooltipContent}
                 </ReactTooltip>
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        mt: 1,
-                        fontSize: "0.75rem",
-                        color: "rgba(0,0,0,0.6)",
-                        fontStyle: "italic"
-                    }}
-                >
-                    Note: Map zoom is only available through the state selector
-                </Box>
             </Box>
         </Box>
     );

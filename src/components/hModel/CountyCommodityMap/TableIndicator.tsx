@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Tooltip, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import MapIcon from "@mui/icons-material/Map";
 import styled from "@emotion/styled";
 
 const IndicatorContainer = styled(Box)`
@@ -46,8 +47,14 @@ const TableIndicator: React.FC<TableIndicatorProps> = ({ message, onClick, isAtT
                 top: isAtTop ? "20px" : "auto"
             }}
         >
-            <IndicatorText variant="body2">{message}</IndicatorText>
-            {isAtTop ? <ArrowUpwardIcon sx={{ color: "white" }} /> : <ArrowDownwardIcon sx={{ color: "white" }} />}
+            <IndicatorText variant="body2">{isAtTop ? "Back to map controls" : message}</IndicatorText>
+            {isAtTop ? (
+                <MapIcon sx={{ color: "white" }} />
+            ) : message.includes("breakdown") ? (
+                <TableChartIcon sx={{ color: "white" }} />
+            ) : (
+                <ArrowDownwardIcon sx={{ color: "white" }} />
+            )}
         </IndicatorContainer>
     );
 };

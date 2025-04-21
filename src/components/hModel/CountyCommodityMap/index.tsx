@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import TableChartIcon from "@mui/icons-material/TableChart";
 import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
-import TableIndicator from "./TableIndicator";
 
 const CountyCommodityMap = ({
     countyData,
@@ -72,42 +72,22 @@ const CountyCommodityMap = ({
     }, [selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode, onMapUpdate]);
 
     useEffect(() => {
-        const hasCommoditySelection =
-            selectedCommodities.length > 0 &&
-            !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
-        const hasYearSelection = yearRange.length > 1 || (aggregationEnabled && yearAggregation > 0);
-        const hasProgramSelection =
-            selectedPrograms.length > 0 && !(selectedPrograms.length === 1 && selectedPrograms[0] === "All Programs");
-
-        const shouldShowIndicator = hasCommoditySelection || hasYearSelection || hasProgramSelection;
-        setShowTableIndicator(shouldShowIndicator);
-
-        if (shouldShowIndicator) {
-            let message = "View detailed breakdown in table";
-            const breakdowns = [];
-
-            if (hasCommoditySelection) {
-                breakdowns.push("Commodity breakdown");
+        const resetNavigationState = () => {
+            if (isAtTop) {
+                setIsAtTop(false);
             }
-            if (hasYearSelection) {
-                breakdowns.push("Yearly breakdown");
-            }
-            if (hasProgramSelection) {
-                breakdowns.push("Program breakdown");
-            }
+        };
 
-            if (breakdowns.length > 0) {
-                message += ` (${breakdowns.join(", ")})`;
-            }
-
-            setIndicatorMessage(message);
-        }
-    }, [selectedCommodities, yearRange, yearAggregation, aggregationEnabled, selectedPrograms]);
+        return () => {
+            resetNavigationState();
+        };
+    }, [isAtTop]);
 
     const handleSetSelectedCommodities = (newValue) => {
         if (JSON.stringify(selectedCommodities) !== JSON.stringify(newValue)) {
             setSelectedCommodities(newValue);
             setForceUpdate((prev) => prev + 1);
+            setIsAtTop(false);
             if (onMapUpdate) {
                 onMapUpdate(selectedYear, newValue, selectedPrograms, selectedState, viewMode);
             }
@@ -118,6 +98,7 @@ const CountyCommodityMap = ({
         if (JSON.stringify(selectedPrograms) !== JSON.stringify(newValue)) {
             setSelectedPrograms(newValue);
             setForceUpdate((prev) => prev + 1);
+            setIsAtTop(false);
             if (onMapUpdate) {
                 onMapUpdate(selectedYear, selectedCommodities, newValue, selectedState, viewMode);
             }
@@ -128,6 +109,7 @@ const CountyCommodityMap = ({
         if (selectedState !== newValue) {
             setSelectedState(newValue);
             setForceUpdate((prev) => prev + 1);
+            setIsAtTop(false);
             if (onMapUpdate) {
                 onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, newValue, viewMode);
             }
@@ -140,6 +122,7 @@ const CountyCommodityMap = ({
 
     const handleSetViewMode = (newValue) => {
         setViewMode(newValue);
+        setIsAtTop(false);
         if (onMapUpdate) {
             onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, newValue);
         }
@@ -148,13 +131,8 @@ const CountyCommodityMap = ({
     const handleScrollToTable = () => {
         const tableElement = document.getElementById("county-commodity-table");
         if (tableElement) {
-            if (isAtTop) {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                setIsAtTop(false);
-            } else {
-                tableElement.scrollIntoView({ behavior: "smooth" });
-                setIsAtTop(true);
-            }
+            tableElement.scrollIntoView({ behavior: "smooth" });
+            setIsAtTop(true);
         }
     };
 
@@ -240,12 +218,28 @@ const CountyCommodityMap = ({
                         showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
                         setViewMode={handleSetViewMode}
-                        setYearRange={setYearRange}
-                        setShowMeanValues={setShowMeanValues}
+                        setYearRange={(newValue) => {
+                            setYearRange(newValue);
+
+                            setIsAtTop(false);
+                        }}
+                        setShowMeanValues={(newValue) => {
+                            setShowMeanValues(newValue);
+
+                            setIsAtTop(false);
+                        }}
                         setProposedPolicyName={setProposedPolicyName}
                         aggregationEnabled={aggregationEnabled}
-                        setAggregationEnabled={setAggregationEnabled}
-                        setYearAggregation={setYearAggregation}
+                        setAggregationEnabled={(newValue) => {
+                            setAggregationEnabled(newValue);
+
+                            setIsAtTop(false);
+                        }}
+                        setYearAggregation={(newValue) => {
+                            setYearAggregation(newValue);
+
+                            setIsAtTop(false);
+                        }}
                     />
 
                     <Box
@@ -286,6 +280,7 @@ const CountyCommodityMap = ({
                 sx={{
                     overflow: "hidden"
                 }}
+                id="county-commodity-map"
             >
                 <CountyMap
                     mapData={mapData}
@@ -305,9 +300,58 @@ const CountyCommodityMap = ({
                     key={mapKey}
                 />
             </Box>
-            {showTableIndicator && (
-                <TableIndicator message={indicatorMessage} onClick={handleScrollToTable} isAtTop={isAtTop} />
-            )}
+            {(() => {
+                const hasCommoditySelection =
+                    selectedCommodities.length > 0 &&
+                    !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
+                const hasYearSelection = yearRange.length > 1 || (aggregationEnabled && yearAggregation > 0);
+
+                const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop;
+
+                if (!shouldShowButton) return null;
+
+                let message = "View detailed breakdown in table";
+                const breakdowns: string[] = [];
+
+                if (hasCommoditySelection) breakdowns.push("Commodity breakdown");
+                if (hasYearSelection) breakdowns.push("Yearly breakdown");
+
+                if (breakdowns.length > 0) {
+                    message += ` (${breakdowns.join(", ")})`;
+                }
+
+                return (
+                    <div
+                        style={{
+                            position: "fixed",
+                            bottom: "20px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            zIndex: 1000
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            onClick={handleScrollToTable}
+                            sx={{
+                                "backgroundColor": "rgba(47, 113, 100, 0.9)",
+                                "&:hover": {
+                                    backgroundColor: "rgba(47, 113, 100, 1)"
+                                },
+                                "display": "flex",
+                                "alignItems": "center",
+                                "gap": "8px",
+                                "padding": "12px 20px",
+                                "borderRadius": "8px",
+                                "fontWeight": 500
+                            }}
+                        >
+                            <span>{message}</span>
+                            <TableChartIcon />
+                        </Button>
+                    </div>
+                );
+            })()}
         </Box>
     );
 };

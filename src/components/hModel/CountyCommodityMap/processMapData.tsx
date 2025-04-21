@@ -1,8 +1,6 @@
 import { calculateThresholds } from "../../shared/ColorFunctions";
 import {
     getCountyNameFromFips,
-    findProposedCommodityAndProgram,
-    calculateMeanRates,
     isDataValid,
     calculateWeightedMeanRate,
     getTotalBaseAcres
@@ -40,7 +38,6 @@ export const processMapData = ({
     const yearsToAggregate: string[] = [];
 
     if (yearAggregation > 0) {
-        // Include previous years for both Payment Rate and Total Payment views
         const availableYears = Object.keys(countyData).sort();
         const currentIndex = availableYears.indexOf(selectedYear);
         yearsToAggregate.push(selectedYear);
