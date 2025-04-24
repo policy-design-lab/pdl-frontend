@@ -249,10 +249,21 @@ export const getPaymentRateForTooltip = (rate: number, isWeightedAverage: boolea
 };
 
 export const isDataValid = (county: any): boolean => {
-    if (!county || !county.scenarios || county.scenarios.length === 0) {
-        return false;
+    let hasAnyRealData = false;
+    let totalRealPayment = 0;
+
+    if (county.commodities) {
+        Object.values(county.commodities).forEach((commodity: any) => {
+            const commodityValue = parseFloat(commodity.value || 0);
+
+            if (commodityValue > 0) {
+                hasAnyRealData = true;
+                totalRealPayment += commodityValue;
+            }
+        });
     }
-    return true;
+
+    return hasAnyRealData && totalRealPayment > 0;
 };
 
 export const formatCellValue = (

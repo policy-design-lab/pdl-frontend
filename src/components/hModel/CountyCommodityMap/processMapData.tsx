@@ -14,6 +14,19 @@ const calculatePercentChange = (currentValue: number, proposedValue: number): nu
     return 0;
 };
 
+const hasValidCountyData = (county: any): boolean => {
+    if (!county || !county.commodities) return false;
+
+    let hasValue = false;
+    Object.values(county.commodities).forEach((commodity: any) => {
+        if (parseFloat(commodity.value || 0) > 0) {
+            hasValue = true;
+        }
+    });
+
+    return hasValue;
+};
+
 export const processMapData = ({
     countyData,
     countyDataProposed,
@@ -438,6 +451,10 @@ export const processMapData = ({
         }
 
         county.hasData = isDataValid(county);
+
+        if (!county.hasData) {
+            county.hasData = hasValidCountyData(county);
+        }
 
         if (!county.hasData) {
             county.value = 0;

@@ -154,7 +154,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                 {description}
                 <br />
                 Details of model can by found by{" "}
-                <Link href={link} target="_blank" rel="noopener">
+                <Link href={link} target="_blank" rel="noopener" style={{ color: "#2F7164" }}>
                     Link
                 </Link>
                 , authored by {author}.
@@ -190,7 +190,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                 {showHouseAgCommittee && (
                                     <Box sx={{ mt: 4 }}>
                                         <Typography variant="h5" sx={{ mb: 3, color: "#2F7164", fontWeight: 600 }}>
-                                            House Agriculture Committee
+                                            Overall Introduction Section
                                         </Typography>
                                         <Box
                                             sx={{
@@ -213,18 +213,16 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                         </Box>
                                         <Box sx={{ mt: 4, p: 3, backgroundColor: "white", borderRadius: 1 }}>
                                             <Typography variant="h6" sx={{ mb: 2, color: "#2F7164" }}>
-                                                About the Committee
+                                                What we can put here?
                                             </Typography>
                                             <Typography paragraph>
-                                                The House Agriculture Committee plays a key role in shaping agricultural
-                                                policy in the United States. The committee oversees various aspects of
-                                                agricultural and rural development, including farm programs, rural
-                                                development, nutrition, and conservation.
+                                                A description of every model: Yifan's model, Henrique's model, Tosh's Model, etc
                                             </Typography>
                                             <Typography paragraph>
-                                                This section provides analysis of various policy proposals and bills
-                                                from the House Agriculture Committee. Use the navigation above to
-                                                explore specific proposals and their projected impacts.
+                                                Or description of each year's proposal, depends on the content of the submenu
+                                            </Typography>
+                                            <Typography paragraph>
+                                              Or anything else.
                                             </Typography>
                                         </Box>
                                     </Box>
