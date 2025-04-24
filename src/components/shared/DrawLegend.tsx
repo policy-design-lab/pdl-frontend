@@ -194,8 +194,8 @@ export default function DrawLegend({
                 } else {
                     baseSVG.attr("height", 90);
                     const noDataMessage =
-                        programData.length === 0 ?
-                            "There is no data available for the current selection"
+                        programData.length === 0
+                            ? "There is no data available for the current selection"
                             : "There isn't sufficient data distribution to display a detailed legend";
                     baseSVG
                         .append("text")
@@ -219,13 +219,13 @@ export default function DrawLegend({
                                 .style("font-size", "12px")
                                 .text(
                                     `Range: ${
-                                        isRatio ?
-                                            `${Math.round(minValue * 100)}%` :
-                                            ShortFormat(minValue.toFixed(2), -1, 2)
+                                        isRatio
+                                            ? `${Math.round(minValue * 100)}%`
+                                            : ShortFormat(minValue.toFixed(2), -1, 2)
                                     } to ${
-                                        isRatio ?
-                                            `${Math.round(maxValue * 100)}%` :
-                                            ShortFormat(maxValue.toFixed(2), -1, 2)
+                                        isRatio
+                                            ? `${Math.round(maxValue * 100)}%`
+                                            : ShortFormat(maxValue.toFixed(2), -1, 2)
                                     }`
                                 );
                         }

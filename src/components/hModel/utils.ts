@@ -18,7 +18,12 @@ export interface CountyObject {
 }
 
 export const formatCurrency = (value: number, options = { minimumFractionDigits: 2 }): string => {
-    return `$${value.toLocaleString(undefined, options)}`;
+    const roundedValue = Math.round(value * 100) / 100;
+    return `$${roundedValue.toLocaleString(undefined, options)}`;
+};
+
+export const formatNumericValue = (value: number): number => {
+    return Math.round(value * 100) / 100;
 };
 
 export const getCountyNameFromFips = (countyFIPS: string): string => {
@@ -244,19 +249,42 @@ export const getPaymentRateForTooltip = (rate: number, isWeightedAverage: boolea
 };
 
 export const isDataValid = (county: any): boolean => {
-    let hasAnyRealData = false;
-    let totalRealPayment = 0;
+    if (!county || !county.scenarios || county.scenarios.length === 0) {
+        return false;
+    }
+    return true;
+};
 
-    if (county.commodities) {
-        Object.values(county.commodities).forEach((commodity: any) => {
-            const commodityValue = parseFloat(commodity.value || 0);
-
-            if (commodityValue > 0) {
-                hasAnyRealData = true;
-                totalRealPayment += commodityValue;
-            }
-        });
+export const formatCellValue = (
+    cell: any,
+    includesDot: boolean,
+    includesPaymentRate: boolean,
+    headerIncludesRate: boolean,
+    headerIncludesBaseAcres: boolean,
+    headerIncludesPayment: boolean,
+    accessor: string
+): string | number => {
+    if (includesPaymentRate || headerIncludesRate) {
+        return cell.value ? `$${Number(cell.value).toFixed(2)}/acre` : "$0.00/acre";
     }
 
-    return hasAnyRealData && totalRealPayment > 0;
+    if (headerIncludesBaseAcres) {
+        return typeof cell.value === "number" ? formatNumericValue(cell.value).toFixed(2) : cell.value;
+    }
+
+    if (includesDot) {
+        return typeof cell.value === "number" ? formatCurrency(cell.value) : cell.value;
+    }
+
+    if (
+        headerIncludesPayment ||
+        accessor === "current" ||
+        accessor === "proposed" ||
+        accessor === "difference" ||
+        accessor === "aggregatedPayment"
+    ) {
+        return typeof cell.value === "number" ? formatCurrency(cell.value) : cell.value;
+    }
+
+    return cell.render("Cell");
 };

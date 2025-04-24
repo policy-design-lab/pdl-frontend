@@ -3,6 +3,13 @@ import { Box, Button } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { MenuItem as MenuItemType } from "./Menu";
 
+const buttonBaseStyle = {
+    transition: "all 0.2s ease-in-out",
+    borderColor: "#2F7164",
+    transform: "translateZ(0)",
+    willChange: "transform, background-color, color"
+};
+
 export function HorizontalMenu({
     menu,
     selectedItem,
@@ -15,20 +22,30 @@ export function HorizontalMenu({
     const [topLevel, midLevel] = selectedItem.split("-").map(Number);
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                transition: "all 0.2s ease-in-out",
+                height: "40px",
+                transform: "translateZ(0)"
+            }}
+        >
             {menu[0] && (
                 <>
                     <Button
                         variant={topLevel === 0 ? "contained" : "outlined"}
                         sx={{
+                            ...buttonBaseStyle,
                             "color": topLevel === 0 ? "white" : "#2F7164",
                             "backgroundColor": topLevel === 0 ? "#2F7164" : "transparent",
                             "&:hover": {
                                 backgroundColor: topLevel === 0 ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
                             },
                             "fontWeight": 600,
-                            "mr": 1,
-                            "borderColor": "#2F7164"
+                            "mr": 1
                         }}
                         onClick={() => onMenuSelect("0-0")}
                     >
@@ -42,14 +59,14 @@ export function HorizontalMenu({
                     <Button
                         variant={topLevel === 1 ? "contained" : "outlined"}
                         sx={{
+                            ...buttonBaseStyle,
                             "color": topLevel === 1 ? "white" : "#2F7164",
                             "backgroundColor": topLevel === 1 ? "#2F7164" : "transparent",
                             "&:hover": {
                                 backgroundColor: topLevel === 1 ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
                             },
                             "fontWeight": 600,
-                            "mr": 1,
-                            "borderColor": "#2F7164"
+                            "mr": 1
                         }}
                         onClick={() => onMenuSelect("1-0")}
                     >
@@ -65,6 +82,7 @@ export function HorizontalMenu({
                         variant={topLevel === 1 && midLevel === subIndex ? "contained" : "outlined"}
                         size="small"
                         sx={{
+                            ...buttonBaseStyle,
                             "color": topLevel === 1 && midLevel === subIndex ? "white" : "#2F7164",
                             "backgroundColor": topLevel === 1 && midLevel === subIndex ? "#2F7164" : "transparent",
                             "&:hover": {
@@ -72,8 +90,7 @@ export function HorizontalMenu({
                                     topLevel === 1 && midLevel === subIndex ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
                             },
                             "fontWeight": topLevel === 1 && midLevel === subIndex ? 600 : 400,
-                            "mr": 1,
-                            "borderColor": "#2F7164"
+                            "mr": 1
                         }}
                         onClick={() => onMenuSelect(`1-${subIndex}`)}
                     >

@@ -38,6 +38,16 @@ interface TableIndicatorProps {
     isAtTop: boolean;
 }
 
+const IndicatorIcon = ({ isAtTop, message }: { isAtTop: boolean; message: string }) => {
+    return isAtTop ? (
+        <MapIcon sx={{ color: "white" }} />
+    ) : message.includes("breakdown") ? (
+        <TableChartIcon sx={{ color: "white" }} />
+    ) : (
+        <ArrowDownwardIcon sx={{ color: "white" }} />
+    );
+};
+
 const TableIndicator: React.FC<TableIndicatorProps> = ({ message, onClick, isAtTop }) => {
     return (
         <IndicatorContainer
@@ -48,13 +58,7 @@ const TableIndicator: React.FC<TableIndicatorProps> = ({ message, onClick, isAtT
             }}
         >
             <IndicatorText variant="body2">{isAtTop ? "Back to map controls" : message}</IndicatorText>
-            {isAtTop ? (
-                <MapIcon sx={{ color: "white" }} />
-            ) : message.includes("breakdown") ? (
-                <TableChartIcon sx={{ color: "white" }} />
-            ) : (
-                <ArrowDownwardIcon sx={{ color: "white" }} />
-            )}
+            <IndicatorIcon isAtTop={isAtTop} message={message} />
         </IndicatorContainer>
     );
 };

@@ -1,6 +1,7 @@
 import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
 import { ShortFormat } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
+
 export const CountyTooltipContent = ({
     countyData,
     countyFIPS,
@@ -329,6 +330,11 @@ function generateCommodityDifferenceContent(
     yearAggregation = 0
 ) {
     let content = "";
+
+    if (!countyData || !countyData.commodities) {
+        return content;
+    }
+
     const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
         ? Object.keys(countyData.commodities)
         : selectedCommodities;
@@ -340,6 +346,9 @@ function generateCommodityDifferenceContent(
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
 
     const formatDiff = (value) => {
+        if (value === undefined || value === null) {
+            return "0.00";
+        }
         const sign = value >= 0 ? "+" : "";
         return `${sign}${ShortFormat(value, undefined, 2)}`;
     };
@@ -349,12 +358,15 @@ function generateCommodityDifferenceContent(
 
         commoditiesToDisplay.forEach((commodity) => {
             const commodityData = countyData.commodities[commodity];
+            if (!commodityData) {
+                return;
+            }
+
             if (
-                commodityData &&
-                (commodityData.value > 0 ||
-                    commodityData.currentValue > 0 ||
-                    commodityData.proposedValue > 0 ||
-                    commodityData.difference !== 0)
+                commodityData.value > 0 ||
+                commodityData.currentValue > 0 ||
+                commodityData.proposedValue > 0 ||
+                commodityData.difference !== 0
             ) {
                 let commodityCurrentValue = commodityData.currentValue;
                 let commodityProposedValue = commodityData.proposedValue;
@@ -384,10 +396,13 @@ function generateCommodityDifferenceContent(
                     baseAcres = 0.3;
                 }
 
-                const percentChange =
-                    commodityCurrentValue === 0
-                        ? 100
-                        : ((commodityProposedValue - commodityCurrentValue) / commodityCurrentValue) * 100;
+                let percentChange = 0;
+                if (commodityCurrentValue !== 0 && commodityCurrentValue !== undefined) {
+                    percentChange =
+                        ((commodityProposedValue - commodityCurrentValue) / Math.abs(commodityCurrentValue)) * 100;
+                } else if (commodityProposedValue !== 0) {
+                    percentChange = 100;
+                }
 
                 let commodityCurrentMeanRate = currentBaseAcres > 0 ? commodityCurrentValue / currentBaseAcres : 0;
                 let commodityProposedMeanRate = proposedBaseAcres > 0 ? commodityProposedValue / proposedBaseAcres : 0;
@@ -1019,7 +1034,16 @@ function generateCommodityRegularContent(
 
         commoditiesToDisplay.forEach((commodity) => {
             const commodityData = countyData.commodities[commodity];
-            if (commodityData && commodityData.value > 0) {
+            if (!commodityData) {
+                return;
+            }
+
+            if (
+                commodityData.value > 0 ||
+                commodityData.currentValue > 0 ||
+                commodityData.proposedValue > 0 ||
+                commodityData.difference !== 0
+            ) {
                 let commodityValue = commodityData.value;
                 if (typeof commodityValue === "string") {
                     commodityValue = parseFloat(commodityValue.replace(/[^0-9.-]+/g, ""));

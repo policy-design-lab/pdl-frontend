@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Button } from "@mui/material";
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import ReactTooltip from "react-tooltip";
@@ -387,16 +387,36 @@ const CountyMap = ({
         <Box className="county-commodity-map" sx={{ position: "relative" }}>
             {selectedState !== "All States" && (
                 <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
-                    <IconButton
+                    <Button
                         onClick={handleCloseStateView}
                         aria-label="return to US map"
+                        variant="contained"
+                        startIcon={<CloseIcon />}
                         sx={{
-                            "bgcolor": "rgba(255, 255, 255, 0.8)",
-                            "&:hover": { bgcolor: "rgba(255, 255, 255, 0.9)" }
+                            "bgcolor": "rgba(47, 113, 100, 0.9)",
+                            "color": "white",
+                            "border": "2px solid white",
+                            "boxShadow": "0 2px 10px rgba(0,0,0,0.2)",
+                            "@keyframes pulse": {
+                                "0%": {
+                                    boxShadow: "0 0 0 0 rgba(47, 113, 100, 0.7)"
+                                },
+                                "70%": {
+                                    boxShadow: "0 0 0 8px rgba(47, 113, 100, 0)"
+                                },
+                                "100%": {
+                                    boxShadow: "0 0 0 0 rgba(47, 113, 100, 0)"
+                                }
+                            },
+                            "animation": "pulse 2s infinite",
+                            "&:hover": {
+                                bgcolor: "rgba(47, 113, 100, 1)",
+                                transform: "scale(1.05)"
+                            }
                         }}
                     >
-                        <CloseIcon />
-                    </IconButton>
+                        Return to US Map
+                    </Button>
                 </Box>
             )}
             <Box
@@ -467,8 +487,8 @@ const CountyMap = ({
                             zoom={position.zoom}
                             center={position.coordinates}
                             onMoveEnd={handleMoveEnd}
-                            doubleClickZoom={false}
-                            disablePanning
+                            doubleclickzoom="false"
+                            disablepanning="true"
                             translateExtent={[
                                 [position.coordinates[0] - 0.000001, position.coordinates[1] - 0.000001],
                                 [position.coordinates[0] + 0.000001, position.coordinates[1] + 0.000001]

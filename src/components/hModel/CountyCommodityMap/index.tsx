@@ -204,7 +204,7 @@ const CountyCommodityMap = ({
                 <Box
                     sx={{
                         p: 2,
-                        backgroundColor: "#f5f5f5",
+                        backgroundColor: "white",
                         borderRadius: "4px",
                         border: "1px solid rgba(47, 113, 100, 0.2)",
                         mb: 3
@@ -304,7 +304,8 @@ const CountyCommodityMap = ({
                 const hasCommoditySelection =
                     selectedCommodities.length > 0 &&
                     !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
-                const hasYearSelection = yearRange.length > 1 || (aggregationEnabled && yearAggregation > 0);
+
+                const hasYearSelection = aggregationEnabled && (yearRange.length > 1 || yearAggregation > 0);
 
                 const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop;
 

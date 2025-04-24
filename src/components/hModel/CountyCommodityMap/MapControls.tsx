@@ -10,6 +10,7 @@ import {
     Radio,
     Typography
 } from "@mui/material";
+import InfoTooltip from "./InfoTooltip";
 
 const MapControls = ({
     availableYears,
@@ -45,9 +46,21 @@ const MapControls = ({
         }
     };
 
+    const handleYearRangeChange = (event, newValue) => {
+        if (newValue !== null) {
+            setYearRange([newValue]);
+
+            if (newValue === 0) {
+                setAggregationEnabled(false);
+                setYearAggregation(0);
+            }
+        }
+    };
+
     const selectedYear = availableYears[yearRange[0]];
-    const earliestYearShown = aggregationEnabled ? availableYears[0] : selectedYear;
     const isAggregationDisabled = yearRange[0] === 0;
+
+    const toggleButtonHeight = "44px";
 
     return (
         <Grid container spacing={3} alignItems="flex-start">
@@ -58,10 +71,13 @@ const MapControls = ({
                         fontWeight: "bold",
                         fontSize: "1rem",
                         color: "rgba(47, 113, 100, 1)",
-                        mb: 1
+                        mb: 1,
+                        display: "flex",
+                        alignItems: "center"
                     }}
                 >
                     Data View Mode
+                    <InfoTooltip title="Select how to view the data. 'Current Policy' shows payments under existing farm bill policies. 'Proposed' shows projected payments under proposed changes. 'Policy Differences' shows the numerical and percentage differences between current and proposed policies to highlight the impact of changes." />
                 </FormLabel>
                 <ToggleButtonGroup
                     value={viewMode}
@@ -82,6 +98,7 @@ const MapControls = ({
                             "backgroundColor": viewMode === "current" ? "rgba(47, 113, 100, 0.1)" : "transparent",
                             "fontWeight": viewMode === "current" ? "bold" : "normal",
                             "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.05)"
                             }
@@ -97,6 +114,7 @@ const MapControls = ({
                             "backgroundColor": viewMode === "proposed" ? "rgba(47, 113, 100, 0.1)" : "transparent",
                             "fontWeight": viewMode === "proposed" ? "bold" : "normal",
                             "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.05)"
                             }
@@ -112,6 +130,7 @@ const MapControls = ({
                             "backgroundColor": viewMode === "difference" ? "rgba(47, 113, 100, 0.1)" : "transparent",
                             "fontWeight": viewMode === "difference" ? "bold" : "normal",
                             "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.05)"
                             }
@@ -132,10 +151,13 @@ const MapControls = ({
                         fontWeight: "bold",
                         fontSize: "1rem",
                         color: "rgba(47, 113, 100, 1)",
-                        mb: 1
+                        mb: 1,
+                        display: "flex",
+                        alignItems: "center"
                     }}
                 >
                     Displayed Metrics
+                    <InfoTooltip title="Choose which metrics to display on the map. 'Total Payments ($)' shows the total dollar amount distributed to each county, useful for seeing overall funding allocation. 'Payment Rate ($/acre)' shows the average payment per acre." />
                 </FormLabel>
                 <ToggleButtonGroup
                     value={showMeanValues ? "mean" : "total"}
@@ -158,6 +180,7 @@ const MapControls = ({
                             "backgroundColor": !showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
                             "fontWeight": !showMeanValues ? "bold" : "normal",
                             "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.05)"
                             }
@@ -173,6 +196,7 @@ const MapControls = ({
                             "backgroundColor": showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
                             "fontWeight": showMeanValues ? "bold" : "normal",
                             "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.05)"
                             }
@@ -189,10 +213,13 @@ const MapControls = ({
                         sx={{
                             fontWeight: "bold",
                             fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)"
+                            color: "rgba(47, 113, 100, 1)",
+                            display: "flex",
+                            alignItems: "center"
                         }}
                     >
                         Year Selection
+                        <InfoTooltip title="Control the time period for displayed data. Use the button to select a specific fiscal year for payments. The toggle option lets you view aggregated/weighted average data instead of single-year data, providing insights into multi-year program impacts." />
                     </FormLabel>
                     <RadioGroup
                         row
@@ -252,9 +279,7 @@ const MapControls = ({
                 <ToggleButtonGroup
                     value={yearRange[0]}
                     exclusive
-                    onChange={(e, newValue) => {
-                        if (newValue !== null) setYearRange([newValue]);
-                    }}
+                    onChange={handleYearRangeChange}
                     aria-label="year selection"
                     sx={{
                         display: "flex",
@@ -282,6 +307,8 @@ const MapControls = ({
                                         ? "bold"
                                         : "normal",
                                 "border": "1px solid rgba(47, 113, 100, 0.5)",
+                                "height": toggleButtonHeight,
+                                "minWidth": "48px",
                                 "&:hover": {
                                     backgroundColor: "rgba(47, 113, 100, 0.05)"
                                 }

@@ -1,6 +1,7 @@
 import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } from "@mui/material";
 import React from "react";
 import noShowStates from "../../../files/maps/noShow-state.json";
+import InfoTooltip from "./InfoTooltip";
 
 interface FilterSelectorsProps {
     availableCommodities: string[];
@@ -40,56 +41,147 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
     };
 
     const handleProgramChange = (event: { target: { value: unknown } }) => {
-        const value = event.target.value as string[];
-        if (value.includes("All Programs") && !selectedPrograms.includes("All Programs")) {
-            setSelectedPrograms(["All Programs"]);
-            return;
-        }
-        if (value.length === 0) {
-            setSelectedPrograms(["All Programs"]);
-            return;
-        }
-        const filtered = value.filter((item) => item !== "All Programs");
-        setSelectedPrograms(filtered);
+        const value = event.target.value as string;
+        setSelectedPrograms([value]);
     };
 
     const handleStateChange = (event: { target: { value: unknown } }) => {
         setSelectedState(event.target.value as string);
     };
 
+    const selectHeight = "44px";
+
+    const chipContainerHeight = "36px";
+
+    const menuItemStyle = {
+        fontSize: "0.875rem",
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif"
+    };
+
+    const selectStyle = {
+        "height": selectHeight,
+        "fontSize": "0.875rem",
+        "fontFamily": "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        "color": "rgba(47, 113, 100, 1)",
+        "border": "1px solid rgba(47, 113, 100, 0.5)",
+        "backgroundColor": "white",
+
+        ".MuiOutlinedInput-notchedOutline": {
+            border: "none"
+        },
+
+        "&:hover": {
+            backgroundColor: "rgba(47, 113, 100, 0.05)"
+        },
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            border: "none"
+        },
+        "& .MuiSelect-select": {
+            display: "flex",
+            alignItems: "flex-start",
+            padding: "0 32px 0 14px",
+            height: "100% !important",
+            overflow: "hidden"
+        },
+
+        "&.Mui-focused": {
+            color: "rgba(47, 113, 100, 1)"
+        },
+        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "none",
+            boxShadow: "none"
+        },
+
+        "transition": "all 0.2s ease-in-out",
+
+        "transform": "translateZ(0)",
+
+        "willChange": "transform"
+    };
+
+    const chipContainerStyle = {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 0.5,
+        minHeight: chipContainerHeight,
+        height: chipContainerHeight,
+        maxHeight: "36px",
+        overflow: "hidden",
+        alignItems: "center",
+        width: "100%",
+        transition: "all 0.2s ease-in-out",
+
+        transform: "translateZ(0)",
+
+        position: "relative"
+    };
+
+    const chipStyle = {
+        borderRadius: 1,
+        borderColor: "lightgray",
+        color: "rgba(47, 113, 100, 1)",
+        transition: "all 0.2s ease-in-out",
+        height: "24px",
+
+        transform: "translateZ(0)"
+    };
+
+    const formLabelStyle = {
+        "fontWeight": "bold",
+        "fontSize": "1rem",
+        "color": "rgba(47, 113, 100, 1)",
+        "mb": 1,
+        "display": "flex",
+        "alignItems": "center",
+
+        "&.Mui-focused": {
+            color: "rgba(47, 113, 100, 1)"
+        },
+
+        "&&": {
+            color: "rgba(47, 113, 100, 1)"
+        }
+    };
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
-                <FormControl fullWidth>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)",
-                            mb: 1
-                        }}
-                    >
+                <FormControl
+                    fullWidth
+                    sx={{
+                        "& .MuiFormLabel-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiInputBase-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                            overflow: "hidden",
+                            transition: "all 0.2s ease-in-out",
+                            transform: "translateZ(0)"
+                        }
+                    }}
+                >
+                    <FormLabel component="legend" sx={formLabelStyle}>
                         Select State to View/Zoom
+                        <InfoTooltip title="Select a specific state to zoom in on the map, or keep 'All States' selected to view the entire U.S. map." />
                     </FormLabel>
                     <Select
                         value={selectedState}
                         onChange={handleStateChange}
+                        renderValue={(selected) => (
+                            <Box sx={chipContainerStyle}>
+                                <Chip key={selected} label={selected} sx={chipStyle} />
+                            </Box>
+                        )}
                         sx={{
-                            "width": "100%",
-                            "color": "rgba(47, 113, 100, 1)",
-                            ".MuiOutlinedInput-notchedOutline": {
-                                borderColor: "rgba(0, 0, 0, 0.23)"
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "rgba(47, 113, 100, 0.8)"
-                            },
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                minHeight: "50px", // Adjusted height to match the other two menu item height
-                                padding: "8px 32px 8px 14px"
-                            }
+                            ...selectStyle,
+                            width: "100%",
+
+                            ...(selectedState !== "All States" && {
+                                fontWeight: "bold",
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            })
                         }}
                         MenuProps={{
                             PaperProps: {
@@ -103,6 +195,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         <MenuItem
                             value="All States"
                             sx={{
+                                ...menuItemStyle,
                                 fontWeight: "bold",
                                 bgcolor: selectedState !== "All States" ? "rgba(47, 113, 100, 0.1)" : "inherit"
                             }}
@@ -115,7 +208,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             .filter(([, name]) => !noShowStates[name])
                             .sort((a, b) => String(a[1]).localeCompare(String(b[1])))
                             .map(([code, name]) => (
-                                <MenuItem key={code} value={String(name)}>
+                                <MenuItem key={code} value={String(name)} sx={menuItemStyle}>
                                     {String(name)}
                                 </MenuItem>
                             ))}
@@ -123,24 +216,32 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                 </FormControl>
             </Grid>
             <Grid item xs={12} md={4}>
-                <FormControl fullWidth>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)",
-                            mb: 1
-                        }}
-                    >
+                <FormControl
+                    fullWidth
+                    sx={{
+                        "& .MuiFormLabel-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiInputBase-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                            overflow: "hidden",
+                            transition: "all 0.2s ease-in-out",
+                            transform: "translateZ(0)"
+                        }
+                    }}
+                >
+                    <FormLabel component="legend" sx={formLabelStyle}>
                         Select Commodities
+                        <InfoTooltip title="Select specific commodities to view data for (e.g., Corn, Cotton, Soybeans), or choose 'All Commodities' to see data for all available commodities combined." />
                     </FormLabel>
                     <Select
                         multiple
                         value={selectedCommodities}
                         onChange={handleCommodityChange}
                         renderValue={(selected) => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                            <Box sx={chipContainerStyle}>
                                 {(selected as string[]).map((value) => (
                                     <Chip
                                         key={value}
@@ -157,11 +258,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                         onMouseDown={(event) => {
                                             event.stopPropagation();
                                         }}
-                                        sx={{
-                                            borderRadius: 1,
-                                            borderColor: "lightgray",
-                                            color: "rgba(47, 113, 100, 1)"
-                                        }}
+                                        sx={chipStyle}
                                     />
                                 ))}
                             </Box>
@@ -174,12 +271,22 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                 }
                             }
                         }}
-                        sx={{ width: "100%" }}
+                        sx={{
+                            ...selectStyle,
+                            width: "100%",
+
+                            ...(selectedCommodities.length > 0 &&
+                                !selectedCommodities.includes("All Commodities") && {
+                                    fontWeight: "bold",
+                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                })
+                        }}
                         key={`commodity-select-${selectedCommodities.join("|")}`}
                     >
                         <MenuItem
                             value="All Commodities"
                             sx={{
+                                ...menuItemStyle,
                                 fontWeight: "bold",
                                 bgcolor:
                                     selectedCommodities[0] !== "All Commodities" ? "rgba(47, 113, 100, 0.1)" : "inherit"
@@ -193,6 +300,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                 key={commodity}
                                 value={commodity}
                                 sx={{
+                                    ...menuItemStyle,
                                     ...(selectedCommodities.includes(commodity) && {
                                         backgroundColor: "rgba(47, 113, 100, 0.1)"
                                     })
@@ -205,46 +313,32 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                 </FormControl>
             </Grid>
             <Grid item xs={12} md={4}>
-                <FormControl fullWidth>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)",
-                            mb: 1
-                        }}
-                    >
+                <FormControl
+                    fullWidth
+                    sx={{
+                        "& .MuiFormLabel-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiInputBase-root.Mui-focused": {
+                            color: "rgba(47, 113, 100, 1)"
+                        },
+                        "& .MuiOutlinedInput-root": {
+                            overflow: "hidden",
+                            transition: "all 0.2s ease-in-out",
+                            transform: "translateZ(0)"
+                        }
+                    }}
+                >
+                    <FormLabel component="legend" sx={formLabelStyle}>
                         Select Programs
+                        <InfoTooltip title="Select specific farm programs to view data for (e.g., ARC-CO, PLC), or choose 'All Programs' to see data for all available programs combined." />
                     </FormLabel>
                     <Select
-                        multiple
-                        value={selectedPrograms}
+                        value={selectedPrograms[0]}
                         onChange={handleProgramChange}
-                        displayEmpty={false}
                         renderValue={(selected) => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {(selected as string[]).map((value) => (
-                                    <Chip
-                                        key={value}
-                                        label={value}
-                                        onDelete={() => {
-                                            if (selectedPrograms.length > 1) {
-                                                setSelectedPrograms(selectedPrograms.filter((item) => item !== value));
-                                            } else {
-                                                setSelectedPrograms(["All Programs"]);
-                                            }
-                                        }}
-                                        onMouseDown={(event) => {
-                                            event.stopPropagation();
-                                        }}
-                                        sx={{
-                                            borderRadius: 1,
-                                            borderColor: "lightgray",
-                                            color: "rgba(47, 113, 100, 1)"
-                                        }}
-                                    />
-                                ))}
+                            <Box sx={chipContainerStyle}>
+                                <Chip key={selected} label={selected} sx={chipStyle} />
                             </Box>
                         )}
                         MenuProps={{
@@ -255,12 +349,20 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                 }
                             }
                         }}
-                        sx={{ width: "100%" }}
-                        key={`program-select-${selectedPrograms.join("|")}`}
+                        sx={{
+                            ...selectStyle,
+                            width: "100%",
+
+                            ...(selectedPrograms[0] !== "All Programs" && {
+                                fontWeight: "bold",
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            })
+                        }}
                     >
                         <MenuItem
                             value="All Programs"
                             sx={{
+                                ...menuItemStyle,
                                 fontWeight: "bold",
                                 bgcolor: selectedPrograms[0] !== "All Programs" ? "rgba(47, 113, 100, 0.1)" : "inherit"
                             }}
@@ -273,6 +375,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                 key={program}
                                 value={program}
                                 sx={{
+                                    ...menuItemStyle,
                                     ...(selectedPrograms.includes(program) && {
                                         backgroundColor: "rgba(47, 113, 100, 0.1)"
                                     })

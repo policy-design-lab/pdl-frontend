@@ -1,10 +1,18 @@
+import React from "react";
 import { calculateThresholds } from "../../shared/ColorFunctions";
-import {
-    getCountyNameFromFips,
-    isDataValid,
-    calculateWeightedMeanRate,
-    getTotalBaseAcres
-} from "../utils";
+import { getCountyNameFromFips, isDataValid, calculateWeightedMeanRate, getTotalBaseAcres } from "../utils";
+
+const calculatePercentChange = (currentValue: number, proposedValue: number): number => {
+    if (currentValue !== 0) {
+        return ((proposedValue - currentValue) / currentValue) * 100;
+    }
+
+    if (proposedValue > 0) {
+        return 100;
+    }
+
+    return 0;
+};
 
 export const processMapData = ({
     countyData,
@@ -318,7 +326,7 @@ export const processMapData = ({
             county.value = county.currentValue;
         }
 
-        county.percentChange = county.currentValue !== 0 ? (county.value / county.currentValue) * 100 : 0;
+        county.percentChange = calculatePercentChange(county.currentValue, county.proposedValue);
 
         Object.values(county.commodities).forEach((commodity: any) => {
             commodity.value =
