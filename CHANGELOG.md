@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Support title II year range change [#371](https://github.com/policy-design-lab/pdl-frontend/issues/371)
+- Update Title II CRP subpage to 2014-2023 [#380](https://github.com/policy-design-lab/pdl-frontend/issues/380)
 
 ## [1.8.0] - 2025-03-10
 
