@@ -597,7 +597,7 @@ export const processMapData = ({
         (value) => value !== undefined && value !== null && !isNaN(value) && value !== 0 && isFinite(value)
     );
 
-    const thresholds = validDataValues.length > 0 ? calculateThresholds(validDataValues) : [0, 0.25, 0.5, 0.75, 1];
+    const thresholds = validDataValues.length > 0 ? calculateThresholds(validDataValues) : [0, 0.17, 0.34, 0.5, 0.67, 0.84, 1];
 
     return {
         counties,

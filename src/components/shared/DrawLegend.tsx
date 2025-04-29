@@ -50,6 +50,13 @@ export default function DrawLegend({
         drawLegend();
     }, [width]);
 
+    // Adjust label positions to prevent overlaps
+    const getOptimalLabelPositions = (points: number[], svgWidth: number) => {
+        // For smaller screens, use simple alternating pattern (one up, one down)
+        // This restores the original design where labels alternate between top and bottom
+        return points.map((_, i) => i % 2 === 0 ? 50 : 10);
+    };
+
     const drawLegend = () => {
         if (legendRn.current && width > 0) {
             d3.select(legendRn.current).selectAll("svg").remove();
@@ -74,11 +81,6 @@ export default function DrawLegend({
                         programData.filter((d) => d >= cut_points[i - 1] && d < cut_points[i]).length /
                             programData.length
                     );
-                    // Leave following part as the backup of solution 2.
-                    // programData
-                    //     .filter((d) => d >= cut_points[i - 1] && d < cut_points[i])
-                    //     .reduce((accumulator, currentValue) => accumulator + currentValue, 0) /
-                    //     programData.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
                 });
                 data_distribution.push(
                     programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
@@ -87,6 +89,7 @@ export default function DrawLegend({
                 const hasValidDistribution = data_distribution.some((d) => d > 0.01) && programData.length > 0;
 
                 if (hasValidDistribution) {
+                    // Add legend rectangles
                     baseSVG
                         .selectAll(null)
                         .data(data_distribution)
@@ -109,21 +112,41 @@ export default function DrawLegend({
                         })
                         .attr("height", 10)
                         .style("fill", (d, i) => prepColor[i]);
+                    
                     cut_points = cut_points.concat(Math.max(...programData));
+                    
+                    // Get rectangle positions for label placement
                     baseSVG
                         .selectAll(".legendRect")
                         .nodes()
                         .forEach((d) => {
                             legendRectX.push(Number(d3.select(d).attr("x")));
                         });
+                    
+                    // Add final position
                     const last =
                         legendRectX[legendRectX.length - 1] +
                         data_distribution[data_distribution.length - 1] * svgWidth;
                     legendRectX.push(last);
+                    
+                    // Remove any duplicate positions that might be too close to each other
+                    // This prevents duplicate labels at the first and last positions
+                    const uniquePositions: number[] = [];
+                    const uniqueCutPoints: number[] = [];
+                    
+                    // Only keep positions that are at least 5px apart
+                    legendRectX.forEach((pos, index) => {
+                        if (index === 0 || Math.abs(pos - uniquePositions[uniquePositions.length - 1]) > 5) {
+                            uniquePositions.push(pos);
+                            uniqueCutPoints.push(cut_points[index]);
+                        }
+                    });
+                    
+                    // For wide screens, use uniform label position
                     if (svgWidth > 1690) {
                         baseSVG
                             .selectAll(null)
-                            .data(legendRectX)
+                            .data(uniquePositions)
                             .enter()
                             .append("text")
                             .attr("class", "legendText")
@@ -132,41 +155,47 @@ export default function DrawLegend({
                             .attr("x", (d, i) => {
                                 return i === 0 ? d : d - margin / 4;
                             })
+                            .attr("text-anchor", (d, i) => i === 0 ? "start" : "middle")
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    return `${Math.round(uniqueCutPoints[i] * 100)}%`;
                                 }
                                 if (i === 0 && !notDollar) {
-                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                    const res = ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                return ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
                             });
                     } else {
+                        // Determine optimal label positions based on space constraints
+                        const labelPositions = getOptimalLabelPositions(uniquePositions, svgWidth);
+                        
                         baseSVG
                             .selectAll(null)
-                            .data(legendRectX)
+                            .data(uniquePositions)
                             .enter()
                             .append("text")
                             .attr("class", "legendText")
                             .attr("id", (d) => `legendText${d}`)
                             .attr("y", (d, i) => {
-                                return i % 2 === 0 ? 50 : 10;
+                                return labelPositions[i];
                             })
                             .attr("x", (d, i) => {
                                 return i === 0 ? d : d - margin / 4;
                             })
+                            .attr("text-anchor", (d, i) => i === 0 ? "start" : "middle")
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    return `${Math.round(uniqueCutPoints[i] * 100)}%`;
                                 }
                                 if (i === 0 && !notDollar) {
-                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                    const res = ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                return ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
                             });
                     }
+                    
                     if (emptyState.length !== 0) {
                         const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
                         const middleText = baseSVG

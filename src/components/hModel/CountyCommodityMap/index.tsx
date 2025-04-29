@@ -173,20 +173,24 @@ const CountyCommodityMap = ({
 
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
-            return ["#f3e5f5", "#ce93d8", "#9c27b0", "#7b1fa2", "#4a148c"];
+            // ten purple base color with strong difference between each other
+            return ["#f3e5f5", "#e1bee7", "#ce93d8", "#ba68c8", "#9c27b0", "#8e24aa", "#7b1fa2", "#6a1b9a", "#4a148c", "#380e82"];
         }
         if (viewMode === "current") {
-            return ["#c8e6c9", "#81c784", "#4caf50", "#2e7d32", "#1b5e20"];
+            // ten orange base color with strong difference between each other
+            return ["#fff3e0", "#ffe0b2", "#ffcc80", "#ffb74d", "#ffa726", "#ff9800", "#fb8c00", "#f57c00", "#e65100", "#d84315"];
         }
         if (viewMode === "proposed") {
-            return ["#e3f2fd", "#90caf9", "#42a5f5", "#1976d2", "#0d47a1"];
+            // ten blue base color with strong difference between each other
+            return ["#e1f5fe", "#b3e5fc", "#81d4fa", "#4fc3f7", "#29b6f6", "#03a9f4", "#039be5", "#0288d1", "#0277bd", "#01579b"];
         }
 
         if (showMeanValues) {
-            return ["#c6dbef", "#6baed6", "#4292c6", "#2171b5", "#08306b"];
+            // ten yellow base color with strong difference between each other
+            return ["#fffde7", "#fff9c4", "#fff59d", "#fff176", "#ffee58", "#ffeb3b", "#fdd835", "#fbc02d", "#f9a825", "#f57f17"];
         }
-
-        return ["#fdd0a2", "#f16913", "#d94801", "#a63603", "#7f2704"];
+        // ten red base color with strong difference between each other
+        return ["#ffebee", "#ffcdd2", "#ef9a9a", "#e57373", "#ef5350", "#e53935", "#d32f2f", "#c62828", "#b71c1c", "#a51b1b"];
     }, [viewMode, showMeanValues]);
 
     const effectiveYear = useMemo(() => {
