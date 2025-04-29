@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Support title II year range change [#371](https://github.com/policy-design-lab/pdl-frontend/issues/371)
+- Bump the Ubuntu version of the Lint Github action to latest [#382](https://github.com/policy-design-lab/pdl-frontend/issues/382)
+- Update rules for Danger Github action to eliminate unnecessary checks when PR is in draft status
 
 ## [1.8.0] - 2025-03-10
 
