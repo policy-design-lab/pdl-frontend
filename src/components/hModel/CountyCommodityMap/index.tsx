@@ -6,7 +6,7 @@ import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
-
+import { DistributionType, detectDistributionType } from "../../shared/DistributionFunctions";
 const CountyCommodityMap = ({
     countyData,
     stateCodesData,
@@ -36,21 +36,19 @@ const CountyCommodityMap = ({
     const [showTableIndicator, setShowTableIndicator] = useState(false);
     const [indicatorMessage, setIndicatorMessage] = useState("");
     const [isAtTop, setIsAtTop] = useState(false);
-
+    const [distributionType, setDistributionType] = useState<DistributionType>("normal");
     useEffect(() => {
         let mounted = true;
         return () => {
             mounted = false;
         };
     }, [selectedCommodities]);
-
     useEffect(() => {
         let mounted = true;
         return () => {
             mounted = false;
         };
     }, [selectedPrograms]);
-
     useEffect(() => {
         let mounted = true;
         if (mounted) {
@@ -64,25 +62,27 @@ const CountyCommodityMap = ({
             mounted = false;
         };
     }, [yearRange, availableYears, onMapUpdate, selectedCommodities, selectedPrograms, selectedState, viewMode]);
-
     useEffect(() => {
         if (onMapUpdate) {
             onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode);
         }
     }, [selectedYear, selectedCommodities, selectedPrograms, selectedState, viewMode, onMapUpdate]);
-
     useEffect(() => {
         const resetNavigationState = () => {
             if (isAtTop) {
                 setIsAtTop(false);
             }
         };
-
         return () => {
             resetNavigationState();
         };
     }, [isAtTop]);
-
+    useEffect(() => {
+        if (mapData && mapData.data && mapData.data.length > 0 && forceUpdate === 0) {
+            const detectedType = detectDistributionType(mapData.data);
+            setDistributionType(detectedType);
+        }
+    }, [mapData?.data]);
     const handleSetSelectedCommodities = (newValue) => {
         if (JSON.stringify(selectedCommodities) !== JSON.stringify(newValue)) {
             setSelectedCommodities(newValue);
@@ -93,7 +93,6 @@ const CountyCommodityMap = ({
             }
         }
     };
-
     const handleSetSelectedPrograms = (newValue) => {
         if (JSON.stringify(selectedPrograms) !== JSON.stringify(newValue)) {
             setSelectedPrograms(newValue);
@@ -104,7 +103,6 @@ const CountyCommodityMap = ({
             }
         }
     };
-
     const handleSetSelectedState = (newValue) => {
         if (selectedState !== newValue) {
             setSelectedState(newValue);
@@ -115,11 +113,9 @@ const CountyCommodityMap = ({
             }
         }
     };
-
     const handleTooltipChange = (newContent) => {
         setContent(newContent);
     };
-
     const handleSetViewMode = (newValue) => {
         setViewMode(newValue);
         setIsAtTop(false);
@@ -127,7 +123,6 @@ const CountyCommodityMap = ({
             onMapUpdate(selectedYear, selectedCommodities, selectedPrograms, selectedState, newValue);
         }
     };
-
     const handleScrollToTable = () => {
         const tableElement = document.getElementById("county-commodity-table");
         if (tableElement) {
@@ -135,7 +130,11 @@ const CountyCommodityMap = ({
             setIsAtTop(true);
         }
     };
-
+    const handleDistributionChange = (newType: DistributionType) => {
+        console.log(`Distribution type changed to: ${newType}`);
+        setDistributionType(newType);
+        setForceUpdate((prev) => prev + 1);
+    };
     const mapData = useMemo(() => {
         if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
         const result = processMapData({
@@ -148,7 +147,8 @@ const CountyCommodityMap = ({
             selectedState,
             stateCodesData,
             yearAggregation,
-            showMeanValues
+            showMeanValues,
+            distributionType
         });
         return result;
     }, [
@@ -162,37 +162,102 @@ const CountyCommodityMap = ({
         stateCodesData,
         yearAggregation,
         showMeanValues,
+        distributionType,
         forceUpdate
     ]);
-
     const mapKey = useMemo(() => {
         return `${selectedCommodities.join("|")}-${selectedPrograms.join(
             "|"
-        )}-${selectedState}-${viewMode}-${selectedYear}-${forceUpdate}`;
-    }, [selectedCommodities, selectedPrograms, selectedState, viewMode, selectedYear, forceUpdate]);
-
+        )}-${selectedState}-${viewMode}-${selectedYear}-${distributionType}-${forceUpdate}`;
+    }, [selectedCommodities, selectedPrograms, selectedState, viewMode, selectedYear, distributionType, forceUpdate]);
     const mapColor = useMemo(() => {
+        const differenceColors = [
+            "#f3e5f5",
+            "#e1bee7",
+            "#ce93d8",
+            "#ba68c8",
+            "#9c27b0",
+            "#8e24aa",
+            "#7b1fa2",
+            "#6a1b9a",
+            "#4a148c",
+            "#380e82",
+            "#2a0066"
+        ];
+        const currentColors = [
+            "#fff3e0",
+            "#ffe0b2",
+            "#ffcc80",
+            "#ffb74d",
+            "#ffa726",
+            "#ff9800",
+            "#fb8c00",
+            "#f57c00",
+            "#e65100",
+            "#d84315",
+            "#bf360c"
+        ];
+        const proposedColors = [
+            "#e1f5fe",
+            "#b3e5fc",
+            "#81d4fa",
+            "#4fc3f7",
+            "#29b6f6",
+            "#03a9f4",
+            "#039be5",
+            "#0288d1",
+            "#0277bd",
+            "#01579b",
+            "#003966"
+        ];
+        const meanValueColors = [
+            "#fffde7",
+            "#fff9c4",
+            "#fff59d",
+            "#fff176",
+            "#ffee58",
+            "#ffeb3b",
+            "#fdd835",
+            "#fbc02d",
+            "#f9a825",
+            "#f57f17",
+            "#e65100"
+        ];
+        const paymentColors = [
+            "#ffebee",
+            "#ffcdd2",
+            "#ef9a9a",
+            "#e57373",
+            "#ef5350",
+            "#e53935",
+            "#d32f2f",
+            "#c62828",
+            "#b71c1c",
+            "#a51b1b",
+            "#840000"
+        ];
+        let baseColors;
         if (viewMode === "difference") {
-            // ten purple base color with strong difference between each other
-            return ["#f3e5f5", "#e1bee7", "#ce93d8", "#ba68c8", "#9c27b0", "#8e24aa", "#7b1fa2", "#6a1b9a", "#4a148c", "#380e82"];
+            baseColors = differenceColors;
+        } else if (viewMode === "current") {
+            baseColors = currentColors;
+        } else if (viewMode === "proposed") {
+            baseColors = proposedColors;
+        } else if (showMeanValues) {
+            baseColors = meanValueColors;
+        } else {
+            baseColors = paymentColors;
         }
-        if (viewMode === "current") {
-            // ten orange base color with strong difference between each other
-            return ["#fff3e0", "#ffe0b2", "#ffcc80", "#ffb74d", "#ffa726", "#ff9800", "#fb8c00", "#f57c00", "#e65100", "#d84315"];
+        switch (distributionType) {
+            case "leftSkewed":
+                return baseColors.slice(0, 10);
+            case "rightSkewed":
+                return baseColors.slice(0, 10);
+            case "normal":
+            default:
+                return baseColors.slice(0, 10);
         }
-        if (viewMode === "proposed") {
-            // ten blue base color with strong difference between each other
-            return ["#e1f5fe", "#b3e5fc", "#81d4fa", "#4fc3f7", "#29b6f6", "#03a9f4", "#039be5", "#0288d1", "#0277bd", "#01579b"];
-        }
-
-        if (showMeanValues) {
-            // ten yellow base color with strong difference between each other
-            return ["#fffde7", "#fff9c4", "#fff59d", "#fff176", "#ffee58", "#ffeb3b", "#fdd835", "#fbc02d", "#f9a825", "#f57f17"];
-        }
-        // ten red base color with strong difference between each other
-        return ["#ffebee", "#ffcdd2", "#ef9a9a", "#e57373", "#ef5350", "#e53935", "#d32f2f", "#c62828", "#b71c1c", "#a51b1b"];
-    }, [viewMode, showMeanValues]);
-
+    }, [viewMode, showMeanValues, distributionType]);
     const effectiveYear = useMemo(() => {
         if (aggregationEnabled && yearAggregation > 0) {
             const startYear = availableYears[yearRange[0]];
@@ -201,7 +266,6 @@ const CountyCommodityMap = ({
         }
         return selectedYear;
     }, [selectedYear, yearRange, yearAggregation, aggregationEnabled, availableYears]);
-
     return (
         <Box sx={{ width: "100%" }}>
             <Box sx={{ my: 5 }}>
@@ -224,28 +288,23 @@ const CountyCommodityMap = ({
                         setViewMode={handleSetViewMode}
                         setYearRange={(newValue) => {
                             setYearRange(newValue);
-
                             setIsAtTop(false);
                         }}
                         setShowMeanValues={(newValue) => {
                             setShowMeanValues(newValue);
-
                             setIsAtTop(false);
                         }}
                         setProposedPolicyName={setProposedPolicyName}
                         aggregationEnabled={aggregationEnabled}
                         setAggregationEnabled={(newValue) => {
                             setAggregationEnabled(newValue);
-
                             setIsAtTop(false);
                         }}
                         setYearAggregation={(newValue) => {
                             setYearAggregation(newValue);
-
                             setIsAtTop(false);
                         }}
                     />
-
                     <Box
                         sx={{
                             mt: 3,
@@ -266,17 +325,18 @@ const CountyCommodityMap = ({
                         />
                     </Box>
                 </Box>
-
                 <Box sx={{ mt: 5 }}>
                     <MapLegend
                         mapData={mapData}
                         mapColor={mapColor}
                         viewMode={viewMode}
-                        selectedYear={selectedYear}
+                        selectedYear={effectiveYear}
                         selectedState={selectedState}
                         yearAggregation={yearAggregation}
                         showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
+                        onDistributionChange={handleDistributionChange}
+                        distributionType={distributionType}
                     />
                 </Box>
             </Box>
@@ -308,23 +368,16 @@ const CountyCommodityMap = ({
                 const hasCommoditySelection =
                     selectedCommodities.length > 0 &&
                     !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
-
                 const hasYearSelection = aggregationEnabled && (yearRange.length > 1 || yearAggregation > 0);
-
                 const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop;
-
                 if (!shouldShowButton) return null;
-
                 let message = "View detailed breakdown in table";
                 const breakdowns: string[] = [];
-
                 if (hasCommoditySelection) breakdowns.push("Commodity breakdown");
                 if (hasYearSelection) breakdowns.push("Yearly breakdown");
-
                 if (breakdowns.length > 0) {
                     message += ` (${breakdowns.join(", ")})`;
                 }
-
                 return (
                     <div
                         style={{
@@ -360,5 +413,4 @@ const CountyCommodityMap = ({
         </Box>
     );
 };
-
 export default CountyCommodityMap;

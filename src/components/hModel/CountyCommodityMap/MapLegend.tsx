@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import * as d3 from "d3";
 import DrawLegend from "../../shared/DrawLegend";
-
+import EnhancedColorLegend from "../../EnhancedColorLegend";
+import { DistributionType, detectDistributionType } from "../../shared/DistributionFunctions";
 const MapLegend = ({
     mapData,
     mapColor,
@@ -11,8 +12,24 @@ const MapLegend = ({
     selectedState,
     yearAggregation,
     showMeanValues,
-    proposedPolicyName
+    proposedPolicyName,
+    onDistributionChange,
+    distributionType: externalDistributionType
 }) => {
+    const [distributionType, setDistributionType] = useState<DistributionType>(
+        externalDistributionType || "leftSkewed"
+    );
+    useEffect(() => {
+        if (externalDistributionType && externalDistributionType !== distributionType) {
+            setDistributionType(externalDistributionType);
+        }
+    }, [externalDistributionType]);
+    useEffect(() => {
+        if (!externalDistributionType && mapData && mapData.data && mapData.data.length > 0) {
+            const detectedType = detectDistributionType(mapData.data);
+            setDistributionType(detectedType);
+        }
+    }, [mapData.data, externalDistributionType]);
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const getLegendTitle = () => {
         let title = "";
@@ -36,7 +53,33 @@ const MapLegend = ({
         }
         return title;
     };
-
+    const handleDistributionChange = (newType: DistributionType) => {
+        setDistributionType(newType);
+        if (onDistributionChange) {
+            onDistributionChange(newType);
+        }
+    };
+    const titleElement = (
+        <Box display="flex" justifyContent="center">
+            <Typography noWrap variant="h6">
+                {getLegendTitle()}
+            </Typography>
+        </Box>
+    );
+    if (mapData.thresholds && mapData.thresholds.length > 0) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <EnhancedColorLegend
+                    key={`${selectedYear}-${viewMode}-${showMeanValues}-${distributionType}-${mapData.thresholds.length}`}
+                    colors={mapColor}
+                    thresholds={mapData.thresholds}
+                    title={titleElement}
+                    distributionType={distributionType}
+                    onDistributionChange={handleDistributionChange}
+                />
+            </Box>
+        );
+    }
     return (
         <Box display="flex" flexDirection="column" alignItems="center">
             <DrawLegend

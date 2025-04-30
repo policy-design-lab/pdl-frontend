@@ -1,32 +1,30 @@
 import React from "react";
 import { calculateThresholds } from "../../shared/ColorFunctions";
+import {
+    calculateDistributionThresholds,
+    DistributionType,
+    detectDistributionType
+} from "../../shared/DistributionFunctions";
 import { getCountyNameFromFips, isDataValid, calculateWeightedMeanRate, getTotalBaseAcres } from "../utils";
-
 const calculatePercentChange = (currentValue: number, proposedValue: number): number => {
     if (currentValue !== 0) {
         return ((proposedValue - currentValue) / currentValue) * 100;
     }
-
     if (proposedValue > 0) {
         return 100;
     }
-
     return 0;
 };
-
 const hasValidCountyData = (county: any): boolean => {
     if (!county || !county.commodities) return false;
-
     let hasValue = false;
     Object.values(county.commodities).forEach((commodity: any) => {
         if (parseFloat(commodity.value || 0) > 0) {
             hasValue = true;
         }
     });
-
     return hasValue;
 };
-
 export const processMapData = ({
     countyData,
     countyDataProposed,
@@ -37,7 +35,8 @@ export const processMapData = ({
     selectedState,
     stateCodesData,
     yearAggregation,
-    showMeanValues
+    showMeanValues,
+    distributionType
 }: {
     countyData: Record<string, any>;
     countyDataProposed: Record<string, any>;
@@ -49,15 +48,14 @@ export const processMapData = ({
     stateCodesData: Record<string, string>;
     yearAggregation: number;
     showMeanValues: boolean;
+    distributionType?: DistributionType;
 }) => {
     if (!countyData[selectedYear] && !countyDataProposed[selectedYear]) {
         return { counties: {}, thresholds: [], data: [], selectedCommodities, selectedPrograms };
     }
-
     const counties = {};
     const dataValues: number[] = [];
     const yearsToAggregate: string[] = [];
-
     if (yearAggregation > 0) {
         const availableYears = Object.keys(countyData).sort();
         const currentIndex = availableYears.indexOf(selectedYear);
@@ -71,10 +69,8 @@ export const processMapData = ({
     } else {
         yearsToAggregate.push(selectedYear);
     }
-
     const stateFilterActive = selectedState !== "All States";
     let processedAnyCounties = false;
-
     if (stateFilterActive) {
         const stateCodeMapping = {};
         Object.entries(stateCodesData).forEach(([code, name]) => {
@@ -83,12 +79,10 @@ export const processMapData = ({
             }
         });
     }
-
     const processCountyData = (yearData, isProposed = false, year: string) => {
         yearData.forEach((state) => {
             const stateCode = state.state;
             const stateName = stateCodesData[stateCode];
-
             if (stateFilterActive) {
                 if (stateName !== selectedState) {
                     let foundMatch = false;
@@ -100,7 +94,6 @@ export const processMapData = ({
                             foundMatch = true;
                         }
                     });
-
                     if (!foundMatch) {
                         return;
                     }
@@ -108,12 +101,10 @@ export const processMapData = ({
             }
             state.counties.forEach((county) => {
                 processedAnyCounties = true;
-
                 const countyFIPS =
                     county.countyFIPS && county.countyFIPS.length < 5
                         ? county.countyFIPS.padStart(5, "0")
                         : county.countyFIPS;
-
                 if (!counties[countyFIPS]) {
                     counties[countyFIPS] = {
                         value: 0,
@@ -149,9 +140,7 @@ export const processMapData = ({
                             selectedPrograms.includes("All Programs")
                     };
                 }
-
                 let hasProcessedBaseAcres = false;
-
                 county.scenarios.forEach((scenario) => {
                     scenario.commodities.forEach((commodity) => {
                         if (!counties[countyFIPS].commodities[commodity.commodityName]) {
@@ -167,20 +156,16 @@ export const processMapData = ({
                                 yearlyData: {}
                             };
                         }
-
                         const programIncluded =
                             selectedPrograms.includes("All Programs") ||
                             commodity.programs.some((program) => selectedPrograms.includes(program.programName));
                         const commodityIncluded =
                             selectedCommodities.includes("All Commodities") ||
                             selectedCommodities.includes(commodity.commodityName);
-
                         if (!programIncluded || !commodityIncluded) {
                             return;
                         }
-
                         counties[countyFIPS].hasData = true;
-
                         commodity.programs.forEach((program) => {
                             if (
                                 !selectedPrograms.includes("All Programs") &&
@@ -188,7 +173,6 @@ export const processMapData = ({
                             ) {
                                 return;
                             }
-
                             if (!counties[countyFIPS].programs[program.programName]) {
                                 counties[countyFIPS].programs[program.programName] = {
                                     value: 0,
@@ -203,13 +187,10 @@ export const processMapData = ({
                                     proposedMedianRate: 0
                                 };
                             }
-
                             const value = program.totalPaymentInDollars || 0;
                             const baseAcres = program.baseAcres || 0;
-
                             if (commodity.baseAcres !== undefined && commodity.baseAcres > 0) {
                                 const commodityAcres = commodity.baseAcres;
-
                                 if (isProposed) {
                                     counties[countyFIPS].commodities[commodity.commodityName].proposedBaseAcres =
                                         commodityAcres;
@@ -222,7 +203,6 @@ export const processMapData = ({
                                         commodityAcres;
                                 }
                             }
-
                             if (!hasProcessedBaseAcres) {
                                 const totalBaseAcres = getTotalBaseAcres(
                                     county,
@@ -230,7 +210,6 @@ export const processMapData = ({
                                     selectedPrograms,
                                     isProposed ? "Proposed" : "Current"
                                 );
-
                                 if (isProposed) {
                                     counties[countyFIPS].proposedBaseAcres = totalBaseAcres;
                                     counties[countyFIPS].baseAcres = totalBaseAcres;
@@ -239,18 +218,15 @@ export const processMapData = ({
                                     counties[countyFIPS].baseAcres = totalBaseAcres;
                                 }
                                 hasProcessedBaseAcres = true;
-
                                 if (totalBaseAcres > 0) {
                                     counties[countyFIPS].hasValidBaseAcres = true;
                                 }
                             }
-
                             if (isProposed) {
                                 counties[countyFIPS].programs[program.programName].proposedBaseAcres += baseAcres;
                             } else {
                                 counties[countyFIPS].programs[program.programName].currentBaseAcres += baseAcres;
                             }
-
                             if (isProposed) {
                                 counties[countyFIPS].proposedValue += value;
                                 counties[countyFIPS].value = counties[countyFIPS].proposedValue;
@@ -264,7 +240,6 @@ export const processMapData = ({
                                     counties[countyFIPS].commodities[commodity.commodityName].currentValue;
                                 counties[countyFIPS].programs[program.programName].currentValue += value;
                             }
-
                             if (!counties[countyFIPS].yearlyData[year]) {
                                 counties[countyFIPS].yearlyData[year] = {
                                     value: 0,
@@ -280,7 +255,6 @@ export const processMapData = ({
                             }
                             counties[countyFIPS].yearlyData[year].value += value;
                             counties[countyFIPS].yearlyData[year].baseAcres += baseAcres;
-
                             if (!counties[countyFIPS].commodities[commodity.commodityName].yearlyData) {
                                 counties[countyFIPS].commodities[commodity.commodityName].yearlyData = {};
                             }
@@ -310,7 +284,6 @@ export const processMapData = ({
             });
         });
     };
-
     if (viewMode === "difference") {
         yearsToAggregate.forEach((year) => {
             const currentYearData = countyData[year] || [];
@@ -329,7 +302,6 @@ export const processMapData = ({
             processCountyData(currentYearData, false, year);
         });
     }
-
     Object.values(counties).forEach((county: any) => {
         if (viewMode === "difference") {
             county.value = county.proposedValue - county.currentValue;
@@ -338,9 +310,7 @@ export const processMapData = ({
         } else {
             county.value = county.currentValue;
         }
-
         county.percentChange = calculatePercentChange(county.currentValue, county.proposedValue);
-
         Object.values(county.commodities).forEach((commodity: any) => {
             commodity.value =
                 viewMode === "difference"
@@ -349,29 +319,24 @@ export const processMapData = ({
                     ? commodity.proposedValue
                     : commodity.currentValue;
         });
-
         Object.values(county.programs).forEach((program: any) => {
             program.value = program.proposedValue - program.currentValue;
         });
-
         county.currentBaseAcres = county.baseAcres;
         county.proposedBaseAcres = county.baseAcres;
         county.hasValidBaseAcres = county.baseAcres > 0;
-
         if (county.programs) {
             Object.entries(county.programs).forEach(([programName, programData]: [string, any]) => {
                 if (programData.currentBaseAcres > 0) {
                     programData.currentMeanRate = programData.currentValue / programData.currentBaseAcres;
                     programData.currentMeanRate = Math.round(programData.currentMeanRate * 100) / 100;
                 }
-
                 if (programData.proposedBaseAcres > 0) {
                     programData.proposedMeanRate = programData.proposedValue / programData.proposedBaseAcres;
                     programData.proposedMeanRate = Math.round(programData.proposedMeanRate * 100) / 100;
                 }
             });
         }
-
         if (county.hasData && county.hasValidBaseAcres) {
             if (county.currentBaseAcres > 0) {
                 const currentMeanRateResult = calculateWeightedMeanRate(
@@ -379,9 +344,7 @@ export const processMapData = ({
                     county.currentBaseAcres,
                     county.isMultiSelection
                 );
-
                 county.currentMeanRatePrecise = currentMeanRateResult.rate;
-
                 county.currentMeanRate = Math.round(Math.min(currentMeanRateResult.rate, 1000) * 100) / 100;
                 county.isCurrentMeanWeighted = currentMeanRateResult.isWeightedAverage;
             } else {
@@ -389,16 +352,13 @@ export const processMapData = ({
                 county.currentMeanRate = 0;
                 county.isCurrentMeanWeighted = false;
             }
-
             if (county.proposedBaseAcres > 0) {
                 const proposedMeanRateResult = calculateWeightedMeanRate(
                     county.proposedValue,
                     county.proposedBaseAcres,
                     county.isMultiSelection
                 );
-
                 county.proposedMeanRatePrecise = proposedMeanRateResult.rate;
-
                 county.proposedMeanRate = Math.round(Math.min(proposedMeanRateResult.rate, 1000) * 100) / 100;
                 county.isProposedMeanWeighted = proposedMeanRateResult.isWeightedAverage;
             } else {
@@ -406,7 +366,6 @@ export const processMapData = ({
                 county.proposedMeanRate = 0;
                 county.isProposedMeanWeighted = false;
             }
-
             if (viewMode === "proposed") {
                 county.meanPaymentRateInDollarsPerAcre = county.proposedMeanRate;
                 county.isMeanWeighted = county.isProposedMeanWeighted;
@@ -414,17 +373,14 @@ export const processMapData = ({
                 county.meanPaymentRateInDollarsPerAcre = county.currentMeanRate;
                 county.isMeanWeighted = county.isCurrentMeanWeighted;
             }
-
             const preciseRateDifference = county.proposedMeanRatePrecise - county.currentMeanRatePrecise;
             county.meanRateDifference = Math.round(preciseRateDifference * 100) / 100;
-
             if (county.meanRateDifference > 500) {
                 county.meanRateDifference = 500;
             } else if (county.meanRateDifference < -500) {
                 county.meanRateDifference = -500;
             }
         }
-
         if (showMeanValues) {
             if (county.hasValidBaseAcres) {
                 if (viewMode === "difference") {
@@ -449,13 +405,10 @@ export const processMapData = ({
         } else if (county.value !== 0) {
             dataValues.push(county.value);
         }
-
         county.hasData = isDataValid(county);
-
         if (!county.hasData) {
             county.hasData = hasValidCountyData(county);
         }
-
         if (!county.hasData) {
             county.value = 0;
             county.currentValue = 0;
@@ -487,7 +440,6 @@ export const processMapData = ({
             }
         }
     });
-
     if (Object.keys(counties).length === 0) {
         if (selectedState !== "All States") {
             const availableYears = Object.keys(countyData);
@@ -521,7 +473,6 @@ export const processMapData = ({
                                                     )
                                             )
                                     );
-
                                 if (hasAnyData) {
                                     if (viewMode === "difference") {
                                         counties[county.countyFIPS] = {
@@ -584,7 +535,6 @@ export const processMapData = ({
                     }
                 });
             }
-
             if (!foundCounties) {
                 return { counties: {}, thresholds: [], data: [], selectedCommodities, selectedPrograms };
             }
@@ -592,17 +542,27 @@ export const processMapData = ({
             return { counties: {}, thresholds: [], data: [], selectedCommodities, selectedPrograms };
         }
     }
-
     const validDataValues = dataValues.filter(
         (value) => value !== undefined && value !== null && !isNaN(value) && value !== 0 && isFinite(value)
     );
-
-    const thresholds = validDataValues.length > 0 ? calculateThresholds(validDataValues) : [0, 0.17, 0.34, 0.5, 0.67, 0.84, 1];
-
+    let thresholds: number[] = [];
+    if (validDataValues.length > 0) {
+        if (distributionType) {
+            thresholds = calculateDistributionThresholds(validDataValues, distributionType);
+        } else {
+            const detectedType = detectDistributionType(validDataValues);
+            thresholds = calculateDistributionThresholds(validDataValues, detectedType);
+            if (!thresholds || thresholds.length === 0) {
+                thresholds = calculateThresholds(validDataValues);
+            }
+        }
+    } else {
+        thresholds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    }
     return {
         counties,
         thresholds,
-        data: dataValues,
+        data: validDataValues,
         selectedCommodities,
         selectedPrograms,
         selectedState,
