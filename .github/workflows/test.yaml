@@ -5,7 +5,7 @@ on: [ push,pull_request ]
 jobs:
   build:
     name: Test Suite
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Set up Node
