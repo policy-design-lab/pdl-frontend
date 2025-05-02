@@ -1,7 +1,7 @@
 {
   "18-22 All Programs Total": [5000000000, 10000000000,  30000000000, 40000000000],
   "Crop Insurance Total":[0, 500000000, 1000000000, 5000000000],
-  "totalNetFarmerBenefit": [0, 500000000, 1000000000, 5000000000],
+  "totalNetFarmerBenefit": [0, 250000000, 750000000, 2000000000],
   "Title I Total":[50000000, 100000000, 500000000, 1000000000],
   "Total Commodities Programs, Subtitle A": [100000000, 500000000, 1000000000, 2000000000],
   "Title II Total":[100000000, 500000000, 1000000000, 2000000000],
@@ -23,9 +23,9 @@
   "totalPremiumSubsidy": [5000000, 100000000, 500000000, 1000000000],
   "totalFarmerPaidPremium": [10000000,100000000, 500000000,1000000000],
   "totalPoliciesEarningPremium":  [1000, 10000, 100000, 500000],
-  "averageLiabilities":[50000000, 1000000000, 5000000000, 10000000000],
+  "averageLiabilities": [100000000, 1000000000, 3000000000, 5000000000],
   "lossRatio":[0.5, 0.75, 1, 1.5],
-  "averageInsuredAreaInAcres":[10000, 5000000, 10000000, 20000000],
+  "averageInsuredAreaInAcres":[1000000, 5000000, 10000000, 15000000],
 
   "Total EQIP": [50000000, 100000000, 150000000, 200000000],
   "Land management": [10000000, 40000000, 60000000, 80000000],
@@ -36,12 +36,12 @@
   "Soil testing":[1000, 5000, 10000, 50000],
   "Other planning":[10000, 500000, 1000000, 3000000],
   "Conservation planning assessment":[10000, 500000, 1000000, 3000000],
-  "Resource-conserving crop rotation":[50000, 100000, 500000, 1000000],
+  "Resource-conserving crop rotation":[10000, 50000, 100000, 200000],
   "Soil health":[5000, 1000000, 200000, 1000000],
   "Comprehensive Nutrient Mgt.":[10000, 100000, 1000000, 5000000],
 
 
-  "Soil remediation":[100000, 1000000, 5000000, 50000000],
+  "Soil remediation":[1000000, 5000000, 10000000, 20000000],
 
   "Total CSP": [5000000, 10000000, 50000000, 100000000],
   "2018 Practices": [1000000, 10000000, 100000000, 200000000],
