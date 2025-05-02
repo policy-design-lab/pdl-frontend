@@ -1,14 +1,22 @@
 .MapLegendSVG {
   font-family: "Roboto", sans-serif;
+  width: 100%;
 }
 .legendText {
-  font-size: 14px;
+  font-size: 12px;
+  fill: #333;
+  pointer-events: none;
 }
 .legendTextSide {
-  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  fill: #666;
+  pointer-events: none;
+}
+.legendTextExplanation {
+  font-size: 11px;
+  fill: #555;
   font-style: italic;
-  font-size: 14px;
-  color: #666;
+  pointer-events: none;
 }
 @media (max-width: 1679px) {
   .legendText {
@@ -17,4 +25,25 @@
   .legendTextSide {
     font-size: 12px;
   }
+}
+
+.legend-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.legend-tooltip.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.legendRect {
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.legendRect:hover {
+  opacity: 0.9;
+  filter: brightness(1.1);
+  cursor: pointer;
 }

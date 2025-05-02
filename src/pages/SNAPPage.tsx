@@ -38,12 +38,10 @@ export default function SNAPPage(): JSX.Element {
     const heightPercentage = 0.4;
     const [data, setData] = React.useState(null);
 
-    // connect to api endpoint
     const [stateCodes, setStateCodes] = React.useState([]);
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
-
     React.useEffect(() => {
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
