@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -27,10 +27,43 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = (props) => {
+interface SubSubProgram {
+    subSubProgramName: string;
+    totalPaymentInDollars: number;
+    totalPaymentInPercentageNationwide: number;
+}
+
+interface SubProgram {
+    subProgramName: string;
+    totalPaymentInDollars: number;
+    totalPaymentInPercentageNationwide: number;
+    subSubPrograms?: SubSubProgram[];
+}
+
+interface StateRecord {
+    state: string;
+    subPrograms: SubProgram[];
+    length?: number;
+}
+
+interface MapChartProps {
+    year: string;
+    setReactTooltipContent: (content: string | JSX.Element) => void;
+    category: string;
+    colorScale: any;
+    allStates: any[];
+    stateCodes: Record<string, string>;
+    statePerformance: Record<string, StateRecord[]>;
+}
+
+const MapChart = (props: MapChartProps) => {
     const { year, setReactTooltipContent, category, allStates, stateCodes, statePerformance, colorScale } = props;
     let categoryRecord;
     const classes = useStyles();
+    const getColorForValue = (value) => {
+        return colorScale(value);
+    };
+    
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -117,8 +150,10 @@ const MapChart = (props) => {
                                     </div>
                                 );
                                 const fillColour = () => {
-                                    if (categoryPayment) {
-                                        if (categoryPayment !== 0) return colorScale(categoryPayment);
+                                    if (categoryPayment !== undefined) {
+                                        if (categoryPayment !== 0) {
+                                            return getColorForValue(categoryPayment);
+                                        }
                                         return "#D2D2D2";
                                     }
                                     return "#D2D2D2";
@@ -189,8 +224,21 @@ const MapChart = (props) => {
 MapChart.propTypes = {
     year: PropTypes.string,
     setReactTooltipContent: PropTypes.func,
-    category: PropTypes.string
+    category: PropTypes.string,
+    colorScale: PropTypes.any,
+    allStates: PropTypes.array,
+    stateCodes: PropTypes.object,
+    statePerformance: PropTypes.object
 };
+
+interface CategoryMapProps {
+    year: string;
+    category: string;
+    attribute: string;
+    statePerformance: Record<string, StateRecord[]>;
+    allStates: any[];
+    stateCodes: Record<string, string>;
+}
 
 const CategoryMap = ({
     year,
@@ -199,18 +247,11 @@ const CategoryMap = ({
     statePerformance,
     allStates,
     stateCodes
-}: {
-    year: string;
-    category: string;
-    attribute: string;
-    statePerformance: any;
-    allStates: any;
-    stateCodes: any;
-}): JSX.Element => {
-    const [content, setContent] = useState("");
+}: CategoryMapProps): JSX.Element => {
+    const [content, setContent] = useState<string | JSX.Element>("");
     let title = `CRP ${category} from ${year}`;
     const quantizeArray: number[] = [];
-    const zeroPoints = [];
+    const zeroPoints: string[] = [];
 
     statePerformance[year].forEach((value) => {
         const programRecord = value.subPrograms;
@@ -219,7 +260,7 @@ const CategoryMap = ({
             ACur = programRecord.find((s) => s.subProgramName === category);
         } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
             const contSingUp = programRecord.find((s) => s.subProgramName === "Continuous Sign-up");
-            if (contSingUp) {
+            if (contSingUp && contSingUp.subSubPrograms) {
                 const subSubPrograms = contSingUp.subSubPrograms;
                 title = `CRP Continuous Sign-up, ${category} from ${year}`;
 
@@ -230,11 +271,14 @@ const CategoryMap = ({
                 });
             }
         }
-        if (ACur) {
+        if (ACur && Object.keys(ACur).length > 0) {
             let key = getValueFromAttrDollar(ACur, attribute);
             key = key !== "" ? key : attribute;
-            quantizeArray.push(ACur[key]);
-            ACur[key] === 0 && zeroPoints.push(value.state);
+            if (ACur[key] !== undefined && ACur[key] > 0) {
+                quantizeArray.push(ACur[key]);
+            } else if (ACur[key] === 0) {
+                zeroPoints.push(value.state);
+            }
         }
         return null;
     });
@@ -244,6 +288,7 @@ const CategoryMap = ({
     const customScale = legendConfig[category === "Grassland" ? "Grassland-CRP" : category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const classes = useStyles();
+    let syntheticData = [...quantizeArray];
     return (
         <div>
             {maxValue !== 0 ? (
@@ -252,7 +297,7 @@ const CategoryMap = ({
                         <DrawLegend
                             colorScale={colorScale}
                             title={titleElement(category, years)}
-                            programData={quantizeArray}
+                            programData={syntheticData}
                             prepColor={mapColor}
                             isRatio={false}
                             notDollar={false}
