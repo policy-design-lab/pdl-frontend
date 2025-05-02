@@ -33,6 +33,8 @@ export default function CropInsurancePage(): JSX.Element {
     const cropInsuranceDiv = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
+    const startYear = 2014;
+    const endYear = 2023;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
@@ -44,7 +46,7 @@ export default function CropInsurancePage(): JSX.Element {
             const converted_json = convertAllState(response);
             setStateCodesData(converted_json);
         });
-        const statedistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution`;
+        const statedistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/state-distribution?start_year=${startYear}&end_year=${endYear}`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
             setStateDistributionData(response);
         });
@@ -114,7 +116,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalNetFarmerBenefit"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -170,14 +172,17 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 0 ? "none" : "div" }}
                                 >
                                     <CropInsuranceBubble
-                                        originalData={setBubbleData("2018-2022")}
+                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
                                         stateCodesData={stateCodesData}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        startYear={startYear}
+                                        endYear={endYear}
                                     />
                                     <CropInsuranceBars
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu={checked}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -185,7 +190,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (2018-2022)"
+                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={[
                                             "totalNetFarmerBenefitInDollars",
@@ -196,7 +201,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -219,7 +224,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalFarmerPaidPremium"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -275,14 +280,17 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 0 ? "none" : "div" }}
                                 >
                                     <CropInsuranceBubble
-                                        originalData={setBubbleData("2018-2022")}
+                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
                                         stateCodesData={stateCodesData}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        startYear={startYear}
+                                        endYear={endYear}
                                     />
                                     <CropInsuranceBars
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu={checked}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -290,7 +298,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (2018-2022)"
+                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={[
                                             "totalNetFarmerBenefitInDollars",
@@ -301,7 +309,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -324,7 +332,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalIndemnities"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -380,14 +388,17 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 0 ? "none" : "div" }}
                                 >
                                     <CropInsuranceBubble
-                                        originalData={setBubbleData("2018-2022")}
+                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
                                         stateCodesData={stateCodesData}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        startYear={startYear}
+                                        endYear={endYear}
                                     />
                                     <CropInsuranceBars
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu={checked}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -395,7 +406,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (2018-2022)"
+                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={[
                                             "totalNetFarmerBenefitInDollars",
@@ -406,7 +417,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -429,7 +440,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalPremium"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -485,14 +496,17 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 0 ? "none" : "div" }}
                                 >
                                     <CropInsuranceBubble
-                                        originalData={setBubbleData("2018-2022")}
+                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
                                         stateCodesData={stateCodesData}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        startYear={startYear}
+                                        endYear={endYear}
                                     />
                                     <CropInsuranceBars
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu={checked}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -500,7 +514,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (2018-2022)"
+                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={[
                                             "totalNetFarmerBenefitInDollars",
@@ -511,7 +525,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -533,7 +547,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalPremiumSubsidy"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -589,14 +603,17 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 0 ? "none" : "div" }}
                                 >
                                     <CropInsuranceBubble
-                                        originalData={setBubbleData("2018-2022")}
+                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
                                         stateCodesData={stateCodesData}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        startYear={startYear}
+                                        endYear={endYear}
                                     />
                                     <CropInsuranceBars
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu={checked}
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -604,7 +621,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (2018-2022)"
+                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={[
                                             "totalNetFarmerBenefitInDollars",
@@ -615,7 +632,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -639,7 +656,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="lossRatio"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -665,13 +682,13 @@ export default function CropInsurancePage(): JSX.Element {
                                     }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Loss Ratio (2018-2022)"
+                                        tableTitle={`Loss Ratio (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={["lossRatio"]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -695,7 +712,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="averageLiabilities"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -721,13 +738,13 @@ export default function CropInsurancePage(): JSX.Element {
                                     }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Average Liabilities (2018-2022)"
+                                        tableTitle={`Average Liabilities (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={["averageLiabilitiesInDollars"]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -751,7 +768,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="totalPoliciesEarningPremium"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -810,6 +827,7 @@ export default function CropInsurancePage(): JSX.Element {
                                         stateDistributionData={stateDistributionData}
                                         checkedMenu="totalPoliciesEarningPremium"
                                         initChartWidthRatio={initChartWidthRatio}
+                                        yearKey={`${startYear}-${endYear}`}
                                     />
                                 </Box>
                                 <Box
@@ -817,13 +835,13 @@ export default function CropInsurancePage(): JSX.Element {
                                     sx={{ display: tab !== 1 ? "none" : "div" }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Total Policies Earning Premium and Total Indemnities (2018-2022)"
+                                        tableTitle={`Total Policies Earning Premium and Total Indemnities (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
@@ -847,7 +865,7 @@ export default function CropInsurancePage(): JSX.Element {
                             <CropInsuranceMap
                                 program="Crop Insurance"
                                 attribute="averageInsuredAreaInAcres"
-                                year="2018-2022"
+                                year={`${startYear}-${endYear}`}
                                 mapColor={mapColor}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
@@ -873,13 +891,13 @@ export default function CropInsurancePage(): JSX.Element {
                                     }}
                                 >
                                     <CropInsuranceProgramTable
-                                        tableTitle="Average Insured Area in Acres (2018-2022)"
+                                        tableTitle={`Average Insured Area in Acres (${startYear}-${endYear})`}
                                         program="Crop Insurance"
                                         attributes={["averageInsuredAreaInAcres"]}
                                         skipColumns={[]}
                                         stateCodes={stateCodesData}
                                         CropInsuranceData={stateDistributionData}
-                                        year="2018-2022"
+                                        year={`${startYear}-${endYear}`}
                                         colors={[]}
                                     />
                                 </Box>
