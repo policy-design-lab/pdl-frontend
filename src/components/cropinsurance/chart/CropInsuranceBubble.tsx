@@ -6,7 +6,13 @@ import ReactDOMServer from "react-dom/server";
 import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
 
-export default function CropInsuranceBubble({ originalData, initChartWidthRatio, stateCodesData, startYear, endYear }): JSX.Element {
+export default function CropInsuranceBubble({
+    originalData,
+    initChartWidthRatio,
+    stateCodesData,
+    startYear,
+    endYear
+}): JSX.Element {
     const rn = React.useRef(null);
     const baseColor = "#00000099";
     const lightGreen = "#66BB6A33";
