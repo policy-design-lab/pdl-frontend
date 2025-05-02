@@ -76,7 +76,15 @@ export const processRegionsInRange = (
     const regionsInRange: RawRegionData[] = [];
     let highestValueRegion: RawRegionData | null = null;
     let highestValue = -Infinity;
-
+    let maxValueInData = -Infinity;
+    Object.entries(regionData).forEach(([fips, region]) => {
+        if (!region || (typeof region === "object" && !region.hasData)) return;
+        const regionValue = typeof region === "number" ? region : region.value;
+        if (regionValue !== undefined && regionValue !== null && isFinite(regionValue)) {
+            maxValueInData = Math.max(maxValueInData, regionValue);
+        }
+    });
+    const isLastBin = Math.abs(max - maxValueInData) < 0.001;
     try {
         Object.entries(regionData).forEach(([fips, region]) => {
             if (!region || (typeof region === "object" && !region.hasData)) return;
@@ -115,9 +123,10 @@ export const processRegionsInRange = (
                     value: regionValue
                 };
             }
-            const isInLastRange = min === max && regionValue >= min;
-            const isInRegularRange = min !== max && regionValue >= min && regionValue < max;
-            if (isInLastRange || isInRegularRange) {
+            const isInRange = isLastBin ? 
+                (regionValue >= min) : 
+                (regionValue >= min && regionValue < max);
+            if (isInRange) {
                 regionsInRange.push({
                     fips,
                     name: formatRegionName(regionName, regionType),
@@ -145,8 +154,8 @@ export const processRegionsInRange = (
             maxRegion.state = getStateFromFipsEnhanced(maxRegion.fips, stateCodeToName);
         }
     } else if (highestValueRegion && min === max) {
-        minRegion = { ...highestValueRegion };
-        maxRegion = { ...highestValueRegion };
+        minRegion = highestValueRegion;
+        maxRegion = highestValueRegion;
         regionsInRange.push(highestValueRegion);
         return {
             regionsInRange,

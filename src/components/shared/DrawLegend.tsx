@@ -40,7 +40,6 @@ export default function DrawLegend({
     const legendRn = React.useRef<HTMLDivElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const margin = 40;
-    const cut_points: number[] = [];
     const [width, setWidth] = React.useState(992);
     const [tooltipData, setTooltipData] = React.useState<TooltipData | null>(null);
     const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
@@ -78,8 +77,9 @@ export default function DrawLegend({
             const lowerValue = localCutPoints[i];
             const upperValue = localCutPoints[i + 1];
             const lowerPercentile = (sortedData.findIndex((v) => v >= lowerValue) / sortedData.length) * 100;
-            const upperPercentile =
-                i === segmentCount - 1 ? 100 : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
+            const upperPercentile = i === segmentCount - 1 
+                ? 100 
+                : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
             const startPercent = Math.round(lowerPercentile);
             const endPercent = Math.round(upperPercentile);
             newPercentileRanges.push(`${startPercent}% - ${endPercent}%`);
