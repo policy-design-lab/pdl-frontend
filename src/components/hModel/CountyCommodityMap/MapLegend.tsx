@@ -11,7 +11,9 @@ const MapLegend = ({
     selectedState,
     yearAggregation,
     showMeanValues,
-    proposedPolicyName
+    proposedPolicyName,
+    stateCodeToName,
+    showTooltips = true
 }) => {
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const getLegendTitle = () => {
@@ -36,7 +38,6 @@ const MapLegend = ({
         }
         return title;
     };
-
     return (
         <Box display="flex" flexDirection="column" alignItems="center">
             <DrawLegend
@@ -56,6 +57,11 @@ const MapLegend = ({
                 emptyState={[]}
                 isRatio={false}
                 notDollar={!!showMeanValues}
+                countyData={mapData.counties}
+                showPercentileExplanation
+                stateCodeToName={stateCodeToName}
+                showTooltips={showTooltips}
+                regionType="county"
             />
         </Box>
     );

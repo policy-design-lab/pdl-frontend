@@ -1,6 +1,7 @@
 import React from "react";
 import { calculateThresholds } from "../../shared/ColorFunctions";
 import { getCountyNameFromFips, isDataValid, calculateWeightedMeanRate, getTotalBaseAcres } from "../utils";
+import { getMapPercentiles } from "./percentileConfig";
 
 const calculatePercentChange = (currentValue: number, proposedValue: number): number => {
     if (currentValue !== 0) {
@@ -597,7 +598,11 @@ export const processMapData = ({
         (value) => value !== undefined && value !== null && !isNaN(value) && value !== 0 && isFinite(value)
     );
 
-    const thresholds = validDataValues.length > 0 ? calculateThresholds(validDataValues) : [0, 0.17, 0.34, 0.5, 0.67, 0.84, 1];
+    const mapPercentiles = getMapPercentiles();
+    const thresholds =
+        validDataValues.length > 0 ?
+            calculateThresholds(validDataValues, mapPercentiles) :
+            [0, 0.17, 0.34, 0.5, 0.67, 0.84, 1];
 
     return {
         counties,

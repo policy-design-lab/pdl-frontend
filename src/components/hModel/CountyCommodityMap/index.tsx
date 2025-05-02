@@ -22,7 +22,8 @@ const CountyCommodityMap = ({
     yearAggregation,
     setYearAggregation,
     aggregationEnabled,
-    setAggregationEnabled
+    setAggregationEnabled,
+    stateCodeToName
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[0] || "2024");
@@ -33,8 +34,6 @@ const CountyCommodityMap = ({
     const [proposedPolicyName, setProposedPolicyName] = useState("2025 Policy");
     const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
     const [forceUpdate, setForceUpdate] = useState(0);
-    const [showTableIndicator, setShowTableIndicator] = useState(false);
-    const [indicatorMessage, setIndicatorMessage] = useState("");
     const [isAtTop, setIsAtTop] = useState(false);
 
     useEffect(() => {
@@ -173,34 +172,85 @@ const CountyCommodityMap = ({
 
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
-            // ten purple base color with strong difference between each other
-            return ["#f3e5f5", "#e1bee7", "#ce93d8", "#ba68c8", "#9c27b0", "#8e24aa", "#7b1fa2", "#6a1b9a", "#4a148c", "#380e82"];
+            // 11 purple base colors with strong difference between each other
+            return [
+                "#f3e5f5",
+                "#e1bee7",
+                "#ce93d8",
+                "#ba68c8",
+                "#ab47bc",
+                "#9c27b0",
+                "#8e24aa",
+                "#7b1fa2",
+                "#6a1b9a",
+                "#4a148c",
+                "#5c2196"
+            ];
         }
         if (viewMode === "current") {
-            // ten orange base color with strong difference between each other
-            return ["#fff3e0", "#ffe0b2", "#ffcc80", "#ffb74d", "#ffa726", "#ff9800", "#fb8c00", "#f57c00", "#e65100", "#d84315"];
+            // 11 orange base colors with strong difference between each other
+            return [
+                "#fff3e0",
+                "#ffe0b2",
+                "#ffcc80",
+                "#ffb74d",
+                "#ffa726",
+                "#ff9800",
+                "#fb8c00",
+                "#f57c00",
+                "#ef6c00",
+                "#e65100",
+                "#e05410"
+            ];
         }
         if (viewMode === "proposed") {
-            // ten blue base color with strong difference between each other
-            return ["#e1f5fe", "#b3e5fc", "#81d4fa", "#4fc3f7", "#29b6f6", "#03a9f4", "#039be5", "#0288d1", "#0277bd", "#01579b"];
+            // 11 blue base colors with strong difference between each other
+            return [
+                "#e1f5fe",
+                "#b3e5fc",
+                "#81d4fa",
+                "#4fc3f7",
+                "#29b6f6",
+                "#03a9f4",
+                "#039be5",
+                "#0288d1",
+                "#0277bd",
+                "#01579b",
+                "#0268a6"
+            ];
         }
 
         if (showMeanValues) {
-            // ten yellow base color with strong difference between each other
-            return ["#fffde7", "#fff9c4", "#fff59d", "#fff176", "#ffee58", "#ffeb3b", "#fdd835", "#fbc02d", "#f9a825", "#f57f17"];
+            // 11 yellow base colors with strong difference between each other
+            return [
+                "#fffde7",
+                "#fff9c4",
+                "#fff59d",
+                "#fff176",
+                "#ffee58",
+                "#ffeb3b",
+                "#fdd835",
+                "#fbc02d",
+                "#f9a825",
+                "#f57f17",
+                "#f7941d"
+            ];
         }
-        // ten red base color with strong difference between each other
-        return ["#ffebee", "#ffcdd2", "#ef9a9a", "#e57373", "#ef5350", "#e53935", "#d32f2f", "#c62828", "#b71c1c", "#a51b1b"];
+        // 11 red base colors with strong difference between each other
+        return [
+            "#ffebee",
+            "#ffcdd2",
+            "#ef9a9a",
+            "#e57373",
+            "#ef5350",
+            "#e53935",
+            "#d32f2f",
+            "#c62828",
+            "#b71c1c",
+            "#a51b1b",
+            "#c42225"
+        ];
     }, [viewMode, showMeanValues]);
-
-    const effectiveYear = useMemo(() => {
-        if (aggregationEnabled && yearAggregation > 0) {
-            const startYear = availableYears[yearRange[0]];
-            const endYear = availableYears[Math.min(yearRange[0] + yearAggregation, availableYears.length - 1)];
-            return `${startYear}-${endYear}`;
-        }
-        return selectedYear;
-    }, [selectedYear, yearRange, yearAggregation, aggregationEnabled, availableYears]);
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -224,24 +274,20 @@ const CountyCommodityMap = ({
                         setViewMode={handleSetViewMode}
                         setYearRange={(newValue) => {
                             setYearRange(newValue);
-
                             setIsAtTop(false);
                         }}
                         setShowMeanValues={(newValue) => {
                             setShowMeanValues(newValue);
-
                             setIsAtTop(false);
                         }}
                         setProposedPolicyName={setProposedPolicyName}
                         aggregationEnabled={aggregationEnabled}
                         setAggregationEnabled={(newValue) => {
                             setAggregationEnabled(newValue);
-
                             setIsAtTop(false);
                         }}
                         setYearAggregation={(newValue) => {
                             setYearAggregation(newValue);
-
                             setIsAtTop(false);
                         }}
                     />
@@ -277,6 +323,7 @@ const CountyCommodityMap = ({
                         yearAggregation={yearAggregation}
                         showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
+                        stateCodeToName={stateCodeToName}
                     />
                 </Box>
             </Box>

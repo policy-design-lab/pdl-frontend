@@ -216,14 +216,14 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                 What we can put here?
                                             </Typography>
                                             <Typography paragraph>
-                                                A description of every model: Yifan's model, Henrique's model, Tosh's Model, etc
+                                                A description of every model: Yifan's model, Henrique's model, Tosh's
+                                                Model, etc
                                             </Typography>
                                             <Typography paragraph>
-                                                Or description of each year's proposal, depends on the content of the submenu
+                                                Or description of each year's proposal, depends on the content of the
+                                                submenu
                                             </Typography>
-                                            <Typography paragraph>
-                                              Or anything else.
-                                            </Typography>
+                                            <Typography paragraph>Or anything else.</Typography>
                                         </Box>
                                     </Box>
                                 )}
@@ -336,6 +336,14 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                     setYearAggregation={setYearAggregation}
                                                     aggregationEnabled={aggregationEnabled}
                                                     setAggregationEnabled={setAggregationEnabled}
+                                                    // transfer stateCodesArray like [{
+                                                    // "code": "AL",
+                                                    // "name": "Alabama"
+                                                    // },... to something like {"AL": "Alabama", "AK": "Alaska", ...}
+                                                    stateCodeToName={metaData.stateCodesArray.reduce((acc, curr) => {
+                                                        acc[curr.code] = curr.name;
+                                                        return acc;
+                                                    }, {})}
                                                 />
                                             </Box>
                                             <Box
