@@ -3,11 +3,12 @@ import * as d3 from "d3";
 import { Box, Typography } from "@mui/material";
 import { ShortFormat } from "./ConvertionFormats";
 import "../../styles/drawLegend.css";
-import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
-import LegendTooltipContent from "./LegendTooltipContent";
 
-type RectHoverCallback = (index: number, data?: any) => void;
-
+/**
+ * Keys in legendConfig.json must match the 'searchKey' variable in DrawLegend.tsx file.
+ * If there's any changes in legendConfig.json, please re-check and update the 'searchKey' variable here.
+ * The programData parameter is the array of all data points that will be used to draw the legend.
+ */
 export default function DrawLegend({
     isRatio = false,
     notDollar = false,
@@ -15,77 +16,12 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState = [],
-    countyData = {},
-    showPercentileExplanation = false,
-    onRectHover = null,
-    stateCodeToName = {},
-    showTooltips = false,
-    regionType = "county"
-}: {
-    isRatio?: boolean;
-    notDollar?: boolean;
-    colorScale: any;
-    title: React.ReactNode;
-    programData: number[];
-    prepColor: string[];
-    emptyState?: string[];
-    countyData?: Record<string, any>;
-    showPercentileExplanation?: boolean;
-    onRectHover?: RectHoverCallback | null;
-    stateCodeToName: Record<string, string>;
-    showTooltips?: boolean;
-    regionType?: string;
+    emptyState = []
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
-    const tooltipRef = React.useRef<HTMLDivElement>(null);
     const margin = 40;
+    let cut_points: number[] = [];
     const [width, setWidth] = React.useState(992);
-    const [tooltipData, setTooltipData] = React.useState<TooltipData | null>(null);
-    const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
-    const [tooltipVisible, setTooltipVisible] = React.useState(false);
-    const [percentileRanges, setPercentileRanges] = React.useState<string[]>([]);
-    const [activeRectIndex, setActiveRectIndex] = React.useState<number | null>(null);
-
-    React.useEffect(() => {
-        const trackMousePosition = (e: MouseEvent) => {
-            if (activeRectIndex !== null) {
-                setTooltipPosition({
-                    x: e.clientX,
-                    y: e.clientY
-                });
-            }
-        };
-        window.addEventListener("mousemove", trackMousePosition);
-        return () => {
-            window.removeEventListener("mousemove", trackMousePosition);
-        };
-    }, [activeRectIndex]);
-
-    React.useEffect(() => {
-        if (programData.length === 0) {
-            setPercentileRanges([]);
-            return;
-        }
-        const customScale = colorScale.domain();
-        const minValue = Math.min(...programData);
-        const localCutPoints = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
-        const segmentCount = localCutPoints.length - 1;
-        const newPercentileRanges: string[] = [];
-        const sortedData = [...programData].sort((a, b) => a - b);
-        for (let i = 0; i < segmentCount; i++) {
-            const lowerValue = localCutPoints[i];
-            const upperValue = localCutPoints[i + 1];
-            const lowerPercentile = (sortedData.findIndex((v) => v >= lowerValue) / sortedData.length) * 100;
-            const upperPercentile = i === segmentCount - 1 
-                ? 100 
-                : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
-            const startPercent = Math.round(lowerPercentile);
-            const endPercent = Math.round(upperPercentile);
-            newPercentileRanges.push(`${startPercent}% - ${endPercent}%`);
-        }
-        setPercentileRanges(newPercentileRanges);
-    }, [programData, colorScale]);
 
     React.useEffect(() => {
         const updateWidth = () => {
@@ -111,10 +47,9 @@ export default function DrawLegend({
     }, []);
 
     React.useEffect(() => {
-        if (percentileRanges.length > 0) {
-            drawLegend();
-        }
-    }, [width, countyData, percentileRanges]);
+        drawLegend();
+    }, [width]); // Run drawLegend when width updates
+
     const drawLegend = () => {
         if (legendRn.current && width > 0) {
             d3.select(legendRn.current).selectAll("svg").remove();
@@ -122,184 +57,115 @@ export default function DrawLegend({
                 .select(legendRn.current)
                 .append("svg")
                 .attr("width", "100%")
-                .attr("height", showPercentileExplanation ? 140 : 110)
-                .attr("viewBox", `0 0 ${width} ${showPercentileExplanation ? 140 : 110}`)
+                .attr("height", 90)
+                .attr("viewBox", `0 0 ${width} 90`)
                 .attr("preserveAspectRatio", "xMinYMid meet");
-
             const customScale = colorScale.domain();
-            const minValue = Math.min(...programData);
-            const cut_points = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
-            const segmentCount = cut_points.length - 1;
+            cut_points.push(Math.min(...programData));
+            cut_points = cut_points.concat(customScale);
+            const legendRectX: number[] = [];
             if (Math.min(...programData) !== Infinity && Math.max(...programData) !== Infinity) {
                 baseSVG.selectAll("text").remove();
                 baseSVG.selectAll("rect").remove();
                 const data_distribution: number[] = [];
-                let totalValueSum = 0;
-                for (let i = 0; i < segmentCount; i++) {
-                    const lowerValue = cut_points[i];
-                    const upperValue = cut_points[i + 1];
-                    let countInRange;
-                    if (i === segmentCount - 1) {
-                        countInRange = programData.filter((d) => d >= lowerValue).length;
-                    } else {
-                        countInRange = programData.filter((d) => d >= lowerValue && d < upperValue).length;
-                    }
-                    const segmentValue = countInRange > 0 ? countInRange : Math.max(1, programData.length * 0.01);
-                    data_distribution.push(segmentValue);
-                    totalValueSum += segmentValue;
-                }
-                for (let i = 0; i < data_distribution.length; i++) {
-                    data_distribution[i] = data_distribution[i] / totalValueSum;
-                }
+                const cutCount = Array.from({ length: cut_points.length - 1 }, (v, i) => 1 + i);
+                cutCount.forEach((i) => {
+                    data_distribution.push(
+                        programData.filter((d) => d >= cut_points[i - 1] && d < cut_points[i]).length /
+                            programData.length
+                    );
+                    // Leave following part as the backup of solution 2.
+                    // programData
+                    //     .filter((d) => d >= cut_points[i - 1] && d < cut_points[i])
+                    //     .reduce((accumulator, currentValue) => accumulator + currentValue, 0) /
+                    //     programData.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                });
+                data_distribution.push(
+                    programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
+                );
                 const svgWidth = width - margin * 2;
-                const hasValidDistribution = programData.length > 0;
-
-                if (hasValidDistribution) {
-                    const segments = baseSVG
-                        .selectAll("g.segment")
+                // No need to show color length if there are less than five colors (i.e. not enough data points or label is not correctly identified)
+                if (!data_distribution.includes(0)) {
+                    baseSVG
+                        .selectAll(null)
                         .data(data_distribution)
                         .enter()
-                        .append("g")
-                        .attr("class", "segment")
-                        .attr("data-index", (d, i) => i);
-                    const segmentPositions: number[] = [];
-                    let currentPosition = margin;
-                    for (let i = 0; i < data_distribution.length; i++) {
-                        segmentPositions.push(currentPosition);
-                        currentPosition += data_distribution[i] * svgWidth;
-                    }
-                    segmentPositions.push(currentPosition);
-                    segments
                         .append("rect")
                         .attr("class", "legendRect")
-                        .attr("data-index", (d, i) => i)
-                        .attr("id", (d, i) => `legendRect${i}`)
-                        .attr("x", (d, i) => segmentPositions[i])
-                        .attr("y", () => 20)
-                        .attr("width", (d) => d * svgWidth)
-                        .attr("height", 20)
-                        .style("fill", (d, i) => prepColor[i])
-                        .style("cursor", "pointer")
-                        .on("mouseover", function (this: SVGRectElement) {
-                            const rectIndex = parseInt(d3.select(this).attr("data-index"), 10);
-                            if (percentileRanges.length === 0) {
-                                return;
+                        .attr("id", (d) => `legendRect${d}`)
+                        .attr("x", (d, i) => {
+                            if (i === 0) {
+                                return margin;
                             }
-                            if (isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
-                                return;
-                            }
-                            setActiveRectIndex(rectIndex);
-                            const binRange = percentileRanges[rectIndex];
-                            const min = cut_points[rectIndex];
-                            const max = cut_points[rectIndex + 1];
-                            const { minRegion, maxRegion, regionCount } = processRegionsInRange(
-                                countyData,
-                                min,
-                                max,
-                                stateCodeToName,
-                                regionType
-                            );
-                            setTooltipData({
-                                percentileRange: binRange,
-                                regionCount,
-                                minRegion: regionCount > 0 ? minRegion : "N/A",
-                                maxRegion: regionCount > 0 ? maxRegion : "N/A",
-                                rectIndex
-                            });
-                            const rectDOMBounds = this.getBoundingClientRect();
-                            setTooltipPosition({
-                                x: rectDOMBounds.left + rectDOMBounds.width / 2,
-                                y: rectDOMBounds.top
-                            });
-                            setTooltipVisible(true);
-                            d3.select(this).classed("tooltip-visible", true);
-                            if (onRectHover) {
-                                onRectHover(rectIndex, d3.select(this).datum());
-                            }
+                            const sum = data_distribution.slice(0, i).reduce((acc, curr) => acc + curr, 0);
+                            return margin + svgWidth * sum;
                         })
-                        .on("mouseout", function (this: SVGRectElement) {
-                            const rectIndex = parseInt(d3.select(this).attr("data-index"), 10);
-                            if (isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
-                                return;
-                            }
-                            d3.select(this).classed("tooltip-visible", false);
-                            setActiveRectIndex(null);
-                            setTooltipVisible(false);
+                        .attr("y", () => {
+                            return 20;
                         })
-                        .on("click", function (this: SVGRectElement) {
-                            const rectIndex = parseInt(d3.select(this).attr("data-index"), 10);
-                            if (isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
-                                return;
-                            }
-                            if (onRectHover) {
-                                onRectHover(rectIndex, d3.select(this).datum());
-                            }
+                        .attr("width", (d) => {
+                            return d * svgWidth;
+                        })
+                        .attr("height", 10)
+                        .style("fill", (d, i) => prepColor[i]);
+                    cut_points = cut_points.concat(Math.max(...programData));
+                    baseSVG
+                        .selectAll(".legendRect")
+                        .nodes()
+                        .forEach((d) => {
+                            legendRectX.push(Number(d3.select(d).attr("x")));
                         });
-                    const uniquePositions = segmentPositions;
-                    const uniqueCutPoints: number[] = [];
-                    for (let i = 0; i < cut_points.length; i++) {
-                        uniqueCutPoints.push(cut_points[i]);
-                    }
-
+                    const last =
+                        legendRectX[legendRectX.length - 1] +
+                        data_distribution[data_distribution.length - 1] * svgWidth;
+                    legendRectX.push(last);
                     if (svgWidth > 1690) {
                         baseSVG
                             .selectAll(null)
-                            .data(uniquePositions)
+                            .data(legendRectX)
                             .enter()
                             .append("text")
                             .attr("class", "legendText")
-                            .attr("id", (d, i) => `legendText${i}`)
-                            .attr("y", 60)
-                            .attr("x", (d) => d)
-                            .attr("text-anchor", "middle")
-                            .style("font-size", "11px")
+                            .attr("id", (d) => `legendText${d}`)
+                            .attr("y", 50)
+                            .attr("x", (d, i) => {
+                                return i === 0 ? d : d - margin / 4;
+                            })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(uniqueCutPoints[i] * 100)}%`;
+                                    return `${Math.round(cut_points[i] * 100)}%`;
                                 }
-                                if (!notDollar) {
-                                    const res = ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
+                                if (i === 0 && !notDollar) {
+                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
+                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
                             });
                     } else {
                         baseSVG
                             .selectAll(null)
-                            .data(uniquePositions)
+                            .data(legendRectX)
                             .enter()
                             .append("text")
                             .attr("class", "legendText")
-                            .attr("id", (d, i) => `legendText${i}`)
-                            .attr("y", (d, i) => (i % 2 === 0 ? 60 : 10))
-                            .attr("x", (d) => d)
-                            .attr("text-anchor", "middle")
-                            .style("font-size", "11px")
+                            .attr("id", (d) => `legendText${d}`)
+                            .attr("y", (d, i) => {
+                                return i % 2 === 0 ? 50 : 10;
+                            })
+                            .attr("x", (d, i) => {
+                                return i === 0 ? d : d - margin / 4;
+                            })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(uniqueCutPoints[i] * 100)}%`;
+                                    return `${Math.round(cut_points[i] * 100)}%`;
                                 }
-                                if (!notDollar) {
-                                    const res = ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
+                                if (i === 0 && !notDollar) {
+                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(uniqueCutPoints[i].toFixed(2), -1, 2);
+                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
                             });
                     }
-
-                    if (showPercentileExplanation) {
-                        baseSVG
-                            .append("text")
-                            .attr("class", "legendTextExplanation")
-                            .attr("x", width / 2)
-                            .attr("y", 100)
-                            .attr("text-anchor", "middle")
-                            .style("font-size", "11px")
-                            .text(
-                                "Counties are grouped by percentile ranges based on their actual payment values or rates, not by count. Hover for details."
-                            );
-                    }
-
                     if (emptyState.length !== 0) {
                         const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
                         const middleText = baseSVG
@@ -314,22 +180,18 @@ export default function DrawLegend({
                             .append("text")
                             .attr("class", "legendTextSide")
                             .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
-                            .attr("y", showPercentileExplanation ? 120 : 90)
+                            .attr("y", 80)
                             .text(`${zeroState.join(", ")} has no data available`);
                     } else {
                         baseSVG
                             .append("text")
                             .attr("class", "legendTextSide")
                             .attr("x", width / 2 - 150)
-                            .attr("y", showPercentileExplanation ? 120 : 90)
+                            .attr("y", 80)
                             .text("Gray states indicate no available data or a value of 0");
                     }
                 } else {
-                    baseSVG.attr("height", showPercentileExplanation ? 140 : 110);
-                    const noDataMessage =
-                        programData.length === 0
-                            ? "There is no data available for the current selection"
-                            : "There isn't sufficient data distribution to display a detailed legend";
+                    baseSVG.attr("height", 90);
                     baseSVG
                         .append("text")
                         .attr("class", "legendTextSide")
@@ -337,32 +199,7 @@ export default function DrawLegend({
                         .attr("x", width / 2)
                         .attr("y", 45)
                         .style("font-size", "14px")
-                        .text(noDataMessage);
-                    if (programData.length > 0) {
-                        const minValue = Math.min(...programData);
-                        const maxValue = Math.max(...programData);
-
-                        if (isFinite(minValue) && isFinite(maxValue)) {
-                            baseSVG
-                                .append("text")
-                                .attr("class", "legendTextSide")
-                                .attr("text-anchor", "middle")
-                                .attr("x", width / 2)
-                                .attr("y", 70)
-                                .style("font-size", "12px")
-                                .text(
-                                    `Range: ${
-                                        isRatio
-                                            ? `${Math.round(minValue * 100)}%`
-                                            : ShortFormat(minValue.toFixed(2), -1, 2)
-                                    } to ${
-                                        isRatio
-                                            ? `${Math.round(maxValue * 100)}%`
-                                            : ShortFormat(maxValue.toFixed(2), -1, 2)
-                                    }`
-                                );
-                        }
-                    }
+                        .text("There isn't sufficient data to display the legend");
                 }
             }
         }
@@ -372,8 +209,7 @@ export default function DrawLegend({
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                minWidth: 560,
-                position: "relative"
+                minWidth: 560
             }}
         >
             <Box display="flex" justifyContent="center">
@@ -382,27 +218,6 @@ export default function DrawLegend({
                 </Typography>
             </Box>
             <div ref={legendRn} className="MapLegendSVG" />
-            {tooltipData && tooltipVisible && showTooltips && (
-                <div
-                    ref={tooltipRef}
-                    style={{
-                        position: "fixed",
-                        top: `${tooltipPosition.y - 120}px`,
-                        left: `${tooltipPosition.x}px`,
-                        transform: "translateX(-50%)",
-                        backgroundColor: "white",
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        padding: "12px",
-                        zIndex: 9999,
-                        width: "300px",
-                        pointerEvents: "none"
-                    }}
-                >
-                    <LegendTooltipContent tooltipData={tooltipData} notDollar={notDollar} regionType={regionType} />
-                </div>
-            )}
         </Box>
     );
 }

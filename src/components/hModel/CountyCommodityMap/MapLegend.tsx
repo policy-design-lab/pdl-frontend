@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import * as d3 from "d3";
-import DrawLegend from "../../shared/DrawLegend";
+import DrawLegendNew from "../../shared/DrawLegend-New";
 
 const MapLegend = ({
     mapData,
@@ -40,7 +40,7 @@ const MapLegend = ({
     };
     return (
         <Box display="flex" flexDirection="column" alignItems="center">
-            <DrawLegend
+            <DrawLegendNew
                 key={`${selectedYear}-${viewMode}-${showMeanValues}-${mapData.thresholds.join(
                     ","
                 )}-${selectedState}-${yearAggregation}`}
