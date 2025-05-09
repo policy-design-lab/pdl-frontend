@@ -8,11 +8,11 @@ export interface MenuItem {
 
 export const houseProjectionMenu: MenuItem[] = [
     {
-        title: "House Ag Committee",
+        title: "2024 Proposals",
         items: []
     },
     {
-        title: "2024 Proposals",
+        title: "House Ag Committee",
         items: [
             {
                 title: "EQIP Projection"
@@ -37,19 +37,18 @@ export function MenuItem({
     onMenuSelect: (i: string) => void;
     level: number;
 }): JSX.Element {
-    const isTopHouseAgCommittee = level === 0 && item.title === "House Ag Committee";
-    const is2024Proposals = level === 0 && item.title === "2024 Proposals";
+    const isTop2024Proposals = level === 0 && item.title === "2024 Proposals";
+    const isHouseAgCommittee = level === 0 && item.title === "House Ag Committee";
 
     const [isOpen, setIsOpen] = useState(true);
 
     const isSelected = selectedItem === index;
-
     const hasSelectedChild = selectedItem.startsWith(`${index}-`);
 
     const handleClick = () => {
-        if (is2024Proposals) {
+        if (isHouseAgCommittee) {
             setIsOpen(!isOpen);
-        } else if (!isTopHouseAgCommittee) {
+        } else if (!isTop2024Proposals) {
             onMenuSelect(index);
         }
     };
@@ -60,11 +59,13 @@ export function MenuItem({
     };
 
     const getBackgroundColor = () => {
+        if (level > 0) return "#F5F7F6";
         return "#ECF0EE";
     };
 
     const getHoverBackgroundColor = () => {
-        if (isTopHouseAgCommittee) return "inherit";
+        if (isTop2024Proposals) return "inherit";
+        if (level > 0) return "rgba(0, 0, 0, 0.08)";
         return "rgba(0, 0, 0, 0.04)";
     };
 
@@ -74,10 +75,10 @@ export function MenuItem({
         <>
             <ListItemButton
                 onClick={handleClick}
-                disabled={isTopHouseAgCommittee}
+                disabled={isTop2024Proposals}
                 sx={{
                     "my": 0,
-                    "py": 2,
+                    "py": level === 0 ? 2 : 1.5,
                     "pl": level * 3,
                     "color": getTextColor(),
                     "backgroundColor": getBackgroundColor(),
@@ -89,7 +90,7 @@ export function MenuItem({
                         opacity: 1,
                         color: "#666666"
                     },
-                    "cursor": isTopHouseAgCommittee ? "default" : "pointer"
+                    "cursor": isTop2024Proposals ? "default" : "pointer"
                 }}
             >
                 <ListItemText
@@ -98,7 +99,8 @@ export function MenuItem({
                             sx={{
                                 mx: 3,
                                 fontFamily: '"Roboto", sans-serif',
-                                fontWeight: 600,
+                                fontWeight: level === 0 ? 600 : 500,
+                                fontSize: level === 0 ? "inherit" : "0.95em",
                                 borderLeft: showBorder
                                     ? `4px solid ${isSelected || hasSelectedChild ? "#2F7164" : "#ccd7d1"}`
                                     : "none",

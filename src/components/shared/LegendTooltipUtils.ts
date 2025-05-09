@@ -123,9 +123,7 @@ export const processRegionsInRange = (
                     value: regionValue
                 };
             }
-            const isInRange = isLastBin ? 
-                (regionValue >= min) : 
-                (regionValue >= min && regionValue < max);
+            const isInRange = isLastBin ? regionValue >= min : regionValue >= min && regionValue < max;
             if (isInRange) {
                 regionsInRange.push({
                     fips,

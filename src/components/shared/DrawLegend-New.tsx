@@ -77,9 +77,8 @@ export default function DrawLegendNew({
             const lowerValue = localCutPoints[i];
             const upperValue = localCutPoints[i + 1];
             const lowerPercentile = (sortedData.findIndex((v) => v >= lowerValue) / sortedData.length) * 100;
-            const upperPercentile = i === segmentCount - 1 
-                ? 100 
-                : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
+            const upperPercentile =
+                i === segmentCount - 1 ? 100 : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
             const startPercent = Math.round(lowerPercentile);
             const endPercent = Math.round(upperPercentile);
             newPercentileRanges.push(`${startPercent}% - ${endPercent}%`);

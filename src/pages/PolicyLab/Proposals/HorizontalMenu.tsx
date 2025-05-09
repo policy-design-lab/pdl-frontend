@@ -1,6 +1,7 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { MenuItem as MenuItemType } from "./Menu";
 
 const buttonBaseStyle = {
@@ -20,6 +21,19 @@ export function HorizontalMenu({
     onMenuSelect: (value: string) => void;
 }): JSX.Element {
     const [topLevel, midLevel] = selectedItem.split("-").map(Number);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleDropdownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleDropdownClose = () => {
+        setAnchorEl(null);
+    };
+    const handleDropdownSelect = (subIndex: number) => {
+        onMenuSelect(`1-${subIndex}`);
+        setAnchorEl(null);
+    };
 
     return (
         <Box
@@ -66,37 +80,43 @@ export function HorizontalMenu({
                                 backgroundColor: topLevel === 1 ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
                             },
                             "fontWeight": 600,
-                            "mr": 1
+                            "mr": 1,
+                            "display": "flex",
+                            "alignItems": "center"
                         }}
-                        onClick={() => onMenuSelect("1-0")}
+                        onClick={handleDropdownClick}
+                        endIcon={
+                            <ArrowDropDownIcon
+                                sx={{ color: topLevel === 1 ? "white" : "#2F7164", ml: 0.5, fontSize: 28 }}
+                            />
+                        }
                     >
                         {menu[1].title}
                     </Button>
-                    <NavigateNextIcon sx={{ mx: 1, color: "#666" }} />
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleDropdownClose}
+                        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                        transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    >
+                        {menu[1]?.items &&
+                            menu[1].items.map((item, subIndex) => (
+                                <MenuItem
+                                    key={`submenu-${subIndex}`}
+                                    selected={topLevel === 1 && midLevel === subIndex}
+                                    onClick={() => handleDropdownSelect(subIndex)}
+                                    sx={{
+                                        fontWeight: topLevel === 1 && midLevel === subIndex ? 600 : 400,
+                                        color: "#2F7164"
+                                    }}
+                                >
+                                    {item.title}
+                                </MenuItem>
+                            ))}
+                    </Menu>
                 </>
             )}
-            {menu[1]?.items &&
-                menu[1].items.map((item, subIndex) => (
-                    <Button
-                        key={`submenu-${subIndex}`}
-                        variant={topLevel === 1 && midLevel === subIndex ? "contained" : "outlined"}
-                        size="small"
-                        sx={{
-                            ...buttonBaseStyle,
-                            "color": topLevel === 1 && midLevel === subIndex ? "white" : "#2F7164",
-                            "backgroundColor": topLevel === 1 && midLevel === subIndex ? "#2F7164" : "transparent",
-                            "&:hover": {
-                                backgroundColor:
-                                    topLevel === 1 && midLevel === subIndex ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
-                            },
-                            "fontWeight": topLevel === 1 && midLevel === subIndex ? 600 : 400,
-                            "mr": 1
-                        }}
-                        onClick={() => onMenuSelect(`1-${subIndex}`)}
-                    >
-                        {item.title}
-                    </Button>
-                ))}
         </Box>
     );
 }
