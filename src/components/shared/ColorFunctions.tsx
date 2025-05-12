@@ -90,24 +90,19 @@ const optimizeThresholds = (thresholds: number[], data: number[]): number[] => {
     return result;
 };
 
-// Default percentiles as equal intervals if no custom percentiles are provided
 const defaultPercentiles = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 export const calculateThresholds = (dataValues: number[], customPercentiles?: number[]): number[] => {
     const validValues = dataValues.filter(
         (v) => v !== undefined && v !== null && !Number.isNaN(v) && v !== 0 && Number.isFinite(v)
     );
-
     if (validValues.length === 0) {
         return [];
     }
     const sortedData = [...validValues].sort((a, b) => a - b);
     const dataLength = sortedData.length;
     const initialThresholds: number[] = [];
-
-    // Always include the minimum value
     initialThresholds.push(sortedData[0]);
-
     if (dataLength < 30) {
         const min = sortedData[0];
         const max = sortedData[dataLength - 1];
@@ -115,28 +110,16 @@ export const calculateThresholds = (dataValues: number[], customPercentiles?: nu
         for (let i = 1; i < 9; i += 1) {
             initialThresholds.push(min + step * i);
         }
-
-        // Always include the maximum value
         initialThresholds.push(max);
     } else {
         const percentiles = customPercentiles || defaultPercentiles;
-
-        // Filter out the 0 percentile as we've already added the min value
-        // Also filter out 100 as we'll add the max value separately
         const filteredPercentiles = percentiles.filter((p) => p > 0 && p < 100);
-
-        // Add values for each percentile between 0 and 100
         filteredPercentiles.forEach((percentile) => {
             const index = Math.floor(dataLength * (percentile / 100));
             initialThresholds.push(sortedData[Math.min(index, dataLength - 1)]);
         });
-
-        // Always include the maximum value
         initialThresholds.push(sortedData[dataLength - 1]);
     }
-
-    // Remove duplicates and sort
     const uniqueThresholds = Array.from(new Set(initialThresholds)).sort((a, b) => a - b);
-
     return uniqueThresholds;
 };

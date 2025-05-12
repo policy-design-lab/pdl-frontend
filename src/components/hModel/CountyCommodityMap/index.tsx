@@ -6,6 +6,7 @@ import CountyMap from "./CountyMap";
 import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
+import { PercentileMode } from "./percentileConfig";
 
 const CountyCommodityMap = ({
     countyData,
@@ -35,6 +36,39 @@ const CountyCommodityMap = ({
     const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
     const [forceUpdate, setForceUpdate] = useState(0);
     const [isAtTop, setIsAtTop] = useState(false);
+    const [percentileMode, setPercentileMode] = useState(PercentileMode.DEFAULT);
+    const [mapInitialized, setMapInitialized] = useState(false);
+    
+    const mapData = useMemo(() => {
+        if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
+        const result = processMapData({
+            countyData,
+            countyDataProposed,
+            selectedYear,
+            viewMode,
+            selectedCommodities,
+            selectedPrograms,
+            selectedState,
+            stateCodesData,
+            yearAggregation,
+            showMeanValues,
+            percentileMode
+        });
+        return result;
+    }, [
+        countyData,
+        countyDataProposed,
+        selectedYear,
+        viewMode,
+        selectedCommodities,
+        selectedPrograms,
+        selectedState,
+        stateCodesData,
+        yearAggregation,
+        showMeanValues,
+        percentileMode,
+        forceUpdate
+    ]);
 
     useEffect(() => {
         let mounted = true;
@@ -135,34 +169,20 @@ const CountyCommodityMap = ({
         }
     };
 
-    const mapData = useMemo(() => {
-        if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
-        const result = processMapData({
-            countyData,
-            countyDataProposed,
-            selectedYear,
-            viewMode,
-            selectedCommodities,
-            selectedPrograms,
-            selectedState,
-            stateCodesData,
-            yearAggregation,
-            showMeanValues
-        });
-        return result;
-    }, [
-        countyData,
-        countyDataProposed,
-        selectedYear,
-        viewMode,
-        selectedCommodities,
-        selectedPrograms,
-        selectedState,
-        stateCodesData,
-        yearAggregation,
-        showMeanValues,
-        forceUpdate
-    ]);
+    const handlePercentileModeChange = (newMode) => {
+        if (newMode !== percentileMode) {
+            setPercentileMode(newMode);
+            // Use forceUpdate to trigger re-render with new percentile mode
+            setForceUpdate(prev => prev + 1);
+        }
+    };
+
+    useEffect(() => {
+        // After initial render, mark the map as initialized to prevent layout shifts
+        if (!mapInitialized && mapData && mapData.thresholds && mapData.thresholds.length > 0) {
+            setMapInitialized(true);
+        }
+    }, [mapData, mapInitialized]);
 
     const mapKey = useMemo(() => {
         return `${selectedCommodities.join("|")}-${selectedPrograms.join(
@@ -313,7 +333,7 @@ const CountyCommodityMap = ({
                     </Box>
                 </Box>
 
-                <Box sx={{ mt: 5 }}>
+                <Box sx={{ mt: 5, minHeight: mapInitialized ? 200 : 'auto' }}>
                     <MapLegend
                         mapData={mapData}
                         mapColor={mapColor}
@@ -324,6 +344,8 @@ const CountyCommodityMap = ({
                         showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
                         stateCodeToName={stateCodeToName}
+                        percentileMode={percentileMode}
+                        onPercentileModeChange={handlePercentileModeChange}
                     />
                 </Box>
             </Box>
