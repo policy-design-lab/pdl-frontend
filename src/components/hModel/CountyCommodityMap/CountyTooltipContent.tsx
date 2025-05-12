@@ -279,7 +279,15 @@ function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
     return content;
 }
 
-function generateRegularTooltipContent(countyData, classes, showMeanValues, yearAggregation, selectedCommodities = [], selectedPrograms = [], selectedYears = []) {
+function generateRegularTooltipContent(
+    countyData,
+    classes,
+    showMeanValues,
+    yearAggregation,
+    selectedCommodities = [],
+    selectedPrograms = [],
+    selectedYears = []
+) {
     const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
@@ -821,13 +829,11 @@ function generateYearBreakdownContent(countyData, classes, showMeanValues, selec
     </tr>`;
 
     if (countyData.yearlyData) {
-        const selectedYearsStrings = Array.isArray(selectedYears) 
-            ? selectedYears.map(year => String(year)) 
-            : [];
-        const yearsToShow = selectedYearsStrings.length > 0
-            ? Object.keys(countyData.yearlyData).filter(year => 
-                selectedYearsStrings.includes(year))
-            : Object.keys(countyData.yearlyData);
+        const selectedYearsStrings = Array.isArray(selectedYears) ? selectedYears.map((year) => String(year)) : [];
+        const yearsToShow =
+            selectedYearsStrings.length > 0
+                ? Object.keys(countyData.yearlyData).filter((year) => selectedYearsStrings.includes(year))
+                : Object.keys(countyData.yearlyData);
         const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
         sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];
@@ -919,13 +925,11 @@ function generateYearBreakdownDifferenceContent(countyData, classes, showMeanVal
     </tr>`;
 
     if (countyData.yearlyData) {
-        const selectedYearsStrings = Array.isArray(selectedYears) 
-            ? selectedYears.map(year => String(year)) 
-            : [];     
-        const yearsToShow = selectedYearsStrings.length > 0
-            ? Object.keys(countyData.yearlyData).filter(year => 
-                selectedYearsStrings.includes(year))
-            : Object.keys(countyData.yearlyData);
+        const selectedYearsStrings = Array.isArray(selectedYears) ? selectedYears.map((year) => String(year)) : [];
+        const yearsToShow =
+            selectedYearsStrings.length > 0
+                ? Object.keys(countyData.yearlyData).filter((year) => selectedYearsStrings.includes(year))
+                : Object.keys(countyData.yearlyData);
         const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
         sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];

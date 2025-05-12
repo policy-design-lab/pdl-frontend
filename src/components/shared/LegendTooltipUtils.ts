@@ -47,7 +47,6 @@ export const getRegionInfoFromFips = (fips: string): { name: string; stateCode: 
 
 export const formatRegionName = (name: string, regionType = "County"): string => {
     if (!name) return `Unknown ${regionType}`;
-
     if (name.toLowerCase().includes(regionType.toLowerCase())) return name;
     return name;
 };
@@ -76,12 +75,80 @@ export const processRegionsInRange = (
     const regionsInRange: RawRegionData[] = [];
     let highestValueRegion: RawRegionData | null = null;
     let highestValue = -Infinity;
+    let lowestValueRegion: RawRegionData | null = null;
+    let lowestValue = Infinity;
     let maxValueInData = -Infinity;
     Object.entries(regionData).forEach(([fips, region]) => {
         if (!region || (typeof region === "object" && !region.hasData)) return;
         const regionValue = typeof region === "number" ? region : region.value;
         if (regionValue !== undefined && regionValue !== null && isFinite(regionValue)) {
             maxValueInData = Math.max(maxValueInData, regionValue);
+            if (regionValue > highestValue) {
+                highestValue = regionValue;
+                let stateName = "";
+                let regionName = "";
+                if (typeof region === "object") {
+                    if (region.state && region.state !== "All States") {
+                        stateName = region.state;
+                    } else if (region.stateFIPS) {
+                        stateName = getStateFromFips(region.stateFIPS, stateCodeToName);
+                    } else if (fips) {
+                        stateName = getStateFromFipsEnhanced(fips, stateCodeToName);
+                    }
+                    if (region.name) {
+                        regionName = region.name;
+                    } else if (fips) {
+                        regionName = getRegionNameFromFips(fips, regionType);
+                    } else {
+                        regionName = `Unknown ${regionType}`;
+                    }
+                } else if (fips) {
+                    stateName = getStateFromFipsEnhanced(fips, stateCodeToName);
+                    regionName = getRegionNameFromFips(fips, regionType);
+                } else {
+                    stateName = "";
+                    regionName = `Unknown ${regionType}`;
+                }
+                highestValueRegion = {
+                    fips,
+                    name: formatRegionName(regionName, regionType),
+                    state: stateName,
+                    value: regionValue
+                };
+            }
+            if (regionValue < lowestValue) {
+                lowestValue = regionValue;
+                let stateName = "";
+                let regionName = "";
+                if (typeof region === "object") {
+                    if (region.state && region.state !== "All States") {
+                        stateName = region.state;
+                    } else if (region.stateFIPS) {
+                        stateName = getStateFromFips(region.stateFIPS, stateCodeToName);
+                    } else if (fips) {
+                        stateName = getStateFromFipsEnhanced(fips, stateCodeToName);
+                    }
+                    if (region.name) {
+                        regionName = region.name;
+                    } else if (fips) {
+                        regionName = getRegionNameFromFips(fips, regionType);
+                    } else {
+                        regionName = `Unknown ${regionType}`;
+                    }
+                } else if (fips) {
+                    stateName = getStateFromFipsEnhanced(fips, stateCodeToName);
+                    regionName = getRegionNameFromFips(fips, regionType);
+                } else {
+                    stateName = "";
+                    regionName = `Unknown ${regionType}`;
+                }
+                lowestValueRegion = {
+                    fips,
+                    name: formatRegionName(regionName, regionType),
+                    state: stateName,
+                    value: regionValue
+                };
+            }
         }
     });
     const isLastBin = Math.abs(max - maxValueInData) < 0.001;
@@ -114,15 +181,6 @@ export const processRegionsInRange = (
                 stateName = "";
                 regionName = `Unknown ${regionType}`;
             }
-            if (regionValue > highestValue) {
-                highestValue = regionValue;
-                highestValueRegion = {
-                    fips,
-                    name: formatRegionName(regionName, regionType),
-                    state: stateName,
-                    value: regionValue
-                };
-            }
             const isInRange = isLastBin ? regionValue >= min : regionValue >= min && regionValue < max;
             if (isInRange) {
                 regionsInRange.push({
@@ -143,15 +201,13 @@ export const processRegionsInRange = (
         regionsInRange.sort((a, b) => a.value - b.value);
         minRegion = { ...regionsInRange[0] };
         maxRegion = { ...regionsInRange[regionsInRange.length - 1] };
-
         if (minRegion.fips && !minRegion.state) {
             minRegion.state = getStateFromFipsEnhanced(minRegion.fips, stateCodeToName);
         }
-
         if (maxRegion.fips && !maxRegion.state) {
             maxRegion.state = getStateFromFipsEnhanced(maxRegion.fips, stateCodeToName);
         }
-    } else if (highestValueRegion && min === max) {
+    } else if (min === max && highestValueRegion) {
         minRegion = highestValueRegion;
         maxRegion = highestValueRegion;
         regionsInRange.push(highestValueRegion);
@@ -161,9 +217,13 @@ export const processRegionsInRange = (
             maxRegion,
             regionCount: 1
         };
+    } else if (lowestValueRegion && highestValueRegion) {
+        minRegion = lowestValueRegion;
+        maxRegion = highestValueRegion;
     }
     return { regionsInRange, minRegion, maxRegion, regionCount };
 };
+
 export const isRegionObject = (
     region: string | { name: string; value: number; state?: string; fips?: string }
 ): region is { name: string; value: number; state?: string; fips?: string } => {

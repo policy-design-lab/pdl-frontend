@@ -100,10 +100,7 @@ const MapLegend = ({
                                 <MenuItem value={PercentileMode.DEFAULT}>
                                     <Box display="flex" alignItems="center">
                                         <Box>
-                                            <Typography variant="body2">Highlight Extremes</Typography>
-                                            <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'text.secondary', display: 'block' }}>
-                                                Non-linear percentiles
-                                            </Typography>
+                                            <Typography variant="body2">Non-linear percentiles</Typography>
                                         </Box>
                                         <InfoTooltip title={getPercentileModeExplanation(PercentileMode.DEFAULT)} />
                                     </Box>
@@ -111,10 +108,7 @@ const MapLegend = ({
                                 <MenuItem value={PercentileMode.EQUAL}>
                                     <Box display="flex" alignItems="center">
                                         <Box>
-                                            <Typography variant="body2">Balanced Distribution</Typography>
-                                            <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'text.secondary', display: 'block' }}>
-                                                Equal deciles (10%)
-                                            </Typography>
+                                            <Typography variant="body2">Equal deciles (10%)</Typography>
                                         </Box>
                                         <InfoTooltip title={getPercentileModeExplanation(PercentileMode.EQUAL)} />
                                     </Box>

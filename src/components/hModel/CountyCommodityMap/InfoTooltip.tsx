@@ -8,21 +8,21 @@ interface InfoTooltipProps {
 
 const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
     const formattedContent = (
-        <React.Fragment>
-            {title.split('\n\n').map((paragraph, index) => (
-                <Typography 
-                    key={index} 
-                    variant="body2" 
-                    style={{ 
-                        marginBottom: index < title.split('\n\n').length - 1 ? '8px' : 0,
-                        fontSize: '0.8rem',
-                        whiteSpace: 'pre-line'
+        <>
+            {title.split("\n\n").map((paragraph, index) => (
+                <Typography
+                    key={index}
+                    variant="body2"
+                    style={{
+                        marginBottom: index < title.split("\n\n").length - 1 ? "8px" : 0,
+                        fontSize: "0.8rem",
+                        whiteSpace: "pre-line"
                     }}
                 >
                     {paragraph}
                 </Typography>
             ))}
-        </React.Fragment>
+        </>
     );
 
     return (

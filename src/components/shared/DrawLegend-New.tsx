@@ -194,8 +194,29 @@ export default function DrawLegendNew({
                 const binRange = percentileRanges[rectIndex];
                 const min = cut_points[rectIndex];
                 const max = cut_points[rectIndex + 1];
+                const dataForProcessing = Object.entries(countyData).reduce((acc, [fips, county]) => {
+                    if (!county || typeof county !== "object" || !county.hasData) {
+                        return acc;
+                    }
+                    if (notDollar) {
+                        if (
+                            county.hasOwnProperty("meanPaymentRateInDollarsPerAcre") &&
+                            county.hasValidBaseAcres &&
+                            county.meanPaymentRateInDollarsPerAcre !== undefined
+                        ) {
+                            const roundedValue = Math.round(county.meanPaymentRateInDollarsPerAcre * 100) / 100;
+                            acc[fips] = {
+                                ...county,
+                                value: roundedValue
+                            };
+                        }
+                    } else {
+                        acc[fips] = county;
+                    }
+                    return acc;
+                }, {});
                 const { minRegion, maxRegion, regionCount } = processRegionsInRange(
-                    countyData,
+                    dataForProcessing,
                     min,
                     max,
                     stateCodeToName,
@@ -204,8 +225,8 @@ export default function DrawLegendNew({
                 setTooltipData({
                     percentileRange: binRange,
                     regionCount,
-                    minRegion: regionCount > 0 ? minRegion : "N/A",
-                    maxRegion: regionCount > 0 ? maxRegion : "N/A",
+                    minRegion: regionCount > 0 ? minRegion : minRegion,
+                    maxRegion: regionCount > 0 ? maxRegion : maxRegion,
                     rectIndex
                 });
                 const rectDOMBounds = this.getBoundingClientRect();
@@ -243,11 +264,12 @@ export default function DrawLegendNew({
                 if (isRatio) {
                     return `${Math.round(d * 100)}%`;
                 }
+                const roundedValue = Math.round(d * 100) / 100;
                 if (!notDollar) {
-                    const res = ShortFormat(d.toFixed(2), -1, 2);
+                    const res = ShortFormat(roundedValue.toFixed(2), -1, 2);
                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                 }
-                return ShortFormat(d.toFixed(2), -1, 2);
+                return ShortFormat(roundedValue.toFixed(2), -1, 2);
             });
         if (emptyState.length !== 0) {
             const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
