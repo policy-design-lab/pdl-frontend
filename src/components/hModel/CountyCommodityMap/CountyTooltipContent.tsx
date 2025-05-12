@@ -10,7 +10,8 @@ export const CountyTooltipContent = ({
     selectedPrograms,
     classes,
     showMeanValues,
-    yearAggregation
+    yearAggregation,
+    selectedYears = []
 }) => {
     if (!countyData) return "";
 
@@ -111,11 +112,19 @@ export const CountyTooltipContent = ({
 
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, showMeanValues);
-
-        if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
-            tooltipContent += generateYearBreakdownDifferenceContent(countyData, classes, showMeanValues);
+        const isMultiYearSelection = Array.isArray(selectedYears) && selectedYears.length > 1;
+        if (
+            (yearAggregation > 0 || isMultiYearSelection) &&
+            countyData.yearlyData &&
+            Object.keys(countyData.yearlyData).length > 0
+        ) {
+            tooltipContent += generateYearBreakdownDifferenceContent(
+                countyData,
+                classes,
+                showMeanValues,
+                selectedYears
+            );
         }
-
         if (
             selectedCommodities &&
             !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))
@@ -126,10 +135,10 @@ export const CountyTooltipContent = ({
                 classes,
                 showMeanValues,
                 viewMode,
-                yearAggregation
+                yearAggregation,
+                selectedYears
             );
         }
-
         if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
             tooltipContent += generateProgramDifferenceContent(countyData, selectedPrograms, classes, showMeanValues);
         }
@@ -140,7 +149,8 @@ export const CountyTooltipContent = ({
             showMeanValues,
             yearAggregation,
             selectedCommodities,
-            selectedPrograms
+            selectedPrograms,
+            selectedYears
         );
 
         if (
@@ -153,7 +163,8 @@ export const CountyTooltipContent = ({
                 classes,
                 showMeanValues,
                 viewMode,
-                yearAggregation
+                yearAggregation,
+                selectedYears
             );
         }
 
@@ -185,9 +196,6 @@ function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
     const isCurrentWeightedAvg = countyData.isCurrentMeanWeighted;
     const isProposedWeightedAvg = countyData.isProposedMeanWeighted;
     const meanRateDiff = countyData.meanRateDifference || 0;
-
-    const sectionHeaderStyle =
-        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
 
     const content = `
@@ -271,14 +279,7 @@ function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
     return content;
 }
 
-function generateRegularTooltipContent(
-    countyData,
-    classes,
-    showMeanValues,
-    yearAggregation,
-    selectedCommodities,
-    selectedPrograms
-) {
+function generateRegularTooltipContent(countyData, classes, showMeanValues, yearAggregation, selectedYears = []) {
     const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
@@ -314,8 +315,12 @@ function generateRegularTooltipContent(
         </tr>`;
     }
 
-    if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
-        content += generateYearBreakdownContent(countyData, classes, showMeanValues);
+    if (
+        (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
+        countyData.yearlyData &&
+        Object.keys(countyData.yearlyData).length > 0
+    ) {
+        content += generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears);
     }
 
     return content;
@@ -325,9 +330,9 @@ function generateCommodityDifferenceContent(
     countyData,
     selectedCommodities,
     classes,
-    showMeanValues,
     viewMode,
-    yearAggregation = 0
+    yearAggregation = 0,
+    selectedYears = []
 ) {
     let content = "";
 
@@ -464,12 +469,15 @@ function generateCommodityDifferenceContent(
                 </tr>`;
 
                 if (
-                    yearAggregation > 0 &&
-                    commodityData.yearlyData &&
-                    Object.keys(commodityData.yearlyData).length > 0
+                    (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
+                    countyData.commodities[commodity].yearBreakdown
                 ) {
-                    const years = Object.keys(commodityData.yearlyData).sort((a, b) => b.localeCompare(a));
-                    if (years.length > 0) {
+                    const commodityYears =
+                        selectedYears && selectedYears.length > 0
+                            ? Object.keys(commodityData.yearlyData || {}).filter((year) => selectedYears.includes(year))
+                            : Object.keys(commodityData.yearlyData || {});
+                    const sortedCommodityYears = commodityYears.sort((a, b) => b.localeCompare(a));
+                    if (sortedCommodityYears.length > 0) {
                         content += `
                         <tr>
                             <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold; font-size: 0.9rem;">
@@ -477,7 +485,7 @@ function generateCommodityDifferenceContent(
                             </td>
                         </tr>`;
 
-                        years.forEach((year) => {
+                        sortedCommodityYears.forEach((year) => {
                             const yearData = commodityData.yearlyData[year];
                             if (yearData) {
                                 const value =
@@ -789,12 +797,9 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
     return content;
 }
 
-function generateYearBreakdownContent(countyData, classes, showMeanValues) {
+function generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears = []) {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
-    const subSectionStyle =
-        "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
-
     let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
 
     const valueLabel = showMeanValues ? "County Payment Rate" : "County Total";
@@ -817,8 +822,12 @@ function generateYearBreakdownContent(countyData, classes, showMeanValues) {
     </tr>`;
 
     if (countyData.yearlyData) {
-        const years = Object.keys(countyData.yearlyData).sort((a, b) => b.localeCompare(a));
-        years.forEach((year) => {
+        const yearsToShow =
+            selectedYears && selectedYears.length > 0 ?
+                Object.keys(countyData.yearlyData).filter((year) => selectedYears.includes(year)) :
+                Object.keys(countyData.yearlyData);
+        const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
+        sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];
             if (yearData) {
                 const value =
@@ -881,7 +890,7 @@ function generateYearBreakdownContent(countyData, classes, showMeanValues) {
     return content;
 }
 
-function generateYearBreakdownDifferenceContent(countyData, classes, showMeanValues) {
+function generateYearBreakdownDifferenceContent(countyData, classes, showMeanValues, selectedYears = []) {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
@@ -908,8 +917,12 @@ function generateYearBreakdownDifferenceContent(countyData, classes, showMeanVal
     </tr>`;
 
     if (countyData.yearlyData) {
-        const years = Object.keys(countyData.yearlyData).sort((a, b) => b.localeCompare(a));
-        years.forEach((year) => {
+        const yearsToShow =
+            selectedYears && selectedYears.length > 0 ?
+                Object.keys(countyData.yearlyData).filter((year) => selectedYears.includes(year)) :
+                Object.keys(countyData.yearlyData);
+        const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
+        sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];
             if (yearData) {
                 const currentValue =
@@ -1017,7 +1030,8 @@ function generateCommodityRegularContent(
     classes,
     showMeanValues,
     viewMode = "current",
-    yearAggregation = 0
+    yearAggregation = 0,
+    selectedYears = []
 ) {
     let content = "";
     const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
@@ -1120,20 +1134,22 @@ function generateCommodityRegularContent(
                 </tr>`;
 
                 if (
-                    yearAggregation > 0 &&
-                    commodityData.yearlyData &&
-                    Object.keys(commodityData.yearlyData).length > 0
+                    (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
+                    countyData.commodities[commodity].yearBreakdown
                 ) {
-                    const years = Object.keys(commodityData.yearlyData).sort((a, b) => b.localeCompare(a));
-                    if (years.length > 0) {
+                    const commodityYears =
+                        selectedYears && selectedYears.length > 0
+                            ? Object.keys(commodityData.yearlyData || {}).filter((year) => selectedYears.includes(year))
+                            : Object.keys(commodityData.yearlyData || {});
+                    const sortedCommodityYears = commodityYears.sort((a, b) => b.localeCompare(a));
+                    if (sortedCommodityYears.length > 0) {
                         content += `
                         <tr>
                             <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold; font-size: 0.9rem;">
                                 Yearly Breakdown:
                             </td>
                         </tr>`;
-
-                        years.forEach((year) => {
+                        sortedCommodityYears.forEach((year) => {
                             const yearData = commodityData.yearlyData[year];
                             if (yearData) {
                                 const value =

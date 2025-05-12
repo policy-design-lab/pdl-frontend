@@ -32,24 +32,28 @@ export const processMapData = ({
     countyData,
     countyDataProposed,
     selectedYear,
+    selectedYears = [],
     viewMode,
     selectedCommodities,
     selectedPrograms,
     selectedState,
     stateCodesData,
     yearAggregation,
+    aggregationEnabled = false,
     showMeanValues,
     percentileMode = PercentileMode.DEFAULT
 }: {
     countyData: Record<string, any>;
     countyDataProposed: Record<string, any>;
     selectedYear: string;
+    selectedYears?: string[];
     viewMode: string;
     selectedCommodities: string[];
     selectedPrograms: string[];
     selectedState: string;
     stateCodesData: Record<string, string>;
     yearAggregation: number;
+    aggregationEnabled?: boolean;
     showMeanValues: boolean;
     percentileMode?: PercentileMode;
 }) => {
@@ -59,16 +63,19 @@ export const processMapData = ({
 
     const counties = {};
     const dataValues: number[] = [];
-    const yearsToAggregate: string[] = [];
-
-    if (yearAggregation > 0) {
-        const availableYears = Object.keys(countyData).sort();
-        const currentIndex = availableYears.indexOf(selectedYear);
-        yearsToAggregate.push(selectedYear);
-        for (let i = 1; i <= yearAggregation; i++) {
-            const prevIndex = currentIndex - i;
-            if (prevIndex >= 0) {
-                yearsToAggregate.push(availableYears[prevIndex]);
+    let yearsToAggregate: string[] = [];
+    if (aggregationEnabled) {
+        if (selectedYears && selectedYears.length > 0) {
+            yearsToAggregate = [...selectedYears];
+        } else {
+            const availableYears = Object.keys(countyData).sort();
+            const currentIndex = availableYears.indexOf(selectedYear);
+            yearsToAggregate.push(selectedYear);
+            for (let i = 1; i <= yearAggregation; i++) {
+                const prevIndex = currentIndex - i;
+                if (prevIndex >= 0) {
+                    yearsToAggregate.push(availableYears[prevIndex]);
+                }
             }
         }
     } else {
@@ -601,7 +608,7 @@ export const processMapData = ({
     );
 
     const percentiles = getMapPercentiles(percentileMode);
-    
+
     const thresholds = calculateThresholds(validDataValues, percentiles);
 
     return {

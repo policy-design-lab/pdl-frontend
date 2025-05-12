@@ -27,40 +27,46 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
     return (
         <>
             <div style={{ fontWeight: "bold", marginBottom: "8px" }}>
-            Percentile Range: {tooltipData.percentileRange}
-        </div>
+                Percentile Range: {tooltipData.percentileRange}
+            </div>
             <div style={{ marginBottom: "8px", lineHeight: "1.4", fontSize: "0.9rem" }}>
-            {tooltipData.regionCount > 0 
-                ? `${tooltipData.regionCount} ${regionPlural} with ${valueType} that fall between the ${startPercentile}th and ${endPercentile}th percentiles of all values`
-                : isHighestRange
-                ? `This represents the highest value range (${startPercentile}%-${endPercentile}%). There are no ${regionPlural} with values in this specific range.`
-                : `There are no ${regionPlural} with ${valueType} that fall between the ${startPercentile}th and ${endPercentile}th percentiles.`}
+                {tooltipData.regionCount > 0
+                    ? `${tooltipData.regionCount} ${regionPlural} with ${valueType} that fall between the ${startPercentile}th and ${endPercentile}th percentiles of all values`
+                    : isHighestRange
+                    ? `This represents the highest value range (${startPercentile}%-${endPercentile}%). There are no ${regionPlural} with values in this specific range.`
+                    : `There are no ${regionPlural} with ${valueType} that fall between the ${startPercentile}th and ${endPercentile}th percentiles.`}
             </div>
             {(tooltipData.regionCount > 0 || hasHighestValueInfo) &&
                 isRegionObject(tooltipData.minRegion) &&
                 isRegionObject(tooltipData.maxRegion) && (
                     <>
-           {hasHighestValueInfo ? (
+                        {hasHighestValueInfo ? (
                             <div style={{ fontSize: "0.85rem", marginBottom: "4px" }}>
-                  <strong>Highest Value:</strong> {tooltipData.maxRegion.name}
-                  {tooltipData.maxRegion.state ? `, ${tooltipData.maxRegion.state}` : ""}: 
-                  {notDollar ? tooltipData.maxRegion.value.toLocaleString() : `$${tooltipData.maxRegion.value.toLocaleString()}`}
-              </div>
+                                <strong>Highest Value:</strong> {tooltipData.maxRegion.name}
+                                {tooltipData.maxRegion.state ? `, ${tooltipData.maxRegion.state}` : ""}:
+                                {notDollar
+                                    ? tooltipData.maxRegion.value.toLocaleString()
+                                    : `$${tooltipData.maxRegion.value.toLocaleString()}`}
+                            </div>
                         ) : (
                             <>
                                 <div style={{ fontSize: "0.85rem", marginBottom: "4px" }}>
                                     <strong>Lowest:</strong> {tooltipData.minRegion.name}
-                    {tooltipData.minRegion.state ? `, ${tooltipData.minRegion.state}` : ""}: 
-                    {notDollar ? tooltipData.minRegion.value.toLocaleString() : `$${tooltipData.minRegion.value.toLocaleString()}`}
-                </div>
+                                    {tooltipData.minRegion.state ? `, ${tooltipData.minRegion.state}` : ""}:
+                                    {notDollar
+                                        ? tooltipData.minRegion.value.toLocaleString()
+                                        : `$${tooltipData.minRegion.value.toLocaleString()}`}
+                                </div>
                                 <div style={{ fontSize: "0.85rem" }}>
                                     <strong>Highest:</strong> {tooltipData.maxRegion.name}
-                    {tooltipData.maxRegion.state ? `, ${tooltipData.maxRegion.state}` : ""}: 
-                    {notDollar ? tooltipData.maxRegion.value.toLocaleString() : `$${tooltipData.maxRegion.value.toLocaleString()}`}
-                </div>
+                                    {tooltipData.maxRegion.state ? `, ${tooltipData.maxRegion.state}` : ""}:
+                                    {notDollar
+                                        ? tooltipData.maxRegion.value.toLocaleString()
+                                        : `$${tooltipData.maxRegion.value.toLocaleString()}`}
+                                </div>
                             </>
                         )}
-       </>
+                    </>
                 )}
         </>
     );

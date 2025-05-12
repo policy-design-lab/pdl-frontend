@@ -219,7 +219,7 @@ const MapControls = ({
                         }}
                     >
                         Year Selection
-                        <InfoTooltip title="Control the time period for displayed data. Use the button to select a specific fiscal year for payments. The toggle option lets you view aggregated/weighted average data instead of single-year data, providing insights into multi-year program impacts." />
+                        <InfoTooltip title="Control the time period for displayed data. In 'Single' mode, select a specific fiscal year. In 'Aggregated' mode, you can select multiple years to view aggregated/weighted average data across those years." />
                     </FormLabel>
                     <RadioGroup
                         row
@@ -252,7 +252,6 @@ const MapControls = ({
                         />
                         <FormControlLabel
                             value="aggregated"
-                            disabled={isAggregationDisabled}
                             control={
                                 <Radio
                                     size="small"
@@ -270,66 +269,103 @@ const MapControls = ({
                                     Aggregated
                                 </Typography>
                             }
-                            sx={{
-                                color: isAggregationDisabled ? "rgba(47, 113, 100, 0.5)" : "rgba(47, 113, 100, 1)"
-                            }}
+                            sx={{ color: "rgba(47, 113, 100, 1)" }}
+                            disabled={isAggregationDisabled}
                         />
                     </RadioGroup>
                 </Box>
-                <ToggleButtonGroup
-                    value={yearRange[0]}
-                    exclusive
-                    onChange={handleYearRangeChange}
-                    aria-label="year selection"
-                    sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        width: "100%"
-                    }}
-                    size="small"
-                >
-                    {availableYears.map((year, index) => (
-                        <ToggleButton
-                            key={year}
-                            value={index}
-                            sx={{
-                                "flex": "0 0 auto",
-                                "margin": "0 4px 4px 0",
-                                "color": yearRange[0] === index ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor":
-                                    yearRange[0] === index ||
-                                    (aggregationEnabled && year >= yearRange[0] && year <= selectedYear)
-                                        ? "rgba(47, 113, 100, 0.1)"
-                                        : "transparent",
-                                "fontWeight":
-                                    yearRange[0] === index ||
-                                    (aggregationEnabled && year >= yearRange[0] && year <= selectedYear)
-                                        ? "bold"
-                                        : "normal",
-                                "border": "1px solid rgba(47, 113, 100, 0.5)",
-                                "height": toggleButtonHeight,
-                                "minWidth": "48px",
-                                "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 0.05)"
-                                }
-                            }}
-                        >
-                            {year}
-                        </ToggleButton>
-                    ))}
-                </ToggleButtonGroup>
-                {aggregationEnabled && !isAggregationDisabled && (
-                    <Typography
-                        variant="caption"
+
+                {aggregationEnabled ? (
+                    <Box
                         sx={{
-                            display: "block",
-                            mt: 0.5,
-                            color: "rgba(47, 113, 100, 0.8)",
-                            fontSize: "0.75rem"
+                            "display": "flex",
+                            "width": "100%",
+                            "flexWrap": "wrap",
+                            "gap": "4px",
+                            ".MuiToggleButton-root": {
+                                borderRadius: "4px !important"
+                            }
                         }}
                     >
-                        Showing data from {availableYears[0]} to {selectedYear}
-                    </Typography>
+                        {availableYears.map((year, index) => (
+                            <ToggleButton
+                                key={index}
+                                value={index}
+                                selected={yearRange.includes(index)}
+                                onClick={() => {
+                                    let newYearRange = [...yearRange];
+                                    if (newYearRange.includes(index) && newYearRange.length > 1) {
+                                        newYearRange = newYearRange.filter((idx) => idx !== index);
+                                    } else if (!newYearRange.includes(index)) {
+                                        newYearRange.push(index);
+                                    }
+                                    setYearRange(newYearRange);
+                                }}
+                                sx={{
+                                    "flex": 1,
+                                    "minWidth": "80px",
+                                    "color": yearRange.includes(index) ?
+                                        "rgba(47, 113, 100, 1)" :
+                                        "rgba(47, 113, 100, 0.8)",
+                                    "backgroundColor": yearRange.includes(index) ?
+                                        "rgba(47, 113, 100, 0.1)" :
+                                        "transparent",
+                                    "fontWeight": yearRange.includes(index) ? "bold" : "normal",
+                                    "border": "1px solid rgba(47, 113, 100, 0.5)",
+                                    "height": toggleButtonHeight,
+                                    "&:hover": {
+                                        backgroundColor: "rgba(47, 113, 100, 0.05)"
+                                    },
+                                    "marginBottom": "4px"
+                                }}
+                            >
+                                {year}
+                            </ToggleButton>
+                        ))}
+                    </Box>
+                ) : (
+                    <ToggleButtonGroup
+                        value={yearRange[0]}
+                        exclusive
+                        onChange={handleYearRangeChange}
+                        aria-label="selected year"
+                        sx={{
+                            "display": "flex",
+                            "width": "100%",
+                            "flexWrap": "wrap",
+                            "gap": "4px",
+                            ".MuiToggleButtonGroup-grouped": {
+                                border: "1px solid rgba(47, 113, 100, 0.5)",
+                                mx: "0 !important",
+                                borderRadius: "4px !important"
+                            }
+                        }}
+                        size="small"
+                    >
+                        {availableYears.map((year, index) => (
+                            <ToggleButton
+                                key={index}
+                                value={index}
+                                sx={{
+                                    "flex": 1,
+                                    "minWidth": "80px",
+                                    "color":
+                                        yearRange[0] === index ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
+                                    "backgroundColor":
+                                        yearRange[0] === index ? "rgba(47, 113, 100, 0.1)" : "transparent",
+                                    "fontWeight": yearRange[0] === index ? "bold" : "normal",
+                                    "border": "1px solid rgba(47, 113, 100, 0.5)",
+                                    "height": toggleButtonHeight,
+                                    "&:hover": {
+                                        backgroundColor: "rgba(47, 113, 100, 0.05)"
+                                    },
+                                    "marginBottom": "4px"
+                                }}
+                            >
+                                {year}
+                            </ToggleButton>
+                        ))}
+                    </ToggleButtonGroup>
                 )}
             </Grid>
         </Grid>

@@ -28,6 +28,7 @@ const CountyCommodityMap = ({
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[0] || "2024");
+    const [selectedYears, setSelectedYears] = useState([availableYears[0] || "2024"]);
     const [selectedCommodities, setSelectedCommodities] = useState(["All Commodities"]);
     const [selectedPrograms, setSelectedPrograms] = useState(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
@@ -38,19 +39,21 @@ const CountyCommodityMap = ({
     const [isAtTop, setIsAtTop] = useState(false);
     const [percentileMode, setPercentileMode] = useState(PercentileMode.DEFAULT);
     const [mapInitialized, setMapInitialized] = useState(false);
-    
+
     const mapData = useMemo(() => {
         if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
         const result = processMapData({
             countyData,
             countyDataProposed,
             selectedYear,
+            selectedYears: aggregationEnabled ? selectedYears : [selectedYear],
             viewMode,
             selectedCommodities,
             selectedPrograms,
             selectedState,
             stateCodesData,
             yearAggregation,
+            aggregationEnabled,
             showMeanValues,
             percentileMode
         });
@@ -59,12 +62,14 @@ const CountyCommodityMap = ({
         countyData,
         countyDataProposed,
         selectedYear,
+        selectedYears,
         viewMode,
         selectedCommodities,
         selectedPrograms,
         selectedState,
         stateCodesData,
         yearAggregation,
+        aggregationEnabled,
         showMeanValues,
         percentileMode,
         forceUpdate
@@ -87,16 +92,40 @@ const CountyCommodityMap = ({
     useEffect(() => {
         let mounted = true;
         if (mounted) {
-            const newYear = availableYears[yearRange[0]] || "2024";
-            setSelectedYear(newYear);
+            if (aggregationEnabled && yearRange.length > 0) {
+                const selectedYearsList = yearRange.map((index) => availableYears[index] || "2024");
+                setSelectedYears(selectedYearsList);
+                const latestYearIndex = Math.max(...yearRange);
+                setSelectedYear(availableYears[latestYearIndex] || "2024");
+            } else {
+                const newYear = availableYears[yearRange[0]] || "2024";
+                setSelectedYear(newYear);
+                setSelectedYears([newYear]);
+            }
+
             if (onMapUpdate) {
-                onMapUpdate(newYear, selectedCommodities, selectedPrograms, selectedState, viewMode);
+                onMapUpdate(
+                    aggregationEnabled && yearRange.length > 1 ? selectedYears : selectedYear,
+                    selectedCommodities,
+                    selectedPrograms,
+                    selectedState,
+                    viewMode
+                );
             }
         }
         return () => {
             mounted = false;
         };
-    }, [yearRange, availableYears, onMapUpdate, selectedCommodities, selectedPrograms, selectedState, viewMode]);
+    }, [
+        yearRange,
+        availableYears,
+        onMapUpdate,
+        selectedCommodities,
+        selectedPrograms,
+        selectedState,
+        viewMode,
+        aggregationEnabled
+    ]);
 
     useEffect(() => {
         if (onMapUpdate) {
@@ -172,23 +201,35 @@ const CountyCommodityMap = ({
     const handlePercentileModeChange = (newMode) => {
         if (newMode !== percentileMode) {
             setPercentileMode(newMode);
-            // Use forceUpdate to trigger re-render with new percentile mode
-            setForceUpdate(prev => prev + 1);
+            setForceUpdate((prev) => prev + 1);
         }
     };
 
     useEffect(() => {
-        // After initial render, mark the map as initialized to prevent layout shifts
         if (!mapInitialized && mapData && mapData.thresholds && mapData.thresholds.length > 0) {
             setMapInitialized(true);
         }
     }, [mapData, mapInitialized]);
 
     const mapKey = useMemo(() => {
+        const yearKey =
+            aggregationEnabled && selectedYears.length > 1 ?
+                `years-${selectedYears.join("-")}` :
+                `year-${selectedYear}`;
+
         return `${selectedCommodities.join("|")}-${selectedPrograms.join(
             "|"
-        )}-${selectedState}-${viewMode}-${selectedYear}-${forceUpdate}`;
-    }, [selectedCommodities, selectedPrograms, selectedState, viewMode, selectedYear, forceUpdate]);
+        )}-${selectedState}-${viewMode}-${yearKey}-${forceUpdate}`;
+    }, [
+        selectedCommodities,
+        selectedPrograms,
+        selectedState,
+        viewMode,
+        selectedYear,
+        selectedYears,
+        aggregationEnabled,
+        forceUpdate
+    ]);
 
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
@@ -333,12 +374,12 @@ const CountyCommodityMap = ({
                     </Box>
                 </Box>
 
-                <Box sx={{ mt: 5, minHeight: mapInitialized ? 200 : 'auto' }}>
+                <Box sx={{ mt: 5, minHeight: mapInitialized ? 200 : "auto" }}>
                     <MapLegend
                         mapData={mapData}
                         mapColor={mapColor}
                         viewMode={viewMode}
-                        selectedYear={selectedYear}
+                        selectedYear={aggregationEnabled && selectedYears.length > 1 ? selectedYears : selectedYear}
                         selectedState={selectedState}
                         yearAggregation={yearAggregation}
                         showMeanValues={showMeanValues}
@@ -370,6 +411,7 @@ const CountyCommodityMap = ({
                     yearAggregation={yearAggregation}
                     selectedCommodities={selectedCommodities}
                     setSelectedState={handleSetSelectedState}
+                    selectedYears={aggregationEnabled ? selectedYears : [selectedYear as any]}
                     key={mapKey}
                 />
             </Box>

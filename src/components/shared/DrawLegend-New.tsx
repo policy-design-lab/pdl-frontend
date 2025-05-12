@@ -103,10 +103,10 @@ export default function DrawLegendNew({
         if (containerRef.current) {
             observer.observe(containerRef.current);
         }
-        window.addEventListener('resize', updateWidthAndDraw);
+        window.addEventListener("resize", updateWidthAndDraw);
         return () => {
             observer.disconnect();
-            window.removeEventListener('resize', updateWidthAndDraw);
+            window.removeEventListener("resize", updateWidthAndDraw);
         };
     }, [updateWidthAndDraw]);
     React.useEffect(() => {
@@ -121,8 +121,8 @@ export default function DrawLegendNew({
             .select(legendRn.current)
             .append("svg")
             .attr("width", "100%")
-            .attr("height", showPercentileExplanation ? 140 : 110)
-            .attr("viewBox", `0 0 ${width} ${showPercentileExplanation ? 140 : 110}`)
+            .attr("height", 110)
+            .attr("viewBox", `0 0 ${width} 110`)
             .attr("preserveAspectRatio", "xMinYMid meet");
         const customScale = colorScale.domain();
         const minValue = Math.min(...programData);
@@ -249,25 +249,13 @@ export default function DrawLegendNew({
                 }
                 return ShortFormat(d.toFixed(2), -1, 2);
             });
-        if (showPercentileExplanation) {
-            baseSVG
-                .append("text")
-                .attr("class", "legendTextExplanation")
-                .attr("x", width / 2)
-                .attr("y", 100)
-                .attr("text-anchor", "middle")
-                .style("font-size", "11px")
-                .text(
-                    "Counties are grouped by percentile ranges based on their actual payment values or rates, not by count. Hover for details."
-                );
-        }
         if (emptyState.length !== 0) {
             const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
             baseSVG
                 .append("text")
                 .attr("class", "legendTextSide")
                 .attr("x", width / 2)
-                .attr("y", showPercentileExplanation ? 120 : 90)
+                .attr("y", 90)
                 .attr("text-anchor", "middle")
                 .text(`${zeroState.join(", ")} has no data available`);
         } else {
@@ -275,7 +263,7 @@ export default function DrawLegendNew({
                 .append("text")
                 .attr("class", "legendTextSide")
                 .attr("x", width / 2)
-                .attr("y", showPercentileExplanation ? 120 : 90)
+                .attr("y", 90)
                 .attr("text-anchor", "middle")
                 .text("Gray states indicate no available data or a value of 0");
         }
@@ -289,7 +277,7 @@ export default function DrawLegendNew({
                 minHeight: "140px"
             }}
         >
-            <div ref={legendRn} style={{ width: "100%" }}></div>
+            <div ref={legendRn} style={{ width: "100%" }} />
             {showTooltips && tooltipData && tooltipVisible && (
                 <div
                     ref={tooltipRef}

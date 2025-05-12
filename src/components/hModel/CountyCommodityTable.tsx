@@ -160,16 +160,21 @@ const CountyCommodityTable = ({
     }, [selectedYear, yearAggregation, aggregationEnabled]);
 
     const yearRange = useMemo(() => {
-        if (aggregationEnabled && yearAggregation > 0) {
-            const startYear = 2024;
-            const endYear = parseInt(selectedYear);
-            const years: string[] = [];
-            for (let year = startYear; year <= endYear; year++) {
-                years.push(year.toString());
+        if (aggregationEnabled) {
+            if (Array.isArray(selectedYear)) {
+                return selectedYear;
             }
-            return years;
+            if (yearAggregation > 0) {
+                const startYear = 2024;
+                const endYear = parseInt(selectedYear.toString());
+                const years: string[] = [];
+                for (let year = startYear; year <= endYear; year++) {
+                    years.push(year.toString());
+                }
+                return years;
+            }
         }
-        return [selectedYear];
+        return Array.isArray(selectedYear) ? selectedYear : [selectedYear];
     }, [selectedYear, yearAggregation, aggregationEnabled]);
 
     const getTableTitle = useMemo(() => {

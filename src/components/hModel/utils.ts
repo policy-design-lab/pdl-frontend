@@ -75,13 +75,14 @@ export const findProposedCommodityAndProgram = (
     return { proposedScenario, proposedCommodity, proposedProgram };
 };
 
-export const calculateYearRange = (selectedYear: string): string[] => {
+export const calculateYearRange = (selectedYear: string | string[]): string[] => {
+    if (Array.isArray(selectedYear)) {
+        return selectedYear;
+    }
     const isAggregatedYear = typeof selectedYear === "string" && selectedYear.includes("-");
-
     if (!isAggregatedYear) return [selectedYear];
-
     const [startYear, endYear] = selectedYear.split("-").map((y) => parseInt(y.trim(), 10));
-    const years = [];
+    const years: string[] = [];
     for (let year = startYear; year <= endYear; year++) {
         years.push(year.toString());
     }
@@ -98,13 +99,27 @@ export const compareWithDollarSign = (a: any, b: any) => {
 };
 
 export const generateTableTitle = (
-    selectedYear: string,
+    selectedYear: string | string[],
     selectedCommodities: string[],
     selectedPrograms: string[],
     viewMode: string,
     isAggregatedYear: boolean
 ): string => {
-    const yearPart = isAggregatedYear ? `Years ${selectedYear} (Aggregated)` : `Year ${selectedYear}`;
+    let yearPart = "";
+
+    if (Array.isArray(selectedYear)) {
+        // Handle multiple selected years
+        if (selectedYear.length === 1) {
+            yearPart = `Year ${selectedYear[0]}`;
+        } else {
+            // Sort years numerically for consistent display
+            const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+            yearPart = `Years ${sortedYears.join(", ")} (Aggregated)`;
+        }
+    } else {
+        // Handle single year or traditional aggregated year
+        yearPart = isAggregatedYear ? `Years ${selectedYear} (Aggregated)` : `Year ${selectedYear}`;
+    }
 
     let commodityPart = "";
     if (selectedCommodities.includes("All Commodities")) {
@@ -137,14 +152,25 @@ export const generateTableTitle = (
 };
 
 export const generateCsvFilename = (
-    selectedYear: string,
+    selectedYear: string | string[],
     selectedCommodities: string[],
     selectedPrograms: string[],
     viewMode: string,
     isAggregatedYear: boolean
 ): string => {
     const dateStr = new Date().toISOString().split("T")[0];
-    const yearStr = isAggregatedYear ? selectedYear.replace("-", "to") : selectedYear;
+
+    let yearStr = "";
+    if (Array.isArray(selectedYear)) {
+        if (selectedYear.length === 1) {
+            yearStr = selectedYear[0];
+        } else {
+            const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+            yearStr = `${sortedYears[0]}to${sortedYears[sortedYears.length - 1]}`;
+        }
+    } else {
+        yearStr = isAggregatedYear ? selectedYear.replace("-", "to") : selectedYear;
+    }
     const commodityStr = selectedCommodities.includes("All Commodities")
         ? "all-commodities"
         : selectedCommodities.join("-").toLowerCase().replace(/\s+/g, "-");

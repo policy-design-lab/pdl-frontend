@@ -99,7 +99,24 @@ const CountyMap = ({
     selectedPrograms,
     yearAggregation,
     selectedCommodities,
-    setSelectedState
+    setSelectedState,
+    selectedYears = []
+}: {
+    mapData: any;
+    mapColor: string[];
+    viewMode: string;
+    selectedState: string;
+    stateCodesData: any;
+    allStates: any;
+    isLoading: boolean;
+    onTooltipChange: (content: string) => void;
+    tooltipContent: string;
+    showMeanValues: boolean;
+    selectedPrograms: string[];
+    yearAggregation: number;
+    selectedCommodities: string[];
+    setSelectedState: (state: string) => void;
+    selectedYears: (string | number)[];
 }) => {
     const classes = useStyles();
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
@@ -270,7 +287,8 @@ const CountyMap = ({
                     selectedPrograms,
                     classes,
                     showMeanValues,
-                    yearAggregation
+                    yearAggregation,
+                    selectedYears
                 });
 
                 if (mounted) {
@@ -287,7 +305,8 @@ const CountyMap = ({
                 selectedPrograms,
                 classes,
                 showMeanValues,
-                yearAggregation
+                yearAggregation,
+                selectedYears
             });
             if (mounted) {
                 onTooltipChange(tooltipHtml);
