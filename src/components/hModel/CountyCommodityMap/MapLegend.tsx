@@ -57,9 +57,9 @@ const MapLegend = ({
 
     const getPercentileModeExplanation = (mode) => {
         if (mode === PercentileMode.DEFAULT) {
-            return "Focuses color distribution to highlight extreme values. Uses percentiles at 0, 5, 10, 15, 40, 65, 80, 85, 90, 95, and 100 to provide more detail at the lowest and highest ranges.";
+            return "Focuses color distribution to highlight extreme values. Uses non-linear percentile thresholds (0, 5, 10, 15, 40, 65, 80, 85, 90, 95, 100) to provide greater visual discrimination at distribution tails. Statistical interpretation: Emphasizes outliers and distributional skewness by allocating more color bands to extreme values.";
         }
-        return "Distributes colors evenly across all values. Uses equal percentile intervals at 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, and 100.";
+        return "Distributes colors evenly across all values using deciles (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100). Statistical interpretation: Provides uniform visual representation across the entire distribution, similar to standard quantile plots with equal-sized bins.";
     };
 
     return (
@@ -99,13 +99,23 @@ const MapLegend = ({
                             >
                                 <MenuItem value={PercentileMode.DEFAULT}>
                                     <Box display="flex" alignItems="center">
-                                        Highlight Extremes
+                                        <Box>
+                                            <Typography variant="body2">Highlight Extremes</Typography>
+                                            <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'text.secondary', display: 'block' }}>
+                                                Non-linear percentiles
+                                            </Typography>
+                                        </Box>
                                         <InfoTooltip title={getPercentileModeExplanation(PercentileMode.DEFAULT)} />
                                     </Box>
                                 </MenuItem>
                                 <MenuItem value={PercentileMode.EQUAL}>
                                     <Box display="flex" alignItems="center">
-                                        Balanced Distribution
+                                        <Box>
+                                            <Typography variant="body2">Balanced Distribution</Typography>
+                                            <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'text.secondary', display: 'block' }}>
+                                                Equal deciles (10%)
+                                            </Typography>
+                                        </Box>
                                         <InfoTooltip title={getPercentileModeExplanation(PercentileMode.EQUAL)} />
                                     </Box>
                                 </MenuItem>

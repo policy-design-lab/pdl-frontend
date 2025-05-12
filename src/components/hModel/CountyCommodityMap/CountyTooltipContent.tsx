@@ -279,7 +279,7 @@ function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
     return content;
 }
 
-function generateRegularTooltipContent(countyData, classes, showMeanValues, yearAggregation, selectedYears = []) {
+function generateRegularTooltipContent(countyData, classes, showMeanValues, yearAggregation, selectedCommodities = [], selectedPrograms = [], selectedYears = []) {
     const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
@@ -314,15 +314,14 @@ function generateRegularTooltipContent(countyData, classes, showMeanValues, year
             </td>
         </tr>`;
     }
-
+    const isMultiYearSelection = selectedYears && selectedYears.length > 1;
     if (
-        (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
+        (yearAggregation > 0 || isMultiYearSelection) &&
         countyData.yearlyData &&
         Object.keys(countyData.yearlyData).length > 0
     ) {
         content += generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears);
     }
-
     return content;
 }
 
@@ -822,10 +821,13 @@ function generateYearBreakdownContent(countyData, classes, showMeanValues, selec
     </tr>`;
 
     if (countyData.yearlyData) {
-        const yearsToShow =
-            selectedYears && selectedYears.length > 0 ?
-                Object.keys(countyData.yearlyData).filter((year) => selectedYears.includes(year)) :
-                Object.keys(countyData.yearlyData);
+        const selectedYearsStrings = Array.isArray(selectedYears) 
+            ? selectedYears.map(year => String(year)) 
+            : [];
+        const yearsToShow = selectedYearsStrings.length > 0
+            ? Object.keys(countyData.yearlyData).filter(year => 
+                selectedYearsStrings.includes(year))
+            : Object.keys(countyData.yearlyData);
         const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
         sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];
@@ -917,10 +919,13 @@ function generateYearBreakdownDifferenceContent(countyData, classes, showMeanVal
     </tr>`;
 
     if (countyData.yearlyData) {
-        const yearsToShow =
-            selectedYears && selectedYears.length > 0 ?
-                Object.keys(countyData.yearlyData).filter((year) => selectedYears.includes(year)) :
-                Object.keys(countyData.yearlyData);
+        const selectedYearsStrings = Array.isArray(selectedYears) 
+            ? selectedYears.map(year => String(year)) 
+            : [];     
+        const yearsToShow = selectedYearsStrings.length > 0
+            ? Object.keys(countyData.yearlyData).filter(year => 
+                selectedYearsStrings.includes(year))
+            : Object.keys(countyData.yearlyData);
         const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
         sortedYears.forEach((year) => {
             const yearData = countyData.yearlyData[year];
