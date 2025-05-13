@@ -121,7 +121,6 @@ const CountyMap = ({
     const classes = useStyles();
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
-
     useEffect(() => {
         const handleDoubleClick = (e) => {
             if (e.target.closest(".county-commodity-map")) {
@@ -130,7 +129,6 @@ const CountyMap = ({
                 return false;
             }
         };
-
         const handleWheel = (e) => {
             if (e.target.closest(".county-commodity-map")) {
                 if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
@@ -140,7 +138,6 @@ const CountyMap = ({
                 }
             }
         };
-
         const handleDrag = (e) => {
             if (e.target.closest(".county-commodity-map")) {
                 e.stopPropagation();
@@ -148,7 +145,6 @@ const CountyMap = ({
                 return false;
             }
         };
-
         const handleMouseDown = (e) => {
             if (e.target.closest(".county-commodity-map") && !e.target.closest(".rsm-geography")) {
                 e.stopPropagation();
@@ -156,13 +152,11 @@ const CountyMap = ({
                 return false;
             }
         };
-
         document.addEventListener("dblclick", handleDoubleClick, { capture: true });
         document.addEventListener("wheel", handleWheel, { capture: true, passive: false });
         document.addEventListener("drag", handleDrag, { capture: true });
         document.addEventListener("dragstart", handleDrag, { capture: true });
         document.addEventListener("mousedown", handleMouseDown, { capture: true });
-
         return () => {
             document.removeEventListener("dblclick", handleDoubleClick, { capture: true });
             document.removeEventListener("wheel", handleWheel, { capture: true });
@@ -262,11 +256,9 @@ const CountyMap = ({
                     localCountyFIPS = geo.properties.fips;
                 }
             }
-
             const countyName = geo.properties?.name || "Unknown County";
             const stateFIPS = localCountyFIPS?.substring(0, 2);
             const stateName = stateFIPS ? stateCodesData[stateFIPS] || "Unknown State" : "Unknown State";
-
             const lookupFIPS = localCountyFIPS;
             const { countyData, usedKey } = findCountyData(
                 mapData.counties,
@@ -278,7 +270,6 @@ const CountyMap = ({
                     hasData: false,
                     name: countyName
                 };
-
                 const tooltipHtml = CountyTooltipContent({
                     countyData: mockCountyData,
                     countyFIPS: localCountyFIPS,
@@ -290,13 +281,11 @@ const CountyMap = ({
                     yearAggregation,
                     selectedYears
                 });
-
                 if (mounted) {
                     onTooltipChange(tooltipHtml);
                 }
                 return;
             }
-
             const tooltipHtml = CountyTooltipContent({
                 countyData,
                 countyFIPS: localCountyFIPS,
@@ -360,19 +349,15 @@ const CountyMap = ({
     const getCountyFillColor = useCallback(
         (countyData) => {
             if (!countyData || countyData.hasData === false) return "#EEE";
-
             if (showMeanValues && (!countyData.hasValidBaseAcres || countyData.baseAcres <= 0)) {
                 return "#CCC";
             }
-
             let valueToUse;
-
             if (showMeanValues) {
                 if (viewMode === "difference") {
                     valueToUse = countyData.meanRateDifference || 0;
                 } else {
                     valueToUse = countyData.meanPaymentRateInDollarsPerAcre;
-
                     if ((valueToUse === undefined || valueToUse === 0) && selectedPrograms.length === 1) {
                         const programName = selectedPrograms[0];
                         if (countyData.programs && countyData.programs[programName]) {
@@ -386,11 +371,9 @@ const CountyMap = ({
             } else {
                 valueToUse = countyData.value || 0;
             }
-
             if (valueToUse === undefined || valueToUse === null || !isFinite(valueToUse) || valueToUse < 0.01) {
                 return "#EEE";
             }
-
             return colorScale(valueToUse);
         },
         [showMeanValues, selectedPrograms, viewMode, colorScale]
@@ -528,16 +511,13 @@ const CountyMap = ({
                                                     if (stateName !== selectedState) {
                                                         return null;
                                                     }
-
                                                     const lookupFIPS = countyFIPS;
-
                                                     const { countyData, usedKey } = findCountyData(
                                                         mapData.counties,
                                                         lookupFIPS,
                                                         selectedState !== "All States"
                                                     );
                                                     let fillColor;
-
                                                     if (!countyData) {
                                                         fillColor = "#d9d9d9";
                                                     } else if (countyData.hasData === false) {
@@ -574,7 +554,6 @@ const CountyMap = ({
                                                 }
                                                 const { countyData } = findCountyData(mapData.counties, countyFIPS);
                                                 let fillColor;
-
                                                 if (!countyData) {
                                                     fillColor = "#d9d9d9";
                                                 } else if (countyData.hasData === false) {

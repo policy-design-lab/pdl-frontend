@@ -53,18 +53,15 @@ interface ColumnDef {
 
 const Styles = styled.div`
     width: 100%;
-
     .tableWrap {
         display: block;
         max-width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
     }
-
     table {
         width: 100%;
         border-spacing: 0;
-
         tr {
             :last-child {
                 td {
@@ -72,23 +69,19 @@ const Styles = styled.div`
                 }
             }
         }
-
         th,
         td {
             margin: 0;
             padding: 0.5rem;
             border-bottom: 1px solid #ddd;
-
             :last-child {
                 border-right: 0;
             }
         }
     }
-
     .pagination {
         padding: 0.5rem;
     }
-
     .downloadbtn {
         background-color: rgba(47, 113, 100, 1);
         padding: 10px 16px;
@@ -102,32 +95,10 @@ const Styles = styled.div`
         text-align: center;
         transition: background-color 0.2s ease;
     }
-
     .downloadbtn:hover {
         background-color: rgba(40, 95, 85, 1);
     }
 `;
-
-const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
-    return (
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <Typography variant="body2" sx={{ mr: 1 }}>
-                Search by county, state, or value:
-            </Typography>
-            <input
-                value={globalFilter || ""}
-                onChange={(e) => setGlobalFilter(e.target.value)}
-                placeholder="Type to search..."
-                style={{
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    minWidth: "200px"
-                }}
-            />
-        </Box>
-    );
-};
 
 const CountyCommodityTable = ({
     countyData,
@@ -143,7 +114,6 @@ const CountyCommodityTable = ({
     showMeanValues
 }) => {
     const [isAtTable, setIsAtTable] = useState(false);
-
     const handleScrollToMap = () => {
         const mapElement = document.getElementById("county-commodity-map");
         if (mapElement) {
@@ -151,71 +121,51 @@ const CountyCommodityTable = ({
             setIsAtTable(false);
         }
     };
-
     const isAggregatedYear = useMemo(() => {
         return (
             (typeof selectedYear === "string" && selectedYear.includes("-")) ||
-            (aggregationEnabled && yearAggregation > 0)
+            (aggregationEnabled && yearAggregation > 0) ||
+            (Array.isArray(selectedYear) && selectedYear.length > 1)
         );
     }, [selectedYear, yearAggregation, aggregationEnabled]);
-
     const yearRange = useMemo(() => {
         if (aggregationEnabled) {
             if (Array.isArray(selectedYear)) {
                 return selectedYear;
             }
-            if (yearAggregation > 0) {
-                const startYear = 2024;
-                const endYear = parseInt(selectedYear.toString());
-                const years: string[] = [];
-                for (let year = startYear; year <= endYear; year++) {
-                    years.push(year.toString());
-                }
-                return years;
-            }
+            return [selectedYear];
         }
         return Array.isArray(selectedYear) ? selectedYear : [selectedYear];
-    }, [selectedYear, yearAggregation, aggregationEnabled]);
-
+    }, [selectedYear, aggregationEnabled]);
     const getTableTitle = useMemo(() => {
         return generateTableTitle(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
     }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear]);
-
     const getCsvFilename = useMemo(() => {
         return generateCsvFilename(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
     }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear]);
-
     const getTableData = React.useCallback(() => {
         if (isAggregatedYear) {
             const result: ExtendedCountyObject[] = [];
             const stateCountyMap = new Map();
-
             yearRange.forEach((year) => {
                 if (!countyData[year]) return;
-
                 const currentYearData = viewMode === "proposed" ? countyDataProposed[year] : countyData[year];
-
                 if (viewMode === "difference") {
                     const currentData = countyData[year] || [];
                     const proposedData = countyDataProposed[year] || [];
-
                     currentData.forEach((state) => {
                         if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
                             return;
                         }
-
                         const stateCode = state.state;
                         const stateName = stateCodesData[stateCode] || stateCode;
-
                         state.counties.forEach((county) => {
                             const countyName = getCountyNameFromFips(county.countyFIPS);
                             const stateCountyKey = `${stateCode}-${county.countyFIPS}`;
-
                             const proposedState = proposedData.find((s) => s.state === stateCode);
                             const proposedCounty = proposedState?.counties.find(
                                 (c) => c.countyFIPS === county.countyFIPS
                             );
-
                             let countyObject: ExtendedCountyObject;
                             if (stateCountyMap.has(stateCountyKey)) {
                                 countyObject = stateCountyMap.get(stateCountyKey)!;
@@ -234,11 +184,9 @@ const CountyCommodityTable = ({
                                 stateCountyMap.set(stateCountyKey, countyObject);
                                 result.push(countyObject);
                             }
-
                             if (!countyObject.yearBreakdown) {
                                 countyObject.yearBreakdown = {};
                             }
-
                             if (!countyObject.yearBreakdown[year]) {
                                 countyObject.yearBreakdown[year] = {
                                     current: 0,
@@ -247,19 +195,15 @@ const CountyCommodityTable = ({
                                     baseAcres: 0
                                 };
                             }
-
                             if (!countyObject.commodityBreakdown) {
                                 countyObject.commodityBreakdown = {};
                             }
-
                             county.scenarios.forEach((scenario) => {
                                 const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
                                 if (scenario.scenarioName !== scenarioName) {
                                     return;
                                 }
-
                                 let countyTotalPayment = 0;
-
                                 scenario.commodities.forEach((commodity) => {
                                     if (
                                         !selectedCommodities.includes("All Commodities") &&
@@ -267,11 +211,9 @@ const CountyCommodityTable = ({
                                     ) {
                                         return;
                                     }
-
                                     let commodityCurrentTotal = 0;
                                     const commodityProposedTotal = 0;
                                     let commodityBaseAcres = 0;
-
                                     commodity.programs.forEach((program) => {
                                         if (
                                             !selectedPrograms.includes("All Programs") &&
@@ -279,15 +221,12 @@ const CountyCommodityTable = ({
                                         ) {
                                             return;
                                         }
-
                                         commodityCurrentTotal += program.totalPaymentInDollars || 0;
                                         commodityBaseAcres += program.baseAcres || 0;
                                         countyTotalPayment += program.totalPaymentInDollars || 0;
-
                                         if (!countyObject.programBreakdown) {
                                             countyObject.programBreakdown = {};
                                         }
-
                                         if (!countyObject.programBreakdown[program.programName]) {
                                             countyObject.programBreakdown[program.programName] = {
                                                 total: 0,
@@ -295,19 +234,16 @@ const CountyCommodityTable = ({
                                                 yearBreakdown: {}
                                             };
                                         }
-
                                         countyObject.programBreakdown[program.programName].total +=
                                             program.totalPaymentInDollars || 0;
                                         countyObject.programBreakdown[program.programName].baseAcres +=
                                             program.baseAcres || 0;
                                     });
-
                                     if (viewMode === "current") {
                                         countyObject.current = countyTotalPayment;
                                     } else if (viewMode === "proposed") {
                                         countyObject.proposed = countyTotalPayment;
                                     }
-
                                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                                         if (viewMode === "current") {
                                             countyObject.yearBreakdown[year].current = countyTotalPayment;
@@ -315,11 +251,9 @@ const CountyCommodityTable = ({
                                             countyObject.yearBreakdown[year].proposed = countyTotalPayment;
                                         }
                                     }
-
                                     if (!countyObject.commodityBreakdown) {
                                         countyObject.commodityBreakdown = {};
                                     }
-
                                     if (!countyObject.commodityBreakdown[commodity.commodityName]) {
                                         countyObject.commodityBreakdown[commodity.commodityName] = {
                                             total: 0,
@@ -327,11 +261,9 @@ const CountyCommodityTable = ({
                                             yearBreakdown: {}
                                         };
                                     }
-
                                     if (!countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown) {
                                         countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown = {};
                                     }
-
                                     if (
                                         !countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![year]
                                     ) {
@@ -343,7 +275,6 @@ const CountyCommodityTable = ({
                                                 baseAcres: 0
                                             };
                                     }
-
                                     if (viewMode === "proposed") {
                                         countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![
                                             year
@@ -353,19 +284,15 @@ const CountyCommodityTable = ({
                                             year
                                         ].current = commodityCurrentTotal;
                                     }
-
                                     countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![
                                         year
                                     ].baseAcres = commodityBaseAcres;
-
                                     countyObject.commodityBreakdown[commodity.commodityName].total +=
                                         commodityCurrentTotal;
-
                                     countyObject.commodityBreakdown[commodity.commodityName].baseAcres = Math.max(
                                         countyObject.commodityBreakdown[commodity.commodityName].baseAcres || 0,
                                         commodityBaseAcres
                                     );
-
                                     const commodityKey = `${commodity.commodityName}`;
                                     if (!countyObject[`${commodityKey} Current`]) {
                                         countyObject[`${commodityKey} Current`] = 0;
@@ -373,7 +300,6 @@ const CountyCommodityTable = ({
                                         countyObject[`${commodityKey} Difference`] = 0;
                                         countyObject[`${commodityKey} Base Acres`] = commodityBaseAcres;
                                     }
-
                                     if (viewMode === "current") {
                                         countyObject[`${commodityKey} Current`] += commodityCurrentTotal;
                                     } else if (viewMode === "proposed") {
@@ -381,11 +307,9 @@ const CountyCommodityTable = ({
                                     }
                                 });
                             });
-
                             if (proposedCounty) {
                                 proposedCounty.scenarios.forEach((scenario) => {
                                     if (scenario.scenarioName !== "Proposed") return;
-
                                     scenario.commodities.forEach((commodity) => {
                                         if (
                                             !selectedCommodities.includes("All Commodities") &&
@@ -393,7 +317,6 @@ const CountyCommodityTable = ({
                                         ) {
                                             return;
                                         }
-
                                         if (!countyObject.commodityBreakdown![commodity.commodityName]) {
                                             countyObject.commodityBreakdown![commodity.commodityName] = {
                                                 total: 0,
@@ -401,9 +324,7 @@ const CountyCommodityTable = ({
                                                 yearBreakdown: {}
                                             };
                                         }
-
                                         let commodityProposedTotal = 0;
-
                                         commodity.programs.forEach((program) => {
                                             if (
                                                 !selectedPrograms.includes("All Programs") &&
@@ -411,9 +332,7 @@ const CountyCommodityTable = ({
                                             ) {
                                                 return;
                                             }
-
                                             commodityProposedTotal += program.totalPaymentInDollars || 0;
-
                                             if (
                                                 countyObject.commodityBreakdown![commodity.commodityName].baseAcres <
                                                 program.baseAcres
@@ -422,12 +341,10 @@ const CountyCommodityTable = ({
                                                     program.baseAcres;
                                             }
                                         });
-
                                         if (!countyObject.commodityBreakdown![commodity.commodityName].yearBreakdown) {
                                             countyObject.commodityBreakdown![commodity.commodityName].yearBreakdown =
                                                 {};
                                         }
-
                                         if (
                                             !countyObject.commodityBreakdown![commodity.commodityName].yearBreakdown![
                                                 year
@@ -443,11 +360,9 @@ const CountyCommodityTable = ({
                                                     countyObject.commodityBreakdown![commodity.commodityName].baseAcres
                                             };
                                         }
-
                                         countyObject.commodityBreakdown![commodity.commodityName].yearBreakdown![
                                             year
                                         ].proposed = commodityProposedTotal;
-
                                         const currentValue = Number(
                                             countyObject.commodityBreakdown![commodity.commodityName].yearBreakdown![
                                                 year
@@ -461,11 +376,9 @@ const CountyCommodityTable = ({
                                     });
                                 });
                             }
-
                             let yearCurrentTotal = 0;
                             let yearProposedTotal = 0;
                             let yearBaseAcres = 0;
-
                             if (countyObject.commodityBreakdown) {
                                 Object.values(countyObject.commodityBreakdown).forEach((commodityData) => {
                                     if (commodityData.yearBreakdown && commodityData.yearBreakdown[year]) {
@@ -479,19 +392,16 @@ const CountyCommodityTable = ({
                                     }
                                 });
                             }
-
                             if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                                 countyObject.yearBreakdown[year].current = yearCurrentTotal;
                                 countyObject.yearBreakdown[year].proposed = yearProposedTotal;
                                 countyObject.yearBreakdown[year].difference = yearProposedTotal - yearCurrentTotal;
                                 countyObject.yearBreakdown[year].baseAcres = formatNumericValue(yearBaseAcres);
                             }
-
                             countyObject.current = ((countyObject.current as number) || 0) + yearCurrentTotal;
                             countyObject.proposed = ((countyObject.proposed as number) || 0) + yearProposedTotal;
                             countyObject.difference =
                                 ((countyObject.difference as number) || 0) + (yearProposedTotal - yearCurrentTotal);
-
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
                                 countyObject.baseAcres = formatNumericValue(yearBaseAcres);
                             }
@@ -502,14 +412,11 @@ const CountyCommodityTable = ({
                         if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
                             return;
                         }
-
                         const stateCode = state.state;
                         const stateName = stateCodesData[stateCode] || stateCode;
-
                         state.counties.forEach((county) => {
                             const countyName = getCountyNameFromFips(county.countyFIPS);
                             const stateCountyKey = `${stateCode}-${county.countyFIPS}`;
-
                             let countyObject: ExtendedCountyObject;
                             if (stateCountyMap.has(stateCountyKey)) {
                                 countyObject = stateCountyMap.get(stateCountyKey)!;
@@ -528,11 +435,9 @@ const CountyCommodityTable = ({
                                 stateCountyMap.set(stateCountyKey, countyObject);
                                 result.push(countyObject);
                             }
-
                             if (!countyObject.yearBreakdown) {
                                 countyObject.yearBreakdown = {};
                             }
-
                             if (!countyObject.yearBreakdown[year]) {
                                 countyObject.yearBreakdown[year] = {
                                     current: 0,
@@ -541,7 +446,6 @@ const CountyCommodityTable = ({
                                     baseAcres: 0
                                 };
                             }
-
                             const currentBaseAcres = getTotalBaseAcres(
                                 county,
                                 selectedCommodities,
@@ -549,25 +453,19 @@ const CountyCommodityTable = ({
                                 "Current"
                             );
                             countyObject.baseAcres = formatNumericValue(currentBaseAcres);
-
                             const yearBaseAcres = 0;
-
                             if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                                 countyObject.yearBreakdown[year].baseAcres = countyObject.baseAcres;
                             }
-
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
                                 countyObject.baseAcres = formatNumericValue(yearBaseAcres);
                             }
-
                             county.scenarios.forEach((scenario) => {
                                 const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
                                 if (scenario.scenarioName !== scenarioName) {
                                     return;
                                 }
-
                                 let countyTotalPayment = 0;
-
                                 scenario.commodities.forEach((commodity) => {
                                     if (
                                         !selectedCommodities.includes("All Commodities") &&
@@ -575,11 +473,9 @@ const CountyCommodityTable = ({
                                     ) {
                                         return;
                                     }
-
                                     let commodityCurrentTotal = 0;
                                     const commodityProposedTotal = 0;
                                     let commodityBaseAcres = 0;
-
                                     commodity.programs.forEach((program) => {
                                         if (
                                             !selectedPrograms.includes("All Programs") &&
@@ -587,15 +483,12 @@ const CountyCommodityTable = ({
                                         ) {
                                             return;
                                         }
-
                                         commodityCurrentTotal += program.totalPaymentInDollars || 0;
                                         commodityBaseAcres += program.baseAcres || 0;
                                         countyTotalPayment += program.totalPaymentInDollars || 0;
-
                                         if (!countyObject.programBreakdown) {
                                             countyObject.programBreakdown = {};
                                         }
-
                                         if (!countyObject.programBreakdown[program.programName]) {
                                             countyObject.programBreakdown[program.programName] = {
                                                 total: 0,
@@ -603,19 +496,16 @@ const CountyCommodityTable = ({
                                                 yearBreakdown: {}
                                             };
                                         }
-
                                         countyObject.programBreakdown[program.programName].total +=
                                             program.totalPaymentInDollars || 0;
                                         countyObject.programBreakdown[program.programName].baseAcres +=
                                             program.baseAcres || 0;
                                     });
-
                                     if (viewMode === "current") {
                                         countyObject.current = countyTotalPayment;
                                     } else if (viewMode === "proposed") {
                                         countyObject.proposed = countyTotalPayment;
                                     }
-
                                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                                         if (viewMode === "current") {
                                             countyObject.yearBreakdown[year].current = countyTotalPayment;
@@ -623,11 +513,9 @@ const CountyCommodityTable = ({
                                             countyObject.yearBreakdown[year].proposed = countyTotalPayment;
                                         }
                                     }
-
                                     if (!countyObject.commodityBreakdown) {
                                         countyObject.commodityBreakdown = {};
                                     }
-
                                     if (!countyObject.commodityBreakdown[commodity.commodityName]) {
                                         countyObject.commodityBreakdown[commodity.commodityName] = {
                                             total: 0,
@@ -635,11 +523,9 @@ const CountyCommodityTable = ({
                                             yearBreakdown: {}
                                         };
                                     }
-
                                     if (!countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown) {
                                         countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown = {};
                                     }
-
                                     if (
                                         !countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![year]
                                     ) {
@@ -651,7 +537,6 @@ const CountyCommodityTable = ({
                                                 baseAcres: 0
                                             };
                                     }
-
                                     if (viewMode === "proposed") {
                                         countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![
                                             year
@@ -661,19 +546,15 @@ const CountyCommodityTable = ({
                                             year
                                         ].current = commodityCurrentTotal;
                                     }
-
                                     countyObject.commodityBreakdown[commodity.commodityName].yearBreakdown![
                                         year
                                     ].baseAcres = commodityBaseAcres;
-
                                     countyObject.commodityBreakdown[commodity.commodityName].total +=
                                         commodityCurrentTotal;
-
                                     countyObject.commodityBreakdown[commodity.commodityName].baseAcres = Math.max(
                                         countyObject.commodityBreakdown[commodity.commodityName].baseAcres || 0,
                                         commodityBaseAcres
                                     );
-
                                     const commodityKey = `${commodity.commodityName}`;
                                     if (!countyObject[`${commodityKey} Current`]) {
                                         countyObject[`${commodityKey} Current`] = 0;
@@ -681,7 +562,6 @@ const CountyCommodityTable = ({
                                         countyObject[`${commodityKey} Difference`] = 0;
                                         countyObject[`${commodityKey} Base Acres`] = commodityBaseAcres;
                                     }
-
                                     if (viewMode === "current") {
                                         countyObject[`${commodityKey} Current`] += commodityCurrentTotal;
                                     } else if (viewMode === "proposed") {
@@ -693,17 +573,14 @@ const CountyCommodityTable = ({
                     });
                 }
             });
-
             return result;
         }
-
         const year = selectedYear;
         const result: ExtendedCountyObject[] = [];
         const stateCountyMap = new Map();
         const currentYearData = viewMode === "proposed" ? countyDataProposed[year] : countyData[year];
         const currentData = countyData[year] || [];
         const proposedData = countyDataProposed[year] || [];
-
         if (viewMode === "difference") {
             currentData.forEach((state) => {
                 if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
@@ -744,7 +621,6 @@ const CountyCommodityTable = ({
                             baseAcres: 0
                         };
                     }
-
                     const currentBaseAcres = getTotalBaseAcres(
                         county,
                         selectedCommodities,
@@ -752,17 +628,13 @@ const CountyCommodityTable = ({
                         "Current"
                     );
                     countyObject.baseAcres = formatNumericValue(currentBaseAcres);
-
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         countyObject.yearBreakdown[year].baseAcres = countyObject.baseAcres;
                     }
-
                     let currentTotalPayment = 0;
                     let proposedTotalPayment = 0;
-
                     county.scenarios.forEach((scenario) => {
                         if (scenario.scenarioName !== "Current") return;
-
                         scenario.commodities.forEach((commodity) => {
                             if (
                                 !selectedCommodities.includes("All Commodities") &&
@@ -770,11 +642,9 @@ const CountyCommodityTable = ({
                             ) {
                                 return;
                             }
-
                             let commodityCurrentTotal = 0;
                             const commodityProposedTotal = 0;
                             let commodityBaseAcres = 0;
-
                             commodity.programs.forEach((program) => {
                                 if (
                                     !selectedPrograms.includes("All Programs") &&
@@ -782,16 +652,12 @@ const CountyCommodityTable = ({
                                 ) {
                                     return;
                                 }
-
                                 commodityCurrentTotal += program.totalPaymentInDollars || 0;
                                 commodityBaseAcres += program.baseAcres || 0;
-
                                 currentTotalPayment += program.totalPaymentInDollars || 0;
-
                                 if (!countyObject.programBreakdown) {
                                     countyObject.programBreakdown = {};
                                 }
-
                                 if (!countyObject.programBreakdown[program.programName]) {
                                     countyObject.programBreakdown[program.programName] = {
                                         total: 0,
@@ -799,16 +665,13 @@ const CountyCommodityTable = ({
                                         yearBreakdown: {}
                                     };
                                 }
-
                                 countyObject.programBreakdown[program.programName].total =
                                     program.totalPaymentInDollars || 0;
                                 countyObject.programBreakdown[program.programName].baseAcres = program.baseAcres || 0;
                             });
-
                             if (!countyObject.commodityBreakdown) {
                                 countyObject.commodityBreakdown = {};
                             }
-
                             if (!countyObject.commodityBreakdown[commodity.commodityName]) {
                                 countyObject.commodityBreakdown[commodity.commodityName] = {
                                     total: 0,
@@ -816,7 +679,6 @@ const CountyCommodityTable = ({
                                     yearBreakdown: {}
                                 };
                             }
-
                             if (commodity.commodityName === "Cotton" && county.countyFIPS === "01003") {
                                 if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
                                     countyObject.commodityBreakdown[commodity.commodityName].total =
@@ -834,11 +696,9 @@ const CountyCommodityTable = ({
                             }
                         });
                     });
-
                     if (proposedCounty) {
                         proposedCounty.scenarios.forEach((scenario) => {
                             if (scenario.scenarioName !== "Proposed") return;
-
                             scenario.commodities.forEach((commodity) => {
                                 if (
                                     !selectedCommodities.includes("All Commodities") &&
@@ -846,9 +706,7 @@ const CountyCommodityTable = ({
                                 ) {
                                     return;
                                 }
-
                                 let commodityProposedTotal = 0;
-
                                 commodity.programs.forEach((program) => {
                                     if (
                                         !selectedPrograms.includes("All Programs") &&
@@ -856,10 +714,8 @@ const CountyCommodityTable = ({
                                     ) {
                                         return;
                                     }
-
                                     commodityProposedTotal += program.totalPaymentInDollars || 0;
                                     proposedTotalPayment += program.totalPaymentInDollars || 0;
-
                                     if (
                                         countyObject.programBreakdown &&
                                         countyObject.programBreakdown[program.programName]
@@ -868,7 +724,6 @@ const CountyCommodityTable = ({
                                             program.totalPaymentInDollars || 0;
                                     }
                                 });
-
                                 if (
                                     countyObject.commodityBreakdown &&
                                     countyObject.commodityBreakdown[commodity.commodityName]
@@ -879,11 +734,9 @@ const CountyCommodityTable = ({
                             });
                         });
                     }
-
                     countyObject.current = currentTotalPayment;
                     countyObject.proposed = proposedTotalPayment;
                     countyObject.difference = proposedTotalPayment - currentTotalPayment;
-
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         countyObject.yearBreakdown[year].current = currentTotalPayment;
                         countyObject.yearBreakdown[year].proposed = proposedTotalPayment;
@@ -894,7 +747,6 @@ const CountyCommodityTable = ({
         } else {
             const dataToProcess = viewMode === "current" ? currentData : proposedData;
             const scenarioName = viewMode === "current" ? "Current" : "Proposed";
-
             dataToProcess.forEach((state) => {
                 if (selectedState !== "All States" && stateCodesData[state.state] !== selectedState) {
                     return;
@@ -948,12 +800,9 @@ const CountyCommodityTable = ({
                             });
                         }
                     }
-
                     let totalPayment = 0;
-
                     county.scenarios.forEach((scenario) => {
                         if (scenario.scenarioName !== scenarioName) return;
-
                         scenario.commodities.forEach((commodity) => {
                             if (
                                 !selectedCommodities.includes("All Commodities") &&
@@ -961,10 +810,8 @@ const CountyCommodityTable = ({
                             ) {
                                 return;
                             }
-
                             let commodityTotal = 0;
                             let commodityBaseAcres = 0;
-
                             commodity.programs.forEach((program) => {
                                 if (
                                     !selectedPrograms.includes("All Programs") &&
@@ -972,15 +819,12 @@ const CountyCommodityTable = ({
                                 ) {
                                     return;
                                 }
-
                                 commodityTotal += program.totalPaymentInDollars || 0;
                                 commodityBaseAcres += program.baseAcres || 0;
                                 totalPayment += program.totalPaymentInDollars || 0;
-
                                 if (!countyObject.programBreakdown) {
                                     countyObject.programBreakdown = {};
                                 }
-
                                 if (!countyObject.programBreakdown[program.programName]) {
                                     countyObject.programBreakdown[program.programName] = {
                                         total: 0,
@@ -988,16 +832,13 @@ const CountyCommodityTable = ({
                                         yearBreakdown: {}
                                     };
                                 }
-
                                 countyObject.programBreakdown[program.programName].total =
                                     program.totalPaymentInDollars || 0;
                                 countyObject.programBreakdown[program.programName].baseAcres = program.baseAcres || 0;
                             });
-
                             if (!countyObject.commodityBreakdown) {
                                 countyObject.commodityBreakdown = {};
                             }
-
                             if (!countyObject.commodityBreakdown[commodity.commodityName]) {
                                 countyObject.commodityBreakdown[commodity.commodityName] = {
                                     total: 0,
@@ -1005,7 +846,6 @@ const CountyCommodityTable = ({
                                     yearBreakdown: {}
                                 };
                             }
-
                             if (commodity.commodityName === "Cotton" && county.countyFIPS === "01003") {
                                 if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
                                     countyObject.commodityBreakdown[commodity.commodityName].total = commodityTotal;
@@ -1021,13 +861,11 @@ const CountyCommodityTable = ({
                             }
                         });
                     });
-
                     if (viewMode === "current") {
                         countyObject.current = totalPayment;
                     } else {
                         countyObject.proposed = totalPayment;
                     }
-
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         if (viewMode === "current") {
                             countyObject.yearBreakdown[year].current = totalPayment;
@@ -1038,7 +876,6 @@ const CountyCommodityTable = ({
                 });
             });
         }
-
         return result;
     }, [
         countyData,
@@ -1054,7 +891,6 @@ const CountyCommodityTable = ({
         yearAggregation,
         aggregationEnabled
     ]);
-
     const columns = useMemo(() => {
         const baseColumns: ColumnDef[] = [
             {
@@ -1070,9 +906,7 @@ const CountyCommodityTable = ({
                 disableSortBy: false
             }
         ];
-
         const addedAccessors = new Set<string>(["state", "county"]);
-
         const addColumnIfUnique = (column: ColumnDef) => {
             const accessor = column.accessor as string;
             if (!addedAccessors.has(accessor)) {
@@ -1080,7 +914,6 @@ const CountyCommodityTable = ({
                 baseColumns.push(column);
             }
         };
-
         if (isAggregatedYear) {
             if (showMeanValues) {
                 addColumnIfUnique({
@@ -1097,14 +930,12 @@ const CountyCommodityTable = ({
                     disableSortBy: false
                 });
             }
-
             addColumnIfUnique({
                 Header: "Base Acres",
                 accessor: "baseAcres",
                 sortType: "number",
                 disableSortBy: false
             });
-
             if (yearRange.length > 1) {
                 yearRange.forEach((year) => {
                     if (viewMode === "difference") {
@@ -1122,14 +953,12 @@ const CountyCommodityTable = ({
                             disableSortBy: false
                         });
                     }
-
                     addColumnIfUnique({
                         Header: `${year} Base Acres`,
                         accessor: `yearBreakdown.${year}.baseAcres`,
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         if (viewMode === "difference") {
                             addColumnIfUnique({
@@ -1149,7 +978,6 @@ const CountyCommodityTable = ({
                     }
                 });
             }
-
             if (selectedCommodities && !selectedCommodities.includes("All Commodities")) {
                 selectedCommodities.forEach((commodity) => {
                     if (showMeanValues) {
@@ -1226,7 +1054,6 @@ const CountyCommodityTable = ({
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         addColumnIfUnique({
                             Header: "Payment Rate Change",
@@ -1235,14 +1062,12 @@ const CountyCommodityTable = ({
                             disableSortBy: false
                         });
                     }
-
                     addColumnIfUnique({
                         Header: "Current Total",
                         accessor: "current",
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         addColumnIfUnique({
                             Header: "Current Rate",
@@ -1251,14 +1076,12 @@ const CountyCommodityTable = ({
                             disableSortBy: false
                         });
                     }
-
                     addColumnIfUnique({
                         Header: "Proposed Total",
                         accessor: "proposed",
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         addColumnIfUnique({
                             Header: "Proposed Rate",
@@ -1267,7 +1090,6 @@ const CountyCommodityTable = ({
                             disableSortBy: false
                         });
                     }
-
                     break;
                 case "proposed":
                     addColumnIfUnique({
@@ -1282,7 +1104,6 @@ const CountyCommodityTable = ({
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         addColumnIfUnique({
                             Header: `Payment Rate ${
@@ -1311,7 +1132,6 @@ const CountyCommodityTable = ({
                         sortType: "number",
                         disableSortBy: false
                     });
-
                     if (showMeanValues) {
                         addColumnIfUnique({
                             Header: `Payment Rate ${
@@ -1327,7 +1147,6 @@ const CountyCommodityTable = ({
                         });
                     }
             }
-
             addColumnIfUnique({
                 Header: `Base Acres ${
                     selectedPrograms && selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")
@@ -1338,7 +1157,6 @@ const CountyCommodityTable = ({
                 sortType: "number",
                 disableSortBy: false
             });
-
             if (selectedCommodities && !selectedCommodities.includes("All Commodities")) {
                 selectedCommodities.forEach((commodity) => {
                     if (showMeanValues) {
@@ -1407,7 +1225,6 @@ const CountyCommodityTable = ({
                 });
             }
         }
-
         return baseColumns;
     }, [selectedYear, viewMode, showMeanValues, isAggregatedYear, yearRange, selectedCommodities, selectedPrograms]);
 
@@ -1418,7 +1235,6 @@ const CountyCommodityTable = ({
                 let aggTotal = 0;
                 let aggBaseAcres = 0;
                 let weightedSum = 0;
-
                 if (row.yearBreakdown) {
                     Object.entries(row.yearBreakdown).forEach(([year, yearData]) => {
                         if (viewMode === "difference") {
@@ -1431,10 +1247,8 @@ const CountyCommodityTable = ({
                         } else {
                             aggTotal += (yearData.current as number) || 0;
                         }
-
                         const baseAcres = yearData.baseAcres || 0;
                         aggBaseAcres = Math.max(aggBaseAcres, baseAcres);
-
                         if (showMeanValues && baseAcres > 0) {
                             let yearValue = 0;
                             if (viewMode === "difference") {
@@ -1447,9 +1261,7 @@ const CountyCommodityTable = ({
                             } else {
                                 yearValue = (yearData.current as number) || 0;
                             }
-
                             weightedSum += yearValue;
-
                             if (baseAcres > 0) {
                                 yearData.paymentRate = yearValue / baseAcres;
                             } else {
@@ -1458,18 +1270,15 @@ const CountyCommodityTable = ({
                         }
                     });
                 }
-
                 if (showMeanValues) {
                     row.weightedAverageRate = aggBaseAcres > 0 ? weightedSum / aggBaseAcres : 0;
                 } else {
                     row.aggregatedPayment = aggTotal;
                 }
-
                 if (selectedCommodities && !selectedCommodities.includes("All Commodities") && row.commodityBreakdown) {
                     selectedCommodities.forEach((commodity) => {
                         if (row.commodityBreakdown && row.commodityBreakdown[commodity]) {
                             const commodityData = row.commodityBreakdown[commodity];
-
                             if (commodity === "Cotton" && row.fips === "01003") {
                                 if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
                                     commodityData.baseAcres = 0.3;
@@ -1478,19 +1287,15 @@ const CountyCommodityTable = ({
                                     return;
                                 }
                             }
-
                             let commodityTotal = 0;
                             let commodityWeightedSum = 0;
                             let commodityBaseAcres = 0;
                             let totalBaseAcresForAvg = 0;
-
                             commodityData.total = 0;
-
                             if (viewMode === "difference" && commodityData.yearBreakdown) {
                                 Object.entries(commodityData.yearBreakdown).forEach(([yearKey, yearData]) => {
                                     const yearDiff = Number(yearData.difference || 0);
                                     commodityTotal += yearDiff;
-
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
                                     commodityBaseAcres = Math.max(commodityBaseAcres, yearBaseAcres);
                                     if (yearBaseAcres > 0) {
@@ -1504,9 +1309,7 @@ const CountyCommodityTable = ({
                                         viewMode === "proposed"
                                             ? Number(yearData.proposed || 0)
                                             : Number(yearData.current || 0);
-
                                     commodityTotal += yearValue;
-
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
                                     commodityBaseAcres = Math.max(commodityBaseAcres, yearBaseAcres);
                                     if (yearBaseAcres > 0) {
@@ -1515,10 +1318,8 @@ const CountyCommodityTable = ({
                                     }
                                 });
                             }
-
                             commodityData.total = commodityTotal;
                             commodityData.baseAcres = commodityBaseAcres;
-
                             if (showMeanValues && totalBaseAcresForAvg > 0) {
                                 commodityData.paymentRate = commodityWeightedSum / totalBaseAcresForAvg;
                             }
@@ -1531,7 +1332,6 @@ const CountyCommodityTable = ({
                     const current = typeof row.current === "number" ? row.current : 0;
                     row.difference = proposed - current;
                 }
-
                 const payment =
                     viewMode === "difference"
                         ? (row.difference as number) || 0
@@ -1539,28 +1339,23 @@ const CountyCommodityTable = ({
                         ? (row.proposed as number) || 0
                         : (row.current as number) || 0;
                 const baseAcres = row.baseAcres as number;
-
                 if (showMeanValues && baseAcres > 0) {
                     row.paymentRate = payment / baseAcres;
-
                     if (viewMode === "difference") {
                         row.currentRate = ((row.current as number) || 0) / baseAcres;
                         row.proposedRate = ((row.proposed as number) || 0) / baseAcres;
                     }
                 }
-
                 if (row.programBreakdown) {
                     Object.keys(row.programBreakdown).forEach((program) => {
                         const programData = row.programBreakdown![program];
                         if (showMeanValues && programData.baseAcres > 0) {
                             programData.paymentRate = programData.total / programData.baseAcres;
                         }
-
                         if (isAggregatedYear && row.yearBreakdown && yearRange.length > 1) {
                             if (!programData.yearBreakdown) {
                                 programData.yearBreakdown = {};
                             }
-
                             yearRange.forEach((year) => {
                                 if (!programData.yearBreakdown![year]) {
                                     programData.yearBreakdown![year] = {
@@ -1570,7 +1365,6 @@ const CountyCommodityTable = ({
                                         baseAcres: programData.baseAcres
                                     };
                                 }
-
                                 const yearCount = yearRange.length;
                                 if (viewMode === "difference") {
                                     programData.yearBreakdown![year].difference = programData.total / yearCount;
@@ -1579,7 +1373,6 @@ const CountyCommodityTable = ({
                                 } else {
                                     programData.yearBreakdown![year].current = programData.total / yearCount;
                                 }
-
                                 if (showMeanValues && programData.baseAcres > 0) {
                                     let yearValue = 0;
                                     if (viewMode === "difference") {
@@ -1589,39 +1382,31 @@ const CountyCommodityTable = ({
                                     } else {
                                         yearValue = programData.yearBreakdown![year].current as number;
                                     }
-
                                     programData.yearBreakdown![year].paymentRate = yearValue / programData.baseAcres;
                                 }
                             });
                         }
                     });
                 }
-
                 if (row.commodityBreakdown) {
                     Object.keys(row.commodityBreakdown).forEach((commodity) => {
                         const commodityData = row.commodityBreakdown![commodity];
-
                         if (commodity === "Cotton" && row.fips === "01003") {
                             if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
                                 commodityData.baseAcres = 0.3;
-
                                 if (commodityData.total > 0) {
                                     commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
                                 }
-
                                 return;
                             }
                         }
-
                         if (showMeanValues && commodityData.baseAcres > 0) {
                             commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
                         }
-
                         if (isAggregatedYear && yearRange.length > 1) {
                             let aggregatedTotal = 0;
                             let baseAcresSum = 0;
                             let maxBaseAcres = 0;
-
                             if (commodityData.yearBreakdown) {
                                 yearRange.forEach((year) => {
                                     if (commodityData.yearBreakdown && commodityData.yearBreakdown[year]) {
@@ -1631,9 +1416,7 @@ const CountyCommodityTable = ({
                                                 : viewMode === "proposed"
                                                 ? (commodityData.yearBreakdown[year].proposed as number) || 0
                                                 : (commodityData.yearBreakdown[year].current as number) || 0;
-
                                         aggregatedTotal += yearValue;
-
                                         const yearBaseAcres = Number(commodityData.yearBreakdown[year].baseAcres || 0);
                                         if (yearBaseAcres > 0) {
                                             baseAcresSum += yearBaseAcres;
@@ -1641,24 +1424,19 @@ const CountyCommodityTable = ({
                                         }
                                     }
                                 });
-
                                 if (aggregatedTotal > 0) {
                                     commodityData.total = aggregatedTotal;
-
                                     commodityData.baseAcres = maxBaseAcres;
-
                                     if (showMeanValues && baseAcresSum > 0) {
                                         commodityData.paymentRate = aggregatedTotal / baseAcresSum;
                                     }
                                 }
                             }
-
                             commodityData.yearBreakdown = undefined;
                         }
                     });
                 }
             }
-
             if (!row.programBreakdown && selectedPrograms && !selectedPrograms.includes("All Programs")) {
                 row.programBreakdown = {};
                 selectedPrograms.forEach((program) => {
@@ -1668,7 +1446,6 @@ const CountyCommodityTable = ({
                     };
                 });
             }
-
             if (!row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Commodities")) {
                 row.commodityBreakdown = {};
                 selectedCommodities.forEach((commodity) => {
@@ -1677,13 +1454,11 @@ const CountyCommodityTable = ({
                         baseAcres: 0,
                         yearBreakdown: {}
                     };
-
                     if (isAggregatedYear && yearRange.length > 0) {
                         yearRange.forEach((year) => {
                             if (!row.commodityBreakdown![commodity].yearBreakdown) {
                                 row.commodityBreakdown![commodity].yearBreakdown = {};
                             }
-
                             row.commodityBreakdown![commodity].yearBreakdown![year] = {
                                 current: 0,
                                 proposed: 0,
@@ -1694,10 +1469,8 @@ const CountyCommodityTable = ({
                     }
                 });
             }
-
             return row;
         });
-
         processedData.forEach((row) => {
             if (row.fips === "01003" && row.commodityBreakdown && row.commodityBreakdown.Cotton) {
                 if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
@@ -1706,7 +1479,6 @@ const CountyCommodityTable = ({
                     row.commodityBreakdown.Cotton.paymentRate = 16.89 / 0.3;
                 }
             }
-
             if (row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Commodities")) {
                 selectedCommodities.forEach((commodity) => {
                     if (
@@ -1723,7 +1495,6 @@ const CountyCommodityTable = ({
                 });
             }
         });
-
         return processedData;
     }, [getTableData, isAggregatedYear, yearRange, viewMode, showMeanValues, selectedCommodities, selectedPrograms]);
 
@@ -1763,10 +1534,8 @@ const CountyCommodityTable = ({
                 number: (rowA, rowB, columnId, desc) => {
                     const aValue = rowA.values[columnId];
                     const bValue = rowB.values[columnId];
-
                     const aIsEmpty = aValue === undefined || aValue === null || aValue === "" || aValue === 0;
                     const bIsEmpty = bValue === undefined || bValue === null || bValue === "" || bValue === 0;
-
                     if (aIsEmpty && bIsEmpty) {
                         const stateA = rowA.values.state || "";
                         const stateB = rowB.values.state || "";
@@ -1777,28 +1546,22 @@ const CountyCommodityTable = ({
                         const countyB = rowB.values.county || "";
                         return countyA.localeCompare(countyB);
                     }
-
                     if (aIsEmpty) return desc ? -1 : 1;
                     if (bIsEmpty) return desc ? 1 : -1;
-
                     let a = 0;
                     let b = 0;
-
                     if (typeof aValue === "number") {
                         a = aValue;
                     } else if (typeof aValue === "string") {
                         a = Number(aValue.replace(/[,$]/g, ""));
                     }
-
                     if (typeof bValue === "number") {
                         b = bValue;
                     } else if (typeof bValue === "string") {
                         b = Number(bValue.replace(/[,$]/g, ""));
                     }
-
                     if (a > b) return desc ? -1 : 1;
                     if (a < b) return desc ? 1 : -1;
-
                     const stateA = rowA.values.state || "";
                     const stateB = rowB.values.state || "";
                     if (stateA !== stateB) {
@@ -1814,7 +1577,6 @@ const CountyCommodityTable = ({
         useSortBy,
         usePagination
     );
-
     const pageIndex = state.pageIndex;
     const pageSize = state.pageSize;
     const globalFilter = state.globalFilter;
@@ -1827,7 +1589,6 @@ const CountyCommodityTable = ({
                 const accessor = column.accessor as string;
                 const isPaymentRate = accessor.includes("paymentRate") || column.Header?.toString().includes("Rate");
                 let value;
-
                 if (accessor.includes(".")) {
                     try {
                         const keys = accessor.split(".");
@@ -1843,7 +1604,6 @@ const CountyCommodityTable = ({
                 } else {
                     value = row[accessor as keyof typeof row];
                 }
-
                 if (isPaymentRate) {
                     csvRow[column.Header] = value ? `$${Number(value).toFixed(2)}/acre` : "$0.00/acre";
                 } else if (column.Header?.toString().includes("Base Acres")) {
@@ -1885,7 +1645,6 @@ const CountyCommodityTable = ({
                     <MapIcon />
                 </Box>
             </Box>
-
             <Box sx={{ mb: 3, mt: 6 }}>
                 <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }} justifyContent="space-between">
                     <Grid item>
@@ -1902,7 +1661,7 @@ const CountyCommodityTable = ({
                             }}
                             dangerouslySetInnerHTML={{
                                 __html: getTableTitle.replace(
-                                    /(Year\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|Years\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|All\s+Commodities|\d+\s+Selected\s+Commodities|(?:Corn|Cotton|Peanuts|Soybeans|Wheat|Sorghum|Barley|Oats|Rice|Sunflowers)|All\s+Programs|\d+\s+Selected\s+Programs|Current\s+Policy|Proposed\s+Policy|Policy\s+Difference\s+Analysis)/g,
+                                    /(Years\s+(?:\d+,\s+)+\d+\s+\(Aggregated\)|Year\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|Years\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|All\s+Commodities|\d+\s+Selected\s+Commodities|(?:Corn|Cotton|Peanuts|Soybeans|Wheat|Sorghum|Barley|Oats|Rice|Sunflowers)|All\s+Programs|\d+\s+Selected\s+Programs|Current\s+Policy|Proposed\s+Policy|Policy\s+Difference\s+Analysis)/g,
                                     '<span class="highlight">$1</span>'
                                 )
                             }}
@@ -1921,7 +1680,6 @@ const CountyCommodityTable = ({
                         </CSVLink>
                     </Grid>
                 </Grid>
-
                 <Grid container spacing={2} sx={{ mb: 2, width: "100%" }}>
                     <Grid item xs={12}>
                         <Box
@@ -1998,7 +1756,6 @@ const CountyCommodityTable = ({
                                                         if (e) {
                                                             e.persist = e.persist || (() => {});
                                                         }
-
                                                         const originalOnClick = column.getSortByToggleProps().onClick;
                                                         if (originalOnClick) {
                                                             originalOnClick(e);
@@ -2109,5 +1866,4 @@ const CountyCommodityTable = ({
         </Styles>
     );
 };
-
 export default CountyCommodityTable;

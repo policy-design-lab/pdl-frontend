@@ -15,7 +15,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     const [metaData, setMetaData] = useState({
         allStates: {},
         stateCodesData: {},
-        stateCodesArray: []
+        stateCodesArray: [] as { code: string; name: string }[]
     });
     const [loadingStates, setLoadingStates] = useState({
         metadata: true,
@@ -24,7 +24,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     });
     const [selectedItem, setSelectedItem] = useState("0-0");
     const [selectedPractices, setSelectedPractices] = useState(["All Practices"]);
-
     const [hModelDistributionData, setHModelDistributionData] = useState({});
     const [hModelDistributionProposedData, setHModelDistributionProposedData] = useState({});
     const [hModelDataReady, setHModelDataReady] = useState(false);
@@ -32,19 +31,18 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
     const [availableYears, setAvailableYears] = useState<string[]>([]);
     const [selectedYear, setSelectedYear] = useState("");
+    const [selectedYears, setSelectedYears] = useState<string[]>([]);
     const [selectedCommodities, setSelectedCommodities] = useState<string[]>(["All Commodities"]);
     const [selectedPrograms, setSelectedPrograms] = useState<string[]>(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
-
     const [showMeanValues, setShowMeanValues] = useState(false);
     const [yearAggregation, setYearAggregation] = useState(0);
     const [aggregationEnabled, setAggregationEnabled] = useState(false);
-
     const [showEQIPProjection, setShowEQIPProjection] = useState(false);
     const [showARCPLCPayments, setShowARCPLCPayments] = useState(false);
     const [showHouseAgCommittee, setShowHouseAgCommittee] = useState(true);
-
+    const initializedRef = React.useRef(false);
     const handlePracticeChange = (practices) => {
         setSelectedPractices(practices);
     };
@@ -63,43 +61,34 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                     stateCodesArray: stateCodesResponse
                 });
                 setLoadingStates((prev) => ({ ...prev, metadata: false }));
-
                 const practiceNamesResponse = await getJsonDataFromUrl(
                     `${config.apiUrl}/titles/title-ii/proposals/2024/house/eqip/practice-names`
                 );
                 setPracticeNames(practiceNamesResponse);
                 setLoadingStates((prev) => ({ ...prev, practices: false }));
-
                 const statePerformanceResponse = await getJsonDataFromUrl(
                     `${config.apiUrl}/titles/title-ii/proposals/2024/house/eqip/predicted`
                 );
                 setStatePerformance(statePerformanceResponse);
                 setLoadingStates((prev) => ({ ...prev, performance: false }));
-
                 const [hModelDistributionResponse, hModelDistributionProposedResponse] = await Promise.all([
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/current`),
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/proposed`)
                 ]);
-
                 setHModelDistributionData(hModelDistributionResponse);
                 setHModelDistributionProposedData(hModelDistributionProposedResponse);
-
                 const years = Object.keys(hModelDistributionResponse).sort();
                 setAvailableYears(years.length > 0 ? years : ["2024"]);
                 setSelectedYear(years.length > 0 ? years[0] : "2024");
-
                 const commoditiesSet = new Set<string>();
                 const programsSet = new Set<string>();
-
                 if (years.length > 0) {
                     const firstYearData = hModelDistributionResponse[years[0]] || [];
-
                     firstYearData.forEach((state) => {
                         state.counties.forEach((county) => {
                             county.scenarios.forEach((scenario) => {
                                 scenario.commodities.forEach((commodity) => {
                                     commoditiesSet.add(commodity.commodityName);
-
                                     commodity.programs.forEach((program) => {
                                         programsSet.add(program.programName);
                                     });
@@ -108,7 +97,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                         });
                     });
                 }
-
                 setAvailableCommodities(Array.from(commoditiesSet).sort());
                 setAvailablePrograms(Array.from(programsSet).sort());
                 setHModelDataReady(true);
@@ -139,15 +127,51 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     };
 
     const handleMapUpdate = (year, commodities, programs, state, mode) => {
-        setSelectedYear(year);
-        setSelectedCommodities(commodities);
-        setSelectedPrograms(programs);
-        setSelectedState(state);
-        setViewMode(mode);
+        if (!initializedRef.current && availableYears.length > 0) {
+            initializedRef.current = true;
+            if (Array.isArray(year)) {
+                setSelectedYears(year);
+                setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+            } else {
+                setSelectedYear(year);
+                setSelectedYears([year]);
+            }
+            setSelectedCommodities(commodities);
+            setSelectedPrograms(programs);
+            setSelectedState(state);
+            setViewMode(mode);
+            return;
+        }
+        const yearChanged = Array.isArray(year) ?
+            JSON.stringify(year) !== JSON.stringify(selectedYears)
+            : year !== selectedYear;
+        const commoditiesChanged = JSON.stringify(commodities) !== JSON.stringify(selectedCommodities);
+        const programsChanged = JSON.stringify(programs) !== JSON.stringify(selectedPrograms);
+        const stateChanged = state !== selectedState;
+        const modeChanged = mode !== viewMode;
+        if (yearChanged || commoditiesChanged || programsChanged || stateChanged || modeChanged) {
+            if (Array.isArray(year)) {
+                setSelectedYears(year);
+                setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+            } else {
+                setSelectedYear(year);
+                setSelectedYears([year]);
+            }
+            if (commoditiesChanged) {
+                setSelectedCommodities(commodities);
+            }
+            if (programsChanged) {
+                setSelectedPrograms(programs);
+            }
+            if (stateChanged) {
+                setSelectedState(state);
+            }
+            if (modeChanged) {
+                setViewMode(mode);
+            }
+        }
     };
-
     const isLoading = Object.values(loadingStates).some((state) => state);
-
     const getDescriptionContent = (description: string, author: string, link: string) => {
         return (
             <>
@@ -161,7 +185,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
             </>
         );
     };
-
     return (
         <Box sx={{ width: "100%" }}>
             {v === index && (
@@ -186,7 +209,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                         onMenuSelect={handleMenuSelect}
                                     />
                                 </Box>
-
                                 {showHouseAgCommittee && (
                                     <Box sx={{ mt: 4 }}>
                                         <Typography variant="h5" sx={{ mb: 3, color: "#2F7164", fontWeight: 600 }}>
@@ -227,7 +249,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                         </Box>
                                     </Box>
                                 )}
-
                                 {(showEQIPProjection || showARCPLCPayments) && (
                                     <Typography
                                         variant="body1"
@@ -249,7 +270,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     </Typography>
                                 )}
                             </Box>
-
                             {isLoading || (showARCPLCPayments && !hModelDataReady) ? (
                                 <Box
                                     sx={{
@@ -310,7 +330,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                             </Box>
                                         </>
                                     )}
-
                                     {showARCPLCPayments && (
                                         <>
                                             <Box
@@ -357,7 +376,11 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                 <CountyCommodityTable
                                                     countyData={hModelDistributionData}
                                                     countyDataProposed={hModelDistributionProposedData}
-                                                    selectedYear={selectedYear}
+                                                    selectedYear={
+                                                        aggregationEnabled && selectedYears.length > 1 ?
+                                                            selectedYears :
+                                                            selectedYear
+                                                    }
                                                     viewMode={viewMode}
                                                     selectedCommodities={selectedCommodities}
                                                     selectedPrograms={selectedPrograms}
