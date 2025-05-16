@@ -4,7 +4,6 @@ import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 import * as d3 from "d3";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
@@ -27,10 +26,32 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = (props) => {
-    const { year, setReactTooltipContent, category, allStates, stateCodes, statePerformance, colorScale } = props;
+interface SubSubProgram {
+    subSubProgramName: string;
+    totalPaymentInDollars: number;
+    totalPaymentInPercentageNationwide: number;
+}
+
+interface SubProgram {
+    subProgramName: string;
+    totalPaymentInDollars: number;
+    totalPaymentInPercentageNationwide: number;
+    subSubPrograms?: SubSubProgram[];
+}
+
+interface StateRecord {
+    state: string;
+    subPrograms: SubProgram[];
+    length?: number;
+}
+
+const MapChart = ({ year, setReactTooltipContent, category, allStates, stateCodes, statePerformance, colorScale }) => {
     let categoryRecord;
     const classes = useStyles();
+    const getColorForValue = (value) => {
+        return colorScale(value);
+    };
+
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
@@ -117,8 +138,10 @@ const MapChart = (props) => {
                                     </div>
                                 );
                                 const fillColour = () => {
-                                    if (categoryPayment) {
-                                        if (categoryPayment !== 0) return colorScale(categoryPayment);
+                                    if (categoryPayment !== undefined) {
+                                        if (categoryPayment !== 0) {
+                                            return getColorForValue(categoryPayment);
+                                        }
                                         return "#D2D2D2";
                                     }
                                     return "#D2D2D2";
@@ -186,11 +209,14 @@ const MapChart = (props) => {
     );
 };
 
-MapChart.propTypes = {
-    year: PropTypes.string,
-    setReactTooltipContent: PropTypes.func,
-    category: PropTypes.string
-};
+interface CategoryMapProps {
+    year: string;
+    category: string;
+    attribute: string;
+    statePerformance: Record<string, StateRecord[]>;
+    allStates: any[];
+    stateCodes: Record<string, string>;
+}
 
 const CategoryMap = ({
     year,
@@ -199,18 +225,11 @@ const CategoryMap = ({
     statePerformance,
     allStates,
     stateCodes
-}: {
-    year: string;
-    category: string;
-    attribute: string;
-    statePerformance: any;
-    allStates: any;
-    stateCodes: any;
-}): JSX.Element => {
-    const [content, setContent] = useState("");
+}: CategoryMapProps): JSX.Element => {
+    const [content, setContent] = useState<string | JSX.Element>("");
     let title = `CRP ${category} from ${year}`;
     const quantizeArray: number[] = [];
-    const zeroPoints = [];
+    const zeroPoints: string[] = [];
 
     statePerformance[year].forEach((value) => {
         const programRecord = value.subPrograms;
@@ -219,7 +238,7 @@ const CategoryMap = ({
             ACur = programRecord.find((s) => s.subProgramName === category);
         } else if (category === "CREP Only" || category === "Continuous Non-CREP" || category === "Farmable Wetland") {
             const contSingUp = programRecord.find((s) => s.subProgramName === "Continuous Sign-up");
-            if (contSingUp) {
+            if (contSingUp && contSingUp.subSubPrograms) {
                 const subSubPrograms = contSingUp.subSubPrograms;
                 title = `CRP Continuous Sign-up, ${category} from ${year}`;
 
@@ -230,11 +249,14 @@ const CategoryMap = ({
                 });
             }
         }
-        if (ACur) {
+        if (ACur && Object.keys(ACur).length > 0) {
             let key = getValueFromAttrDollar(ACur, attribute);
             key = key !== "" ? key : attribute;
-            quantizeArray.push(ACur[key]);
-            ACur[key] === 0 && zeroPoints.push(value.state);
+            if (ACur[key] !== undefined && ACur[key] > 0) {
+                quantizeArray.push(ACur[key]);
+            } else if (ACur[key] === 0) {
+                zeroPoints.push(value.state);
+            }
         }
         return null;
     });
@@ -251,7 +273,7 @@ const CategoryMap = ({
                         <DrawLegend
                             colorScale={colorScale}
                             title={titleElement(category, year)}
-                            programData={quantizeArray}
+                            programData={[...quantizeArray]}
                             prepColor={mapColor}
                             isRatio={false}
                             notDollar={false}
