@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Bump the Ubuntu version of the Lint Github action to latest [#382](https://github.com/policy-design-lab/pdl-frontend/issues/382)
 - Update rules for Danger Github action to eliminate unnecessary checks when PR is in draft status
 - Update Crop Insurance data years to 2014-2023 and make future updates easier. [#378](https://github.com/policy-design-lab/pdl-frontend/issues/378)
+- Update the map coloring for all maps in Title II and Crop Insurance [#385](https://github.com/policy-design-lab/pdl-frontend/issues/385)
 
 ## [1.8.0] - 2025-03-10
 
