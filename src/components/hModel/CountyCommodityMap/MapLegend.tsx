@@ -129,7 +129,8 @@ const MapLegend = ({
                     prepColor={mapColor}
                     emptyState={[]}
                     isRatio={false}
-                    notDollar={!!showMeanValues}
+                    notDollar={false}
+                    isPaymentRate={showMeanValues}
                     countyData={mapData.counties}
                     showPercentileExplanation
                     stateCodeToName={stateCodeToName}

@@ -321,7 +321,7 @@ const CountyCommodityMap = ({
 
     return (
         <Box sx={{ width: "100%" }}>
-            <Box sx={{ mt: 20, mb: -10 }}>
+            <Box sx={{ mt: 2, mb: -10 }}>
                 <Box
                     sx={{
                         p: 2,

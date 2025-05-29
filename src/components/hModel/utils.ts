@@ -1,5 +1,4 @@
 import countyFipsMapping from "../../files/maps/fips_county_mapping.json";
-
 export interface YearBreakdownData {
     current?: string | number;
     proposed?: string | number;
@@ -37,7 +36,6 @@ export const calculateTotals = (
 ): { currentTotal: number; proposedTotal: number } => {
     let currentTotal = 0;
     const proposedTotal = 0;
-
     county.scenarios.forEach((scenario) => {
         scenario.commodities.forEach((commodity) => {
             if (
@@ -46,17 +44,14 @@ export const calculateTotals = (
             ) {
                 return;
             }
-
             commodity.programs.forEach((program) => {
                 if (!selectedPrograms.includes("All Programs") && !selectedPrograms.includes(program.programName)) {
                     return;
                 }
-
                 currentTotal += program.totalPaymentInDollars || 0;
             });
         });
     });
-
     return { currentTotal, proposedTotal };
 };
 
@@ -67,14 +62,10 @@ export const findProposedCommodityAndProgram = (
     programName: string
 ): { proposedScenario: any; proposedCommodity: any; proposedProgram: any } => {
     const proposedScenario = proposedCounty?.scenarios.find((s) => s.scenarioName === scenarioName);
-
     const proposedCommodity = proposedScenario?.commodities.find((c) => c.commodityName === commodityName);
-
     const proposedProgram = proposedCommodity?.programs.find((p) => p.programName === programName);
-
     return { proposedScenario, proposedCommodity, proposedProgram };
 };
-
 export const calculateYearRange = (selectedYear: string | string[]): string[] => {
     if (Array.isArray(selectedYear)) {
         return selectedYear;
@@ -106,7 +97,6 @@ export const generateTableTitle = (
     isAggregatedYear: boolean
 ): string => {
     let yearPart = "";
-
     if (Array.isArray(selectedYear)) {
         // Handle multiple selected years
         if (selectedYear.length === 1) {
@@ -120,7 +110,6 @@ export const generateTableTitle = (
         // Handle single year or traditional aggregated year
         yearPart = isAggregatedYear ? `Years ${selectedYear} (Aggregated)` : `Year ${selectedYear}`;
     }
-
     let commodityPart = "";
     if (selectedCommodities.includes("All Commodities")) {
         commodityPart = "All Commodities";
@@ -129,7 +118,6 @@ export const generateTableTitle = (
     } else if (selectedCommodities.length > 1) {
         commodityPart = `${selectedCommodities.length} Selected Commodities`;
     }
-
     let programPart = "";
     if (selectedPrograms.includes("All Programs")) {
         programPart = "All Programs";
@@ -138,7 +126,6 @@ export const generateTableTitle = (
     } else if (selectedPrograms.length > 1) {
         programPart = `${selectedPrograms.length} Selected Programs`;
     }
-
     let viewPart = "";
     if (viewMode === "current") {
         viewPart = "Current Policy";
@@ -147,7 +134,6 @@ export const generateTableTitle = (
     } else if (viewMode === "difference") {
         viewPart = "Policy Difference Analysis";
     }
-
     return `ARC-PLC County Payments - ${yearPart}, ${commodityPart}, ${programPart}, ${viewPart}`;
 };
 
@@ -159,7 +145,6 @@ export const generateCsvFilename = (
     isAggregatedYear: boolean
 ): string => {
     const dateStr = new Date().toISOString().split("T")[0];
-
     let yearStr = "";
     if (Array.isArray(selectedYear)) {
         if (selectedYear.length === 1) {
@@ -174,11 +159,9 @@ export const generateCsvFilename = (
     const commodityStr = selectedCommodities.includes("All Commodities")
         ? "all-commodities"
         : selectedCommodities.join("-").toLowerCase().replace(/\s+/g, "-");
-
     const programStr = selectedPrograms.includes("All Programs")
         ? "all-programs"
         : selectedPrograms.join("-").toLowerCase().replace(/\s+/g, "-");
-
     return `arc-plc-payments-${yearStr}-${commodityStr}-${programStr}-${viewMode}-${dateStr}.csv`;
 };
 
@@ -196,7 +179,6 @@ export const calculateWeightedMeanRate = (
 ): { rate: number; isWeightedAverage: boolean } => {
     if (totalBaseAcres > 0) {
         const preciseRate = totalPayments / totalBaseAcres;
-
         return {
             rate: preciseRate,
             isWeightedAverage: isMultiSelection
@@ -212,12 +194,9 @@ export const getTotalBaseAcres = (
     scenarioType = "Current"
 ): number => {
     if (!county || !county.scenarios) return 0;
-
     let totalBaseAcres = 0;
     const processedProgramCommodityPairs = new Set<string>();
-
     const targetScenario = county.scenarios.find((s) => s.scenarioName === scenarioType);
-
     if (!targetScenario || !targetScenario.commodities) {
         if (county.scenarios[0] && county.scenarios[0].commodities) {
             county.scenarios[0].commodities.forEach((commodity) => {
@@ -227,12 +206,10 @@ export const getTotalBaseAcres = (
                 ) {
                     return;
                 }
-
                 commodity.programs.forEach((program) => {
                     if (!selectedPrograms.includes("All Programs") && !selectedPrograms.includes(program.programName)) {
                         return;
                     }
-
                     const pairKey = `${commodity.commodityName}-${program.programName}`;
                     if (!processedProgramCommodityPairs.has(pairKey)) {
                         totalBaseAcres += program.baseAcres || 0;
@@ -249,12 +226,10 @@ export const getTotalBaseAcres = (
             ) {
                 return;
             }
-
             commodity.programs.forEach((program) => {
                 if (!selectedPrograms.includes("All Programs") && !selectedPrograms.includes(program.programName)) {
                     return;
                 }
-
                 const pairKey = `${commodity.commodityName}-${program.programName}`;
                 if (!processedProgramCommodityPairs.has(pairKey)) {
                     totalBaseAcres += program.baseAcres || 0;
@@ -263,9 +238,7 @@ export const getTotalBaseAcres = (
             });
         });
     }
-
     totalBaseAcres = Math.round(totalBaseAcres * 100) / 100;
-
     return totalBaseAcres;
 };
 
@@ -277,18 +250,15 @@ export const getPaymentRateForTooltip = (rate: number, isWeightedAverage: boolea
 export const isDataValid = (county: any): boolean => {
     let hasAnyRealData = false;
     let totalRealPayment = 0;
-
     if (county.commodities) {
         Object.values(county.commodities).forEach((commodity: any) => {
             const commodityValue = parseFloat(commodity.value || 0);
-
             if (commodityValue > 0) {
                 hasAnyRealData = true;
                 totalRealPayment += commodityValue;
             }
         });
     }
-
     return hasAnyRealData && totalRealPayment > 0;
 };
 
@@ -302,17 +272,14 @@ export const formatCellValue = (
     accessor: string
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
-        return cell.value ? `$${Number(cell.value).toFixed(2)}/acre` : "$0.00/acre";
+        return cell.value && cell.value > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
     }
-
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" ? formatNumericValue(cell.value).toFixed(2) : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ? formatNumericValue(cell.value).toFixed(2) : cell.value;
     }
-
     if (includesDot) {
-        return typeof cell.value === "number" ? formatCurrency(cell.value) : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";
     }
-
     if (
         headerIncludesPayment ||
         accessor === "current" ||
@@ -320,7 +287,7 @@ export const formatCellValue = (
         accessor === "difference" ||
         accessor === "aggregatedPayment"
     ) {
-        return typeof cell.value === "number" ? formatCurrency(cell.value) : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";
     }
 
     return cell.render("Cell");

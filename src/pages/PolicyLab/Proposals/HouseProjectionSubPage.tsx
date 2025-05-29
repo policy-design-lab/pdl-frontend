@@ -7,6 +7,7 @@ import { houseProjectionMenu } from "./Menu";
 import HouseOutlayTable from "../../../components/policylab/HouseOutlayTable";
 import CountyCommodityMap from "../../../components/hModel/CountyCommodityMap";
 import CountyCommodityTable from "../../../components/hModel/CountyCommodityTable";
+import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
 
 export default function HouseProjectionSubPageProps({ v, index }: { v: number; index: number }): JSX.Element {
@@ -172,6 +173,18 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         }
     };
     const isLoading = Object.values(loadingStates).some((state) => state);
+    const shouldShowLoading = () => {
+        if (showHouseAgCommittee) {
+            return false;
+        }
+        if (showEQIPProjection) {
+            return isLoading;
+        }
+        if (showARCPLCPayments) {
+            return isLoading || !hModelDataReady;
+        }
+        return false;
+    };
     const getDescriptionContent = (description: string, author: string, link: string) => {
         return (
             <>
@@ -270,7 +283,24 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     </Typography>
                                 )}
                             </Box>
-                            {isLoading || (showARCPLCPayments && !hModelDataReady) ? (
+                            {showARCPLCPayments && hModelDataReady && Object.keys(hModelDistributionData).length > 0 && Object.keys(hModelDistributionProposedData).length > 0 && (
+                                <Box
+                                    sx={{
+                                        backgroundColor: "white",
+                                        borderRadius: 1,
+                                        px: 3,
+                                        pt: 3,
+                                        pb: 1
+                                    }}
+                                >
+                                    <PolicyComparisonSection
+                                        currentData={hModelDistributionData}
+                                        proposedData={hModelDistributionProposedData}
+                                        title="Policy Impact Analysis: Payment Projections"
+                                    />
+                                </Box>
+                            )}
+                            {shouldShowLoading() ? (
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -336,9 +366,33 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                 sx={{
                                                     backgroundColor: "white",
                                                     borderRadius: 1,
-                                                    mb: 3
+                                                    px: 3,
+                                                    pt: 3,
+                                                    pb: 1
                                                 }}
                                             >
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 600,
+                                                        fontSize: "1.5rem",
+                                                        color: "#2F7164",
+                                                        mb: 0,
+                                                        textAlign: "center"
+                                                    }}
+                                                >
+                                                    Interactive Map & Data Analysis
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: "0.875rem",
+                                                        color: "#666",
+                                                        fontStyle: "italic",
+                                                        mb: 1,
+                                                        textAlign: "center"
+                                                    }}
+                                                >
+                                                    Use controls to filter data and interact with the map for detailed county information
+                                                </Typography>
                                                 <CountyCommodityMap
                                                     countyData={hModelDistributionData}
                                                     countyDataProposed={hModelDistributionProposedData}

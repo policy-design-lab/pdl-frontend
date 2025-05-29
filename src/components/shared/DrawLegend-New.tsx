@@ -23,7 +23,8 @@ export default function DrawLegendNew({
     stateCodeToName = {},
     showTooltips = false,
     regionType = "county",
-    percentileMode = "default"
+    percentileMode = "default",
+    isPaymentRate = false
 }: {
     isRatio?: boolean;
     notDollar?: boolean;
@@ -39,6 +40,7 @@ export default function DrawLegendNew({
     showTooltips?: boolean;
     regionType?: string;
     percentileMode?: string;
+    isPaymentRate?: boolean;
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
@@ -265,7 +267,7 @@ export default function DrawLegendNew({
                     return `${Math.round(d * 100)}%`;
                 }
                 const roundedValue = Math.round(d * 100) / 100;
-                if (!notDollar) {
+                if (!notDollar || isPaymentRate) {
                     const res = ShortFormat(roundedValue.toFixed(2), -1, 2);
                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                 }

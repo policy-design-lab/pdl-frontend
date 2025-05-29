@@ -47,8 +47,8 @@ interface ExtendedCountyObject extends CountyObject {
 interface ColumnDef {
     Header: string;
     accessor: string;
-    sortType?: string | ((a: any, b: any) => number);
     disableSortBy: boolean;
+    sortType?: (rowA, rowB, columnId) => number;
 }
 
 const Styles = styled.div`
@@ -891,343 +891,6 @@ const CountyCommodityTable = ({
         yearAggregation,
         aggregationEnabled
     ]);
-    const columns = useMemo(() => {
-        const baseColumns: ColumnDef[] = [
-            {
-                Header: "State",
-                accessor: "state",
-                sortType: "alphanumeric",
-                disableSortBy: false
-            },
-            {
-                Header: "County Name",
-                accessor: "county",
-                sortType: "alphanumeric",
-                disableSortBy: false
-            }
-        ];
-        const addedAccessors = new Set<string>(["state", "county"]);
-        const addColumnIfUnique = (column: ColumnDef) => {
-            const accessor = column.accessor as string;
-            if (!addedAccessors.has(accessor)) {
-                addedAccessors.add(accessor);
-                baseColumns.push(column);
-            }
-        };
-        if (isAggregatedYear) {
-            if (showMeanValues) {
-                addColumnIfUnique({
-                    Header: viewMode === "difference" ? "Aggregated Rate Change" : "Aggregated Payment Rate",
-                    accessor: "weightedAverageRate",
-                    sortType: "number",
-                    disableSortBy: false
-                });
-            } else {
-                addColumnIfUnique({
-                    Header: viewMode === "difference" ? "Aggregated Payment Change" : "Aggregated Total Payment",
-                    accessor: "aggregatedPayment",
-                    sortType: "number",
-                    disableSortBy: false
-                });
-            }
-            addColumnIfUnique({
-                Header: "Base Acres",
-                accessor: "baseAcres",
-                sortType: "number",
-                disableSortBy: false
-            });
-            if (yearRange.length > 1) {
-                yearRange.forEach((year) => {
-                    if (viewMode === "difference") {
-                        addColumnIfUnique({
-                            Header: `${year} Payment Change`,
-                            accessor: `yearBreakdown.${year}.difference`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    } else {
-                        addColumnIfUnique({
-                            Header: `${year} Payment`,
-                            accessor: `yearBreakdown.${year}.${viewMode === "proposed" ? "proposed" : "current"}`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                    addColumnIfUnique({
-                        Header: `${year} Base Acres`,
-                        accessor: `yearBreakdown.${year}.baseAcres`,
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        if (viewMode === "difference") {
-                            addColumnIfUnique({
-                                Header: `${year} Rate Change`,
-                                accessor: `yearBreakdown.${year}.paymentRate`,
-                                sortType: "number",
-                                disableSortBy: false
-                            });
-                        } else {
-                            addColumnIfUnique({
-                                Header: `${year} Payment Rate`,
-                                accessor: `yearBreakdown.${year}.paymentRate`,
-                                sortType: "number",
-                                disableSortBy: false
-                            });
-                        }
-                    }
-                });
-            }
-            if (selectedCommodities && !selectedCommodities.includes("All Commodities")) {
-                selectedCommodities.forEach((commodity) => {
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: `${commodity} Total ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.total`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Base Acres ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Payment Rate ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.paymentRate`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    } else {
-                        addColumnIfUnique({
-                            Header: `${commodity} Total ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.total`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Base Acres ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                });
-            }
-        } else {
-            switch (viewMode) {
-                case "difference":
-                    addColumnIfUnique({
-                        Header: "Total Payment Change",
-                        accessor: "difference",
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: "Payment Rate Change",
-                            accessor: "paymentRate",
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                    addColumnIfUnique({
-                        Header: "Current Total",
-                        accessor: "current",
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: "Current Rate",
-                            accessor: "currentRate",
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                    addColumnIfUnique({
-                        Header: "Proposed Total",
-                        accessor: "proposed",
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: "Proposed Rate",
-                            accessor: "proposedRate",
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                    break;
-                case "proposed":
-                    addColumnIfUnique({
-                        Header: `Total Payment ${
-                            selectedPrograms &&
-                            selectedPrograms.length === 1 &&
-                            !selectedPrograms.includes("All Programs")
-                                ? `(${selectedPrograms[0]})`
-                                : ""
-                        }`,
-                        accessor: "proposed",
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: `Payment Rate ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: "paymentRate",
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                    break;
-                default:
-                    addColumnIfUnique({
-                        Header: `Total Payment ${
-                            selectedPrograms &&
-                            selectedPrograms.length === 1 &&
-                            !selectedPrograms.includes("All Programs")
-                                ? `(${selectedPrograms[0]})`
-                                : ""
-                        }`,
-                        accessor: "current",
-                        sortType: "number",
-                        disableSortBy: false
-                    });
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: `Payment Rate ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: "paymentRate",
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-            }
-            addColumnIfUnique({
-                Header: `Base Acres ${
-                    selectedPrograms && selectedPrograms.length === 1 && !selectedPrograms.includes("All Programs")
-                        ? `(${selectedPrograms[0]})`
-                        : ""
-                }`,
-                accessor: "baseAcres",
-                sortType: "number",
-                disableSortBy: false
-            });
-            if (selectedCommodities && !selectedCommodities.includes("All Commodities")) {
-                selectedCommodities.forEach((commodity) => {
-                    if (showMeanValues) {
-                        addColumnIfUnique({
-                            Header: `${commodity} Total ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.total`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Base Acres ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Payment Rate ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.paymentRate`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    } else {
-                        addColumnIfUnique({
-                            Header: `${commodity} Total ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.total`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                        addColumnIfUnique({
-                            Header: `${commodity} Base Acres ${
-                                selectedPrograms &&
-                                selectedPrograms.length === 1 &&
-                                !selectedPrograms.includes("All Programs")
-                                    ? `(${selectedPrograms[0]})`
-                                    : ""
-                            }`,
-                            accessor: `commodityBreakdown.${commodity}.baseAcres`,
-                            sortType: "number",
-                            disableSortBy: false
-                        });
-                    }
-                });
-            }
-        }
-        return baseColumns;
-    }, [selectedYear, viewMode, showMeanValues, isAggregatedYear, yearRange, selectedCommodities, selectedPrograms]);
-
     const data = useMemo(() => {
         const tableData = getTableData();
         const processedData = tableData.map((row: ExtendedCountyObject) => {
@@ -1469,7 +1132,7 @@ const CountyCommodityTable = ({
                     }
                 });
             }
-            return row;
+            return { ...row };
         });
         processedData.forEach((row) => {
             if (row.fips === "01003" && row.commodityBreakdown && row.commodityBreakdown.Cotton) {
@@ -1495,81 +1158,75 @@ const CountyCommodityTable = ({
                 });
             }
         });
-        return processedData;
+        return [...processedData];
     }, [getTableData, isAggregatedYear, yearRange, viewMode, showMeanValues, selectedCommodities, selectedPrograms]);
-
+    const dataWithKeys = useMemo(() => {
+        return data.map((row, index) => ({
+            ...row,
+            __id: `${row.state}-${row.county}-${row.fips}-${index}`,
+        }));
+    }, [data]);
     const [columnPage, setColumnPage] = useState(0);
     const columnsPerPage = 6;
+    const baseColumns = useMemo(() => [
+        {
+            Header: "State",
+            accessor: "state",
+            disableSortBy: false,
+            sortType: "emptyBottomText"
+        },
+        {
+            Header: "County Name",
+            accessor: "county",
+            disableSortBy: false,
+            sortType: "emptyBottomText"
+        },
+        {
+            Header: "Total Payment",
+            accessor: "current",
+            disableSortBy: false,
+            sortType: "emptyBottomNumeric"
+        },
+        {
+            Header: "Base Acres",
+            accessor: "baseAcres",
+            disableSortBy: false,
+            sortType: "emptyBottomNumeric"
+        }
+    ], []);
+    
     const visibleColumnIndices = useMemo(() => {
         const startIndex = columnPage * columnsPerPage + 2;
-        const endIndex = Math.min(startIndex + columnsPerPage, columns.length);
+        const endIndex = Math.min(startIndex + columnsPerPage, baseColumns.length);
         return [0, 1, ...Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex)];
-    }, [columnPage, columnsPerPage, columns.length]);
-    const totalColumnPages = Math.ceil((columns.length - 2) / columnsPerPage);
-
+    }, [columnPage, columnsPerPage, baseColumns.length]);
+    const totalColumnPages = Math.ceil((baseColumns.length - 2) / columnsPerPage);
     const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
-        setPageSize,
-        state,
-        setGlobalFilter
+        state
     } = useTable(
         {
-            columns,
-            data,
+            columns: baseColumns,
+            data: dataWithKeys,
             initialState: { pageIndex: 0, pageSize: 10 },
             defaultSortBy: [{ id: "state", desc: false }],
+            disableSortRemove: false,
+            autoResetSortBy: false,
+            disableMultiSort: true,
+            getRowId: (row, index) => `${row.state}-${row.county}-${row.fips}-${index}`,
             sortTypes: {
-                number: (rowA, rowB, columnId, desc) => {
+                emptyBottomNumeric: (rowA, rowB, columnId) => {
+                    const aValue = rowA.values[columnId];
+                    const bValue = rowB.values[columnId];                
+                    const aNum = typeof aValue === 'number' ? aValue : Number(aValue) || 0;
+                    const bNum = typeof bValue === 'number' ? bValue : Number(bValue) || 0;
+                    return aNum - bNum;
+                },
+                emptyBottomText: (rowA, rowB, columnId) => {
                     const aValue = rowA.values[columnId];
                     const bValue = rowB.values[columnId];
-                    const aIsEmpty = aValue === undefined || aValue === null || aValue === "" || aValue === 0;
-                    const bIsEmpty = bValue === undefined || bValue === null || bValue === "" || bValue === 0;
-                    if (aIsEmpty && bIsEmpty) {
-                        const stateA = rowA.values.state || "";
-                        const stateB = rowB.values.state || "";
-                        if (stateA !== stateB) {
-                            return stateA.localeCompare(stateB);
-                        }
-                        const countyA = rowA.values.county || "";
-                        const countyB = rowB.values.county || "";
-                        return countyA.localeCompare(countyB);
-                    }
-                    if (aIsEmpty) return desc ? -1 : 1;
-                    if (bIsEmpty) return desc ? 1 : -1;
-                    let a = 0;
-                    let b = 0;
-                    if (typeof aValue === "number") {
-                        a = aValue;
-                    } else if (typeof aValue === "string") {
-                        a = Number(aValue.replace(/[,$]/g, ""));
-                    }
-                    if (typeof bValue === "number") {
-                        b = bValue;
-                    } else if (typeof bValue === "string") {
-                        b = Number(bValue.replace(/[,$]/g, ""));
-                    }
-                    if (a > b) return desc ? -1 : 1;
-                    if (a < b) return desc ? 1 : -1;
-                    const stateA = rowA.values.state || "";
-                    const stateB = rowB.values.state || "";
-                    if (stateA !== stateB) {
-                        return stateA.localeCompare(stateB);
-                    }
-                    const countyA = rowA.values.county || "";
-                    const countyB = rowB.values.county || "";
-                    return countyA.localeCompare(countyB);
+                    const aStr = aValue ? String(aValue).toLowerCase() : '';
+                    const bStr = bValue ? String(bValue).toLowerCase() : '';
+                    return aStr.localeCompare(bStr);
                 }
             }
         },
@@ -1577,15 +1234,86 @@ const CountyCommodityTable = ({
         useSortBy,
         usePagination
     );
-    const pageIndex = state.pageIndex;
-    const pageSize = state.pageSize;
-    const globalFilter = state.globalFilter;
-
+    const { countiesWithValues, countiesWithoutValues } = useMemo(() => {
+        const sortBy = state?.sortBy?.[0]?.id || 'state';
+        const withValues: typeof dataWithKeys = [];
+        const withoutValues: typeof dataWithKeys = [];
+        dataWithKeys.forEach(row => {
+            let value = row[sortBy];if (sortBy.includes('.')) {
+                const keys = sortBy.split('.');
+                value = keys.reduce((obj, key) => obj?.[key], row);
+            }
+            const isNumericColumn = sortBy === 'current' || sortBy === 'baseAcres' || sortBy.includes('Payment') || sortBy.includes('Base Acres');
+            const isEmpty = isNumericColumn 
+                ? (value === undefined || value === null || value === "" || value === 0)
+                : (!value || value === "");
+            
+            if (isEmpty) {
+                withoutValues.push(row);
+            } else {
+                withValues.push(row);
+            }
+        });
+        return { countiesWithValues: withValues, countiesWithoutValues: withoutValues };
+    }, [dataWithKeys, state?.sortBy]);
+    const mainTableData = useMemo(() => countiesWithValues, [countiesWithValues]);
+    const {
+        getTableProps: getMainTableProps,
+        getTableBodyProps: getMainTableBodyProps,
+        headerGroups: mainHeaderGroups,
+        rows: mainRows,
+        prepareRow: prepareMainRow,
+        page: mainPage,
+        canPreviousPage: mainCanPreviousPage,
+        canNextPage: mainCanNextPage,
+        pageOptions: mainPageOptions,
+        pageCount: mainPageCount,
+        gotoPage: mainGotoPage,
+        nextPage: mainNextPage,
+        previousPage: mainPreviousPage,
+        setPageSize: mainSetPageSize,
+        state: mainState,
+        setGlobalFilter: mainSetGlobalFilter
+    } = useTable(
+        {
+            columns: baseColumns,
+            data: mainTableData,
+            initialState: { pageIndex: 0, pageSize: 10 },
+            defaultSortBy: [{ id: "state", desc: false }],
+            disableSortRemove: false,
+            autoResetSortBy: false,
+            disableMultiSort: true,
+            getRowId: (row, index) => `${row.state}-${row.county}-${row.fips}-${index}`,
+            sortTypes: {
+                emptyBottomNumeric: (rowA, rowB, columnId) => {
+                    const aValue = rowA.values[columnId];
+                    const bValue = rowB.values[columnId];
+                    const aNum = typeof aValue === 'number' ? aValue : Number(aValue) || 0;
+                    const bNum = typeof bValue === 'number' ? bValue : Number(bValue) || 0;
+                    return aNum - bNum;
+                },
+                emptyBottomText: (rowA, rowB, columnId) => {
+                    const aValue = rowA.values[columnId];
+                    const bValue = rowB.values[columnId];
+                    const aStr = aValue ? String(aValue).toLowerCase() : '';
+                    const bStr = bValue ? String(bValue).toLowerCase() : '';
+                    return aStr.localeCompare(bStr);
+                }
+            }
+        },
+        useGlobalFilter,
+        useSortBy,
+        usePagination
+    );
+    const [showEmptyCounties, setShowEmptyCounties] = useState(false);
+    const pageIndex = mainState.pageIndex;
+    const pageSize = mainState.pageSize;
+    const globalFilter = mainState.globalFilter;
     const csvData = useMemo(() => {
-        if (!data || !columns) return [];
+        if (!data || !baseColumns) return [];
         return data.map((row) => {
             const csvRow = {};
-            columns.forEach((column) => {
+            baseColumns.forEach((column) => {
                 const accessor = column.accessor as string;
                 const isPaymentRate = accessor.includes("paymentRate") || column.Header?.toString().includes("Rate");
                 let value;
@@ -1616,8 +1344,7 @@ const CountyCommodityTable = ({
             });
             return csvRow;
         });
-    }, [data, columns]);
-
+    }, [data, baseColumns]);
     return (
         <Styles id="county-commodity-table">
             <Box
@@ -1682,6 +1409,45 @@ const CountyCommodityTable = ({
                 </Grid>
                 <Grid container spacing={2} sx={{ mb: 2, width: "100%" }}>
                     <Grid item xs={12}>
+                        {mainState.sortBy && mainState.sortBy.length > 0 && !mainState.sortBy[0].desc && 
+                         (mainState.sortBy[0].id === 'current' || mainState.sortBy[0].id === 'baseAcres') && (() => {
+                            const sortBy = mainState.sortBy[0].id;
+                            let firstNonEmptyIndex = -1;
+                            for (let i = 0; i < mainRows.length; i++) {
+                                const value = mainRows[i].values[sortBy];
+                                if (value !== undefined && value !== null && value !== "" && value !== 0) {
+                                    firstNonEmptyIndex = i;
+                                    break;
+                                }
+                            }
+                            if (firstNonEmptyIndex === -1) return null;
+                            const targetPage = Math.floor(firstNonEmptyIndex / pageSize) + 1;
+                            return (
+                                <Box sx={{ mb: 2, p: 2, backgroundColor: "rgba(255, 193, 7, 0.1)", borderRadius: "6px", border: "1px solid rgba(255, 193, 7, 0.3)" }}>
+                                    <Typography variant="body2" sx={{ color: "rgba(255, 143, 0, 0.9)", lineHeight: 1.5, mb: 1 }}>
+                                        💡 <strong>Tip:</strong> You're sorting by ascending order. Counties with no values appear first. 
+                                        Counties with actual values start on <strong>page {targetPage}</strong>.
+                                    </Typography>
+                                    {targetPage !== pageIndex + 1 && (
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            onClick={() => mainGotoPage(targetPage - 1)}
+                                            sx={{
+                                                borderColor: "rgba(255, 143, 0, 0.5)",
+                                                color: "rgba(255, 143, 0, 0.9)",
+                                                "&:hover": {
+                                                    borderColor: "rgba(255, 143, 0, 0.8)",
+                                                    backgroundColor: "rgba(255, 143, 0, 0.1)"
+                                                }
+                                            }}
+                                        >
+                                            Jump to page {targetPage}
+                                        </Button>
+                                    )}
+                                </Box>
+                            );
+                        })()}
                         <Box
                             sx={{
                                 display: "flex",
@@ -1697,7 +1463,7 @@ const CountyCommodityTable = ({
                             </Typography>
                             <input
                                 value={globalFilter || ""}
-                                onChange={(e) => setGlobalFilter(e.target.value)}
+                                onChange={(e) => mainSetGlobalFilter(e.target.value)}
                                 placeholder="Type to search..."
                                 style={{
                                     padding: "10px 12px",
@@ -1740,61 +1506,44 @@ const CountyCommodityTable = ({
             </Box>
             <div className="tableWrap">
                 <TableContainer>
-                    <table {...getTableProps()}>
+                    <table {...getMainTableProps()}>
                         <thead>
-                            {headerGroups.map((headerGroup) => (
+                            {mainHeaderGroups.map((headerGroup) => (
                                 <tr {...headerGroup.getHeaderGroupProps()}>
                                     {headerGroup.headers
                                         .filter((_, index) => visibleColumnIndices.includes(index))
                                         .map((column) => (
                                             <th
-                                                {...column.getHeaderProps({
-                                                    ...column.getSortByToggleProps({
-                                                        title: `Sort by ${column.Header}`
-                                                    }),
-                                                    onClick: (e) => {
-                                                        if (e) {
-                                                            e.persist = e.persist || (() => {});
-                                                        }
-                                                        const originalOnClick = column.getSortByToggleProps().onClick;
-                                                        if (originalOnClick) {
-                                                            originalOnClick(e);
-                                                        }
-                                                    }
-                                                })}
+                                                {...column.getHeaderProps(column.getSortByToggleProps())}
                                                 style={{
                                                     background: "rgba(47, 113, 100, 0.08)",
                                                     color: "#2F7164",
                                                     padding: "10px",
-                                                    cursor: column.disableSortBy ? "default" : "pointer"
+                                                    cursor: "pointer"
                                                 }}
                                             >
                                                 <div style={{ display: "flex", alignItems: "center" }}>
                                                     {column.render("Header")}
-                                                    {column.disableSortBy ? null : (
-                                                        <span>
-                                                            {column.isSorted ? (
-                                                                column.isSortedDesc ? (
-                                                                    <span style={{ marginLeft: "5px" }}>▼</span>
-                                                                ) : (
-                                                                    <span style={{ marginLeft: "5px" }}>▲</span>
-                                                                )
+                                                    <span style={{ marginLeft: "5px" }}>
+                                                        {column.isSorted ? (
+                                                            column.isSortedDesc ? (
+                                                                <span>↓</span>
                                                             ) : (
-                                                                <SwapVertIcon
-                                                                    style={{ fontSize: "1rem", marginLeft: "5px" }}
-                                                                />
-                                                            )}
-                                                        </span>
-                                                    )}
+                                                                <span>↑</span>
+                                                            )
+                                                        ) : (
+                                                            <SwapVertIcon sx={{ fontSize: "16px", opacity: 0.5 }} />
+                                                        )}
+                                                    </span>
                                                 </div>
                                             </th>
                                         ))}
                                 </tr>
                             ))}
                         </thead>
-                        <tbody {...getTableBodyProps()}>
-                            {page.map((row) => {
-                                prepareRow(row);
+                        <tbody {...getMainTableBodyProps()}>
+                            {mainPage.map((row) => {
+                                prepareMainRow(row);
                                 return (
                                     <tr {...row.getRowProps()}>
                                         {row.cells
@@ -1828,22 +1577,22 @@ const CountyCommodityTable = ({
             </div>
             <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Box>
-                    <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage} sx={{ mr: 1 }}>
+                    <Button onClick={() => mainGotoPage(0)} disabled={!mainCanPreviousPage} sx={{ mr: 1 }}>
                         {"<<"}
                     </Button>
-                    <Button onClick={() => previousPage()} disabled={!canPreviousPage} sx={{ mr: 1 }}>
+                    <Button onClick={() => mainPreviousPage()} disabled={!mainCanPreviousPage} sx={{ mr: 1 }}>
                         {"<"}
                     </Button>
-                    <Button onClick={() => nextPage()} disabled={!canNextPage} sx={{ mr: 1 }}>
+                    <Button onClick={() => mainNextPage()} disabled={!mainCanNextPage} sx={{ mr: 1 }}>
                         {">"}
                     </Button>
-                    <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} sx={{ mr: 1 }}>
+                    <Button onClick={() => mainGotoPage(mainPageCount - 1)} disabled={!mainCanNextPage} sx={{ mr: 1 }}>
                         {">>"}
                     </Button>
                     <span style={{ paddingLeft: 8 }}>
                         Page{" "}
                         <strong style={{ padding: 8 }}>
-                            {pageIndex + 1} of {pageCount}
+                            {pageIndex + 1} of {mainPageCount}
                         </strong>
                     </span>
                 </Box>
@@ -1851,7 +1600,7 @@ const CountyCommodityTable = ({
                     <select
                         value={pageSize}
                         onChange={(e) => {
-                            setPageSize(Number(e.target.value));
+                            mainSetPageSize(Number(e.target.value));
                         }}
                         style={{ padding: "4px" }}
                     >
@@ -1863,6 +1612,57 @@ const CountyCommodityTable = ({
                     </select>
                 </Box>
             </Box>
+            {countiesWithoutValues.length > 0 && (
+                <Box sx={{ mt: 3, border: "1px solid #ddd", borderRadius: "6px" }}>
+                    <Button
+                        onClick={() => setShowEmptyCounties(!showEmptyCounties)}
+                        sx={{
+                            width: "100%",
+                            p: 2,
+                            backgroundColor: "rgba(47, 113, 100, 0.05)",
+                            color: "#2F7164",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            textTransform: "none",
+                            borderRadius: "6px 6px 0 0",
+                            "&:hover": {
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            }
+                        }}
+                    >
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                            Counties with no values ({countiesWithoutValues.length} counties)
+                        </Typography>
+                        <span>{showEmptyCounties ? "▼" : "▶"}</span>
+                    </Button>
+                    {showEmptyCounties && (
+                        <Box sx={{ p: 2, backgroundColor: "rgba(0, 0, 0, 0.02)" }}>
+                            <Typography variant="body2" sx={{ mb: 2, color: "rgba(0, 0, 0, 0.6)" }}>
+                                The following counties have no payment data for the current selection:
+                            </Typography>
+                            <Box sx={{ maxHeight: "300px", overflowY: "auto" }}>
+                                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                                    <thead>
+                                        <tr style={{ backgroundColor: "rgba(47, 113, 100, 0.05)" }}>
+                                            <th style={{ padding: "8px", borderBottom: "1px solid #ddd", textAlign: "left" }}>State</th>
+                                            <th style={{ padding: "8px", borderBottom: "1px solid #ddd", textAlign: "left" }}>County</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {countiesWithoutValues.map((row, index) => (
+                                            <tr key={row.__id} style={{ backgroundColor: index % 2 === 0 ? "white" : "rgba(0, 0, 0, 0.02)" }}>
+                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>{row.state}</td>
+                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>{row.county}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
+            )}
         </Styles>
     );
 };
