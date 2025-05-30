@@ -92,27 +92,31 @@ export const CountyTooltipContent = ({
             <table class="${classes.tooltip_table}" style="border-spacing: 0; width: 100%; padding: 8px 0 10px 0;">
             <tbody>`;
 
-    tooltipContent += `
-        <tr>
-            <td class="${
-                classes.tooltip_regularcell_left
-            }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                Base Acres:
-            </td>
-            <td class="${
-                classes.tooltip_regularcell_right
-            }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                ${ShortFormat(
-                    viewMode === "proposed" ? countyData.proposedBaseAcres || 0 : countyData.currentBaseAcres || 0,
-                    undefined,
-                    1
-                )}
-            </td>
-        </tr>`;
+    const isMultiYearSelection = Array.isArray(selectedYears) && selectedYears.length > 1;
+    const hasYearAggregation = yearAggregation > 0;
+
+    if (!(isMultiYearSelection || hasYearAggregation)) {
+        tooltipContent += `
+            <tr>
+                <td class="${
+                    classes.tooltip_regularcell_left
+                }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    Base Acres:
+                </td>
+                <td class="${
+                    classes.tooltip_regularcell_right
+                }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    ${ShortFormat(
+                        viewMode === "proposed" ? countyData.proposedBaseAcres || 0 : countyData.currentBaseAcres || 0,
+                        undefined,
+                        1
+                    )}
+                </td>
+            </tr>`;
+    }
 
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, showMeanValues);
-        const isMultiYearSelection = Array.isArray(selectedYears) && selectedYears.length > 1;
         if (
             (yearAggregation > 0 || isMultiYearSelection) &&
             countyData.yearlyData &&

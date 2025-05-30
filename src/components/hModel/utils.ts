@@ -1,4 +1,5 @@
 import countyFipsMapping from "../../files/maps/fips_county_mapping.json";
+
 export interface YearBreakdownData {
     current?: string | number;
     proposed?: string | number;
@@ -175,7 +176,8 @@ export const calculateMeanRates = (county: any, baseAcres: number, weightedMean:
 export const calculateWeightedMeanRate = (
     totalPayments: number,
     totalBaseAcres: number,
-    isMultiSelection = false
+    isMultiSelection = false,
+    numberOfYears = 1
 ): { rate: number; isWeightedAverage: boolean } => {
     if (totalBaseAcres > 0) {
         const preciseRate = totalPayments / totalBaseAcres;
@@ -275,7 +277,9 @@ export const formatCellValue = (
         return cell.value && cell.value > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" && cell.value > 0 ? formatNumericValue(cell.value).toFixed(2) : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ?
+            formatNumericValue(cell.value).toFixed(2) :
+            cell.value;
     }
     if (includesDot) {
         return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";

@@ -283,23 +283,26 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     </Typography>
                                 )}
                             </Box>
-                            {showARCPLCPayments && hModelDataReady && Object.keys(hModelDistributionData).length > 0 && Object.keys(hModelDistributionProposedData).length > 0 && (
-                                <Box
-                                    sx={{
-                                        backgroundColor: "white",
-                                        borderRadius: 1,
-                                        px: 3,
-                                        pt: 3,
-                                        pb: 1
-                                    }}
-                                >
-                                    <PolicyComparisonSection
-                                        currentData={hModelDistributionData}
-                                        proposedData={hModelDistributionProposedData}
-                                        title="Policy Impact Analysis: Payment Projections"
-                                    />
-                                </Box>
-                            )}
+                            {showARCPLCPayments &&
+                                hModelDataReady &&
+                                Object.keys(hModelDistributionData).length > 0 &&
+                                Object.keys(hModelDistributionProposedData).length > 0 && (
+                                    <Box
+                                        sx={{
+                                            backgroundColor: "white",
+                                            borderRadius: 1,
+                                            px: 3,
+                                            pt: 3,
+                                            pb: 1
+                                        }}
+                                    >
+                                        <PolicyComparisonSection
+                                            currentData={hModelDistributionData}
+                                            proposedData={hModelDistributionProposedData}
+                                            title="Policy Impact Analysis: Payment Projections"
+                                        />
+                                    </Box>
+                                )}
                             {shouldShowLoading() ? (
                                 <Box
                                     sx={{
@@ -391,7 +394,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                         textAlign: "center"
                                                     }}
                                                 >
-                                                    Use controls to filter data and interact with the map for detailed county information
+                                                    Use controls to filter data and interact with the map for detailed
+                                                    county information
                                                 </Typography>
                                                 <CountyCommodityMap
                                                     countyData={hModelDistributionData}

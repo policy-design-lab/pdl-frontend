@@ -453,9 +453,9 @@ const CountyCommodityTable = ({
                                 "Current"
                             );
                             countyObject.baseAcres = formatNumericValue(currentBaseAcres);
-                            const yearBaseAcres = 0;
+                            const yearBaseAcres = currentBaseAcres;
                             if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
-                                countyObject.yearBreakdown[year].baseAcres = countyObject.baseAcres;
+                                countyObject.yearBreakdown[year].baseAcres = formatNumericValue(yearBaseAcres);
                             }
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
                                 countyObject.baseAcres = formatNumericValue(yearBaseAcres);
@@ -792,12 +792,8 @@ const CountyCommodityTable = ({
                             scenarioName
                         );
                         countyObject.baseAcres = formatNumericValue(baseAcres);
-                        if (countyObject.yearBreakdown) {
-                            Object.keys(countyObject.yearBreakdown).forEach((yearKey) => {
-                                if (countyObject.yearBreakdown) {
-                                    countyObject.yearBreakdown[yearKey].baseAcres = countyObject.baseAcres;
-                                }
-                            });
+                        if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
+                            countyObject.yearBreakdown[year].baseAcres = formatNumericValue(baseAcres);
                         }
                     }
                     let totalPayment = 0;
@@ -934,7 +930,15 @@ const CountyCommodityTable = ({
                     });
                 }
                 if (showMeanValues) {
-                    row.weightedAverageRate = aggBaseAcres > 0 ? weightedSum / aggBaseAcres : 0;
+                    let totalBaseAcresSum = 0;
+                    if (row.yearBreakdown) {
+                        Object.entries(row.yearBreakdown).forEach(([year, yearData]) => {
+                            const baseAcres = yearData.baseAcres || 0;
+                            totalBaseAcresSum += baseAcres;
+                        });
+                    }
+                    const denominatorForRate = totalBaseAcresSum > 0 ? totalBaseAcresSum : 1;
+                    row.weightedAverageRate = denominatorForRate > 0 ? aggTotal / denominatorForRate : 0;
                 } else {
                     row.aggregatedPayment = aggTotal;
                 }
@@ -952,7 +956,7 @@ const CountyCommodityTable = ({
                             }
                             let commodityTotal = 0;
                             let commodityWeightedSum = 0;
-                            let commodityBaseAcres = 0;
+                            const commodityBaseAcres = 0;
                             let totalBaseAcresForAvg = 0;
                             commodityData.total = 0;
                             if (viewMode === "difference" && commodityData.yearBreakdown) {
@@ -960,7 +964,6 @@ const CountyCommodityTable = ({
                                     const yearDiff = Number(yearData.difference || 0);
                                     commodityTotal += yearDiff;
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
-                                    commodityBaseAcres = Math.max(commodityBaseAcres, yearBaseAcres);
                                     if (yearBaseAcres > 0) {
                                         commodityWeightedSum += yearDiff;
                                         totalBaseAcresForAvg += yearBaseAcres;
@@ -974,7 +977,6 @@ const CountyCommodityTable = ({
                                             : Number(yearData.current || 0);
                                     commodityTotal += yearValue;
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
-                                    commodityBaseAcres = Math.max(commodityBaseAcres, yearBaseAcres);
                                     if (yearBaseAcres > 0) {
                                         commodityWeightedSum += yearValue;
                                         totalBaseAcresForAvg += yearBaseAcres;
@@ -982,7 +984,7 @@ const CountyCommodityTable = ({
                                 });
                             }
                             commodityData.total = commodityTotal;
-                            commodityData.baseAcres = commodityBaseAcres;
+                            commodityData.baseAcres = totalBaseAcresForAvg;
                             if (showMeanValues && totalBaseAcresForAvg > 0) {
                                 commodityData.paymentRate = commodityWeightedSum / totalBaseAcresForAvg;
                             }
@@ -1069,7 +1071,6 @@ const CountyCommodityTable = ({
                         if (isAggregatedYear && yearRange.length > 1) {
                             let aggregatedTotal = 0;
                             let baseAcresSum = 0;
-                            let maxBaseAcres = 0;
                             if (commodityData.yearBreakdown) {
                                 yearRange.forEach((year) => {
                                     if (commodityData.yearBreakdown && commodityData.yearBreakdown[year]) {
@@ -1083,13 +1084,12 @@ const CountyCommodityTable = ({
                                         const yearBaseAcres = Number(commodityData.yearBreakdown[year].baseAcres || 0);
                                         if (yearBaseAcres > 0) {
                                             baseAcresSum += yearBaseAcres;
-                                            maxBaseAcres = Math.max(maxBaseAcres, yearBaseAcres);
                                         }
                                     }
                                 });
                                 if (aggregatedTotal > 0) {
                                     commodityData.total = aggregatedTotal;
-                                    commodityData.baseAcres = maxBaseAcres;
+                                    commodityData.baseAcres = baseAcresSum;
                                     if (showMeanValues && baseAcresSum > 0) {
                                         commodityData.paymentRate = aggregatedTotal / baseAcresSum;
                                     }
@@ -1159,51 +1159,171 @@ const CountyCommodityTable = ({
             }
         });
         return [...processedData];
-    }, [getTableData, isAggregatedYear, yearRange, viewMode, showMeanValues, selectedCommodities, selectedPrograms]);
+    }, [
+        getTableData,
+        isAggregatedYear,
+        yearRange,
+        viewMode,
+        showMeanValues,
+        selectedCommodities,
+        selectedPrograms,
+        selectedState
+    ]);
     const dataWithKeys = useMemo(() => {
         return data.map((row, index) => ({
             ...row,
-            __id: `${row.state}-${row.county}-${row.fips}-${index}`,
+            __id: `${row.state}-${row.county}-${row.fips}-${index}`
         }));
     }, [data]);
     const [columnPage, setColumnPage] = useState(0);
     const columnsPerPage = 6;
-    const baseColumns = useMemo(() => [
-        {
-            Header: "State",
-            accessor: "state",
-            disableSortBy: false,
-            sortType: "emptyBottomText"
-        },
-        {
-            Header: "County Name",
-            accessor: "county",
-            disableSortBy: false,
-            sortType: "emptyBottomText"
-        },
-        {
-            Header: "Total Payment",
-            accessor: "current",
-            disableSortBy: false,
-            sortType: "emptyBottomNumeric"
-        },
-        {
-            Header: "Base Acres",
-            accessor: "baseAcres",
-            disableSortBy: false,
-            sortType: "emptyBottomNumeric"
+    const baseColumns = useMemo(() => {
+        const columns = [
+            {
+                Header: "State",
+                accessor: "state",
+                disableSortBy: false,
+                sortType: "emptyBottomText"
+            },
+            {
+                Header: "County Name",
+                accessor: "county",
+                disableSortBy: false,
+                sortType: "emptyBottomText"
+            }
+        ];
+
+        if (isAggregatedYear && showMeanValues) {
+            columns.push({
+                Header: "Weighted Avg Rate",
+                accessor: "weightedAverageRate",
+                disableSortBy: false,
+                sortType: "emptyBottomNumeric"
+            });
+        } else if (isAggregatedYear) {
+            columns.push({
+                Header: "Aggregated Payment",
+                accessor: "aggregatedPayment",
+                disableSortBy: false,
+                sortType: "emptyBottomNumeric"
+            });
+        } else {
+            columns.push({
+                Header: showMeanValues ? "Payment Rate" : "Total Payment",
+                accessor: showMeanValues ? "paymentRate" : "current",
+                disableSortBy: false,
+                sortType: "emptyBottomNumeric"
+            });
         }
-    ], []);
-    
+
+        if (!(isAggregatedYear && yearRange.length > 1)) {
+            columns.push({
+                Header: "Base Acres",
+                accessor: "baseAcres",
+                disableSortBy: false,
+                sortType: "emptyBottomNumeric"
+            });
+        }
+
+        if (isAggregatedYear && yearRange.length > 1) {
+            yearRange.forEach((year) => {
+                if (showMeanValues) {
+                    columns.push({
+                        Header: `${year} Rate`,
+                        accessor: `yearBreakdown.${year}.paymentRate`,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                } else {
+                    const accessor =
+                        viewMode === "difference" ?
+                            `yearBreakdown.${year}.difference` :
+                            viewMode === "proposed" ?
+                            `yearBreakdown.${year}.proposed` :
+                            `yearBreakdown.${year}.current`;
+                    columns.push({
+                        Header: `${year} Payment`,
+                        accessor,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                }
+                columns.push({
+                    Header: `${year} Base Acres`,
+                    accessor: `yearBreakdown.${year}.baseAcres`,
+                    disableSortBy: false,
+                    sortType: "emptyBottomNumeric"
+                });
+            });
+        }
+
+        if (selectedCommodities && !selectedCommodities.includes("All Commodities") && selectedCommodities.length > 0) {
+            selectedCommodities.forEach((commodity) => {
+                if (showMeanValues) {
+                    columns.push({
+                        Header: `${commodity} Rate`,
+                        accessor: `commodityBreakdown.${commodity}.paymentRate`,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                } else {
+                    columns.push({
+                        Header: `${commodity} Payment`,
+                        accessor: `commodityBreakdown.${commodity}.total`,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                }
+                columns.push({
+                    Header: `${commodity} Base Acres`,
+                    accessor: `commodityBreakdown.${commodity}.baseAcres`,
+                    disableSortBy: false,
+                    sortType: "emptyBottomNumeric"
+                });
+            });
+        }
+
+        if (
+            selectedPrograms &&
+            !selectedPrograms.includes("All Programs") &&
+            selectedPrograms.length > 1 &&
+            selectedPrograms.length <= 3
+        ) {
+            selectedPrograms.forEach((program) => {
+                if (showMeanValues) {
+                    columns.push({
+                        Header: `${program} Rate`,
+                        accessor: `programBreakdown.${program}.paymentRate`,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                } else {
+                    columns.push({
+                        Header: `${program} Payment`,
+                        accessor: `programBreakdown.${program}.total`,
+                        disableSortBy: false,
+                        sortType: "emptyBottomNumeric"
+                    });
+                }
+                columns.push({
+                    Header: `${program} Base Acres`,
+                    accessor: `programBreakdown.${program}.baseAcres`,
+                    disableSortBy: false,
+                    sortType: "emptyBottomNumeric"
+                });
+            });
+        }
+
+        return columns;
+    }, [showMeanValues, isAggregatedYear, yearRange, selectedCommodities, selectedPrograms, viewMode]);
+
     const visibleColumnIndices = useMemo(() => {
         const startIndex = columnPage * columnsPerPage + 2;
         const endIndex = Math.min(startIndex + columnsPerPage, baseColumns.length);
         return [0, 1, ...Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex)];
     }, [columnPage, columnsPerPage, baseColumns.length]);
     const totalColumnPages = Math.ceil((baseColumns.length - 2) / columnsPerPage);
-    const {
-        state
-    } = useTable(
+    const { state } = useTable(
         {
             columns: baseColumns,
             data: dataWithKeys,
@@ -1216,16 +1336,16 @@ const CountyCommodityTable = ({
             sortTypes: {
                 emptyBottomNumeric: (rowA, rowB, columnId) => {
                     const aValue = rowA.values[columnId];
-                    const bValue = rowB.values[columnId];                
-                    const aNum = typeof aValue === 'number' ? aValue : Number(aValue) || 0;
-                    const bNum = typeof bValue === 'number' ? bValue : Number(bValue) || 0;
+                    const bValue = rowB.values[columnId];
+                    const aNum = typeof aValue === "number" ? aValue : Number(aValue) || 0;
+                    const bNum = typeof bValue === "number" ? bValue : Number(bValue) || 0;
                     return aNum - bNum;
                 },
                 emptyBottomText: (rowA, rowB, columnId) => {
                     const aValue = rowA.values[columnId];
                     const bValue = rowB.values[columnId];
-                    const aStr = aValue ? String(aValue).toLowerCase() : '';
-                    const bStr = bValue ? String(bValue).toLowerCase() : '';
+                    const aStr = aValue ? String(aValue).toLowerCase() : "";
+                    const bStr = bValue ? String(bValue).toLowerCase() : "";
                     return aStr.localeCompare(bStr);
                 }
             }
@@ -1235,19 +1355,31 @@ const CountyCommodityTable = ({
         usePagination
     );
     const { countiesWithValues, countiesWithoutValues } = useMemo(() => {
-        const sortBy = state?.sortBy?.[0]?.id || 'state';
+        const sortBy = state?.sortBy?.[0]?.id || "state";
         const withValues: typeof dataWithKeys = [];
         const withoutValues: typeof dataWithKeys = [];
-        dataWithKeys.forEach(row => {
-            let value = row[sortBy];if (sortBy.includes('.')) {
-                const keys = sortBy.split('.');
+        dataWithKeys.forEach((row) => {
+            let value = row[sortBy];
+            if (sortBy.includes(".")) {
+                const keys = sortBy.split(".");
                 value = keys.reduce((obj, key) => obj?.[key], row);
             }
-            const isNumericColumn = sortBy === 'current' || sortBy === 'baseAcres' || sortBy.includes('Payment') || sortBy.includes('Base Acres');
-            const isEmpty = isNumericColumn 
-                ? (value === undefined || value === null || value === "" || value === 0)
-                : (!value || value === "");
-            
+            const isNumericColumn =
+                sortBy === "current" ||
+                sortBy === "paymentRate" ||
+                sortBy === "weightedAverageRate" ||
+                sortBy === "aggregatedPayment" ||
+                sortBy === "baseAcres" ||
+                sortBy.includes("Payment") ||
+                sortBy.includes("Rate") ||
+                sortBy.includes("Base Acres") ||
+                sortBy.includes("yearBreakdown") ||
+                sortBy.includes("commodityBreakdown") ||
+                sortBy.includes("programBreakdown");
+            const isEmpty = isNumericColumn ?
+                value === undefined || value === null || value === "" || value === 0 :
+                !value || value === "";
+
             if (isEmpty) {
                 withoutValues.push(row);
             } else {
@@ -1288,15 +1420,15 @@ const CountyCommodityTable = ({
                 emptyBottomNumeric: (rowA, rowB, columnId) => {
                     const aValue = rowA.values[columnId];
                     const bValue = rowB.values[columnId];
-                    const aNum = typeof aValue === 'number' ? aValue : Number(aValue) || 0;
-                    const bNum = typeof bValue === 'number' ? bValue : Number(bValue) || 0;
+                    const aNum = typeof aValue === "number" ? aValue : Number(aValue) || 0;
+                    const bNum = typeof bValue === "number" ? bValue : Number(bValue) || 0;
                     return aNum - bNum;
                 },
                 emptyBottomText: (rowA, rowB, columnId) => {
                     const aValue = rowA.values[columnId];
                     const bValue = rowB.values[columnId];
-                    const aStr = aValue ? String(aValue).toLowerCase() : '';
-                    const bStr = bValue ? String(bValue).toLowerCase() : '';
+                    const aStr = aValue ? String(aValue).toLowerCase() : "";
+                    const bStr = bValue ? String(bValue).toLowerCase() : "";
                     return aStr.localeCompare(bStr);
                 }
             }
@@ -1409,45 +1541,66 @@ const CountyCommodityTable = ({
                 </Grid>
                 <Grid container spacing={2} sx={{ mb: 2, width: "100%" }}>
                     <Grid item xs={12}>
-                        {mainState.sortBy && mainState.sortBy.length > 0 && !mainState.sortBy[0].desc && 
-                         (mainState.sortBy[0].id === 'current' || mainState.sortBy[0].id === 'baseAcres') && (() => {
-                            const sortBy = mainState.sortBy[0].id;
-                            let firstNonEmptyIndex = -1;
-                            for (let i = 0; i < mainRows.length; i++) {
-                                const value = mainRows[i].values[sortBy];
-                                if (value !== undefined && value !== null && value !== "" && value !== 0) {
-                                    firstNonEmptyIndex = i;
-                                    break;
+                        {mainState.sortBy &&
+                            mainState.sortBy.length > 0 &&
+                            !mainState.sortBy[0].desc &&
+                            (mainState.sortBy[0].id === "current" ||
+                                mainState.sortBy[0].id === "paymentRate" ||
+                                mainState.sortBy[0].id === "weightedAverageRate" ||
+                                mainState.sortBy[0].id === "aggregatedPayment" ||
+                                mainState.sortBy[0].id === "baseAcres" ||
+                                mainState.sortBy[0].id.includes("Payment") ||
+                                mainState.sortBy[0].id.includes("Rate")) &&
+                            (() => {
+                                const sortBy = mainState.sortBy[0].id;
+                                let firstNonEmptyIndex = -1;
+                                for (let i = 0; i < mainRows.length; i++) {
+                                    const value = mainRows[i].values[sortBy];
+                                    if (value !== undefined && value !== null && value !== "" && value !== 0) {
+                                        firstNonEmptyIndex = i;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (firstNonEmptyIndex === -1) return null;
-                            const targetPage = Math.floor(firstNonEmptyIndex / pageSize) + 1;
-                            return (
-                                <Box sx={{ mb: 2, p: 2, backgroundColor: "rgba(255, 193, 7, 0.1)", borderRadius: "6px", border: "1px solid rgba(255, 193, 7, 0.3)" }}>
-                                    <Typography variant="body2" sx={{ color: "rgba(255, 143, 0, 0.9)", lineHeight: 1.5, mb: 1 }}>
-                                        💡 <strong>Tip:</strong> You're sorting by ascending order. Counties with no values appear first. 
-                                        Counties with actual values start on <strong>page {targetPage}</strong>.
-                                    </Typography>
-                                    {targetPage !== pageIndex + 1 && (
-                                        <Button
-                                            variant="outlined"
-                                            size="small"
-                                            onClick={() => mainGotoPage(targetPage - 1)}
-                                            sx={{
-                                                borderColor: "rgba(255, 143, 0, 0.5)",
-                                                color: "rgba(255, 143, 0, 0.9)",
-                                                "&:hover": {
-                                                    borderColor: "rgba(255, 143, 0, 0.8)",
-                                                    backgroundColor: "rgba(255, 143, 0, 0.1)"
-                                                }
-                                            }}
+                                if (firstNonEmptyIndex === -1) return null;
+                                const targetPage = Math.floor(firstNonEmptyIndex / pageSize) + 1;
+                                return (
+                                    <Box
+                                        sx={{
+                                            mb: 2,
+                                            p: 2,
+                                            backgroundColor: "rgba(255, 193, 7, 0.1)",
+                                            borderRadius: "6px",
+                                            border: "1px solid rgba(255, 193, 7, 0.3)"
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ color: "rgba(255, 143, 0, 0.9)", lineHeight: 1.5, mb: 1 }}
                                         >
-                                            Jump to page {targetPage}
-                                        </Button>
-                                    )}
-                                </Box>
-                            );
-                        })()}
+                                            💡 <strong>Tip:</strong> You're sorting by ascending order. Counties with no
+                                            values appear first. Counties with actual values start on{" "}
+                                            <strong>page {targetPage}</strong>.
+                                        </Typography>
+                                        {targetPage !== pageIndex + 1 && (
+                                            <Button
+                                                variant="outlined"
+                                                size="small"
+                                                onClick={() => mainGotoPage(targetPage - 1)}
+                                                sx={{
+                                                    "borderColor": "rgba(255, 143, 0, 0.5)",
+                                                    "color": "rgba(255, 143, 0, 0.9)",
+                                                    "&:hover": {
+                                                        borderColor: "rgba(255, 143, 0, 0.8)",
+                                                        backgroundColor: "rgba(255, 143, 0, 0.1)"
+                                                    }
+                                                }}
+                                            >
+                                                Jump to page {targetPage}
+                                            </Button>
+                                        )}
+                                    </Box>
+                                );
+                            })()}
                         <Box
                             sx={{
                                 display: "flex",
@@ -1617,15 +1770,15 @@ const CountyCommodityTable = ({
                     <Button
                         onClick={() => setShowEmptyCounties(!showEmptyCounties)}
                         sx={{
-                            width: "100%",
-                            p: 2,
-                            backgroundColor: "rgba(47, 113, 100, 0.05)",
-                            color: "#2F7164",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            textTransform: "none",
-                            borderRadius: "6px 6px 0 0",
+                            "width": "100%",
+                            "p": 2,
+                            "backgroundColor": "rgba(47, 113, 100, 0.05)",
+                            "color": "#2F7164",
+                            "display": "flex",
+                            "justifyContent": "space-between",
+                            "alignItems": "center",
+                            "textTransform": "none",
+                            "borderRadius": "6px 6px 0 0",
                             "&:hover": {
                                 backgroundColor: "rgba(47, 113, 100, 0.1)"
                             }
@@ -1645,15 +1798,40 @@ const CountyCommodityTable = ({
                                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                                     <thead>
                                         <tr style={{ backgroundColor: "rgba(47, 113, 100, 0.05)" }}>
-                                            <th style={{ padding: "8px", borderBottom: "1px solid #ddd", textAlign: "left" }}>State</th>
-                                            <th style={{ padding: "8px", borderBottom: "1px solid #ddd", textAlign: "left" }}>County</th>
+                                            <th
+                                                style={{
+                                                    padding: "8px",
+                                                    borderBottom: "1px solid #ddd",
+                                                    textAlign: "left"
+                                                }}
+                                            >
+                                                State
+                                            </th>
+                                            <th
+                                                style={{
+                                                    padding: "8px",
+                                                    borderBottom: "1px solid #ddd",
+                                                    textAlign: "left"
+                                                }}
+                                            >
+                                                County
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {countiesWithoutValues.map((row, index) => (
-                                            <tr key={row.__id} style={{ backgroundColor: index % 2 === 0 ? "white" : "rgba(0, 0, 0, 0.02)" }}>
-                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>{row.state}</td>
-                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>{row.county}</td>
+                                            <tr
+                                                key={row.__id}
+                                                style={{
+                                                    backgroundColor: index % 2 === 0 ? "white" : "rgba(0, 0, 0, 0.02)"
+                                                }}
+                                            >
+                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>
+                                                    {row.state}
+                                                </td>
+                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>
+                                                    {row.county}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

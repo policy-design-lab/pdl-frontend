@@ -81,7 +81,7 @@ const StyledContainer = styled.div`
     }
     .tooltip {
         position: fixed;
-        background: #2F7164;
+        background: #2f7164;
         color: white;
         padding: 8px 12px;
         border-radius: 4px;
@@ -108,12 +108,36 @@ const predefinedCommodityColors = {
 const generateColorPalette = (commodities: string[]): Record<string, string> => {
     const colors: Record<string, string> = {};
     const defaultColors = [
-        "#2F7164", "#8B4513", "#ebe288", "#ECF0EE", "#DEB887",
-        "#F5DEB3", "#4a148c", "#DAA520", "#B8860B", "#4682B4",
-        "#8A2BE2", "#A0522D", "#5F9EA0", "#7FFF00", "#D2691E",
-        "#FF7F50", "#6495ED", "#DC143C", "#00CED1", "#9400D3",
-        "#FF1493", "#00BFFF", "#696969", "#1E90FF", "#B22222",
-        "#32CD32", "#FF6347", "#40E0D0", "#EE82EE", "#F0E68C"
+        "#2F7164",
+        "#8B4513",
+        "#ebe288",
+        "#ECF0EE",
+        "#DEB887",
+        "#F5DEB3",
+        "#4a148c",
+        "#DAA520",
+        "#B8860B",
+        "#4682B4",
+        "#8A2BE2",
+        "#A0522D",
+        "#5F9EA0",
+        "#7FFF00",
+        "#D2691E",
+        "#FF7F50",
+        "#6495ED",
+        "#DC143C",
+        "#00CED1",
+        "#9400D3",
+        "#FF1493",
+        "#00BFFF",
+        "#696969",
+        "#1E90FF",
+        "#B22222",
+        "#32CD32",
+        "#FF6347",
+        "#40E0D0",
+        "#EE82EE",
+        "#F0E68C"
     ];
     let colorIndex = 0;
     commodities.forEach((commodity) => {
@@ -145,8 +169,8 @@ export default function PolicyBarChart({
             }
         };
         updateWidth();
-        window.addEventListener('resize', updateWidth);
-        return () => window.removeEventListener('resize', updateWidth);
+        window.addEventListener("resize", updateWidth);
+        return () => window.removeEventListener("resize", updateWidth);
     }, []);
     const processData = React.useCallback(() => {
         if (!data || !data.current || !data.proposed) return;
@@ -216,12 +240,9 @@ export default function PolicyBarChart({
             )
         );
         const commodityColors = generateColorPalette(allCommodities);
-        const legend = svg
-            .append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(${margin.left}, 20)`);
+        const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${margin.left}, 20)`);
         const legendItemWidth = Math.min(120, graphWidth / allCommodities.length);
-        const legendRows = Math.ceil(allCommodities.length * legendItemWidth / graphWidth);
+        const legendRows = Math.ceil((allCommodities.length * legendItemWidth) / graphWidth);
         const itemsPerRow = Math.ceil(allCommodities.length / legendRows);
         allCommodities.forEach((commodity, i) => {
             const row = Math.floor(i / itemsPerRow);
@@ -250,9 +271,7 @@ export default function PolicyBarChart({
             .append("g")
             .attr("class", "policy-legend")
             .attr("transform", `translate(${margin.left + graphWidth - 200}, 20)`);
-        const currentLegendItem = policyLegend
-            .append("g")
-            .attr("class", "legend-item");
+        const currentLegendItem = policyLegend.append("g").attr("class", "legend-item");
         currentLegendItem
             .append("rect")
             .attr("width", 16)
@@ -297,8 +316,14 @@ export default function PolicyBarChart({
         const barGap = barWidth * 0.3;
         const maxCurrent = d3.max(processedData, (d) => d.current.totalPayment) || 0;
         const maxProposed = d3.max(processedData, (d) => d.proposed.totalPayment) || 0;
-        const yScaleLeft = d3.scaleLinear().domain([0, maxCurrent * 1.1]).range([graphHeight, 0]);
-        const yScaleRight = d3.scaleLinear().domain([0, maxProposed * 1.1]).range([graphHeight, 0]);
+        const yScaleLeft = d3
+            .scaleLinear()
+            .domain([0, maxCurrent * 1.1])
+            .range([graphHeight, 0]);
+        const yScaleRight = d3
+            .scaleLinear()
+            .domain([0, maxProposed * 1.1])
+            .range([graphHeight, 0]);
         const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
         const yAxisLeft = d3
             .axisLeft(yScaleLeft)
@@ -317,9 +342,7 @@ export default function PolicyBarChart({
             .selectAll("text")
             .style("fill", "#2F7164")
             .style("font-family", "Roboto, sans-serif");
-        chartGroup.append("g").attr("class", "y-left axis").call(yAxisLeft)
-            .selectAll("text")
-            .style("fill", "#FF8C00");
+        chartGroup.append("g").attr("class", "y-left axis").call(yAxisLeft).selectAll("text").style("fill", "#FF8C00");
         chartGroup
             .append("g")
             .attr("class", "y-right axis")
@@ -396,15 +419,14 @@ export default function PolicyBarChart({
                         .attr("stroke", "#fff")
                         .attr("stroke-width", 1)
                         .attr("opacity", 0.8);
-                rect.on("mouseover", function onMouseOver(event) {
+                    rect.on("mouseover", function onMouseOver(event) {
                         totalLabel.style("opacity", 1);
                         if (tooltipRef.current) {
                             const tooltip = d3.select(tooltipRef.current);
                             tooltip
                                 .style("opacity", 1)
                                 .style("left", `${event.clientX + 10}px`)
-                                .style("top", `${event.clientY - 10}px`)
-                                .html(`
+                                .style("top", `${event.clientY - 10}px`).html(`
                                     <strong>${commodity.commodityName}</strong><br/>
                                     Year: ${yearData.year}<br/>
                                     Type: ${type === "current" ? "Current Policy" : "Proposed Policy"}<br/>
@@ -412,14 +434,13 @@ export default function PolicyBarChart({
                                     <em>Total ${type}: ${CurrencyFormat(totalPayment)}</em>
                                 `);
                         }
-                    })
-                    .on("mouseout", function onMouseOut() {
+                    }).on("mouseout", function onMouseOut() {
                         totalLabel.style("opacity", 0);
                         if (tooltipRef.current) {
                             d3.select(tooltipRef.current).style("opacity", 0);
                         }
                     });
-                cumulativeHeight += commodity.totalPaymentInDollars;
+                    cumulativeHeight += commodity.totalPaymentInDollars;
                 });
             });
         };
@@ -433,4 +454,4 @@ export default function PolicyBarChart({
             <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
         </StyledContainer>
     );
-} 
+}

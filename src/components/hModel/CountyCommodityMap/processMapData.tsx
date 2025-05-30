@@ -1,4 +1,3 @@
-import React from "react";
 import { calculateThresholds } from "../../shared/ColorFunctions";
 import { getCountyNameFromFips, isDataValid, calculateWeightedMeanRate, getTotalBaseAcres } from "../utils";
 import { getMapPercentiles, PercentileMode } from "./percentileConfig";
@@ -348,9 +347,7 @@ export const processMapData = ({
         } else {
             county.value = county.currentValue;
         }
-
         county.percentChange = calculatePercentChange(county.currentValue, county.proposedValue);
-
         Object.values(county.commodities).forEach((commodity: any) => {
             commodity.value =
                 viewMode === "difference"
@@ -364,6 +361,13 @@ export const processMapData = ({
             program.value = program.proposedValue - program.currentValue;
         });
 
+        let totalBaseAcres = 0;
+        if (county.yearlyData && Object.keys(county.yearlyData).length > 0) {
+            Object.values(county.yearlyData).forEach((yearData: any) => {
+                totalBaseAcres += yearData.baseAcres || 0;
+            });
+        }
+        county.baseAcres = totalBaseAcres;
         county.currentBaseAcres = county.baseAcres;
         county.proposedBaseAcres = county.baseAcres;
         county.hasValidBaseAcres = county.baseAcres > 0;
@@ -383,11 +387,13 @@ export const processMapData = ({
         }
 
         if (county.hasData && county.hasValidBaseAcres) {
+            const numberOfYears = yearsToAggregate.length;
             if (county.currentBaseAcres > 0) {
                 const currentMeanRateResult = calculateWeightedMeanRate(
                     county.currentValue,
                     county.currentBaseAcres,
-                    county.isMultiSelection
+                    county.isMultiSelection,
+                    numberOfYears
                 );
 
                 county.currentMeanRatePrecise = currentMeanRateResult.rate;
@@ -404,7 +410,8 @@ export const processMapData = ({
                 const proposedMeanRateResult = calculateWeightedMeanRate(
                     county.proposedValue,
                     county.proposedBaseAcres,
-                    county.isMultiSelection
+                    county.isMultiSelection,
+                    numberOfYears
                 );
 
                 county.proposedMeanRatePrecise = proposedMeanRateResult.rate;

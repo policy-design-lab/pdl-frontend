@@ -43,7 +43,7 @@ export default function PolicyComparisonSection({
                 Hover over any bar to see total payment amounts and detailed breakdown
             </Typography>
             <Box sx={{ width: "100%" }}>
-                <PolicyBarChart 
+                <PolicyBarChart
                     data={chartData}
                     width={undefined}
                     height={450}
@@ -52,4 +52,4 @@ export default function PolicyComparisonSection({
             </Box>
         </>
     );
-} 
+}
