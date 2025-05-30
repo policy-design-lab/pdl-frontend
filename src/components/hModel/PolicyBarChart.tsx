@@ -45,12 +45,6 @@ const StyledContainer = styled.div`
         font-size: 0.75rem;
         font-family: "Roboto", sans-serif;
     }
-    .y-left text {
-        fill: #1f78b4;
-    }
-    .y-right text {
-        fill: #ba68c8;
-    }
     .axis .tick line {
         visibility: hidden;
     }
@@ -316,24 +310,21 @@ export default function PolicyBarChart({
         const barGap = barWidth * 0.3;
         const maxCurrent = d3.max(processedData, (d) => d.current.totalPayment) || 0;
         const maxProposed = d3.max(processedData, (d) => d.proposed.totalPayment) || 0;
-        const yScaleLeft = d3
+        const maxValue = Math.max(maxCurrent, maxProposed);
+
+        const yScale = d3
             .scaleLinear()
-            .domain([0, maxCurrent * 1.1])
+            .domain([0, maxValue * 1.1])
             .range([graphHeight, 0]);
-        const yScaleRight = d3
-            .scaleLinear()
-            .domain([0, maxProposed * 1.1])
-            .range([graphHeight, 0]);
+
         const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
-        const yAxisLeft = d3
-            .axisLeft(yScaleLeft)
+        const yAxis = d3
+            .axisLeft(yScale)
             .tickFormat((d) => `$${ShortFormat(d as number)}`)
             .tickSizeOuter(0);
-        const yAxisRight = d3
-            .axisRight(yScaleRight)
-            .tickFormat((d) => `$${ShortFormat(d as number)}`)
-            .tickSizeOuter(0);
+
         const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+
         chartGroup
             .append("g")
             .attr("class", "x-axis")
@@ -342,14 +333,9 @@ export default function PolicyBarChart({
             .selectAll("text")
             .style("fill", "#2F7164")
             .style("font-family", "Roboto, sans-serif");
-        chartGroup.append("g").attr("class", "y-left axis").call(yAxisLeft).selectAll("text").style("fill", "#FF8C00");
-        chartGroup
-            .append("g")
-            .attr("class", "y-right axis")
-            .attr("transform", `translate(${graphWidth}, 0)`)
-            .call(yAxisRight)
-            .selectAll("text")
-            .style("fill", "rgb(1, 87, 155)");
+
+        chartGroup.append("g").attr("class", "y-left axis").call(yAxis).selectAll("text").style("fill", "#00000099");
+
         chartGroup
             .append("text")
             .attr("transform", "rotate(-90)")
@@ -357,32 +343,22 @@ export default function PolicyBarChart({
             .attr("x", 0 - graphHeight / 2)
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .style("fill", "#FF8C00")
+            .style("fill", "#00000099")
             .style("font-size", "0.85rem")
             .style("font-family", "Roboto, sans-serif")
-            .text("Current Policy ($)");
-        chartGroup
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", graphWidth + margin.right)
-            .attr("x", 0 - graphHeight / 2)
-            .attr("dy", "-1em")
-            .style("text-anchor", "middle")
-            .style("fill", "rgb(1, 87, 155)")
-            .style("font-size", "0.85rem")
-            .style("font-family", "Roboto, sans-serif")
-            .text("Proposed Policy ($)");
+            .text("Payment Amount ($)");
+
         const gridLines = chartGroup.append("g").attr("class", "grid");
         gridLines
             .selectAll(".grid-line")
-            .data(yScaleLeft.ticks())
+            .data(yScale.ticks())
             .enter()
             .append("line")
             .attr("class", "grid-line")
             .attr("x1", 0)
             .attr("x2", graphWidth)
-            .attr("y1", (d) => yScaleLeft(d))
-            .attr("y2", (d) => yScaleLeft(d));
+            .attr("y1", (d) => yScale(d))
+            .attr("y2", (d) => yScale(d));
         const drawStackedBars = (
             chartData: YearData[],
             type: "current" | "proposed",
@@ -444,8 +420,8 @@ export default function PolicyBarChart({
                 });
             });
         };
-        drawStackedBars(processedData, "current", "#FF8C00", 0, yScaleLeft);
-        drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScaleRight);
+        drawStackedBars(processedData, "current", "#FF8C00", 0, yScale);
+        drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScale);
         svg.attr("width", chartWidth).attr("height", height);
     };
     return (
