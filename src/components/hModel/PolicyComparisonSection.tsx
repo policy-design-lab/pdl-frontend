@@ -40,7 +40,7 @@ export default function PolicyComparisonSection({
                     textAlign: "center"
                 }}
             >
-                Hover over any bar to see total payment amounts and detailed breakdown
+                Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown.
             </Typography>
             <Box sx={{ width: "100%" }}>
                 <PolicyBarChart

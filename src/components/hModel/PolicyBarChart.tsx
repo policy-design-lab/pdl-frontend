@@ -188,6 +188,74 @@ const CommoditySummaryTable: React.FC<{
             { currentTotal: 0, proposedTotal: 0 }
         );
     }, [commoditySummaries]);
+    const maxTotal = React.useMemo(() => {
+        return Math.max(...commoditySummaries.map(c => Math.max(c.currentTotal, c.proposedTotal)), 
+                      Math.max(overallTotals.currentTotal, overallTotals.proposedTotal));
+    }, [commoditySummaries, overallTotals]);
+    const MiniBarChart: React.FC<{ current: number; proposed: number; isOverall?: boolean }> = ({ current, proposed, isOverall = false }) => {
+        const barWidth = 60;
+        const barHeight = isOverall ? 120 : 100;
+        const currentHeight = maxTotal > 0 ? (current / maxTotal) * barHeight : 0;
+        const proposedHeight = maxTotal > 0 ? (proposed / maxTotal) * barHeight : 0;
+        
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, minWidth: 140 }}>
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-end', height: barHeight + 20 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+                        <Box
+                            sx={{
+                                width: barWidth,
+                                height: currentHeight,
+                                backgroundColor: '#FF8C00',
+                                borderRadius: 1,
+                                minHeight: current > 0 ? 4 : 0,
+                                opacity: 0.8,
+                                alignSelf: 'flex-end'
+                            }}
+                        />
+                        <Typography sx={{ fontSize: '0.7rem', color: '#FF8C00', fontWeight: isOverall ? 600 : 400, textAlign: 'center' }}>
+                            Current
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+                        <Box
+                            sx={{
+                                width: barWidth,
+                                height: proposedHeight,
+                                backgroundColor: 'rgb(1, 87, 155)',
+                                borderRadius: 1,
+                                minHeight: proposed > 0 ? 4 : 0,
+                                opacity: 0.8,
+                                alignSelf: 'flex-end',
+                                position: 'relative',
+                                '&::after': {
+                                    content: '""',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    background: 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)',
+                                    borderRadius: 1
+                                }
+                            }}
+                        />
+                        <Typography sx={{ fontSize: '0.7rem', color: 'rgb(1, 87, 155)', fontWeight: isOverall ? 600 : 400, textAlign: 'center' }}>
+                            Proposed
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 2, fontSize: '0.65rem', color: '#666' }}>
+                    <Typography sx={{ fontSize: '0.65rem', color: '#FF8C00' }}>
+                        {ShortFormat(current)}
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.65rem', color: 'rgb(1, 87, 155)' }}>
+                        {ShortFormat(proposed)}
+                    </Typography>
+                </Box>
+            </Box>
+        );
+    };
 
     return (
         <Box sx={{ mt: 3 }}>
@@ -219,83 +287,102 @@ const CommoditySummaryTable: React.FC<{
                     </Typography>
                 )}
             </Typography>
-            <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
-                <Table size="small" stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
-                                Commodity
-                            </TableCell>
-                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "#FF8C00" }}>
-                                Current Policy
-                            </TableCell>
-                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}>
-                                Proposed Policy
-                            </TableCell>
-                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
-                                Difference
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {commoditySummaries.map((commodity) => {
-                            const difference = commodity.proposedTotal - commodity.currentTotal;
-                            const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
-                            return (
-                                <TableRow 
-                                    key={commodity.commodityName} 
-                                    hover
-                                    sx={{ 
-                                        backgroundColor: isSelected ? "#f0f8ff" : "inherit",
-                                        "&:hover": { backgroundColor: isSelected ? "#e6f3ff" : "#f5f5f5" }
-                                    }}
-                                >
-                                    <TableCell sx={{ fontWeight: isSelected ? 600 : 500 }}>
-                                        {commodity.commodityName}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: "#FF8C00", fontWeight: isSelected ? 600 : 400 }}>
-                                        {CurrencyFormat(commodity.currentTotal)}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: "rgb(1, 87, 155)", fontWeight: isSelected ? 600 : 400 }}>
-                                        {CurrencyFormat(commodity.proposedTotal)}
-                                    </TableCell>
-                                    <TableCell 
-                                        align="right" 
+            <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
+                <TableContainer component={Paper} sx={{ maxHeight: 400, flex: 1 }}>
+                    <Table size="small" stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
+                                    Commodity
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "#FF8C00" }}>
+                                    Current Policy
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}>
+                                    Proposed Policy
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
+                                    Difference
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {commoditySummaries.map((commodity) => {
+                                const difference = commodity.proposedTotal - commodity.currentTotal;
+                                const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
+                                return (
+                                    <TableRow 
+                                        key={commodity.commodityName} 
+                                        hover
                                         sx={{ 
-                                            color: "rgb(156, 39, 176)",
-                                            fontWeight: isSelected ? 600 : 500
+                                            backgroundColor: isSelected ? "#f0f8ff" : "inherit",
+                                            "&:hover": { backgroundColor: isSelected ? "#e6f3ff" : "#f5f5f5" }
                                         }}
                                     >
-                                        {difference >= 0 ? "+" : ""}{CurrencyFormat(difference)}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                        <TableRow sx={{ borderTop: 2, borderColor: "#2F7164" }}>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "1rem" }}>
-                                Overall Total
-                            </TableCell>
-                            <TableCell align="right" sx={{ fontWeight: 700, color: "#FF8C00", fontSize: "1rem" }}>
-                                {CurrencyFormat(overallTotals.currentTotal)}
-                            </TableCell>
-                            <TableCell align="right" sx={{ fontWeight: 700, color: "rgb(1, 87, 155)", fontSize: "1rem" }}>
-                                {CurrencyFormat(overallTotals.proposedTotal)}
-                            </TableCell>
-                            <TableCell 
-                                align="right" 
-                                sx={{ 
-                                    fontWeight: 700,
-                                    color: "rgb(156, 39, 176)",
-                                    fontSize: "1rem"
-                                }}
-                            >
-                                {(overallTotals.proposedTotal - overallTotals.currentTotal) >= 0 ? "+" : ""}
-                                {CurrencyFormat(overallTotals.proposedTotal - overallTotals.currentTotal)}
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                        <TableCell sx={{ fontWeight: isSelected ? 600 : 500 }}>
+                                            {commodity.commodityName}
+                                        </TableCell>
+                                        <TableCell align="right" sx={{ color: "#FF8C00", fontWeight: isSelected ? 600 : 400 }}>
+                                            {CurrencyFormat(commodity.currentTotal)}
+                                        </TableCell>
+                                        <TableCell align="right" sx={{ color: "rgb(1, 87, 155)", fontWeight: isSelected ? 600 : 400 }}>
+                                            {CurrencyFormat(commodity.proposedTotal)}
+                                        </TableCell>
+                                        <TableCell 
+                                            align="right" 
+                                            sx={{ 
+                                                color: "rgb(156, 39, 176)",
+                                                fontWeight: isSelected ? 600 : 500
+                                            }}
+                                        >
+                                            {difference >= 0 ? "+" : ""}{CurrencyFormat(difference)}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            <TableRow sx={{ borderTop: 2, borderColor: "#2F7164" }}>
+                                <TableCell sx={{ fontWeight: 700, fontSize: "1rem" }}>
+                                    Overall Total
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 700, color: "#FF8C00", fontSize: "1rem" }}>
+                                    {CurrencyFormat(overallTotals.currentTotal)}
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 700, color: "rgb(1, 87, 155)", fontSize: "1rem" }}>
+                                    {CurrencyFormat(overallTotals.proposedTotal)}
+                                </TableCell>
+                                <TableCell 
+                                    align="right" 
+                                    sx={{ 
+                                        fontWeight: 700,
+                                        color: "rgb(156, 39, 176)",
+                                        fontSize: "1rem"
+                                    }}
+                                >
+                                    {(overallTotals.proposedTotal - overallTotals.currentTotal) >= 0 ? "+" : ""}
+                                    {CurrencyFormat(overallTotals.proposedTotal - overallTotals.currentTotal)}
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Box sx={{ minWidth: 200, pt: 1 }}>
+                    <Typography sx={{ fontWeight: 600, fontSize: "0.9rem", color: "#2F7164", mb: 2, textAlign: "center" }}>
+                        Visual Comparison
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <Box sx={{ mt: 2, pt: 2, borderTop: 2, borderColor: "#2F7164" }}>
+                            <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, mb: 1, color: '#2F7164' }}>
+                                All Commodities
+                            </Typography>
+                            <MiniBarChart 
+                                current={overallTotals.currentTotal}
+                                proposed={overallTotals.proposedTotal}
+                                isOverall={true}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     );
 };
@@ -312,6 +399,7 @@ export default function PolicyBarChart({
     const [processedData, setProcessedData] = React.useState<YearData[]>([]);
     const [containerWidth, setContainerWidth] = React.useState(800);
     const [selectedCommodities, setSelectedCommodities] = React.useState<string[]>([]);
+    
     React.useEffect(() => {
         const updateWidth = () => {
             if (containerRef.current) {
@@ -388,6 +476,21 @@ export default function PolicyBarChart({
         if (processedData.length === 0 || containerWidth === 0) return;
         renderChart();
     }, [processedData, containerWidth, height, selectedCommodities]);
+    
+    React.useEffect(() => {
+        if (processedData.length > 0 && selectedCommodities.length === 0) {
+            const allCommodities = Array.from(
+                new Set(
+                    processedData.flatMap((d) => [
+                        ...d.current.commodities.map((c) => c.commodityName),
+                        ...d.proposed.commodities.map((c) => c.commodityName)
+                    ])
+                )
+            );
+            setSelectedCommodities(allCommodities);
+        }
+    }, [processedData]);
+    
     const renderChart = () => {
         if (!svgRef.current || processedData.length === 0) return;
         const chartWidth = width || containerWidth;
@@ -429,13 +532,23 @@ export default function PolicyBarChart({
             const col = i % itemsPerRow;
             const x = col * legendItemWidth;
             const y = row * 25;
-            const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity);
-            
+            const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity);       
             const legendItem = legend
                 .append("g")
                 .attr("class", "legend-item")
                 .attr("transform", `translate(${x}, ${y})`)
-                .style("cursor", "pointer");
+                .style("cursor", "pointer");             
+            const checkbox = legendItem
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", 14)
+                .attr("height", 14)
+                .attr("fill", commodityColors[commodity] || "#999")
+                .attr("stroke", "#333")
+                .attr("stroke-width", 1)
+                .attr("rx", 2)
+                .attr("opacity", 0.8);           
             if (isSelected && selectedCommodities.length > 0) {
                 legendItem
                     .append("path")
@@ -445,8 +558,7 @@ export default function PolicyBarChart({
                     .attr("fill", "none")
                     .attr("stroke-linecap", "round")
                     .attr("stroke-linejoin", "round");
-            }
-            
+            }          
             legendItem
                 .append("text")
                 .attr("x", 20)
@@ -455,9 +567,21 @@ export default function PolicyBarChart({
                 .style("font-size", "0.75rem")
                 .style("fill", "#00000099")
                 .style("font-family", "Roboto, sans-serif");
-             legendItem.on("click", function() {
+            const proposedIndicator = legendItem
+                .append("rect")
+                .attr("x", 20 + commodity.length * 5 + 5)
+                .attr("y", 2)
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("fill", commodityColors[commodity] || "#999")
+                .attr("opacity", 0.8)
+                .style("fill", `url(#stripes)`)
+                .attr("rx", 1);               
+            legendItem.on("click", function() {
                 if (selectedCommodities.includes(commodity)) {
-                    setSelectedCommodities(prev => prev.filter(c => c !== commodity));
+                    if (selectedCommodities.length > 1) {
+                        setSelectedCommodities(prev => prev.filter(c => c !== commodity));
+                    }
                 } else {
                     setSelectedCommodities(prev => [...prev, commodity]);
                 }
@@ -584,6 +708,17 @@ export default function PolicyBarChart({
                     yearData[type].totalPayment :
                     visibleCommodities.reduce((sum, c) => sum + c.totalPaymentInDollars, 0);
                     
+                const totalLabel = chartGroup
+                    .append("text")
+                    .attr("x", (xScale(yearData.year) || 0) + xOffset + barWidth / 2)
+                    .attr("y", yScale(yearData[type].totalPayment) - 8)
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "0.7rem")
+                    .style("font-family", "Roboto, sans-serif")
+                    .style("fill", type === "current" ? "#FF8C00" : "rgb(1, 87, 155)")
+                    .style("font-weight", "600")
+                    .style("opacity", 1)
+                    .text(`$${ShortFormat(totalPayment)}`);     
                 allCommodities.forEach((commodity) => {
                     const isVisible = selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
                     const barHeight = graphHeight - yScale(commodity.totalPaymentInDollars);
