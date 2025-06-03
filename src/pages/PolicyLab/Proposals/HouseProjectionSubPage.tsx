@@ -283,26 +283,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     </Typography>
                                 )}
                             </Box>
-                            {showARCPLCPayments &&
-                                hModelDataReady &&
-                                Object.keys(hModelDistributionData).length > 0 &&
-                                Object.keys(hModelDistributionProposedData).length > 0 && (
-                                    <Box
-                                        sx={{
-                                            backgroundColor: "white",
-                                            borderRadius: 1,
-                                            px: 3,
-                                            pt: 3,
-                                            pb: 1
-                                        }}
-                                    >
-                                        <PolicyComparisonSection
-                                            currentData={hModelDistributionData}
-                                            proposedData={hModelDistributionProposedData}
-                                            title="Policy Impact Analysis: Payment Projections"
-                                        />
-                                    </Box>
-                                )}
                             {shouldShowLoading() ? (
                                 <Box
                                     sx={{
@@ -413,10 +393,6 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                     setYearAggregation={setYearAggregation}
                                                     aggregationEnabled={aggregationEnabled}
                                                     setAggregationEnabled={setAggregationEnabled}
-                                                    // transfer stateCodesArray like [{
-                                                    // "code": "AL",
-                                                    // "name": "Alabama"
-                                                    // },... to something like {"AL": "Alabama", "AK": "Alaska", ...}
                                                     stateCodeToName={metaData.stateCodesArray.reduce((acc, curr) => {
                                                         acc[curr.code] = curr.name;
                                                         return acc;
@@ -449,6 +425,25 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                     aggregationEnabled={aggregationEnabled}
                                                 />
                                             </Box>
+                                            {hModelDataReady &&
+                                                Object.keys(hModelDistributionData).length > 0 &&
+                                                Object.keys(hModelDistributionProposedData).length > 0 && (
+                                                    <Box
+                                                        sx={{
+                                                            backgroundColor: "white",
+                                                            borderRadius: 1,
+                                                            px: 3,
+                                                            pt: 3,
+                                                            pb: 1
+                                                        }}
+                                                    >
+                                                        <PolicyComparisonSection
+                                                            currentData={hModelDistributionData}
+                                                            proposedData={hModelDistributionProposedData}
+                                                            title="Policy Impact Analysis: Payment Projections"
+                                                        />
+                                                    </Box>
+                                                )}
                                         </>
                                     )}
                                 </Box>

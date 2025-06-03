@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box } from "@mui/material";
 import { ShortFormat, CurrencyFormat } from "../shared/ConvertionFormats";
 
 interface CommodityData {
@@ -91,9 +92,9 @@ const predefinedCommodityColors = {
     Corn: "#2F7164",
     Wheat: "#8B4513",
     Soybeans: "#ebe288",
-    Cotton: "#ECF0EE",
-    Peanuts: "#DEB887",
-    Rice: "#F5DEB3",
+    Cotton: "#4a4a4a",
+    Peanuts: "#dc2626",
+    Rice: "#1e90ff",
     Sorghum: "#4a148c",
     Barley: "#DAA520",
     Oats: "#B8860B"
@@ -145,6 +146,160 @@ const generateColorPalette = (commodities: string[]): Record<string, string> => 
     return colors;
 };
 
+const CommoditySummaryTable: React.FC<{ 
+    data: YearData[]; 
+    selectedCommodities: string[]; 
+    setSelectedCommodities: React.Dispatch<React.SetStateAction<string[]>>;
+}> = ({ data, selectedCommodities, setSelectedCommodities }) => {
+    const commoditySummaries = React.useMemo(() => {
+        const summaryMap = new Map<string, { currentTotal: number; proposedTotal: number }>();
+        
+        data.forEach(yearData => {
+            yearData.current.commodities.forEach(commodity => {
+                if (selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName)) {
+                    const existing = summaryMap.get(commodity.commodityName) || { currentTotal: 0, proposedTotal: 0 };
+                    existing.currentTotal += commodity.totalPaymentInDollars;
+                    summaryMap.set(commodity.commodityName, existing);
+                }
+            });
+            
+            yearData.proposed.commodities.forEach(commodity => {
+                if (selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName)) {
+                    const existing = summaryMap.get(commodity.commodityName) || { currentTotal: 0, proposedTotal: 0 };
+                    existing.proposedTotal += commodity.totalPaymentInDollars;
+                    summaryMap.set(commodity.commodityName, existing);
+                }
+            });
+        });
+        
+        return Array.from(summaryMap.entries()).map(([commodityName, totals]) => ({
+            commodityName,
+            currentTotal: totals.currentTotal,
+            proposedTotal: totals.proposedTotal
+        })).sort((a, b) => b.currentTotal - a.currentTotal);
+    }, [data, selectedCommodities]);
+
+    const overallTotals = React.useMemo(() => {
+        return commoditySummaries.reduce(
+            (acc, commodity) => ({
+                currentTotal: acc.currentTotal + commodity.currentTotal,
+                proposedTotal: acc.proposedTotal + commodity.proposedTotal
+            }),
+            { currentTotal: 0, proposedTotal: 0 }
+        );
+    }, [commoditySummaries]);
+
+    return (
+        <Box sx={{ mt: 3 }}>
+            <Typography
+                sx={{
+                    fontWeight: 600,
+                    fontSize: "1.2rem",
+                    color: "#2F7164",
+                    mb: 2,
+                    textAlign: "center"
+                }}
+            >
+                10-Year Payment Totals by Commodity
+                {selectedCommodities.length > 0 && (
+                    <Typography 
+                        component="span" 
+                        sx={{ 
+                            fontSize: "0.8rem", 
+                            ml: 2, 
+                            color: "#666",
+                            cursor: "pointer",
+                            textDecoration: "underline"
+                        }}
+                        onClick={() => {
+                            setSelectedCommodities([]);
+                        }}
+                    >
+                        (Clear Selection)
+                    </Typography>
+                )}
+            </Typography>
+            <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                <Table size="small" stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
+                                Commodity
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "#FF8C00" }}>
+                                Current Policy
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}>
+                                Proposed Policy
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
+                                Difference
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {commoditySummaries.map((commodity) => {
+                            const difference = commodity.proposedTotal - commodity.currentTotal;
+                            const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
+                            return (
+                                <TableRow 
+                                    key={commodity.commodityName} 
+                                    hover
+                                    sx={{ 
+                                        backgroundColor: isSelected ? "#f0f8ff" : "inherit",
+                                        "&:hover": { backgroundColor: isSelected ? "#e6f3ff" : "#f5f5f5" }
+                                    }}
+                                >
+                                    <TableCell sx={{ fontWeight: isSelected ? 600 : 500 }}>
+                                        {commodity.commodityName}
+                                    </TableCell>
+                                    <TableCell align="right" sx={{ color: "#FF8C00", fontWeight: isSelected ? 600 : 400 }}>
+                                        {CurrencyFormat(commodity.currentTotal)}
+                                    </TableCell>
+                                    <TableCell align="right" sx={{ color: "rgb(1, 87, 155)", fontWeight: isSelected ? 600 : 400 }}>
+                                        {CurrencyFormat(commodity.proposedTotal)}
+                                    </TableCell>
+                                    <TableCell 
+                                        align="right" 
+                                        sx={{ 
+                                            color: "rgb(156, 39, 176)",
+                                            fontWeight: isSelected ? 600 : 500
+                                        }}
+                                    >
+                                        {difference >= 0 ? "+" : ""}{CurrencyFormat(difference)}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                        <TableRow sx={{ borderTop: 2, borderColor: "#2F7164" }}>
+                            <TableCell sx={{ fontWeight: 700, fontSize: "1rem" }}>
+                                Overall Total
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 700, color: "#FF8C00", fontSize: "1rem" }}>
+                                {CurrencyFormat(overallTotals.currentTotal)}
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 700, color: "rgb(1, 87, 155)", fontSize: "1rem" }}>
+                                {CurrencyFormat(overallTotals.proposedTotal)}
+                            </TableCell>
+                            <TableCell 
+                                align="right" 
+                                sx={{ 
+                                    fontWeight: 700,
+                                    color: "rgb(156, 39, 176)",
+                                    fontSize: "1rem"
+                                }}
+                            >
+                                {(overallTotals.proposedTotal - overallTotals.currentTotal) >= 0 ? "+" : ""}
+                                {CurrencyFormat(overallTotals.proposedTotal - overallTotals.currentTotal)}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Box>
+    );
+};
+
 export default function PolicyBarChart({
     data,
     width,
@@ -156,6 +311,7 @@ export default function PolicyBarChart({
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const [processedData, setProcessedData] = React.useState<YearData[]>([]);
     const [containerWidth, setContainerWidth] = React.useState(800);
+    const [selectedCommodities, setSelectedCommodities] = React.useState<string[]>([]);
     React.useEffect(() => {
         const updateWidth = () => {
             if (containerRef.current) {
@@ -170,26 +326,36 @@ export default function PolicyBarChart({
         if (!data || !data.current || !data.proposed) return;
         const years = Object.keys(data.current);
         const processed: YearData[] = years.map((year) => {
-            const currentYearData = data.current[year]?.[0];
-            const proposedYearData = data.proposed[year]?.[0];
-            const getCurrentTotal = (yearData: any) => {
-                if (!yearData?.counties) return 0;
-                return yearData.counties.reduce((total: number, county: any) => {
-                    return total + (county.scenarios?.[0]?.totalPaymentInDollars || 0);
-                }, 0);
+            const currentYearDataArray = data.current[year] || [];
+            const proposedYearDataArray = data.proposed[year] || [];
+            const getCurrentTotal = (yearDataArray: any[]) => {
+                if (!yearDataArray || yearDataArray.length === 0) return 0;
+                let total = 0;
+                yearDataArray.forEach(yearData => {
+                    if (!yearData?.counties) return;
+                    yearData.counties.forEach((county: any) => {
+                        total += county.scenarios?.[0]?.totalPaymentInDollars || 0;
+                    });
+                });
+                return total;
             };
-            const getCommodities = (yearData: any) => {
-                if (!yearData?.counties) return [];
+            
+            const getCommodities = (yearDataArray: any[]) => {
+                if (!yearDataArray || yearDataArray.length === 0) return [];
                 const commodityMap = new Map<string, number>();
-                yearData.counties.forEach((county: any) => {
-                    county.scenarios?.[0]?.commodities?.forEach((commodity: any) => {
-                        const name = commodity.commodityName;
-                        const payment =
-                            commodity.programs?.reduce(
-                                (sum: number, program: any) => sum + (program.totalPaymentInDollars || 0),
-                                0
-                            ) || 0;
-                        commodityMap.set(name, (commodityMap.get(name) || 0) + payment);
+                
+                yearDataArray.forEach(yearData => {
+                    if (!yearData?.counties) return;
+                    yearData.counties.forEach((county: any) => {
+                        county.scenarios?.[0]?.commodities?.forEach((commodity: any) => {
+                            const name = commodity.commodityName;
+                            const payment =
+                                commodity.programs?.reduce(
+                                    (sum: number, program: any) => sum + (program.totalPaymentInDollars || 0),
+                                    0
+                                ) || 0;
+                            commodityMap.set(name, (commodityMap.get(name) || 0) + payment);
+                        });
                     });
                 });
                 return Array.from(commodityMap.entries()).map(([name, total]) => ({
@@ -197,15 +363,19 @@ export default function PolicyBarChart({
                     totalPaymentInDollars: total
                 }));
             };
+            const currentTotal = getCurrentTotal(currentYearDataArray);
+            const proposedTotal = getCurrentTotal(proposedYearDataArray);
+            const currentCommodities = getCommodities(currentYearDataArray);
+            const proposedCommodities = getCommodities(proposedYearDataArray);
             return {
                 year,
                 current: {
-                    totalPayment: getCurrentTotal(currentYearData),
-                    commodities: getCommodities(currentYearData)
+                    totalPayment: currentTotal,
+                    commodities: currentCommodities
                 },
                 proposed: {
-                    totalPayment: getCurrentTotal(proposedYearData),
-                    commodities: getCommodities(proposedYearData)
+                    totalPayment: proposedTotal,
+                    commodities: proposedCommodities
                 }
             };
         });
@@ -217,7 +387,7 @@ export default function PolicyBarChart({
     React.useEffect(() => {
         if (processedData.length === 0 || containerWidth === 0) return;
         renderChart();
-    }, [processedData, containerWidth, height]);
+    }, [processedData, containerWidth, height, selectedCommodities]);
     const renderChart = () => {
         if (!svgRef.current || processedData.length === 0) return;
         const chartWidth = width || containerWidth;
@@ -225,6 +395,22 @@ export default function PolicyBarChart({
         svg.selectAll("*").remove();
         const graphWidth = chartWidth - margin.left - margin.right;
         const graphHeight = height - margin.top - margin.bottom;
+        
+        const defs = svg.append("defs");
+        const pattern = defs.append("pattern")
+            .attr("id", "stripes")
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("width", 4)
+            .attr("height", 4);
+        pattern.append("rect")
+            .attr("width", 4)
+            .attr("height", 4)
+            .attr("fill", "rgba(255,255,255,0.3)");
+        pattern.append("path")
+            .attr("d", "M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2")
+            .attr("stroke", "rgba(255,255,255,0.6)")
+            .attr("stroke-width", 0.5);
+        
         const allCommodities = Array.from(
             new Set(
                 processedData.flatMap((d) => [
@@ -235,36 +421,52 @@ export default function PolicyBarChart({
         );
         const commodityColors = generateColorPalette(allCommodities);
         const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${margin.left}, 20)`);
-        const legendItemWidth = Math.min(120, graphWidth / allCommodities.length);
+        const legendItemWidth = Math.min(140, graphWidth / allCommodities.length);
         const legendRows = Math.ceil((allCommodities.length * legendItemWidth) / graphWidth);
         const itemsPerRow = Math.ceil(allCommodities.length / legendRows);
         allCommodities.forEach((commodity, i) => {
             const row = Math.floor(i / itemsPerRow);
             const col = i % itemsPerRow;
             const x = col * legendItemWidth;
-            const y = row * 20;
+            const y = row * 25;
+            const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity);
+            
             const legendItem = legend
                 .append("g")
                 .attr("class", "legend-item")
-                .attr("transform", `translate(${x}, ${y})`);
-            legendItem
-                .append("rect")
-                .attr("width", 12)
-                .attr("height", 12)
-                .attr("fill", commodityColors[commodity] || "#999");
+                .attr("transform", `translate(${x}, ${y})`)
+                .style("cursor", "pointer");
+            if (isSelected && selectedCommodities.length > 0) {
+                legendItem
+                    .append("path")
+                    .attr("d", "M3,7 L6,10 L11,3")
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-linejoin", "round");
+            }
+            
             legendItem
                 .append("text")
-                .attr("x", 16)
-                .attr("y", 9)
+                .attr("x", 20)
+                .attr("y", 10)
                 .text(commodity)
                 .style("font-size", "0.75rem")
                 .style("fill", "#00000099")
                 .style("font-family", "Roboto, sans-serif");
+             legendItem.on("click", function() {
+                if (selectedCommodities.includes(commodity)) {
+                    setSelectedCommodities(prev => prev.filter(c => c !== commodity));
+                } else {
+                    setSelectedCommodities(prev => [...prev, commodity]);
+                }
+            });
         });
         const policyLegend = svg
             .append("g")
             .attr("class", "policy-legend")
-            .attr("transform", `translate(${margin.left + graphWidth - 200}, 20)`);
+            .attr("transform", `translate(${margin.left + graphWidth - 250}, 20)`);
         const currentLegendItem = policyLegend.append("g").attr("class", "legend-item");
         currentLegendItem
             .append("rect")
@@ -291,6 +493,12 @@ export default function PolicyBarChart({
             .attr("height", 12)
             .attr("fill", "rgb(1, 87, 155)")
             .attr("opacity", 0.8);
+        proposedLegendItem
+            .append("rect")
+            .attr("width", 16)
+            .attr("height", 12)
+            .attr("fill", "url(#stripes)")
+            .attr("opacity", 0.6);
         proposedLegendItem
             .append("text")
             .attr("x", 20)
@@ -367,23 +575,19 @@ export default function PolicyBarChart({
             yScale: d3.ScaleLinear<number, number>
         ) => {
             chartData.forEach((yearData) => {
-                const commodities = yearData[type].commodities;
+                const allCommodities = yearData[type].commodities;
+                const visibleCommodities = selectedCommodities.length === 0 ? 
+                    allCommodities : 
+                    allCommodities.filter(c => selectedCommodities.includes(c.commodityName));
                 let cumulativeHeight = 0;
-                const totalPayment = yearData[type].totalPayment;
-                const totalLabel = chartGroup
-                    .append("text")
-                    .attr("x", (xScale(yearData.year) || 0) + xOffset + barWidth / 2)
-                    .attr("y", yScale(totalPayment) - 8)
-                    .attr("text-anchor", "middle")
-                    .style("font-size", "0.7rem")
-                    .style("font-family", "Roboto, sans-serif")
-                    .style("fill", type === "current" ? "#FF8C00" : "rgb(1, 87, 155)")
-                    .style("font-weight", "600")
-                    .style("opacity", 0)
-                    .text(`$${ShortFormat(totalPayment)}`);
-                commodities.forEach((commodity) => {
+                const totalPayment = selectedCommodities.length === 0 ?
+                    yearData[type].totalPayment :
+                    visibleCommodities.reduce((sum, c) => sum + c.totalPaymentInDollars, 0);
+                    
+                allCommodities.forEach((commodity) => {
+                    const isVisible = selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
                     const barHeight = graphHeight - yScale(commodity.totalPaymentInDollars);
-                    const commodityColor = commodityColors[commodity.commodityName] || color;
+                    const commodityColor = commodityColors[commodity.commodityName] || color;           
                     const rect = chartGroup
                         .append("rect")
                         .attr("class", "bar")
@@ -394,9 +598,20 @@ export default function PolicyBarChart({
                         .attr("fill", commodityColor)
                         .attr("stroke", "#fff")
                         .attr("stroke-width", 1)
-                        .attr("opacity", 0.8);
+                        .attr("opacity", isVisible ? 0.8 : 0.2);                     
+                    if (type === "proposed") {
+                        chartGroup
+                            .append("rect")
+                            .attr("class", "bar-stripe")
+                            .attr("x", (xScale(yearData.year) || 0) + xOffset)
+                            .attr("y", yScale(cumulativeHeight + commodity.totalPaymentInDollars))
+                            .attr("width", barWidth)
+                            .attr("height", barHeight)
+                            .attr("fill", "url(#stripes)")
+                            .attr("opacity", isVisible ? 0.6 : 0.1)
+                            .style("pointer-events", "none");
+                    }                 
                     rect.on("mouseover", function onMouseOver(event) {
-                        totalLabel.style("opacity", 1);
                         if (tooltipRef.current) {
                             const tooltip = d3.select(tooltipRef.current);
                             tooltip
@@ -411,7 +626,6 @@ export default function PolicyBarChart({
                                 `);
                         }
                     }).on("mouseout", function onMouseOut() {
-                        totalLabel.style("opacity", 0);
                         if (tooltipRef.current) {
                             d3.select(tooltipRef.current).style("opacity", 0);
                         }
@@ -428,6 +642,7 @@ export default function PolicyBarChart({
         <StyledContainer ref={containerRef}>
             <svg ref={svgRef} />
             <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
+            <CommoditySummaryTable data={processedData} selectedCommodities={selectedCommodities} setSelectedCommodities={setSelectedCommodities} />
         </StyledContainer>
     );
 }

@@ -397,7 +397,7 @@ function generateCommodityDifferenceContent(
                 if (typeof commodityDifference === "string") {
                     commodityDifference = parseFloat(commodityDifference.replace(/[^0-9.-]+/g, ""));
                 }
-
+                commodityDifference = commodityProposedValue - commodityCurrentValue;
                 let baseAcres = commodityData.baseAcres || 0;
                 const currentBaseAcres = commodityData.currentBaseAcres || 0;
                 const proposedBaseAcres = commodityData.proposedBaseAcres || 0;
