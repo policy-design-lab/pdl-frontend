@@ -121,6 +121,7 @@ const CountyMap = ({
     const classes = useStyles();
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
+    const [userZoomLevel, setUserZoomLevel] = useState(1);
     useEffect(() => {
         const handleDoubleClick = (e) => {
             if (e.target.closest(".county-commodity-map")) {
@@ -131,7 +132,7 @@ const CountyMap = ({
         };
         const handleWheel = (e) => {
             if (e.target.closest(".county-commodity-map")) {
-                if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                if (e.ctrlKey || e.metaKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.deltaZ !== 0) {
                     e.stopPropagation();
                     e.preventDefault();
                     return false;
@@ -145,8 +146,25 @@ const CountyMap = ({
                 return false;
             }
         };
+        const handleClick = (e) => {
+            if (
+                e.target.closest(".county-commodity-map") &&
+                !e.target.closest(".rsm-geography") &&
+                !e.target.closest("button") &&
+                !e.target.closest(".MuiButton-root")
+            ) {
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            }
+        };
         const handleMouseDown = (e) => {
-            if (e.target.closest(".county-commodity-map") && !e.target.closest(".rsm-geography")) {
+            if (
+                e.target.closest(".county-commodity-map") &&
+                !e.target.closest(".rsm-geography") &&
+                !e.target.closest("button") &&
+                !e.target.closest(".MuiButton-root")
+            ) {
                 e.stopPropagation();
                 e.preventDefault();
                 return false;
@@ -157,12 +175,14 @@ const CountyMap = ({
         document.addEventListener("drag", handleDrag, { capture: true });
         document.addEventListener("dragstart", handleDrag, { capture: true });
         document.addEventListener("mousedown", handleMouseDown, { capture: true });
+        document.addEventListener("click", handleClick, { capture: true });
         return () => {
             document.removeEventListener("dblclick", handleDoubleClick, { capture: true });
             document.removeEventListener("wheel", handleWheel, { capture: true });
             document.removeEventListener("drag", handleDrag, { capture: true });
             document.removeEventListener("dragstart", handleDrag, { capture: true });
             document.removeEventListener("mousedown", handleMouseDown, { capture: true });
+            document.removeEventListener("click", handleClick, { capture: true });
         };
     }, []);
 
@@ -233,16 +253,49 @@ const CountyMap = ({
         }
         if (mounted) {
             if (selectedState === "All States") {
-                setPosition({ coordinates: [-95, 40], zoom: 1 });
+                setPosition({ coordinates: [-95, 40], zoom: userZoomLevel });
             } else if (stateViewSettings[selectedState]) {
                 const { center, zoom } = stateViewSettings[selectedState];
-                setPosition({ coordinates: center, zoom });
+                setPosition({ coordinates: center, zoom: zoom * userZoomLevel });
             }
         }
         return () => {
             mounted = false;
         };
-    }, [selectedState, mapData, stateCodesData]);
+    }, [selectedState, mapData, stateCodesData, userZoomLevel]);
+
+    const handleZoomIn = useCallback(() => {
+        const newZoomLevel = Math.min(userZoomLevel * 1.2, 3);
+        setUserZoomLevel(newZoomLevel);
+        if (selectedState === "All States") {
+            setPosition({ coordinates: [-95, 40], zoom: newZoomLevel });
+        } else if (stateViewSettings[selectedState]) {
+            const { center } = stateViewSettings[selectedState];
+            setPosition({ coordinates: center, zoom: stateViewSettings[selectedState].zoom * newZoomLevel });
+        }
+    }, [userZoomLevel, selectedState]);
+
+    const handleZoomOut = useCallback(() => {
+        const newZoomLevel = Math.max(userZoomLevel / 1.2, 0.5);
+        setUserZoomLevel(newZoomLevel);
+        if (selectedState === "All States") {
+            setPosition({ coordinates: [-95, 40], zoom: newZoomLevel });
+        } else if (stateViewSettings[selectedState]) {
+            const { center } = stateViewSettings[selectedState];
+            setPosition({ coordinates: center, zoom: stateViewSettings[selectedState].zoom * newZoomLevel });
+        }
+    }, [userZoomLevel, selectedState]);
+
+    const handleResetZoom = useCallback(() => {
+        setUserZoomLevel(1);
+        if (selectedState === "All States") {
+            setPosition({ coordinates: [-95, 40], zoom: 1 });
+        } else if (stateViewSettings[selectedState]) {
+            const { center, zoom } = stateViewSettings[selectedState];
+            setPosition({ coordinates: center, zoom });
+        }
+    }, [selectedState]);
+
     const handleMouseEnter = useCallback(
         (geo, countyFIPS) => {
             let mounted = true;
@@ -322,22 +375,20 @@ const CountyMap = ({
     }, [onTooltipChange]);
     const handleCloseStateView = useCallback(() => {
         setSelectedState("All States");
+        setUserZoomLevel(1);
+        setPosition({ coordinates: [-95, 40], zoom: 1 });
     }, [setSelectedState]);
     const handleMoveEnd = useCallback(
         (positionObj) => {
             let mounted = true;
             if (selectedState === "All States") {
-                if (positionObj.zoom !== 1 || positionObj.coordinates[0] !== -95 || positionObj.coordinates[1] !== 40) {
-                    setPosition({ coordinates: [-95, 40], zoom: 1 });
+                if (positionObj.coordinates[0] !== -95 || positionObj.coordinates[1] !== 40) {
+                    setPosition({ coordinates: [-95, 40], zoom: positionObj.zoom });
                 }
             } else if (stateViewSettings[selectedState]) {
-                const { center, zoom } = stateViewSettings[selectedState];
-                if (
-                    positionObj.zoom !== zoom ||
-                    positionObj.coordinates[0] !== center[0] ||
-                    positionObj.coordinates[1] !== center[1]
-                ) {
-                    setPosition({ coordinates: center, zoom });
+                const { center } = stateViewSettings[selectedState];
+                if (positionObj.coordinates[0] !== center[0] || positionObj.coordinates[1] !== center[1]) {
+                    setPosition({ coordinates: center, zoom: positionObj.zoom });
                 }
             }
             return () => {
@@ -388,7 +439,7 @@ const CountyMap = ({
     return (
         <Box className="county-commodity-map" sx={{ position: "relative" }}>
             {selectedState !== "All States" && (
-                <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}>
+                <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 2000 }}>
                     <Button
                         onClick={handleCloseStateView}
                         aria-label="return to US map"
@@ -399,6 +450,7 @@ const CountyMap = ({
                             "color": "white",
                             "border": "2px solid white",
                             "boxShadow": "0 2px 10px rgba(0,0,0,0.2)",
+                            "pointerEvents": "auto",
                             "@keyframes pulse": {
                                 "0%": {
                                     boxShadow: "0 0 0 0 rgba(47, 113, 100, 0.7)"
@@ -442,7 +494,9 @@ const CountyMap = ({
                     data-for="map-tooltip"
                     style={{
                         width: "100%",
-                        position: "relative"
+                        position: "relative",
+                        transform: `scale(${Math.min(1, window.devicePixelRatio || 1)})`,
+                        transformOrigin: "center center"
                     }}
                 >
                     <ComposableMap
@@ -491,12 +545,8 @@ const CountyMap = ({
                             onMoveEnd={handleMoveEnd}
                             doubleclickzoom="false"
                             disablepanning="true"
-                            translateExtent={[
-                                [position.coordinates[0] - 0.000001, position.coordinates[1] - 0.000001],
-                                [position.coordinates[0] + 0.000001, position.coordinates[1] + 0.000001]
-                            ]}
-                            minZoom={position.zoom}
-                            maxZoom={position.zoom}
+                            minZoom={0.5}
+                            maxZoom={3}
                         >
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => {
@@ -666,6 +716,101 @@ const CountyMap = ({
                 >
                     {tooltipContent}
                 </ReactTooltip>
+            </Box>
+            <Box
+                sx={{
+                    position: "absolute",
+                    bottom: 10,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    zIndex: 2000,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 1,
+                    pointerEvents: "auto"
+                }}
+            >
+                <Box
+                    sx={{
+                        fontSize: "12px",
+                        color: "#666",
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+                        pointerEvents: "auto"
+                    }}
+                >
+                    Map Zoom Controls
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: 1,
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        borderRadius: "8px",
+                        padding: "8px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                        pointerEvents: "auto"
+                    }}
+                >
+                    <Button
+                        onClick={handleZoomOut}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                            "minWidth": "auto",
+                            "width": "32px",
+                            "height": "32px",
+                            "borderColor": "rgba(47, 113, 100, 0.5)",
+                            "color": "#2F7164",
+                            "pointerEvents": "auto",
+                            "&:hover": {
+                                borderColor: "#2F7164",
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            }
+                        }}
+                    >
+                        −
+                    </Button>
+                    <Button
+                        onClick={handleResetZoom}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                            "fontSize": "11px",
+                            "borderColor": "rgba(47, 113, 100, 0.5)",
+                            "color": "#2F7164",
+                            "pointerEvents": "auto",
+                            "&:hover": {
+                                borderColor: "#2F7164",
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            }
+                        }}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        onClick={handleZoomIn}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                            "minWidth": "auto",
+                            "width": "32px",
+                            "height": "32px",
+                            "borderColor": "rgba(47, 113, 100, 0.5)",
+                            "color": "#2F7164",
+                            "pointerEvents": "auto",
+                            "&:hover": {
+                                borderColor: "#2F7164",
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            }
+                        }}
+                    >
+                        +
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );

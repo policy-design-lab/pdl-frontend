@@ -40,7 +40,8 @@ export default function PolicyComparisonSection({
                     textAlign: "center"
                 }}
             >
-                Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown.
+                Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed
+                breakdown.
             </Typography>
             <Box sx={{ width: "100%" }}>
                 <PolicyBarChart
