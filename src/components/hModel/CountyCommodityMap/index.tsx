@@ -126,8 +126,8 @@ const CountyCommodityMap = ({
         if (!onMapUpdate) return;
         const prevValues = prevValuesRef.current;
         const yearsParam = aggregationEnabled && selectedYears.length > 1 ? selectedYears : selectedYear;
-        const yearsChanged = Array.isArray(yearsParam) ?
-            JSON.stringify(yearsParam) !== JSON.stringify(prevValues.selectedYears)
+        const yearsChanged = Array.isArray(yearsParam)
+            ? JSON.stringify(yearsParam) !== JSON.stringify(prevValues.selectedYears)
             : yearsParam !== prevValues.selectedYear;
         const commoditiesChanged =
             JSON.stringify(selectedCommodities) !== JSON.stringify(prevValues.selectedCommodities);
@@ -226,9 +226,9 @@ const CountyCommodityMap = ({
     }, [mapData, mapInitialized]);
     const mapKey = useMemo(() => {
         const yearKey =
-            aggregationEnabled && selectedYears.length > 1 ?
-                `years-${selectedYears.join("-")}` :
-                `year-${selectedYear}`;
+            aggregationEnabled && selectedYears.length > 1
+                ? `years-${selectedYears.join("-")}`
+                : `year-${selectedYear}`;
         return `${selectedCommodities.join("|")}-${selectedPrograms.join(
             "|"
         )}-${selectedState}-${viewMode}-${yearKey}-${forceUpdate}`;

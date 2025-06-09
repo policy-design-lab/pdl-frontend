@@ -41,55 +41,6 @@ const wouldLabelsOverlap = (values: number[]): boolean => {
     return false;
 };
 
-const optimizeThresholds = (thresholds: number[], data: number[]): number[] => {
-    if (thresholds.length <= 1) return thresholds;
-    if (!wouldLabelsOverlap(thresholds)) return thresholds;
-    if (thresholds.length > 3) {
-        const reducedThresholds = thresholds.filter((_, i) => i % 2 === 0);
-        return optimizeThresholds(reducedThresholds, data);
-    }
-    const scale = Math.max(...thresholds) >= 1000000 ? 1000000 : Math.max(...thresholds) >= 1000 ? 1000 : 1;
-    const roundingFactors =
-        scale === 1000000 ?
-            [1000000, 5000000, 10000000] :
-            scale === 1000 ?
-            [1000, 5000, 10000, 50000] :
-            [1, 5, 10, 50, 100];
-    for (const factor of roundingFactors) {
-        const roundedThresholds = thresholds.map((t) => Math.round(t / factor) * factor);
-        const uniqueRounded = Array.from(new Set(roundedThresholds)).sort((a, b) => a - b);
-        if (uniqueRounded.length >= 3 && !wouldLabelsOverlap(uniqueRounded)) {
-            return uniqueRounded;
-        }
-    }
-    const min = Math.min(...data);
-    const max = Math.max(...data);
-    const result: number[] = [];
-    if (scale === 1000000) {
-        const values = [1000000, 10000000, 100000000];
-        values.forEach((val) => {
-            if (val > min && val < max) {
-                result.push(val);
-            }
-        });
-    } else if (scale === 1000) {
-        const values = [1000, 10000, 100000, 1000000];
-        values.forEach((val) => {
-            if (val > min && val < max) {
-                result.push(val);
-            }
-        });
-    } else {
-        const values = [10, 100, 1000];
-        values.forEach((val) => {
-            if (val > min && val < max) {
-                result.push(val);
-            }
-        });
-    }
-    return result;
-};
-
 const defaultPercentiles = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 export const calculateThresholds = (dataValues: number[], customPercentiles?: number[]): number[] => {

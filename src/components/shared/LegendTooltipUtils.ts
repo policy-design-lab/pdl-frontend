@@ -7,6 +7,14 @@ export interface RawRegionData {
     value: number;
 }
 
+interface RegionDataItem {
+    hasData?: boolean;
+    value?: number;
+    state?: string;
+    stateFIPS?: string;
+    name?: string;
+}
+
 export interface TooltipData {
     percentileRange: string;
     regionCount: number;
@@ -61,7 +69,7 @@ export const getRegionNameFromFips = (fips: string, regionType = "County"): stri
 };
 
 export const processRegionsInRange = (
-    regionData: Record<string, any>,
+    regionData: Record<string, number | RegionDataItem>,
     min: number,
     max: number,
     stateCodeToName: Record<string, string>,
@@ -81,7 +89,7 @@ export const processRegionsInRange = (
     Object.entries(regionData).forEach(([fips, region]) => {
         if (!region || (typeof region === "object" && !region.hasData)) return;
         const regionValue = typeof region === "number" ? region : region.value;
-        if (regionValue !== undefined && regionValue !== null && isFinite(regionValue)) {
+        if (regionValue !== undefined && regionValue !== null && Number.isFinite(regionValue)) {
             maxValueInData = Math.max(maxValueInData, regionValue);
             if (regionValue > highestValue) {
                 highestValue = regionValue;

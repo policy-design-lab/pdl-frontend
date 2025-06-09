@@ -228,12 +228,12 @@ const MapControls = ({
                             sx={{
                                 "flex": 1,
                                 "minWidth": "80px",
-                                "color": yearRange.includes(index) ?
-                                    "rgba(47, 113, 100, 1)" :
-                                    "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor": yearRange.includes(index) ?
-                                    "rgba(47, 113, 100, 0.1)" :
-                                    "transparent",
+                                "color": yearRange.includes(index)
+                                    ? "rgba(47, 113, 100, 1)"
+                                    : "rgba(47, 113, 100, 0.8)",
+                                "backgroundColor": yearRange.includes(index)
+                                    ? "rgba(47, 113, 100, 0.1)"
+                                    : "transparent",
                                 "fontWeight": yearRange.includes(index) ? "bold" : "normal",
                                 "border": "1px solid rgba(47, 113, 100, 0.5)",
                                 "height": toggleButtonHeight,

@@ -7,18 +7,28 @@ import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
 import LegendTooltipContent from "./LegendTooltipContent";
 import { PercentileMode } from "../hModel/CountyCommodityMap/percentileConfig";
 
-type RectHoverCallback = (index: number, data?: any) => void;
+interface CountyDataItem {
+    hasData?: boolean;
+    hasValidBaseAcres?: boolean;
+    meanPaymentRateInDollarsPerAcre?: number;
+    value?: number;
+    [key: string]: unknown;
+}
+
+interface ColorScale {
+    domain(): number[];
+}
+
+type RectHoverCallback = (index: number, data?: unknown) => void;
 
 export default function DrawLegendNew({
     isRatio = false,
     notDollar = false,
     colorScale,
-    title,
     programData,
     prepColor,
     emptyState = [],
     countyData = {},
-    showPercentileExplanation = false,
     onRectHover = null,
     stateCodeToName = {},
     showTooltips = false,
@@ -28,13 +38,11 @@ export default function DrawLegendNew({
 }: {
     isRatio?: boolean;
     notDollar?: boolean;
-    colorScale: any;
-    title: React.ReactNode;
+    colorScale: ColorScale;
     programData: number[];
     prepColor: string[];
     emptyState?: string[];
-    countyData?: Record<string, any>;
-    showPercentileExplanation?: boolean;
+    countyData?: Record<string, CountyDataItem>;
     onRectHover?: RectHoverCallback | null;
     stateCodeToName: Record<string, string>;
     showTooltips?: boolean;
@@ -77,7 +85,7 @@ export default function DrawLegendNew({
         const segmentCount = localCutPoints.length - 1;
         const newPercentileRanges: string[] = [];
         const sortedData = [...programData].sort((a, b) => a - b);
-        for (let i = 0; i < segmentCount; i++) {
+        for (let i = 0; i < segmentCount; i += 1) {
             const lowerValue = localCutPoints[i];
             const upperValue = localCutPoints[i + 1];
             const lowerPercentile = (sortedData.findIndex((v) => v >= lowerValue) / sortedData.length) * 100;
@@ -137,7 +145,7 @@ export default function DrawLegendNew({
         baseSVG.selectAll("rect").remove();
         const data_distribution: number[] = [];
         let totalValueSum = 0;
-        for (let i = 0; i < segmentCount; i++) {
+        for (let i = 0; i < segmentCount; i += 1) {
             const lowerValue = cut_points[i];
             const upperValue = cut_points[i + 1];
             let countInRange;
@@ -150,8 +158,8 @@ export default function DrawLegendNew({
             data_distribution.push(segmentValue);
             totalValueSum += segmentValue;
         }
-        for (let i = 0; i < data_distribution.length; i++) {
-            data_distribution[i] = data_distribution[i] / totalValueSum;
+        for (let i = 0; i < data_distribution.length; i += 1) {
+            data_distribution[i] /= totalValueSum;
         }
         const svgWidth = width - margin * 2;
         const segments = baseSVG
@@ -168,7 +176,7 @@ export default function DrawLegendNew({
         } else {
             let currentPosition = margin;
             segmentPositions = [currentPosition];
-            for (let i = 0; i < data_distribution.length; i++) {
+            for (let i = 0; i < data_distribution.length; i += 1) {
                 currentPosition += data_distribution[i] * svgWidth;
                 segmentPositions.push(currentPosition);
             }
@@ -184,12 +192,12 @@ export default function DrawLegendNew({
             .attr("height", 20)
             .style("fill", (d, i) => prepColor[i])
             .style("cursor", "pointer")
-            .on("mouseover", function (this: SVGRectElement) {
+            .on("mouseover", function handleMouseOver(this: SVGRectElement) {
                 const rectIndex = parseInt(d3.select(this).attr("data-index"), 10);
                 if (percentileRanges.length === 0) {
                     return;
                 }
-                if (isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
+                if (Number.isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
                     return;
                 }
                 setActiveRectIndex(rectIndex);
@@ -202,7 +210,7 @@ export default function DrawLegendNew({
                     }
                     if (notDollar) {
                         if (
-                            county.hasOwnProperty("meanPaymentRateInDollarsPerAcre") &&
+                            Object.prototype.hasOwnProperty.call(county, "meanPaymentRateInDollarsPerAcre") &&
                             county.hasValidBaseAcres &&
                             county.meanPaymentRateInDollarsPerAcre !== undefined
                         ) {
@@ -216,7 +224,7 @@ export default function DrawLegendNew({
                         acc[fips] = county;
                     }
                     return acc;
-                }, {});
+                }, {} as Record<string, CountyDataItem>);
                 const { minRegion, maxRegion, regionCount } = processRegionsInRange(
                     dataForProcessing,
                     min,
@@ -231,7 +239,8 @@ export default function DrawLegendNew({
                     maxRegion: regionCount > 0 ? maxRegion : maxRegion,
                     rectIndex
                 });
-                const rectDOMBounds = this.getBoundingClientRect();
+                const rectElement = this as SVGRectElement;
+                const rectDOMBounds = rectElement.getBoundingClientRect();
                 setTooltipPosition({
                     x: rectDOMBounds.left + rectDOMBounds.width / 2,
                     y: rectDOMBounds.top
@@ -242,9 +251,9 @@ export default function DrawLegendNew({
                     onRectHover(rectIndex, d3.select(this).datum());
                 }
             })
-            .on("mouseout", function (this: SVGRectElement) {
+            .on("mouseout", function handleMouseOut(this: SVGRectElement) {
                 const rectIndex = parseInt(d3.select(this).attr("data-index"), 10);
-                if (isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
+                if (Number.isNaN(rectIndex) || rectIndex < 0 || rectIndex >= percentileRanges.length) {
                     return;
                 }
                 d3.select(this).classed("tooltip-visible", false);

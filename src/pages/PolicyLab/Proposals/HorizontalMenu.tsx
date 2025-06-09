@@ -103,7 +103,7 @@ export function HorizontalMenu({
                         {menu[1]?.items &&
                             menu[1].items.map((item, subIndex) => (
                                 <MenuItem
-                                    key={`submenu-${subIndex}`}
+                                    key={`submenu-${item.title}`}
                                     selected={topLevel === 1 && midLevel === subIndex}
                                     onClick={() => handleDropdownSelect(subIndex)}
                                     sx={{

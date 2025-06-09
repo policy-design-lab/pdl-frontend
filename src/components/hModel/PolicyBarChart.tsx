@@ -31,8 +31,29 @@ interface YearData {
     };
 }
 
+interface County {
+    scenarios?: Array<{
+        totalPaymentInDollars?: number;
+        commodities?: Array<{
+            commodityName: string;
+            programs?: Array<{
+                totalPaymentInDollars?: number;
+            }>;
+        }>;
+    }>;
+}
+
+interface StateData {
+    counties?: County[];
+}
+
+interface ProcessedData {
+    current: Record<string, StateData[]>;
+    proposed: Record<string, StateData[]>;
+}
+
 interface PolicyBarChartProps {
-    data: any;
+    data: ProcessedData;
     width?: number;
     height?: number;
     margin?: { top: number; right: number; bottom: number; left: number };
@@ -150,7 +171,7 @@ const generateColorPalette = (commodities: string[]): Record<string, string> => 
             colors[commodity] = predefinedCommodityColors[commodity];
         } else {
             colors[commodity] = defaultColors[colorIndex % defaultColors.length];
-            colorIndex++;
+            colorIndex += 1;
         }
     });
     return colors;
@@ -159,8 +180,7 @@ const generateColorPalette = (commodities: string[]): Record<string, string> => 
 const CommoditySummaryTable: React.FC<{
     data: YearData[];
     selectedCommodities: string[];
-    setSelectedCommodities: React.Dispatch<React.SetStateAction<string[]>>;
-}> = ({ data, selectedCommodities, setSelectedCommodities }) => {
+}> = ({ data, selectedCommodities }) => {
     const commoditySummaries = React.useMemo(() => {
         const summaryMap = new Map<string, { currentTotal: number; proposedTotal: number }>();
 
@@ -300,23 +320,6 @@ const CommoditySummaryTable: React.FC<{
                 }}
             >
                 10-Year Payment Totals by Commodity
-                {selectedCommodities.length > 0 && (
-                    <Typography
-                        component="span"
-                        sx={{
-                            fontSize: "0.8rem",
-                            ml: 2,
-                            color: "#666",
-                            cursor: "pointer",
-                            textDecoration: "underline"
-                        }}
-                        onClick={() => {
-                            setSelectedCommodities([]);
-                        }}
-                    >
-                        (Clear Selection)
-                    </Typography>
-                )}
             </Typography>
             <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
                 <TableContainer component={Paper} sx={{ maxHeight: 400, flex: 1 }}>
@@ -463,30 +466,30 @@ export default function PolicyBarChart({
         const processed: YearData[] = years.map((year) => {
             const currentYearDataArray = data.current[year] || [];
             const proposedYearDataArray = data.proposed[year] || [];
-            const getCurrentTotal = (yearDataArray: any[]) => {
+            const getCurrentTotal = (yearDataArray: StateData[]) => {
                 if (!yearDataArray || yearDataArray.length === 0) return 0;
                 let total = 0;
-                yearDataArray.forEach((yearData) => {
-                    if (!yearData?.counties) return;
-                    yearData.counties.forEach((county: any) => {
+                yearDataArray.forEach((yearDataItem) => {
+                    if (!yearDataItem?.counties) return;
+                    yearDataItem.counties.forEach((county: County) => {
                         total += county.scenarios?.[0]?.totalPaymentInDollars || 0;
                     });
                 });
                 return total;
             };
 
-            const getCommodities = (yearDataArray: any[]) => {
+            const getCommodities = (yearDataArray: StateData[]) => {
                 if (!yearDataArray || yearDataArray.length === 0) return [];
                 const commodityMap = new Map<string, number>();
 
-                yearDataArray.forEach((yearData) => {
-                    if (!yearData?.counties) return;
-                    yearData.counties.forEach((county: any) => {
-                        county.scenarios?.[0]?.commodities?.forEach((commodity: any) => {
+                yearDataArray.forEach((yearDataItem) => {
+                    if (!yearDataItem?.counties) return;
+                    yearDataItem.counties.forEach((county: County) => {
+                        county.scenarios?.[0]?.commodities?.forEach((commodity) => {
                             const name = commodity.commodityName;
                             const payment =
                                 commodity.programs?.reduce(
-                                    (sum: number, program: any) => sum + (program.totalPaymentInDollars || 0),
+                                    (sum: number, program) => sum + (program.totalPaymentInDollars || 0),
                                     0
                                 ) || 0;
                             commodityMap.set(name, (commodityMap.get(name) || 0) + payment);
@@ -560,7 +563,7 @@ export default function PolicyBarChart({
             .attr("stroke", "rgba(255,255,255,0.6)")
             .attr("stroke-width", 0.5);
 
-        const allCommodities = Array.from(
+        const allCommoditiesInChart = Array.from(
             new Set(
                 processedData.flatMap((d) => [
                     ...d.current.commodities.map((c) => c.commodityName),
@@ -568,12 +571,12 @@ export default function PolicyBarChart({
                 ])
             )
         );
-        const commodityColors = generateColorPalette(allCommodities);
+        const commodityColors = generateColorPalette(allCommoditiesInChart);
         const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${margin.left}, 20)`);
-        const legendItemWidth = Math.min(140, graphWidth / allCommodities.length);
-        const legendRows = Math.ceil((allCommodities.length * legendItemWidth) / graphWidth);
-        const itemsPerRow = Math.ceil(allCommodities.length / legendRows);
-        allCommodities.forEach((commodity, i) => {
+        const legendItemWidth = Math.min(140, graphWidth / allCommoditiesInChart.length);
+        const legendRows = Math.ceil((allCommoditiesInChart.length * legendItemWidth) / graphWidth);
+        const itemsPerRow = Math.ceil(allCommoditiesInChart.length / legendRows);
+        allCommoditiesInChart.forEach((commodity, i) => {
             const row = Math.floor(i / itemsPerRow);
             const col = i % itemsPerRow;
             const x = col * legendItemWidth;
@@ -584,7 +587,7 @@ export default function PolicyBarChart({
                 .attr("class", "legend-item")
                 .attr("transform", `translate(${x}, ${y})`)
                 .style("cursor", "pointer");
-            const checkbox = legendItem
+            legendItem
                 .append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
@@ -613,7 +616,7 @@ export default function PolicyBarChart({
                 .style("font-size", "0.75rem")
                 .style("fill", "#00000099")
                 .style("font-family", "Roboto, sans-serif");
-            const proposedIndicator = legendItem
+            legendItem
                 .append("rect")
                 .attr("x", 20 + commodity.length * 5 + 5)
                 .attr("y", 2)
@@ -623,7 +626,7 @@ export default function PolicyBarChart({
                 .attr("opacity", 0.8)
                 .style("fill", "url(#stripes)")
                 .attr("rx", 1);
-            legendItem.on("click", function () {
+            legendItem.on("click", function handleLegendClick() {
                 if (selectedCommodities.includes(commodity)) {
                     if (selectedCommodities.length > 1) {
                         setSelectedCommodities((prev) => prev.filter((c) => c !== commodity));
@@ -636,7 +639,7 @@ export default function PolicyBarChart({
         const policyLegend = svg
             .append("g")
             .attr("class", "policy-legend")
-            .attr("transform", `translate(${margin.left + graphWidth - 250}, 20)`);
+            .attr("transform", `translate(${margin.left + graphWidth - 250}, ${margin.top + graphHeight + 20})`);
         const currentLegendItem = policyLegend.append("g").attr("class", "legend-item");
         currentLegendItem
             .append("rect")
@@ -690,14 +693,14 @@ export default function PolicyBarChart({
         const maxProposed = d3.max(processedData, (d) => d.proposed.totalPayment) || 0;
         const maxValue = Math.max(maxCurrent, maxProposed);
 
-        const yScale = d3
+        const yScaleChart = d3
             .scaleLinear()
             .domain([0, maxValue * 1.1])
             .range([graphHeight, 0]);
 
         const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
         const yAxis = d3
-            .axisLeft(yScale)
+            .axisLeft(yScaleChart)
             .tickFormat((d) => `$${ShortFormat(d as number)}`)
             .tickSizeOuter(0);
 
@@ -729,14 +732,14 @@ export default function PolicyBarChart({
         const gridLines = chartGroup.append("g").attr("class", "grid");
         gridLines
             .selectAll(".grid-line")
-            .data(yScale.ticks())
+            .data(yScaleChart.ticks())
             .enter()
             .append("line")
             .attr("class", "grid-line")
             .attr("x1", 0)
             .attr("x2", graphWidth)
-            .attr("y1", (d) => yScale(d))
-            .attr("y2", (d) => yScale(d));
+            .attr("y1", (d) => yScaleChart(d))
+            .attr("y2", (d) => yScaleChart(d));
         const drawStackedBars = (
             chartData: YearData[],
             type: "current" | "proposed",
@@ -745,18 +748,18 @@ export default function PolicyBarChart({
             yScale: d3.ScaleLinear<number, number>
         ) => {
             chartData.forEach((yearData) => {
-                const allCommodities = yearData[type].commodities;
+                const commodityData = yearData[type].commodities;
                 const visibleCommodities =
                     selectedCommodities.length === 0 ?
-                        allCommodities :
-                        allCommodities.filter((c) => selectedCommodities.includes(c.commodityName));
+                        commodityData :
+                        commodityData.filter((c) => selectedCommodities.includes(c.commodityName));
                 let cumulativeHeight = 0;
                 const totalPayment =
                     selectedCommodities.length === 0 ?
                         yearData[type].totalPayment :
                         visibleCommodities.reduce((sum, c) => sum + c.totalPaymentInDollars, 0);
 
-                const totalLabel = chartGroup
+                chartGroup
                     .append("text")
                     .attr("x", (xScale(yearData.year) || 0) + xOffset + barWidth / 2)
                     .attr("y", yScale(yearData[type].totalPayment) - 8)
@@ -767,7 +770,7 @@ export default function PolicyBarChart({
                     .style("font-weight", "600")
                     .style("opacity", 1)
                     .text(`$${ShortFormat(totalPayment)}`);
-                allCommodities.forEach((commodity) => {
+                commodityData.forEach((commodity) => {
                     const isVisible =
                         selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
                     const barHeight = graphHeight - yScale(commodity.totalPaymentInDollars);
@@ -818,19 +821,15 @@ export default function PolicyBarChart({
                 });
             });
         };
-        drawStackedBars(processedData, "current", "#FF8C00", 0, yScale);
-        drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScale);
+        drawStackedBars(processedData, "current", "#FF8C00", 0, yScaleChart);
+        drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScaleChart);
         svg.attr("width", chartWidth).attr("height", height);
     };
     return (
         <StyledContainer ref={containerRef}>
             <svg ref={svgRef} />
             <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
-            <CommoditySummaryTable
-                data={processedData}
-                selectedCommodities={selectedCommodities}
-                setSelectedCommodities={setSelectedCommodities}
-            />
+            <CommoditySummaryTable data={processedData} selectedCommodities={selectedCommodities} />
         </StyledContainer>
     );
 }

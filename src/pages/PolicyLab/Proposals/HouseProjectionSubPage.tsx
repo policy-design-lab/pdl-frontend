@@ -143,8 +143,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
             setViewMode(mode);
             return;
         }
-        const yearChanged = Array.isArray(year) ?
-            JSON.stringify(year) !== JSON.stringify(selectedYears)
+        const yearChanged = Array.isArray(year)
+            ? JSON.stringify(year) !== JSON.stringify(selectedYears)
             : year !== selectedYear;
         const commoditiesChanged = JSON.stringify(commodities) !== JSON.stringify(selectedCommodities);
         const programsChanged = JSON.stringify(programs) !== JSON.stringify(selectedPrograms);
@@ -251,12 +251,12 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                 What we can put here?
                                             </Typography>
                                             <Typography paragraph>
-                                                A description of every model: Yifan's model, Henrique's model, Tosh's
-                                                Model, etc
+                                                A description of every model: Yifan&apos;s model, Henrique&apos;s model,
+                                                Tosh&apos;s Model, etc
                                             </Typography>
                                             <Typography paragraph>
-                                                Or description of each year's proposal, depends on the content of the
-                                                submenu
+                                                Or description of each year&apos;s proposal, depends on the content of
+                                                the submenu
                                             </Typography>
                                             <Typography paragraph>Or anything else.</Typography>
                                         </Box>
@@ -273,7 +273,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     >
                                         {getDescriptionContent(
                                             showEQIPProjection
-                                                ? "The following visualizations provide projections and analysis of the proposal in the House Ag Committee's 2024 Farm Bill to rescind Inflation Reduction Act appropriations and reinvest a portion of them in Farm Bill conservation baseline."
+                                                ? "The following visualizations provide projections and analysis of the proposal in the House Ag Committee&apos;s 2024 Farm Bill to rescind Inflation Reduction Act appropriations and reinvest a portion of them in Farm Bill conservation baseline."
                                                 : "The following visualizations provide analysis of ARC-PLC County Payments comparing current policy to proposed 2025 Farm Bill changes.",
                                             showEQIPProjection ? "A" : "B",
                                             showEQIPProjection
@@ -411,9 +411,9 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                     countyData={hModelDistributionData}
                                                     countyDataProposed={hModelDistributionProposedData}
                                                     selectedYear={
-                                                        aggregationEnabled && selectedYears.length > 1 ?
-                                                            selectedYears :
-                                                            selectedYear
+                                                        aggregationEnabled && selectedYears.length > 1
+                                                            ? selectedYears
+                                                            : selectedYear
                                                     }
                                                     viewMode={viewMode}
                                                     selectedCommodities={selectedCommodities}

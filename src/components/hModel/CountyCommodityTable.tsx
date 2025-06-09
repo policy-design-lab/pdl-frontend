@@ -44,13 +44,6 @@ interface ExtendedCountyObject extends CountyObject {
     };
 }
 
-interface ColumnDef {
-    Header: string;
-    accessor: string;
-    disableSortBy: boolean;
-    sortType?: (rowA, rowB, columnId) => number;
-}
-
 const Styles = styled.div`
     width: 100%;
     .tableWrap {
@@ -100,7 +93,21 @@ const Styles = styled.div`
     }
 `;
 
-const CountyCommodityTable = ({
+interface CountyCommodityTableProps {
+    countyData: any;
+    countyDataProposed: any;
+    selectedYear: any;
+    viewMode: string;
+    selectedCommodities: string[];
+    selectedPrograms: string[];
+    selectedState: string;
+    stateCodesData: any;
+    yearAggregation: number;
+    aggregationEnabled: boolean;
+    showMeanValues: boolean;
+}
+
+const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     countyData,
     countyDataProposed,
     selectedYear,
@@ -113,12 +120,10 @@ const CountyCommodityTable = ({
     aggregationEnabled,
     showMeanValues
 }) => {
-    const [isAtTable, setIsAtTable] = useState(false);
     const handleScrollToMap = () => {
         const mapElement = document.getElementById("county-commodity-map");
         if (mapElement) {
             mapElement.scrollIntoView({ behavior: "smooth" });
-            setIsAtTable(false);
         }
     };
     const isAggregatedYear = useMemo(() => {
@@ -1236,11 +1241,11 @@ const CountyCommodityTable = ({
                     });
                 } else {
                     const accessor =
-                        viewMode === "difference" ?
-                            `yearBreakdown.${year}.difference` :
-                            viewMode === "proposed" ?
-                            `yearBreakdown.${year}.proposed` :
-                            `yearBreakdown.${year}.current`;
+                        viewMode === "difference"
+                            ? `yearBreakdown.${year}.difference`
+                            : viewMode === "proposed"
+                            ? `yearBreakdown.${year}.proposed`
+                            : `yearBreakdown.${year}.current`;
                     columns.push({
                         Header: `${year} Payment`,
                         accessor,
@@ -1376,9 +1381,9 @@ const CountyCommodityTable = ({
                 sortBy.includes("yearBreakdown") ||
                 sortBy.includes("commodityBreakdown") ||
                 sortBy.includes("programBreakdown");
-            const isEmpty = isNumericColumn ?
-                value === undefined || value === null || value === "" || value === 0 :
-                !value || value === "";
+            const isEmpty = isNumericColumn
+                ? value === undefined || value === null || value === "" || value === 0
+                : !value || value === "";
 
             if (isEmpty) {
                 withoutValues.push(row);

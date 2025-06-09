@@ -11,8 +11,13 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
     notDollar,
     regionType = "county"
 }) => {
-    const regionPlural =
-        tooltipData.regionCount !== 1 ? (regionType === "county" ? "counties" : `${regionType}s`) : regionType;
+    const getRegionPlural = () => {
+        if (tooltipData.regionCount === 1) {
+            return regionType;
+        }
+        return regionType === "county" ? "counties" : `${regionType}s`;
+    };
+    const regionPlural = getRegionPlural();
     const valueLabel = notDollar ? "Rate" : "Amount";
     const hasHighestValueInfo =
         tooltipData.regionCount === 0 &&
@@ -47,8 +52,8 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                         </strong>{" "}
                         percentile range have the highest rates.
                         <div style={{ marginTop: "8px" }}>
-                            This means they're in the top {100 - parseInt(startPercentile)}% of all counties when sorted
-                            by payment rate, receiving the most significant financial support per acre.
+                            This means they&apos;re in the top {100 - parseInt(startPercentile, 10)}% of all counties
+                            when sorted by payment rate, receiving the most significant financial support per acre.
                         </div>
                     </>
                 ) : (
@@ -59,8 +64,8 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                         </strong>{" "}
                         percentile range receive the highest payments.
                         <div style={{ marginTop: "8px" }}>
-                            This means they're in the top {100 - parseInt(startPercentile)}% of all counties when sorted
-                            by total payment, receiving the most substantial overall financial support.
+                            This means they&apos;re in the top {100 - parseInt(startPercentile, 10)}% of all counties
+                            when sorted by total payment, receiving the most substantial overall financial support.
                         </div>
                     </>
                 );
@@ -74,8 +79,8 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                         </strong>{" "}
                         percentile range have the lowest rates.
                         <div style={{ marginTop: "8px" }}>
-                            This means they're in the bottom {parseInt(endPercentile)}% of all counties when sorted by
-                            payment rate, receiving minimal financial support per acre.
+                            This means they&apos;re in the bottom {parseInt(endPercentile, 10)}% of all counties when
+                            sorted by payment rate, receiving minimal financial support per acre.
                         </div>
                     </>
                 ) : (
@@ -86,13 +91,13 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                         </strong>{" "}
                         percentile range receive the lowest payments.
                         <div style={{ marginTop: "8px" }}>
-                            This means they're in the bottom {parseInt(endPercentile)}% of all counties when sorted by
-                            total payment, receiving minimal overall financial support.
+                            This means they&apos;re in the bottom {parseInt(endPercentile, 10)}% of all counties when
+                            sorted by total payment, receiving minimal overall financial support.
                         </div>
                     </>
                 );
             }
-            if (parseInt(startPercentile) >= 80) {
+            if (parseInt(startPercentile, 10) >= 80) {
                 return notDollar ? (
                     <>
                         {tooltipData.regionCount} {regionPlural} with <strong>payment rates</strong> in the{" "}
@@ -121,7 +126,7 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                     </>
                 );
             }
-            if (parseInt(endPercentile) <= 20) {
+            if (parseInt(endPercentile, 10) <= 20) {
                 return notDollar ? (
                     <>
                         {tooltipData.regionCount} {regionPlural} with <strong>payment rates</strong> in the{" "}
@@ -188,7 +193,7 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                     percentile range shows the highest <strong>payment rate</strong> values.
                     <div style={{ marginTop: "8px" }}>
                         There are no {regionPlural} in this range, which would represent the top{" "}
-                        {100 - parseInt(startPercentile)}% of counties if any existed here.
+                        {100 - parseInt(startPercentile, 10)}% of counties if any existed here.
                     </div>
                 </>
             ) : (
@@ -200,7 +205,7 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                     percentile range shows the highest <strong>total payment</strong> values.
                     <div style={{ marginTop: "8px" }}>
                         There are no {regionPlural} in this range, which would represent the top{" "}
-                        {100 - parseInt(startPercentile)}% of counties if any existed here.
+                        {100 - parseInt(startPercentile, 10)}% of counties if any existed here.
                     </div>
                 </>
             );
@@ -215,7 +220,7 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                     percentile range shows the lowest <strong>payment rate</strong> values.
                     <div style={{ marginTop: "8px" }}>
                         There are no {regionPlural} in this range, which would represent the bottom{" "}
-                        {parseInt(endPercentile)}% of counties if any existed here.
+                        {parseInt(endPercentile, 10)}% of counties if any existed here.
                     </div>
                 </>
             ) : (
@@ -227,7 +232,7 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
                     percentile range shows the lowest <strong>total payment</strong> values.
                     <div style={{ marginTop: "8px" }}>
                         There are no {regionPlural} in this range, which would represent the bottom{" "}
-                        {parseInt(endPercentile)}% of counties if any existed here.
+                        {parseInt(endPercentile, 10)}% of counties if any existed here.
                     </div>
                 </>
             );

@@ -277,9 +277,9 @@ export const formatCellValue = (
         return cell.value && cell.value > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" && cell.value > 0 ?
-            formatNumericValue(cell.value).toFixed(2) :
-            cell.value;
+        return typeof cell.value === "number" && cell.value > 0
+            ? formatNumericValue(cell.value).toFixed(2)
+            : cell.value;
     }
     if (includesDot) {
         return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";

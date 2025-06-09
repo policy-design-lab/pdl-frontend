@@ -82,8 +82,6 @@ export const processMapData = ({
     }
 
     const stateFilterActive = selectedState !== "All States";
-    let processedAnyCounties = false;
-
     if (stateFilterActive) {
         const stateCodeMapping = {};
         Object.entries(stateCodesData).forEach(([code, name]) => {
@@ -116,12 +114,10 @@ export const processMapData = ({
                 }
             }
             state.counties.forEach((county) => {
-                processedAnyCounties = true;
-
                 const countyFIPS =
-                    county.countyFIPS && county.countyFIPS.length < 5
-                        ? county.countyFIPS.padStart(5, "0")
-                        : county.countyFIPS;
+                    county.countyFIPS && county.countyFIPS.length < 5 ?
+                        county.countyFIPS.padStart(5, "0") :
+                        county.countyFIPS;
 
                 if (!counties[countyFIPS]) {
                     counties[countyFIPS] = {
@@ -349,12 +345,13 @@ export const processMapData = ({
         }
         county.percentChange = calculatePercentChange(county.currentValue, county.proposedValue);
         Object.values(county.commodities).forEach((commodity: any) => {
-            commodity.value =
-                viewMode === "difference"
-                    ? commodity.proposedValue - commodity.currentValue
-                    : viewMode === "proposed"
-                    ? commodity.proposedValue
-                    : commodity.currentValue;
+            if (viewMode === "difference") {
+                commodity.value = commodity.proposedValue - commodity.currentValue;
+            } else if (viewMode === "proposed") {
+                commodity.value = commodity.proposedValue;
+            } else {
+                commodity.value = commodity.currentValue;
+            }
         });
 
         Object.values(county.programs).forEach((program: any) => {
@@ -373,7 +370,7 @@ export const processMapData = ({
         county.hasValidBaseAcres = county.baseAcres > 0;
 
         if (county.programs) {
-            Object.entries(county.programs).forEach(([programName, programData]: [string, any]) => {
+            Object.entries(county.programs).forEach(([, programData]: [string, any]) => {
                 if (programData.currentBaseAcres > 0) {
                     programData.currentMeanRate = programData.currentValue / programData.currentBaseAcres;
                     programData.currentMeanRate = Math.round(programData.currentMeanRate * 100) / 100;
@@ -445,11 +442,11 @@ export const processMapData = ({
         if (showMeanValues) {
             if (county.hasValidBaseAcres) {
                 if (viewMode === "difference") {
-                    if (isFinite(county.meanRateDifference) && county.meanRateDifference !== 0) {
+                    if (Number.isFinite(county.meanRateDifference) && county.meanRateDifference !== 0) {
                         dataValues.push(county.meanRateDifference);
                     }
                 } else if (
-                    isFinite(county.meanPaymentRateInDollarsPerAcre) &&
+                    Number.isFinite(county.meanPaymentRateInDollarsPerAcre) &&
                     county.meanPaymentRateInDollarsPerAcre !== 0
                 ) {
                     dataValues.push(county.meanPaymentRateInDollarsPerAcre);
@@ -515,7 +512,7 @@ export const processMapData = ({
                     stateCodesForSelectedState.push(code);
                 }
             });
-            for (const year of availableYears) {
+            availableYears.forEach((year) => {
                 const yearData = countyData[year] || [];
                 yearData.forEach((state) => {
                     const stateCode = state.state;
@@ -600,7 +597,7 @@ export const processMapData = ({
                         });
                     }
                 });
-            }
+            });
 
             if (!foundCounties) {
                 return { counties: {}, thresholds: [], data: [], selectedCommodities, selectedPrograms };
@@ -611,7 +608,8 @@ export const processMapData = ({
     }
 
     const validDataValues = dataValues.filter(
-        (value) => value !== undefined && value !== null && !isNaN(value) && value !== 0 && isFinite(value)
+        (value) =>
+            value !== undefined && value !== null && !Number.isNaN(value) && value !== 0 && Number.isFinite(value)
     );
 
     const percentiles = getMapPercentiles(percentileMode);
