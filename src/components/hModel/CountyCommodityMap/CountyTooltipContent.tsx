@@ -92,7 +92,7 @@ export const CountyTooltipContent = ({
             <table class="${classes.tooltip_table}" style="border-spacing: 0; width: 100%; padding: 8px 0 10px 0;">
             <tbody>`;
 
-    const isMultiYearSelection = Array.isArray(selectedYears) && selectedYears.length > 1;
+    const isMultiYearSelection = selectedYears && selectedYears.length > 1;
     const hasYearAggregation = yearAggregation > 0;
 
     if (!(isMultiYearSelection || hasYearAggregation)) {
@@ -117,11 +117,7 @@ export const CountyTooltipContent = ({
 
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, showMeanValues);
-        if (
-            (yearAggregation > 0 || isMultiYearSelection) &&
-            countyData.yearlyData &&
-            Object.keys(countyData.yearlyData).length > 0
-        ) {
+        if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
             tooltipContent += generateYearBreakdownDifferenceContent(
                 countyData,
                 classes,
@@ -327,11 +323,7 @@ function generateRegularTooltipContent(
         </tr>`;
     }
     const isMultiYearSelection = selectedYears && selectedYears.length > 1;
-    if (
-        (yearAggregation > 0 || isMultiYearSelection) &&
-        countyData.yearlyData &&
-        Object.keys(countyData.yearlyData).length > 0
-    ) {
+    if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
         content += generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears);
     }
     return content;
@@ -1146,10 +1138,7 @@ function generateCommodityRegularContent(
                     </td>
                 </tr>`;
 
-                if (
-                    (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
-                    countyData.commodities[commodity].yearBreakdown
-                ) {
+                if (yearAggregation > 0 && countyData.commodities[commodity].yearBreakdown) {
                     const commodityYears =
                         selectedYears && selectedYears.length > 0
                             ? Object.keys(commodityData.yearlyData || {}).filter((year) => selectedYears.includes(year))

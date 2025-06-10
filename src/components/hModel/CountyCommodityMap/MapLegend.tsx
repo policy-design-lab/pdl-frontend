@@ -73,21 +73,43 @@ const MapLegend = ({
         >
             <Box
                 display="flex"
-                justifyContent="center"
-                alignItems="center"
+                justifyContent="space-between"
+                alignItems="flex-start"
                 mb={1}
                 width="100%"
-                sx={{ px: 2, position: "relative" }}
+                sx={{
+                    px: 2,
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: { xs: 1, md: 0 }
+                }}
             >
-                <Box sx={{ flex: 1, visibility: "hidden", minWidth: 190 }}>
-                    {/* Spacer element to balance the title */}
-                </Box>
-                <Box sx={{ textAlign: "center", position: "absolute", left: 0, right: 0, margin: "0 auto" }}>
-                    <Typography variant="h6" noWrap>
+                <Box
+                    sx={{
+                        flex: 1,
+                        textAlign: { xs: "center", md: "center" },
+                        pr: { xs: 0, md: 2 },
+                        order: { xs: 2, md: 1 }
+                    }}
+                >
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            wordBreak: "break-word",
+                            lineHeight: 1.2,
+                            fontSize: { xs: "1rem", md: "1.25rem" }
+                        }}
+                    >
                         {getLegendTitle()}
                     </Typography>
                 </Box>
-                <Box sx={{ minWidth: 190, flexShrink: 0, zIndex: 1 }}>
+                <Box
+                    sx={{
+                        minWidth: { xs: "100%", md: 190 },
+                        flexShrink: 0,
+                        zIndex: 1,
+                        order: { xs: 1, md: 2 }
+                    }}
+                >
                     <FormControl size="small" fullWidth>
                         <Box display="flex" alignItems="center">
                             <InputLabel id="percentile-mode-label">Map Coloring</InputLabel>
@@ -124,7 +146,6 @@ const MapLegend = ({
                         Array.isArray(selectedYear) ? selectedYear.join("-") : selectedYear
                     }-${viewMode}-${showMeanValues}-${selectedState}-${yearAggregation}-${percentileMode}`}
                     colorScale={colorScale}
-                    title={null}
                     programData={mapData.data}
                     prepColor={mapColor}
                     emptyState={[]}
@@ -132,7 +153,6 @@ const MapLegend = ({
                     notDollar={false}
                     isPaymentRate={showMeanValues}
                     countyData={mapData.counties}
-                    showPercentileExplanation
                     stateCodeToName={stateCodeToName}
                     showTooltips={showTooltips}
                     regionType="county"

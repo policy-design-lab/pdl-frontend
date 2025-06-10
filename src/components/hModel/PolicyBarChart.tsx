@@ -13,6 +13,7 @@ import {
     Box
 } from "@mui/material";
 import { ShortFormat, CurrencyFormat } from "../shared/ConvertionFormats";
+import { transformYearDataForward } from "./utils";
 
 interface CommodityData {
     commodityName: string;
@@ -413,25 +414,6 @@ const CommoditySummaryTable: React.FC<{
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box sx={{ minWidth: 200, pt: 1 }}>
-                    <Typography
-                        sx={{ fontWeight: 600, fontSize: "0.9rem", color: "#2F7164", mb: 2, textAlign: "center" }}
-                    >
-                        Visual Comparison
-                    </Typography>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Box sx={{ mt: 2, pt: 2, borderTop: 2, borderColor: "#2F7164" }}>
-                            <Typography sx={{ fontSize: "0.85rem", fontWeight: 700, mb: 1, color: "#2F7164" }}>
-                                All Commodities
-                            </Typography>
-                            <MiniBarChart
-                                current={overallTotals.currentTotal}
-                                proposed={overallTotals.proposedTotal}
-                                isOverall
-                            />
-                        </Box>
-                    </Box>
-                </Box>
             </Box>
         </Box>
     );
@@ -462,10 +444,12 @@ export default function PolicyBarChart({
     }, []);
     const processData = React.useCallback(() => {
         if (!data || !data.current || !data.proposed) return;
-        const years = Object.keys(data.current);
+        const transformedCurrentData = transformYearDataForward(data.current);
+        const transformedProposedData = transformYearDataForward(data.proposed);
+        const years = Object.keys(transformedCurrentData);
         const processed: YearData[] = years.map((year) => {
-            const currentYearDataArray = data.current[year] || [];
-            const proposedYearDataArray = data.proposed[year] || [];
+            const currentYearDataArray = transformedCurrentData[year] || [];
+            const proposedYearDataArray = transformedProposedData[year] || [];
             const getCurrentTotal = (yearDataArray: StateData[]) => {
                 if (!yearDataArray || yearDataArray.length === 0) return 0;
                 let total = 0;
@@ -750,14 +734,14 @@ export default function PolicyBarChart({
             chartData.forEach((yearData) => {
                 const commodityData = yearData[type].commodities;
                 const visibleCommodities =
-                    selectedCommodities.length === 0 ?
-                        commodityData :
-                        commodityData.filter((c) => selectedCommodities.includes(c.commodityName));
+                    selectedCommodities.length === 0
+                        ? commodityData
+                        : commodityData.filter((c) => selectedCommodities.includes(c.commodityName));
                 let cumulativeHeight = 0;
                 const totalPayment =
-                    selectedCommodities.length === 0 ?
-                        yearData[type].totalPayment :
-                        visibleCommodities.reduce((sum, c) => sum + c.totalPaymentInDollars, 0);
+                    selectedCommodities.length === 0
+                        ? yearData[type].totalPayment
+                        : visibleCommodities.reduce((sum, c) => sum + c.totalPaymentInDollars, 0);
 
                 chartGroup
                     .append("text")

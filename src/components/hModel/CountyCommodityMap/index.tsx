@@ -39,6 +39,7 @@ const CountyCommodityMap = ({
     const [isAtTop, setIsAtTop] = useState(false);
     const [percentileMode, setPercentileMode] = useState(PercentileMode.DEFAULT);
     const [mapInitialized, setMapInitialized] = useState(false);
+    const [showTableButton, setShowTableButton] = useState(true);
     const prevValuesRef = useRef<{
         selectedYear: string | null;
         selectedYears: string[];
@@ -183,6 +184,7 @@ const CountyCommodityMap = ({
             setSelectedCommodities(newValue);
             setForceUpdate((prev) => prev + 1);
             setIsAtTop(false);
+            setShowTableButton(true);
         }
     };
     const handleSetSelectedPrograms = (newValue) => {
@@ -190,6 +192,7 @@ const CountyCommodityMap = ({
             setSelectedPrograms(newValue);
             setForceUpdate((prev) => prev + 1);
             setIsAtTop(false);
+            setShowTableButton(true);
         }
     };
     const handleSetSelectedState = (newValue) => {
@@ -197,6 +200,7 @@ const CountyCommodityMap = ({
             setSelectedState(newValue);
             setForceUpdate((prev) => prev + 1);
             setIsAtTop(false);
+            setShowTableButton(true);
         }
     };
     const handleTooltipChange = (newContent) => {
@@ -205,14 +209,37 @@ const CountyCommodityMap = ({
     const handleSetViewMode = (newValue) => {
         setViewMode(newValue);
         setIsAtTop(false);
+        setShowTableButton(true);
     };
     const handleScrollToTable = () => {
         const tableElement = document.getElementById("county-commodity-table");
         if (tableElement) {
             tableElement.scrollIntoView({ behavior: "smooth" });
             setIsAtTop(true);
+            setShowTableButton(false);
         }
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const tableElement = document.getElementById("county-commodity-table");
+            if (tableElement) {
+                const rect = tableElement.getBoundingClientRect();
+                const isTableVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                setShowTableButton(!isTableVisible);
+                if (isTableVisible) {
+                    setIsAtTop(true);
+                } else {
+                    setIsAtTop(false);
+                }
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
     const handlePercentileModeChange = (newMode) => {
         if (newMode !== percentileMode) {
             setPercentileMode(newMode);
@@ -335,27 +362,29 @@ const CountyCommodityMap = ({
                         availableYears={availableYears}
                         viewMode={viewMode}
                         yearRange={yearRange}
-                        yearAggregation={yearAggregation}
                         showMeanValues={showMeanValues}
                         proposedPolicyName={proposedPolicyName}
                         setViewMode={handleSetViewMode}
                         setYearRange={(newValue) => {
                             setYearRange(newValue);
                             setIsAtTop(false);
+                            setShowTableButton(true);
                         }}
                         setShowMeanValues={(newValue) => {
                             setShowMeanValues(newValue);
                             setIsAtTop(false);
+                            setShowTableButton(true);
                         }}
                         setProposedPolicyName={setProposedPolicyName}
-                        aggregationEnabled={aggregationEnabled}
                         setAggregationEnabled={(newValue) => {
                             setAggregationEnabled(newValue);
                             setIsAtTop(false);
+                            setShowTableButton(true);
                         }}
                         setYearAggregation={(newValue) => {
                             setYearAggregation(newValue);
                             setIsAtTop(false);
+                            setShowTableButton(true);
                         }}
                     />
                     <Box
@@ -424,12 +453,12 @@ const CountyCommodityMap = ({
                     selectedCommodities.length > 0 &&
                     !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
                 const hasYearSelection = aggregationEnabled && (yearRange.length > 1 || yearAggregation > 0);
-                const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop;
+                const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop && showTableButton;
                 if (!shouldShowButton) return null;
-                let message = "View detailed breakdown in table";
+                let message = "View table";
                 const breakdowns: string[] = [];
-                if (hasCommoditySelection) breakdowns.push("Commodity breakdown");
-                if (hasYearSelection) breakdowns.push("Yearly breakdown");
+                if (hasCommoditySelection) breakdowns.push("Commodity");
+                if (hasYearSelection) breakdowns.push("Yearly");
                 if (breakdowns.length > 0) {
                     message += ` (${breakdowns.join(", ")})`;
                 }
@@ -438,14 +467,14 @@ const CountyCommodityMap = ({
                         style={{
                             position: "fixed",
                             bottom: "20px",
-                            left: "50%",
-                            transform: "translateX(-50%)",
+                            right: "20px",
                             zIndex: 1000
                         }}
                     >
                         <Button
                             variant="contained"
                             onClick={handleScrollToTable}
+                            size="small"
                             sx={{
                                 "backgroundColor": "rgba(47, 113, 100, 0.9)",
                                 "&:hover": {
@@ -453,14 +482,16 @@ const CountyCommodityMap = ({
                                 },
                                 "display": "flex",
                                 "alignItems": "center",
-                                "gap": "8px",
-                                "padding": "12px 20px",
-                                "borderRadius": "8px",
-                                "fontWeight": 500
+                                "gap": "6px",
+                                "padding": "8px 12px",
+                                "borderRadius": "6px",
+                                "fontWeight": 500,
+                                "fontSize": "0.875rem",
+                                "textTransform": "none"
                             }}
                         >
                             <span>{message}</span>
-                            <TableChartIcon />
+                            <TableChartIcon sx={{ fontSize: "18px" }} />
                         </Button>
                     </div>
                 );

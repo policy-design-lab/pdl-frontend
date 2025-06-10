@@ -347,101 +347,119 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                         <>
                                             <Box
                                                 sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: 1,
-                                                    px: 3,
-                                                    pt: 3,
-                                                    pb: 1
+                                                    mb: 3
                                                 }}
                                             >
-                                                <Typography
+                                                <Box
                                                     sx={{
-                                                        fontWeight: 600,
-                                                        fontSize: "1.5rem",
-                                                        color: "#2F7164",
-                                                        mb: 0,
-                                                        textAlign: "center"
+                                                        backgroundColor: "white",
+                                                        borderRadius: 1,
+                                                        px: 3,
+                                                        pt: 3,
+                                                        pb: 1
                                                     }}
                                                 >
-                                                    Interactive Map & Data Analysis
-                                                </Typography>
-                                                <Typography
+                                                    <Typography
+                                                        sx={{
+                                                            fontWeight: 600,
+                                                            fontSize: "1.5rem",
+                                                            color: "#2F7164",
+                                                            mb: 0,
+                                                            textAlign: "center"
+                                                        }}
+                                                    >
+                                                        Interactive Map & Data Analysis
+                                                    </Typography>
+                                                    <Typography
+                                                        sx={{
+                                                            fontSize: "0.875rem",
+                                                            color: "#666",
+                                                            fontStyle: "italic",
+                                                            mb: 1,
+                                                            textAlign: "center"
+                                                        }}
+                                                    >
+                                                        Use controls to filter data and interact with the map for
+                                                        detailed county information
+                                                    </Typography>
+                                                    <CountyCommodityMap
+                                                        countyData={hModelDistributionData}
+                                                        countyDataProposed={hModelDistributionProposedData}
+                                                        stateCodesData={metaData.stateCodesData}
+                                                        allStates={metaData.allStates}
+                                                        availableCommodities={availableCommodities}
+                                                        availablePrograms={availablePrograms}
+                                                        availableYears={availableYears}
+                                                        isLoading={!hModelDataReady}
+                                                        onMapUpdate={handleMapUpdate}
+                                                        showMeanValues={showMeanValues}
+                                                        setShowMeanValues={setShowMeanValues}
+                                                        yearAggregation={yearAggregation}
+                                                        setYearAggregation={setYearAggregation}
+                                                        aggregationEnabled={aggregationEnabled}
+                                                        setAggregationEnabled={setAggregationEnabled}
+                                                        stateCodeToName={metaData.stateCodesArray.reduce(
+                                                            (acc, curr) => {
+                                                                acc[curr.code] = curr.name;
+                                                                return acc;
+                                                            },
+                                                            {}
+                                                        )}
+                                                    />
+                                                </Box>
+                                                <Box
                                                     sx={{
-                                                        fontSize: "0.875rem",
-                                                        color: "#666",
-                                                        fontStyle: "italic",
-                                                        mb: 1,
-                                                        textAlign: "center"
+                                                        backgroundColor: "white",
+                                                        borderRadius: 1,
+                                                        p: 3,
+                                                        width: "100%",
+                                                        borderTop: "1px solid #e0e0e0"
                                                     }}
                                                 >
-                                                    Use controls to filter data and interact with the map for detailed
-                                                    county information
-                                                </Typography>
-                                                <CountyCommodityMap
-                                                    countyData={hModelDistributionData}
-                                                    countyDataProposed={hModelDistributionProposedData}
-                                                    stateCodesData={metaData.stateCodesData}
-                                                    allStates={metaData.allStates}
-                                                    availableCommodities={availableCommodities}
-                                                    availablePrograms={availablePrograms}
-                                                    availableYears={availableYears}
-                                                    isLoading={!hModelDataReady}
-                                                    onMapUpdate={handleMapUpdate}
-                                                    showMeanValues={showMeanValues}
-                                                    setShowMeanValues={setShowMeanValues}
-                                                    yearAggregation={yearAggregation}
-                                                    setYearAggregation={setYearAggregation}
-                                                    aggregationEnabled={aggregationEnabled}
-                                                    setAggregationEnabled={setAggregationEnabled}
-                                                    stateCodeToName={metaData.stateCodesArray.reduce((acc, curr) => {
-                                                        acc[curr.code] = curr.name;
-                                                        return acc;
-                                                    }, {})}
-                                                />
-                                            </Box>
-                                            <Box
-                                                sx={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: 1,
-                                                    p: 3,
-                                                    width: "100%"
-                                                }}
-                                            >
-                                                <CountyCommodityTable
-                                                    countyData={hModelDistributionData}
-                                                    countyDataProposed={hModelDistributionProposedData}
-                                                    selectedYear={
-                                                        aggregationEnabled && selectedYears.length > 1
-                                                            ? selectedYears
-                                                            : selectedYear
-                                                    }
-                                                    viewMode={viewMode}
-                                                    selectedCommodities={selectedCommodities}
-                                                    selectedPrograms={selectedPrograms}
-                                                    selectedState={selectedState}
-                                                    stateCodesData={metaData.stateCodesData}
-                                                    showMeanValues={showMeanValues}
-                                                    yearAggregation={yearAggregation}
-                                                    aggregationEnabled={aggregationEnabled}
-                                                />
+                                                    <CountyCommodityTable
+                                                        countyData={hModelDistributionData}
+                                                        countyDataProposed={hModelDistributionProposedData}
+                                                        selectedYear={
+                                                            aggregationEnabled && selectedYears.length > 1
+                                                                ? selectedYears
+                                                                : selectedYear
+                                                        }
+                                                        viewMode={viewMode}
+                                                        selectedCommodities={selectedCommodities}
+                                                        selectedPrograms={selectedPrograms}
+                                                        selectedState={selectedState}
+                                                        stateCodesData={metaData.stateCodesData}
+                                                        showMeanValues={showMeanValues}
+                                                        yearAggregation={yearAggregation}
+                                                        aggregationEnabled={aggregationEnabled}
+                                                    />
+                                                </Box>
                                             </Box>
                                             {hModelDataReady &&
                                                 Object.keys(hModelDistributionData).length > 0 &&
                                                 Object.keys(hModelDistributionProposedData).length > 0 && (
                                                     <Box
                                                         sx={{
-                                                            backgroundColor: "white",
-                                                            borderRadius: 1,
-                                                            px: 3,
-                                                            pt: 3,
-                                                            pb: 1
+                                                            border: "2px solid rgba(47, 113, 100, 0.3)",
+                                                            borderRadius: 2,
+                                                            overflow: "visible"
                                                         }}
                                                     >
-                                                        <PolicyComparisonSection
-                                                            currentData={hModelDistributionData}
-                                                            proposedData={hModelDistributionProposedData}
-                                                            title="Policy Impact Analysis: Payment Projections"
-                                                        />
+                                                        <Box
+                                                            sx={{
+                                                                backgroundColor: "white",
+                                                                borderRadius: 1,
+                                                                px: 3,
+                                                                pt: 3,
+                                                                pb: 1
+                                                            }}
+                                                        >
+                                                            <PolicyComparisonSection
+                                                                currentData={hModelDistributionData}
+                                                                proposedData={hModelDistributionProposedData}
+                                                                title="Policy Impact Analysis: Payment Projections"
+                                                            />
+                                                        </Box>
                                                     </Box>
                                                 )}
                                         </>

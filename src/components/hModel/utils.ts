@@ -296,3 +296,24 @@ export const formatCellValue = (
 
     return cell.render("Cell");
 };
+
+export const transformYearDataForward = (data: Record<string, any>): Record<string, any> => {
+    const years = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
+    const transformedData: Record<string, any> = {};
+    const yearsToProcess = years.slice(0, -2);
+    yearsToProcess.forEach((year) => {
+        const newYear = (parseInt(year) + 2).toString();
+        transformedData[newYear] = data[year];
+    });
+    return transformedData;
+};
+
+export const transformYearDataBackward = (data: Record<string, any>): Record<string, any> => {
+    const years = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
+    const transformedData: Record<string, any> = {};
+    years.forEach((year) => {
+        const newYear = (parseInt(year) - 2).toString();
+        transformedData[newYear] = data[year];
+    });
+    return transformedData;
+};

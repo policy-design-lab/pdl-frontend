@@ -721,26 +721,28 @@ const CountyMap = ({
                 sx={{
                     position: "absolute",
                     bottom: 10,
-                    left: "50%",
-                    transform: "translateX(-50%)",
+                    right: 10,
                     zIndex: 2000,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
+                    alignItems: "flex-end",
                     gap: 1,
                     pointerEvents: "auto"
                 }}
             >
                 <Box
                     sx={{
-                        fontSize: "12px",
+                        fontSize: "11px",
                         color: "#666",
                         backgroundColor: "rgba(255, 255, 255, 0.9)",
                         padding: "4px 8px",
                         borderRadius: "4px",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-                        pointerEvents: "auto"
+                        pointerEvents: "auto",
+                        textAlign: "center",
+                        maxWidth: "180px"
                     }}
+                    title="Use these buttons to zoom instead of mouse scroll to avoid accidental zoom changes"
                 >
                     Map Zoom Controls
                 </Box>
