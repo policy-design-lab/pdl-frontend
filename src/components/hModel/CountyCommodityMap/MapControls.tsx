@@ -2,7 +2,21 @@ import React from "react";
 import { Box, Grid, ToggleButton, ToggleButtonGroup, FormLabel } from "@mui/material";
 import InfoTooltip from "./InfoTooltip";
 
-const MapControls = ({
+interface MapControlsProps {
+    availableYears: string[];
+    viewMode: string;
+    yearRange: number[];
+    showMeanValues: boolean;
+    proposedPolicyName: string;
+    setViewMode: (mode: string) => void;
+    setYearRange: (range: number[]) => void;
+    setShowMeanValues: (show: boolean) => void;
+    setProposedPolicyName: (name: string) => void;
+    setAggregationEnabled: (enabled: boolean) => void;
+    setYearAggregation: (aggregation: number) => void;
+}
+
+const MapControls: React.FC<MapControlsProps> = ({
     availableYears,
     viewMode,
     yearRange,
@@ -219,7 +233,7 @@ const MapControls = ({
                 >
                     {availableYears.map((year, index) => (
                         <ToggleButton
-                            key={index}
+                            key={`year-${year}`}
                             value={index}
                             selected={yearRange.includes(index)}
                             onClick={() => {

@@ -17,6 +17,33 @@ export interface CountyObject {
     [key: string]: string | number | { [year: string]: YearBreakdownData } | undefined;
 }
 
+interface Program {
+    programName: string;
+    totalPaymentInDollars?: number;
+    baseAcres?: number;
+}
+
+interface Commodity {
+    commodityName: string;
+    programs: Program[];
+    value?: number;
+}
+
+interface Scenario {
+    scenarioName: string;
+    commodities: Commodity[];
+}
+
+interface CountyData {
+    scenarios: Scenario[];
+    commodities?: { [key: string]: { value?: number } };
+}
+
+interface TableCell {
+    value: string | number;
+    render: (type: string) => string | number;
+}
+
 export const formatCurrency = (value: number, options = { minimumFractionDigits: 2 }): string => {
     const roundedValue = Math.round(value * 100) / 100;
     return `$${roundedValue.toLocaleString(undefined, options)}`;
@@ -31,7 +58,7 @@ export const getCountyNameFromFips = (countyFIPS: string): string => {
 };
 
 export const calculateTotals = (
-    county: any,
+    county: CountyData,
     selectedCommodities: string[],
     selectedPrograms: string[]
 ): { currentTotal: number; proposedTotal: number } => {
@@ -57,16 +84,21 @@ export const calculateTotals = (
 };
 
 export const findProposedCommodityAndProgram = (
-    proposedCounty: any,
+    proposedCounty: CountyData,
     scenarioName: string,
     commodityName: string,
     programName: string
-): { proposedScenario: any; proposedCommodity: any; proposedProgram: any } => {
+): {
+    proposedScenario: Scenario | undefined;
+    proposedCommodity: Commodity | undefined;
+    proposedProgram: Program | undefined;
+} => {
     const proposedScenario = proposedCounty?.scenarios.find((s) => s.scenarioName === scenarioName);
     const proposedCommodity = proposedScenario?.commodities.find((c) => c.commodityName === commodityName);
     const proposedProgram = proposedCommodity?.programs.find((p) => p.programName === programName);
     return { proposedScenario, proposedCommodity, proposedProgram };
 };
+
 export const calculateYearRange = (selectedYear: string | string[]): string[] => {
     if (Array.isArray(selectedYear)) {
         return selectedYear;
@@ -75,13 +107,13 @@ export const calculateYearRange = (selectedYear: string | string[]): string[] =>
     if (!isAggregatedYear) return [selectedYear];
     const [startYear, endYear] = selectedYear.split("-").map((y) => parseInt(y.trim(), 10));
     const years: string[] = [];
-    for (let year = startYear; year <= endYear; year++) {
+    for (let year = startYear; year <= endYear; year += 1) {
         years.push(year.toString());
     }
     return years;
 };
 
-export const compareWithDollarSign = (a: any, b: any) => {
+export const compareWithDollarSign = (a: string | number, b: string | number): number => {
     if (typeof a === "string" && typeof b === "string") {
         const numA = parseFloat(a.replace(/[^0-9.-]+/g, ""));
         const numB = parseFloat(b.replace(/[^0-9.-]+/g, ""));
@@ -99,16 +131,13 @@ export const generateTableTitle = (
 ): string => {
     let yearPart = "";
     if (Array.isArray(selectedYear)) {
-        // Handle multiple selected years
         if (selectedYear.length === 1) {
             yearPart = `Year ${selectedYear[0]}`;
         } else {
-            // Sort years numerically for consistent display
             const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
             yearPart = `Years ${sortedYears.join(", ")} (Aggregated)`;
         }
     } else {
-        // Handle single year or traditional aggregated year
         yearPart = isAggregatedYear ? `Years ${selectedYear} (Aggregated)` : `Year ${selectedYear}`;
     }
     let commodityPart = "";
@@ -166,7 +195,7 @@ export const generateCsvFilename = (
     return `arc-plc-payments-${yearStr}-${commodityStr}-${programStr}-${viewMode}-${dateStr}.csv`;
 };
 
-export const calculateMeanRates = (county: any, baseAcres: number, weightedMean: number): number => {
+export const calculateMeanRates = (county: CountyData, baseAcres: number, weightedMean: number): number => {
     if (baseAcres > 0) {
         return weightedMean / baseAcres;
     }
@@ -176,8 +205,7 @@ export const calculateMeanRates = (county: any, baseAcres: number, weightedMean:
 export const calculateWeightedMeanRate = (
     totalPayments: number,
     totalBaseAcres: number,
-    isMultiSelection = false,
-    numberOfYears = 1
+    isMultiSelection = false
 ): { rate: number; isWeightedAverage: boolean } => {
     if (totalBaseAcres > 0) {
         const preciseRate = totalPayments / totalBaseAcres;
@@ -190,7 +218,7 @@ export const calculateWeightedMeanRate = (
 };
 
 export const getTotalBaseAcres = (
-    county: any,
+    county: CountyData,
     selectedCommodities: string[] = ["All Commodities"],
     selectedPrograms: string[] = ["All Programs"],
     scenarioType = "Current"
@@ -249,12 +277,12 @@ export const getPaymentRateForTooltip = (rate: number, isWeightedAverage: boolea
     return isWeightedAverage ? `${rateFormatted}/acre (weighted avg)` : `${rateFormatted}/acre`;
 };
 
-export const isDataValid = (county: any): boolean => {
+export const isDataValid = (county: CountyData): boolean => {
     let hasAnyRealData = false;
     let totalRealPayment = 0;
     if (county.commodities) {
-        Object.values(county.commodities).forEach((commodity: any) => {
-            const commodityValue = parseFloat(commodity.value || 0);
+        Object.values(county.commodities).forEach((commodity) => {
+            const commodityValue = parseFloat(commodity.value?.toString() || "0");
             if (commodityValue > 0) {
                 hasAnyRealData = true;
                 totalRealPayment += commodityValue;
@@ -265,7 +293,7 @@ export const isDataValid = (county: any): boolean => {
 };
 
 export const formatCellValue = (
-    cell: any,
+    cell: TableCell,
     includesDot: boolean,
     includesPaymentRate: boolean,
     headerIncludesRate: boolean,
@@ -274,7 +302,7 @@ export const formatCellValue = (
     accessor: string
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
-        return cell.value && cell.value > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
+        return cell.value && Number(cell.value) > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
         return typeof cell.value === "number" && cell.value > 0
@@ -297,22 +325,22 @@ export const formatCellValue = (
     return cell.render("Cell");
 };
 
-export const transformYearDataForward = (data: Record<string, any>): Record<string, any> => {
-    const years = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
-    const transformedData: Record<string, any> = {};
+export const transformYearDataForward = (data: Record<string, unknown>): Record<string, unknown> => {
+    const years = Object.keys(data).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    const transformedData: Record<string, unknown> = {};
     const yearsToProcess = years.slice(0, -2);
     yearsToProcess.forEach((year) => {
-        const newYear = (parseInt(year) + 2).toString();
+        const newYear = (parseInt(year, 10) + 2).toString();
         transformedData[newYear] = data[year];
     });
     return transformedData;
 };
 
-export const transformYearDataBackward = (data: Record<string, any>): Record<string, any> => {
-    const years = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
-    const transformedData: Record<string, any> = {};
+export const transformYearDataBackward = (data: Record<string, unknown>): Record<string, unknown> => {
+    const years = Object.keys(data).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+    const transformedData: Record<string, unknown> = {};
     years.forEach((year) => {
-        const newYear = (parseInt(year) - 2).toString();
+        const newYear = (parseInt(year, 10) - 2).toString();
         transformedData[newYear] = data[year];
     });
     return transformedData;

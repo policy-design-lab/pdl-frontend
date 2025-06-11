@@ -6,7 +6,6 @@ interface PolicyComparisonSectionProps {
     currentData: any;
     proposedData: any;
     title?: string;
-    description?: string;
 }
 
 export default function PolicyComparisonSection({

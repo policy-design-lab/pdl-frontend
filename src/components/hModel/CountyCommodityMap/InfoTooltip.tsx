@@ -7,14 +7,15 @@ interface InfoTooltipProps {
 }
 
 const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
+    const paragraphs = title.split("\n\n");
     const formattedContent = (
         <>
-            {title.split("\n\n").map((paragraph, index) => (
+            {paragraphs.map((paragraph, index) => (
                 <Typography
-                    key={index}
+                    key={`tooltip-paragraph-${paragraph.slice(0, 20).replace(/\s/g, "-")}`}
                     variant="body2"
                     style={{
-                        marginBottom: index < title.split("\n\n").length - 1 ? "8px" : 0,
+                        marginBottom: index < paragraphs.length - 1 ? "8px" : 0,
                         fontSize: "0.8rem",
                         whiteSpace: "pre-line"
                     }}

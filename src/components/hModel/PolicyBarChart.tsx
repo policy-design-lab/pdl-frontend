@@ -320,7 +320,7 @@ const CommoditySummaryTable: React.FC<{
                     textAlign: "center"
                 }}
             >
-                10-Year Payment Totals by Commodity
+                10 Fiscal Year Payment Totals by Commodity
             </Typography>
             <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
                 <TableContainer component={Paper} sx={{ maxHeight: 400, flex: 1 }}>
@@ -343,11 +343,16 @@ const CommoditySummaryTable: React.FC<{
                                 <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
                                     Difference
                                 </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
+                                    % Change
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {commoditySummaries.map((commodity) => {
                                 const difference = commodity.proposedTotal - commodity.currentTotal;
+                                const percentChange =
+                                    commodity.currentTotal > 0 ? (difference / commodity.currentTotal) * 100 : 0;
                                 const isSelected =
                                     selectedCommodities.length === 0 ||
                                     selectedCommodities.includes(commodity.commodityName);
@@ -367,13 +372,13 @@ const CommoditySummaryTable: React.FC<{
                                             align="right"
                                             sx={{ color: "#FF8C00", fontWeight: isSelected ? 600 : 400 }}
                                         >
-                                            {CurrencyFormat(commodity.currentTotal)}
+                                            ${Math.round(commodity.currentTotal).toLocaleString()}
                                         </TableCell>
                                         <TableCell
                                             align="right"
                                             sx={{ color: "rgb(1, 87, 155)", fontWeight: isSelected ? 600 : 400 }}
                                         >
-                                            {CurrencyFormat(commodity.proposedTotal)}
+                                            ${Math.round(commodity.proposedTotal).toLocaleString()}
                                         </TableCell>
                                         <TableCell
                                             align="right"
@@ -382,8 +387,17 @@ const CommoditySummaryTable: React.FC<{
                                                 fontWeight: isSelected ? 600 : 500
                                             }}
                                         >
-                                            {difference >= 0 ? "+" : ""}
-                                            {CurrencyFormat(difference)}
+                                            {difference >= 0 ? "+" : ""}${Math.round(difference).toLocaleString()}
+                                        </TableCell>
+                                        <TableCell
+                                            align="right"
+                                            sx={{
+                                                color: percentChange >= 0 ? "#2e7d32" : "#d32f2f",
+                                                fontWeight: isSelected ? 600 : 500
+                                            }}
+                                        >
+                                            {percentChange >= 0 ? "+" : ""}
+                                            {percentChange.toFixed(1)}%
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -391,13 +405,13 @@ const CommoditySummaryTable: React.FC<{
                             <TableRow sx={{ borderTop: 2, borderColor: "#2F7164" }}>
                                 <TableCell sx={{ fontWeight: 700, fontSize: "1rem" }}>Overall Total</TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 700, color: "#FF8C00", fontSize: "1rem" }}>
-                                    {CurrencyFormat(overallTotals.currentTotal)}
+                                    ${Math.round(overallTotals.currentTotal).toLocaleString()}
                                 </TableCell>
                                 <TableCell
                                     align="right"
                                     sx={{ fontWeight: 700, color: "rgb(1, 87, 155)", fontSize: "1rem" }}
                                 >
-                                    {CurrencyFormat(overallTotals.proposedTotal)}
+                                    ${Math.round(overallTotals.proposedTotal).toLocaleString()}
                                 </TableCell>
                                 <TableCell
                                     align="right"
@@ -407,8 +421,44 @@ const CommoditySummaryTable: React.FC<{
                                         fontSize: "1rem"
                                     }}
                                 >
-                                    {overallTotals.proposedTotal - overallTotals.currentTotal >= 0 ? "+" : ""}
-                                    {CurrencyFormat(overallTotals.proposedTotal - overallTotals.currentTotal)}
+                                    {overallTotals.proposedTotal - overallTotals.currentTotal >= 0 ? "+" : ""}$
+                                    {Math.round(
+                                        overallTotals.proposedTotal - overallTotals.currentTotal
+                                    ).toLocaleString()}
+                                </TableCell>
+                                <TableCell
+                                    align="right"
+                                    sx={{
+                                        fontWeight: 700,
+                                        color:
+                                            overallTotals.currentTotal > 0 &&
+                                            ((overallTotals.proposedTotal - overallTotals.currentTotal) /
+                                                overallTotals.currentTotal) *
+                                                100 >=
+                                                0
+                                                ? "#2e7d32"
+                                                : "#d32f2f",
+                                        fontSize: "1rem"
+                                    }}
+                                >
+                                    {overallTotals.currentTotal > 0 ? (
+                                        <>
+                                            {((overallTotals.proposedTotal - overallTotals.currentTotal) /
+                                                overallTotals.currentTotal) *
+                                                100 >=
+                                            0
+                                                ? "+"
+                                                : ""}
+                                            {(
+                                                ((overallTotals.proposedTotal - overallTotals.currentTotal) /
+                                                    overallTotals.currentTotal) *
+                                                100
+                                            ).toFixed(1)}
+                                            %
+                                        </>
+                                    ) : (
+                                        "N/A"
+                                    )}
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -685,7 +735,7 @@ export default function PolicyBarChart({
         const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
         const yAxis = d3
             .axisLeft(yScaleChart)
-            .tickFormat((d) => `$${ShortFormat(d as number)}`)
+            .tickFormat((d) => `$${ShortFormat(Math.round(d as number), undefined, 0)}`)
             .tickSizeOuter(0);
 
         const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -698,6 +748,15 @@ export default function PolicyBarChart({
             .selectAll("text")
             .style("fill", "#2F7164")
             .style("font-family", "Roboto, sans-serif");
+
+        chartGroup
+            .append("text")
+            .attr("transform", `translate(${graphWidth / 2}, ${graphHeight + margin.bottom - 10})`)
+            .style("text-anchor", "middle")
+            .style("fill", "#2F7164")
+            .style("font-size", "0.85rem")
+            .style("font-family", "Roboto, sans-serif")
+            .text("Fiscal Year");
 
         chartGroup.append("g").attr("class", "y-left axis").call(yAxis).selectAll("text").style("fill", "#00000099");
 
@@ -753,7 +812,7 @@ export default function PolicyBarChart({
                     .style("fill", type === "current" ? "#FF8C00" : "rgb(1, 87, 155)")
                     .style("font-weight", "600")
                     .style("opacity", 1)
-                    .text(`$${ShortFormat(totalPayment)}`);
+                    .text(`$${ShortFormat(Math.round(totalPayment), undefined, 0)}`);
                 commodityData.forEach((commodity) => {
                     const isVisible =
                         selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
@@ -790,10 +849,14 @@ export default function PolicyBarChart({
                                 .style("left", `${event.clientX + 10}px`)
                                 .style("top", `${event.clientY - 10}px`).html(`
                                     <strong>${commodity.commodityName}</strong><br/>
-                                    Year: ${yearData.year}<br/>
+                                    Fiscal Year: ${yearData.year}<br/>
                                     Type: ${type === "current" ? "Current Policy" : "Proposed Policy"}<br/>
-                                    Payment: ${CurrencyFormat(commodity.totalPaymentInDollars)}<br/>
-                                    <em>Total ${type}: ${CurrencyFormat(totalPayment)}</em>
+                                    Payment: $${ShortFormat(
+                                        Math.round(commodity.totalPaymentInDollars),
+                                        undefined,
+                                        0
+                                    )}<br/>
+                                    <em>Total ${type}: $${ShortFormat(Math.round(totalPayment), undefined, 0)}</em>
                                 `);
                         }
                     }).on("mouseout", function onMouseOut() {
