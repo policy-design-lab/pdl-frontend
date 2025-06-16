@@ -1,5 +1,5 @@
 import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
-import { ShortFormat } from "../../shared/ConvertionFormats";
+import { ShortFormatInteger } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
 
 interface CountyTooltipContentProps {
@@ -118,10 +118,8 @@ export const CountyTooltipContent = ({
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                    ${ShortFormat(
-                        viewMode === "proposed" ? countyData.proposedBaseAcres || 0 : countyData.currentBaseAcres || 0,
-                        undefined,
-                        1
+                    ${ShortFormatInteger(
+                        viewMode === "proposed" ? countyData.proposedBaseAcres || 0 : countyData.currentBaseAcres || 0
                     )}
                 </td>
             </tr>`;
@@ -129,14 +127,6 @@ export const CountyTooltipContent = ({
 
     if (viewMode === "difference") {
         tooltipContent += generateDifferenceTooltipContent(countyData, classes, showMeanValues);
-        if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
-            tooltipContent += generateYearBreakdownDifferenceContent(
-                countyData,
-                classes,
-                showMeanValues,
-                selectedYears
-            );
-        }
 
         if (
             selectedCommodities &&
@@ -242,9 +232,10 @@ export const CountyTooltipContent = ({
 };
 
 function generateDifferenceTooltipContent(countyData: any, classes: any, showMeanValues: boolean): string {
-    const formatDiff = (value) => {
-        const sign = value >= 0 ? "+" : "";
-        return `${sign}${ShortFormat(value, undefined, 2)}`;
+    const formatDiff = (value: number | undefined | null): string => {
+        if (!value) return "";
+        const sign = value > 0 ? "+" : "";
+        return `${sign}${ShortFormatInteger(value)}`;
     };
 
     const isCurrentWeightedAvg = countyData.isCurrentMeanWeighted;
@@ -262,7 +253,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_topcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; background-color: rgba(156, 39, 176, 0.12); border-radius: 0 2px 2px 0;">
-                $${ShortFormat(countyData.value, undefined, 2)} (${countyData.percentChange.toFixed(1)}%)
+                $${ShortFormatInteger(countyData.value || 0)} (${(countyData.percentChange || 0).toFixed(1)}%)
             </td>
         </tr>
         <tr>
@@ -286,7 +277,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormat(countyData.currentValue, undefined, 2)}
+                $${ShortFormatInteger(countyData.currentValue || 0)}
             </td>
         </tr>
         <tr>
@@ -298,7 +289,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormat(countyData.currentMeanRate || 0, undefined, 2)}/acre${
+                $${ShortFormatInteger(countyData.currentMeanRate || 0)}/acre${
         isCurrentWeightedAvg ? " (weighted avg)" : ""
     }
             </td>
@@ -312,7 +303,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormat(countyData.proposedValue, undefined, 2)}
+                $${ShortFormatInteger(countyData.proposedValue || 0)}
             </td>
         </tr>
         <tr>
@@ -324,7 +315,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormat(countyData.proposedMeanRate || 0, undefined, 2)}/acre${
+                $${ShortFormatInteger(countyData.proposedMeanRate || 0)}/acre${
         isProposedWeightedAvg ? " (weighted avg)" : ""
     }
             </td>
@@ -356,7 +347,7 @@ function generateRegularTooltipContent(
         <td class="${
             classes.tooltip_topcell_right
         }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-            $${ShortFormat(totalPayment, undefined, 2)}
+            $${ShortFormatInteger(totalPayment || 0)}
         </td>
     </tr>`;
 
@@ -371,14 +362,11 @@ function generateRegularTooltipContent(
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                $${ShortFormat(meanRate, undefined, 2)}/acre${countyData.isMeanWeighted ? " (weighted avg)" : ""}
+                $${ShortFormatInteger(meanRate || 0)}/acre${countyData.isMeanWeighted ? " (weighted avg)" : ""}
             </td>
         </tr>`;
     }
     const isMultiYearSelection = selectedYears && selectedYears.length > 1;
-    if (yearAggregation > 0 && countyData.yearlyData && Object.keys(countyData.yearlyData).length > 0) {
-        content += generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears);
-    }
     return content;
 }
 
@@ -407,12 +395,10 @@ function generateCommodityDifferenceContent(
         "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
 
-    const formatDiff = (value) => {
-        if (value === undefined || value === null) {
-            return "0.00";
-        }
-        const sign = value >= 0 ? "+" : "";
-        return `${sign}${ShortFormat(value, undefined, 2)}`;
+    const formatDiff = (value: number | undefined | null): string => {
+        if (!value) return "";
+        const sign = value > 0 ? "+" : "";
+        return `${sign}${ShortFormatInteger(value)}`;
     };
 
     if (commoditiesToDisplay.length > 0) {
@@ -509,7 +495,7 @@ function generateCommodityDifferenceContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormat(commodityCurrentValue, undefined, 2)}
+                        $${ShortFormatInteger(commodityCurrentValue)}
                     </td>
                 </tr>
                 <tr>
@@ -521,77 +507,9 @@ function generateCommodityDifferenceContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormat(commodityProposedValue, undefined, 2)}
+                        $${ShortFormatInteger(commodityProposedValue)}
                     </td>
                 </tr>`;
-
-                if (
-                    (yearAggregation > 0 || (Array.isArray(selectedYears) && selectedYears.length > 1)) &&
-                    countyData.commodities[commodity].yearBreakdown
-                ) {
-                    const commodityYears =
-                        selectedYears && selectedYears.length > 0
-                            ? Object.keys(commodityData.yearlyData || {}).filter((year) => selectedYears.includes(year))
-                            : Object.keys(commodityData.yearlyData || {});
-                    const sortedCommodityYears = commodityYears.sort((a, b) => b.localeCompare(a));
-                    if (sortedCommodityYears.length > 0) {
-                        content += `
-                        <tr>
-                            <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold; font-size: 0.9rem;">
-                                Yearly Breakdown:
-                            </td>
-                        </tr>`;
-
-                        sortedCommodityYears.forEach((year) => {
-                            const yearData = commodityData.yearlyData[year];
-                            if (yearData) {
-                                const value =
-                                    yearData.value !== undefined
-                                        ? yearData.value
-                                        : yearData.total !== undefined
-                                        ? yearData.total
-                                        : viewMode === "proposed"
-                                        ? yearData.proposed !== undefined
-                                            ? yearData.proposed
-                                            : 0
-                                        : yearData.current !== undefined
-                                        ? yearData.current
-                                        : 0;
-
-                                content += `
-                                <tr>
-                                    <td class="${
-                                        classes.tooltip_regularcell_left
-                                    }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                        ${year} Payment:
-                                    </td>
-                                    <td class="${
-                                        classes.tooltip_regularcell_right
-                                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                        $${ShortFormat(value, undefined, 2)}
-                                    </td>
-                                </tr>`;
-
-                                if (yearData.baseAcres > 0) {
-                                    const yearlyRate = value / yearData.baseAcres;
-                                    content += `
-                                    <tr>
-                                        <td class="${
-                                            classes.tooltip_regularcell_left
-                                        }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                            ${year} Payment Rate:
-                                        </td>
-                                        <td class="${
-                                            classes.tooltip_regularcell_right
-                                        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
-                                        </td>
-                                    </tr>`;
-                                }
-                            }
-                        });
-                    }
-                }
             }
         });
     }
@@ -640,9 +558,10 @@ function generateProgramDifferenceContent(
     programsToDisplay.forEach((program) => {
         const programData = countyData.programs && countyData.programs[program];
         if (programData && (programData.currentValue > 0 || programData.proposedValue > 0)) {
-            const formatDiff = (value) => {
-                const sign = value >= 0 ? "+" : "";
-                return `${sign}${ShortFormat(value, undefined, 2)}`;
+            const formatDiff = (value: number | undefined | null): string => {
+                if (!value) return "";
+                const sign = value > 0 ? "+" : "";
+                return `${sign}${ShortFormatInteger(value)}`;
             };
 
             content += `
@@ -698,7 +617,7 @@ function generateProgramDifferenceContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormat(programData.currentBaseAcres || 0, undefined, 1)}
+                    ${ShortFormatInteger(programData.currentBaseAcres || 0)}
                 </td>
             </tr>
             <tr>
@@ -710,7 +629,7 @@ function generateProgramDifferenceContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormat(programData.proposedBaseAcres || 0, undefined, 1)}
+                    ${ShortFormatInteger(programData.proposedBaseAcres || 0)}
                 </td>
             </tr>
             <tr>
@@ -722,7 +641,7 @@ function generateProgramDifferenceContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    $${ShortFormat(Math.abs(programData.currentValue || 0), undefined, 2)}
+                    $${ShortFormatInteger(Math.abs(programData.currentValue || 0))}
                 </td>
             </tr>
             <tr>
@@ -734,7 +653,7 @@ function generateProgramDifferenceContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    $${ShortFormat(Math.abs(programData.proposedValue || 0), undefined, 2)}
+                    $${ShortFormatInteger(Math.abs(programData.proposedValue || 0))}
                 </td>
             </tr>`;
         }
@@ -767,7 +686,7 @@ function generateProgramRegularContent(
             <td class="${
                 classes.tooltip_topcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                <b>$${ShortFormat(Math.abs(countyData.value), undefined, 2)}</b>
+                <b>$${ShortFormatInteger(Math.abs(countyData.value))}</b>
             </td>
         </tr>
         <tr>
@@ -779,7 +698,7 @@ function generateProgramRegularContent(
             <td class="${
                 classes.tooltip_topcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                <b>$${ShortFormat(Math.abs(countyData.meanPaymentRateInDollarsPerAcre || 0), undefined, 2)}/acre${
+                <b>$${ShortFormatInteger(Math.abs(countyData.meanPaymentRateInDollarsPerAcre || 0))}/acre${
             countyData.isMeanWeighted ? " (weighted avg)" : ""
         }</b>
             </td>
@@ -833,7 +752,7 @@ function generateProgramRegularContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    $${ShortFormat(programValue, undefined, 2)}
+                    $${ShortFormatInteger(programValue)}
                 </td>
             </tr>
             <tr>
@@ -845,7 +764,7 @@ function generateProgramRegularContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormat(baseAcresValue, undefined, 1)}
+                    ${ShortFormatInteger(baseAcresValue)}
                 </td>
             </tr>
             <tr>
@@ -857,250 +776,11 @@ function generateProgramRegularContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    $${ShortFormat(Math.abs(programMeanRate), undefined, 2)}/acre
+                    $${ShortFormatInteger(Math.abs(programMeanRate))}/acre
                 </td>
             </tr>`;
         }
     });
-    return content;
-}
-
-function generateYearBreakdownContent(
-    countyData: any,
-    classes: any,
-    showMeanValues: boolean,
-    selectedYears: (string | number)[] = []
-): string {
-    const sectionHeaderStyle =
-        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
-    let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
-
-    const valueLabel = showMeanValues ? "County Payment Rate" : "County Total";
-    content += `
-    <tr>
-        <td class="${
-            classes.tooltip_topcell_left
-        }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-            <b>${valueLabel}:</b>
-        </td>
-        <td class="${
-            classes.tooltip_topcell_right
-        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-            <b>${
-                showMeanValues
-                    ? `$${ShortFormat(countyData.meanPaymentRateInDollarsPerAcre || 0, undefined, 2)}/acre`
-                    : `$${ShortFormat(countyData.value, undefined, 2)}`
-            }</b>
-        </td>
-    </tr>`;
-
-    if (countyData.yearlyData) {
-        const selectedYearsStrings = Array.isArray(selectedYears) ? selectedYears.map((year) => String(year)) : [];
-        const yearsToShow =
-            selectedYearsStrings.length > 0
-                ? Object.keys(countyData.yearlyData).filter((year) => selectedYearsStrings.includes(year))
-                : Object.keys(countyData.yearlyData);
-        const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
-        sortedYears.forEach((year) => {
-            const yearData = countyData.yearlyData[year];
-            if (yearData) {
-                const value =
-                    yearData.value !== undefined
-                        ? yearData.value
-                        : yearData.total !== undefined
-                        ? yearData.total
-                        : yearData.current !== undefined
-                        ? yearData.current
-                        : 0;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${year} Payment:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        $${ShortFormat(value, undefined, 2)}
-                    </td>
-                </tr>`;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${year} Base Acres:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${ShortFormat(yearData.baseAcres || 0, undefined, 1)}
-                    </td>
-                </tr>`;
-
-                if (yearData.baseAcres > 0 && showMeanValues) {
-                    const yearlyRate = value / yearData.baseAcres;
-                    content += `
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                            ${year} Payment Rate:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
-                        </td>
-                    </tr>`;
-                }
-            }
-        });
-    }
-
-    return content;
-}
-
-function generateYearBreakdownDifferenceContent(
-    countyData: any,
-    classes: any,
-    showMeanValues: boolean,
-    selectedYears: (string | number)[] = []
-): string {
-    const sectionHeaderStyle =
-        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
-    const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
-
-    let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
-
-    const valueLabel = showMeanValues ? "County Payment Rate Diff" : "County Total Diff";
-    content += `
-    <tr>
-        <td class="${
-            classes.tooltip_topcell_left
-        }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-            <b>${valueLabel}:</b>
-        </td>
-        <td class="${
-            classes.tooltip_topcell_right
-        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-            <b>${
-                showMeanValues
-                    ? `$${ShortFormat(countyData.meanRateDifference || 0, undefined, 2)}/acre`
-                    : `$${ShortFormat(countyData.value, undefined, 2)}`
-            }</b>
-        </td>
-    </tr>`;
-
-    if (countyData.yearlyData) {
-        const selectedYearsStrings = Array.isArray(selectedYears) ? selectedYears.map((year) => String(year)) : [];
-        const yearsToShow =
-            selectedYearsStrings.length > 0
-                ? Object.keys(countyData.yearlyData).filter((year) => selectedYearsStrings.includes(year))
-                : Object.keys(countyData.yearlyData);
-        const sortedYears = yearsToShow.sort((a, b) => b.localeCompare(a));
-        sortedYears.forEach((year) => {
-            const yearData = countyData.yearlyData[year];
-            if (yearData) {
-                const currentValue =
-                    yearData.currentValue !== undefined
-                        ? yearData.currentValue
-                        : yearData.current !== undefined
-                        ? yearData.current
-                        : yearData.value || 0;
-
-                const proposedValue =
-                    yearData.proposedValue !== undefined
-                        ? yearData.proposedValue
-                        : yearData.proposed !== undefined
-                        ? yearData.proposed
-                        : yearData.value || 0;
-
-                const difference = proposedValue - currentValue;
-                const percentChange = currentValue !== 0 ? (difference / currentValue) * 100 : 0;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle}">
-                        ${year} Payment Change:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle}">
-                        $${ShortFormat(difference, undefined, 2)} (${percentChange.toFixed(1)}%)
-                    </td>
-                </tr>`;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${year} Base Acres:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${ShortFormat(yearData.baseAcres || 0, undefined, 1)}
-                    </td>
-                </tr>`;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${year} Current:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        $${ShortFormat(currentValue, undefined, 2)}
-                    </td>
-                </tr>`;
-
-                content += `
-                <tr>
-                    <td class="${
-                        classes.tooltip_regularcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        ${year} Proposed:
-                    </td>
-                    <td class="${
-                        classes.tooltip_regularcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                        $${ShortFormat(proposedValue, undefined, 2)}
-                    </td>
-                </tr>`;
-
-                if (yearData.baseAcres > 0 && showMeanValues) {
-                    const currentRate = currentValue / yearData.baseAcres;
-                    const proposedRate = proposedValue / yearData.baseAcres;
-                    const rateDiff = proposedRate - currentRate;
-
-                    content += `
-                    <tr>
-                        <td class="${
-                            classes.tooltip_regularcell_left
-                        }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle}">
-                            ${year} Payment Rate Diff:
-                        </td>
-                        <td class="${
-                            classes.tooltip_regularcell_right
-                        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle}">
-                            $${ShortFormat(rateDiff, undefined, 2)}/acre
-                        </td>
-                    </tr>`;
-                }
-            }
-        });
-    }
-
     return content;
 }
 
@@ -1187,7 +867,7 @@ function generateCommodityRegularContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormat(commodityValue, undefined, 2)}
+                        $${ShortFormatInteger(commodityValue)}
                     </td>
                 </tr>
                 <tr>
@@ -1199,7 +879,7 @@ function generateCommodityRegularContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${ShortFormat(baseAcres, undefined, 1)}
+                        ${ShortFormatInteger(baseAcres)}
                     </td>
                 </tr>
                 <tr>
@@ -1211,73 +891,9 @@ function generateCommodityRegularContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormat(commodityMeanRate, undefined, 2)}/acre
+                        $${ShortFormatInteger(commodityMeanRate)}/acre
                     </td>
                 </tr>`;
-
-                if (yearAggregation > 0 && countyData.commodities[commodity].yearBreakdown) {
-                    const commodityYears =
-                        selectedYears && selectedYears.length > 0
-                            ? Object.keys(commodityData.yearlyData || {}).filter((year) => selectedYears.includes(year))
-                            : Object.keys(commodityData.yearlyData || {});
-                    const sortedCommodityYears = commodityYears.sort((a, b) => b.localeCompare(a));
-                    if (sortedCommodityYears.length > 0) {
-                        content += `
-                        <tr>
-                            <td colspan="2" style="padding-left: 15px; font-style: italic; color: #2F7164; padding-top: 2px; text-align: left; font-weight: bold; font-size: 0.9rem;">
-                                Yearly Breakdown:
-                            </td>
-                        </tr>`;
-                        sortedCommodityYears.forEach((year) => {
-                            const yearData = commodityData.yearlyData[year];
-                            if (yearData) {
-                                const value =
-                                    yearData.value !== undefined
-                                        ? yearData.value
-                                        : yearData.total !== undefined
-                                        ? yearData.total
-                                        : viewMode === "proposed"
-                                        ? yearData.proposed !== undefined
-                                            ? yearData.proposed
-                                            : 0
-                                        : yearData.current !== undefined
-                                        ? yearData.current
-                                        : 0;
-
-                                content += `
-                                <tr>
-                                    <td class="${
-                                        classes.tooltip_regularcell_left
-                                    }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                        ${year} Payment:
-                                    </td>
-                                    <td class="${
-                                        classes.tooltip_regularcell_right
-                                    }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                        $${ShortFormat(value, undefined, 2)}
-                                    </td>
-                                </tr>`;
-
-                                if (yearData.baseAcres > 0) {
-                                    const yearlyRate = value / yearData.baseAcres;
-                                    content += `
-                                    <tr>
-                                        <td class="${
-                                            classes.tooltip_regularcell_left
-                                        }" style="padding-left: 20px; text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                            ${year} Payment Rate:
-                                        </td>
-                                        <td class="${
-                                            classes.tooltip_regularcell_right
-                                        }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                                            $${ShortFormat(yearlyRate, undefined, 2)}/acre
-                                        </td>
-                                    </tr>`;
-                                }
-                            }
-                        });
-                    }
-                }
             }
         });
     }
@@ -1437,9 +1053,9 @@ function generateCombinedCommodityProgramContent(
                 const formatValue = (value: number, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
-                        return `${sign}$${ShortFormat(Math.abs(value), undefined, 2)}${isRate ? "/acre" : ""}`;
+                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}${isRate ? "/acre" : ""}`;
                     }
-                    return `$${ShortFormat(value, undefined, 2)}${isRate ? "/acre" : ""}`;
+                    return `$${ShortFormatInteger(Math.round(value))}${isRate ? "/acre" : ""}`;
                 };
 
                 content += `
@@ -1449,10 +1065,8 @@ function generateCombinedCommodityProgramContent(
                     showMeanValues ? commodityRate : commodityValue,
                     showMeanValues
                 )}</td>
-                            <td style="${cellStyle}">${ShortFormat(
-                    totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres,
-                    undefined,
-                    1
+                                                         <td style="${cellStyle}">${ShortFormatInteger(
+                    totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres
                 )}</td>
                             <td style="${cellStyle}">${
                     commodityArcValue > 0
@@ -1460,7 +1074,7 @@ function generateCombinedCommodityProgramContent(
                         : "-"
                 }</td>
                             <td style="${cellStyle}">${
-                    commodityArcAcres > 0 ? ShortFormat(commodityArcAcres, undefined, 1) : "-"
+                    commodityArcAcres > 0 ? ShortFormatInteger(commodityArcAcres) : "-"
                 }</td>
                             <td style="${cellStyle}">${
                     commodityPlcValue > 0
@@ -1468,7 +1082,7 @@ function generateCombinedCommodityProgramContent(
                         : "-"
                 }</td>
                             <td style="${cellStyle}">${
-                    commodityPlcAcres > 0 ? ShortFormat(commodityPlcAcres, undefined, 1) : "-"
+                    commodityPlcAcres > 0 ? ShortFormatInteger(commodityPlcAcres) : "-"
                 }</td>
                         </tr>`;
             }
@@ -1537,9 +1151,9 @@ function generateCombinedCommodityProgramContent(
                 const formatValue = (value, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
-                        return `${sign}$${ShortFormat(Math.abs(value), undefined, 2)}${isRate ? "/acre" : ""}`;
+                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}${isRate ? "/acre" : ""}`;
                     }
-                    return `$${ShortFormat(value, undefined, 2)}${isRate ? "/acre" : ""}`;
+                    return `$${ShortFormatInteger(Math.round(value))}${isRate ? "/acre" : ""}`;
                 };
 
                 content += `
@@ -1549,7 +1163,9 @@ function generateCombinedCommodityProgramContent(
                     showMeanValues ? commodityRate : commodityValue,
                     showMeanValues
                 )}</td>
-                            <td style="${cellStyle}">${ShortFormat(commodityBaseAcres, undefined, 1)}</td>
+                                                         <td style="${cellStyle}">${ShortFormatInteger(
+                    commodityBaseAcres
+                )}</td>
                         </tr>`;
 
                 if (commodityData.programs) {
@@ -1575,7 +1191,9 @@ function generateCombinedCommodityProgramContent(
                                     showMeanValues ? programRate : programValue,
                                     showMeanValues
                                 )}</td>
-                            <td style="${cellStyle}">${ShortFormat(programBaseAcres, undefined, 1)}</td>
+                                                         <td style="${cellStyle}">${ShortFormatInteger(
+                                    programBaseAcres
+                                )}</td>
                         </tr>`;
                             }
                         }

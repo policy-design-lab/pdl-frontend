@@ -91,7 +91,9 @@ export function HorizontalMenu({
                             />
                         }
                     >
-                        {menu[1].title}
+                        {topLevel === 1 && midLevel >= 0 && menu[1].items && menu[1].items[midLevel] ?
+                            menu[1].items[midLevel].title :
+                            menu[1].title}
                     </Button>
                     <Menu
                         anchorEl={anchorEl}

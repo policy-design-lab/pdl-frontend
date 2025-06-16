@@ -52,6 +52,28 @@ export function ShortFormat(labelValue, position?: number, decimal?: number) {
     }
     return result;
 }
+
+export function ShortFormatInteger(labelValue) {
+    if (labelValue === undefined || labelValue === null) {
+        return "0";
+    }
+    const absoluteValue = Math.abs(Math.round(Number.parseFloat(labelValue)));
+    let result = "";
+    if (absoluteValue >= 1.0e9) {
+        result = `${Math.round(absoluteValue / 1.0e9)}B`;
+    } else if (absoluteValue >= 1.0e6) {
+        result = `${Math.round(absoluteValue / 1.0e6)}M`;
+    } else if (absoluteValue >= 1.0e3) {
+        result = `${Math.round(absoluteValue / 1.0e3)}K`;
+    } else {
+        result = `${absoluteValue}`;
+    }
+    if (labelValue.toString().includes("-")) {
+        result = `-${result}`;
+    }
+    return result;
+}
+
 export function ToPercentageString(value: string): string {
     return `${parseFloat(value).toFixed(2)}%`;
 }

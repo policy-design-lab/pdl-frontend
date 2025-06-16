@@ -12,7 +12,7 @@ export const houseProjectionMenu: MenuItem[] = [
         items: []
     },
     {
-        title: "Conversation & EQIP",
+        title: "Select Proposals",
         items: [
             {
                 title: "EQIP Projection"

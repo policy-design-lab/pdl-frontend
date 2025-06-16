@@ -12,7 +12,7 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import { ShortFormat, CurrencyFormat } from "../shared/ConvertionFormats";
+import { ShortFormatInteger, CurrencyFormat } from "../shared/ConvertionFormats";
 import { transformYearDataForward } from "./utils";
 
 interface CommodityData {
@@ -624,7 +624,7 @@ export default function PolicyBarChart({
         const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
         const yAxis = d3
             .axisLeft(yScaleChart)
-            .tickFormat((d) => `$${ShortFormat(Math.round(d as number), undefined, 0)}`)
+            .tickFormat((d) => `$${ShortFormatInteger(d as number)}`)
             .tickSizeOuter(0);
 
         const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -702,7 +702,7 @@ export default function PolicyBarChart({
                     .style("fill", type === "current" ? "#FF8C00" : "rgb(1, 87, 155)")
                     .style("font-weight", "600")
                     .style("opacity", 1)
-                    .text(`$${ShortFormat(Math.round(totalPayment), undefined, 0)}`);
+                    .text(`$${ShortFormatInteger(totalPayment)}`);
                 visibleCommodities.forEach((commodity) => {
                     const barHeight = graphHeight - yScale(commodity.totalPaymentInDollars);
                     const commodityColor = commodityColors[commodity.commodityName] || color;
@@ -739,12 +739,8 @@ export default function PolicyBarChart({
                                     <strong>${commodity.commodityName}</strong><br/>
                                     Fiscal Year: ${yearData.year}<br/>
                                     Type: ${type === "current" ? "Current Policy" : "Proposed Policy"}<br/>
-                                    Payment: $${ShortFormat(
-                                        Math.round(commodity.totalPaymentInDollars),
-                                        undefined,
-                                        0
-                                    )}<br/>
-                                    <em>Total ${type}: $${ShortFormat(Math.round(totalPayment), undefined, 0)}</em>
+                                    Payment: $${ShortFormatInteger(commodity.totalPaymentInDollars)}<br/>
+                                    <em>Total ${type}: $${ShortFormatInteger(totalPayment)}</em>
                                 `);
                         }
                     }).on("mouseout", function onMouseOut() {

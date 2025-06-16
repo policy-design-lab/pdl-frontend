@@ -1,5 +1,6 @@
 import { Box, Typography, Grid, CircularProgress, Link } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { config } from "../../../app.config";
 import HouseOutlayMap from "../../../components/policylab/HouseOutlayMap";
 import { convertAllState, getJsonDataFromUrl } from "../../../utils/apiutil";
@@ -10,7 +11,16 @@ import CountyCommodityTable from "../../../components/hModel/CountyCommodityTabl
 import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
 
-export default function HouseProjectionSubPageProps({ v, index }: { v: number; index: number }): JSX.Element {
+export default function HouseProjectionSubPageProps({
+    v,
+    index,
+    subtab
+}: {
+    v: number;
+    index: number;
+    subtab?: string;
+}): JSX.Element {
+    const navigate = useNavigate();
     const [statePerformance, setStatePerformance] = useState({});
     const [practiceNames, setPracticeNames] = useState({});
     const [metaData, setMetaData] = useState({
@@ -28,6 +38,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     const [hModelDistributionData, setHModelDistributionData] = useState({});
     const [hModelDistributionProposedData, setHModelDistributionProposedData] = useState({});
     const [hModelDataReady, setHModelDataReady] = useState(false);
+    const [hModelLoading, setHModelLoading] = useState(false);
+    const [menuSwitchLoading, setMenuSwitchLoading] = useState(false);
     const [availableCommodities, setAvailableCommodities] = useState<string[]>([]);
     const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
     const [availableYears, setAvailableYears] = useState<string[]>([]);
@@ -47,6 +59,16 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     const handlePracticeChange = (practices) => {
         setSelectedPractices(practices);
     };
+
+    useEffect(() => {
+        if (subtab === "eqip-projection") {
+            setSelectedItem("1-0");
+        } else if (subtab === "arc-plc-payments") {
+            setSelectedItem("1-1");
+        } else if (!subtab) {
+            setSelectedItem("0-0");
+        }
+    }, [subtab]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,6 +94,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                 );
                 setStatePerformance(statePerformanceResponse);
                 setLoadingStates((prev) => ({ ...prev, performance: false }));
+                setHModelLoading(true);
                 const [hModelDistributionResponse, hModelDistributionProposedResponse] = await Promise.all([
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/current`),
                     getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/proposed`)
@@ -101,9 +124,11 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                 setAvailableCommodities(Array.from(commoditiesSet).sort());
                 setAvailablePrograms(Array.from(programsSet).sort());
                 setHModelDataReady(true);
+                setHModelLoading(false);
             } catch (err) {
                 console.error("Error fetching data:", err);
                 setLoadingStates({ metadata: false, practices: false, performance: false });
+                setHModelLoading(false);
             }
         };
         fetchData();
@@ -114,7 +139,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         setShowHouseAgCommittee(false);
         setShowEQIPProjection(false);
         setShowARCPLCPayments(false);
-        if (topIndex === 0 && selectedItem === "0-0") {
+        if (topIndex === 0) {
             setShowHouseAgCommittee(true);
         } else if (topIndex === 1 && midIndex === 0) {
             setShowEQIPProjection(true);
@@ -124,7 +149,25 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
     }, [selectedItem]);
 
     const handleMenuSelect = (value: string) => {
+        const [topIndex, midIndex] = value.split("-").map(Number);
+
+        if (topIndex === 1 && midIndex === 1 && !hModelDataReady) {
+            setMenuSwitchLoading(true);
+            setTimeout(() => setMenuSwitchLoading(false), 1500);
+        } else if (topIndex === 1 && midIndex === 1) {
+            setMenuSwitchLoading(true);
+            setTimeout(() => setMenuSwitchLoading(false), 800);
+        }
+
         setSelectedItem(value);
+
+        if (topIndex === 0) {
+            navigate("/policy-lab/proposal-analysis");
+        } else if (topIndex === 1 && midIndex === 0) {
+            navigate("/policy-lab/proposal-analysis/eqip-projection");
+        } else if (topIndex === 1 && midIndex === 1) {
+            navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+        }
     };
 
     const handleMapUpdate = (year, commodities, programs, state, mode) => {
@@ -181,7 +224,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
             return isLoading;
         }
         if (showARCPLCPayments) {
-            return isLoading || !hModelDataReady;
+            return isLoading || hModelLoading || !hModelDataReady || menuSwitchLoading;
         }
         return false;
     };
@@ -326,8 +369,49 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     >
                                         {getDescriptionContent(
                                             showEQIPProjection
-                                                ? "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily, August 1, 2024; August 29, 2024; October 10, 2024; November 7, 2024."
-                                                : "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to modify the payment calculations for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm subsidy programs. The payment rate and total payment projections are visualized by county, program crop, and crop year through application of a model created by Henrique Monaco, a PhD candidate at the University of Illinois at Urbana-Champaign. Further details will be available from his dissertation upon completion, which will be available here."
+                                                ? `In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily: `
+                                                : "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to modify the payment calculations for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm subsidy programs. The payment rate and total payment projections are visualized by county, program crop, and crop year through application of a model created by Henrique Monaco, a PhD candidate at the University of Illinois at Urbana-Champaign. Dissertation will be updated soon.",
+                                            showEQIPProjection ? undefined : "Henrique Monaco"
+                                        )}
+                                        {showEQIPProjection && (
+                                            <>
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2024/08/policy-design-case-study-eqip-and-the-inflation-reduction-act.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    August 1, 2024
+                                                </a>
+                                                ;{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2024/08/back-to-policy-design-the-inflation-reduction-acts-conservation-assistance.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    August 29, 2024
+                                                </a>
+                                                ;{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2024/10/conservation-tradeoff-eqip-in-the-inflation-reduction-act-and-the-house-farm-bill.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    October 10, 2024
+                                                </a>
+                                                ;{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2024/11/taking-a-closer-look-at-the-conservation-tradeoff-issues.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    November 7, 2024
+                                                </a>
+                                                .
+                                            </>
                                         )}
                                     </Typography>
                                 )}
@@ -510,7 +594,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                                 title="Policy Analysis: Budgetary Impacts of Proposed Changes in Policy Design"
                                                                 subTitle="Projected Changes in Spending on a Fiscal Year Basis; 10-year Budget Window."
                                                                 tooltip={
-                                                                    "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a ‘timing shift’ for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
+                                                                    "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
                                                                 }
                                                             />
                                                         </Box>
