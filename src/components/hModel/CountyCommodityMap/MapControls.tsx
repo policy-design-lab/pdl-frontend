@@ -74,8 +74,8 @@ const MapControls: React.FC<MapControlsProps> = ({
                         alignItems: "center"
                     }}
                 >
-                    Data View Mode
-                    <InfoTooltip title="Select how to view the data. 'Current Policy' shows payments under existing farm bill policies. 'Proposed' shows projected payments under proposed changes. 'Policy Differences' shows the numerical and percentage differences between current and proposed policies to highlight the impact of changes." />
+                    Select Policy Design to View
+                    <InfoTooltip title="Select the policy option to view payment projections. Under ‘Current Policy’ payments are projected using the programs as designed in the 2018 Farm Bill. Under ‘Proposed Policy’ payments are projected based on the changes proposed in the 2024 House Agriculture Committee bill. The ‘Policy Differences’ presents the numerical and percentage differences if the proposed policy designs replaced current policy designs. This tab highlights the estimated impacts of the proposed changes." />
                 </FormLabel>
                 <ToggleButtonGroup
                     value={viewMode}
@@ -154,8 +154,8 @@ const MapControls: React.FC<MapControlsProps> = ({
                         alignItems: "center"
                     }}
                 >
-                    Displayed Metrics
-                    <InfoTooltip title="Choose which metrics to display on the map. 'Total Payments ($)' shows the total dollar amount distributed to each county, useful for seeing overall funding allocation. 'Payment Rate ($/acre)' shows the average payment per acre." />
+                    Select Data Projection
+                    <InfoTooltip title="Choose the data projections to be visualized on the map. ‘Total Payments ($)’ visualizes the total dollar amount projected for each county, useful for seeing overall funding allocation. ‘Payment Rate ($/acre)’ visualizes the average payment per base acre, useful for understanding the direct impact of policy design changes on farmers and by program crop." />
                 </FormLabel>
                 <ToggleButtonGroup
                     value={showMeanValues ? "mean" : "total"}
@@ -216,8 +216,8 @@ const MapControls: React.FC<MapControlsProps> = ({
                         alignItems: "center"
                     }}
                 >
-                    Year Selection
-                    <InfoTooltip title="Select one or more years for analysis. When you select a single year, the map and table show data for that specific year only. When you select multiple years, the system automatically switches to aggregated mode, combining data across all selected years and showing yearly breakdowns in the table." />
+                    Select Crop Year or Combination of Crop Years
+                    <InfoTooltip title="Choose the crop year or combination of crop years for which data will be visualized on the map and provided in the table below. The crop year is the year associated with enrollment of the program crop in the farm program (ARC-CO or PLC) and is the year in which the crop is planted and/or harvested. Selecting a single year displays projected payments for only that crop year in both the map and the table; selecting multiple years visualizes an aggregation of those years in the map, with each year included in the table. Note that, in general, Congress authorizes the programs for five crop years." />
                 </FormLabel>
 
                 <Box

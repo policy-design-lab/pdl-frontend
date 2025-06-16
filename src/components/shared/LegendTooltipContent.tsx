@@ -35,11 +35,11 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
         isRegionObject(tooltipData.maxRegion) &&
         tooltipData.minRegion.fips === tooltipData.maxRegion.fips;
     const formatValue = (value: number) => {
-        const roundedValue = Math.round(value * 100) / 100;
+        const roundedValue = Math.round(value);
         if (notDollar) {
-            return roundedValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return roundedValue.toLocaleString();
         }
-        return `$${roundedValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        return `$${roundedValue.toLocaleString()}`;
     };
     const getCombinedText = () => {
         if (tooltipData.regionCount > 0) {

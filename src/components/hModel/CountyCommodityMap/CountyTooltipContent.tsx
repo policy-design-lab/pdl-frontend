@@ -2,6 +2,18 @@ import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
 import { ShortFormat } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
 
+interface CountyTooltipContentProps {
+    countyData: any;
+    countyFIPS: string;
+    viewMode: string;
+    selectedCommodities: string[];
+    selectedPrograms: string[];
+    classes: any;
+    showMeanValues: boolean;
+    yearAggregation: number;
+    selectedYears?: (string | number)[];
+}
+
 export const CountyTooltipContent = ({
     countyData,
     countyFIPS,
@@ -12,7 +24,7 @@ export const CountyTooltipContent = ({
     showMeanValues,
     yearAggregation,
     selectedYears = []
-}) => {
+}: CountyTooltipContentProps): string => {
     if (!countyData) return "";
 
     if (
@@ -125,22 +137,46 @@ export const CountyTooltipContent = ({
                 selectedYears
             );
         }
+
         if (
             selectedCommodities &&
-            !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))
+            !(selectedCommodities.length === 1 && selectedCommodities.includes("All Program Crops")) &&
+            selectedPrograms &&
+            (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)
         ) {
-            tooltipContent += generateCommodityDifferenceContent(
+            tooltipContent += generateCombinedCommodityProgramContent(
                 countyData,
                 selectedCommodities,
+                selectedPrograms,
                 classes,
                 showMeanValues,
                 viewMode,
                 yearAggregation,
                 selectedYears
             );
-        }
-        if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
-            tooltipContent += generateProgramDifferenceContent(countyData, selectedPrograms, classes, showMeanValues);
+        } else {
+            if (
+                selectedCommodities &&
+                !(selectedCommodities.length === 1 && selectedCommodities.includes("All Program Crops"))
+            ) {
+                tooltipContent += generateCommodityDifferenceContent(
+                    countyData,
+                    selectedCommodities,
+                    classes,
+                    showMeanValues,
+                    viewMode,
+                    yearAggregation,
+                    selectedYears
+                );
+            }
+            if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
+                tooltipContent += generateProgramDifferenceContent(
+                    countyData,
+                    selectedPrograms,
+                    classes,
+                    showMeanValues
+                );
+            }
         }
     } else {
         tooltipContent += generateRegularTooltipContent(
@@ -155,27 +191,45 @@ export const CountyTooltipContent = ({
 
         if (
             selectedCommodities &&
-            !(selectedCommodities.length === 1 && selectedCommodities.includes("All Commodities"))
+            !(selectedCommodities.length === 1 && selectedCommodities.includes("All Program Crops")) &&
+            selectedPrograms &&
+            (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)
         ) {
-            tooltipContent += generateCommodityRegularContent(
+            tooltipContent += generateCombinedCommodityProgramContent(
                 countyData,
                 selectedCommodities,
+                selectedPrograms,
                 classes,
                 showMeanValues,
                 viewMode,
                 yearAggregation,
                 selectedYears
             );
-        }
+        } else {
+            if (
+                selectedCommodities &&
+                !(selectedCommodities.length === 1 && selectedCommodities.includes("All Program Crops"))
+            ) {
+                tooltipContent += generateCommodityRegularContent(
+                    countyData,
+                    selectedCommodities,
+                    classes,
+                    showMeanValues,
+                    viewMode,
+                    yearAggregation,
+                    selectedYears
+                );
+            }
 
-        if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
-            tooltipContent += generateProgramRegularContent(
-                countyData,
-                selectedPrograms,
-                classes,
-                showMeanValues,
-                viewMode
-            );
+            if (selectedPrograms && (selectedPrograms.includes("All Programs") || selectedPrograms.length > 1)) {
+                tooltipContent += generateProgramRegularContent(
+                    countyData,
+                    selectedPrograms,
+                    classes,
+                    showMeanValues,
+                    viewMode
+                );
+            }
         }
     }
     tooltipContent += `
@@ -187,7 +241,7 @@ export const CountyTooltipContent = ({
     return tooltipContent;
 };
 
-function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
+function generateDifferenceTooltipContent(countyData: any, classes: any, showMeanValues: boolean): string {
     const formatDiff = (value) => {
         const sign = value >= 0 ? "+" : "";
         return `${sign}${ShortFormat(value, undefined, 2)}`;
@@ -280,14 +334,14 @@ function generateDifferenceTooltipContent(countyData, classes, showMeanValues) {
 }
 
 function generateRegularTooltipContent(
-    countyData,
-    classes,
-    showMeanValues,
-    yearAggregation,
-    selectedCommodities = [],
-    selectedPrograms = [],
-    selectedYears = []
-) {
+    countyData: any,
+    classes: any,
+    showMeanValues: boolean,
+    yearAggregation: number,
+    selectedCommodities: string[] = [],
+    selectedPrograms: string[] = [],
+    selectedYears: (string | number)[] = []
+): string {
     const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
@@ -330,20 +384,21 @@ function generateRegularTooltipContent(
 }
 
 function generateCommodityDifferenceContent(
-    countyData,
-    selectedCommodities,
-    classes,
-    viewMode,
+    countyData: any,
+    selectedCommodities: string[],
+    classes: any,
+    showMeanValues: boolean,
+    viewMode: string,
     yearAggregation = 0,
-    selectedYears = []
-) {
+    selectedYears: (string | number)[] = []
+): string {
     let content = "";
 
     if (!countyData || !countyData.commodities) {
         return content;
     }
 
-    const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
+    const commoditiesToDisplay = selectedCommodities.includes("All Program Crops")
         ? Object.keys(countyData.commodities)
         : selectedCommodities;
 
@@ -545,7 +600,12 @@ function generateCommodityDifferenceContent(
     return content;
 }
 
-function generateProgramDifferenceContent(countyData, selectedPrograms, classes, showMeanValues) {
+function generateProgramDifferenceContent(
+    countyData: any,
+    selectedPrograms: string[],
+    classes: any,
+    showMeanValues: boolean
+): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const subSectionStyle =
@@ -554,7 +614,7 @@ function generateProgramDifferenceContent(countyData, selectedPrograms, classes,
 
     let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">Program Breakdown</td></tr>`;
 
-    let programsToDisplay = [];
+    let programsToDisplay: string[] = [];
     if (selectedPrograms.includes("All Programs")) {
         if (
             countyData.programs &&
@@ -683,7 +743,13 @@ function generateProgramDifferenceContent(countyData, selectedPrograms, classes,
     return content;
 }
 
-function generateProgramRegularContent(countyData, selectedPrograms, classes, showMeanValues, viewMode = "current") {
+function generateProgramRegularContent(
+    countyData: any,
+    selectedPrograms: string[],
+    classes: any,
+    showMeanValues: boolean,
+    viewMode = "current"
+): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const subSectionStyle =
@@ -721,7 +787,7 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
         </tr>`;
     }
 
-    let programsToDisplay = [];
+    let programsToDisplay: string[] = [];
     if (selectedPrograms.includes("All Programs")) {
         if (countyData.programs && Object.keys(countyData.programs).length > 0) {
             if (countyData.programs["ARC-CO"]) {
@@ -800,7 +866,12 @@ function generateProgramRegularContent(countyData, selectedPrograms, classes, sh
     return content;
 }
 
-function generateYearBreakdownContent(countyData, classes, showMeanValues, selectedYears = []) {
+function generateYearBreakdownContent(
+    countyData: any,
+    classes: any,
+    showMeanValues: boolean,
+    selectedYears: (string | number)[] = []
+): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">County Yearly Breakdown</td></tr>`;
@@ -894,7 +965,12 @@ function generateYearBreakdownContent(countyData, classes, showMeanValues, selec
     return content;
 }
 
-function generateYearBreakdownDifferenceContent(countyData, classes, showMeanValues, selectedYears = []) {
+function generateYearBreakdownDifferenceContent(
+    countyData: any,
+    classes: any,
+    showMeanValues: boolean,
+    selectedYears: (string | number)[] = []
+): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
@@ -1030,16 +1106,16 @@ function generateYearBreakdownDifferenceContent(countyData, classes, showMeanVal
 }
 
 function generateCommodityRegularContent(
-    countyData,
-    selectedCommodities,
-    classes,
-    showMeanValues,
+    countyData: any,
+    selectedCommodities: string[],
+    classes: any,
+    showMeanValues: boolean,
     viewMode = "current",
     yearAggregation = 0,
-    selectedYears = []
-) {
+    selectedYears: (string | number)[] = []
+): string {
     let content = "";
-    const commoditiesToDisplay = selectedCommodities.includes("All Commodities")
+    const commoditiesToDisplay = selectedCommodities.includes("All Program Crops")
         ? Object.keys(countyData.commodities)
         : selectedCommodities;
 
@@ -1082,8 +1158,21 @@ function generateCommodityRegularContent(
                 ) {
                     baseAcres = 0.3;
                 }
-
-                let commodityMeanRate = baseAcres > 0 ? commodityValue / baseAcres : 0;
+                let commodityMeanRate = 0;
+                if (baseAcres > 0) {
+                    const isMultiYear = yearAggregation > 0 || (selectedYears && selectedYears.length > 1);
+                    const numberOfYears =
+                        selectedYears && selectedYears.length > 1
+                            ? selectedYears.length
+                            : yearAggregation > 0
+                            ? yearAggregation
+                            : 1;
+                    if (isMultiYear && numberOfYears > 1) {
+                        commodityMeanRate = commodityValue / (baseAcres * numberOfYears);
+                    } else {
+                        commodityMeanRate = commodityValue / baseAcres;
+                    }
+                }
 
                 if (
                     countyData.fips === "01003" &&
@@ -1204,5 +1293,329 @@ function generateCommodityRegularContent(
             }
         });
     }
+    return content;
+}
+
+function generateCombinedCommodityProgramContent(
+    countyData: any,
+    selectedCommodities: string[],
+    selectedPrograms: string[],
+    classes: any,
+    showMeanValues: boolean,
+    viewMode = "current",
+    yearAggregation = 0,
+    selectedYears: (string | number)[] = []
+): string {
+    const commoditiesToDisplay = selectedCommodities.includes("All Program Crops")
+        ? Object.keys(countyData.commodities || {})
+        : selectedCommodities;
+
+    const programsToDisplay = selectedPrograms.includes("All Programs") ? ["ARC-CO", "PLC"] : selectedPrograms;
+
+    if (commoditiesToDisplay.length === 0 || !countyData.commodities) {
+        return "";
+    }
+
+    const sectionHeaderStyle =
+        "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 8px; border-radius: 3px; margin-top: 6px;";
+
+    const tableHeaderStyle =
+        "background-color: rgba(47, 113, 100, 0.08); font-weight: bold; text-align: center; padding: 6px 4px; border: 1px solid rgba(47, 113, 100, 0.2); font-size: 0.8em;";
+
+    const commodityHeaderStyle =
+        "background-color: rgba(47, 113, 100, 0.12); font-weight: bold; text-align: left; padding: 6px 8px; border: 1px solid rgba(47, 113, 100, 0.2); color: #2F7164;";
+
+    const cellStyle =
+        "text-align: right; vertical-align: middle; padding: 4px 6px; border: 1px solid rgba(47, 113, 100, 0.15); font-size: 0.85em;";
+
+    let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">Commodity Breakdown</td></tr>`;
+
+    const showAllPrograms = selectedPrograms.includes("All Programs");
+
+    if (showAllPrograms) {
+        content += `
+        <tr>
+            <td colspan="2" style="padding: 4px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                    <thead>
+                        <tr>
+                            <th style="${tableHeaderStyle}; text-align: left; width: 20%;">Commodity</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">${
+            showMeanValues ? "Total Rate" : "Total ($)"
+        }</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">Base Acres</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">${
+            showMeanValues ? "ARC Rate" : "ARC Total"
+        }</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">ARC Acres</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">${
+            showMeanValues ? "PLC Rate" : "PLC Total"
+        }</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">PLC Acres</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        commoditiesToDisplay.forEach((commodity) => {
+            const commodityData = countyData.commodities[commodity];
+            if (!commodityData) return;
+
+            const getValueForViewMode = (data: any) => {
+                if (viewMode === "difference") {
+                    return (data.proposedValue || 0) - (data.currentValue || 0);
+                }
+                if (viewMode === "proposed") {
+                    return data.proposedValue || data.value || 0;
+                }
+                return data.currentValue || data.value || 0;
+            };
+
+            const getAcresForViewMode = (data: any) => {
+                if (viewMode === "proposed") {
+                    return data.proposedBaseAcres || data.baseAcres || 0;
+                }
+                return data.currentBaseAcres || data.baseAcres || 0;
+            };
+
+            const commodityValue = getValueForViewMode(commodityData);
+            const commodityBaseAcres = getAcresForViewMode(commodityData);
+
+            let commodityArcValue = 0;
+            let commodityPlcValue = 0;
+            let commodityArcAcres = 0;
+            let commodityPlcAcres = 0;
+
+            if (commodityData.programs) {
+                if (Array.isArray(commodityData.programs)) {
+                    commodityData.programs.forEach((program: any) => {
+                        const programValue = getValueForViewMode({
+                            currentValue: program.currentValue || program.totalPaymentInDollars || 0,
+                            proposedValue: program.proposedValue || program.totalPaymentInDollars || 0
+                        });
+                        const programAcres = getAcresForViewMode({
+                            currentBaseAcres: program.currentBaseAcres || program.baseAcres || 0,
+                            proposedBaseAcres: program.proposedBaseAcres || program.baseAcres || 0
+                        });
+
+                        if (program.programName === "ARC-CO") {
+                            commodityArcValue += programValue;
+                            commodityArcAcres += programAcres;
+                        } else if (program.programName === "PLC") {
+                            commodityPlcValue += programValue;
+                            commodityPlcAcres += programAcres;
+                        }
+                    });
+                } else if (typeof commodityData.programs === "object") {
+                    if (commodityData.programs["ARC-CO"]) {
+                        const arcProgram = commodityData.programs["ARC-CO"];
+                        commodityArcValue = getValueForViewMode(arcProgram);
+                        commodityArcAcres = getAcresForViewMode(arcProgram);
+                    }
+                    if (commodityData.programs.PLC) {
+                        const plcProgram = commodityData.programs.PLC;
+                        commodityPlcValue = getValueForViewMode(plcProgram);
+                        commodityPlcAcres = getAcresForViewMode(plcProgram);
+                    }
+                }
+            }
+
+            const totalCommodityProgramAcres = commodityArcAcres + commodityPlcAcres;
+            const isMultiYear = yearAggregation > 0 || (selectedYears && selectedYears.length > 1);
+            const numberOfYears =
+                selectedYears && selectedYears.length > 1
+                    ? selectedYears.length
+                    : yearAggregation > 0
+                    ? yearAggregation
+                    : 1;
+
+            let commodityArcRate = 0;
+            let commodityPlcRate = 0;
+
+            if (commodityArcAcres > 0) {
+                if (isMultiYear && numberOfYears > 1) {
+                    commodityArcRate = commodityArcValue / (commodityArcAcres * numberOfYears);
+                } else {
+                    commodityArcRate = commodityArcValue / commodityArcAcres;
+                }
+            }
+
+            if (commodityPlcAcres > 0) {
+                if (isMultiYear && numberOfYears > 1) {
+                    commodityPlcRate = commodityPlcValue / (commodityPlcAcres * numberOfYears);
+                } else {
+                    commodityPlcRate = commodityPlcValue / commodityPlcAcres;
+                }
+            }
+
+            const actualCommodityBaseAcres =
+                totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres;
+
+            let commodityRate = 0;
+            if (actualCommodityBaseAcres > 0) {
+                if (isMultiYear && numberOfYears > 1) {
+                    commodityRate = commodityValue / (actualCommodityBaseAcres * numberOfYears);
+                } else {
+                    commodityRate = commodityValue / actualCommodityBaseAcres;
+                }
+            }
+
+            if (commodityValue > 0 || commodityBaseAcres > 0 || commodityArcValue > 0 || commodityPlcValue > 0) {
+                const formatValue = (value: number, isRate = false) => {
+                    if (viewMode === "difference") {
+                        const sign = value >= 0 ? "+" : "";
+                        return `${sign}$${ShortFormat(Math.abs(value), undefined, 2)}${isRate ? "/acre" : ""}`;
+                    }
+                    return `$${ShortFormat(value, undefined, 2)}${isRate ? "/acre" : ""}`;
+                };
+
+                content += `
+                        <tr>
+                            <td style="${commodityHeaderStyle}">${commodity}</td>
+                            <td style="${cellStyle}">${formatValue(
+                    showMeanValues ? commodityRate : commodityValue,
+                    showMeanValues
+                )}</td>
+                            <td style="${cellStyle}">${ShortFormat(
+                    totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres,
+                    undefined,
+                    1
+                )}</td>
+                            <td style="${cellStyle}">${
+                    commodityArcValue > 0
+                        ? formatValue(showMeanValues ? commodityArcRate : commodityArcValue, showMeanValues)
+                        : "-"
+                }</td>
+                            <td style="${cellStyle}">${
+                    commodityArcAcres > 0 ? ShortFormat(commodityArcAcres, undefined, 1) : "-"
+                }</td>
+                            <td style="${cellStyle}">${
+                    commodityPlcValue > 0
+                        ? formatValue(showMeanValues ? commodityPlcRate : commodityPlcValue, showMeanValues)
+                        : "-"
+                }</td>
+                            <td style="${cellStyle}">${
+                    commodityPlcAcres > 0 ? ShortFormat(commodityPlcAcres, undefined, 1) : "-"
+                }</td>
+                        </tr>`;
+            }
+        });
+
+        content += `
+                    </tbody>
+                </table>
+            </td>
+        </tr>`;
+    } else {
+        content += `
+        <tr>
+            <td colspan="2" style="padding: 4px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                    <thead>
+                        <tr>
+                            <th style="${tableHeaderStyle}; text-align: left; width: 40%;">Commodity/Program</th>
+                            <th style="${tableHeaderStyle}; width: 30%;">${
+            showMeanValues ? "Rate ($/acre)" : "Total ($)"
+        }</th>
+                            <th style="${tableHeaderStyle}; width: 30%;">Base Acres</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        commoditiesToDisplay.forEach((commodity) => {
+            const commodityData = countyData.commodities[commodity];
+            if (!commodityData) return;
+
+            const getValueForProgram = (programData: any) => {
+                if (!programData) return 0;
+                if (viewMode === "difference") {
+                    return (programData.proposedValue || 0) - (programData.currentValue || 0);
+                }
+                return programData.totalPaymentInDollars || programData.value || programData.currentValue || 0;
+            };
+
+            const getAcresForProgram = (programData: any) => {
+                if (!programData) return 0;
+                return programData.baseAcres || programData.currentBaseAcres || 0;
+            };
+
+            const getValueForViewMode = (data: any) => {
+                if (viewMode === "difference") {
+                    return (data.proposedValue || 0) - (data.currentValue || 0);
+                }
+                if (viewMode === "proposed") {
+                    return data.proposedValue || data.value || 0;
+                }
+                return data.currentValue || data.value || 0;
+            };
+
+            const getAcresForViewMode = (data: any) => {
+                if (viewMode === "proposed") {
+                    return data.proposedBaseAcres || data.baseAcres || 0;
+                }
+                return data.currentBaseAcres || data.baseAcres || 0;
+            };
+
+            const commodityValue = getValueForViewMode(commodityData);
+            const commodityBaseAcres = getAcresForViewMode(commodityData);
+            const commodityRate = commodityBaseAcres > 0 ? commodityValue / commodityBaseAcres : 0;
+
+            if (commodityValue > 0 || commodityBaseAcres > 0) {
+                const formatValue = (value, isRate = false) => {
+                    if (viewMode === "difference") {
+                        const sign = value >= 0 ? "+" : "";
+                        return `${sign}$${ShortFormat(Math.abs(value), undefined, 2)}${isRate ? "/acre" : ""}`;
+                    }
+                    return `$${ShortFormat(value, undefined, 2)}${isRate ? "/acre" : ""}`;
+                };
+
+                content += `
+                        <tr>
+                            <td style="${commodityHeaderStyle}">${commodity}</td>
+                            <td style="${cellStyle}">${formatValue(
+                    showMeanValues ? commodityRate : commodityValue,
+                    showMeanValues
+                )}</td>
+                            <td style="${cellStyle}">${ShortFormat(commodityBaseAcres, undefined, 1)}</td>
+                        </tr>`;
+
+                if (commodityData.programs) {
+                    programsToDisplay.forEach((program) => {
+                        let programData = null;
+
+                        if (Array.isArray(commodityData.programs)) {
+                            programData = commodityData.programs.find((p) => p.programName === program);
+                        } else if (typeof commodityData.programs === "object") {
+                            programData = commodityData.programs[program];
+                        }
+
+                        if (programData) {
+                            const programValue = getValueForProgram(programData);
+                            const programBaseAcres = getAcresForProgram(programData);
+                            const programRate = programBaseAcres > 0 ? programValue / programBaseAcres : 0;
+
+                            if (programValue > 0 || programBaseAcres > 0) {
+                                content += `
+                        <tr>
+                            <td style="text-align: left; vertical-align: middle; padding: 4px 8px; border: 1px solid rgba(47, 113, 100, 0.15); font-size: 0.9em; padding-left: 16px;">• ${program}</td>
+                            <td style="${cellStyle}">${formatValue(
+                                    showMeanValues ? programRate : programValue,
+                                    showMeanValues
+                                )}</td>
+                            <td style="${cellStyle}">${ShortFormat(programBaseAcres, undefined, 1)}</td>
+                        </tr>`;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        content += `
+                    </tbody>
+                </table>
+            </td>
+        </tr>`;
+    }
+
     return content;
 }

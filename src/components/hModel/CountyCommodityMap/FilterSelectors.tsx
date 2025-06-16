@@ -2,6 +2,7 @@ import { FormControl, FormLabel, Select, MenuItem, Chip, Grid, Box, Divider } fr
 import React from "react";
 import noShowStates from "../../../files/maps/noShow-state.json";
 import InfoTooltip from "./InfoTooltip";
+import { CommodityOrder } from "./CommodityOrder";
 
 interface FilterSelectorsProps {
     availableCommodities: string[];
@@ -28,15 +29,15 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
 }) => {
     const handleCommodityChange = (event: { target: { value: unknown } }) => {
         const value = event.target.value as string[];
-        if (value.includes("All Commodities") && !selectedCommodities.includes("All Commodities")) {
-            setSelectedCommodities(["All Commodities"]);
+        if (value.includes("All Program Crops") && !selectedCommodities.includes("All Program Crops")) {
+            setSelectedCommodities(["All Program Crops"]);
             return;
         }
         if (value.length === 0) {
-            setSelectedCommodities(["All Commodities"]);
+            setSelectedCommodities(["All Program Crops"]);
             return;
         }
-        const filtered = value.filter((item) => item !== "All Commodities");
+        const filtered = value.filter((item) => item !== "All Program Crops");
         setSelectedCommodities(filtered);
     };
 
@@ -48,6 +49,21 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
     const handleStateChange = (event: { target: { value: unknown } }) => {
         setSelectedState(event.target.value as string);
     };
+
+    const sortedCommodities = React.useMemo(() => {
+        return availableCommodities.sort((a, b) => {
+            const indexA = CommodityOrder.indexOf(a);
+            const indexB = CommodityOrder.indexOf(b);
+
+            if (indexA === -1 && indexB === -1) {
+                return a.localeCompare(b);
+            }
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+
+            return indexA - indexB;
+        });
+    }, [availableCommodities]);
 
     const selectHeight = "44px";
 
@@ -233,8 +249,8 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                     }}
                 >
                     <FormLabel component="legend" sx={formLabelStyle}>
-                        Select Commodities
-                        <InfoTooltip title="Select specific commodities to view data for (e.g., Corn, Cotton, Soybeans), or choose 'All Commodities' to see data for all available commodities combined." />
+                        Select Program Crop
+                        <InfoTooltip title="Select the program crop or crops to view payment projections, or select ‘All Program Crops’ to visualize projections for all program crops combined. Program crops are those authorized by Congress to be eligible for ARC-CO and PLC payments and for which base acres exist to be enrolled in a program. The following are the program crops included in the model are and available in the map and table: corn, soybeans, wheat, sorghum, seed cotton, rice, and peanuts." />
                     </FormLabel>
                     <Select
                         multiple
@@ -252,7 +268,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                                     selectedCommodities.filter((item) => item !== value)
                                                 );
                                             } else {
-                                                setSelectedCommodities(["All Commodities"]);
+                                                setSelectedCommodities(["All Program Crops"]);
                                             }
                                         }}
                                         onMouseDown={(event) => {
@@ -276,7 +292,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             width: "100%",
 
                             ...(selectedCommodities.length > 0 &&
-                                !selectedCommodities.includes("All Commodities") && {
+                                !selectedCommodities.includes("All Program Crops") && {
                                     fontWeight: "bold",
                                     backgroundColor: "rgba(47, 113, 100, 0.1)"
                                 })
@@ -284,18 +300,20 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                         key={`commodity-select-${selectedCommodities.join("|")}`}
                     >
                         <MenuItem
-                            value="All Commodities"
+                            value="All Program Crops"
                             sx={{
                                 ...menuItemStyle,
                                 fontWeight: "bold",
                                 bgcolor:
-                                    selectedCommodities[0] !== "All Commodities" ? "rgba(47, 113, 100, 0.1)" : "inherit"
+                                    selectedCommodities[0] !== "All Program Crops"
+                                        ? "rgba(47, 113, 100, 0.1)"
+                                        : "inherit"
                             }}
                         >
-                            All Commodities
+                            All Program Crops
                         </MenuItem>
                         <Divider sx={{ my: 1 }} />
-                        {availableCommodities.map((commodity) => (
+                        {sortedCommodities.map((commodity) => (
                             <MenuItem
                                 key={commodity}
                                 value={commodity}
@@ -330,8 +348,8 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                     }}
                 >
                     <FormLabel component="legend" sx={formLabelStyle}>
-                        Select Programs
-                        <InfoTooltip title="Select specific farm programs to view data for (e.g., ARC-CO, PLC), or choose 'All Programs' to see data for all available programs combined." />
+                        Select Farm Program
+                        <InfoTooltip title="Select the farm program for data visualization. Agriculture Risk Coverage, county option (ARC-CO) provides payments triggered by declines in crop revenues (price times yield). Price Loss Coverage (PLC) provides payments triggered when marketing year average prices are below the effective reference price. Users can also select ‘All Programs’ to view the data for both programs combined. More information on the programs is available from USDA’s Farm Service Agency (FSA): https://www.fsa.usda.gov/resources/programs/arc-plc." />
                     </FormLabel>
                     <Select
                         value={selectedPrograms[0]}

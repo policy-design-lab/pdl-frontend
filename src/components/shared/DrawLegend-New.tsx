@@ -275,12 +275,12 @@ export default function DrawLegendNew({
                 if (isRatio) {
                     return `${Math.round(d * 100)}%`;
                 }
-                const roundedValue = Math.round(d * 100) / 100;
-                if (!notDollar || isPaymentRate) {
-                    const res = ShortFormat(roundedValue.toFixed(2), -1, 2);
+                const roundedValue = Math.round(d);
+                if (!notDollar) {
+                    const res = ShortFormat(roundedValue.toString(), 0, 0);
                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                 }
-                return ShortFormat(roundedValue.toFixed(2), -1, 2);
+                return ShortFormat(roundedValue.toString(), 0, 0);
             });
         if (emptyState.length !== 0) {
             const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);

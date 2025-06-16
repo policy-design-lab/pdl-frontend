@@ -185,16 +185,20 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
         }
         return false;
     };
-    const getDescriptionContent = (description: string, author: string, link: string) => {
+    const getDescriptionContent = (description: string, author?: string, link?: string) => {
         return (
             <>
                 {description}
                 <br />
-                Details of model can by found by{" "}
-                <Link href={link} target="_blank" rel="noopener" style={{ color: "#2F7164" }}>
-                    Link
-                </Link>
-                , authored by {author}.
+                {link && author && (
+                    <>
+                        Details of model can by found by{" "}
+                        <Link href={link} target="_blank" rel="noopener" style={{ color: "#2F7164" }}>
+                            Link
+                        </Link>
+                        , authored by {author}.
+                    </>
+                )}
             </>
         );
     };
@@ -225,7 +229,7 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                 {showHouseAgCommittee && (
                                     <Box sx={{ mt: 4 }}>
                                         <Typography variant="h5" sx={{ mb: 3, color: "#2F7164", fontWeight: 600 }}>
-                                            Overall Introduction Section
+                                            Introduction: Proposal Analysis
                                         </Typography>
                                         <Box
                                             sx={{
@@ -237,28 +241,77 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                             }}
                                         >
                                             <Typography sx={{ fontSize: "1.125rem" }}>
-                                                In this space, a variety of policy design proposals will be evaluated
-                                                and analyzed. Some analysis is of existing or previous bills in
-                                                Congress, as well as modifications or alternatives to proposed or
-                                                existing policies. Overall, the goal is to provide a space for policy
-                                                design analysis to further creativity and innovation. Interactive maps
-                                                and other visualizations accompany the various proposals, providing
-                                                analysis and perspectives on policy design.
+                                                One goal of the Policy Design Lab is to provide useful visualizations of
+                                                alternative policy designs, including proposals pending in Congress.
+                                                Such visualizations are intended to advance understanding of policies
+                                                and the impacts of different designs. The visualizations consist
+                                                primarily of interactive maps built using complex modeling, a variety of
+                                                data sources, and legislative textual analysis. Early developments will
+                                                visualize the distribution of benefits, and changes in distribution,
+                                                projected to result from changes in policy designs; later developments
+                                                will build upon the distributional projections to include estimates of
+                                                other outcomes, benefits, or impacts of policy designs, including the
+                                                application of ecosystem or biophysical models and other science and
+                                                research.
                                             </Typography>
                                         </Box>
                                         <Box sx={{ mt: 4, p: 3, backgroundColor: "white", borderRadius: 1 }}>
                                             <Typography variant="h6" sx={{ mb: 2, color: "#2F7164" }}>
-                                                What we can put here?
+                                                The visualizations of policy designs are grouped relative to the timing
+                                                and authorship of proposed changes to policies. Each visualization will
+                                                include background information on the modeling and data, as well as
+                                                links to more detailed explanations including doctorate dissertations or
+                                                other academic outputs.
                                             </Typography>
                                             <Typography paragraph>
-                                                A description of every model: Yifan&apos;s model, Henrique&apos;s model,
-                                                Tosh&apos;s Model, etc
+                                                Summary discussions and analysis using the work visualized will also be
+                                                available on{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    farmdoc daily
+                                                </a>
+                                                .
                                             </Typography>
                                             <Typography paragraph>
-                                                Or description of each year&apos;s proposal, depends on the content of
-                                                the submenu
+                                                Projected impacts of proposals can be compared to existing benefit
+                                                allocations visualized on{" "}
+                                                <a
+                                                    href="https://policydesignlab.ncsa.illinois.edu/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    this website
+                                                </a>
+                                                .
                                             </Typography>
-                                            <Typography paragraph>Or anything else.</Typography>
+                                            <Typography paragraph>
+                                                Additional resources on projected costs of policies are available from
+                                                the{" "}
+                                                <a
+                                                    href="https://www.cbo.gov/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Congressional Budget Office
+                                                </a>
+                                                .
+                                            </Typography>
+                                            <Typography paragraph>
+                                                Information about, and analysis of, legislative proposals, statutes, and
+                                                Congressional debates are available from the Congressional Research
+                                                Service:{" "}
+                                                <a
+                                                    href="https://www.congress.gov/crs-products"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    Congressional Research Service
+                                                </a>
+                                                .
+                                            </Typography>
                                         </Box>
                                     </Box>
                                 )}
@@ -273,12 +326,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                     >
                                         {getDescriptionContent(
                                             showEQIPProjection
-                                                ? "The following visualizations provide projections and analysis of the proposal in the House Ag Committee&apos;s 2024 Farm Bill to rescind Inflation Reduction Act appropriations and reinvest a portion of them in Farm Bill conservation baseline."
-                                                : "The following visualizations provide analysis of ARC-PLC County Payments comparing current policy to proposed 2025 Farm Bill changes.",
-                                            showEQIPProjection ? "A" : "B",
-                                            showEQIPProjection
-                                                ? "https://www.congress.gov/119/bills/hconres10/BILLS-119hconres10enr.htm"
-                                                : "https://www.congress.gov/119/bills/hconres10/BILLS-119hconres10enr.htm"
+                                                ? "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily, August 1, 2024; August 29, 2024; October 10, 2024; November 7, 2024."
+                                                : "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to modify the payment calculations for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm subsidy programs. The payment rate and total payment projections are visualized by county, program crop, and crop year through application of a model created by Henrique Monaco, a PhD candidate at the University of Illinois at Urbana-Champaign. Further details will be available from his dissertation upon completion, which will be available here."
                                         )}
                                     </Typography>
                                 )}
@@ -368,7 +417,8 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                             textAlign: "center"
                                                         }}
                                                     >
-                                                        Interactive Map & Data Analysis
+                                                        Interactive Map & Data Analysis: Projected Payment Amounts and
+                                                        Payment Rates (per base acre)
                                                     </Typography>
                                                     <Typography
                                                         sx={{
@@ -457,7 +507,11 @@ export default function HouseProjectionSubPageProps({ v, index }: { v: number; i
                                                             <PolicyComparisonSection
                                                                 currentData={hModelDistributionData}
                                                                 proposedData={hModelDistributionProposedData}
-                                                                title="Policy Impact Analysis: Payment Projections"
+                                                                title="Policy Analysis: Budgetary Impacts of Proposed Changes in Policy Design"
+                                                                subTitle="Projected Changes in Spending on a Fiscal Year Basis; 10-year Budget Window."
+                                                                tooltip={
+                                                                    "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a ‘timing shift’ for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
+                                                                }
                                                             />
                                                         </Box>
                                                     </Box>

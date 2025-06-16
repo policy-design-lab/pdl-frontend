@@ -4,11 +4,11 @@ import { geoCentroid } from "d3-geo";
 import * as d3 from "d3";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import { Check } from "react-bootstrap-icons";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import DrawLegend from "../shared/DrawLegend";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { CheckAddZero } from "../shared/ColorFunctions";
+import InfoTooltip from "../hModel/CountyCommodityMap/InfoTooltip";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -286,6 +286,7 @@ const HouseOutlayMap = ({
                     : "Selected Projected Change in Financial Assistance"}{" "}
                 for <strong>{year}</strong>
             </Typography>
+            <InfoTooltip title="The projections in the map equal projections of financial assistance with the increased funding authorization proposed in the House Agriculture Committee bill (2024) minus the projection of the remaining Inflation Reduction Act funds (by State and practice)." />
         </Box>
     );
     return (
@@ -298,6 +299,7 @@ const HouseOutlayMap = ({
                     programData={practiceData.data}
                     prepColor={mapColor}
                     emptyState={[]}
+                    notDollar={false}
                 />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center" pt={4} pb={4}>

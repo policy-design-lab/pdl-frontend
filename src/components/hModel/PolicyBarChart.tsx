@@ -227,87 +227,6 @@ const CommoditySummaryTable: React.FC<{
             Math.max(overallTotals.currentTotal, overallTotals.proposedTotal)
         );
     }, [commoditySummaries, overallTotals]);
-    const MiniBarChart: React.FC<{ current: number; proposed: number; isOverall?: boolean }> = ({
-        current,
-        proposed,
-        isOverall = false
-    }) => {
-        const barWidth = 60;
-        const barHeight = isOverall ? 120 : 100;
-        const currentHeight = maxTotal > 0 ? (current / maxTotal) * barHeight : 0;
-        const proposedHeight = maxTotal > 0 ? (proposed / maxTotal) * barHeight : 0;
-
-        return (
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, minWidth: 140 }}>
-                <Box sx={{ display: "flex", gap: 2, alignItems: "flex-end", height: barHeight + 20 }}>
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
-                        <Box
-                            sx={{
-                                width: barWidth,
-                                height: currentHeight,
-                                backgroundColor: "#FF8C00",
-                                borderRadius: 1,
-                                minHeight: current > 0 ? 4 : 0,
-                                opacity: 0.8,
-                                alignSelf: "flex-end"
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                fontSize: "0.7rem",
-                                color: "#FF8C00",
-                                fontWeight: isOverall ? 600 : 400,
-                                textAlign: "center"
-                            }}
-                        >
-                            Current
-                        </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
-                        <Box
-                            sx={{
-                                "width": barWidth,
-                                "height": proposedHeight,
-                                "backgroundColor": "rgb(1, 87, 155)",
-                                "borderRadius": 1,
-                                "minHeight": proposed > 0 ? 4 : 0,
-                                "opacity": 0.8,
-                                "alignSelf": "flex-end",
-                                "position": "relative",
-                                "&::after": {
-                                    content: '""',
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    background:
-                                        "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)",
-                                    borderRadius: 1
-                                }
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                fontSize: "0.7rem",
-                                color: "rgb(1, 87, 155)",
-                                fontWeight: isOverall ? 600 : 400,
-                                textAlign: "center"
-                            }}
-                        >
-                            Proposed
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box sx={{ display: "flex", gap: 2, fontSize: "0.65rem", color: "#666" }}>
-                    <Typography sx={{ fontSize: "0.65rem", color: "#FF8C00" }}>{ShortFormat(current)}</Typography>
-                    <Typography sx={{ fontSize: "0.65rem", color: "rgb(1, 87, 155)" }}>
-                        {ShortFormat(proposed)}
-                    </Typography>
-                </Box>
-            </Box>
-        );
-    };
 
     return (
         <Box sx={{ mt: 3 }}>
@@ -320,7 +239,7 @@ const CommoditySummaryTable: React.FC<{
                     textAlign: "center"
                 }}
             >
-                10 Fiscal Year Payment Totals by Commodity
+                Payment Totals by Commodity: Total for 10 Fiscal Years
             </Typography>
             <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
                 <TableContainer component={Paper} sx={{ maxHeight: 400, flex: 1 }}>
@@ -607,55 +526,69 @@ export default function PolicyBarChart({
         );
         const commodityColors = generateColorPalette(allCommoditiesInChart);
         const legend = svg.append("g").attr("class", "legend").attr("transform", `translate(${margin.left}, 20)`);
-        const legendItemWidth = Math.min(140, graphWidth / allCommoditiesInChart.length);
-        const legendRows = Math.ceil((allCommoditiesInChart.length * legendItemWidth) / graphWidth);
-        const itemsPerRow = Math.ceil(allCommoditiesInChart.length / legendRows);
+        const minItemWidth = 90;
+        const maxItemsPerRow = Math.max(1, Math.floor(graphWidth / minItemWidth));
+        const actualItemsPerRow = Math.min(maxItemsPerRow, allCommoditiesInChart.length);
+        const legendItemWidth = graphWidth / actualItemsPerRow;
+        const legendRows = Math.ceil(allCommoditiesInChart.length / actualItemsPerRow);
+        const itemsPerRow = actualItemsPerRow;
         allCommoditiesInChart.forEach((commodity, i) => {
             const row = Math.floor(i / itemsPerRow);
             const col = i % itemsPerRow;
             const x = col * legendItemWidth;
-            const y = row * 25;
+            const y = row * 32;
             const isSelected = selectedCommodities.length === 0 || selectedCommodities.includes(commodity);
             const legendItem = legend
                 .append("g")
                 .attr("class", "legend-item")
                 .attr("transform", `translate(${x}, ${y})`)
                 .style("cursor", "pointer");
+            const rectSize = Math.min(20, Math.max(16, legendItemWidth * 0.12));
+            const fontSize = Math.min(16, Math.max(12, legendItemWidth * 0.1));
             legendItem
                 .append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr("width", 14)
-                .attr("height", 14)
+                .attr("width", rectSize)
+                .attr("height", rectSize)
                 .attr("fill", commodityColors[commodity] || "#999")
                 .attr("stroke", "#333")
                 .attr("stroke-width", 1)
                 .attr("rx", 2)
                 .attr("opacity", 0.8);
             if (isSelected && selectedCommodities.length > 0) {
+                const checkmarkScale = rectSize / 14;
                 legendItem
                     .append("path")
-                    .attr("d", "M3,7 L6,10 L11,3")
+                    .attr(
+                        "d",
+                        `M${3 * checkmarkScale},${7 * checkmarkScale} L${6 * checkmarkScale},${10 * checkmarkScale} L${
+                            11 * checkmarkScale
+                        },${3 * checkmarkScale}`
+                    )
                     .attr("stroke", "white")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 2 * checkmarkScale)
                     .attr("fill", "none")
                     .attr("stroke-linecap", "round")
                     .attr("stroke-linejoin", "round");
             }
             legendItem
                 .append("text")
-                .attr("x", 20)
-                .attr("y", 10)
+                .attr("x", rectSize + 6)
+                .attr("y", rectSize / 2 + 2)
                 .text(commodity)
-                .style("font-size", "0.75rem")
+                .style("font-size", `${fontSize}px`)
                 .style("fill", "#00000099")
-                .style("font-family", "Roboto, sans-serif");
+                .style("font-family", "Roboto, sans-serif")
+                .style("dominant-baseline", "middle");
+            const strikeRectSize = Math.min(14, Math.max(10, legendItemWidth * 0.08));
+            const textWidth = commodity.length * fontSize * 0.55;
             legendItem
                 .append("rect")
-                .attr("x", 20 + commodity.length * 5 + 5)
-                .attr("y", 2)
-                .attr("width", 10)
-                .attr("height", 10)
+                .attr("x", rectSize + 6 + textWidth + 6)
+                .attr("y", rectSize / 2 - strikeRectSize / 2)
+                .attr("width", strikeRectSize)
+                .attr("height", strikeRectSize)
                 .attr("fill", commodityColors[commodity] || "#999")
                 .attr("opacity", 0.8)
                 .style("fill", "url(#stripes)")
@@ -670,51 +603,7 @@ export default function PolicyBarChart({
                 }
             });
         });
-        const policyLegend = svg
-            .append("g")
-            .attr("class", "policy-legend")
-            .attr("transform", `translate(${margin.left + graphWidth - 250}, ${margin.top + graphHeight + 20})`);
-        const currentLegendItem = policyLegend.append("g").attr("class", "legend-item");
-        currentLegendItem
-            .append("rect")
-            .attr("width", 16)
-            .attr("height", 12)
-            .attr("fill", "#FF8C00")
-            .attr("opacity", 0.8);
-        currentLegendItem
-            .append("text")
-            .attr("x", 20)
-            .attr("y", 9)
-            .text("Current Policy")
-            .style("font-size", "0.75rem")
-            .style("fill", "#FF8C00")
-            .style("font-family", "Roboto, sans-serif")
-            .style("font-weight", "500");
-        const proposedLegendItem = policyLegend
-            .append("g")
-            .attr("class", "legend-item")
-            .attr("transform", "translate(120, 0)");
-        proposedLegendItem
-            .append("rect")
-            .attr("width", 16)
-            .attr("height", 12)
-            .attr("fill", "rgb(1, 87, 155)")
-            .attr("opacity", 0.8);
-        proposedLegendItem
-            .append("rect")
-            .attr("width", 16)
-            .attr("height", 12)
-            .attr("fill", "url(#stripes)")
-            .attr("opacity", 0.6);
-        proposedLegendItem
-            .append("text")
-            .attr("x", 20)
-            .attr("y", 9)
-            .text("Proposed Policy")
-            .style("font-size", "0.75rem")
-            .style("fill", "rgb(1, 87, 155)")
-            .style("font-family", "Roboto, sans-serif")
-            .style("font-weight", "500");
+
         const xScale = d3
             .scaleBand()
             .domain(processedData.map((d) => d.year))
@@ -747,7 +636,8 @@ export default function PolicyBarChart({
             .call(xAxis)
             .selectAll("text")
             .style("fill", "#2F7164")
-            .style("font-family", "Roboto, sans-serif");
+            .style("font-family", "Roboto, sans-serif")
+            .style("font-weight", "bold");
 
         chartGroup
             .append("text")
@@ -805,7 +695,7 @@ export default function PolicyBarChart({
                 chartGroup
                     .append("text")
                     .attr("x", (xScale(yearData.year) || 0) + xOffset + barWidth / 2)
-                    .attr("y", yScale(yearData[type].totalPayment) - 8)
+                    .attr("y", yScale(totalPayment) - 8)
                     .attr("text-anchor", "middle")
                     .style("font-size", "0.7rem")
                     .style("font-family", "Roboto, sans-serif")
@@ -813,9 +703,7 @@ export default function PolicyBarChart({
                     .style("font-weight", "600")
                     .style("opacity", 1)
                     .text(`$${ShortFormat(Math.round(totalPayment), undefined, 0)}`);
-                commodityData.forEach((commodity) => {
-                    const isVisible =
-                        selectedCommodities.length === 0 || selectedCommodities.includes(commodity.commodityName);
+                visibleCommodities.forEach((commodity) => {
                     const barHeight = graphHeight - yScale(commodity.totalPaymentInDollars);
                     const commodityColor = commodityColors[commodity.commodityName] || color;
                     const rect = chartGroup
@@ -828,7 +716,7 @@ export default function PolicyBarChart({
                         .attr("fill", commodityColor)
                         .attr("stroke", "#fff")
                         .attr("stroke-width", 1)
-                        .attr("opacity", isVisible ? 0.8 : 0.2);
+                        .attr("opacity", 0.8);
                     if (type === "proposed") {
                         chartGroup
                             .append("rect")
@@ -838,7 +726,7 @@ export default function PolicyBarChart({
                             .attr("width", barWidth)
                             .attr("height", barHeight)
                             .attr("fill", "url(#stripes)")
-                            .attr("opacity", isVisible ? 0.6 : 0.1)
+                            .attr("opacity", 0.6)
                             .style("pointer-events", "none");
                     }
                     rect.on("mouseover", function onMouseOver(event) {
@@ -870,6 +758,28 @@ export default function PolicyBarChart({
         };
         drawStackedBars(processedData, "current", "#FF8C00", 0, yScaleChart);
         drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScaleChart);
+        processedData.forEach((yearData) => {
+            chartGroup
+                .append("text")
+                .attr("x", (xScale(yearData.year) || 0) + barWidth / 2)
+                .attr("y", graphHeight + 10)
+                .attr("text-anchor", "middle")
+                .style("font-size", "0.5rem")
+                .style("font-family", "Roboto, sans-serif")
+                .style("fill", "#FF8C00")
+                .style("font-weight", "700")
+                .text("C");
+            chartGroup
+                .append("text")
+                .attr("x", (xScale(yearData.year) || 0) + barWidth + barGap + barWidth / 2)
+                .attr("y", graphHeight + 10)
+                .attr("text-anchor", "middle")
+                .style("font-size", "0.5rem")
+                .style("font-family", "Roboto, sans-serif")
+                .style("fill", "rgb(1, 87, 155)")
+                .style("font-weight", "700")
+                .text("P");
+        });
         svg.attr("width", chartWidth).attr("height", height);
     };
     return (

@@ -12,7 +12,7 @@ export const houseProjectionMenu: MenuItem[] = [
         items: []
     },
     {
-        title: "House Ag Committee",
+        title: "Conversation & EQIP",
         items: [
             {
                 title: "EQIP Projection"

@@ -722,7 +722,7 @@ const CountyMap = ({
                     position: "absolute",
                     bottom: 10,
                     right: 10,
-                    zIndex: 2000,
+                    zIndex: 500,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-end",

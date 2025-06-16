@@ -19,6 +19,8 @@ import {
 
 interface ExtendedYearBreakdownData extends YearBreakdownData {
     paymentRate?: number;
+    currentBaseAcres?: number | string;
+    proposedBaseAcres?: number | string;
 }
 
 interface ExtendedCountyObject extends CountyObject {
@@ -26,6 +28,8 @@ interface ExtendedCountyObject extends CountyObject {
     weightedAverageRate?: number;
     aggregatedPayment?: number;
     paymentRate?: number;
+    currentBaseAcres?: number | string;
+    proposedBaseAcres?: number | string;
     commodityBreakdown?: {
         [commodity: string]: {
             total: number;
@@ -143,8 +147,15 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         return Array.isArray(selectedYear) ? selectedYear : [selectedYear];
     }, [selectedYear, aggregationEnabled]);
     const getTableTitle = useMemo(() => {
-        return generateTableTitle(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
-    }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear]);
+        return generateTableTitle(
+            selectedYear,
+            selectedCommodities,
+            selectedPrograms,
+            viewMode,
+            isAggregatedYear,
+            showMeanValues
+        );
+    }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear, showMeanValues]);
     const getCsvFilename = useMemo(() => {
         return generateCsvFilename(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
     }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear]);
@@ -211,7 +222,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 let countyTotalPayment = 0;
                                 scenario.commodities.forEach((commodity) => {
                                     if (
-                                        !selectedCommodities.includes("All Commodities") &&
+                                        !selectedCommodities.includes("All Program Crops") &&
                                         !selectedCommodities.includes(commodity.commodityName)
                                     ) {
                                         return;
@@ -317,7 +328,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     if (scenario.scenarioName !== "Proposed") return;
                                     scenario.commodities.forEach((commodity) => {
                                         if (
-                                            !selectedCommodities.includes("All Commodities") &&
+                                            !selectedCommodities.includes("All Program Crops") &&
                                             !selectedCommodities.includes(commodity.commodityName)
                                         ) {
                                             return;
@@ -407,6 +418,23 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             countyObject.proposed = ((countyObject.proposed as number) || 0) + yearProposedTotal;
                             countyObject.difference =
                                 ((countyObject.difference as number) || 0) + (yearProposedTotal - yearCurrentTotal);
+                            const yearCurrentBaseAcres = getTotalBaseAcres(
+                                county,
+                                selectedCommodities,
+                                selectedPrograms,
+                                "Current"
+                            );
+                            const yearProposedBaseAcres = proposedCounty
+                                ? getTotalBaseAcres(proposedCounty, selectedCommodities, selectedPrograms, "Proposed")
+                                : yearCurrentBaseAcres;
+
+                            if (!countyObject.currentBaseAcres) countyObject.currentBaseAcres = 0;
+                            if (!countyObject.proposedBaseAcres) countyObject.proposedBaseAcres = 0;
+                            countyObject.currentBaseAcres =
+                                (countyObject.currentBaseAcres as number) + yearCurrentBaseAcres;
+                            countyObject.proposedBaseAcres =
+                                (countyObject.proposedBaseAcres as number) + yearProposedBaseAcres;
+
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
                                 countyObject.baseAcres = formatNumericValue(yearBaseAcres);
                             }
@@ -473,7 +501,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 let countyTotalPayment = 0;
                                 scenario.commodities.forEach((commodity) => {
                                     if (
-                                        !selectedCommodities.includes("All Commodities") &&
+                                        !selectedCommodities.includes("All Program Crops") &&
                                         !selectedCommodities.includes(commodity.commodityName)
                                     ) {
                                         return;
@@ -632,9 +660,18 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         selectedPrograms,
                         "Current"
                     );
+                    const proposedBaseAcres = proposedCounty
+                        ? getTotalBaseAcres(proposedCounty, selectedCommodities, selectedPrograms, "Proposed")
+                        : currentBaseAcres;
+
                     countyObject.baseAcres = formatNumericValue(currentBaseAcres);
+                    countyObject.currentBaseAcres = formatNumericValue(currentBaseAcres);
+                    countyObject.proposedBaseAcres = formatNumericValue(proposedBaseAcres);
+
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         countyObject.yearBreakdown[year].baseAcres = countyObject.baseAcres;
+                        countyObject.yearBreakdown[year].currentBaseAcres = countyObject.currentBaseAcres;
+                        countyObject.yearBreakdown[year].proposedBaseAcres = countyObject.proposedBaseAcres;
                     }
                     let currentTotalPayment = 0;
                     let proposedTotalPayment = 0;
@@ -642,7 +679,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         if (scenario.scenarioName !== "Current") return;
                         scenario.commodities.forEach((commodity) => {
                             if (
-                                !selectedCommodities.includes("All Commodities") &&
+                                !selectedCommodities.includes("All Program Crops") &&
                                 !selectedCommodities.includes(commodity.commodityName)
                             ) {
                                 return;
@@ -706,7 +743,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             if (scenario.scenarioName !== "Proposed") return;
                             scenario.commodities.forEach((commodity) => {
                                 if (
-                                    !selectedCommodities.includes("All Commodities") &&
+                                    !selectedCommodities.includes("All Program Crops") &&
                                     !selectedCommodities.includes(commodity.commodityName)
                                 ) {
                                     return;
@@ -742,6 +779,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     countyObject.current = currentTotalPayment;
                     countyObject.proposed = proposedTotalPayment;
                     countyObject.difference = proposedTotalPayment - currentTotalPayment;
+
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         countyObject.yearBreakdown[year].current = currentTotalPayment;
                         countyObject.yearBreakdown[year].proposed = proposedTotalPayment;
@@ -806,7 +844,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         if (scenario.scenarioName !== scenarioName) return;
                         scenario.commodities.forEach((commodity) => {
                             if (
-                                !selectedCommodities.includes("All Commodities") &&
+                                !selectedCommodities.includes("All Program Crops") &&
                                 !selectedCommodities.includes(commodity.commodityName)
                             ) {
                                 return;
@@ -897,28 +935,41 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         const processedData = tableData.map((row: ExtendedCountyObject) => {
             if (isAggregatedYear) {
                 let aggTotal = 0;
+                let aggCurrentTotal = 0;
+                let aggProposedTotal = 0;
+                let aggCurrentBaseAcres = 0;
+                let aggProposedBaseAcres = 0;
                 let aggBaseAcres = 0;
                 let weightedSum = 0;
                 if (row.yearBreakdown) {
                     Object.entries(row.yearBreakdown).forEach(([year, yearData]) => {
+                        const proposed = (yearData.proposed as number) || 0;
+                        const current = (yearData.current as number) || 0;
+
+                        aggCurrentTotal += current;
+                        aggProposedTotal += proposed;
+
                         if (viewMode === "difference") {
-                            const proposed = (yearData.proposed as number) || 0;
-                            const current = (yearData.current as number) || 0;
                             yearData.difference = proposed - current;
                             aggTotal += yearData.difference;
                         } else if (viewMode === "proposed") {
-                            aggTotal += (yearData.proposed as number) || 0;
+                            aggTotal += proposed;
                         } else {
-                            aggTotal += (yearData.current as number) || 0;
+                            aggTotal += current;
                         }
-                        const baseAcres = yearData.baseAcres || 0;
+                        const currentBaseAcres = Number(yearData.currentBaseAcres) || Number(yearData.baseAcres) || 0;
+                        const proposedBaseAcres = Number(yearData.proposedBaseAcres) || Number(yearData.baseAcres) || 0;
+                        const baseAcres = Number(yearData.baseAcres) || 0;
+
+                        aggCurrentBaseAcres = Math.max(aggCurrentBaseAcres, currentBaseAcres);
+                        aggProposedBaseAcres = Math.max(aggProposedBaseAcres, proposedBaseAcres);
                         aggBaseAcres = Math.max(aggBaseAcres, baseAcres);
                         if (showMeanValues && baseAcres > 0) {
                             let yearValue = 0;
                             if (viewMode === "difference") {
-                                const proposed = (yearData.proposed as number) || 0;
-                                const current = (yearData.current as number) || 0;
-                                yearValue = proposed - current;
+                                const proposedAmount = (yearData.proposed as number) || 0;
+                                const currentAmount = (yearData.current as number) || 0;
+                                yearValue = proposedAmount - currentAmount;
                                 yearData.difference = yearValue;
                             } else if (viewMode === "proposed") {
                                 yearValue = (yearData.proposed as number) || 0;
@@ -935,19 +986,37 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     });
                 }
                 if (showMeanValues) {
-                    let totalBaseAcresSum = 0;
+                    let maxBaseAcres = 0;
+                    let numberOfYears = 0;
                     if (row.yearBreakdown) {
-                        Object.entries(row.yearBreakdown).forEach(([year, yearData]) => {
+                        Object.entries(row.yearBreakdown).forEach(([, yearData]) => {
                             const baseAcres = yearData.baseAcres || 0;
-                            totalBaseAcresSum += baseAcres;
+                            maxBaseAcres = Math.max(maxBaseAcres, baseAcres);
+                            if (baseAcres > 0) {
+                                numberOfYears += 1;
+                            }
                         });
                     }
-                    const denominatorForRate = totalBaseAcresSum > 0 ? totalBaseAcresSum : 1;
-                    row.weightedAverageRate = denominatorForRate > 0 ? aggTotal / denominatorForRate : 0;
+                    const adjustedBaseAcres = numberOfYears > 1 ? maxBaseAcres * numberOfYears : maxBaseAcres;
+                    if (viewMode === "difference") {
+                        const currentTotal = aggCurrentTotal || 0;
+                        const proposedTotal = aggProposedTotal || 0;
+                        const actualCurrentBaseAcres = (row.currentBaseAcres as number) || maxBaseAcres;
+                        const actualProposedBaseAcres = (row.proposedBaseAcres as number) || maxBaseAcres;
+                        const currentRate = actualCurrentBaseAcres > 0 ? currentTotal / actualCurrentBaseAcres : 0;
+                        const proposedRate = actualProposedBaseAcres > 0 ? proposedTotal / actualProposedBaseAcres : 0;
+                        row.weightedAverageRate = proposedRate - currentRate;
+                    } else {
+                        row.weightedAverageRate = adjustedBaseAcres > 0 ? aggTotal / adjustedBaseAcres : 0;
+                    }
                 } else {
                     row.aggregatedPayment = aggTotal;
                 }
-                if (selectedCommodities && !selectedCommodities.includes("All Commodities") && row.commodityBreakdown) {
+                if (
+                    selectedCommodities &&
+                    !selectedCommodities.includes("All Program Crops") &&
+                    row.commodityBreakdown
+                ) {
                     selectedCommodities.forEach((commodity) => {
                         if (row.commodityBreakdown && row.commodityBreakdown[commodity]) {
                             const commodityData = row.commodityBreakdown[commodity];
@@ -961,21 +1030,27 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             }
                             let commodityTotal = 0;
                             let commodityWeightedSum = 0;
-                            const commodityBaseAcres = 0;
-                            let totalBaseAcresForAvg = 0;
+                            let maxCommodityBaseAcres = 0;
+                            let commodityYearCount = 0;
                             commodityData.total = 0;
                             if (viewMode === "difference" && commodityData.yearBreakdown) {
-                                Object.entries(commodityData.yearBreakdown).forEach(([yearKey, yearData]) => {
-                                    const yearDiff = Number(yearData.difference || 0);
+                                Object.entries(commodityData.yearBreakdown).forEach(([, yearData]) => {
+                                    const currentPayment = Number(yearData.current || 0);
+                                    const proposedPayment = Number(yearData.proposed || 0);
+                                    const yearDiff = proposedPayment - currentPayment;
                                     commodityTotal += yearDiff;
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
                                     if (yearBaseAcres > 0) {
-                                        commodityWeightedSum += yearDiff;
-                                        totalBaseAcresForAvg += yearBaseAcres;
+                                        const currentRate = currentPayment / yearBaseAcres;
+                                        const proposedRate = proposedPayment / yearBaseAcres;
+                                        const rateDiff = proposedRate - currentRate;
+                                        commodityWeightedSum += rateDiff * yearBaseAcres;
+                                        maxCommodityBaseAcres = Math.max(maxCommodityBaseAcres, yearBaseAcres);
+                                        commodityYearCount += 1;
                                     }
                                 });
                             } else if (commodityData.yearBreakdown) {
-                                Object.entries(commodityData.yearBreakdown).forEach(([yearKey, yearData]) => {
+                                Object.entries(commodityData.yearBreakdown).forEach(([, yearData]) => {
                                     const yearValue =
                                         viewMode === "proposed"
                                             ? Number(yearData.proposed || 0)
@@ -984,14 +1059,19 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
                                     if (yearBaseAcres > 0) {
                                         commodityWeightedSum += yearValue;
-                                        totalBaseAcresForAvg += yearBaseAcres;
+                                        maxCommodityBaseAcres = Math.max(maxCommodityBaseAcres, yearBaseAcres);
+                                        commodityYearCount += 1;
                                     }
                                 });
                             }
                             commodityData.total = commodityTotal;
-                            commodityData.baseAcres = totalBaseAcresForAvg;
-                            if (showMeanValues && totalBaseAcresForAvg > 0) {
-                                commodityData.paymentRate = commodityWeightedSum / totalBaseAcresForAvg;
+                            const adjustedCommodityBaseAcres =
+                                commodityYearCount > 1
+                                    ? maxCommodityBaseAcres * commodityYearCount
+                                    : maxCommodityBaseAcres;
+                            commodityData.baseAcres = adjustedCommodityBaseAcres;
+                            if (showMeanValues && adjustedCommodityBaseAcres > 0) {
+                                commodityData.paymentRate = commodityWeightedSum / adjustedCommodityBaseAcres;
                             }
                         }
                     });
@@ -1002,18 +1082,24 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     const current = typeof row.current === "number" ? row.current : 0;
                     row.difference = proposed - current;
                 }
-                const payment =
-                    viewMode === "difference"
-                        ? (row.difference as number) || 0
-                        : viewMode === "proposed"
-                        ? (row.proposed as number) || 0
-                        : (row.current as number) || 0;
-                const baseAcres = row.baseAcres as number;
-                if (showMeanValues && baseAcres > 0) {
-                    row.paymentRate = payment / baseAcres;
+                if (showMeanValues) {
                     if (viewMode === "difference") {
-                        row.currentRate = ((row.current as number) || 0) / baseAcres;
-                        row.proposedRate = ((row.proposed as number) || 0) / baseAcres;
+                        const currentBaseAcres = (row.currentBaseAcres as number) || (row.baseAcres as number) || 0;
+                        const proposedBaseAcres = (row.proposedBaseAcres as number) || (row.baseAcres as number) || 0;
+                        const currentPayment = (row.current as number) || 0;
+                        const proposedPayment = (row.proposed as number) || 0;
+                        const currentRate = currentBaseAcres > 0 ? currentPayment / currentBaseAcres : 0;
+                        const proposedRate = proposedBaseAcres > 0 ? proposedPayment / proposedBaseAcres : 0;
+                        row.currentRate = currentRate;
+                        row.proposedRate = proposedRate;
+                        row.paymentRate = proposedRate - currentRate;
+                    } else {
+                        const payment =
+                            viewMode === "proposed" ? (row.proposed as number) || 0 : (row.current as number) || 0;
+                        const baseAcres = (row.baseAcres as number) || 0;
+                        if (baseAcres > 0) {
+                            row.paymentRate = payment / baseAcres;
+                        }
                     }
                 }
                 if (row.programBreakdown) {
@@ -1079,12 +1165,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             if (commodityData.yearBreakdown) {
                                 yearRange.forEach((year) => {
                                     if (commodityData.yearBreakdown && commodityData.yearBreakdown[year]) {
-                                        const yearValue =
-                                            viewMode === "difference"
-                                                ? (commodityData.yearBreakdown[year].difference as number) || 0
-                                                : viewMode === "proposed"
-                                                ? (commodityData.yearBreakdown[year].proposed as number) || 0
-                                                : (commodityData.yearBreakdown[year].current as number) || 0;
+                                        let yearValue = 0;
+                                        if (viewMode === "difference") {
+                                            yearValue = (commodityData.yearBreakdown[year].difference as number) || 0;
+                                        } else if (viewMode === "proposed") {
+                                            yearValue = (commodityData.yearBreakdown[year].proposed as number) || 0;
+                                        } else {
+                                            yearValue = (commodityData.yearBreakdown[year].current as number) || 0;
+                                        }
                                         aggregatedTotal += yearValue;
                                         const yearBaseAcres = Number(commodityData.yearBreakdown[year].baseAcres || 0);
                                         if (yearBaseAcres > 0) {
@@ -1114,7 +1202,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     };
                 });
             }
-            if (!row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Commodities")) {
+            if (!row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Program Crops")) {
                 row.commodityBreakdown = {};
                 selectedCommodities.forEach((commodity) => {
                     row.commodityBreakdown![commodity] = {
@@ -1147,7 +1235,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     row.commodityBreakdown.Cotton.paymentRate = 16.89 / 0.3;
                 }
             }
-            if (row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Commodities")) {
+            if (row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Program Crops")) {
                 selectedCommodities.forEach((commodity) => {
                     if (
                         row.commodityBreakdown &&
@@ -1206,15 +1294,31 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                 sortType: "emptyBottomNumeric"
             });
         } else if (isAggregatedYear) {
+            let headerText = "Aggregated Payment";
+            if (viewMode === "difference") {
+                headerText = "Aggregated Difference";
+            } else if (viewMode === "proposed") {
+                headerText = "Aggregated Payment (Proposed)";
+            }
             columns.push({
-                Header: "Aggregated Payment",
+                Header: headerText,
                 accessor: "aggregatedPayment",
                 disableSortBy: false,
                 sortType: "emptyBottomNumeric"
             });
         } else {
+            let headerText;
+            if (showMeanValues) {
+                headerText = "Payment Rate";
+            } else if (viewMode === "difference") {
+                headerText = "Total Difference";
+            } else if (viewMode === "proposed") {
+                headerText = "Total Payment (Proposed)";
+            } else {
+                headerText = "Total Payment";
+            }
             columns.push({
-                Header: showMeanValues ? "Payment Rate" : "Total Payment",
+                Header: headerText,
                 accessor: showMeanValues ? "paymentRate" : "current",
                 disableSortBy: false,
                 sortType: "emptyBottomNumeric"
@@ -1246,8 +1350,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             : viewMode === "proposed"
                             ? `yearBreakdown.${year}.proposed`
                             : `yearBreakdown.${year}.current`;
+                    let headerText = `${year} Payment`;
+                    if (viewMode === "difference") {
+                        headerText = `${year} Difference`;
+                    } else if (viewMode === "proposed") {
+                        headerText = `${year} Payment (Proposed)`;
+                    }
                     columns.push({
-                        Header: `${year} Payment`,
+                        Header: headerText,
                         accessor,
                         disableSortBy: false,
                         sortType: "emptyBottomNumeric"
@@ -1262,7 +1372,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
             });
         }
 
-        if (selectedCommodities && !selectedCommodities.includes("All Commodities") && selectedCommodities.length > 0) {
+        if (
+            selectedCommodities &&
+            !selectedCommodities.includes("All Program Crops") &&
+            selectedCommodities.length > 0
+        ) {
             selectedCommodities.forEach((commodity) => {
                 if (showMeanValues) {
                     columns.push({
@@ -1272,8 +1386,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         sortType: "emptyBottomNumeric"
                     });
                 } else {
+                    let headerText = `${commodity} Payment`;
+                    if (viewMode === "difference") {
+                        headerText = `${commodity} Difference`;
+                    } else if (viewMode === "proposed") {
+                        headerText = `${commodity} Payment (Proposed)`;
+                    }
                     columns.push({
-                        Header: `${commodity} Payment`,
+                        Header: headerText,
                         accessor: `commodityBreakdown.${commodity}.total`,
                         disableSortBy: false,
                         sortType: "emptyBottomNumeric"
@@ -1303,8 +1423,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         sortType: "emptyBottomNumeric"
                     });
                 } else {
+                    let headerText = `${program} Payment`;
+                    if (viewMode === "difference") {
+                        headerText = `${program} Difference`;
+                    } else if (viewMode === "proposed") {
+                        headerText = `${program} Payment (Proposed)`;
+                    }
                     columns.push({
-                        Header: `${program} Payment`,
+                        Header: headerText,
                         accessor: `programBreakdown.${program}.total`,
                         disableSortBy: false,
                         sortType: "emptyBottomNumeric"
@@ -1582,8 +1708,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                             variant="body2"
                                             sx={{ color: "rgba(255, 143, 0, 0.9)", lineHeight: 1.5, mb: 1 }}
                                         >
-                                            💡 <strong>Tip:</strong> You're sorting by ascending order. Counties with no
-                                            values appear first. Counties with actual values start on{" "}
+                                            💡 <strong>Tip:</strong> You&apos;re sorting by ascending order. Counties
+                                            with no values appear first. Counties with actual values start on{" "}
                                             <strong>page {targetPage}</strong>.
                                         </Typography>
                                         {targetPage !== pageIndex + 1 && (
@@ -1666,11 +1792,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                 <TableContainer>
                     <table {...getMainTableProps()}>
                         <thead>
-                            {mainHeaderGroups.map((headerGroup) => (
-                                <tr {...headerGroup.getHeaderGroupProps()}>
+                            {mainHeaderGroups.map((headerGroup, hgIndex) => (
+                                <tr {...headerGroup.getHeaderGroupProps()} key={`header-group-${hgIndex}`}>
                                     {headerGroup.headers
                                         .filter((_, index) => visibleColumnIndices.includes(index))
-                                        .map((column) => (
+                                        .map((column, colIndex) => (
                                             <th
                                                 {...column.getHeaderProps(column.getSortByToggleProps())}
                                                 style={{
@@ -1679,6 +1805,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                                     padding: "10px",
                                                     cursor: "pointer"
                                                 }}
+                                                key={`column-${colIndex}`}
                                             >
                                                 <div style={{ display: "flex", alignItems: "center" }}>
                                                     {column.render("Header")}
@@ -1700,15 +1827,15 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             ))}
                         </thead>
                         <tbody {...getMainTableBodyProps()}>
-                            {mainPage.map((row) => {
+                            {mainPage.map((row, rowIndex) => {
                                 prepareMainRow(row);
                                 return (
-                                    <tr {...row.getRowProps()}>
+                                    <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
                                         {row.cells
                                             .filter((_, index) => visibleColumnIndices.includes(index))
-                                            .map((cell) => {
+                                            .map((cell, cellIndex) => {
                                                 return (
-                                                    <td {...cell.getCellProps()}>
+                                                    <td {...cell.getCellProps()} key={`cell-${cellIndex}`}>
                                                         {formatCellValue(
                                                             cell,
                                                             typeof cell.column.accessor === "string" &&
@@ -1718,7 +1845,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                                             cell.column.Header?.toString().includes("Rate"),
                                                             cell.column.Header?.toString().includes("Base Acres"),
                                                             cell.column.Header?.toString().includes("Payment") ||
-                                                                cell.column.Header?.toString().includes("Total"),
+                                                                cell.column.Header?.toString().includes("Total") ||
+                                                                cell.column.Header?.toString().includes("Difference"),
                                                             typeof cell.column.accessor === "string"
                                                                 ? cell.column.accessor
                                                                 : ""
@@ -1762,9 +1890,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         }}
                         style={{ padding: "4px" }}
                     >
-                        {[10, 20, 30, 40, 50].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
+                        {[10, 20, 30, 40, 50].map((pageSizeOption) => (
+                            <option key={pageSizeOption} value={pageSizeOption}>
+                                Show {pageSizeOption}
                             </option>
                         ))}
                     </select>

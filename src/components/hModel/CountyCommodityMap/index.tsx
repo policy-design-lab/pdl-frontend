@@ -27,14 +27,17 @@ const CountyCommodityMap = ({
     stateCodeToName
 }) => {
     const [content, setContent] = useState("");
-    const [selectedYear, setSelectedYear] = useState(availableYears[0] || "2024");
-    const [selectedYears, setSelectedYears] = useState([availableYears[0] || "2024"]);
-    const [selectedCommodities, setSelectedCommodities] = useState(["All Commodities"]);
+    const [selectedYear, setSelectedYear] = useState(availableYears[availableYears.length - 1] || "2024");
+    const [selectedYears, setSelectedYears] = useState(availableYears.slice(0, Math.min(10, availableYears.length)));
+    const [selectedCommodities, setSelectedCommodities] = useState(["All Program Crops"]);
     const [selectedPrograms, setSelectedPrograms] = useState(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
     const [proposedPolicyName, setProposedPolicyName] = useState("2025 Policy");
-    const [yearRange, setYearRange] = useState([availableYears.indexOf(selectedYear)]);
+    const [yearRange, setYearRange] = useState(() => {
+        const numYears = Math.min(10, availableYears.length);
+        return Array.from({ length: numYears }, (_, i) => i);
+    });
     const [forceUpdate, setForceUpdate] = useState(0);
     const [isAtTop, setIsAtTop] = useState(false);
     const [percentileMode, setPercentileMode] = useState(PercentileMode.DEFAULT);
@@ -108,6 +111,12 @@ const CountyCommodityMap = ({
     useEffect(() => {
         let mounted = true;
         if (mounted) {
+            if (yearRange.length > 1 && !aggregationEnabled) {
+                setAggregationEnabled(true);
+            } else if (yearRange.length === 1 && aggregationEnabled) {
+                setAggregationEnabled(false);
+            }
+
             if (aggregationEnabled && yearRange.length > 0) {
                 const selectedYearsList = yearRange.map((index) => availableYears[index] || "2024");
                 setSelectedYears(selectedYearsList);
@@ -420,6 +429,7 @@ const CountyCommodityMap = ({
                         stateCodeToName={stateCodeToName}
                         percentileMode={percentileMode}
                         onPercentileModeChange={handlePercentileModeChange}
+                        selectedCommodities={selectedCommodities}
                     />
                 </Box>
             </Box>
@@ -451,7 +461,7 @@ const CountyCommodityMap = ({
             {(() => {
                 const hasCommoditySelection =
                     selectedCommodities.length > 0 &&
-                    !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Commodities");
+                    !(selectedCommodities.length === 1 && selectedCommodities[0] === "All Program Crops");
                 const hasYearSelection = aggregationEnabled && (yearRange.length > 1 || yearAggregation > 0);
                 const shouldShowButton = (hasCommoditySelection || hasYearSelection) && !isAtTop && showTableButton;
                 if (!shouldShowButton) return null;

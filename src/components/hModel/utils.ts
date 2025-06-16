@@ -67,7 +67,7 @@ export const calculateTotals = (
     county.scenarios.forEach((scenario) => {
         scenario.commodities.forEach((commodity) => {
             if (
-                !selectedCommodities.includes("All Commodities") &&
+                !selectedCommodities.includes("All Program Crops") &&
                 !selectedCommodities.includes(commodity.commodityName)
             ) {
                 return;
@@ -127,44 +127,76 @@ export const generateTableTitle = (
     selectedCommodities: string[],
     selectedPrograms: string[],
     viewMode: string,
-    isAggregatedYear: boolean
+    isAggregatedYear: boolean,
+    showMeanValues = false
 ): string => {
-    let yearPart = "";
-    if (Array.isArray(selectedYear)) {
-        if (selectedYear.length === 1) {
-            yearPart = `Year ${selectedYear[0]}`;
+    const isMultiYearSelection = Array.isArray(selectedYear) && selectedYear.length > 1;
+    let yearDisplay = "";
+    if (isMultiYearSelection) {
+        const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+
+        const areConsecutive = (years) => {
+            for (let i = 1; i < years.length; i++) {
+                if (parseInt(years[i], 10) - parseInt(years[i - 1], 10) !== 1) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        if (sortedYears.length === 2) {
+            yearDisplay = `${sortedYears[0]}-${sortedYears[1]}`;
+        } else if (areConsecutive(sortedYears)) {
+            yearDisplay = `${sortedYears[0]}-${sortedYears[sortedYears.length - 1]}`;
+        } else if (sortedYears.length <= 4) {
+            yearDisplay = sortedYears.join(", ");
         } else {
-            const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
-            yearPart = `Years ${sortedYears.join(", ")} (Aggregated)`;
+            yearDisplay = `${sortedYears.length} Selected Years (${sortedYears[0]}-${
+                sortedYears[sortedYears.length - 1]
+            })`;
         }
     } else {
-        yearPart = isAggregatedYear ? `Years ${selectedYear} (Aggregated)` : `Year ${selectedYear}`;
+        yearDisplay = Array.isArray(selectedYear) ? selectedYear[0] : selectedYear;
     }
+
+    let title = "";
+    let policyMode = "";
+    let metrics = "";
     let commodityPart = "";
-    if (selectedCommodities.includes("All Commodities")) {
-        commodityPart = "All Commodities";
-    } else if (selectedCommodities.length === 1) {
-        commodityPart = selectedCommodities[0];
-    } else if (selectedCommodities.length > 1) {
-        commodityPart = `${selectedCommodities.length} Selected Commodities`;
+
+    if (viewMode === "difference") {
+        policyMode = "Policy Differences";
+        metrics = showMeanValues ? "Mean Rate" : "Payment";
+        title = `${metrics} Differences Between Current and Proposed Policy`;
+    } else {
+        policyMode = viewMode === "current" ? "Current Policy" : "Proposed Policy";
+        metrics = showMeanValues ? "Payment Rate" : "Total Payments";
+        title = `${policyMode}: ${metrics}`;
     }
-    let programPart = "";
-    if (selectedPrograms.includes("All Programs")) {
-        programPart = "All Programs";
-    } else if (selectedPrograms.length === 1) {
-        programPart = selectedPrograms[0];
-    } else if (selectedPrograms.length > 1) {
-        programPart = `${selectedPrograms.length} Selected Programs`;
+
+    const hasSpecificCommodities =
+        selectedCommodities &&
+        selectedCommodities.length > 0 &&
+        !(selectedCommodities.length === 1 && selectedCommodities.includes("All Program Crops"));
+
+    if (hasSpecificCommodities) {
+        if (selectedCommodities.length === 1) {
+            commodityPart = ` for ${selectedCommodities[0]}`;
+        } else if (selectedCommodities.length <= 3) {
+            commodityPart = ` for ${selectedCommodities.join(", ")}`;
+        } else {
+            commodityPart = ` for ${selectedCommodities.length} Selected Commodities`;
+        }
+        title += commodityPart;
     }
-    let viewPart = "";
-    if (viewMode === "current") {
-        viewPart = "Current Policy";
-    } else if (viewMode === "proposed") {
-        viewPart = "Proposed Policy";
-    } else if (viewMode === "difference") {
-        viewPart = "Policy Difference Analysis";
+
+    title += ` (${yearDisplay})`;
+
+    if (isMultiYearSelection || isAggregatedYear) {
+        title += " - Aggregated";
     }
-    return `ARC-PLC County Payments - ${yearPart}, ${commodityPart}, ${programPart}, ${viewPart}`;
+
+    return title;
 };
 
 export const generateCsvFilename = (
@@ -186,7 +218,7 @@ export const generateCsvFilename = (
     } else {
         yearStr = isAggregatedYear ? selectedYear.replace("-", "to") : selectedYear;
     }
-    const commodityStr = selectedCommodities.includes("All Commodities")
+    const commodityStr = selectedCommodities.includes("All Program Crops")
         ? "all-commodities"
         : selectedCommodities.join("-").toLowerCase().replace(/\s+/g, "-");
     const programStr = selectedPrograms.includes("All Programs")
@@ -205,13 +237,14 @@ export const calculateMeanRates = (county: CountyData, baseAcres: number, weight
 export const calculateWeightedMeanRate = (
     totalPayments: number,
     totalBaseAcres: number,
-    isMultiSelection = false
+    isMultiSelection = false,
+    numberOfYears = 1
 ): { rate: number; isWeightedAverage: boolean } => {
     if (totalBaseAcres > 0) {
         const preciseRate = totalPayments / totalBaseAcres;
         return {
             rate: preciseRate,
-            isWeightedAverage: isMultiSelection
+            isWeightedAverage: isMultiSelection || numberOfYears > 1
         };
     }
     return { rate: 0, isWeightedAverage: false };
@@ -219,7 +252,7 @@ export const calculateWeightedMeanRate = (
 
 export const getTotalBaseAcres = (
     county: CountyData,
-    selectedCommodities: string[] = ["All Commodities"],
+    selectedCommodities: string[] = ["All Program Crops"],
     selectedPrograms: string[] = ["All Programs"],
     scenarioType = "Current"
 ): number => {
@@ -231,7 +264,7 @@ export const getTotalBaseAcres = (
         if (county.scenarios[0] && county.scenarios[0].commodities) {
             county.scenarios[0].commodities.forEach((commodity) => {
                 if (
-                    !selectedCommodities.includes("All Commodities") &&
+                    !selectedCommodities.includes("All Program Crops") &&
                     !selectedCommodities.includes(commodity.commodityName)
                 ) {
                     return;
@@ -251,7 +284,7 @@ export const getTotalBaseAcres = (
     } else {
         targetScenario.commodities.forEach((commodity) => {
             if (
-                !selectedCommodities.includes("All Commodities") &&
+                !selectedCommodities.includes("All Program Crops") &&
                 !selectedCommodities.includes(commodity.commodityName)
             ) {
                 return;
@@ -302,15 +335,19 @@ export const formatCellValue = (
     accessor: string
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
-        return cell.value && Number(cell.value) > 0 ? `$${Number(cell.value).toFixed(2)}/acre` : "";
+        return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" && cell.value > 0
-            ? formatNumericValue(cell.value).toFixed(2)
-            : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ? Math.round(cell.value) : cell.value;
     }
     if (includesDot) {
-        return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";
+        if (typeof cell.value === "number" && cell.value !== 0) {
+            if (accessor === "difference" || accessor.includes("difference")) {
+                return `$${Math.round(cell.value).toLocaleString()}`;
+            }
+            return cell.value > 0 ? `$${Math.round(cell.value).toLocaleString()}` : "";
+        }
+        return "";
     }
     if (
         headerIncludesPayment ||
@@ -319,7 +356,13 @@ export const formatCellValue = (
         accessor === "difference" ||
         accessor === "aggregatedPayment"
     ) {
-        return typeof cell.value === "number" && cell.value > 0 ? formatCurrency(cell.value) : "";
+        if (typeof cell.value === "number" && cell.value !== 0) {
+            if (accessor === "difference" || accessor.includes("difference")) {
+                return `$${Math.round(cell.value).toLocaleString()}`;
+            }
+            return cell.value > 0 ? `$${Math.round(cell.value).toLocaleString()}` : "";
+        }
+        return "";
     }
 
     return cell.render("Cell");
