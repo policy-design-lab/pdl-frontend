@@ -203,8 +203,8 @@ export const processMapData = ({
                                     baseAcres: 0,
                                     currentBaseAcres: 0,
                                     proposedBaseAcres: 0,
-                                    currentMeanRate: program.meanPaymentRateInDollarsPerAcre || 0,
-                                    currentMedianRate: program.medianPaymentRateInDollarsPerAcre || 0,
+                                    currentMeanRate: 0,
+                                    currentMedianRate: 0,
                                     proposedMeanRate: 0,
                                     proposedMedianRate: 0
                                 };
@@ -439,6 +439,49 @@ export const processMapData = ({
                 if (programData.proposedBaseAcres > 0) {
                     programData.proposedMeanRate = programData.proposedValue / programData.proposedBaseAcres;
                     programData.proposedMeanRate = Math.round(programData.proposedMeanRate * 100) / 100;
+                }
+            });
+        }
+
+        if (county.commodities) {
+            Object.entries(county.commodities).forEach(([, commodityData]: [string, any]) => {
+                if (commodityData.currentBaseAcres > 0) {
+                    commodityData.currentMeanRate = commodityData.currentValue / commodityData.currentBaseAcres;
+                    commodityData.currentMeanRate = Math.round(commodityData.currentMeanRate * 100) / 100;
+                    if (viewMode === "current") {
+                        commodityData.meanPaymentRateInDollarsPerAcre = commodityData.currentMeanRate;
+                    }
+                }
+
+                if (commodityData.proposedBaseAcres > 0) {
+                    commodityData.proposedMeanRate = commodityData.proposedValue / commodityData.proposedBaseAcres;
+                    commodityData.proposedMeanRate = Math.round(commodityData.proposedMeanRate * 100) / 100;
+                    if (viewMode === "proposed") {
+                        commodityData.meanPaymentRateInDollarsPerAcre = commodityData.proposedMeanRate;
+                    }
+                }
+
+                if (
+                    viewMode === "difference" &&
+                    commodityData.currentBaseAcres > 0 &&
+                    commodityData.proposedBaseAcres > 0
+                ) {
+                    commodityData.meanRateDifference = commodityData.proposedMeanRate - commodityData.currentMeanRate;
+                    commodityData.meanPaymentRateInDollarsPerAcre = commodityData.meanRateDifference;
+                }
+
+                if (commodityData.programs) {
+                    Object.entries(commodityData.programs).forEach(([, programData]: [string, any]) => {
+                        if (programData.currentBaseAcres > 0) {
+                            programData.currentMeanRate = programData.currentValue / programData.currentBaseAcres;
+                            programData.currentMeanRate = Math.round(programData.currentMeanRate * 100) / 100;
+                        }
+
+                        if (programData.proposedBaseAcres > 0) {
+                            programData.proposedMeanRate = programData.proposedValue / programData.proposedBaseAcres;
+                            programData.proposedMeanRate = Math.round(programData.proposedMeanRate * 100) / 100;
+                        }
+                    });
                 }
             });
         }

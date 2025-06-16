@@ -346,7 +346,6 @@ function generateRegularTooltipContent(
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
     const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
     const baseAcres = countyData.baseAcres || 0;
-
     let content = `
     <tr style="${topTipStyle}">
         <td class="${
@@ -1160,18 +1159,7 @@ function generateCommodityRegularContent(
                 }
                 let commodityMeanRate = 0;
                 if (baseAcres > 0) {
-                    const isMultiYear = yearAggregation > 0 || (selectedYears && selectedYears.length > 1);
-                    const numberOfYears =
-                        selectedYears && selectedYears.length > 1
-                            ? selectedYears.length
-                            : yearAggregation > 0
-                            ? yearAggregation
-                            : 1;
-                    if (isMultiYear && numberOfYears > 1) {
-                        commodityMeanRate = commodityValue / (baseAcres * numberOfYears);
-                    } else {
-                        commodityMeanRate = commodityValue / baseAcres;
-                    }
+                    commodityMeanRate = commodityValue / baseAcres;
                 }
 
                 if (
@@ -1432,33 +1420,19 @@ function generateCombinedCommodityProgramContent(
             let commodityPlcRate = 0;
 
             if (commodityArcAcres > 0) {
-                if (isMultiYear && numberOfYears > 1) {
-                    commodityArcRate = commodityArcValue / (commodityArcAcres * numberOfYears);
-                } else {
-                    commodityArcRate = commodityArcValue / commodityArcAcres;
-                }
+                commodityArcRate = commodityArcValue / commodityArcAcres;
             }
 
             if (commodityPlcAcres > 0) {
-                if (isMultiYear && numberOfYears > 1) {
-                    commodityPlcRate = commodityPlcValue / (commodityPlcAcres * numberOfYears);
-                } else {
-                    commodityPlcRate = commodityPlcValue / commodityPlcAcres;
-                }
+                commodityPlcRate = commodityPlcValue / commodityPlcAcres;
             }
-
             const actualCommodityBaseAcres =
                 totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres;
 
             let commodityRate = 0;
             if (actualCommodityBaseAcres > 0) {
-                if (isMultiYear && numberOfYears > 1) {
-                    commodityRate = commodityValue / (actualCommodityBaseAcres * numberOfYears);
-                } else {
-                    commodityRate = commodityValue / actualCommodityBaseAcres;
-                }
+                commodityRate = commodityValue / actualCommodityBaseAcres;
             }
-
             if (commodityValue > 0 || commodityBaseAcres > 0 || commodityArcValue > 0 || commodityPlcValue > 0) {
                 const formatValue = (value: number, isRate = false) => {
                     if (viewMode === "difference") {
