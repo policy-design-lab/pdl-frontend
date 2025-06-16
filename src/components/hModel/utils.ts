@@ -338,7 +338,9 @@ export const formatCellValue = (
         return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" && cell.value > 0 ? Math.round(cell.value) : cell.value;
+        return typeof cell.value === "number" && cell.value > 0 ?
+            Math.round(cell.value).toLocaleString("en-US") :
+            cell.value;
     }
     if (includesDot) {
         if (typeof cell.value === "number" && cell.value !== 0) {

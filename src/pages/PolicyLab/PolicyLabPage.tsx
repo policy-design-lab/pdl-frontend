@@ -87,11 +87,11 @@ export default function PolicyLabPage(): JSX.Element {
                 v={value}
                 index={1}
                 subtab={
-                    tab === "arc-plc-payments" ?
-                        "arc-plc-payments" :
-                        tab === "eqip-projection" ?
-                        "eqip-projection" :
-                        subtab
+                    tab === "arc-plc-payments"
+                        ? "arc-plc-payments"
+                        : tab === "eqip-projection"
+                        ? "eqip-projection"
+                        : subtab
                 }
             />
         </Box>

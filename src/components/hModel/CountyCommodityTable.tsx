@@ -1598,7 +1598,13 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                 if (isPaymentRate) {
                     csvRow[column.Header] = value ? `$${Number(value).toFixed(2)}/acre` : "$0.00/acre";
                 } else if (column.Header?.toString().includes("Base Acres")) {
-                    csvRow[column.Header] = typeof value === "number" ? formatNumericValue(value).toFixed(2) : value;
+                    csvRow[column.Header] =
+                        typeof value === "number" ?
+                            Number(value).toLocaleString("en-US", {
+                                  minimumFractionDigits: 0,
+                                  maximumFractionDigits: 2
+                              }) :
+                            value;
                 } else if (typeof value === "number") {
                     csvRow[column.Header] = formatCurrency(value);
                 } else {
