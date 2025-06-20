@@ -1024,13 +1024,14 @@ function generateCombinedCommodityProgramContent(
             }
 
             const totalCommodityProgramAcres = commodityArcAcres + commodityPlcAcres;
-            const isMultiYear = yearAggregation > 0 || (selectedYears && selectedYears.length > 1);
-            const numberOfYears =
-                selectedYears && selectedYears.length > 1
-                    ? selectedYears.length
-                    : yearAggregation > 0
-                    ? yearAggregation
-                    : 1;
+            let numberOfYears;
+            if (selectedYears && selectedYears.length > 1) {
+                numberOfYears = selectedYears.length;
+            } else if (yearAggregation > 0) {
+                numberOfYears = yearAggregation;
+            } else {
+                numberOfYears = 1;
+            }
 
             let commodityArcRate = 0;
             let commodityPlcRate = 0;

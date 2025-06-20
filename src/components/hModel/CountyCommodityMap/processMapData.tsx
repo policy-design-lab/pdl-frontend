@@ -70,7 +70,7 @@ export const processMapData = ({
             const availableYears = Object.keys(countyData).sort();
             const currentIndex = availableYears.indexOf(selectedYear);
             yearsToAggregate.push(selectedYear);
-            for (let i = 1; i <= yearAggregation; i++) {
+            for (let i = 1; i <= yearAggregation; i += 1) {
                 const prevIndex = currentIndex - i;
                 if (prevIndex >= 0) {
                     yearsToAggregate.push(availableYears[prevIndex]);

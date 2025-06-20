@@ -1345,12 +1345,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         sortType: "emptyBottomNumeric"
                     });
                 } else {
-                    const accessor =
-                        viewMode === "difference"
-                            ? `yearBreakdown.${year}.difference`
-                            : viewMode === "proposed"
-                            ? `yearBreakdown.${year}.proposed`
-                            : `yearBreakdown.${year}.current`;
+                    let accessor;
+                    if (viewMode === "difference") {
+                        accessor = `yearBreakdown.${year}.difference`;
+                    } else if (viewMode === "proposed") {
+                        accessor = `yearBreakdown.${year}.proposed`;
+                    } else {
+                        accessor = `yearBreakdown.${year}.current`;
+                    }
                     let headerText = `${year} Payment`;
                     if (viewMode === "difference") {
                         headerText = `${year} Difference`;
@@ -1843,7 +1845,10 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     <table {...getMainTableProps()}>
                         <thead>
                             {mainHeaderGroups.map((headerGroup, hgIndex) => (
-                                <tr {...headerGroup.getHeaderGroupProps()} key={`header-group-${hgIndex}`}>
+                                <tr
+                                    {...headerGroup.getHeaderGroupProps()}
+                                    key={`header-group-${headerGroup.id || hgIndex}`}
+                                >
                                     {headerGroup.headers
                                         .filter((_, index) => visibleColumnIndices.includes(index))
                                         .map((column, colIndex) => (
@@ -1855,20 +1860,22 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                                     padding: "10px",
                                                     cursor: "pointer"
                                                 }}
-                                                key={`column-${colIndex}`}
+                                                key={`column-${column.id || colIndex}`}
                                             >
                                                 <div style={{ display: "flex", alignItems: "center" }}>
                                                     {column.render("Header")}
                                                     <span style={{ marginLeft: "5px" }}>
-                                                        {column.isSorted ? (
-                                                            column.isSortedDesc ? (
-                                                                <span>↓</span>
-                                                            ) : (
-                                                                <span>↑</span>
-                                                            )
-                                                        ) : (
-                                                            <SwapVertIcon sx={{ fontSize: "16px", opacity: 0.5 }} />
-                                                        )}
+                                                        {(() => {
+                                                            if (column.isSorted) {
+                                                                if (column.isSortedDesc) {
+                                                                    return <span>↓</span>;
+                                                                }
+                                                                return <span>↑</span>;
+                                                            }
+                                                            return (
+                                                                <SwapVertIcon sx={{ fontSize: "16px", opacity: 0.5 }} />
+                                                            );
+                                                        })()}
                                                     </span>
                                                 </div>
                                             </th>
@@ -1880,12 +1887,15 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             {mainPage.map((row, rowIndex) => {
                                 prepareMainRow(row);
                                 return (
-                                    <tr {...row.getRowProps()} key={`row-${rowIndex}`}>
+                                    <tr {...row.getRowProps()} key={row.id || `row-${rowIndex}`}>
                                         {row.cells
                                             .filter((_, index) => visibleColumnIndices.includes(index))
                                             .map((cell, cellIndex) => {
                                                 return (
-                                                    <td {...cell.getCellProps()} key={`cell-${cellIndex}`}>
+                                                    <td
+                                                        {...cell.getCellProps()}
+                                                        key={`cell-${cell.column.id || cellIndex}`}
+                                                    >
                                                         {formatCellValue(
                                                             cell,
                                                             typeof cell.column.accessor === "string" &&

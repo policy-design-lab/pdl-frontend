@@ -77,7 +77,8 @@ export const useConfigurableLoading = (): UseConfigurableLoadingReturn => {
             message = "Processing data..."
         ) => {
             if (!isChunkedProcessingEnabled()) {
-                return chunkProcessor(data);
+                const result = await chunkProcessor(data);
+                return Array.isArray(result) ? result : [result];
             }
 
             const config = getUIConfig();
@@ -91,12 +92,12 @@ export const useConfigurableLoading = (): UseConfigurableLoadingReturn => {
             const processChunksSequentially = async (): Promise<unknown[]> => {
                 const sequentialResults: unknown[] = [];
 
-                for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex += 1) {
+                const processChunkAtIndex = async (chunkIndex: number): Promise<unknown> => {
                     if (config.loadingStates.enableProgressMessages) {
                         setProcessingMessage(`${message} (${chunkIndex + 1}/${chunks.length})`);
                     }
 
-                    const chunkResult = await new Promise((resolve) => {
+                    return new Promise((resolve) => {
                         const processChunk = async (): Promise<void> => {
                             try {
                                 const result = await chunkProcessor(chunks[chunkIndex]);
@@ -124,12 +125,19 @@ export const useConfigurableLoading = (): UseConfigurableLoadingReturn => {
                             }, 0);
                         }
                     });
+                };
 
-                    if (chunkResult !== null) {
-                        sequentialResults.push(chunkResult);
-                    }
-                }
+                const processAllChunks = async (): Promise<void> => {
+                    const chunkPromises = chunks.map((_, index) => processChunkAtIndex(index));
+                    const results = await Promise.all(chunkPromises);
 
+                    results.forEach((result) => {
+                        if (result !== null) {
+                            sequentialResults.push(result);
+                        }
+                    });
+                };
+                await processAllChunks();
                 return sequentialResults;
             };
 

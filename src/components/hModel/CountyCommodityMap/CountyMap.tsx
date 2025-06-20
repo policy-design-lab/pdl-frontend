@@ -129,6 +129,7 @@ const CountyMap = ({
                 e.preventDefault();
                 return false;
             }
+            return undefined;
         };
         const handleWheel = (e) => {
             if (e.target.closest(".county-commodity-map")) {
@@ -138,6 +139,7 @@ const CountyMap = ({
                     return false;
                 }
             }
+            return undefined;
         };
         const handleDrag = (e) => {
             if (e.target.closest(".county-commodity-map")) {
@@ -145,6 +147,7 @@ const CountyMap = ({
                 e.preventDefault();
                 return false;
             }
+            return undefined;
         };
         const handleClick = (e) => {
             if (
@@ -157,6 +160,7 @@ const CountyMap = ({
                 e.preventDefault();
                 return false;
             }
+            return undefined;
         };
         const handleMouseDown = (e) => {
             if (
@@ -169,6 +173,7 @@ const CountyMap = ({
                 e.preventDefault();
                 return false;
             }
+            return undefined;
         };
         document.addEventListener("dblclick", handleDoubleClick, { capture: true });
         document.addEventListener("wheel", handleWheel, { capture: true, passive: false });
@@ -298,7 +303,7 @@ const CountyMap = ({
 
     const handleMouseEnter = useCallback(
         (geo, countyFIPS) => {
-            let mounted = true;
+            const mounted = true;
             let localCountyFIPS = countyFIPS;
             if (!localCountyFIPS && geo.properties) {
                 if (geo.properties.GEOID) {
@@ -337,7 +342,7 @@ const CountyMap = ({
                 if (mounted) {
                     onTooltipChange(tooltipHtml);
                 }
-                return;
+                return undefined;
             }
             const tooltipHtml = CountyTooltipContent({
                 countyData,
@@ -353,9 +358,7 @@ const CountyMap = ({
             if (mounted) {
                 onTooltipChange(tooltipHtml);
             }
-            return () => {
-                mounted = false;
-            };
+            return undefined;
         },
         [
             mapData,
@@ -380,7 +383,7 @@ const CountyMap = ({
     }, [setSelectedState]);
     const handleMoveEnd = useCallback(
         (positionObj) => {
-            let mounted = true;
+            const mounted = true;
             if (selectedState === "All States") {
                 if (positionObj.coordinates[0] !== -95 || positionObj.coordinates[1] !== 40) {
                     setPosition({ coordinates: [-95, 40], zoom: positionObj.zoom });
@@ -391,9 +394,7 @@ const CountyMap = ({
                     setPosition({ coordinates: center, zoom: positionObj.zoom });
                 }
             }
-            return () => {
-                mounted = false;
-            };
+            return undefined;
         },
         [selectedState]
     );
@@ -422,7 +423,7 @@ const CountyMap = ({
             } else {
                 valueToUse = countyData.value || 0;
             }
-            if (valueToUse === undefined || valueToUse === null || !isFinite(valueToUse) || valueToUse < 0.01) {
+            if (valueToUse === undefined || valueToUse === null || !Number.isFinite(valueToUse) || valueToUse < 0.01) {
                 return "#EEE";
             }
             return colorScale(valueToUse);
@@ -523,7 +524,6 @@ const CountyMap = ({
                         onMouseMove={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
-                            return false;
                         }}
                         onMouseUp={(e) => {
                             e.stopPropagation();
