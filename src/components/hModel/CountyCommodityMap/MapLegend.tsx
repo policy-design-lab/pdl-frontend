@@ -5,7 +5,23 @@ import DrawLegendNew from "../../shared/DrawLegend-New";
 import { PercentileMode } from "./percentileConfig";
 import InfoTooltip from "./InfoTooltip";
 
-const MapLegend = ({
+interface MapLegendProps {
+    mapData: { thresholds: number[]; data: unknown[]; counties: Record<string, unknown> };
+    mapColor: string[];
+    viewMode: string;
+    selectedYear: string | string[];
+    selectedState: string;
+    yearAggregation: number;
+    showMeanValues: boolean;
+    proposedPolicyName: string;
+    stateCodeToName: Record<string, string>;
+    showTooltips?: boolean;
+    percentileMode: string;
+    onPercentileModeChange: (mode: string) => void;
+    selectedCommodities?: string[];
+}
+
+const MapLegend: React.FC<MapLegendProps> = ({
     mapData,
     mapColor,
     viewMode,
@@ -29,7 +45,7 @@ const MapLegend = ({
             const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
 
             const areConsecutive = (years) => {
-                for (let i = 1; i < years.length; i++) {
+                for (let i = 1; i < years.length; i += 1) {
                     if (parseInt(years[i], 10) - parseInt(years[i - 1], 10) !== 1) {
                         return false;
                     }

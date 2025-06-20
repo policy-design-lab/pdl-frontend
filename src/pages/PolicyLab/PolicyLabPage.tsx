@@ -1,4 +1,4 @@
-import { Box, Divider, Tabs } from "@mui/material";
+import { Box, Tabs } from "@mui/material";
 import React, { useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { useParams, useNavigate } from "react-router-dom";
@@ -86,13 +86,15 @@ export default function PolicyLabPage(): JSX.Element {
             <HouseProjectionSubPage
                 v={value}
                 index={1}
-                subtab={
-                    tab === "arc-plc-payments"
-                        ? "arc-plc-payments"
-                        : tab === "eqip-projection"
-                        ? "eqip-projection"
-                        : subtab
-                }
+                subtab={(() => {
+                    if (tab === "arc-plc-payments") {
+                        return "arc-plc-payments";
+                    }
+                    if (tab === "eqip-projection") {
+                        return "eqip-projection";
+                    }
+                    return subtab;
+                })()}
             />
         </Box>
     );

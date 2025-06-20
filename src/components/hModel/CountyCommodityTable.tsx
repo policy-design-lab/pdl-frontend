@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Box, Typography, Grid, TableContainer, Button } from "@mui/material";
+import { Box, Typography, Grid, TableContainer, Button, CircularProgress, Fade } from "@mui/material";
 import styled from "@emotion/styled";
 import { useTable, useSortBy, usePagination, useGlobalFilter } from "react-table";
 import { CSVLink } from "react-csv";
@@ -98,14 +98,14 @@ const Styles = styled.div`
 `;
 
 interface CountyCommodityTableProps {
-    countyData: any;
-    countyDataProposed: any;
-    selectedYear: any;
+    countyData: Record<string, unknown>;
+    countyDataProposed: Record<string, unknown>;
+    selectedYear: string | string[];
     viewMode: string;
     selectedCommodities: string[];
     selectedPrograms: string[];
     selectedState: string;
-    stateCodesData: any;
+    stateCodesData: Record<string, string>;
     yearAggregation: number;
     aggregationEnabled: boolean;
     showMeanValues: boolean;
@@ -124,6 +124,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     aggregationEnabled,
     showMeanValues
 }) => {
+    const [isTableLoading] = useState(false);
     const handleScrollToMap = () => {
         const mapElement = document.getElementById("county-commodity-map");
         if (mapElement) {
@@ -1584,7 +1585,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     try {
                         const keys = accessor.split(".");
                         let obj = row as any;
-                        for (let i = 0; i < keys.length; i++) {
+                        for (let i = 0; i < keys.length; i += 1) {
                             if (obj == null) break;
                             obj = obj[keys[i]];
                         }
@@ -1599,12 +1600,12 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     csvRow[column.Header] = value ? `$${Number(value).toFixed(2)}/acre` : "$0.00/acre";
                 } else if (column.Header?.toString().includes("Base Acres")) {
                     csvRow[column.Header] =
-                        typeof value === "number" ?
-                            Number(value).toLocaleString("en-US", {
+                        typeof value === "number"
+                            ? Number(value).toLocaleString("en-US", {
                                   minimumFractionDigits: 0,
                                   maximumFractionDigits: 2
-                              }) :
-                            value;
+                              })
+                            : value;
                 } else if (typeof value === "number") {
                     csvRow[column.Header] = formatCurrency(value);
                 } else {
@@ -1616,6 +1617,49 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     }, [data, baseColumns]);
     return (
         <Styles id="county-commodity-table">
+            {isTableLoading && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 1500,
+                        backdropFilter: "blur(2px)"
+                    }}
+                >
+                    <Fade in={isTableLoading} timeout={300}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: 2,
+                                p: 3,
+                                backgroundColor: "white",
+                                borderRadius: 2,
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+                            }}
+                        >
+                            <CircularProgress size={40} thickness={4} sx={{ color: "rgba(47, 113, 100, 1)" }} />
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    color: "rgba(47, 113, 100, 1)",
+                                    fontWeight: 500
+                                }}
+                            >
+                                Processing table data...
+                            </Typography>
+                        </Box>
+                    </Fade>
+                </Box>
+            )}
             <Box
                 sx={{
                     "position": "fixed",
@@ -1691,7 +1735,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             (() => {
                                 const sortBy = mainState.sortBy[0].id;
                                 let firstNonEmptyIndex = -1;
-                                for (let i = 0; i < mainRows.length; i++) {
+                                for (let i = 0; i < mainRows.length; i += 1) {
                                     const value = mainRows[i].values[sortBy];
                                     if (value !== undefined && value !== null && value !== "" && value !== 0) {
                                         firstNonEmptyIndex = i;

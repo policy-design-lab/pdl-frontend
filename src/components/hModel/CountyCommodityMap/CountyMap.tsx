@@ -437,7 +437,14 @@ const CountyMap = ({
         );
     }
     return (
-        <Box className="county-commodity-map" sx={{ position: "relative" }}>
+        <Box
+            className="county-commodity-map"
+            sx={{
+                position: "relative",
+                transition: "opacity 0.3s ease-in-out",
+                opacity: isLoading ? 0.6 : 1
+            }}
+        >
             {selectedState !== "All States" && (
                 <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 2000 }}>
                     <Button

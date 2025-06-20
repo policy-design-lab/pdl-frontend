@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Box, Button } from "@mui/material";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { Box, Button, CircularProgress, Backdrop, LinearProgress, Fade } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
@@ -7,6 +7,15 @@ import { processMapData } from "./processMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
 import { PercentileMode } from "./percentileConfig";
+import {
+    isLoadingEnabled,
+    isChunkedProcessingEnabled,
+    isLoadingOverlayEnabled,
+    getHeavyOperationThresholds,
+    getChunkSize,
+    shouldLogChunkProcessing,
+    getUIConfig
+} from "../../../utils/configUtil";
 
 const CountyCommodityMap = ({
     countyData,
@@ -43,6 +52,10 @@ const CountyCommodityMap = ({
     const [percentileMode, setPercentileMode] = useState(PercentileMode.DEFAULT);
     const [mapInitialized, setMapInitialized] = useState(false);
     const [showTableButton, setShowTableButton] = useState(true);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [processingMessage, setProcessingMessage] = useState("Processing data...");
+    const [mapData, setMapData] = useState<any>({ counties: {}, thresholds: [], data: [] });
+
     const prevValuesRef = useRef<{
         selectedYear: string | null;
         selectedYears: string[];
@@ -54,17 +67,136 @@ const CountyCommodityMap = ({
         aggregationEnabled: boolean;
     }>({
         selectedYear: null,
-        selectedYears: [],
-        selectedCommodities: [],
-        selectedPrograms: [],
+        selectedYears: [] as string[],
+        selectedCommodities: [] as string[],
+        selectedPrograms: [] as string[],
         selectedState: null,
         viewMode: null,
-        yearRange: [],
+        yearRange: [] as number[],
         aggregationEnabled: false
     });
-    const mapData = useMemo(() => {
-        if (!selectedYear) return { counties: {}, thresholds: [], data: [] };
-        const result = processMapData({
+
+    const processMapDataInChunks = useCallback(async (params) => {
+        if (!isLoadingEnabled()) {
+            return processMapData(params);
+        }
+
+        setIsProcessing(true);
+        setProcessingMessage("Processing map data...");
+
+        return new Promise((resolve) => {
+            const chunks = [];
+            const years = params.aggregationEnabled ? params.selectedYears : [params.selectedYear];
+            const configuredChunkSize = getChunkSize();
+            const chunkSize = Math.max(1, Math.floor(years.length / configuredChunkSize));
+
+            for (let i = 0; i < years.length; i += chunkSize) {
+                chunks.push(years.slice(i, i + chunkSize));
+            }
+
+            let processedData = { counties: {}, thresholds: [], data: [] };
+            let chunkIndex = 0;
+
+            const processChunk = () => {
+                if (chunkIndex >= chunks.length) {
+                    setIsProcessing(false);
+                    resolve(processedData);
+                    return;
+                }
+
+                const config = getUIConfig();
+                if (config.loadingStates.enableProgressMessages) {
+                    setProcessingMessage(`Processing data... (${chunkIndex + 1}/${chunks.length})`);
+                }
+
+                const processFunction = () => {
+                    try {
+                        const chunkParams = { ...params, selectedYears: chunks[chunkIndex] };
+                        const chunkResult = processMapData(chunkParams);
+
+                        if (shouldLogChunkProcessing()) {
+                            // eslint-disable-next-line no-console
+                            console.log(`Processed chunk ${chunkIndex + 1}/${chunks.length}`, chunkResult);
+                        }
+
+                        if (chunkIndex === 0) {
+                            processedData = chunkResult;
+                        } else {
+                            Object.assign(processedData.counties, chunkResult.counties);
+                            processedData.data = [...processedData.data, ...chunkResult.data];
+                            processedData.thresholds = chunkResult.thresholds;
+                        }
+
+                        chunkIndex += 1;
+                        setTimeout(processChunk, 0);
+                    } catch (error) {
+                        console.error("Error processing chunk:", error);
+                        chunkIndex += 1;
+                        setTimeout(processChunk, 0);
+                    }
+                };
+
+                if (config.performance.useRequestAnimationFrame) {
+                    requestAnimationFrame(processFunction);
+                } else {
+                    setTimeout(processFunction, 0);
+                }
+            };
+
+            processChunk();
+        });
+    }, []);
+
+    const processMapDataAsync = useCallback(
+        async (params) => {
+            if (!isLoadingEnabled()) {
+                return processMapData(params);
+            }
+
+            const thresholds = getHeavyOperationThresholds();
+            const hasMultipleYears =
+                params.aggregationEnabled && params.selectedYears.length > thresholds.multipleYears;
+            const hasComplexFilters =
+                params.selectedCommodities.length > thresholds.complexCommodityFilters ||
+                params.selectedPrograms.length > thresholds.complexProgramFilters;
+
+            if (isChunkedProcessingEnabled() && (hasMultipleYears || hasComplexFilters)) {
+                return processMapDataInChunks(params);
+            }
+            setIsProcessing(true);
+            setProcessingMessage("Processing map data...");
+
+            return new Promise((resolve) => {
+                const config = getUIConfig();
+                const processFunction = () => {
+                    try {
+                        const result = processMapData(params);
+                        setIsProcessing(false);
+                        resolve(result);
+                    } catch (error) {
+                        console.error("Error processing map data:", error);
+                        setIsProcessing(false);
+                        resolve({ counties: {}, thresholds: [], data: [] });
+                    }
+                };
+
+                if (config.performance.useRequestAnimationFrame) {
+                    requestAnimationFrame(processFunction);
+                } else {
+                    setTimeout(processFunction, 0);
+                }
+            });
+        },
+        [processMapDataInChunks]
+    );
+
+    const updateMapData = useCallback(async () => {
+        if (!selectedYear) {
+            setMapData({ counties: {}, thresholds: [], data: [] });
+            return;
+        }
+
+        const params = {
             countyData,
             countyDataProposed,
             selectedYear,
@@ -78,8 +210,10 @@ const CountyCommodityMap = ({
             aggregationEnabled,
             showMeanValues,
             percentileMode
-        });
-        return result;
+        };
+
+        const result = await processMapDataAsync(params);
+        setMapData(result);
     }, [
         countyData,
         countyDataProposed,
@@ -94,8 +228,14 @@ const CountyCommodityMap = ({
         aggregationEnabled,
         showMeanValues,
         percentileMode,
-        forceUpdate
+        forceUpdate,
+        processMapDataAsync
     ]);
+
+    useEffect(() => {
+        updateMapData();
+    }, [updateMapData]);
+
     useEffect(() => {
         let mounted = true;
         return () => {
@@ -506,6 +646,64 @@ const CountyCommodityMap = ({
                     </div>
                 );
             })()}
+            {isLoadingOverlayEnabled() && (
+                <Backdrop
+                    sx={{
+                        color: "#fff",
+                        zIndex: 2000,
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        backdropFilter: getUIConfig().animations.backdropBlur ? "blur(2px)" : "none"
+                    }}
+                    open={isProcessing}
+                >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 2
+                        }}
+                    >
+                        <CircularProgress color="inherit" size={48} thickness={4} />
+                        {getUIConfig().animations.enabled && (
+                            <Fade in={isProcessing} timeout={getUIConfig().animations.fadeTimeout}>
+                                <Box
+                                    sx={{
+                                        textAlign: "center",
+                                        fontSize: "1.1rem",
+                                        fontWeight: 500
+                                    }}
+                                >
+                                    {processingMessage}
+                                </Box>
+                            </Fade>
+                        )}
+                        {!getUIConfig().animations.enabled && (
+                            <Box
+                                sx={{
+                                    textAlign: "center",
+                                    fontSize: "1.1rem",
+                                    fontWeight: 500
+                                }}
+                            >
+                                {processingMessage}
+                            </Box>
+                        )}
+                        <LinearProgress
+                            sx={{
+                                "width": 200,
+                                "height": 6,
+                                "borderRadius": 3,
+                                "backgroundColor": "rgba(255, 255, 255, 0.3)",
+                                "& .MuiLinearProgress-bar": {
+                                    backgroundColor: "#fff",
+                                    borderRadius: 3
+                                }
+                            }}
+                        />
+                    </Box>
+                </Backdrop>
+            )}
         </Box>
     );
 };

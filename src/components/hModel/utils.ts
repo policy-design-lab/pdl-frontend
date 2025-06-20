@@ -136,7 +136,7 @@ export const generateTableTitle = (
         const sortedYears = [...selectedYear].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
 
         const areConsecutive = (years) => {
-            for (let i = 1; i < years.length; i++) {
+            for (let i = 1; i < years.length; i += 1) {
                 if (parseInt(years[i], 10) - parseInt(years[i - 1], 10) !== 1) {
                     return false;
                 }
@@ -338,9 +338,9 @@ export const formatCellValue = (
         return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}/acre` : "";
     }
     if (headerIncludesBaseAcres) {
-        return typeof cell.value === "number" && cell.value > 0 ?
-            Math.round(cell.value).toLocaleString("en-US") :
-            cell.value;
+        return typeof cell.value === "number" && cell.value > 0
+            ? Math.round(cell.value).toLocaleString("en-US")
+            : cell.value;
     }
     if (includesDot) {
         if (typeof cell.value === "number" && cell.value !== 0) {

@@ -39,13 +39,14 @@ interface TableIndicatorProps {
 }
 
 const IndicatorIcon = ({ isAtTop, message }: { isAtTop: boolean; message: string }) => {
-    return isAtTop ? (
-        <MapIcon sx={{ color: "white" }} />
-    ) : message.includes("breakdown") ? (
-        <TableChartIcon sx={{ color: "white" }} />
-    ) : (
-        <ArrowDownwardIcon sx={{ color: "white" }} />
-    );
+    if (isAtTop) {
+        return <MapIcon sx={{ color: "white" }} />;
+    }
+
+    if (message.includes("breakdown")) {
+        return <TableChartIcon sx={{ color: "white" }} />;
+    }
+    return <ArrowDownwardIcon sx={{ color: "white" }} />;
 };
 
 const TableIndicator: React.FC<TableIndicatorProps> = ({ message, onClick, isAtTop }) => {
