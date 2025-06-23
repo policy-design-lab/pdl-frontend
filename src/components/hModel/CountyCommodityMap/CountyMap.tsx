@@ -337,7 +337,8 @@ const CountyMap = ({
                     classes,
                     showMeanValues,
                     yearAggregation,
-                    selectedYears
+                    selectedYears,
+                    stateCodesData
                 });
                 if (mounted) {
                     onTooltipChange(tooltipHtml);
@@ -353,7 +354,8 @@ const CountyMap = ({
                 classes,
                 showMeanValues,
                 yearAggregation,
-                selectedYears
+                selectedYears,
+                stateCodesData
             });
             if (mounted) {
                 onTooltipChange(tooltipHtml);

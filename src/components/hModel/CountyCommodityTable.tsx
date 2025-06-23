@@ -722,21 +722,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     yearBreakdown: {}
                                 };
                             }
-                            if (commodity.commodityName === "Cotton" && county.countyFIPS === "01003") {
-                                if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
-                                    countyObject.commodityBreakdown[commodity.commodityName].total =
-                                        commodityCurrentTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres = 0.3;
-                                } else {
-                                    countyObject.commodityBreakdown[commodity.commodityName].total =
-                                        commodityCurrentTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres =
-                                        commodityBaseAcres;
-                                }
-                            } else {
-                                countyObject.commodityBreakdown[commodity.commodityName].total = commodityCurrentTotal;
-                                countyObject.commodityBreakdown[commodity.commodityName].baseAcres = commodityBaseAcres;
-                            }
+                            countyObject.commodityBreakdown[commodity.commodityName].total = commodityCurrentTotal;
+                            countyObject.commodityBreakdown[commodity.commodityName].baseAcres = commodityBaseAcres;
                         });
                     });
                     if (proposedCounty) {
@@ -886,19 +873,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     yearBreakdown: {}
                                 };
                             }
-                            if (commodity.commodityName === "Cotton" && county.countyFIPS === "01003") {
-                                if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
-                                    countyObject.commodityBreakdown[commodity.commodityName].total = commodityTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres = 0.3;
-                                } else {
-                                    countyObject.commodityBreakdown[commodity.commodityName].total = commodityTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres =
-                                        commodityBaseAcres;
-                                }
-                            } else {
-                                countyObject.commodityBreakdown[commodity.commodityName].total = commodityTotal;
-                                countyObject.commodityBreakdown[commodity.commodityName].baseAcres = commodityBaseAcres;
-                            }
+                            countyObject.commodityBreakdown[commodity.commodityName].total = commodityTotal;
+                            countyObject.commodityBreakdown[commodity.commodityName].baseAcres = commodityBaseAcres;
                         });
                     });
                     if (viewMode === "current") {
@@ -1021,14 +997,6 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     selectedCommodities.forEach((commodity) => {
                         if (row.commodityBreakdown && row.commodityBreakdown[commodity]) {
                             const commodityData = row.commodityBreakdown[commodity];
-                            if (commodity === "Cotton" && row.fips === "01003") {
-                                if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
-                                    commodityData.baseAcres = 0.3;
-                                    commodityData.total = 16.89;
-                                    commodityData.paymentRate = 16.89 / 0.3;
-                                    return;
-                                }
-                            }
                             let commodityTotal = 0;
                             let commodityWeightedSum = 0;
                             let maxCommodityBaseAcres = 0;
@@ -1148,15 +1116,6 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                 if (row.commodityBreakdown) {
                     Object.keys(row.commodityBreakdown).forEach((commodity) => {
                         const commodityData = row.commodityBreakdown![commodity];
-                        if (commodity === "Cotton" && row.fips === "01003") {
-                            if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
-                                commodityData.baseAcres = 0.3;
-                                if (commodityData.total > 0) {
-                                    commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
-                                }
-                                return;
-                            }
-                        }
                         if (showMeanValues && commodityData.baseAcres > 0) {
                             commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
                         }
@@ -1229,13 +1188,6 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
             return { ...row };
         });
         processedData.forEach((row) => {
-            if (row.fips === "01003" && row.commodityBreakdown && row.commodityBreakdown.Cotton) {
-                if (selectedPrograms.length === 1 && selectedPrograms[0] === "ARC-CO") {
-                    row.commodityBreakdown.Cotton.baseAcres = 0.3;
-                    row.commodityBreakdown.Cotton.total = 16.89;
-                    row.commodityBreakdown.Cotton.paymentRate = 16.89 / 0.3;
-                }
-            }
             if (row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Program Crops")) {
                 selectedCommodities.forEach((commodity) => {
                     if (
@@ -1282,6 +1234,12 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
             {
                 Header: "County Name",
                 accessor: "county",
+                disableSortBy: false,
+                sortType: "emptyBottomText"
+            },
+            {
+                Header: "FIPS Code",
+                accessor: "fips",
                 disableSortBy: false,
                 sortType: "emptyBottomText"
             }
@@ -1452,11 +1410,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     }, [showMeanValues, isAggregatedYear, yearRange, selectedCommodities, selectedPrograms, viewMode]);
 
     const visibleColumnIndices = useMemo(() => {
-        const startIndex = columnPage * columnsPerPage + 2;
+        const startIndex = columnPage * columnsPerPage + 3;
         const endIndex = Math.min(startIndex + columnsPerPage, baseColumns.length);
-        return [0, 1, ...Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex)];
+        return [0, 1, 2, ...Array.from({ length: endIndex - startIndex }, (_, i) => i + startIndex)];
     }, [columnPage, columnsPerPage, baseColumns.length]);
-    const totalColumnPages = Math.ceil((baseColumns.length - 2) / columnsPerPage);
+    const totalColumnPages = Math.ceil((baseColumns.length - 3) / columnsPerPage);
     const { state } = useTable(
         {
             columns: baseColumns,
@@ -1599,7 +1557,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     value = row[accessor as keyof typeof row];
                 }
                 if (isPaymentRate) {
-                    csvRow[column.Header] = value ? `$${Number(value).toFixed(2)}/acre` : "$0.00/acre";
+                    csvRow[column.Header] = value ? Number(value).toFixed(2) : "0.00";
                 } else if (column.Header?.toString().includes("Base Acres")) {
                     csvRow[column.Header] =
                         typeof value === "number"

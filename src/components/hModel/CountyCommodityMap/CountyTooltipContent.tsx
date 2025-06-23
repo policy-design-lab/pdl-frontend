@@ -12,6 +12,7 @@ interface CountyTooltipContentProps {
     showMeanValues: boolean;
     yearAggregation: number;
     selectedYears?: (string | number)[];
+    stateCodesData?: Record<string, string>;
 }
 
 export const CountyTooltipContent = ({
@@ -23,65 +24,22 @@ export const CountyTooltipContent = ({
     classes,
     showMeanValues,
     yearAggregation,
-    selectedYears = []
+    selectedYears = [],
+    stateCodesData
 }: CountyTooltipContentProps): string => {
     if (!countyData) return "";
-
-    if (
-        countyFIPS === "01003" &&
-        selectedCommodities?.includes("Cotton") &&
-        selectedPrograms?.length === 1 &&
-        selectedPrograms[0] === "ARC-CO"
-    ) {
-        if (!countyData.commodities) {
-            countyData.commodities = {};
-        }
-
-        countyData.commodities.Cotton = countyData.commodities.Cotton || {};
-
-        countyData.commodities.Cotton.value = 16.89;
-        countyData.commodities.Cotton.currentValue = 16.89;
-        countyData.commodities.Cotton.proposedValue = 16.89;
-        countyData.commodities.Cotton.baseAcres = 0.3;
-        countyData.commodities.Cotton.currentBaseAcres = 0.3;
-        countyData.commodities.Cotton.proposedBaseAcres = 0.3;
-
-        if (showMeanValues) {
-            const paymentRate = 16.89 / 0.3;
-            countyData.commodities.Cotton.meanRate = paymentRate;
-            countyData.commodities.Cotton.currentMeanRate = paymentRate;
-            countyData.commodities.Cotton.proposedMeanRate = paymentRate;
-        }
-    }
-
     const countyName = countyFipsMapping[countyFIPS] || `County ${countyFIPS}`;
-
+    const stateFIPS = countyFIPS?.substring(0, 2);
+    const stateName = stateFIPS ? stateCodesData?.[stateFIPS] || countyFipsMapping[stateFIPS] || "" : "";
+    const displayName = stateName ? `${stateName}, ${countyName}` : countyName;
     if (!countyData.hasData) {
-        const stateFIPS = countyFIPS?.substring(0, 2);
-        const stateName = stateFIPS ? countyFipsMapping[stateFIPS] || "" : "";
-        const stateDisplay = stateName ? `, ${stateName}` : "";
-
         return `
         <div class="${classes.tooltip_overall}">
-            <div class="${
-                classes.tooltip_header
-            }" style="background-color: rgba(47, 113, 100, 0.15); padding: 8px; border-radius: 4px 4px 0 0;">
-                <b>${countyName}${stateDisplay}</b>
+            <div class="${classes.tooltip_header}" style="background-color: rgba(47, 113, 100, 0.15); padding: 8px; border-radius: 4px 4px 0 0;">
+                <b>${displayName}</b>
             </div>
             <table class="${classes.tooltip_table}" style="border-spacing: 0; width: 100%; padding: 8px 0 10px 0;">
             <tbody>
-                <tr>
-                    <td class="${
-                        classes.tooltip_topcell_left
-                    }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        FIPS Code:
-                    </td>
-                    <td class="${
-                        classes.tooltip_topcell_right
-                    }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${countyFIPS || "Unknown"}
-                    </td>
-                </tr>
                 <tr>
                     <td colspan="2" style="background-color: rgba(200, 200, 200, 0.2); padding: 10px; text-align: center; color: #666; font-style: italic; border-radius: 4px;">
                         No payment data available for this county.
@@ -96,10 +54,8 @@ export const CountyTooltipContent = ({
 
     let tooltipContent = `
         <div class="${classes.tooltip_overall}">
-            <div class="${
-                classes.tooltip_header
-            }" style="background-color: rgba(47, 113, 100, 0.15); padding: 8px; border-radius: 4px 4px 0 0;">
-                <b>${countyName} (FIPS: ${countyFIPS || countyData.name})</b>
+            <div class="${classes.tooltip_header}" style="background-color: rgba(47, 113, 100, 0.15); padding: 8px; border-radius: 4px 4px 0 0;">
+                <b>${displayName}</b>
             </div>
             <table class="${classes.tooltip_table}" style="border-spacing: 0; width: 100%; padding: 8px 0 10px 0;">
             <tbody>`;
@@ -403,13 +359,11 @@ function generateCommodityDifferenceContent(
 
     if (commoditiesToDisplay.length > 0) {
         content += `<tr><td colspan="2" style="${sectionHeaderStyle}">Commodity Breakdown</td></tr>`;
-
         commoditiesToDisplay.forEach((commodity) => {
             const commodityData = countyData.commodities[commodity];
             if (!commodityData) {
                 return;
             }
-
             if (
                 commodityData.value > 0 ||
                 commodityData.currentValue > 0 ||
@@ -430,20 +384,9 @@ function generateCommodityDifferenceContent(
                     commodityDifference = parseFloat(commodityDifference.replace(/[^0-9.-]+/g, ""));
                 }
                 commodityDifference = commodityProposedValue - commodityCurrentValue;
-                let baseAcres = commodityData.baseAcres || 0;
+                const baseAcres = commodityData.baseAcres || 0;
                 const currentBaseAcres = commodityData.currentBaseAcres || 0;
                 const proposedBaseAcres = commodityData.proposedBaseAcres || 0;
-
-                if (
-                    countyData.fips === "01003" &&
-                    commodity === "Cotton" &&
-                    countyData.selectedPrograms &&
-                    countyData.selectedPrograms.length === 1 &&
-                    countyData.selectedPrograms[0] === "ARC-CO"
-                ) {
-                    baseAcres = 0.3;
-                }
-
                 let percentChange = 0;
                 if (commodityCurrentValue !== 0 && commodityCurrentValue !== undefined) {
                     percentChange =
@@ -451,23 +394,10 @@ function generateCommodityDifferenceContent(
                 } else if (commodityProposedValue !== 0) {
                     percentChange = 100;
                 }
-
-                let commodityCurrentMeanRate = currentBaseAcres > 0 ? commodityCurrentValue / currentBaseAcres : 0;
-                let commodityProposedMeanRate = proposedBaseAcres > 0 ? commodityProposedValue / proposedBaseAcres : 0;
-                let commodityMeanRateDiff = commodityProposedMeanRate - commodityCurrentMeanRate;
-
-                if (
-                    countyData.fips === "01003" &&
-                    commodity === "Cotton" &&
-                    countyData.selectedPrograms &&
-                    countyData.selectedPrograms.length === 1 &&
-                    countyData.selectedPrograms[0] === "ARC-CO"
-                ) {
-                    commodityCurrentMeanRate = 53.87;
-                    commodityProposedMeanRate = 53.87;
-                    commodityMeanRateDiff = 0;
-                }
-
+                const commodityCurrentMeanRate = currentBaseAcres > 0 ? commodityCurrentValue / currentBaseAcres : 0;
+                const commodityProposedMeanRate =
+                    proposedBaseAcres > 0 ? commodityProposedValue / proposedBaseAcres : 0;
+                const commodityMeanRateDiff = commodityProposedMeanRate - commodityCurrentMeanRate;
                 content += `
                 <tr>
                     <td colspan="2" style="${subSectionStyle}">
@@ -822,36 +752,14 @@ function generateCommodityRegularContent(
                 if (typeof commodityValue === "string") {
                     commodityValue = parseFloat(commodityValue.replace(/[^0-9.-]+/g, ""));
                 }
-
-                let baseAcres =
+                const baseAcres =
                     viewMode === "proposed"
                         ? commodityData.proposedBaseAcres || 0
                         : commodityData.currentBaseAcres || 0;
-
-                if (
-                    countyData.fips === "01003" &&
-                    commodity === "Cotton" &&
-                    countyData.selectedPrograms &&
-                    countyData.selectedPrograms.length === 1 &&
-                    countyData.selectedPrograms[0] === "ARC-CO"
-                ) {
-                    baseAcres = 0.3;
-                }
                 let commodityMeanRate = 0;
                 if (baseAcres > 0) {
                     commodityMeanRate = commodityValue / baseAcres;
                 }
-
-                if (
-                    countyData.fips === "01003" &&
-                    commodity === "Cotton" &&
-                    countyData.selectedPrograms &&
-                    countyData.selectedPrograms.length === 1 &&
-                    countyData.selectedPrograms[0] === "ARC-CO"
-                ) {
-                    commodityMeanRate = 56.3;
-                }
-
                 content += `
                 <tr>
                     <td colspan="2" style="${subSectionStyle}">

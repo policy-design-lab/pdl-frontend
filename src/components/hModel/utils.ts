@@ -335,7 +335,7 @@ export const formatCellValue = (
     accessor: string
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
-        return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}/acre` : "";
+        return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}` : "";
     }
     if (headerIncludesBaseAcres) {
         return typeof cell.value === "number" && cell.value > 0
