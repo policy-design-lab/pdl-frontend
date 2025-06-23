@@ -31,7 +31,7 @@ export const CountyTooltipContent = ({
     const countyName = countyFipsMapping[countyFIPS] || `County ${countyFIPS}`;
     const stateFIPS = countyFIPS?.substring(0, 2);
     const stateName = stateFIPS ? stateCodesData?.[stateFIPS] || countyFipsMapping[stateFIPS] || "" : "";
-    const displayName = stateName ? `${stateName}, ${countyName}` : countyName;
+    const displayName = stateName ? `${countyName}, ${stateName}` : countyName;
     if (!countyData.hasData) {
         return `
         <div class="${classes.tooltip_overall}">

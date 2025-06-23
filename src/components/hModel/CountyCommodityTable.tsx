@@ -1226,14 +1226,14 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     const baseColumns = useMemo(() => {
         const columns = [
             {
-                Header: "State",
-                accessor: "state",
+                Header: "County Name",
+                accessor: "county",
                 disableSortBy: false,
                 sortType: "emptyBottomText"
             },
             {
-                Header: "County Name",
-                accessor: "county",
+                Header: "State",
+                accessor: "state",
                 disableSortBy: false,
                 sortType: "emptyBottomText"
             },
