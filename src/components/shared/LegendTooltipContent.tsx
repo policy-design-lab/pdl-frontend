@@ -5,11 +5,15 @@ interface LegendTooltipContentProps {
     tooltipData: TooltipData;
     notDollar: boolean;
     regionType?: string;
+    viewMode?: string;
+    isPaymentRate?: boolean;
 }
 export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
     tooltipData,
     notDollar,
-    regionType = "county"
+    regionType = "county",
+    viewMode,
+    isPaymentRate
 }) => {
     const getRegionPlural = () => {
         if (tooltipData.regionCount === 1) {
@@ -35,8 +39,16 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
         isRegionObject(tooltipData.maxRegion) &&
         tooltipData.minRegion.fips === tooltipData.maxRegion.fips;
     const formatValue = (value: number) => {
+        if (viewMode === "difference" && isPaymentRate) {
+            const roundedValue = Math.round(value * 10) / 10;
+            const formatted = roundedValue.toFixed(1);
+            return `$${parseFloat(formatted).toLocaleString(undefined, {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1
+            })}`;
+        }
         const roundedValue = Math.round(value);
-        if (notDollar) {
+        if (notDollar && !isPaymentRate) {
             return roundedValue.toLocaleString();
         }
         return `$${roundedValue.toLocaleString()}`;

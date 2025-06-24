@@ -6,6 +6,7 @@ import "../../styles/drawLegend.css";
 import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
 import LegendTooltipContent from "./LegendTooltipContent";
 import { PercentileMode, getMapPercentiles } from "../hModel/CountyCommodityMap/percentileConfig";
+import { CheckAddZero } from "./ColorFunctions";
 
 interface CountyDataItem {
     hasData?: boolean;
@@ -34,7 +35,8 @@ export default function DrawLegendNew({
     showTooltips = false,
     regionType = "county",
     percentileMode = "default",
-    isPaymentRate = false
+    isPaymentRate = false,
+    viewMode = "current"
 }: {
     isRatio?: boolean;
     notDollar?: boolean;
@@ -49,6 +51,7 @@ export default function DrawLegendNew({
     regionType?: string;
     percentileMode?: string;
     isPaymentRate?: boolean;
+    viewMode?: string;
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
@@ -133,9 +136,30 @@ export default function DrawLegendNew({
             .attr("preserveAspectRatio", "xMinYMid meet");
         const customScale = colorScale.domain();
         const minValue = Math.min(...programData);
-        const cut_points = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
+        let cut_points;
+        if (viewMode === "difference") {
+            const hasNegativeAndPositive = programData.some((d) => d < 0) && programData.some((d) => d > 0);
+            if (hasNegativeAndPositive) {
+                const sortedThresholds = [...customScale].sort((a, b) => a - b);
+                const processedThresholds = CheckAddZero(sortedThresholds);
+                cut_points = [
+                    sortedThresholds[0],
+                    ...processedThresholds,
+                    sortedThresholds[sortedThresholds.length - 1]
+                ];
+            } else {
+                cut_points = [...customScale];
+            }
+        } else if (isPaymentRate || notDollar) {
+            cut_points = [...customScale];
+        } else {
+            cut_points = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
+        }
         const segmentCount = cut_points.length - 1;
         if (Math.min(...programData) === Infinity || Math.max(...programData) === Infinity) {
+            return;
+        }
+        if (segmentCount <= 0 || cut_points.some((p) => !Number.isFinite(p))) {
             return;
         }
         baseSVG.selectAll("text").remove();
@@ -175,6 +199,9 @@ export default function DrawLegendNew({
         for (let i = 0; i < segmentCount; i += 1) {
             const percentileRange = percentiles[i + 1] - percentiles[i];
             const segmentWidth = (percentileRange / 100) * svgWidth;
+            if (!Number.isFinite(segmentWidth)) {
+                return;
+            }
             currentPosition += segmentWidth;
             segmentPositions.push(currentPosition);
         }
@@ -183,9 +210,15 @@ export default function DrawLegendNew({
             .attr("class", "legendRect")
             .attr("data-index", (d, i) => i)
             .attr("id", (d, i) => `legendRect${i}`)
-            .attr("x", (d, i) => segmentPositions[i])
+            .attr("x", (d, i) => {
+                const x = segmentPositions[i];
+                return Number.isFinite(x) ? x : 0;
+            })
             .attr("y", () => 20)
-            .attr("width", (d, i) => segmentPositions[i + 1] - segmentPositions[i])
+            .attr("width", (d, i) => {
+                const segmentWidth = segmentPositions[i + 1] - segmentPositions[i];
+                return Number.isFinite(segmentWidth) && segmentWidth > 0 ? segmentWidth : 0;
+            })
             .attr("height", 20)
             .style("fill", (d, i) => prepColor[i])
             .style("cursor", "pointer")
@@ -205,7 +238,18 @@ export default function DrawLegendNew({
                     if (!county || typeof county !== "object" || !county.hasData) {
                         return acc;
                     }
-                    if (notDollar) {
+                    if (viewMode === "difference" && isPaymentRate) {
+                        if (
+                            Object.prototype.hasOwnProperty.call(county, "meanRateDifference") &&
+                            county.hasValidBaseAcres &&
+                            typeof county.meanRateDifference === "number"
+                        ) {
+                            acc[fips] = {
+                                ...county,
+                                value: county.meanRateDifference
+                            };
+                        }
+                    } else if (notDollar || isPaymentRate) {
                         if (
                             Object.prototype.hasOwnProperty.call(county, "meanPaymentRateInDollarsPerAcre") &&
                             county.hasValidBaseAcres &&
@@ -265,19 +309,28 @@ export default function DrawLegendNew({
             .attr("class", "legendText")
             .attr("id", (d, i) => `legendText${i}`)
             .attr("y", (d, i) => (i % 2 === 0 ? 60 : 10))
-            .attr("x", (d, i) => segmentPositions[i])
+            .attr("x", (d, i) => {
+                const x = segmentPositions[i];
+                return Number.isFinite(x) ? x : 0;
+            })
             .attr("text-anchor", "middle")
             .style("font-size", "11px")
             .text((d) => {
                 if (isRatio) {
                     return `${Math.round(d * 100)}%`;
                 }
-                const roundedValue = Math.round(d);
-                if (!notDollar) {
-                    const res = ShortFormat(roundedValue.toString(), 0, 0);
+                if (viewMode === "difference" && isPaymentRate) {
+                    const roundedValue = Math.round(d * 10) / 10;
+                    const res = ShortFormat(roundedValue.toString(), 1, 1);
                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                 }
-                return ShortFormat(roundedValue.toString(), 0, 0);
+
+                const roundedValue = Math.round(d);
+                const res = ShortFormat(roundedValue.toString(), 0, 0);
+                if (notDollar && !isPaymentRate) {
+                    return res;
+                }
+                return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
             });
         if (emptyState.length !== 0) {
             const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
@@ -326,7 +379,13 @@ export default function DrawLegendNew({
                         pointerEvents: "none"
                     }}
                 >
-                    <LegendTooltipContent tooltipData={tooltipData} notDollar={notDollar} regionType={regionType} />
+                    <LegendTooltipContent
+                        tooltipData={tooltipData}
+                        notDollar={notDollar}
+                        regionType={regionType}
+                        viewMode={viewMode}
+                        isPaymentRate={isPaymentRate}
+                    />
                 </div>
             )}
         </Box>

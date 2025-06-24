@@ -205,17 +205,18 @@ const MapLegend: React.FC<MapLegendProps> = ({
                         Array.isArray(selectedYear) ? selectedYear.join("-") : selectedYear
                     }-${viewMode}-${showMeanValues}-${selectedState}-${yearAggregation}-${percentileMode}`}
                     colorScale={colorScale}
-                    programData={mapData.data}
+                    programData={mapData.data as number[]}
                     prepColor={mapColor}
                     emptyState={[]}
                     isRatio={false}
-                    notDollar={false}
+                    notDollar={showMeanValues}
                     isPaymentRate={showMeanValues}
-                    countyData={mapData.counties}
+                    countyData={mapData.counties as Record<string, any>}
                     stateCodeToName={stateCodeToName}
                     showTooltips={showTooltips}
                     regionType="county"
                     percentileMode={percentileMode}
+                    viewMode={viewMode}
                 />
             </Box>
         </Box>

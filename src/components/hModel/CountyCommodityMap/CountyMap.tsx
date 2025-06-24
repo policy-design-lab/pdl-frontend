@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Box, CircularProgress, IconButton, Button } from "@mui/material";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Box, CircularProgress, Button } from "@mui/material";
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import ReactTooltip from "react-tooltip";
@@ -64,7 +64,7 @@ const stateViewSettings = {
     "Wyoming": { center: [-107.5, 43], zoom: 5 },
     "District of Columbia": { center: [-77, 38.9], zoom: 9 }
 };
-const findCountyData = (counties, countyFIPS, debug = false) => {
+const findCountyData = (counties, countyFIPS) => {
     if (!countyFIPS) return { countyData: null, usedKey: null };
     const countyData = counties[countyFIPS];
     const usedKey = countyFIPS;
@@ -102,12 +102,12 @@ const CountyMap = ({
     setSelectedState,
     selectedYears = []
 }: {
-    mapData: any;
+    mapData: Record<string, unknown>;
     mapColor: string[];
     viewMode: string;
     selectedState: string;
-    stateCodesData: any;
-    allStates: any;
+    stateCodesData: Record<string, string>;
+    allStates: Record<string, unknown>[];
     isLoading: boolean;
     onTooltipChange: (content: string) => void;
     tooltipContent: string;
@@ -117,22 +117,30 @@ const CountyMap = ({
     selectedCommodities: string[];
     setSelectedState: (state: string) => void;
     selectedYears: (string | number)[];
-}) => {
+}): JSX.Element => {
     const classes = useStyles();
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
     const [userZoomLevel, setUserZoomLevel] = useState(1);
+    const mountedRef = useRef(true);
+
     useEffect(() => {
-        const handleDoubleClick = (e) => {
-            if (e.target.closest(".county-commodity-map")) {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleDoubleClick = (e: any): boolean | undefined => {
+            if (e.target?.closest?.(".county-commodity-map")) {
                 e.stopPropagation();
                 e.preventDefault();
                 return false;
             }
             return undefined;
         };
-        const handleWheel = (e) => {
-            if (e.target.closest(".county-commodity-map")) {
+        const handleWheel = (e: any): boolean | undefined => {
+            if (e.target?.closest?.(".county-commodity-map")) {
                 if (e.ctrlKey || e.metaKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.deltaZ !== 0) {
                     e.stopPropagation();
                     e.preventDefault();
@@ -141,20 +149,20 @@ const CountyMap = ({
             }
             return undefined;
         };
-        const handleDrag = (e) => {
-            if (e.target.closest(".county-commodity-map")) {
+        const handleDrag = (e: any): boolean | undefined => {
+            if (e.target?.closest?.(".county-commodity-map")) {
                 e.stopPropagation();
                 e.preventDefault();
                 return false;
             }
             return undefined;
         };
-        const handleClick = (e) => {
+        const handleClick = (e: any): boolean | undefined => {
             if (
-                e.target.closest(".county-commodity-map") &&
-                !e.target.closest(".rsm-geography") &&
-                !e.target.closest("button") &&
-                !e.target.closest(".MuiButton-root")
+                e.target?.closest?.(".county-commodity-map") &&
+                !e.target?.closest?.(".rsm-geography") &&
+                !e.target?.closest?.("button") &&
+                !e.target?.closest?.(".MuiButton-root")
             ) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -162,12 +170,12 @@ const CountyMap = ({
             }
             return undefined;
         };
-        const handleMouseDown = (e) => {
+        const handleMouseDown = (e: any): boolean | undefined => {
             if (
-                e.target.closest(".county-commodity-map") &&
-                !e.target.closest(".rsm-geography") &&
-                !e.target.closest("button") &&
-                !e.target.closest(".MuiButton-root")
+                e.target?.closest?.(".county-commodity-map") &&
+                !e.target?.closest?.(".rsm-geography") &&
+                !e.target?.closest?.("button") &&
+                !e.target?.closest?.(".MuiButton-root")
             ) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -270,6 +278,7 @@ const CountyMap = ({
     }, [selectedState, mapData, stateCodesData, userZoomLevel]);
 
     const handleZoomIn = useCallback(() => {
+        if (!mountedRef.current) return;
         const newZoomLevel = Math.min(userZoomLevel * 1.2, 3);
         setUserZoomLevel(newZoomLevel);
         if (selectedState === "All States") {
@@ -281,6 +290,7 @@ const CountyMap = ({
     }, [userZoomLevel, selectedState]);
 
     const handleZoomOut = useCallback(() => {
+        if (!mountedRef.current) return;
         const newZoomLevel = Math.max(userZoomLevel / 1.2, 0.5);
         setUserZoomLevel(newZoomLevel);
         if (selectedState === "All States") {
@@ -292,6 +302,7 @@ const CountyMap = ({
     }, [userZoomLevel, selectedState]);
 
     const handleResetZoom = useCallback(() => {
+        if (!mountedRef.current) return;
         setUserZoomLevel(1);
         if (selectedState === "All States") {
             setPosition({ coordinates: [-95, 40], zoom: 1 });
@@ -302,27 +313,18 @@ const CountyMap = ({
     }, [selectedState]);
 
     const handleMouseEnter = useCallback(
-        (geo, countyFIPS) => {
-            const mounted = true;
+        (geo: any, countyFIPS?: string) => {
             let localCountyFIPS = countyFIPS;
             if (!localCountyFIPS && geo.properties) {
-                if (geo.properties.GEOID) {
-                    localCountyFIPS = geo.properties.GEOID;
-                } else if (geo.properties.id) {
-                    localCountyFIPS = geo.properties.id;
-                } else if (geo.properties.fips) {
-                    localCountyFIPS = geo.properties.fips;
+                if ((geo.properties as any).geoid) {
+                    localCountyFIPS = (geo.properties as any).geoid;
+                } else if ((geo.properties as any).fips) {
+                    localCountyFIPS = (geo.properties as any).fips;
                 }
             }
-            const countyName = geo.properties?.name || "Unknown County";
-            const stateFIPS = localCountyFIPS?.substring(0, 2);
-            const stateName = stateFIPS ? stateCodesData[stateFIPS] || "Unknown State" : "Unknown State";
+            const countyName = (geo.properties as any)?.name || "Unknown County";
             const lookupFIPS = localCountyFIPS;
-            const { countyData, usedKey } = findCountyData(
-                mapData.counties,
-                lookupFIPS,
-                selectedState !== "All States"
-            );
+            const { countyData } = findCountyData(mapData.counties, lookupFIPS || "");
             if (!countyData) {
                 const mockCountyData = {
                     hasData: false,
@@ -330,7 +332,7 @@ const CountyMap = ({
                 };
                 const tooltipHtml = CountyTooltipContent({
                     countyData: mockCountyData,
-                    countyFIPS: localCountyFIPS,
+                    countyFIPS: localCountyFIPS || "",
                     viewMode,
                     selectedCommodities,
                     selectedPrograms,
@@ -340,14 +342,14 @@ const CountyMap = ({
                     selectedYears,
                     stateCodesData
                 });
-                if (mounted) {
+                if (mountedRef.current) {
                     onTooltipChange(tooltipHtml);
                 }
                 return undefined;
             }
             const tooltipHtml = CountyTooltipContent({
                 countyData,
-                countyFIPS: localCountyFIPS,
+                countyFIPS: localCountyFIPS || "",
                 viewMode,
                 selectedCommodities,
                 selectedPrograms,
@@ -357,7 +359,7 @@ const CountyMap = ({
                 selectedYears,
                 stateCodesData
             });
-            if (mounted) {
+            if (mountedRef.current) {
                 onTooltipChange(tooltipHtml);
             }
             return undefined;
@@ -376,16 +378,21 @@ const CountyMap = ({
         ]
     );
     const handleMouseLeave = useCallback(() => {
-        onTooltipChange("");
+        if (mountedRef.current) {
+            onTooltipChange("");
+        }
     }, [onTooltipChange]);
     const handleCloseStateView = useCallback(() => {
-        setSelectedState("All States");
-        setUserZoomLevel(1);
-        setPosition({ coordinates: [-95, 40], zoom: 1 });
+        if (mountedRef.current) {
+            setSelectedState("All States");
+            setUserZoomLevel(1);
+            setPosition({ coordinates: [-95, 40], zoom: 1 });
+        }
     }, [setSelectedState]);
     const handleMoveEnd = useCallback(
-        (positionObj) => {
-            const mounted = true;
+        (positionObj: { coordinates: number[]; zoom: number }): undefined => {
+            if (!mountedRef.current) return;
+
             if (selectedState === "All States") {
                 if (positionObj.coordinates[0] !== -95 || positionObj.coordinates[1] !== 40) {
                     setPosition({ coordinates: [-95, 40], zoom: positionObj.zoom });
@@ -396,7 +403,6 @@ const CountyMap = ({
                     setPosition({ coordinates: center, zoom: positionObj.zoom });
                 }
             }
-            return undefined;
         },
         [selectedState]
     );
@@ -571,11 +577,7 @@ const CountyMap = ({
                                                         return null;
                                                     }
                                                     const lookupFIPS = countyFIPS;
-                                                    const { countyData, usedKey } = findCountyData(
-                                                        mapData.counties,
-                                                        lookupFIPS,
-                                                        selectedState !== "All States"
-                                                    );
+                                                    const { countyData } = findCountyData(mapData.counties, lookupFIPS);
                                                     let fillColor;
                                                     if (!countyData) {
                                                         fillColor = "#d9d9d9";
