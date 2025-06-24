@@ -84,7 +84,9 @@ export default function DrawLegendNew({
         const localCutPoints = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
         const segmentCount = localCutPoints.length - 1;
         const newPercentileRanges: string[] = [];
-        const percentiles = getMapPercentiles(percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT);
+        const percentiles = getMapPercentiles(
+            percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT
+        );
         for (let i = 0; i < segmentCount; i += 1) {
             const startPercent = percentiles[i];
             const endPercent = percentiles[i + 1];
@@ -165,7 +167,9 @@ export default function DrawLegendNew({
             .attr("class", "segment")
             .attr("data-index", (d, i) => i);
         let segmentPositions: number[] = [];
-        const percentiles = getMapPercentiles(percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT);
+        const percentiles = getMapPercentiles(
+            percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT
+        );
         let currentPosition = margin;
         segmentPositions = [currentPosition];
         for (let i = 0; i < segmentCount; i += 1) {
