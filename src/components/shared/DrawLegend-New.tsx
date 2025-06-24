@@ -134,6 +134,10 @@ export default function DrawLegendNew({
             .attr("height", 110)
             .attr("viewBox", `0 0 ${width} 110`)
             .attr("preserveAspectRatio", "xMinYMid meet");
+        const percentiles = getMapPercentiles(
+            percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT
+        );
+        const expectedSegments = percentiles.length - 1;
         const customScale = colorScale.domain();
         const minValue = Math.min(...programData);
         let cut_points;
@@ -156,21 +160,43 @@ export default function DrawLegendNew({
             cut_points = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
         }
         const segmentCount = cut_points.length - 1;
-        if (Math.min(...programData) === Infinity || Math.max(...programData) === Infinity) {
+
+        if (
+            programData.length === 0 ||
+            Math.min(...programData) === Infinity ||
+            Math.max(...programData) === Infinity
+        ) {
+            baseSVG
+                .append("text")
+                .attr("class", "legendTextSide")
+                .attr("x", width / 2)
+                .attr("y", 55)
+                .attr("text-anchor", "middle")
+                .style("font-size", "14px")
+                .text("No data available for the selected filters");
             return;
         }
+
         if (segmentCount <= 0 || cut_points.some((p) => !Number.isFinite(p))) {
+            baseSVG
+                .append("text")
+                .attr("class", "legendTextSide")
+                .attr("x", width / 2)
+                .attr("y", 55)
+                .attr("text-anchor", "middle")
+                .style("font-size", "14px")
+                .text("Unable to generate legend with current data");
             return;
         }
         baseSVG.selectAll("text").remove();
         baseSVG.selectAll("rect").remove();
         const data_distribution: number[] = [];
         let totalValueSum = 0;
-        for (let i = 0; i < segmentCount; i += 1) {
+        for (let i = 0; i < expectedSegments; i += 1) {
             const lowerValue = cut_points[i];
             const upperValue = cut_points[i + 1];
             let countInRange;
-            if (i === segmentCount - 1) {
+            if (i === expectedSegments - 1) {
                 countInRange = programData.filter((d) => d >= lowerValue).length;
             } else {
                 countInRange = programData.filter((d) => d >= lowerValue && d < upperValue).length;
@@ -191,16 +217,22 @@ export default function DrawLegendNew({
             .attr("class", "segment")
             .attr("data-index", (d, i) => i);
         let segmentPositions: number[] = [];
-        const percentiles = getMapPercentiles(
-            percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT
-        );
         let currentPosition = margin;
         segmentPositions = [currentPosition];
-        for (let i = 0; i < segmentCount; i += 1) {
+
+        for (let i = 0; i < expectedSegments; i += 1) {
             const percentileRange = percentiles[i + 1] - percentiles[i];
             const segmentWidth = (percentileRange / 100) * svgWidth;
             if (!Number.isFinite(segmentWidth)) {
-                return;
+                segmentPositions = [];
+                currentPosition = margin;
+                segmentPositions = [currentPosition];
+                const equalSegmentWidth = svgWidth / expectedSegments;
+                for (let j = 0; j < expectedSegments; j += 1) {
+                    currentPosition += equalSegmentWidth;
+                    segmentPositions.push(currentPosition);
+                }
+                break;
             }
             currentPosition += segmentWidth;
             segmentPositions.push(currentPosition);
