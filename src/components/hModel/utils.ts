@@ -373,19 +373,9 @@ export const formatCellValue = (
 export const transformYearDataForward = (data: Record<string, unknown>): Record<string, unknown> => {
     const years = Object.keys(data).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
     const transformedData: Record<string, unknown> = {};
-    const yearsToProcess = years.slice(0, -2);
+    const yearsToProcess = years.slice(0, 10); // Take first 10 years
     yearsToProcess.forEach((year) => {
         const newYear = (parseInt(year, 10) + 2).toString();
-        transformedData[newYear] = data[year];
-    });
-    return transformedData;
-};
-
-export const transformYearDataBackward = (data: Record<string, unknown>): Record<string, unknown> => {
-    const years = Object.keys(data).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
-    const transformedData: Record<string, unknown> = {};
-    years.forEach((year) => {
-        const newYear = (parseInt(year, 10) - 2).toString();
         transformedData[newYear] = data[year];
     });
     return transformedData;
