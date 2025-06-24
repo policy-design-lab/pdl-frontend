@@ -5,7 +5,7 @@ import { ShortFormat } from "./ConvertionFormats";
 import "../../styles/drawLegend.css";
 import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
 import LegendTooltipContent from "./LegendTooltipContent";
-import { PercentileMode } from "../hModel/CountyCommodityMap/percentileConfig";
+import { PercentileMode, getMapPercentiles } from "../hModel/CountyCommodityMap/percentileConfig";
 
 interface CountyDataItem {
     hasData?: boolean;
@@ -84,15 +84,10 @@ export default function DrawLegendNew({
         const localCutPoints = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
         const segmentCount = localCutPoints.length - 1;
         const newPercentileRanges: string[] = [];
-        const sortedData = [...programData].sort((a, b) => a - b);
+        const percentiles = getMapPercentiles(percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT);
         for (let i = 0; i < segmentCount; i += 1) {
-            const lowerValue = localCutPoints[i];
-            const upperValue = localCutPoints[i + 1];
-            const lowerPercentile = (sortedData.findIndex((v) => v >= lowerValue) / sortedData.length) * 100;
-            const upperPercentile =
-                i === segmentCount - 1 ? 100 : (sortedData.findIndex((v) => v >= upperValue) / sortedData.length) * 100;
-            const startPercent = Math.round(lowerPercentile);
-            const endPercent = Math.round(upperPercentile);
+            const startPercent = percentiles[i];
+            const endPercent = percentiles[i + 1];
             newPercentileRanges.push(`${startPercent}% - ${endPercent}%`);
         }
         setPercentileRanges(newPercentileRanges);
@@ -170,16 +165,14 @@ export default function DrawLegendNew({
             .attr("class", "segment")
             .attr("data-index", (d, i) => i);
         let segmentPositions: number[] = [];
-        if (percentileMode === PercentileMode.EQUAL) {
-            const segmentWidth = svgWidth / segmentCount;
-            segmentPositions = Array.from({ length: segmentCount + 1 }, (_, i) => margin + i * segmentWidth);
-        } else {
-            let currentPosition = margin;
-            segmentPositions = [currentPosition];
-            for (let i = 0; i < data_distribution.length; i += 1) {
-                currentPosition += data_distribution[i] * svgWidth;
-                segmentPositions.push(currentPosition);
-            }
+        const percentiles = getMapPercentiles(percentileMode === "equal" ? PercentileMode.EQUAL : PercentileMode.DEFAULT);
+        let currentPosition = margin;
+        segmentPositions = [currentPosition];
+        for (let i = 0; i < segmentCount; i += 1) {
+            const percentileRange = percentiles[i + 1] - percentiles[i];
+            const segmentWidth = (percentileRange / 100) * svgWidth;
+            currentPosition += segmentWidth;
+            segmentPositions.push(currentPosition);
         }
         segments
             .append("rect")
