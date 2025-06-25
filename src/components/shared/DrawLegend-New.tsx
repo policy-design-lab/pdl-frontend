@@ -154,13 +154,13 @@ export default function DrawLegendNew({
             } else {
                 cut_points = [...customScale];
             }
-        } else if (isPaymentRate || notDollar) {
-            cut_points = [...customScale];
         } else {
-            cut_points = customScale[0] === minValue ? [...customScale] : [minValue, ...customScale];
+            cut_points = [...customScale];
+        }
+        if (cut_points.length - 1 !== expectedSegments) {
+            cut_points = cut_points.slice(0, expectedSegments + 1);
         }
         const segmentCount = cut_points.length - 1;
-
         if (
             programData.length === 0 ||
             Math.min(...programData) === Infinity ||
@@ -176,7 +176,6 @@ export default function DrawLegendNew({
                 .text("No data available for the selected filters");
             return;
         }
-
         if (segmentCount <= 0 || cut_points.some((p) => !Number.isFinite(p))) {
             baseSVG
                 .append("text")
@@ -219,7 +218,6 @@ export default function DrawLegendNew({
         let segmentPositions: number[] = [];
         let currentPosition = margin;
         segmentPositions = [currentPosition];
-
         for (let i = 0; i < expectedSegments; i += 1) {
             const percentileRange = percentiles[i + 1] - percentiles[i];
             const segmentWidth = (percentileRange / 100) * svgWidth;
