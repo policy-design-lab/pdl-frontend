@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 import { Box } from "@mui/material";
-import { ShortFormat } from "./ConvertionFormats";
+import { ShortFormat, ShortFormatPaymentRate } from "./ConvertionFormats";
 import "../../styles/drawLegend.css";
 import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
 import LegendTooltipContent from "./LegendTooltipContent";
@@ -139,7 +139,6 @@ export default function DrawLegendNew({
         );
         const expectedSegments = percentiles.length - 1;
         const customScale = colorScale.domain();
-        const minValue = Math.min(...programData);
         let cut_points;
         if (viewMode === "difference") {
             const hasNegativeAndPositive = programData.some((d) => d < 0) && programData.some((d) => d > 0);
@@ -269,23 +268,44 @@ export default function DrawLegendNew({
                         return acc;
                     }
                     if (viewMode === "difference" && isPaymentRate) {
-                        if (
-                            Object.prototype.hasOwnProperty.call(county, "meanRateDifference") &&
-                            county.hasValidBaseAcres &&
-                            typeof county.meanRateDifference === "number"
-                        ) {
+                        if (county.hasValidBaseAcres) {
+                            const currentBaseAcres =
+                                typeof county.currentBaseAcres === "number" ? county.currentBaseAcres : 0;
+                            const proposedBaseAcres =
+                                typeof county.proposedBaseAcres === "number" ? county.proposedBaseAcres : 0;
+                            const currentValue = typeof county.currentValue === "number" ? county.currentValue : 0;
+                            const proposedValue = typeof county.proposedValue === "number" ? county.proposedValue : 0;
+                            const currentRate = currentBaseAcres > 0 ? currentValue / currentBaseAcres : 0;
+                            const proposedRate = proposedBaseAcres > 0 ? proposedValue / proposedBaseAcres : 0;
+                            const calculatedDifference = proposedRate - currentRate;
                             acc[fips] = {
                                 ...county,
-                                value: county.meanRateDifference
+                                value: calculatedDifference
                             };
                         }
                     } else if (notDollar || isPaymentRate) {
-                        if (
-                            Object.prototype.hasOwnProperty.call(county, "meanPaymentRateInDollarsPerAcre") &&
-                            county.hasValidBaseAcres &&
-                            county.meanPaymentRateInDollarsPerAcre !== undefined
-                        ) {
-                            const roundedValue = Math.round(county.meanPaymentRateInDollarsPerAcre * 100) / 100;
+                        if (county.hasValidBaseAcres) {
+                            let totalPayment = 0;
+                            let baseAcres = 0;
+
+                            if (viewMode === "proposed") {
+                                if (typeof county.proposedValue === "number") {
+                                    totalPayment = county.proposedValue;
+                                }
+                                if (typeof county.proposedBaseAcres === "number") {
+                                    baseAcres = county.proposedBaseAcres;
+                                }
+                            } else {
+                                if (typeof county.currentValue === "number") {
+                                    totalPayment = county.currentValue;
+                                }
+                                if (typeof county.currentBaseAcres === "number") {
+                                    baseAcres = county.currentBaseAcres;
+                                }
+                            }
+                            const calculatedRate =
+                                (baseAcres as number) > 0 ? (totalPayment as number) / (baseAcres as number) : 0;
+                            const roundedValue = Math.round(calculatedRate * 100) / 100;
                             acc[fips] = {
                                 ...county,
                                 value: roundedValue
@@ -350,8 +370,11 @@ export default function DrawLegendNew({
                     return `${Math.round(d * 100)}%`;
                 }
                 if (viewMode === "difference" && isPaymentRate) {
-                    const roundedValue = Math.round(d * 10) / 10;
-                    const res = ShortFormat(roundedValue.toString(), 1, 1);
+                    const res = ShortFormatPaymentRate(d, true);
+                    return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
+                }
+                if (isPaymentRate) {
+                    const res = ShortFormatPaymentRate(d, false);
                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                 }
 

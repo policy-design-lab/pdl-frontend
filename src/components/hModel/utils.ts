@@ -1,4 +1,5 @@
 import countyFipsMapping from "../../files/maps/fips_county_mapping.json";
+import { formatPaymentRateUnified } from "../shared/ConvertionFormats";
 
 export interface YearBreakdownData {
     current?: string | number;
@@ -48,6 +49,8 @@ export const formatCurrency = (value: number, options = { minimumFractionDigits:
     const roundedValue = Math.round(value * 100) / 100;
     return `$${roundedValue.toLocaleString(undefined, options)}`;
 };
+
+export const formatPaymentRate = formatPaymentRateUnified;
 
 export const formatNumericValue = (value: number): number => {
     return Math.round(value * 100) / 100;
@@ -335,7 +338,12 @@ export const formatCellValue = (
     accessor: string
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
-        return cell.value && Number(cell.value) > 0 ? `$${Math.round(Number(cell.value))}` : "";
+        if (cell.value && Number(cell.value) > 0) {
+            const isForDifference = accessor === "difference" || accessor.includes("difference");
+            const formattedRate = formatPaymentRate(Number(cell.value), isForDifference);
+            return formattedRate ? `$${formattedRate}` : "";
+        }
+        return "";
     }
     if (headerIncludesBaseAcres) {
         return typeof cell.value === "number" && cell.value > 0

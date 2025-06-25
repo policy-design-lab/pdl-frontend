@@ -40,11 +40,19 @@ export const LegendTooltipContent: React.FC<LegendTooltipContentProps> = ({
         tooltipData.minRegion.fips === tooltipData.maxRegion.fips;
     const formatValue = (value: number) => {
         if (viewMode === "difference" && isPaymentRate) {
-            const roundedValue = Math.round(value * 10) / 10;
+            const roundedValue = Math.round(value * 100) / 100;
             const formatted = roundedValue.toFixed(1);
             return `$${parseFloat(formatted).toLocaleString(undefined, {
                 minimumFractionDigits: 1,
                 maximumFractionDigits: 1
+            })}`;
+        }
+        if (isPaymentRate) {
+            const roundedValue = Math.round(value * 100) / 100;
+            const formatted = roundedValue.toFixed(2);
+            return `$${parseFloat(formatted).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             })}`;
         }
         const roundedValue = Math.round(value);

@@ -74,6 +74,39 @@ export function ShortFormatInteger(labelValue) {
     return result;
 }
 
+export function ShortFormatPaymentRate(labelValue, isForDifference = false) {
+    if (labelValue === undefined || labelValue === null) {
+        return "0";
+    }
+    const decimalPlaces = isForDifference ? 2 : 2;
+    const absoluteValue = Math.abs(Number.parseFloat(labelValue));
+    const roundedValue = Math.round(absoluteValue * 100) / 100;
+    let result = "";
+    if (absoluteValue >= 1.0e9) {
+        const scaledValue = roundedValue / 1.0e9;
+        result = `${scaledValue.toFixed(decimalPlaces)}B`;
+    } else if (absoluteValue >= 1.0e6) {
+        const scaledValue = roundedValue / 1.0e6;
+        result = `${scaledValue.toFixed(decimalPlaces)}M`;
+    } else if (absoluteValue >= 1.0e3) {
+        const scaledValue = roundedValue / 1.0e3;
+        result = `${scaledValue.toFixed(decimalPlaces)}K`;
+    } else {
+        result = `${roundedValue.toFixed(decimalPlaces)}`;
+    }
+    if (labelValue.toString().includes("-")) {
+        result = `-${result}`;
+    }
+    return result;
+}
+
+export function formatPaymentRateUnified(value: number, isForDifference = false): string {
+    if (value === 0 || value === null || value === undefined) return "";
+    const decimalPlaces = isForDifference ? 2 : 2;
+    const roundedValue = Math.round(value * 100) / 100;
+    return roundedValue.toFixed(decimalPlaces);
+}
+
 export function ToPercentageString(value: string): string {
     return `${parseFloat(value).toFixed(2)}%`;
 }

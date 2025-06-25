@@ -113,12 +113,10 @@ const CountyCommodityMap = ({
                     try {
                         const chunkParams = { ...params, selectedYears: chunks[chunkIndex] };
                         const chunkResult = processMapData(chunkParams);
-
                         if (shouldLogChunkProcessing()) {
                             // eslint-disable-next-line no-console
                             console.log(`Processed chunk ${chunkIndex + 1}/${chunks.length}`, chunkResult);
                         }
-
                         if (chunkIndex === 0) {
                             processedData = chunkResult;
                         } else {
@@ -126,7 +124,6 @@ const CountyCommodityMap = ({
                             processedData.data = [...processedData.data, ...chunkResult.data];
                             processedData.thresholds = chunkResult.thresholds;
                         }
-
                         chunkIndex += 1;
                         setTimeout(processChunk, 0);
                     } catch (error) {
@@ -152,15 +149,16 @@ const CountyCommodityMap = ({
             if (!isLoadingEnabled()) {
                 return processMapData(params);
             }
-
             const thresholds = getHeavyOperationThresholds();
             const hasMultipleYears =
                 params.aggregationEnabled && params.selectedYears.length > thresholds.multipleYears;
             const hasComplexFilters =
                 params.selectedCommodities.length > thresholds.complexCommodityFilters ||
                 params.selectedPrograms.length > thresholds.complexProgramFilters;
+            const shouldUseChunking =
+                isChunkedProcessingEnabled() && (hasMultipleYears || hasComplexFilters) && !params.aggregationEnabled;
 
-            if (isChunkedProcessingEnabled() && (hasMultipleYears || hasComplexFilters)) {
+            if (shouldUseChunking) {
                 return processMapDataInChunks(params);
             }
             setIsProcessing(true);
@@ -195,12 +193,12 @@ const CountyCommodityMap = ({
             setMapData({ counties: {}, thresholds: [], data: [] });
             return;
         }
-
+        const yearsParam = aggregationEnabled ? selectedYears : [selectedYear];
         const params = {
             countyData,
             countyDataProposed,
             selectedYear,
-            selectedYears: aggregationEnabled ? selectedYears : [selectedYear],
+            selectedYears: yearsParam,
             viewMode,
             selectedCommodities,
             selectedPrograms,
@@ -211,7 +209,6 @@ const CountyCommodityMap = ({
             showMeanValues,
             percentileMode
         };
-
         const result = await processMapDataAsync(params);
         setMapData(result);
     }, [

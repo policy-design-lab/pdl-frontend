@@ -1,5 +1,5 @@
 import countyFipsMapping from "../../../files/maps/fips_county_mapping.json";
-import { ShortFormatInteger } from "../../shared/ConvertionFormats";
+import { ShortFormatInteger, ShortFormatPaymentRate } from "../../shared/ConvertionFormats";
 import { topTipStyle } from "../../shared/MapTooltip";
 
 interface CountyTooltipContentProps {
@@ -132,7 +132,8 @@ export const CountyTooltipContent = ({
             yearAggregation,
             selectedCommodities,
             selectedPrograms,
-            selectedYears
+            selectedYears,
+            countyFIPS
         );
 
         if (
@@ -194,9 +195,17 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
         return `${sign}${ShortFormatInteger(value)}`;
     };
 
+    const formatPaymentRateDiff = (value: number | undefined | null): string => {
+        if (!value) return "";
+        const sign = value > 0 ? "+" : "";
+        return `${sign}${ShortFormatPaymentRate(value, true)}`;
+    };
+
     const isCurrentWeightedAvg = countyData.isCurrentMeanWeighted;
     const isProposedWeightedAvg = countyData.isProposedMeanWeighted;
-    const meanRateDiff = countyData.meanRateDifference || 0;
+    const currentRate = countyData.currentMeanRatePrecise || 0;
+    const proposedRate = countyData.proposedMeanRatePrecise || 0;
+    const meanRateDiff = proposedRate - currentRate;
     const diffHighlightStyle = "background-color: rgba(156, 39, 176, 0.08); border-radius: 2px;";
 
     const content = `
@@ -221,7 +230,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle} border-radius: 0 2px 2px 0;">
-                ${formatDiff(meanRateDiff)}/acre
+                ${formatPaymentRateDiff(meanRateDiff)}/acre
             </td>
         </tr>
         <tr>
@@ -245,7 +254,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormatInteger(countyData.currentMeanRate || 0)}/acre${
+                $${ShortFormatPaymentRate(countyData.currentMeanRatePrecise || 0)}/acre${
         isCurrentWeightedAvg ? " (weighted avg)" : ""
     }
             </td>
@@ -271,7 +280,7 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                $${ShortFormatInteger(countyData.proposedMeanRate || 0)}/acre${
+                $${ShortFormatPaymentRate(countyData.proposedMeanRatePrecise || 0)}/acre${
         isProposedWeightedAvg ? " (weighted avg)" : ""
     }
             </td>
@@ -287,12 +296,14 @@ function generateRegularTooltipContent(
     yearAggregation: number,
     selectedCommodities: string[] = [],
     selectedPrograms: string[] = [],
-    selectedYears: (string | number)[] = []
+    selectedYears: (string | number)[] = [],
+    countyFIPS = ""
 ): string {
     const viewMode = countyData.proposedValue > 0 ? "proposed" : "current";
     const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
-    const meanRate = countyData.meanPaymentRateInDollarsPerAcre || 0;
     const baseAcres = countyData.baseAcres || 0;
+    const calculatedMeanRate =
+        viewMode === "proposed" ? countyData.proposedMeanRatePrecise || 0 : countyData.currentMeanRatePrecise || 0;
     let content = `
     <tr style="${topTipStyle}">
         <td class="${
@@ -318,7 +329,9 @@ function generateRegularTooltipContent(
             <td class="${
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                $${ShortFormatInteger(meanRate || 0)}/acre${countyData.isMeanWeighted ? " (weighted avg)" : ""}
+                $${ShortFormatPaymentRate(calculatedMeanRate || 0)}/acre${
+            countyData.isMeanWeighted ? " (weighted avg)" : ""
+        }
             </td>
         </tr>`;
     }
@@ -354,7 +367,7 @@ function generateCommodityDifferenceContent(
     const formatDiff = (value: number | undefined | null): string => {
         if (!value) return "";
         const sign = value > 0 ? "+" : "";
-        return `${sign}${ShortFormatInteger(value)}`;
+        return `${sign}${ShortFormatPaymentRate(value, true)}`;
     };
 
     if (commoditiesToDisplay.length > 0) {
@@ -397,7 +410,6 @@ function generateCommodityDifferenceContent(
                 const commodityCurrentMeanRate = currentBaseAcres > 0 ? commodityCurrentValue / currentBaseAcres : 0;
                 const commodityProposedMeanRate =
                     proposedBaseAcres > 0 ? commodityProposedValue / proposedBaseAcres : 0;
-                const commodityMeanRateDiff = commodityProposedMeanRate - commodityCurrentMeanRate;
                 content += `
                 <tr>
                     <td colspan="2" style="${subSectionStyle}">
@@ -491,7 +503,7 @@ function generateProgramDifferenceContent(
             const formatDiff = (value: number | undefined | null): string => {
                 if (!value) return "";
                 const sign = value > 0 ? "+" : "";
-                return `${sign}${ShortFormatInteger(value)}`;
+                return `${sign}${ShortFormatPaymentRate(value, true)}`;
             };
 
             content += `
@@ -502,8 +514,10 @@ function generateProgramDifferenceContent(
             </tr>`;
 
             if (showMeanValues) {
-                const currentRate = programData.currentMeanRate || 0;
-                const proposedRate = programData.proposedMeanRate || 0;
+                const currentBaseAcres = programData.currentBaseAcres || 0;
+                const proposedBaseAcres = programData.proposedBaseAcres || 0;
+                const currentRate = currentBaseAcres > 0 ? (programData.currentValue || 0) / currentBaseAcres : 0;
+                const proposedRate = proposedBaseAcres > 0 ? (programData.proposedValue || 0) / proposedBaseAcres : 0;
                 const diff = proposedRate - currentRate;
 
                 const isWeightedAvg = selectedPrograms.includes("All Programs") || selectedPrograms.length > 1;
@@ -518,7 +532,9 @@ function generateProgramDifferenceContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle} border-radius: 0 2px 2px 0;">
-                        ${formatDiff(diff)}/acre${isWeightedAvg ? " (weighted avg)" : ""}
+                        ${diff !== 0 ? `${diff > 0 ? "+" : ""}${ShortFormatPaymentRate(diff, true)}/acre` : ""}${
+                    isWeightedAvg ? " (weighted avg)" : ""
+                }
                     </td>
                 </tr>`;
             } else {
@@ -602,6 +618,9 @@ function generateProgramRegularContent(
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
     const subSectionStyle =
         "background-color: rgba(47, 113, 100, 0.05); padding: 4px 5px; font-weight: bold; font-style: italic; color: #2F7164;";
+    const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
+    const baseAcres = viewMode === "proposed" ? countyData.proposedBaseAcres : countyData.currentBaseAcres;
+    const calculatedMeanRate = baseAcres > 0 ? totalPayment / baseAcres : 0;
 
     let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">Program Breakdown</td></tr>`;
 
@@ -628,7 +647,7 @@ function generateProgramRegularContent(
             <td class="${
                 classes.tooltip_topcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                <b>$${ShortFormatInteger(Math.abs(countyData.meanPaymentRateInDollarsPerAcre || 0))}/acre${
+                <b>$${ShortFormatPaymentRate(Math.abs(calculatedMeanRate))}/acre${
             countyData.isMeanWeighted ? " (weighted avg)" : ""
         }</b>
             </td>
@@ -664,9 +683,7 @@ function generateProgramRegularContent(
             const baseAcresValue =
                 viewMode === "proposed" ? programData.proposedBaseAcres || 0 : programData.currentBaseAcres || 0;
 
-            const programMeanRate =
-                viewMode === "proposed" ? programData.proposedMeanRate || 0 : programData.currentMeanRate || 0;
-
+            const programMeanRate = baseAcresValue > 0 ? programValue / baseAcresValue : 0;
             content += `
             <tr>
                 <td colspan="2" style="${subSectionStyle}">
@@ -706,7 +723,7 @@ function generateProgramRegularContent(
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    $${ShortFormatInteger(Math.abs(programMeanRate))}/acre
+                                            $${ShortFormatPaymentRate(Math.abs(programMeanRate))}/acre
                 </td>
             </tr>`;
         }
@@ -799,7 +816,7 @@ function generateCommodityRegularContent(
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        $${ShortFormatInteger(commodityMeanRate)}/acre
+                        $${ShortFormatPaymentRate(commodityMeanRate)}/acre
                     </td>
                 </tr>`;
             }
@@ -962,9 +979,15 @@ function generateCombinedCommodityProgramContent(
                 const formatValue = (value: number, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
-                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}${isRate ? "/acre" : ""}`;
+                        if (isRate) {
+                            return `${sign}$${ShortFormatPaymentRate(Math.abs(value), true)}/acre`;
+                        }
+                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}`;
                     }
-                    return `$${ShortFormatInteger(Math.round(value))}${isRate ? "/acre" : ""}`;
+                    if (isRate) {
+                        return `$${ShortFormatPaymentRate(value)}/acre`;
+                    }
+                    return `$${ShortFormatInteger(Math.round(value))}`;
                 };
 
                 content += `
@@ -1060,9 +1083,15 @@ function generateCombinedCommodityProgramContent(
                 const formatValue = (value, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
-                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}${isRate ? "/acre" : ""}`;
+                        if (isRate) {
+                            return `${sign}$${ShortFormatPaymentRate(Math.abs(value), true)}/acre`;
+                        }
+                        return `${sign}$${ShortFormatInteger(Math.round(Math.abs(value)))}`;
                     }
-                    return `$${ShortFormatInteger(Math.round(value))}${isRate ? "/acre" : ""}`;
+                    if (isRate) {
+                        return `$${ShortFormatPaymentRate(value)}/acre`;
+                    }
+                    return `$${ShortFormatInteger(Math.round(value))}`;
                 };
 
                 content += `

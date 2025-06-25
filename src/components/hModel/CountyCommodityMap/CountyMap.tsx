@@ -415,16 +415,29 @@ const CountyMap = ({
             let valueToUse;
             if (showMeanValues) {
                 if (viewMode === "difference") {
-                    valueToUse = countyData.meanRateDifference || 0;
+                    const currentBaseAcres = countyData.currentBaseAcres || 0;
+                    const proposedBaseAcres = countyData.proposedBaseAcres || 0;
+                    const currentRate = currentBaseAcres > 0 ? (countyData.currentValue || 0) / currentBaseAcres : 0;
+                    const proposedRate =
+                        proposedBaseAcres > 0 ? (countyData.proposedValue || 0) / proposedBaseAcres : 0;
+                    valueToUse = proposedRate - currentRate;
                 } else {
-                    valueToUse = countyData.meanPaymentRateInDollarsPerAcre;
+                    const totalPayment = viewMode === "proposed" ? countyData.proposedValue : countyData.currentValue;
+                    const baseAcres =
+                        viewMode === "proposed" ? countyData.proposedBaseAcres : countyData.currentBaseAcres;
+                    valueToUse = baseAcres > 0 ? totalPayment / baseAcres : 0;
                     if ((valueToUse === undefined || valueToUse === 0) && selectedPrograms.length === 1) {
                         const programName = selectedPrograms[0];
                         if (countyData.programs && countyData.programs[programName]) {
-                            valueToUse =
+                            const programValue =
                                 viewMode === "proposed"
-                                    ? countyData.programs[programName].proposedMeanRate
-                                    : countyData.programs[programName].currentMeanRate;
+                                    ? countyData.programs[programName].proposedValue
+                                    : countyData.programs[programName].currentValue;
+                            const programBaseAcres =
+                                viewMode === "proposed"
+                                    ? countyData.programs[programName].proposedBaseAcres
+                                    : countyData.programs[programName].currentBaseAcres;
+                            valueToUse = programBaseAcres > 0 ? programValue / programBaseAcres : 0;
                         }
                     }
                 }

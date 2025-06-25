@@ -121,15 +121,15 @@ const StyledContainer = styled.div`
 `;
 
 const predefinedCommodityColors = {
-    Corn: "#2F7164",
-    Wheat: "#8B4513",
-    Soybeans: "#ebe288",
-    Cotton: "#4a4a4a",
-    Peanuts: "#dc2626",
-    Rice: "#1e90ff",
-    Sorghum: "#4a148c",
-    Barley: "#DAA520",
-    Oats: "#B8860B"
+    "Corn": "#2F7164",
+    "Wheat": "#8B4513",
+    "Soybeans": "#ebe288",
+    "Seed Cotton": "#4a4a4a",
+    "Peanuts": "#dc2626",
+    "Rice": "#1e90ff",
+    "Sorghum": "#4a148c",
+    "Barley": "#DAA520",
+    "Oats": "#B8860B"
 };
 
 const generateColorPalette = (commodities: string[]): Record<string, string> => {

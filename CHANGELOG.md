@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add visual texts updates to Henrique's model's page [#389](https://github.com/policy-design-lab/pdl-frontend/issues/389)
 - Add a reusable loading transition feature and apply it to Henrique's model's page [#390](https://github.com/policy-design-lab/pdl-frontend/issues/390)
 
-
 ### Changed
 - Support title II year range change [#371](https://github.com/policy-design-lab/pdl-frontend/issues/371)
 - Update Title II CRP subpage to 2014-2023 [#380](https://github.com/policy-design-lab/pdl-frontend/issues/380)

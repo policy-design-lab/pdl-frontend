@@ -963,28 +963,29 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     });
                 }
                 if (showMeanValues) {
-                    let maxBaseAcres = 0;
-                    let numberOfYears = 0;
+                    let totalBaseAcres = 0;
                     if (row.yearBreakdown) {
                         Object.entries(row.yearBreakdown).forEach(([, yearData]) => {
                             const baseAcres = yearData.baseAcres || 0;
-                            maxBaseAcres = Math.max(maxBaseAcres, baseAcres);
-                            if (baseAcres > 0) {
-                                numberOfYears += 1;
-                            }
+                            totalBaseAcres += baseAcres;
                         });
+                    } else {
+                        totalBaseAcres = (row.baseAcres as number) || 0;
                     }
-                    const adjustedBaseAcres = numberOfYears > 1 ? maxBaseAcres * numberOfYears : maxBaseAcres;
                     if (viewMode === "difference") {
                         const currentTotal = aggCurrentTotal || 0;
                         const proposedTotal = aggProposedTotal || 0;
-                        const actualCurrentBaseAcres = (row.currentBaseAcres as number) || maxBaseAcres;
-                        const actualProposedBaseAcres = (row.proposedBaseAcres as number) || maxBaseAcres;
+                        const actualCurrentBaseAcres = (row.currentBaseAcres as number) || totalBaseAcres;
+                        const actualProposedBaseAcres = (row.proposedBaseAcres as number) || totalBaseAcres;
                         const currentRate = actualCurrentBaseAcres > 0 ? currentTotal / actualCurrentBaseAcres : 0;
                         const proposedRate = actualProposedBaseAcres > 0 ? proposedTotal / actualProposedBaseAcres : 0;
                         row.weightedAverageRate = proposedRate - currentRate;
+                    } else if (totalBaseAcres > 0) {
+                        const precisedTotal = Math.round(aggTotal * 100) / 100;
+                        const precisedBaseAcres = Math.round(totalBaseAcres * 100) / 100;
+                        row.weightedAverageRate = precisedTotal / precisedBaseAcres;
                     } else {
-                        row.weightedAverageRate = adjustedBaseAcres > 0 ? aggTotal / adjustedBaseAcres : 0;
+                        row.weightedAverageRate = 0;
                     }
                 } else {
                     row.aggregatedPayment = aggTotal;
@@ -1067,7 +1068,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             viewMode === "proposed" ? (row.proposed as number) || 0 : (row.current as number) || 0;
                         const baseAcres = (row.baseAcres as number) || 0;
                         if (baseAcres > 0) {
-                            row.paymentRate = payment / baseAcres;
+                            const precisedPayment = Math.round(payment * 100) / 100;
+                            const precisedBaseAcres = Math.round(baseAcres * 100) / 100;
+                            row.paymentRate = precisedPayment / precisedBaseAcres;
                         }
                     }
                 }
@@ -1661,7 +1664,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             }}
                             dangerouslySetInnerHTML={{
                                 __html: getTableTitle.replace(
-                                    /(Years\s+(?:\d+,\s+)+\d+\s+\(Aggregated\)|Year\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|Years\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|All\s+Commodities|\d+\s+Selected\s+Commodities|(?:Corn|Cotton|Peanuts|Soybeans|Wheat|Sorghum|Barley|Oats|Rice|Sunflowers)|All\s+Programs|\d+\s+Selected\s+Programs|Current\s+Policy|Proposed\s+Policy|Policy\s+Difference\s+Analysis)/g,
+                                    /(Years\s+(?:\d+,\s+)+\d+\s+\(Aggregated\)|Year\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|Years\s+\d+(?:-\d+)?(?:\s+\(Aggregated\))?|All\s+Commodities|\d+\s+Selected\s+Commodities|(?:Seed Cotton|Corn|Peanuts|Soybeans|Wheat|Sorghum|Barley|Oats|Rice|Sunflowers)|All\s+Programs|\d+\s+Selected\s+Programs|Current\s+Policy|Proposed\s+Policy|Policy\s+Difference\s+Analysis)/g,
                                     '<span class="highlight">$1</span>'
                                 )
                             }}
