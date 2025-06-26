@@ -62,9 +62,9 @@ export default function HouseProjectionSubPageProps({
 
     useEffect(() => {
         if (subtab === "eqip-projection") {
-            setSelectedItem("1-0");
+            setSelectedItem("0-0");
         } else if (subtab === "arc-plc-payments") {
-            setSelectedItem("1-1");
+            setSelectedItem("0-1");
         } else if (!subtab) {
             setSelectedItem("0-0");
         }
@@ -139,11 +139,9 @@ export default function HouseProjectionSubPageProps({
         setShowHouseAgCommittee(false);
         setShowEQIPProjection(false);
         setShowARCPLCPayments(false);
-        if (topIndex === 0) {
-            setShowHouseAgCommittee(true);
-        } else if (topIndex === 1 && midIndex === 0) {
+        if (topIndex === 0 && midIndex === 0) {
             setShowEQIPProjection(true);
-        } else if (topIndex === 1 && midIndex === 1) {
+        } else if (topIndex === 0 && midIndex === 1) {
             setShowARCPLCPayments(true);
         }
     }, [selectedItem]);
@@ -151,21 +149,19 @@ export default function HouseProjectionSubPageProps({
     const handleMenuSelect = (value: string) => {
         const [topIndex, midIndex] = value.split("-").map(Number);
 
-        if (topIndex === 1 && midIndex === 1 && !hModelDataReady) {
+        if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
-        } else if (topIndex === 1 && midIndex === 1) {
+        } else if (topIndex === 0 && midIndex === 1) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
 
         setSelectedItem(value);
 
-        if (topIndex === 0) {
-            navigate("/policy-lab/proposal-analysis");
-        } else if (topIndex === 1 && midIndex === 0) {
+        if (topIndex === 0 && midIndex === 0) {
             navigate("/policy-lab/proposal-analysis/eqip-projection");
-        } else if (topIndex === 1 && midIndex === 1) {
+        } else if (topIndex === 0 && midIndex === 1) {
             navigate("/policy-lab/proposal-analysis/arc-plc-payments");
         }
     };
@@ -367,15 +363,9 @@ export default function HouseProjectionSubPageProps({
                                             lineHeight: 1.5
                                         }}
                                     >
-                                        {getDescriptionContent(
-                                            showEQIPProjection
-                                                ? "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily: "
-                                                : "In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to modify the payment calculations for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm subsidy programs. The payment rate and total payment projections are visualized by county, program crop, and crop year through application of a model created by Henrique Monaco, a PhD candidate at the University of Illinois at Urbana-Champaign. Dissertation will be updated soon.",
-                                            showEQIPProjection ? undefined : "Henrique Monaco"
-                                        )}
-                                        {showEQIPProjection && (
+                                        {showEQIPProjection ? (
                                             <>
-                                                <a
+                                                In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily: <a
                                                     href="https://farmdocdaily.illinois.edu/2024/08/policy-design-case-study-eqip-and-the-inflation-reduction-act.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -409,6 +399,36 @@ export default function HouseProjectionSubPageProps({
                                                     style={{ color: "#2F7164" }}
                                                 >
                                                     November 7, 2024
+                                                </a>
+                                                .
+                                            </>
+                                        ) : (
+                                            <>
+                                                In 2025, the House Agriculture Committee reported legislation for the budget reconciliation effort that reauthorized and revised many of the programs and policies traditionally reauthorized in the Farm Bill. Included in that legislation were modifications to the policy design for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm payment programs. Total payments and payment rates (per base acre) are visualized below in aggregate or by county, program, program crop, and crop year. The visualizations are an application of research, policy analysis, and a model developed by <strong>Henrique Monaco</strong>, a PhD candidate at the University of Illinois at Urbana-Champaign. Upon publication, the dissertation and other information will be available here. Discussions of the House proposal are also available on farmdoc daily: <a
+                                                    href="https://farmdocdaily.illinois.edu/2025/05/reviewing-the-house-agriculture-committees-reconciliation-bill.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    May 14, 2025
+                                                </a>
+                                                ;{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2025/05/spending-impacts-of-plc-and-arc-co-in-house-agriculture-reconciliation-bill.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    May 20, 2025
+                                                </a>
+                                                ;{" "}
+                                                <a
+                                                    href="https://farmdocdaily.illinois.edu/2025/05/reviewing-the-cbo-score-of-the-house-reconciliation-bill.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{ color: "#2F7164" }}
+                                                >
+                                                    May 22, 2025
                                                 </a>
                                                 .
                                             </>

@@ -31,7 +31,7 @@ export function HorizontalMenu({
         setAnchorEl(null);
     };
     const handleDropdownSelect = (subIndex: number) => {
-        onMenuSelect(`1-${subIndex}`);
+        onMenuSelect(`0-${subIndex}`);
         setAnchorEl(null);
     };
 
@@ -50,34 +50,13 @@ export function HorizontalMenu({
             {menu[0] && (
                 <>
                     <Button
-                        variant={topLevel === 0 ? "contained" : "outlined"}
+                        variant="outlined"
                         sx={{
                             ...buttonBaseStyle,
-                            "color": topLevel === 0 ? "white" : "#2F7164",
-                            "backgroundColor": topLevel === 0 ? "#2F7164" : "transparent",
+                            "color": "#2F7164",
+                            "backgroundColor": "transparent",
                             "&:hover": {
-                                backgroundColor: topLevel === 0 ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
-                            },
-                            "fontWeight": 600,
-                            "mr": 1
-                        }}
-                        onClick={() => onMenuSelect("0-0")}
-                    >
-                        {menu[0].title}
-                    </Button>
-                    <NavigateNextIcon sx={{ mx: 1, color: "#666" }} />
-                </>
-            )}
-            {menu[1] && (
-                <>
-                    <Button
-                        variant={topLevel === 1 ? "contained" : "outlined"}
-                        sx={{
-                            ...buttonBaseStyle,
-                            "color": topLevel === 1 ? "white" : "#2F7164",
-                            "backgroundColor": topLevel === 1 ? "#2F7164" : "transparent",
-                            "&:hover": {
-                                backgroundColor: topLevel === 1 ? "#2F7164" : "rgba(47, 113, 100, 0.1)"
+                                backgroundColor: "rgba(47, 113, 100, 0.1)"
                             },
                             "fontWeight": 600,
                             "mr": 1,
@@ -87,14 +66,30 @@ export function HorizontalMenu({
                         onClick={handleDropdownClick}
                         endIcon={
                             <ArrowDropDownIcon
-                                sx={{ color: topLevel === 1 ? "white" : "#2F7164", ml: 0.5, fontSize: 28 }}
+                                sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }}
                             />
                         }
                     >
-                        {topLevel === 1 && midLevel >= 0 && menu[1].items && menu[1].items[midLevel]
-                            ? menu[1].items[midLevel].title
-                            : menu[1].title}
+                        {menu[0].title}
                     </Button>
+                    {topLevel === 0 && midLevel >= 0 && (
+                        <>
+                            <NavigateNextIcon sx={{ mx: 1, color: "#666" }} />
+                            <Box
+                                sx={{
+                                    px: 2,
+                                    py: 1,
+                                    backgroundColor: "#2F7164",
+                                    color: "white",
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    fontSize: "14px"
+                                }}
+                            >
+                                {midLevel === 0 ? "EQIP Projection" : midLevel === 1 ? "ARC-PLC Payments" : ""}
+                            </Box>
+                        </>
+                    )}
                     <Menu
                         anchorEl={anchorEl}
                         open={open}
@@ -102,18 +97,18 @@ export function HorizontalMenu({
                         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                         transformOrigin={{ vertical: "top", horizontal: "left" }}
                     >
-                        {menu[1]?.items &&
-                            menu[1].items.map((item, subIndex) => (
+                        {menu[0]?.items &&
+                            menu[0].items.map((item, subIndex) => (
                                 <MenuItem
                                     key={`submenu-${item.title}`}
-                                    selected={topLevel === 1 && midLevel === subIndex}
+                                    selected={topLevel === 0 && midLevel === subIndex}
                                     onClick={() => handleDropdownSelect(subIndex)}
                                     sx={{
-                                        fontWeight: topLevel === 1 && midLevel === subIndex ? 600 : 400,
+                                        fontWeight: topLevel === 0 && midLevel === subIndex ? 600 : 400,
                                         color: "#2F7164"
                                     }}
                                 >
-                                    {item.title}
+                                    {subIndex === 0 ? "2024" : subIndex === 1 ? "2025" : item.title}
                                 </MenuItem>
                             ))}
                     </Menu>

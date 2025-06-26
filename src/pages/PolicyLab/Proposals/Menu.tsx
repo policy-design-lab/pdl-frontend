@@ -8,17 +8,13 @@ export interface MenuItem {
 
 export const houseProjectionMenu: MenuItem[] = [
     {
-        title: "2024 Proposals",
-        items: []
-    },
-    {
-        title: "Select Proposals",
+        title: "Proposals",
         items: [
             {
-                title: "EQIP Projection"
+                title: "2024"
             },
             {
-                title: "ARC-PLC Payments"
+                title: "2025"
             }
         ]
     }
