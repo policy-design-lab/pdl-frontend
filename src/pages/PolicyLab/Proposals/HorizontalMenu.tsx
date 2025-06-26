@@ -35,13 +35,13 @@ export function HorizontalMenu({
         setAnchorEl(null);
     };
     const getSecondLevelTitle = (level: number): string => {
-        if (level === 0) return "EQIP Projection";
-        if (level === 1) return "ARC-PLC Payments";
+        if (level === 0) return "ARC-PLC Payments";
+        if (level === 1) return "EQIP Projection";
         return "";
     };
     const getMenuItemTitle = (index: number, itemTitle: string): string => {
-        if (index === 0) return "2024";
-        if (index === 1) return "2025";
+        if (index === 0) return "2025";
+        if (index === 1) return "2024";
         return itemTitle;
     };
 

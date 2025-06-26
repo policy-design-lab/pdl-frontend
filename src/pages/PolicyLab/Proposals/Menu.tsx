@@ -11,10 +11,10 @@ export const houseProjectionMenu: MenuItem[] = [
         title: "Proposals",
         items: [
             {
-                title: "2024"
+                title: "2025"
             },
             {
-                title: "2025"
+                title: "2024"
             }
         ]
     }

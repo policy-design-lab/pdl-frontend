@@ -62,9 +62,9 @@ export default function HouseProjectionSubPageProps({
 
     useEffect(() => {
         if (subtab === "eqip-projection") {
-            setSelectedItem("0-0");
-        } else if (subtab === "arc-plc-payments") {
             setSelectedItem("0-1");
+        } else if (subtab === "arc-plc-payments") {
+            setSelectedItem("0-0");
         } else if (!subtab) {
             setSelectedItem("");
         }
@@ -142,19 +142,19 @@ export default function HouseProjectionSubPageProps({
         if (selectedItem === "") {
             setShowHouseAgCommittee(true);
         } else if (topIndex === 0 && midIndex === 0) {
-            setShowEQIPProjection(true);
-        } else if (topIndex === 0 && midIndex === 1) {
             setShowARCPLCPayments(true);
+        } else if (topIndex === 0 && midIndex === 1) {
+            setShowEQIPProjection(true);
         }
     }, [selectedItem]);
 
     const handleMenuSelect = (value: string) => {
         const [topIndex, midIndex] = value.split("-").map(Number);
 
-        if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
+        if (topIndex === 0 && midIndex === 0 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
-        } else if (topIndex === 0 && midIndex === 1) {
+        } else if (topIndex === 0 && midIndex === 0) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
@@ -162,9 +162,9 @@ export default function HouseProjectionSubPageProps({
         setSelectedItem(value);
 
         if (topIndex === 0 && midIndex === 0) {
-            navigate("/policy-lab/proposal-analysis/eqip-projection");
-        } else if (topIndex === 0 && midIndex === 1) {
             navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+        } else if (topIndex === 0 && midIndex === 1) {
+            navigate("/policy-lab/proposal-analysis/eqip-projection");
         }
     };
 
