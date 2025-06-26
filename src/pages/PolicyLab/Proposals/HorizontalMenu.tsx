@@ -34,6 +34,16 @@ export function HorizontalMenu({
         onMenuSelect(`0-${subIndex}`);
         setAnchorEl(null);
     };
+    const getSecondLevelTitle = (level: number): string => {
+        if (level === 0) return "EQIP Projection";
+        if (level === 1) return "ARC-PLC Payments";
+        return "";
+    };
+    const getMenuItemTitle = (index: number, itemTitle: string): string => {
+        if (index === 0) return "2024";
+        if (index === 1) return "2025";
+        return itemTitle;
+    };
 
     return (
         <Box
@@ -64,15 +74,11 @@ export function HorizontalMenu({
                             "alignItems": "center"
                         }}
                         onClick={handleDropdownClick}
-                        endIcon={
-                            <ArrowDropDownIcon
-                                sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }}
-                            />
-                        }
+                        endIcon={<ArrowDropDownIcon sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }} />}
                     >
                         {menu[0].title}
                     </Button>
-                    {topLevel === 0 && midLevel >= 0 && (
+                    {selectedItem && topLevel === 0 && midLevel >= 0 && (
                         <>
                             <NavigateNextIcon sx={{ mx: 1, color: "#666" }} />
                             <Box
@@ -86,7 +92,7 @@ export function HorizontalMenu({
                                     fontSize: "14px"
                                 }}
                             >
-                                {midLevel === 0 ? "EQIP Projection" : midLevel === 1 ? "ARC-PLC Payments" : ""}
+                                {getSecondLevelTitle(midLevel)}
                             </Box>
                         </>
                     )}
@@ -108,7 +114,7 @@ export function HorizontalMenu({
                                         color: "#2F7164"
                                     }}
                                 >
-                                    {subIndex === 0 ? "2024" : subIndex === 1 ? "2025" : item.title}
+                                    {getMenuItemTitle(subIndex, item.title)}
                                 </MenuItem>
                             ))}
                     </Menu>

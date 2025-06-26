@@ -66,7 +66,7 @@ export default function HouseProjectionSubPageProps({
         } else if (subtab === "arc-plc-payments") {
             setSelectedItem("0-1");
         } else if (!subtab) {
-            setSelectedItem("0-0");
+            setSelectedItem("");
         }
     }, [subtab]);
 
@@ -139,7 +139,9 @@ export default function HouseProjectionSubPageProps({
         setShowHouseAgCommittee(false);
         setShowEQIPProjection(false);
         setShowARCPLCPayments(false);
-        if (topIndex === 0 && midIndex === 0) {
+        if (selectedItem === "") {
+            setShowHouseAgCommittee(true);
+        } else if (topIndex === 0 && midIndex === 0) {
             setShowEQIPProjection(true);
         } else if (topIndex === 0 && midIndex === 1) {
             setShowARCPLCPayments(true);
@@ -365,7 +367,18 @@ export default function HouseProjectionSubPageProps({
                                     >
                                         {showEQIPProjection ? (
                                             <>
-                                                In 2024, the House Agriculture Committee considered and reported legislation to reauthorize the programs and policies in the Farm Bill. Included in that legislation were provisions to rescind the $18 billion appropriation for conservation programs Congress made in the Inflation Reduction Act of 2022, using the savings to partially offset an increase in the mandatory authorizations for the conservation programs. The visualizations below project the changes in funding allocated to each State through the Environmental Quality Incentives Program (EQIP). The projections are based on an analysis of the allocation of EQIP Farm Bill funding in recent fiscal years by practice and State. Further discussion of the proposed changes were previously reviewed on farmdoc daily: <a
+                                                In 2024, the House Agriculture Committee considered and reported
+                                                legislation to reauthorize the programs and policies in the Farm Bill.
+                                                Included in that legislation were provisions to rescind the $18 billion
+                                                appropriation for conservation programs Congress made in the Inflation
+                                                Reduction Act of 2022, using the savings to partially offset an increase
+                                                in the mandatory authorizations for the conservation programs. The
+                                                visualizations below project the changes in funding allocated to each
+                                                State through the Environmental Quality Incentives Program (EQIP). The
+                                                projections are based on an analysis of the allocation of EQIP Farm Bill
+                                                funding in recent fiscal years by practice and State. Further discussion
+                                                of the proposed changes were previously reviewed on farmdoc daily:{" "}
+                                                <a
                                                     href="https://farmdocdaily.illinois.edu/2024/08/policy-design-case-study-eqip-and-the-inflation-reduction-act.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -404,7 +417,20 @@ export default function HouseProjectionSubPageProps({
                                             </>
                                         ) : (
                                             <>
-                                                In 2025, the House Agriculture Committee reported legislation for the budget reconciliation effort that reauthorized and revised many of the programs and policies traditionally reauthorized in the Farm Bill. Included in that legislation were modifications to the policy design for the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county option (ARC-CO) farm payment programs. Total payments and payment rates (per base acre) are visualized below in aggregate or by county, program, program crop, and crop year. The visualizations are an application of research, policy analysis, and a model developed by <strong>Henrique Monaco</strong>, a PhD candidate at the University of Illinois at Urbana-Champaign. Upon publication, the dissertation and other information will be available here. Discussions of the House proposal are also available on farmdoc daily: <a
+                                                In 2025, the House Agriculture Committee reported legislation for the
+                                                budget reconciliation effort that reauthorized and revised many of the
+                                                programs and policies traditionally reauthorized in the Farm Bill.
+                                                Included in that legislation were modifications to the policy design for
+                                                the Price Loss Coverage (PLC) and Agriculture Risk Coverage, county
+                                                option (ARC-CO) farm payment programs. Total payments and payment rates
+                                                (per base acre) are visualized below in aggregate or by county, program,
+                                                program crop, and crop year. The visualizations are an application of
+                                                research, policy analysis, and a model developed by{" "}
+                                                <strong>Henrique Monaco</strong>, a PhD candidate at the University of
+                                                Illinois at Urbana-Champaign. Upon publication, the dissertation and
+                                                other information will be available here. Discussions of the House
+                                                proposal are also available on farmdoc daily:{" "}
+                                                <a
                                                     href="https://farmdocdaily.illinois.edu/2025/05/reviewing-the-house-agriculture-committees-reconciliation-bill.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
