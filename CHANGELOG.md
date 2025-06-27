@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add a few visual changes to Henrique's model's page [#388](https://github.com/policy-design-lab/pdl-frontend/issues/388)
 - Add visual texts updates to Henrique's model's page [#389](https://github.com/policy-design-lab/pdl-frontend/issues/389)
 - Add a reusable loading transition feature and apply it to Henrique's model's page [#390](https://github.com/policy-design-lab/pdl-frontend/issues/390)
-- Change the total base acres to avg. base acres for aggregated years in the Henrique's model's page [#392](https://github.com/policy-design-lab/pdl-frontend/issues/332)
+- Change the total base acres to avg. base acres for aggregated years in the Henrique's model's page [#392](https://github.com/policy-design-lab/pdl-frontend/issues/392)
 
 
 ### Changed
