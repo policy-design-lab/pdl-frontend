@@ -1454,6 +1454,12 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         const withValues: typeof dataWithKeys = [];
         const withoutValues: typeof dataWithKeys = [];
         dataWithKeys.forEach((row) => {
+            const hasValidCountyName = row.county && row.county !== "";
+            if (!hasValidCountyName) {
+                withoutValues.push(row);
+                return;
+            }
+            // hide rows with empty county name, may update this in the future after confirming the FIPS code processing strategy
             let value = row[sortBy];
             if (sortBy.includes(".")) {
                 const keys = sortBy.split(".");
