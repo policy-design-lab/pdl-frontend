@@ -6,6 +6,10 @@
  * @returns
  */
 export function ShortFormat(labelValue, position?: number, decimal?: number) {
+    if (labelValue === undefined || labelValue === null) {
+        return "0";
+    }
+
     const absoluteValue = Math.abs(Number.parseFloat(labelValue));
     let decimalPart = "";
     let result = "";
@@ -15,19 +19,19 @@ export function ShortFormat(labelValue, position?: number, decimal?: number) {
             (absoluteValue / 1.0e9) % 1 !== 0
                 ? `${(absoluteValue / 1.0e9).toFixed(decimals)}B`
                 : `${absoluteValue / 1.0e9}B`;
-        decimalPart = (absoluteValue / 1.0e9) % 1 !== 0 ? result.match(/\.(.*)B$/)[1] : "";
+        decimalPart = (absoluteValue / 1.0e9) % 1 !== 0 ? result.match(/\.(.*)B$/)?.[1] || "" : "";
     } else if (absoluteValue >= 1.0e6) {
         result =
             (absoluteValue / 1.0e6) % 1 !== 0
                 ? `${(absoluteValue / 1.0e6).toFixed(decimals)}M`
                 : `${absoluteValue / 1.0e6}M`;
-        decimalPart = (absoluteValue / 1.0e6) % 1 !== 0 ? result.match(/\.(.*)M$/)[1] : "";
+        decimalPart = (absoluteValue / 1.0e6) % 1 !== 0 ? result.match(/\.(.*)M$/)?.[1] || "" : "";
     } else if (absoluteValue >= 1.0e3) {
         result =
             (absoluteValue / 1.0e3) % 1 !== 0
                 ? `${(absoluteValue / 1.0e3).toFixed(decimals)}K`
                 : `${absoluteValue / 1.0e3}K`;
-        decimalPart = (absoluteValue / 1.0e3) % 1 !== 0 ? result.match(/\.(.*)K$/)[1] : "";
+        decimalPart = (absoluteValue / 1.0e3) % 1 !== 0 ? result.match(/\.(.*)K$/)?.[1] || "" : "";
     } else {
         result = absoluteValue % 1 !== 0 ? `${absoluteValue.toFixed(decimals)}` : `${absoluteValue}`;
     }
@@ -48,6 +52,61 @@ export function ShortFormat(labelValue, position?: number, decimal?: number) {
     }
     return result;
 }
+
+export function ShortFormatInteger(labelValue) {
+    if (labelValue === undefined || labelValue === null) {
+        return "0";
+    }
+    const absoluteValue = Math.abs(Math.round(Number.parseFloat(labelValue)));
+    let result = "";
+    if (absoluteValue >= 1.0e9) {
+        result = `${Math.round(absoluteValue / 1.0e9)}B`;
+    } else if (absoluteValue >= 1.0e6) {
+        result = `${Math.round(absoluteValue / 1.0e6)}M`;
+    } else if (absoluteValue >= 1.0e3) {
+        result = `${Math.round(absoluteValue / 1.0e3)}K`;
+    } else {
+        result = `${absoluteValue}`;
+    }
+    if (labelValue.toString().includes("-")) {
+        result = `-${result}`;
+    }
+    return result;
+}
+
+export function ShortFormatPaymentRate(labelValue, isForDifference = false) {
+    if (labelValue === undefined || labelValue === null) {
+        return "0";
+    }
+    const decimalPlaces = isForDifference ? 2 : 2;
+    const absoluteValue = Math.abs(Number.parseFloat(labelValue));
+    const roundedValue = Math.round(absoluteValue * 100) / 100;
+    let result = "";
+    if (absoluteValue >= 1.0e9) {
+        const scaledValue = roundedValue / 1.0e9;
+        result = `${scaledValue.toFixed(decimalPlaces)}B`;
+    } else if (absoluteValue >= 1.0e6) {
+        const scaledValue = roundedValue / 1.0e6;
+        result = `${scaledValue.toFixed(decimalPlaces)}M`;
+    } else if (absoluteValue >= 1.0e3) {
+        const scaledValue = roundedValue / 1.0e3;
+        result = `${scaledValue.toFixed(decimalPlaces)}K`;
+    } else {
+        result = `${roundedValue.toFixed(decimalPlaces)}`;
+    }
+    if (labelValue.toString().includes("-")) {
+        result = `-${result}`;
+    }
+    return result;
+}
+
+export function formatPaymentRateUnified(value: number, isForDifference = false): string {
+    if (value === 0 || value === null || value === undefined) return "";
+    const decimalPlaces = isForDifference ? 2 : 2;
+    const roundedValue = Math.round(value * 100) / 100;
+    return roundedValue.toFixed(decimalPlaces);
+}
+
 export function ToPercentageString(value: string): string {
     return `${parseFloat(value).toFixed(2)}%`;
 }

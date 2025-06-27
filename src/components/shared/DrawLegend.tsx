@@ -135,11 +135,12 @@ export default function DrawLegend({
                                 if (isRatio) {
                                     return `${Math.round(cut_points[i] * 100)}%`;
                                 }
-                                if (i === 0 && !notDollar) {
-                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                const roundedValue = Math.round(cut_points[i]);
+                                if (!notDollar) {
+                                    const res = ShortFormat(roundedValue.toString(), 0, 0);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                return ShortFormat(roundedValue.toString(), 0, 0);
                             });
                     } else {
                         baseSVG
@@ -159,11 +160,12 @@ export default function DrawLegend({
                                 if (isRatio) {
                                     return `${Math.round(cut_points[i] * 100)}%`;
                                 }
-                                if (i === 0 && !notDollar) {
-                                    const res = ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                const roundedValue = Math.round(cut_points[i]);
+                                if (!notDollar) {
+                                    const res = ShortFormat(roundedValue.toString(), 0, 0);
                                     return res.indexOf("-") < 0 ? `$${res}` : `-$${res.substring(1)}`;
                                 }
-                                return ShortFormat(cut_points[i].toFixed(2), -1, 2);
+                                return ShortFormat(roundedValue.toString(), 0, 0);
                             });
                     }
                     if (emptyState.length !== 0) {

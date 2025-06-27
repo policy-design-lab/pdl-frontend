@@ -51,7 +51,6 @@ const MapChart = (props) => {
                                             </div>
                                             <table className={classes.tooltip_table}>
                                                 <tbody key={geo.properties.name}>
-                                                    {/* Add yearly breakdown rows */}
                                                     {record.years &&
                                                         Object.entries(record.years).map(([each_year, data]) => (
                                                             <tr key={each_year}>
