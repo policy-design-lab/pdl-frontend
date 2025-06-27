@@ -14,6 +14,24 @@ interface CountyTooltipContentProps {
     selectedYears?: (string | number)[];
     stateCodesData?: Record<string, string>;
 }
+const calculateDisplayBaseAcres = (
+    baseAcres: number,
+    isMultiYearSelection: boolean,
+    hasYearAggregation: boolean,
+    selectedYears: (string | number)[],
+    yearAggregation: number
+): number => {
+    if (!(isMultiYearSelection || hasYearAggregation)) {
+        return baseAcres;
+    }
+
+    const numberOfYears = isMultiYearSelection ? selectedYears.length : yearAggregation + 1;
+    return Math.round(baseAcres / numberOfYears);
+};
+
+const getBaseAcresLabel = (isMultiYearSelection: boolean, hasYearAggregation: boolean): string => {
+    return isMultiYearSelection || hasYearAggregation ? "Avg Base Acres" : "Base Acres";
+};
 
 export const CountyTooltipContent = ({
     countyData,
@@ -79,6 +97,25 @@ export const CountyTooltipContent = ({
                     )}
                 </td>
             </tr>`;
+    } else {
+        const numberOfYears = isMultiYearSelection ? selectedYears.length : yearAggregation + 1;
+        const averageBaseAcres =
+            viewMode === "proposed"
+                ? Math.round((countyData.proposedBaseAcres || 0) / numberOfYears)
+                : Math.round((countyData.currentBaseAcres || 0) / numberOfYears);
+        tooltipContent += `
+            <tr>
+                <td class="${
+                    classes.tooltip_regularcell_left
+                }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    Avg Base Acres:
+                </td>
+                <td class="${
+                    classes.tooltip_regularcell_right
+                }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
+                    ${ShortFormatInteger(averageBaseAcres)}
+                </td>
+            </tr>`;
     }
 
     if (viewMode === "difference") {
@@ -120,7 +157,9 @@ export const CountyTooltipContent = ({
                     countyData,
                     selectedPrograms,
                     classes,
-                    showMeanValues
+                    showMeanValues,
+                    yearAggregation,
+                    selectedYears
                 );
             }
         }
@@ -174,7 +213,9 @@ export const CountyTooltipContent = ({
                     selectedPrograms,
                     classes,
                     showMeanValues,
-                    viewMode
+                    viewMode,
+                    yearAggregation,
+                    selectedYears
                 );
             }
         }
@@ -335,7 +376,6 @@ function generateRegularTooltipContent(
             </td>
         </tr>`;
     }
-    const isMultiYearSelection = selectedYears && selectedYears.length > 1;
     return content;
 }
 
@@ -463,7 +503,9 @@ function generateProgramDifferenceContent(
     countyData: any,
     selectedPrograms: string[],
     classes: any,
-    showMeanValues: boolean
+    showMeanValues: boolean,
+    yearAggregation = 0,
+    selectedYears: (string | number)[] = []
 ): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
@@ -552,30 +594,47 @@ function generateProgramDifferenceContent(
                     </td>
                 </tr>`;
             }
+            const isMultiYearSelection = selectedYears && selectedYears.length > 1;
+            const hasYearAggregation = yearAggregation > 0;
+            const displayCurrentBaseAcres = calculateDisplayBaseAcres(
+                programData.currentBaseAcres || 0,
+                isMultiYearSelection,
+                hasYearAggregation,
+                selectedYears,
+                yearAggregation
+            );
+            const displayProposedBaseAcres = calculateDisplayBaseAcres(
+                programData.proposedBaseAcres || 0,
+                isMultiYearSelection,
+                hasYearAggregation,
+                selectedYears,
+                yearAggregation
+            );
+            const baseAcresLabel = getBaseAcresLabel(isMultiYearSelection, hasYearAggregation);
 
             content += `
             <tr>
                 <td class="${
                     classes.tooltip_regularcell_left
                 }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    Current Base Acres:
+                    Current ${baseAcresLabel}:
                 </td>
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormatInteger(programData.currentBaseAcres || 0)}
+                    ${ShortFormatInteger(displayCurrentBaseAcres)}
                 </td>
             </tr>
             <tr>
                 <td class="${
                     classes.tooltip_regularcell_left
                 }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    Proposed Base Acres:
+                    Proposed ${baseAcresLabel}:
                 </td>
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormatInteger(programData.proposedBaseAcres || 0)}
+                    ${ShortFormatInteger(displayProposedBaseAcres)}
                 </td>
             </tr>
             <tr>
@@ -612,7 +671,9 @@ function generateProgramRegularContent(
     selectedPrograms: string[],
     classes: any,
     showMeanValues: boolean,
-    viewMode = "current"
+    viewMode = "current",
+    yearAggregation = 0,
+    selectedYears: (string | number)[] = []
 ): string {
     const sectionHeaderStyle =
         "background-color: rgba(47, 113, 100, 0.1); font-weight: bold; text-align: center; padding: 5px; border-radius: 3px; margin-top: 6px;";
@@ -683,6 +744,19 @@ function generateProgramRegularContent(
             const baseAcresValue =
                 viewMode === "proposed" ? programData.proposedBaseAcres || 0 : programData.currentBaseAcres || 0;
 
+            const isMultiYearSelection = selectedYears && selectedYears.length > 1;
+            const hasYearAggregation = yearAggregation > 0;
+
+            const displayBaseAcres = calculateDisplayBaseAcres(
+                baseAcresValue,
+                isMultiYearSelection,
+                hasYearAggregation,
+                selectedYears,
+                yearAggregation
+            );
+
+            const baseAcresLabel = getBaseAcresLabel(isMultiYearSelection, hasYearAggregation);
+
             const programMeanRate = baseAcresValue > 0 ? programValue / baseAcresValue : 0;
             content += `
             <tr>
@@ -706,12 +780,12 @@ function generateProgramRegularContent(
                 <td class="${
                     classes.tooltip_regularcell_left
                 }" style="text-align: left; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    Base Acres:
+                    ${baseAcresLabel}:
                 </td>
                 <td class="${
                     classes.tooltip_regularcell_right
                 }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
-                    ${ShortFormatInteger(baseAcresValue)}
+                    ${ShortFormatInteger(displayBaseAcres)}
                 </td>
             </tr>
             <tr>
@@ -773,6 +847,20 @@ function generateCommodityRegularContent(
                     viewMode === "proposed"
                         ? commodityData.proposedBaseAcres || 0
                         : commodityData.currentBaseAcres || 0;
+
+                const isMultiYearSelection = selectedYears && selectedYears.length > 1;
+                const hasYearAggregation = yearAggregation > 0;
+
+                const displayBaseAcres = calculateDisplayBaseAcres(
+                    baseAcres,
+                    isMultiYearSelection,
+                    hasYearAggregation,
+                    selectedYears,
+                    yearAggregation
+                );
+
+                const baseAcresLabel = getBaseAcresLabel(isMultiYearSelection, hasYearAggregation);
+
                 let commodityMeanRate = 0;
                 if (baseAcres > 0) {
                     commodityMeanRate = commodityValue / baseAcres;
@@ -799,12 +887,12 @@ function generateCommodityRegularContent(
                     <td class="${
                         classes.tooltip_regularcell_left
                     }" style="text-align: left; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        Base Acres:
+                        ${baseAcresLabel}:
                     </td>
                     <td class="${
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
-                        ${ShortFormatInteger(baseAcres)}
+                        ${ShortFormatInteger(displayBaseAcres)}
                     </td>
                 </tr>
                 <tr>
@@ -860,6 +948,9 @@ function generateCombinedCommodityProgramContent(
     let content = `<tr><td colspan="2" style="${sectionHeaderStyle}">Commodity Breakdown</td></tr>`;
 
     const showAllPrograms = selectedPrograms.includes("All Programs");
+    const isMultiYearSelection = selectedYears && selectedYears.length > 1;
+    const hasYearAggregation = yearAggregation > 0;
+    const baseAcresLabel = getBaseAcresLabel(isMultiYearSelection, hasYearAggregation);
 
     if (showAllPrograms) {
         content += `
@@ -872,7 +963,7 @@ function generateCombinedCommodityProgramContent(
                             <th style="${tableHeaderStyle}; width: 13%;">${
             showMeanValues ? "Total Rate" : "Total ($)"
         }</th>
-                            <th style="${tableHeaderStyle}; width: 13%;">Base Acres</th>
+                            <th style="${tableHeaderStyle}; width: 13%;">${baseAcresLabel}</th>
                             <th style="${tableHeaderStyle}; width: 13%;">${
             showMeanValues ? "ARC Rate" : "ARC Total"
         }</th>
@@ -976,6 +1067,31 @@ function generateCombinedCommodityProgramContent(
                 commodityRate = commodityValue / actualCommodityBaseAcres;
             }
             if (commodityValue > 0 || commodityBaseAcres > 0 || commodityArcValue > 0 || commodityPlcValue > 0) {
+                const isMultiYear = selectedYears && selectedYears.length > 1;
+                const hasAggregation = yearAggregation > 0;
+                const actualBaseAcres =
+                    totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres;
+                const displayBaseAcres = calculateDisplayBaseAcres(
+                    actualBaseAcres,
+                    isMultiYear,
+                    hasAggregation,
+                    selectedYears,
+                    yearAggregation
+                );
+                const displayArcAcres = calculateDisplayBaseAcres(
+                    commodityArcAcres,
+                    isMultiYear,
+                    hasAggregation,
+                    selectedYears,
+                    yearAggregation
+                );
+                const displayPlcAcres = calculateDisplayBaseAcres(
+                    commodityPlcAcres,
+                    isMultiYear,
+                    hasAggregation,
+                    selectedYears,
+                    yearAggregation
+                );
                 const formatValue = (value: number, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
@@ -998,7 +1114,7 @@ function generateCombinedCommodityProgramContent(
                     showMeanValues
                 )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                    totalCommodityProgramAcres > 0 ? totalCommodityProgramAcres : commodityBaseAcres
+                    displayBaseAcres
                 )}</td>
                             <td style="${cellStyle}">${
                     commodityArcValue > 0
@@ -1006,7 +1122,7 @@ function generateCombinedCommodityProgramContent(
                         : "-"
                 }</td>
                             <td style="${cellStyle}">${
-                    commodityArcAcres > 0 ? ShortFormatInteger(commodityArcAcres) : "-"
+                    commodityArcAcres > 0 ? ShortFormatInteger(displayArcAcres) : "-"
                 }</td>
                             <td style="${cellStyle}">${
                     commodityPlcValue > 0
@@ -1014,7 +1130,7 @@ function generateCombinedCommodityProgramContent(
                         : "-"
                 }</td>
                             <td style="${cellStyle}">${
-                    commodityPlcAcres > 0 ? ShortFormatInteger(commodityPlcAcres) : "-"
+                    commodityPlcAcres > 0 ? ShortFormatInteger(displayPlcAcres) : "-"
                 }</td>
                         </tr>`;
             }
@@ -1036,7 +1152,7 @@ function generateCombinedCommodityProgramContent(
                             <th style="${tableHeaderStyle}; width: 30%;">${
             showMeanValues ? "Rate ($/acre)" : "Total ($)"
         }</th>
-                            <th style="${tableHeaderStyle}; width: 30%;">Base Acres</th>
+                            <th style="${tableHeaderStyle}; width: 30%;">${baseAcresLabel}</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -1080,6 +1196,16 @@ function generateCombinedCommodityProgramContent(
             const commodityRate = commodityBaseAcres > 0 ? commodityValue / commodityBaseAcres : 0;
 
             if (commodityValue > 0 || commodityBaseAcres > 0) {
+                const isMultiYear = selectedYears && selectedYears.length > 1;
+                const hasAggregation = yearAggregation > 0;
+
+                const displayCommodityBaseAcres = calculateDisplayBaseAcres(
+                    commodityBaseAcres,
+                    isMultiYear,
+                    hasAggregation,
+                    selectedYears,
+                    yearAggregation
+                );
                 const formatValue = (value, isRate = false) => {
                     if (viewMode === "difference") {
                         const sign = value >= 0 ? "+" : "";
@@ -1102,7 +1228,7 @@ function generateCombinedCommodityProgramContent(
                     showMeanValues
                 )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                    commodityBaseAcres
+                    displayCommodityBaseAcres
                 )}</td>
                         </tr>`;
 
@@ -1122,6 +1248,13 @@ function generateCombinedCommodityProgramContent(
                             const programRate = programBaseAcres > 0 ? programValue / programBaseAcres : 0;
 
                             if (programValue > 0 || programBaseAcres > 0) {
+                                const displayProgramBaseAcres = calculateDisplayBaseAcres(
+                                    programBaseAcres,
+                                    isMultiYear,
+                                    hasAggregation,
+                                    selectedYears,
+                                    yearAggregation
+                                );
                                 content += `
                         <tr>
                             <td style="text-align: left; vertical-align: middle; padding: 4px 8px; border: 1px solid rgba(47, 113, 100, 0.15); font-size: 0.9em; padding-left: 16px;">• ${program}</td>
@@ -1130,7 +1263,7 @@ function generateCombinedCommodityProgramContent(
                                     showMeanValues
                                 )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                                    programBaseAcres
+                                    displayProgramBaseAcres
                                 )}</td>
                         </tr>`;
                             }
