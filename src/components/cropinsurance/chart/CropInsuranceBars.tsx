@@ -21,16 +21,17 @@ import { DownloadIcon } from "../../shared/DownloadIcon";
 export default function CropInsuranceBars({
     stateDistributionData,
     checkedMenu,
-    initChartWidthRatio
+    initChartWidthRatio,
+    yearKey
 }: {
     stateDistributionData: any;
     checkedMenu: string;
     initChartWidthRatio: number;
+    yearKey: string;
 }): JSX.Element {
     const cropinsuranceDiv = React.useRef(null);
     const [barStatus, setBarStatus] = React.useState(0);
     const [secondarybarStatus, setSecondaryBarStatus] = React.useState(3);
-    const yearKey = "2018-2022";
     const widthPercentage = initChartWidthRatio;
     const heightPercentage = 0.4;
     const paddingLR = 60;

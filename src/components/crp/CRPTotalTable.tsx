@@ -206,7 +206,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        PCT. NATIONWIDE <br /> (as of Sep. 2022)
+                        PCT. NATIONWIDE <br /> (as of Sep. 2023)
                     </Box>
                 ),
                 accessor: "percentage",
@@ -226,7 +226,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        NO. OF CONTRACTS <br /> (as of Sep. 2022)
+                        NO. OF CONTRACTS <br /> (as of Sep. 2023)
                     </Box>
                 ),
                 accessor: "noContract",
@@ -246,7 +246,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        NO. OF FARMS <br /> (as of Sep. 2022)
+                        NO. OF FARMS <br /> (as of Sep. 2023)
                     </Box>
                 ),
                 accessor: "noFarm",
@@ -266,7 +266,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        ACRES <br /> (as of Sep. 2022)
+                        ACRES <br /> (as of Sep. 2023)
                     </Box>
                 ),
                 accessor: "totAcre",

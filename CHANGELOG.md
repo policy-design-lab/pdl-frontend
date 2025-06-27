@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2025-06-27
+
+### Added
+- Add a new page and components to visualize Henrique's model [#370](https://github.com/policy-design-lab/pdl-frontend/issues/370)
+- Add a bar chart with corresponding table for CBO projection to Henrique's model's page [#387](https://github.com/policy-design-lab/pdl-frontend/issues/387)
+- Add a few visual changes to Henrique's model's page [#388](https://github.com/policy-design-lab/pdl-frontend/issues/388)
+- Add visual texts updates to Henrique's model's page [#389](https://github.com/policy-design-lab/pdl-frontend/issues/389)
+- Add a reusable loading transition feature and apply it to Henrique's model's page [#390](https://github.com/policy-design-lab/pdl-frontend/issues/390)
+- Change the total base acres to avg. base acres for aggregated years in the Henrique's model's page [#392](https://github.com/policy-design-lab/pdl-frontend/issues/392)
+
+
+### Changed
+- Support title II year range change [#371](https://github.com/policy-design-lab/pdl-frontend/issues/371)
+- Update Title II CRP subpage to 2014-2023 [#380](https://github.com/policy-design-lab/pdl-frontend/issues/380)
+- Bump the Ubuntu version of the Lint Github action to latest [#382](https://github.com/policy-design-lab/pdl-frontend/issues/382)
+- Update rules for Danger Github action to eliminate unnecessary checks when PR is in draft status
+- Update Crop Insurance data years to 2014-2023 and make future updates easier. [#378](https://github.com/policy-design-lab/pdl-frontend/issues/378)
+- Update the map coloring for all maps in Title II and Crop Insurance [#385](https://github.com/policy-design-lab/pdl-frontend/issues/385)
+
 ## [1.8.0] - 2025-03-10
 
 ### Changed
@@ -347,6 +366,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.9.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.8.0...1.9.0
 [1.8.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.7.0...1.8.0
 [1.7.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.5.0...1.6.0

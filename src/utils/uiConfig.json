@@ -1,0 +1,28 @@
+{
+  "loadingStates": {
+    "enabled": true,
+    "enableChunkedProcessing": true,
+    "enableProgressMessages": true,
+    "enableLoadingOverlay": true,
+    "chunkSize": 3,
+    "heavyOperationThresholds": {
+      "multipleYears": 1,
+      "complexCommodityFilters": 3,
+      "complexProgramFilters": 2
+    }
+  },
+  "animations": {
+    "enabled": true,
+    "fadeTimeout": 300,
+    "backdropBlur": true
+  },
+  "performance": {
+    "useRequestAnimationFrame": true,
+    "useRequestIdleCallback": true,
+    "idleCallbackTimeout": 100
+  },
+  "debugging": {
+    "logChunkProcessing": false,
+    "logPerformanceMetrics": false
+  }
+} 

@@ -6,18 +6,15 @@ export interface MenuItem {
     items?: MenuItem[];
 }
 
-// Menu items. Extend this one in the future if adding more items.
 export const houseProjectionMenu: MenuItem[] = [
     {
-        title: "2024 Proposals",
+        title: "Proposals",
         items: [
             {
-                title: "House Ag Committee",
-                items: [
-                    {
-                        title: "EQIP Projection"
-                    }
-                ]
+                title: "2025"
+            },
+            {
+                title: "2024"
             }
         ]
     }
@@ -36,36 +33,48 @@ export function MenuItem({
     onMenuSelect: (i: string) => void;
     level: number;
 }): JSX.Element {
-    const isParentLevel = level < 2;
-    const [isOpen, setIsOpen] = useState(isParentLevel);
-    const isExactlySelected = selectedItem === index && !isParentLevel;
+    const isTop2024Proposals = level === 0 && item.title === "2024 Proposals";
+    const isHouseAgCommittee = level === 0 && item.title === "House Ag Committee";
+
+    const [isOpen, setIsOpen] = useState(true);
+
+    const isSelected = selectedItem === index;
+    const hasSelectedChild = selectedItem.startsWith(`${index}-`);
+
     const handleClick = () => {
-        if (!isParentLevel) {
+        if (isHouseAgCommittee) {
+            setIsOpen(!isOpen);
+        } else if (!isTop2024Proposals) {
             onMenuSelect(index);
         }
     };
+
     const getTextColor = () => {
-        if (isParentLevel) return "#666666";
-        if (isExactlySelected) return "#2F7164";
-        return "#272727";
+        if (isSelected || hasSelectedChild) return "#2F7164";
+        return "#666666";
     };
+
     const getBackgroundColor = () => {
+        if (level > 0) return "#F5F7F6";
         return "#ECF0EE";
     };
+
     const getHoverBackgroundColor = () => {
-        if (isParentLevel) return "inherit";
-        if (isExactlySelected) return "#ECF0EE";
+        if (isTop2024Proposals) return "inherit";
+        if (level > 0) return "rgba(0, 0, 0, 0.08)";
         return "rgba(0, 0, 0, 0.04)";
     };
+
     const showBorder = level > 0;
+
     return (
         <>
             <ListItemButton
                 onClick={handleClick}
-                disabled={isParentLevel}
+                disabled={isTop2024Proposals}
                 sx={{
                     "my": 0,
-                    "py": 2,
+                    "py": level === 0 ? 2 : 1.5,
                     "pl": level * 3,
                     "color": getTextColor(),
                     "backgroundColor": getBackgroundColor(),
@@ -77,7 +86,7 @@ export function MenuItem({
                         opacity: 1,
                         color: "#666666"
                     },
-                    "cursor": isParentLevel ? "default" : "pointer"
+                    "cursor": isTop2024Proposals ? "default" : "pointer"
                 }}
             >
                 <ListItemText
@@ -86,9 +95,10 @@ export function MenuItem({
                             sx={{
                                 mx: 3,
                                 fontFamily: '"Roboto", sans-serif',
-                                fontWeight: 600,
+                                fontWeight: level === 0 ? 600 : 500,
+                                fontSize: level === 0 ? "inherit" : "0.95em",
                                 borderLeft: showBorder
-                                    ? `4px solid ${isExactlySelected ? "#2F7164" : "#ccd7d1"}`
+                                    ? `4px solid ${isSelected || hasSelectedChild ? "#2F7164" : "#ccd7d1"}`
                                     : "none",
                                 paddingLeft: showBorder ? 2 : 0,
                                 color: "inherit"
@@ -99,19 +109,22 @@ export function MenuItem({
                     }
                 />
             </ListItemButton>
-            {item.items && (
+            {item.items && item.items.length > 0 && (
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        {item.items.map((subItem, subIndex) => (
-                            <MenuItem
-                                key={subItem.title}
-                                item={subItem}
-                                index={`${index}-${subIndex}`}
-                                selectedItem={selectedItem}
-                                onMenuSelect={onMenuSelect}
-                                level={level + 1}
-                            />
-                        ))}
+                        {item.items.map(
+                            (subItem, subIndex) =>
+                                subItem && (
+                                    <MenuItem
+                                        key={subItem.title || `sub-item-${subIndex}`}
+                                        item={subItem}
+                                        index={`${index}-${subIndex}`}
+                                        selectedItem={selectedItem}
+                                        onMenuSelect={onMenuSelect}
+                                        level={level + 1}
+                                    />
+                                )
+                        )}
                     </List>
                 </Collapse>
             )}

@@ -13,7 +13,7 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 
 export default function CRPPage(): JSX.Element {
-    const year = "2018-2022";
+    const year = "2014-2023";
     const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
