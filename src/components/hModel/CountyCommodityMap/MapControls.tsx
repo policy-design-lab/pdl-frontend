@@ -171,22 +171,6 @@ const MapControls: React.FC<MapControlsProps> = ({
                     size="small"
                 >
                     <ToggleButton
-                        value="total"
-                        sx={{
-                            "flex": 1,
-                            "color": !showMeanValues ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                            "backgroundColor": !showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                            "fontWeight": !showMeanValues ? "bold" : "normal",
-                            "border": "1px solid rgba(47, 113, 100, 0.5)",
-                            "height": toggleButtonHeight,
-                            "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.05)"
-                            }
-                        }}
-                    >
-                        Total Payments ($)
-                    </ToggleButton>
-                    <ToggleButton
                         value="mean"
                         sx={{
                             "flex": 1,
@@ -201,6 +185,22 @@ const MapControls: React.FC<MapControlsProps> = ({
                         }}
                     >
                         Payment Rate ($/acre)
+                    </ToggleButton>
+                    <ToggleButton
+                        value="total"
+                        sx={{
+                            "flex": 1,
+                            "color": !showMeanValues ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
+                            "backgroundColor": !showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
+                            "fontWeight": !showMeanValues ? "bold" : "normal",
+                            "border": "1px solid rgba(47, 113, 100, 0.5)",
+                            "height": toggleButtonHeight,
+                            "&:hover": {
+                                backgroundColor: "rgba(47, 113, 100, 0.05)"
+                            }
+                        }}
+                    >
+                        Total Payments ($)
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Grid>
