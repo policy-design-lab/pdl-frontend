@@ -25,22 +25,16 @@ const offsets = {
     DC: [49, 21]
 };
 
-const MapChart = ({
-    setReactTooltipContent,
-    maxValue,
-    statePerformance,
-    stateCodes,
-    allStates,
-    colorScale
-}) => {
+const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allStates, colorScale }) => {
     const classes = useStyles();
 
     // Find all year keys, filtering out any "total" or "summary" keys.
-    const allYearKeys = Object.keys(statePerformance)
-        .filter(y => Array.isArray(statePerformance[y]) && !y.includes("-"));
+    const allYearKeys = Object.keys(statePerformance).filter(
+        (y) => Array.isArray(statePerformance[y]) && !y.includes("-")
+    );
 
     // Find the summary key (the one with '-')
-    const summaryKey = Object.keys(statePerformance).find(k => k.includes("-"));
+    const summaryKey = Object.keys(statePerformance).find((k) => k.includes("-"));
 
     return (
         <div data-tip="">
@@ -53,17 +47,17 @@ const MapChart = ({
                                 // Find summary entry for "total" (e.g., "2018-2022")
                                 const summaryEntry = summaryKey
                                     ? statePerformance[summaryKey].find(
-                                        v =>
-                                            v.state &&
-                                            (v.state.length !== 2
-                                                ? v.state === stateName
-                                                : stateCodes[v.state] === stateName)
-                                    )
+                                          (v) =>
+                                              v.state &&
+                                              (v.state.length !== 2
+                                                  ? v.state === stateName
+                                                  : stateCodes[v.state] === stateName)
+                                      )
                                     : null;
                                 // Gather per-year values
-                                const yearlyBenefits = allYearKeys.map(y => {
+                                const yearlyBenefits = allYearKeys.map((y) => {
                                     const entry = statePerformance[y].find(
-                                        v =>
+                                        (v) =>
                                             v.state &&
                                             (v.state.length !== 2
                                                 ? v.state === stateName
@@ -71,15 +65,13 @@ const MapChart = ({
                                     );
                                     return {
                                         year: y,
-                                        value: entry?.totalPaymentInDollars ?? 0,
+                                        value: entry?.totalPaymentInDollars ?? 0
                                     };
                                 });
 
                                 if (!summaryEntry) return null;
 
                                 const programPayment = summaryEntry?.totalPaymentInDollars ?? 0;
-                                const totalPaymentInPercentage = summaryEntry?.totalPaymentInPercentageNationwide ?? 0;
-                                const avgParticipation = summaryEntry?.averageMonthlyParticipation ?? null;
 
                                 const hoverContent = (
                                     <div className="map_tooltip">
@@ -90,26 +82,33 @@ const MapChart = ({
                                             <tbody>
                                                 {yearlyBenefits.map(({ year, value }) => (
                                                     <tr key={year}>
-                                                        <td className={classes.tooltip_regularcell_left} style={{ color: "#555", fontWeight: 400 }}>
+                                                        <td
+                                                            className={classes.tooltip_regularcell_left}
+                                                            style={{ color: "#555", fontWeight: 400 }}
+                                                        >
                                                             {year} Benefit:
                                                         </td>
-                                                        <td className={classes.tooltip_regularcell_right} style={{ color: "#555", textAlign: "right" }}>
+                                                        <td
+                                                            className={classes.tooltip_regularcell_right}
+                                                            style={{ color: "#555", textAlign: "right" }}
+                                                        >
                                                             ${ShortFormat(value, undefined, 2)}
                                                         </td>
                                                     </tr>
                                                 ))}
                                                 {/* Divider row */}
                                                 <tr>
-                                                    <td colSpan={2} style={{
-                                                        borderTop: "2px solid #bbb",
-                                                        padding: 0,
-                                                        height: "8px"
-                                                    }}></td>
+                                                    <td
+                                                        colSpan={2}
+                                                        style={{
+                                                            borderTop: "2px solid #bbb",
+                                                            padding: 0,
+                                                            height: "8px"
+                                                        }}
+                                                    />
                                                 </tr>
                                                 <tr style={topTipStyle}>
-                                                    <td className={classes.tooltip_topcell_left}>
-                                                        Total Benefits:
-                                                    </td>
+                                                    <td className={classes.tooltip_topcell_left}>Total Benefits:</td>
                                                     <td className={classes.tooltip_topcell_right}>
                                                         ${ShortFormat(programPayment, undefined, 2)}
                                                     </td>
@@ -182,30 +181,21 @@ const MapChart = ({
     );
 };
 
-const SNAPMap = ({
-    mapColor,
-    statePerformance,
-    stateCodes,
-    allStates
-}) => {
+const SNAPMap = ({ mapColor, statePerformance, stateCodes, allStates }) => {
     const [content, setContent] = useState("");
 
     // Get summary key and some year to use for legend/color scale
-    const summaryKey = Object.keys(statePerformance).find(k => k.includes("-"));
+    const summaryKey = Object.keys(statePerformance).find((k) => k.includes("-"));
 
     // Use the summary key for legend/color
-    const quantizeArray = summaryKey
-        ? statePerformance[summaryKey].map(v => v?.totalPaymentInDollars ?? 0)
-        : [];
+    const quantizeArray = summaryKey ? statePerformance[summaryKey].map((v) => v?.totalPaymentInDollars ?? 0) : [];
     const maxValue = Math.max(...quantizeArray, 0);
 
     const customScale = legendConfig["SNAP Total"] || [0, maxValue / 4, maxValue / 2, (3 * maxValue) / 4, maxValue];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
 
     const zeroPoints = summaryKey
-        ? statePerformance[summaryKey]
-              .filter(state => !state?.totalPaymentInDollars)
-              .map(state => state.state)
+        ? statePerformance[summaryKey].filter((state) => !state?.totalPaymentInDollars).map((state) => state.state)
         : [];
     const classes = useStyles();
 
@@ -222,7 +212,6 @@ const SNAPMap = ({
             </Box>
             <MapChart
                 setReactTooltipContent={setContent}
-                maxValue={maxValue}
                 statePerformance={statePerformance}
                 stateCodes={stateCodes}
                 allStates={allStates}
@@ -240,7 +229,8 @@ const SNAPMap = ({
 const titleElement = ({ summaryKey }) => (
     <Box>
         <Typography noWrap variant="h6">
-            <strong>Supplemental Nutrition Assistance Program (SNAP)</strong> Payments <strong>{summaryKey ? `from ${summaryKey}` : ""}</strong>
+            <strong>Supplemental Nutrition Assistance Program (SNAP)</strong> Payments{" "}
+            <strong>{summaryKey ? `from ${summaryKey}` : ""}</strong>
         </Typography>
     </Box>
 );
