@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
-import LandingPageMap from "../components/LandingPageProgramMap";
 import SnapTable from "../components/snap/SNAPTable";
 import SNAPBar from "../components/snap/SNAPBar";
 import NavBar from "../components/NavBar";
+import SnapMap from "../components/snap/SNAPMap";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import { hexToRGB } from "../components/shared/StyleFunctions";
 import "../styles/snap.css";
@@ -36,8 +36,8 @@ export default function SNAPPage(): JSX.Element {
     const yearKey = "2018-2022";
     const widthPercentage = 0.8;
     const heightPercentage = 0.4;
+    const mapColor = ["#F1EEF6", "#CBD9F4", "#74A9CF", "#2B8CBE", "#045A8D"];
     const [data, setData] = React.useState(null);
-
     const [stateCodes, setStateCodes] = React.useState([]);
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);
@@ -144,13 +144,14 @@ export default function SNAPPage(): JSX.Element {
                             pb: 5
                         }}
                     >
-                        <div id="landingPageMapContainer">
-                            <LandingPageMap
-                                programTitle="Supplemental Nutrition Assistance Program (SNAP)"
-                                allStates={allStates}
+                        <div id="SNAPMapContainer">
+                            <SnapMap
+                                program="Supplemental Nutrition Assistance Program (SNAP)"
+                                year={yearKey}
+                                mapColor={mapColor}
+                                statePerformance={data}
                                 stateCodes={stateCodes}
-                                allPrograms={allPrograms}
-                                summary={summary}
+                                allStates={allStates}
                             />
                         </div>
                         <Box
