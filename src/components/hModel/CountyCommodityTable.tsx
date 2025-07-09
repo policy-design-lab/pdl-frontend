@@ -1449,14 +1449,12 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         useSortBy,
         usePagination
     );
-    const { countiesWithValues, countiesWithoutValues } = useMemo(() => {
+    const countiesWithValues = useMemo(() => {
         const sortBy = state?.sortBy?.[0]?.id || "state";
         const withValues: typeof dataWithKeys = [];
-        const withoutValues: typeof dataWithKeys = [];
         dataWithKeys.forEach((row) => {
             const hasValidCountyName = row.county && row.county !== "";
             if (!hasValidCountyName) {
-                withoutValues.push(row);
                 return;
             }
             // hide rows with empty county name, may update this in the future after confirming the FIPS code processing strategy
@@ -1481,13 +1479,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                 ? value === undefined || value === null || value === "" || value === 0
                 : !value || value === "";
 
-            if (isEmpty) {
-                withoutValues.push(row);
-            } else {
+            if (!isEmpty) {
                 withValues.push(row);
             }
         });
-        return { countiesWithValues: withValues, countiesWithoutValues: withoutValues };
+        return withValues;
     }, [dataWithKeys, state?.sortBy]);
     const mainTableData = useMemo(() => countiesWithValues, [countiesWithValues]);
     const {
@@ -1538,7 +1534,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         useSortBy,
         usePagination
     );
-    const [showEmptyCounties, setShowEmptyCounties] = useState(false);
+
     const pageIndex = mainState.pageIndex;
     const pageSize = mainState.pageSize;
     const globalFilter = mainState.globalFilter;
@@ -1925,82 +1921,6 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     </select>
                 </Box>
             </Box>
-            {countiesWithoutValues.length > 0 && (
-                <Box sx={{ mt: 3, border: "1px solid #ddd", borderRadius: "6px" }}>
-                    <Button
-                        onClick={() => setShowEmptyCounties(!showEmptyCounties)}
-                        sx={{
-                            "width": "100%",
-                            "p": 2,
-                            "backgroundColor": "rgba(47, 113, 100, 0.05)",
-                            "color": "#2F7164",
-                            "display": "flex",
-                            "justifyContent": "space-between",
-                            "alignItems": "center",
-                            "textTransform": "none",
-                            "borderRadius": "6px 6px 0 0",
-                            "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
-                            }
-                        }}
-                    >
-                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                            Counties with no values ({countiesWithoutValues.length} counties)
-                        </Typography>
-                        <span>{showEmptyCounties ? "▼" : "▶"}</span>
-                    </Button>
-                    {showEmptyCounties && (
-                        <Box sx={{ p: 2, backgroundColor: "rgba(0, 0, 0, 0.02)" }}>
-                            <Typography variant="body2" sx={{ mb: 2, color: "rgba(0, 0, 0, 0.6)" }}>
-                                The following counties have no payment data for the current selection:
-                            </Typography>
-                            <Box sx={{ maxHeight: "300px", overflowY: "auto" }}>
-                                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                                    <thead>
-                                        <tr style={{ backgroundColor: "rgba(47, 113, 100, 0.05)" }}>
-                                            <th
-                                                style={{
-                                                    padding: "8px",
-                                                    borderBottom: "1px solid #ddd",
-                                                    textAlign: "left"
-                                                }}
-                                            >
-                                                State
-                                            </th>
-                                            <th
-                                                style={{
-                                                    padding: "8px",
-                                                    borderBottom: "1px solid #ddd",
-                                                    textAlign: "left"
-                                                }}
-                                            >
-                                                County
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {countiesWithoutValues.map((row, index) => (
-                                            <tr
-                                                key={row.__id}
-                                                style={{
-                                                    backgroundColor: index % 2 === 0 ? "white" : "rgba(0, 0, 0, 0.02)"
-                                                }}
-                                            >
-                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>
-                                                    {row.state}
-                                                </td>
-                                                <td style={{ padding: "6px 8px", borderBottom: "1px solid #eee" }}>
-                                                    {row.county}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </Box>
-                        </Box>
-                    )}
-                </Box>
-            )}
         </Styles>
     );
 };
