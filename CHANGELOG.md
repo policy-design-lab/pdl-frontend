@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Refactor SNAP map. [#395](https://github.com/policy-design-lab/pdl-frontend/issues/395)
 
+## [1.10.0] - 2025-07-09
+
+### Changed
+- Switched the Payment Rate mode to the default mode with the Total Payment Rate mode in Henrique's map [#396](https://github.com/policy-design-lab/pdl-frontend/issues/396)
+
 ## [1.9.0] - 2025-06-27
 
 ### Added
@@ -371,6 +376,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.10.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.9.0...1.10.0
 [1.9.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.8.0...1.9.0
 [1.8.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.7.0...1.8.0
 [1.7.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.6.0...1.7.0
