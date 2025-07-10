@@ -33,7 +33,9 @@ export default function SNAPPage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
     const color1 = "#1f78b4";
     const color2 = "#ba68c8";
-    const yearKey = "2018-2022";
+    const start_year = 2014;
+    const end_year = 2024;
+    const yearKey = `${start_year}-${end_year}`;
     const widthPercentage = 0.8;
     const heightPercentage = 0.4;
     const mapColor = ["#F1EEF6", "#CBD9F4", "#74A9CF", "#2B8CBE", "#045A8D"];
@@ -41,7 +43,7 @@ export default function SNAPPage(): JSX.Element {
     const [stateCodes, setStateCodes] = React.useState([]);
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [allStates, setAllStates] = React.useState([]);
-    const [summary, setSummary] = React.useState([]);
+
     React.useEffect(() => {
         const statecode_url = `${config.apiUrl}/statecodes`;
         getJsonDataFromUrl(statecode_url).then((response) => {
@@ -59,28 +61,28 @@ export default function SNAPPage(): JSX.Element {
             setAllStates(response);
         });
 
-        const summary_url = `${config.apiUrl}/summary`;
-        getJsonDataFromUrl(summary_url).then((response) => {
-            setSummary(response);
-        });
-
-        getJsonDataFromUrl(`${config.apiUrl}/titles/title-iv/programs/snap/state-distribution`).then((response) => {
+        const data_url = `${config.apiUrl}/titles/title-iv/programs/snap/state-distribution?start_year=${start_year}&end_year=${end_year}`;
+        getJsonDataFromUrl(data_url).then((response) => {
             setData(response);
         });
     }, []);
+
     const defaultTheme = createTheme({
         spacing: 8
     });
+
     const switchBarTable = (event, newTab) => {
         if (newTab !== null) {
             setTab(newTab);
         }
     };
+
     const switchBarStatus = (event, selectItem) => {
         if (selectItem !== null) {
             setBarStatus(selectItem);
         }
     };
+
     const downloadSVG = (status) => {
         if (snapDiv.current !== undefined && status) {
             const svgElement = snapDiv.current.querySelector("#SNAPBarChart");
@@ -97,23 +99,23 @@ export default function SNAPPage(): JSX.Element {
             URL.revokeObjectURL(url);
         }
     };
-    const DownloadIcon = (props) => {
-        return (
-            <SvgIcon {...props}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-download"
-                    viewBox="0 0 16 16"
-                >
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                </svg>
-            </SvgIcon>
-        );
-    };
+
+    const DownloadIcon = (props) => (
+        <SvgIcon {...props}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-download"
+                viewBox="0 0 16 16"
+            >
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+            </svg>
+        </SvgIcon>
+    );
+
     const isDataLoaded = React.useMemo(() => {
         return (
             Object.keys(stateCodes).length > 0 &&
@@ -121,10 +123,10 @@ export default function SNAPPage(): JSX.Element {
             allStates.length > 0 &&
             Array.isArray(allPrograms) &&
             allPrograms.length > 0 &&
-            Array.isArray(summary) &&
-            summary.length > 0
+            !!data
         );
-    }, [stateCodes, allStates, allPrograms, summary]);
+    }, [stateCodes, allStates, allPrograms, data]);
+
     return (
         <ThemeProvider theme={defaultTheme}>
             {isDataLoaded ? (
@@ -227,7 +229,8 @@ export default function SNAPPage(): JSX.Element {
                                                     color: "#212121"
                                                 }}
                                             >
-                                                Total SNAP Benefits and Avg. Monthly Participation (2018-2022)
+                                                Total SNAP Benefits and Avg. Monthly Participation ({start_year}-
+                                                {end_year})
                                             </Typography>
                                             <DownloadIcon
                                                 sx={{
@@ -366,7 +369,8 @@ export default function SNAPPage(): JSX.Element {
                                                         paddingTop: 1.5
                                                     }}
                                                 >
-                                                    Total SNAP Benefits and Avg. Monthly Participation (2018-2022)
+                                                    Total SNAP Benefits and Avg. Monthly Participation ({start_year}-
+                                                    {end_year})
                                                 </Typography>
                                             </Box>
                                         </Grid>

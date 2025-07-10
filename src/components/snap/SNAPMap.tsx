@@ -5,7 +5,7 @@ import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
-import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
+import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
@@ -72,6 +72,7 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                 if (!summaryEntry) return null;
 
                                 const programPayment = summaryEntry?.totalPaymentInDollars ?? 0;
+                                const avgParticipation = summaryEntry?.averageMonthlyParticipation ?? 0;
 
                                 const hoverContent = (
                                     <div className="map_tooltip">
@@ -80,37 +81,83 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                         </div>
                                         <table className={classes.tooltip_table}>
                                             <tbody>
-                                                {yearlyBenefits.map(({ year, value }) => (
-                                                    <tr key={year}>
+                                                {/* Year-by-year benefit rows */}
+                                                {yearlyBenefits.map(({ year, value }, idx) => (
+                                                    <tr key={`${year}-benefit`}>
                                                         <td
-                                                            className={classes.tooltip_regularcell_left}
-                                                            style={{ color: "#555", fontWeight: 400 }}
+                                                            className={
+                                                                idx === 0
+                                                                    ? classes.tooltip_topcell_left
+                                                                    : classes.tooltip_regularcell_left
+                                                            }
+                                                            style={{
+                                                                color: "#555",
+                                                                fontWeight: 400,
+                                                                background: "#f5f5f5"
+                                                            }}
                                                         >
                                                             {year} Benefit:
                                                         </td>
                                                         <td
-                                                            className={classes.tooltip_regularcell_right}
-                                                            style={{ color: "#555", textAlign: "right" }}
+                                                            className={
+                                                                idx === 0
+                                                                    ? classes.tooltip_topcell_right
+                                                                    : classes.tooltip_regularcell_right
+                                                            }
+                                                            style={{
+                                                                color: "#555",
+                                                                textAlign: "right",
+                                                                background: "#f5f5f5",
+                                                                fontVariantNumeric: "tabular-nums"
+                                                            }}
                                                         >
                                                             ${ShortFormat(value, undefined, 2)}
                                                         </td>
                                                     </tr>
                                                 ))}
-                                                {/* Divider row */}
+                                                {/* Total Benefits */}
                                                 <tr>
                                                     <td
-                                                        colSpan={2}
+                                                        className={classes.tooltip_footer_left}
                                                         style={{
-                                                            borderTop: "2px solid #bbb",
-                                                            padding: 0,
-                                                            height: "8px"
+                                                            fontWeight: 700,
+                                                            color: "#232323",
+                                                            background: "#f5f5f5"
                                                         }}
-                                                    />
-                                                </tr>
-                                                <tr style={topTipStyle}>
-                                                    <td className={classes.tooltip_topcell_left}>Total Benefits:</td>
-                                                    <td className={classes.tooltip_topcell_right}>
+                                                    >
+                                                        Total Benefits:
+                                                    </td>
+                                                    <td
+                                                        className={classes.tooltip_footer_right}
+                                                        style={{
+                                                            fontWeight: 700,
+                                                            color: "#232323",
+                                                            background: "#f5f5f5",
+                                                            textAlign: "right",
+                                                            fontVariantNumeric: "tabular-nums"
+                                                        }}
+                                                    >
                                                         ${ShortFormat(programPayment, undefined, 2)}
+                                                    </td>
+                                                </tr>
+                                                {/* Avg. Monthly Participation */}
+                                                <tr>
+                                                    <td
+                                                        className={classes.tooltip_bottomcell_left}
+                                                        style={{ color: "#232323", background: "#f5f5f5" }}
+                                                    >
+                                                        Avg. Monthly Participation:
+                                                    </td>
+                                                    <td
+                                                        className={classes.tooltip_bottomcell_right}
+                                                        style={{
+                                                            color: "#232323",
+                                                            background: "#f5f5f5",
+                                                            textAlign: "right",
+                                                            fontVariantNumeric: "tabular-nums"
+                                                        }}
+                                                    >
+                                                        {ShortFormat(avgParticipation, undefined, 2)}
                                                     </td>
                                                 </tr>
                                             </tbody>
