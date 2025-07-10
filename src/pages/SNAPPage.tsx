@@ -229,8 +229,7 @@ export default function SNAPPage(): JSX.Element {
                                                     color: "#212121"
                                                 }}
                                             >
-                                                Total SNAP Benefits and Avg. Monthly Participation ({start_year}-
-                                                {end_year})
+                                                Total SNAP Benefits and Avg. Monthly Participation ({yearKey})
                                             </Typography>
                                             <DownloadIcon
                                                 sx={{
@@ -369,8 +368,7 @@ export default function SNAPPage(): JSX.Element {
                                                         paddingTop: 1.5
                                                     }}
                                                 >
-                                                    Total SNAP Benefits and Avg. Monthly Participation ({start_year}-
-                                                    {end_year})
+                                                    Total SNAP Benefits and Avg. Monthly Participation ({yearKey})
                                                 </Typography>
                                             </Box>
                                         </Grid>
