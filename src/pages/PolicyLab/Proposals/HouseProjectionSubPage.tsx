@@ -49,7 +49,7 @@ export default function HouseProjectionSubPageProps({
     const [selectedPrograms, setSelectedPrograms] = useState<string[]>(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
-    const [showMeanValues, setShowMeanValues] = useState(false);
+    const [showMeanValues, setShowMeanValues] = useState(true);
     const [yearAggregation, setYearAggregation] = useState(0);
     const [aggregationEnabled, setAggregationEnabled] = useState(false);
     const [showEQIPProjection, setShowEQIPProjection] = useState(false);
