@@ -8,8 +8,10 @@ import { houseProjectionMenu } from "./Menu";
 import HouseOutlayTable from "../../../components/policylab/HouseOutlayTable";
 import CountyCommodityMap from "../../../components/hModel/CountyCommodityMap";
 import CountyCommodityTable from "../../../components/hModel/CountyCommodityTable";
+import CongressionalDistrictTable from "../../../components/hModel/CongressionalDistrictTable";
 import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
+import congressionalDistrictSynthesisData from "../../../data/congressional-districts-synthesis.json";
 
 export default function HouseProjectionSubPageProps({
     v,
@@ -55,7 +57,102 @@ export default function HouseProjectionSubPageProps({
     const [showEQIPProjection, setShowEQIPProjection] = useState(false);
     const [showARCPLCPayments, setShowARCPLCPayments] = useState(false);
     const [showHouseAgCommittee, setShowHouseAgCommittee] = useState(true);
+    const [currentBoundaryType, setCurrentBoundaryType] = useState<"county" | "congressional-district">("county");
+    const [currentTableData, setCurrentTableData] = useState({});
+    const [currentTableDataProposed, setCurrentTableDataProposed] = useState({});
     const initializedRef = React.useRef(false);
+
+    const transformDistrictDataForTable = (districtMapData) => {
+        if (!districtMapData || !districtMapData.districts) {
+            return {};
+        }
+
+        const transformedData = {};
+        const year = selectedYear || availableYears[0];
+
+        if (!transformedData[year]) {
+            transformedData[year] = [];
+        }
+
+        const stateMap = new Map();
+
+        Object.keys(districtMapData.districts).forEach((districtId) => {
+            const district = districtMapData.districts[districtId];
+            const stateCode = district.stateFIPS || districtId.substring(0, 2);
+
+            if (!stateMap.has(stateCode)) {
+                stateMap.set(stateCode, {
+                    state: stateCode,
+                    counties: []
+                });
+            }
+
+            const stateEntry = stateMap.get(stateCode);
+
+            const districtEntry = {
+                countyFIPS: districtId,
+                countyName: district.name || `Congressional District ${districtId.substring(2)}`,
+                scenarios: [
+                    {
+                        scenarioName: "Current",
+                        commodities: [] as any[]
+                    }
+                ]
+            };
+
+            if (district.commodities && Object.keys(district.commodities).length > 0) {
+                Object.keys(district.commodities).forEach((commodityName) => {
+                    const commodity = district.commodities[commodityName];
+                    if (commodity && (commodity.currentValue > 0 || commodity.currentBaseAcres > 0)) {
+                        const commodityEntry = {
+                            commodityName,
+                            baseAcres: commodity.currentBaseAcres || commodity.baseAcres || 0,
+                            programs: [
+                                {
+                                    programName: "ARC-CO",
+                                    baseAcres: commodity.currentBaseAcres || commodity.baseAcres || 0,
+                                    totalPaymentInDollars: commodity.currentValue || 0,
+                                    meanPaymentRateInDollarsPerAcre: commodity.meanPaymentRateInDollarsPerAcre || 0,
+                                    medianPaymentRateInDollarsPerAcre: commodity.medianPaymentRateInDollarsPerAcre || 0
+                                }
+                            ]
+                        };
+                        districtEntry.scenarios[0].commodities.push(commodityEntry);
+                    }
+                });
+            } else {
+                const commodityEntry = {
+                    commodityName: "All Program Crops",
+                    baseAcres: district.currentBaseAcres || district.baseAcres || 0,
+                    programs: [
+                        {
+                            programName: "ARC-CO",
+                            baseAcres: district.currentBaseAcres || district.baseAcres || 0,
+                            totalPaymentInDollars: district.currentValue || district.value || 0,
+                            meanPaymentRateInDollarsPerAcre: district.currentMeanRate || 0,
+                            medianPaymentRateInDollarsPerAcre: district.currentMedianRate || 0
+                        }
+                    ]
+                };
+                districtEntry.scenarios[0].commodities.push(commodityEntry);
+            }
+
+            stateEntry.counties.push(districtEntry);
+        });
+
+        transformedData[year] = Array.from(stateMap.values());
+
+        return transformedData;
+    };
+
+    useEffect(() => {
+        if (Object.keys(hModelDistributionData).length > 0) {
+            setCurrentTableData(hModelDistributionData);
+        }
+        if (Object.keys(hModelDistributionProposedData).length > 0) {
+            setCurrentTableDataProposed(hModelDistributionProposedData);
+        }
+    }, [hModelDistributionData, hModelDistributionProposedData]);
     const handlePracticeChange = (practices) => {
         setSelectedPractices(practices);
     };
@@ -168,48 +265,121 @@ export default function HouseProjectionSubPageProps({
         }
     };
 
-    const handleMapUpdate = (year, commodities, programs, state, mode) => {
-        if (!initializedRef.current && availableYears.length > 0) {
-            initializedRef.current = true;
-            if (Array.isArray(year)) {
-                setSelectedYears(year);
-                setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+    const handleMapUpdate = (updateData, ...args) => {
+        if (typeof updateData === "object" && updateData.year !== undefined) {
+            const { year, commodities, programs, state, mode, boundaryType, data, isCongressionalDistrict } =
+                updateData;
+
+            setCurrentBoundaryType(boundaryType || "county");
+
+            if (isCongressionalDistrict && data) {
+                const transformedData = transformDistrictDataForTable(data);
+                setCurrentTableData(transformedData);
+                setCurrentTableDataProposed(transformedData);
             } else {
-                setSelectedYear(year);
-                setSelectedYears([year]);
+                setCurrentTableData(hModelDistributionData);
+                setCurrentTableDataProposed(hModelDistributionProposedData);
             }
-            setSelectedCommodities(commodities);
-            setSelectedPrograms(programs);
-            setSelectedState(state);
-            setViewMode(mode);
-            return;
-        }
-        const yearChanged = Array.isArray(year)
-            ? JSON.stringify(year) !== JSON.stringify(selectedYears)
-            : year !== selectedYear;
-        const commoditiesChanged = JSON.stringify(commodities) !== JSON.stringify(selectedCommodities);
-        const programsChanged = JSON.stringify(programs) !== JSON.stringify(selectedPrograms);
-        const stateChanged = state !== selectedState;
-        const modeChanged = mode !== viewMode;
-        if (yearChanged || commoditiesChanged || programsChanged || stateChanged || modeChanged) {
-            if (Array.isArray(year)) {
-                setSelectedYears(year);
-                setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
-            } else {
-                setSelectedYear(year);
-                setSelectedYears([year]);
-            }
-            if (commoditiesChanged) {
+
+            if (!initializedRef.current && availableYears.length > 0) {
+                initializedRef.current = true;
+                if (Array.isArray(year)) {
+                    setSelectedYears(year);
+                    setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+                } else {
+                    setSelectedYear(year);
+                    setSelectedYears([year]);
+                }
                 setSelectedCommodities(commodities);
-            }
-            if (programsChanged) {
                 setSelectedPrograms(programs);
-            }
-            if (stateChanged) {
                 setSelectedState(state);
-            }
-            if (modeChanged) {
                 setViewMode(mode);
+                return;
+            }
+
+            const yearChanged = Array.isArray(year)
+                ? JSON.stringify(year) !== JSON.stringify(selectedYears)
+                : year !== selectedYear;
+            const commoditiesChanged = JSON.stringify(commodities) !== JSON.stringify(selectedCommodities);
+            const programsChanged = JSON.stringify(programs) !== JSON.stringify(selectedPrograms);
+            const stateChanged = state !== selectedState;
+            const modeChanged = mode !== viewMode;
+
+            if (yearChanged || commoditiesChanged || programsChanged || stateChanged || modeChanged) {
+                if (Array.isArray(year)) {
+                    setSelectedYears(year);
+                    setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+                } else {
+                    setSelectedYear(year);
+                    setSelectedYears([year]);
+                }
+                if (commoditiesChanged) {
+                    setSelectedCommodities(commodities);
+                }
+                if (programsChanged) {
+                    setSelectedPrograms(programs);
+                }
+                if (stateChanged) {
+                    setSelectedState(state);
+                }
+                if (modeChanged) {
+                    setViewMode(mode);
+                }
+            }
+        } else {
+            const year = updateData;
+            const commodities = args[0];
+            const programs = args[1];
+            const state = args[2];
+            const mode = args[3];
+
+            setCurrentBoundaryType("county");
+            setCurrentTableData(hModelDistributionData);
+            setCurrentTableDataProposed(hModelDistributionProposedData);
+
+            if (!initializedRef.current && availableYears.length > 0) {
+                initializedRef.current = true;
+                if (Array.isArray(year)) {
+                    setSelectedYears(year);
+                    setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+                } else {
+                    setSelectedYear(year);
+                    setSelectedYears([year]);
+                }
+                setSelectedCommodities(commodities);
+                setSelectedPrograms(programs);
+                setSelectedState(state);
+                setViewMode(mode);
+                return;
+            }
+            const yearChanged = Array.isArray(year)
+                ? JSON.stringify(year) !== JSON.stringify(selectedYears)
+                : year !== selectedYear;
+            const commoditiesChanged = JSON.stringify(commodities) !== JSON.stringify(selectedCommodities);
+            const programsChanged = JSON.stringify(programs) !== JSON.stringify(selectedPrograms);
+            const stateChanged = state !== selectedState;
+            const modeChanged = mode !== viewMode;
+
+            if (yearChanged || commoditiesChanged || programsChanged || stateChanged || modeChanged) {
+                if (Array.isArray(year)) {
+                    setSelectedYears(year);
+                    setSelectedYear(year.length > 0 ? year[year.length - 1] : "");
+                } else {
+                    setSelectedYear(year);
+                    setSelectedYears([year]);
+                }
+                if (commoditiesChanged) {
+                    setSelectedCommodities(commodities);
+                }
+                if (programsChanged) {
+                    setSelectedPrograms(programs);
+                }
+                if (stateChanged) {
+                    setSelectedState(state);
+                }
+                if (modeChanged) {
+                    setViewMode(mode);
+                }
             }
         }
     };
@@ -596,23 +766,51 @@ export default function HouseProjectionSubPageProps({
                                                         borderTop: "1px solid #e0e0e0"
                                                     }}
                                                 >
-                                                    <CountyCommodityTable
-                                                        countyData={hModelDistributionData}
-                                                        countyDataProposed={hModelDistributionProposedData}
-                                                        selectedYear={
-                                                            aggregationEnabled && selectedYears.length > 1
-                                                                ? selectedYears
-                                                                : selectedYear
-                                                        }
-                                                        viewMode={viewMode}
-                                                        selectedCommodities={selectedCommodities}
-                                                        selectedPrograms={selectedPrograms}
-                                                        selectedState={selectedState}
-                                                        stateCodesData={metaData.stateCodesData}
-                                                        showMeanValues={showMeanValues}
-                                                        yearAggregation={yearAggregation}
-                                                        aggregationEnabled={aggregationEnabled}
-                                                    />
+                                                    {currentBoundaryType === "congressional-district" ? (
+                                                        <CongressionalDistrictTable
+                                                            districtData={congressionalDistrictSynthesisData}
+                                                            districtDataProposed={congressionalDistrictSynthesisData}
+                                                            selectedYear={
+                                                                aggregationEnabled && selectedYears.length > 1
+                                                                    ? selectedYears
+                                                                    : selectedYear
+                                                            }
+                                                            viewMode={viewMode}
+                                                            selectedCommodities={selectedCommodities}
+                                                            selectedPrograms={selectedPrograms}
+                                                            selectedState={selectedState}
+                                                            stateCodesData={metaData.stateCodesData}
+                                                            showMeanValues={showMeanValues}
+                                                            yearAggregation={yearAggregation}
+                                                            aggregationEnabled={aggregationEnabled}
+                                                        />
+                                                    ) : (
+                                                        <CountyCommodityTable
+                                                            countyData={
+                                                                Object.keys(currentTableData).length > 0
+                                                                    ? currentTableData
+                                                                    : hModelDistributionData
+                                                            }
+                                                            countyDataProposed={
+                                                                Object.keys(currentTableDataProposed).length > 0
+                                                                    ? currentTableDataProposed
+                                                                    : hModelDistributionProposedData
+                                                            }
+                                                            selectedYear={
+                                                                aggregationEnabled && selectedYears.length > 1
+                                                                    ? selectedYears
+                                                                    : selectedYear
+                                                            }
+                                                            viewMode={viewMode}
+                                                            selectedCommodities={selectedCommodities}
+                                                            selectedPrograms={selectedPrograms}
+                                                            selectedState={selectedState}
+                                                            stateCodesData={metaData.stateCodesData}
+                                                            showMeanValues={showMeanValues}
+                                                            yearAggregation={yearAggregation}
+                                                            aggregationEnabled={aggregationEnabled}
+                                                        />
+                                                    )}
                                                 </Box>
                                             </Box>
                                             {hModelDataReady &&

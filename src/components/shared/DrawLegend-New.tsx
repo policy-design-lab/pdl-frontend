@@ -36,7 +36,9 @@ export default function DrawLegendNew({
     regionType = "county",
     percentileMode = "default",
     isPaymentRate = false,
-    viewMode = "current"
+    viewMode = "current",
+    boundaryType = "county",
+    selectedState = "All States"
 }: {
     isRatio?: boolean;
     notDollar?: boolean;
@@ -52,6 +54,8 @@ export default function DrawLegendNew({
     percentileMode?: string;
     isPaymentRate?: boolean;
     viewMode?: string;
+    boundaryType?: string;
+    selectedState?: string;
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
@@ -165,6 +169,12 @@ export default function DrawLegendNew({
             Math.min(...programData) === Infinity ||
             Math.max(...programData) === Infinity
         ) {
+            let message = "No data available for the selected filters";
+            if (boundaryType === "congressional-district" && selectedState !== "All States") {
+                message = `No congressional district data available for ${selectedState}. Sample data includes Alabama, California, and Texas.`;
+            } else if (boundaryType === "congressional-district") {
+                message = "No congressional district data available for the selected filters";
+            }
             baseSVG
                 .append("text")
                 .attr("class", "legendTextSide")
@@ -172,7 +182,7 @@ export default function DrawLegendNew({
                 .attr("y", 55)
                 .attr("text-anchor", "middle")
                 .style("font-size", "14px")
-                .text("No data available for the selected filters");
+                .text(message);
             return;
         }
         if (segmentCount <= 0 || cut_points.some((p) => !Number.isFinite(p))) {

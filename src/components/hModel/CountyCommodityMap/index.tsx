@@ -3,10 +3,14 @@ import { Box, Button, CircularProgress, Backdrop, LinearProgress, Fade } from "@
 import TableChartIcon from "@mui/icons-material/TableChart";
 import MapLegend from "./MapLegend";
 import CountyMap from "./CountyMap";
+import CongressionalDistrictMap from "../CongressionalDistrictMap/CongressionalDistrictMap";
 import { processMapData } from "./processMapData";
+import { processCongressionalDistrictMapData } from "../CongressionalDistrictMap/processCongressionalDistrictMapData";
 import MapControls from "./MapControls";
 import FilterSelectors from "./FilterSelectors";
+import BoundaryToggle, { BoundaryType } from "../BoundaryToggle/BoundaryToggle";
 import { PercentileMode } from "./percentileConfig";
+import congressionalDistrictData from "../../../data/congressional-districts-synthesis.json";
 import {
     isLoadingEnabled,
     isChunkedProcessingEnabled,
@@ -35,6 +39,7 @@ const CountyCommodityMap = ({
     setAggregationEnabled,
     stateCodeToName
 }) => {
+    const [boundaryType, setBoundaryType] = useState<BoundaryType>("county");
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[availableYears.length - 1] || "2024");
     const [selectedYears, setSelectedYears] = useState(availableYears.slice(0, Math.min(10, availableYears.length)));
@@ -54,7 +59,7 @@ const CountyCommodityMap = ({
     const [showTableButton, setShowTableButton] = useState(true);
     const [isProcessing, setIsProcessing] = useState(false);
     const [processingMessage, setProcessingMessage] = useState("Processing data...");
-    const [mapData, setMapData] = useState<any>({ counties: {}, thresholds: [], data: [] });
+    const [mapData, setMapData] = useState<any>({ counties: {}, districts: {}, thresholds: [], data: [] });
 
     const prevValuesRef = useRef<{
         selectedYear: string | null;
@@ -82,7 +87,7 @@ const CountyCommodityMap = ({
         }
 
         setIsProcessing(true);
-        setProcessingMessage("Processing map data...");
+        setProcessingMessage("Processing data...");
 
         return new Promise((resolve) => {
             const chunks = [];
@@ -190,28 +195,64 @@ const CountyCommodityMap = ({
 
     const updateMapData = useCallback(async () => {
         if (!selectedYear) {
-            setMapData({ counties: {}, thresholds: [], data: [] });
+            setMapData({ counties: {}, districts: {}, thresholds: [], data: [] });
             return;
         }
         const yearsParam = aggregationEnabled ? selectedYears : [selectedYear];
-        const params = {
-            countyData,
-            countyDataProposed,
-            selectedYear,
-            selectedYears: yearsParam,
-            viewMode,
-            selectedCommodities,
-            selectedPrograms,
-            selectedState,
-            stateCodesData,
-            yearAggregation,
-            aggregationEnabled,
-            showMeanValues,
-            percentileMode
-        };
-        const result = await processMapDataAsync(params);
-        setMapData(result);
+        if (boundaryType === "congressional-district") {
+            const districtCommodities = selectedCommodities.includes("All Program Crops")
+                ? ["Corn", "Cotton", "Soybeans", "Wheat", "Peanuts"]
+                : selectedCommodities;
+            const districtPrograms = selectedPrograms.includes("All Programs") ? ["ARC-CO", "PLC"] : selectedPrograms;
+
+            const params = {
+                districtData: congressionalDistrictData,
+                districtDataProposed: congressionalDistrictData,
+                selectedYear,
+                selectedYears: yearsParam,
+                viewMode,
+                selectedCommodities: districtCommodities,
+                selectedPrograms: districtPrograms,
+                selectedState,
+                stateCodesData,
+                yearAggregation,
+                aggregationEnabled,
+                showMeanValues,
+                percentileMode
+            };
+            try {
+                const result = await processCongressionalDistrictMapData(params);
+                setMapData({
+                    counties: {},
+                    districts: result.districts || {},
+                    thresholds: result.thresholds || [],
+                    data: result.data || []
+                });
+            } catch (error) {
+                console.error("Error processing congressional district data:", error);
+                setMapData({ counties: {}, districts: {}, thresholds: [], data: [] });
+            }
+        } else {
+            const params = {
+                countyData,
+                countyDataProposed,
+                selectedYear,
+                selectedYears: yearsParam,
+                viewMode,
+                selectedCommodities,
+                selectedPrograms,
+                selectedState,
+                stateCodesData,
+                yearAggregation,
+                aggregationEnabled,
+                showMeanValues,
+                percentileMode
+            };
+            const result = await processMapDataAsync(params);
+            setMapData({ districts: {}, ...result });
+        }
     }, [
+        boundaryType,
         countyData,
         countyDataProposed,
         selectedYear,
@@ -253,14 +294,18 @@ const CountyCommodityMap = ({
             } else if (yearRange.length === 1 && aggregationEnabled) {
                 setAggregationEnabled(false);
             }
+            const currentAvailableYears =
+                boundaryType === "congressional-district"
+                    ? Object.keys(congressionalDistrictData).sort()
+                    : availableYears;
 
             if (aggregationEnabled && yearRange.length > 0) {
-                const selectedYearsList = yearRange.map((index) => availableYears[index] || "2024");
+                const selectedYearsList = yearRange.map((index) => currentAvailableYears[index] || "2024");
                 setSelectedYears(selectedYearsList);
                 const latestYearIndex = Math.max(...yearRange);
-                setSelectedYear(availableYears[latestYearIndex] || "2024");
+                setSelectedYear(currentAvailableYears[latestYearIndex] || "2024");
             } else {
-                const newYear = availableYears[yearRange[0]] || "2024";
+                const newYear = currentAvailableYears[yearRange[0]] || "2024";
                 setSelectedYear(newYear);
                 setSelectedYears([newYear]);
             }
@@ -268,7 +313,7 @@ const CountyCommodityMap = ({
         return () => {
             mounted = false;
         };
-    }, [yearRange, availableYears, aggregationEnabled]);
+    }, [yearRange, availableYears, aggregationEnabled, boundaryType, congressionalDistrictData]);
     useEffect(() => {
         if (!onMapUpdate) return;
         const prevValues = prevValuesRef.current;
@@ -292,7 +337,16 @@ const CountyCommodityMap = ({
             rangeChanged ||
             aggregationChanged
         ) {
-            onMapUpdate(yearsParam, selectedCommodities, selectedPrograms, selectedState, viewMode);
+            onMapUpdate({
+                year: yearsParam,
+                commodities: selectedCommodities,
+                programs: selectedPrograms,
+                state: selectedState,
+                mode: viewMode,
+                boundaryType,
+                data: mapData,
+                isCongressionalDistrict: boundaryType === "congressional-district"
+            });
             prevValuesRef.current = {
                 selectedYear: Array.isArray(yearsParam) ? null : yearsParam,
                 selectedYears: Array.isArray(yearsParam) ? yearsParam : [yearsParam],
@@ -313,6 +367,8 @@ const CountyCommodityMap = ({
         viewMode,
         yearRange,
         aggregationEnabled,
+        boundaryType,
+        mapData,
         onMapUpdate
     ]);
     useEffect(() => {
@@ -491,6 +547,26 @@ const CountyCommodityMap = ({
             "#c42225"
         ];
     }, [viewMode, showMeanValues]);
+    const handleBoundaryChange = useCallback(
+        (newBoundaryType: BoundaryType) => {
+            setBoundaryType(newBoundaryType);
+            setMapData({ counties: {}, districts: {}, thresholds: [], data: [] });
+
+            if (newBoundaryType === "congressional-district") {
+                setSelectedYear("2024");
+                setSelectedState("All States");
+                setAggregationEnabled(false);
+                setYearAggregation(0);
+                setSelectedYears(["2024"]);
+                setYearRange([0]);
+            } else {
+                const firstAvailableYearIndex = availableYears.findIndex((year) => year) || 0;
+                setYearRange([firstAvailableYearIndex]);
+            }
+            setForceUpdate((prev) => prev + 1);
+        },
+        [availableYears]
+    );
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -504,6 +580,13 @@ const CountyCommodityMap = ({
                         mb: 3
                     }}
                 >
+                    <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+                        <BoundaryToggle
+                            selectedBoundary={boundaryType}
+                            onBoundaryChange={handleBoundaryChange}
+                            disabled={isLoading || isProcessing}
+                        />
+                    </Box>
                     <MapControls
                         availableYears={availableYears}
                         viewMode={viewMode}
@@ -567,6 +650,7 @@ const CountyCommodityMap = ({
                         percentileMode={percentileMode}
                         onPercentileModeChange={handlePercentileModeChange}
                         selectedCommodities={selectedCommodities}
+                        boundaryType={boundaryType}
                     />
                 </Box>
             </Box>
@@ -576,24 +660,45 @@ const CountyCommodityMap = ({
                 }}
                 id="county-commodity-map"
             >
-                <CountyMap
-                    mapData={mapData}
-                    mapColor={mapColor}
-                    viewMode={viewMode}
-                    selectedState={selectedState}
-                    stateCodesData={stateCodesData}
-                    allStates={allStates}
-                    isLoading={isLoading}
-                    onTooltipChange={handleTooltipChange}
-                    tooltipContent={content}
-                    showMeanValues={showMeanValues}
-                    selectedPrograms={selectedPrograms}
-                    yearAggregation={yearAggregation}
-                    selectedCommodities={selectedCommodities}
-                    setSelectedState={handleSetSelectedState}
-                    selectedYears={aggregationEnabled ? selectedYears : [selectedYear as any]}
-                    key={mapKey}
-                />
+                {boundaryType === "county" ? (
+                    <CountyMap
+                        mapData={mapData}
+                        mapColor={mapColor}
+                        viewMode={viewMode}
+                        selectedState={selectedState}
+                        stateCodesData={stateCodesData}
+                        allStates={allStates}
+                        isLoading={isLoading}
+                        onTooltipChange={handleTooltipChange}
+                        tooltipContent={content}
+                        showMeanValues={showMeanValues}
+                        selectedPrograms={selectedPrograms}
+                        yearAggregation={yearAggregation}
+                        selectedCommodities={selectedCommodities}
+                        setSelectedState={handleSetSelectedState}
+                        selectedYears={aggregationEnabled ? selectedYears : [selectedYear as any]}
+                        key={mapKey}
+                    />
+                ) : (
+                    <CongressionalDistrictMap
+                        mapData={mapData}
+                        mapColor={mapColor}
+                        viewMode={viewMode}
+                        selectedState={selectedState}
+                        stateCodesData={stateCodesData}
+                        allStates={allStates}
+                        isLoading={isLoading}
+                        onTooltipChange={handleTooltipChange}
+                        tooltipContent={content}
+                        showMeanValues={showMeanValues}
+                        selectedPrograms={selectedPrograms}
+                        yearAggregation={yearAggregation}
+                        selectedCommodities={selectedCommodities}
+                        setSelectedState={handleSetSelectedState}
+                        selectedYears={aggregationEnabled ? selectedYears : [selectedYear as any]}
+                        key={mapKey}
+                    />
+                )}
             </Box>
             {(() => {
                 const hasCommoditySelection =
