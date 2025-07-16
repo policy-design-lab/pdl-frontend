@@ -12,7 +12,7 @@ import {
     Typography
 } from "@mui/material";
 import NavBar from "../components/NavBar";
-import Title1Map from "../components/title1/Title1Map";
+import Title1SubtitleMap from "../components/title1/Title1SubtitleMap";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import Title1TreeMap from "../components/title1/Title1TreeMap";
 import Title1ProgramTable from "../components/title1/Title1ProgramTable";
@@ -236,7 +236,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program={undefined}
                                 subprogram={undefined}
@@ -305,7 +305,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram={undefined}
@@ -405,7 +405,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage County Option (ARC-CO)"
@@ -506,7 +506,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program="Agriculture Risk Coverage (ARC)"
                                 subprogram="Agriculture Risk Coverage Individual Coverage (ARC-IC)"
@@ -607,7 +607,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program="Price Loss Coverage (PLC)"
                                 subprogram={undefined}
@@ -708,7 +708,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Dairy Margin Coverage, Subtitle D"
                                 program={undefined}
                                 subprogram={undefined}
@@ -778,7 +778,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 program={undefined}
                                 subprogram={undefined}
@@ -847,7 +847,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 program="Emergency Assistance for Livestock, Honey Bees, and Farm-Raised Fish Program (ELAP)"
                                 subprogram={undefined}
@@ -916,7 +916,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 program="Livestock Forage Program (LFP)"
                                 subprogram={undefined}
@@ -985,7 +985,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 program="Livestock Indemnity Payments (LIP)"
                                 subprogram={undefined}
@@ -1054,7 +1054,7 @@ export default function TitleIPage(): JSX.Element {
                                 m: "auto"
                             }}
                         >
-                            <Title1Map
+                            <Title1SubtitleMap
                                 subtitle="Supplemental Agricultural Disaster Assistance, Subtitle E"
                                 program="Tree Assistance Program (TAP)"
                                 subprogram={undefined}

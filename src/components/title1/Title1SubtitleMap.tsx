@@ -278,7 +278,7 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const Title1Map = ({
+const Title1SubtitleMap = ({
     subtitle,
     program,
     subprogram,
@@ -390,4 +390,4 @@ const titleElement = ({ subtitle, program, subprogram, year }): JSX.Element => {
         </Box>
     );
 };
-export default Title1Map;
+export default Title1SubtitleMap;
