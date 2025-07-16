@@ -90,11 +90,6 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                                                     ? classes.tooltip_topcell_left
                                                                     : classes.tooltip_regularcell_left
                                                             }
-                                                            style={{
-                                                                color: "#555",
-                                                                fontWeight: 400,
-                                                                background: "#f5f5f5"
-                                                            }}
                                                         >
                                                             {year} Benefit:
                                                         </td>
@@ -104,12 +99,6 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                                                     ? classes.tooltip_topcell_right
                                                                     : classes.tooltip_regularcell_right
                                                             }
-                                                            style={{
-                                                                color: "#555",
-                                                                textAlign: "right",
-                                                                background: "#f5f5f5",
-                                                                fontVariantNumeric: "tabular-nums"
-                                                            }}
                                                         >
                                                             ${ShortFormat(value, undefined, 2)}
                                                         </td>
@@ -117,46 +106,17 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                                 ))}
                                                 {/* Total Benefits */}
                                                 <tr>
-                                                    <td
-                                                        className={classes.tooltip_footer_left}
-                                                        style={{
-                                                            fontWeight: 700,
-                                                            color: "#232323",
-                                                            background: "#f5f5f5"
-                                                        }}
-                                                    >
-                                                        Total Benefits:
-                                                    </td>
-                                                    <td
-                                                        className={classes.tooltip_footer_right}
-                                                        style={{
-                                                            fontWeight: 700,
-                                                            color: "#232323",
-                                                            background: "#f5f5f5",
-                                                            textAlign: "right",
-                                                            fontVariantNumeric: "tabular-nums"
-                                                        }}
-                                                    >
+                                                    <td className={classes.tooltip_footer_left}>Total Benefits:</td>
+                                                    <td className={classes.tooltip_footer_right}>
                                                         ${ShortFormat(programPayment, undefined, 2)}
                                                     </td>
                                                 </tr>
                                                 {/* Avg. Monthly Participation */}
                                                 <tr>
-                                                    <td
-                                                        className={classes.tooltip_bottomcell_left}
-                                                        style={{ color: "#232323", background: "#f5f5f5" }}
-                                                    >
+                                                    <td className={classes.tooltip_bottomcell_left}>
                                                         Avg. Monthly Participation:
                                                     </td>
-                                                    <td
-                                                        className={classes.tooltip_bottomcell_right}
-                                                        style={{
-                                                            color: "#232323",
-                                                            background: "#f5f5f5",
-                                                            textAlign: "right",
-                                                            fontVariantNumeric: "tabular-nums"
-                                                        }}
-                                                    >
+                                                    <td className={classes.tooltip_bottomcell_right}>
                                                         {ShortFormat(avgParticipation, undefined, 2)}
                                                     </td>
                                                 </tr>
