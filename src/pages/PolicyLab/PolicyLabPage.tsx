@@ -7,6 +7,7 @@ import "../../styles/issueWhitePaper.css";
 import Surface51SubPage from "./Surface51SubPage";
 import { CustomTab } from "../../components/shared/CustomTab";
 import HouseProjectionSubPage from "./Proposals/HouseProjectionSubPage";
+import ReconciliationSubPage from "./Reconciliation/ReconciliationSubPage";
 
 const useStyles = makeStyles(() => ({
     iframeContainer: {
@@ -42,22 +43,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function PolicyLabPage(): JSX.Element {
-    const { tab, subtab } = useParams();
+    const { tab, subtab, subsubtab } = useParams();
     const navigate = useNavigate();
     const [value, setValue] = React.useState(0);
     const classes = useStyles();
 
     useEffect(() => {
-        if (tab === "proposal-analysis") {
+        const currentPath = window.location.pathname;
+        if (currentPath === "/policy-lab/2025-reconciliation-farm-bill") {
+            setValue(2);
+        } else if (currentPath.startsWith("/policy-lab/2025-reconciliation-farm-bill/title-i")) {
+            setValue(2);
+        } else if (tab === "proposal-analysis") {
             setValue(1);
+        } else if (tab === "2025-reconciliation-farm-bill" || tab === "title-i") {
+            setValue(2);
         } else if (tab === "proof-of-concept") {
             setValue(0);
         } else if (tab === "arc-plc-payments" || tab === "eqip-projection") {
             setValue(1);
-        } else if (!tab) {
+        } else if (!tab || currentPath === "/policy-lab") {
             setValue(0);
         }
-    }, [tab]);
+    }, [tab, subtab, subsubtab]);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -65,10 +73,12 @@ export default function PolicyLabPage(): JSX.Element {
             navigate("/policy-lab/proof-of-concept");
         } else if (newValue === 1) {
             navigate("/policy-lab/proposal-analysis");
+        } else if (newValue === 2) {
+            navigate("/policy-lab/2025-reconciliation-farm-bill");
         }
     };
 
-    const tabStyle = { fontSize: "1.5em" };
+    const tabStyle = { fontSize: "1.2em" };
     const selectedStyle = { color: "#2F7164 !important", fontWeight: 600 };
     return (
         <Box sx={{ width: "100%" }}>
@@ -80,6 +90,11 @@ export default function PolicyLabPage(): JSX.Element {
                 <Tabs variant="scrollable" value={value} onChange={handleChange} scrollButtons="auto" sx={{ mt: 4 }}>
                     <CustomTab label={<Box>Proof of Concept</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
                     <CustomTab label={<Box>Proposal Analysis</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
+                    <CustomTab
+                        label={<Box>2025 Reconciliation/Farm Bill</Box>}
+                        customsx={tabStyle}
+                        selectedsx={selectedStyle}
+                    />
                 </Tabs>
             </Box>
             <Surface51SubPage styleClass={classes} v={value} index={0} />
@@ -93,7 +108,40 @@ export default function PolicyLabPage(): JSX.Element {
                     if (tab === "eqip-projection") {
                         return "eqip-projection";
                     }
-                    return subtab;
+                    if (tab === "proposal-analysis") {
+                        return subtab;
+                    }
+                    return undefined;
+                })()}
+            />
+            <ReconciliationSubPage
+                v={value}
+                index={2}
+                subtab={(() => {
+                    const currentPath = window.location.pathname;
+                    if (currentPath === "/policy-lab/2025-reconciliation-farm-bill") {
+                        return undefined;
+                    }
+                    if (
+                        tab === "2025-reconciliation-farm-bill" &&
+                        subtab === "title-i" &&
+                        subsubtab === "arc-plc-payments"
+                    ) {
+                        return "arc-plc-payments";
+                    }
+                    if (tab === "2025-reconciliation-farm-bill" && subtab === "title-i" && !subsubtab) {
+                        return "title-i";
+                    }
+                    if (tab === "title-i" && subtab === "arc-plc-payments") {
+                        return "arc-plc-payments";
+                    }
+                    if (tab === "title-i" && !subtab) {
+                        return "title-i";
+                    }
+                    if (tab === "2025-reconciliation-farm-bill") {
+                        return subtab;
+                    }
+                    return undefined;
                 })()}
             />
         </Box>
