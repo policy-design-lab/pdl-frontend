@@ -52,12 +52,24 @@ const MapChart = (props) => {
                                             <table className={classes.tooltip_table}>
                                                 <tbody key={geo.properties.name}>
                                                     {record.years &&
-                                                        Object.entries(record.years).map(([each_year, data]) => (
+                                                        Object.entries(record.years).map(([each_year, data], idx) => (
                                                             <tr key={each_year}>
-                                                                <td className={classes.tooltip_regularcell_left}>
+                                                                <td
+                                                                    className={
+                                                                        idx === 0
+                                                                            ? classes.tooltip_topcell_left
+                                                                            : classes.tooltip_regularcell_left
+                                                                    }
+                                                                >
                                                                     {each_year} Benefit:
                                                                 </td>
-                                                                <td className={classes.tooltip_regularcell_right}>
+                                                                <td
+                                                                    className={
+                                                                        idx === 0
+                                                                            ? classes.tooltip_topcell_right
+                                                                            : classes.tooltip_regularcell_right
+                                                                    }
+                                                                >
                                                                     $
                                                                     {ShortFormat(
                                                                         data.totalPaymentInDollars,
