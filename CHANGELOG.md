@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Refactor SNAP map. [#395](https://github.com/policy-design-lab/pdl-frontend/issues/395)
+- Update Title-1 map to use 2014 - 2023 data. [#403](https://github.com/policy-design-lab/pdl-frontend/issues/403)
 
 ## [1.10.0] - 2025-07-09
 
