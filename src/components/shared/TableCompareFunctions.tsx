@@ -1,21 +1,6 @@
-export function compareWithDollarSign(rowA, rowB, id, desc) {
+export function compareWithDollarSign(rowA: any, rowB: any, id: string): number {
     const aVal = rowA.values[id];
     const bVal = rowB.values[id];
-
-    if (aVal === undefined || aVal === null) return 1;
-    if (bVal === undefined || bVal === null) return -1;
-
-    if (
-        (aVal === "$0.00" || aVal === "" || aVal === undefined) &&
-        (bVal === "$0.00" || bVal === "" || bVal === undefined)
-    ) {
-        const countyA = rowA.values.county || "";
-        const countyB = rowB.values.county || "";
-        return countyA.localeCompare(countyB);
-    }
-
-    if (aVal === "$0.00" || aVal === "" || aVal === 0) return 1;
-    if (bVal === "$0.00" || bVal === "" || bVal === 0) return -1;
 
     let a = 0;
     let b = 0;
@@ -31,38 +16,40 @@ export function compareWithDollarSign(rowA, rowB, id, desc) {
             b = Number.parseFloat(bVal.substring(1).replaceAll(",", ""));
         } else if (typeof bVal === "number") {
             b = bVal;
+        } else if (bVal === undefined || bVal === null || bVal === "") {
+            b = 0;
         }
     } catch (error) {
         console.warn("Error parsing value for sorting:", error);
+        a = 0;
+        b = 0;
     }
 
-    const sortOrder = desc === false ? 1 : -1;
+    if (Number.isNaN(a)) a = 0;
+    if (Number.isNaN(b)) b = 0;
 
-    if (a > b) return -1 * sortOrder;
-    if (a < b) return 1 * sortOrder;
+    const comparison = a - b;
 
-    const countyA = rowA.values.county || "";
-    const countyB = rowB.values.county || "";
-    return countyA.localeCompare(countyB);
+    return comparison;
 }
 
-export function compareWithPercentSign(rowA, rowB, id, desc) {
+export function compareWithPercentSign(rowA: any, rowB: any, id: string): number {
     const a = Number.parseFloat(rowA.values[id].replaceAll("%", ""));
     const b = Number.parseFloat(rowB.values[id].replaceAll("%", ""));
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
+
+    return a - b;
 }
 
-export function compareWithAlphabetic(rowA, rowB, id, desc) {
-    const a = rowA.values[id];
-    const b = rowB.values[id];
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
+export function compareWithAlphabetic(rowA: any, rowB: any, id: string): number {
+    const a = rowA.values[id] || "";
+    const b = rowB.values[id] || "";
+
+    const comparison = a.localeCompare(b);
+
+    return comparison;
 }
 
-export function sortByDollars(jsonArray, key): void {
+export function sortByDollars(jsonArray: any[], key: string): void {
     jsonArray.sort((a, b) => {
         const paymentA = Number(a[key].replace(/[^0-9.-]+/g, ""));
         const paymentB = Number(b[key].replace(/[^0-9.-]+/g, ""));
@@ -70,7 +57,7 @@ export function sortByDollars(jsonArray, key): void {
     });
 }
 
-export function compareWithNumber(rowA, rowB, id, desc) {
+export function compareWithNumber(rowA: any, rowB: any, id: string): number {
     const aVal = rowA.values[id];
     const bVal = rowB.values[id];
 
@@ -96,12 +83,8 @@ export function compareWithNumber(rowA, rowB, id, desc) {
         b = 0;
     }
 
-    const sortOrder = desc === false ? 1 : -1;
+    if (Number.isNaN(a)) a = 0;
+    if (Number.isNaN(b)) b = 0;
 
-    if (a > b) return 1 * sortOrder;
-    if (a < b) return -1 * sortOrder;
-
-    const countyA = rowA.values.county || "";
-    const countyB = rowB.values.county || "";
-    return countyA.localeCompare(countyB);
+    return a - b;
 }
