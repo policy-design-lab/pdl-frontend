@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactor SNAP map. [#395](https://github.com/policy-design-lab/pdl-frontend/issues/395)
 - Update Title-1 map to use 2014 - 2023 data. [#403](https://github.com/policy-design-lab/pdl-frontend/issues/403)
 
+### Fixed
+- Fixed the sorting function for all tables [#407](https://github.com/policy-design-lab/pdl-frontend/issues/407)
+
 ## [1.10.0] - 2025-07-09
 
 ### Changed
