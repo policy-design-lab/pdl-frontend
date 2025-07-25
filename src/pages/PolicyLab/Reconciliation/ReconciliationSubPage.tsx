@@ -106,15 +106,15 @@ export default function ReconciliationSubPage({
                 setLoadingStates((prev) => ({ ...prev, practices: false }));
                 setLoadingStates((prev) => ({ ...prev, performance: false }));
                 setHModelLoading(true);
-
-                // TODO: Update these API endpoints for 2025 reconciliation data
-                const [hModelDistributionResponse, hModelDistributionProposedResponse] = await Promise.all([
-                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/current`),
-                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/proposed`)
-                ]);
-
+                const hModelDistributionResponse = await getJsonDataFromUrl(
+                    `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/obbba`
+                );
                 setHModelDistributionData(hModelDistributionResponse);
-                setHModelDistributionProposedData(hModelDistributionProposedResponse);
+                const emptyProposedData = {};
+                Object.keys(hModelDistributionResponse).forEach((year) => {
+                    emptyProposedData[year] = [];
+                });
+                setHModelDistributionProposedData(emptyProposedData);
                 const years = Object.keys(hModelDistributionResponse).sort();
                 setAvailableYears(years.length > 0 ? years : ["2025"]);
                 setSelectedYear(years.length > 0 ? years[0] : "2025");
@@ -177,7 +177,7 @@ export default function ReconciliationSubPage({
         }
     };
 
-    const handleMapUpdate = (year, commodities, programs, state, mode) => {
+    const handleMapUpdate = (year, commodities, programs, state, mode = "current") => {
         if (!initializedRef.current && availableYears.length > 0) {
             initializedRef.current = true;
             if (Array.isArray(year)) {
@@ -395,6 +395,7 @@ export default function ReconciliationSubPage({
                                                         setYearAggregation={setYearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
                                                         setAggregationEnabled={setAggregationEnabled}
+                                                        enableScenarioSwitching={false}
                                                         stateCodeToName={metaData.stateCodesArray.reduce(
                                                             (acc, curr) => {
                                                                 acc[curr.code] = curr.name;
@@ -421,7 +422,7 @@ export default function ReconciliationSubPage({
                                                                 ? selectedYears
                                                                 : selectedYear
                                                         }
-                                                        viewMode={viewMode}
+                                                        viewMode="current"
                                                         selectedCommodities={selectedCommodities}
                                                         selectedPrograms={selectedPrograms}
                                                         selectedState={selectedState}
@@ -429,40 +430,40 @@ export default function ReconciliationSubPage({
                                                         showMeanValues={showMeanValues}
                                                         yearAggregation={yearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
+                                                        enableScenarioSwitching={false}
                                                     />
                                                 </Box>
                                             </Box>
-                                            {hModelDataReady &&
-                                                Object.keys(hModelDistributionData).length > 0 &&
-                                                Object.keys(hModelDistributionProposedData).length > 0 && (
+                                            {hModelDataReady && Object.keys(hModelDistributionData).length > 0 && (
+                                                <Box
+                                                    sx={{
+                                                        border: "2px solid rgba(47, 113, 100, 0.3)",
+                                                        borderRadius: 2,
+                                                        overflow: "visible"
+                                                    }}
+                                                >
                                                     <Box
                                                         sx={{
-                                                            border: "2px solid rgba(47, 113, 100, 0.3)",
-                                                            borderRadius: 2,
-                                                            overflow: "visible"
+                                                            backgroundColor: "white",
+                                                            borderRadius: 1,
+                                                            px: 3,
+                                                            pt: 3,
+                                                            pb: 1
                                                         }}
                                                     >
-                                                        <Box
-                                                            sx={{
-                                                                backgroundColor: "white",
-                                                                borderRadius: 1,
-                                                                px: 3,
-                                                                pt: 3,
-                                                                pb: 1
-                                                            }}
-                                                        >
-                                                            <PolicyComparisonSection
-                                                                currentData={hModelDistributionData}
-                                                                proposedData={hModelDistributionProposedData}
-                                                                title="Policy Analysis: Budgetary Impacts of Proposed Changes in Policy Design"
-                                                                subTitle="Projected Changes in Spending on a Fiscal Year Basis; 10-year Budget Window."
-                                                                tooltip={
-                                                                    "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
-                                                                }
-                                                            />
-                                                        </Box>
+                                                        <PolicyComparisonSection
+                                                            currentData={hModelDistributionData}
+                                                            proposedData={hModelDistributionData}
+                                                            title="Policy Analysis: OBBBA Scenario Budgetary Impacts"
+                                                            subTitle="Projected Spending on a Fiscal Year Basis; 10-year Budget Window."
+                                                            tooltip={
+                                                                "Projected costs for the OBBBA scenario are produced on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
+                                                            }
+                                                            enableScenarioSwitching={false}
+                                                        />
                                                     </Box>
-                                                )}
+                                                </Box>
+                                            )}
                                         </>
                                     )}
                                 </Box>

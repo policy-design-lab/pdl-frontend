@@ -9,6 +9,7 @@ interface PolicyComparisonSectionProps {
     title?: string;
     subTitle?: string;
     tooltip?: string;
+    enableScenarioSwitching?: boolean;
 }
 
 export default function PolicyComparisonSection({
@@ -16,7 +17,8 @@ export default function PolicyComparisonSection({
     proposedData,
     title = "Policy Impact Comparison",
     subTitle,
-    tooltip
+    tooltip,
+    enableScenarioSwitching = true
 }: PolicyComparisonSectionProps): JSX.Element {
     const chartData = {
         current: currentData,
@@ -61,8 +63,9 @@ export default function PolicyComparisonSection({
                     textAlign: "center"
                 }}
             >
-                Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed
-                breakdown. C = Current Policy, P = Proposed Policy.
+                {enableScenarioSwitching
+                    ? "Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown. C = Current Policy, P = Proposed Policy."
+                    : "Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown."}
             </Typography>
             <Box sx={{ width: "100%" }}>
                 <PolicyBarChart
