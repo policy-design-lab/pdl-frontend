@@ -7,8 +7,7 @@ import {
     compareWithNumber,
     compareWithAlphabetic,
     compareWithDollarSign,
-    compareWithPercentSign,
-    sortByDollars
+    compareWithPercentSign
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 
@@ -204,9 +203,6 @@ function Title1ProgramTable({
         };
         resultData.push(newRecord());
     });
-    if (resultData[0].totalPaymentInDollars) {
-        sortByDollars(resultData, "totalPaymentInDollars");
-    } else sortByDollars(resultData, "totalPaymentInDollars");
     let columns;
     if (subtitle.includes("Subtitle A") && !program) {
         columns = React.useMemo(
@@ -622,7 +618,7 @@ function Title1ProgramTable({
                         columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
                         data={resultData}
                         initialState={{
-                            pageSize: 5,
+                            pageSize: 10,
                             pageIndex: 0
                         }}
                     />
@@ -634,7 +630,6 @@ function Title1ProgramTable({
 
 // eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
-    const state = React.useMemo(() => initialState, []);
     const {
         getTableProps,
         getTableBodyProps,
@@ -655,7 +650,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         {
             columns,
             data,
-            state
+            initialState
         },
         useSortBy,
         usePagination
