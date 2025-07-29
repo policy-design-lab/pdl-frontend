@@ -8,14 +8,13 @@ import MapIcon from "@mui/icons-material/Map";
 import {
     YearBreakdownData,
     CountyObject,
-    formatCurrency,
-    formatNumericValue,
     getCountyNameFromFips,
     generateTableTitle,
     generateCsvFilename,
     getTotalBaseAcres,
     formatCellValue
 } from "./utils";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 
 interface ExtendedYearBreakdownData extends YearBreakdownData {
     paymentRate?: number;

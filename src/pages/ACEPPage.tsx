@@ -10,6 +10,7 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import DataTable from "../components/acep/ACEPTotalTable";
 import "../styles/subpage.css";
+import { formatCurrency } from "../components/shared/ConvertionFormats";
 
 export default function ACEPPage(): JSX.Element {
     const year = "2014-2023";
@@ -138,15 +139,7 @@ export default function ACEPPage(): JSX.Element {
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h6" sx={{ my: 2 }}>
                                     Total Benefits ({year}):
-                                    <strong>
-                                        $
-                                        {
-                                            totalAcep
-                                                .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                                                .toString()
-                                                .split(".")[0]
-                                        }
-                                    </strong>
+                                    <strong>{formatCurrency(totalAcep, { minimumFractionDigits: 0 })}</strong>
                                 </Typography>
                             </Box>
                         </Box>

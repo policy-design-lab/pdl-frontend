@@ -6,6 +6,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 const Styles = styled.div`
     padding: 0;
@@ -234,9 +235,7 @@ function Title2TotalTable({
         });
         rcppTableData.push({
             state: stateName,
-            rcppBenefit: `$${
-                totalRcpp.totalPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).split(".")[0]
-            }`
+            rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 })
         });
     });
 

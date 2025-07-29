@@ -10,6 +10,7 @@ import {
     compareWithPercentSign
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 function AcepProgramTable({
     tableTitle,
@@ -45,13 +46,9 @@ function AcepProgramTable({
             if (attr.includes("Percentage")) {
                 newRecord[attr] = `${value.toString()}%`;
             } else if (attr === "totalAreaInAcres" || attr === "totalContracts") {
-                newRecord[attr] = `${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
+                newRecord[attr] = `${formatCurrency(value, { minimumFractionDigits: 0 })}`;
             } else {
-                newRecord[attr] = `$${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
+                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
             }
         });
         resultData.push(newRecord);

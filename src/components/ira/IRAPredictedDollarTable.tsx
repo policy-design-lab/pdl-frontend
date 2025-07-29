@@ -7,6 +7,7 @@ import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
 import { compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCSVData from "../shared/getCSVData";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 function IRAPredictedDollarTable({
     tableTitle,
@@ -89,10 +90,7 @@ function IRAPredictedDollarTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
-                const formattedValue = value
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()
-                    .split(".")[0];
+                const formattedValue = formatCurrency(value, { minimumFractionDigits: 0 });
                 if (attr.includes("Dollar")) {
                     newRecord[attr] = `$${formattedValue}`;
                 } else {

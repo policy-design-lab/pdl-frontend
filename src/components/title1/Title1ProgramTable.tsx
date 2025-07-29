@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
@@ -9,6 +10,8 @@ import {
     compareWithDollarSign,
     compareWithPercentSign
 } from "../shared/TableCompareFunctions";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
+import getCSVData from "../shared/getCSVData";
 import "../../styles/table.css";
 
 function Title1ProgramTable({
@@ -38,24 +41,19 @@ function Title1ProgramTable({
                     totalPaymentInDollars: programData[0].totalPaymentInDollars,
                     totalPaymentInPercentageNationwide: programData[0].totalPaymentInPercentageNationwide,
                     totalPaymentInPercentageWithinState: programData[0].totalPaymentInPercentageWithinState,
-                    totalCounts: programData[0].totalCounts,
-                    totalCountsInPercentageNationwide: programData[0].totalCountsInPercentageNationwide,
                     averageRecipientCount: programData[0].averageRecipientCount,
                     averageRecipientCountInPercentageNationwide:
                         programData[0].averageRecipientCountInPercentageNationwide,
                     averageRecipientCountInPercentageWithinState:
-                        programData[0].averageRecipientCountInPercentageWithinState,
-                    totalCountsInPercentageWithinState: programData[0].totalCountsInPercentageWithinState
+                        programData[0].averageRecipientCountInPercentageWithinState
                 };
             } else {
                 // Subtitle D and E
                 hashmap[state] = {
                     totalPaymentInDollars: stateData.totalPaymentInDollars,
                     totalPaymentInPercentageNationwide: stateData.totalPaymentInPercentageNationwide,
-                    totalCounts: stateData.totalCounts,
                     averageRecipientCount: stateData.averageRecipientCount,
-                    averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide,
-                    totalCountsInPercentageNationwide: stateData.totalCountsInPercentageNationwide
+                    averageRecipientCountInPercentageNationwide: stateData.averageRecipientCountInPercentageNationwide
                 };
             }
         } else if (subtitle && program && subprogram) {
@@ -96,51 +94,30 @@ function Title1ProgramTable({
                     // SADA's program
                     return {
                         state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                        totalPaymentInDollars: `$${
-                            value.totalPaymentInDollars
-                                .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                                .toString()
-                                .split(".")[0]
-                        }`,
+                        totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, {
+                            minimumFractionDigits: 0
+                        }),
                         totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                         totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
-                        totalCounts: `${value.totalCounts
-                            .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                            .toString()}`,
                         averageRecipientCount: `${value.averageRecipientCount}`,
                         averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
-                        totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`,
-                        totalCountsInPercentageWithinState: `${value.totalCountsInPercentageWithinState.toString()}%`
+                        averageRecipientCountInPercentageWithinState: `${value.averageRecipientCountInPercentageWithinState.toString()}%`
                     };
                 }
                 return {
                     // subtitle D and E
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: `$${
-                        value.totalPaymentInDollars
-                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                            .toString()
-                            .split(".")[0]
-                    }`,
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
-                    totalCounts: `${value.totalCounts
-                        .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                        .toString()}`,
                     averageRecipientCount: `${value.averageRecipientCount}`,
-                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
-                    totalCountsInPercentageNationwide: `${value.totalCountsInPercentageNationwide.toString()}%`
+                    averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
                 };
             }
             // subtitle A
             if (subtitle && !program) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: `$${
-                        value.totalPaymentInDollars
-                            .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                            .toString()
-                            .split(".")[0]
-                    }`,
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`
                 };
             }
@@ -148,20 +125,11 @@ function Title1ProgramTable({
             if (subprogram) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: `$${
-                        value.totalPaymentInDollars
-                            .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                            .toString()
-                            .split(".")[0]
-                    }`,
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                     averageAreaInAcres:
-                        value.averageAreaInAcres === 0
-                            ? "0"
-                            : `${value.averageAreaInAcres
-                                  .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                                  .toString()}`,
+                        value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, true)}`,
                     averageRecipientCount:
                         value.averageRecipientCount === 0
                             ? "0"
@@ -174,19 +142,12 @@ function Title1ProgramTable({
             return value.totalPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      totalPaymentInDollars: `$${
-                          value.totalPaymentInDollars
-                              .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                              .toString()
-                              .split(".")[0]
-                      }`,
+                      totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
                       totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0
                               ? "0"
-                              : `${value.averageAreaInAcres
-                                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                                    .toString()}`,
+                              : `${formatNumericValue(value.averageAreaInAcres, true)}`,
                       averageRecipientCount:
                           value.averageRecipientCount === 0
                               ? "0"
@@ -258,7 +219,7 @@ function Title1ProgramTable({
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "AVG. AVG. TOTAL RECIPIENTS",
+                          Header: "AVG. AVG. AVG. RECIPIENTS",
                           accessor: "averageRecipientCount",
                           sortType: compareWithNumber
                       }
@@ -289,7 +250,7 @@ function Title1ProgramTable({
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "AVG. TOTAL RECIPIENTS",
+                          Header: "AVG. AVG. RECIPIENTS",
                           accessor: "averageRecipientCount",
                           sortType: compareWithNumber
                       }
@@ -322,18 +283,18 @@ function Title1ProgramTable({
                           sortType: compareWithPercentSign
                       },
                       {
-                          Header: "TOTAL RECIPIENTS",
-                          accessor: "totalCounts",
+                          Header: "AVG. RECIPIENTS",
+                          accessor: "averageRecipientCount",
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                          accessor: "totalCountsInPercentageNationwide",
+                          Header: "AVG. RECIPIENTS PCT. NATIONWIDE",
+                          accessor: "averageRecipientCountInPercentageNationwide",
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "TOTAL RECIPIENTS COUNT PCT. WITHIN STATE",
-                          accessor: "totalCountsInPercentageWithinState",
+                          Header: "AVG. RECIPIENTS PCT. WITHIN STATE",
+                          accessor: "averageRecipientCountInPercentageWithinState",
                           sortType: compareWithNumber
                       }
                   ],
@@ -358,13 +319,13 @@ function Title1ProgramTable({
                           sortType: compareWithPercentSign
                       },
                       {
-                          Header: "TOTAL RECIPIENTS",
-                          accessor: "totalCounts",
+                          Header: "AVG. RECIPIENTS",
+                          accessor: "averageRecipientCount",
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "TOTAL RECIPIENTS PCT. NATIONWIDE",
-                          accessor: "totalCountsInPercentageNationwide",
+                          Header: "AVG. RECIPIENTS PCT. NATIONWIDE",
+                          accessor: "averageRecipientCountInPercentageNationwide",
                           sortType: compareWithNumber
                       }
                   ],
@@ -478,6 +439,18 @@ function Title1ProgramTable({
                           margin-top: 8px;
                       }
                   }
+
+                  .downloadbtn {
+                      background-color: rgba(47, 113, 100, 1);
+                      padding: 8px 16px;
+                      border-radius: 4px;
+                      color: #fff;
+                      text-decoration: none;
+                      display: block;
+                      cursor: pointer;
+                      margin-bottom: 1em;
+                      text-align: center;
+                  }
               `
             : styled.div`
                   padding: 0;
@@ -563,6 +536,18 @@ function Title1ProgramTable({
                           margin-top: 8px;
                       }
                   }
+
+                  .downloadbtn {
+                      background-color: rgba(47, 113, 100, 1);
+                      padding: 8px 16px;
+                      border-radius: 4px;
+                      color: #fff;
+                      text-decoration: none;
+                      display: block;
+                      cursor: pointer;
+                      margin-bottom: 1em;
+                      text-align: center;
+                  }
               `;
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
@@ -621,6 +606,7 @@ function Title1ProgramTable({
                             pageSize: 10,
                             pageIndex: 0
                         }}
+                        tableTitle={tableTitle}
                     />
                 </TableContainer>
             </Styles>
@@ -629,7 +615,7 @@ function Title1ProgramTable({
 }
 
 // eslint-disable-next-line
-function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
+function Table({ columns, data, initialState, tableTitle }: { columns: any; data: any; initialState: any; tableTitle: string }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -655,8 +641,14 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         useSortBy,
         usePagination
     );
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
     return (
         <div style={{ width: "100%" }}>
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (

@@ -8,6 +8,7 @@ import RCPPTotalMap from "../components/rcpp/RCPPTotalMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import { formatCurrency } from "../components/shared/ConvertionFormats";
 
 export default function RCPPPage(): JSX.Element {
     const year = "2014-2023";
@@ -61,9 +62,7 @@ export default function RCPPPage(): JSX.Element {
         totalContracts = cur1.totalContracts;
         totalAreaInAcres = cur1.totalAreaInAcres;
         setZeroCategories(zeroCategory);
-        setTotalBenefit(
-            totalRCPPPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-        );
+        setTotalBenefit(formatCurrency(totalRCPPPaymentInDollars, { minimumFractionDigits: 0 }));
     };
 
     return (

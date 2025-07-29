@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import Box from "@mui/material/Box";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
+import { formatCurrency } from "../shared/ConvertionFormats";
+import getCSVData from "../shared/getCSVData";
 
 const Styles = styled.div`
     padding: 0;
@@ -62,9 +65,21 @@ const Styles = styled.div`
             margin-top: 1.5em;
         }
     }
+
+    .downloadbtn {
+        background-color: rgba(47, 113, 100, 1);
+        padding: 8px 16px;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        margin-bottom: 1em;
+        text-align: center;
+    }
 `;
 
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTitle: string }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -90,9 +105,15 @@ function Table({ columns, data }: { columns: any; data: any }) {
         useSortBy,
         usePagination
     );
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
 
     return (
         <div style={{ width: "100%" }}>
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -234,9 +255,7 @@ function Title1TotalTable({
         });
         tableData.push({
             state: stateName,
-            benefit: `$${
-                totalRcpp.totalPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).split(".")[0]
-            }`
+            benefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 })
         });
     });
 
@@ -286,7 +305,7 @@ function Title1TotalTable({
                     </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
-                    <Table columns={columns} data={tableData} />
+                    <Table columns={columns} data={tableData} tableTitle={TableTitle} />
                 </TableContainer>
             </Styles>
         </Box>

@@ -10,7 +10,7 @@ import {
     compareWithPercentSign
 } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { ShortFormat } from "../shared/ConvertionFormats";
+import { formatCurrency, ShortFormat } from "../shared/ConvertionFormats";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -39,13 +39,9 @@ function CropInsuranceProgramTable({
             if (attr === "lossRatio") {
                 newRecord[attr] = `${ShortFormat((Number(value) * 100).toString(), undefined, 1)}%`;
             } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
-                newRecord[attr] = `${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
+                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
             } else {
-                newRecord[attr] = `$${
-                    value.toLocaleString(undefined, { minimumFractionDigits: 2 }).toString().split(".")[0]
-                }`;
+                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
             }
         });
         resultData.push(newRecord);
