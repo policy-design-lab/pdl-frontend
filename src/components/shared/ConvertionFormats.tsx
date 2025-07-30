@@ -123,13 +123,13 @@ export const formatCurrency = (value: number, options = { minimumFractionDigits:
  * @param value
  * @param roundToInteger
  * @param returnAsString
- * @returns
+ * @returns Number always
  */
-export const formatNumericValue = (value: number, roundToInteger = false, returnAsString = true): string | number => {
+export const formatNumericValue = (value: number, roundToInteger = false): number => {
     if (roundToInteger) {
-        return returnAsString ? value.toFixed(0) : Math.round(value);
+        return Math.round(value);
     }
-    return returnAsString ? value.toFixed(2) : Number(value.toFixed(2));
+    return Number(value.toFixed(2));
 };
 
 export function ToPercentageString(value: string): string {

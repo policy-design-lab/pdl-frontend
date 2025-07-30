@@ -129,7 +129,13 @@ function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTi
                                         }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: column.align === "right" ? "flex-end" : "flex-start"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {/* eslint-disable-next-line no-nested-ternary */}
@@ -269,6 +275,7 @@ function Title1TotalTable({
             {
                 Header: "TOTAL TITLE I BENEFITS",
                 accessor: "benefit",
+                align: "right",
                 sortType: compareWithDollarSign,
                 Cell: ({ value }: any) => <div style={{ textAlign: "right" }}>{value}</div>
             }

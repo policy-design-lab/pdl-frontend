@@ -109,7 +109,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: column.align === "right" ? "flex-end" : "flex-start"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {/* eslint-disable-next-line no-nested-ternary */}
@@ -249,6 +255,7 @@ function Title2TotalTable({
             {
                 Header: "TOTAL TITLE II BENEFITS",
                 accessor: "rcppBenefit",
+                align: "right",
                 sortType: compareWithDollarSign,
                 Cell: ({ value }: any) => <div style={{ textAlign: "right" }}>{value}</div>
             }

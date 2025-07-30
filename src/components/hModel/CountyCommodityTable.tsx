@@ -980,8 +980,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         const proposedRate = actualProposedBaseAcres > 0 ? proposedTotal / actualProposedBaseAcres : 0;
                         row.weightedAverageRate = proposedRate - currentRate;
                     } else if (totalBaseAcres > 0) {
-                        const precisedTotal = Math.round(aggTotal * 100) / 100;
-                        const precisedBaseAcres = Math.round(totalBaseAcres * 100) / 100;
+                        const precisedTotal = formatNumericValue(aggTotal);
+                        const precisedBaseAcres = formatNumericValue(totalBaseAcres);
                         row.weightedAverageRate = precisedTotal / precisedBaseAcres;
                     } else {
                         row.weightedAverageRate = 0;
