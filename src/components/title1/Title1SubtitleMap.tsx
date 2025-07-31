@@ -278,7 +278,7 @@ MapChart.propTypes = {
     maxValue: PropTypes.number
 };
 
-const Title1Map = ({
+const Title1SubtitleMap = ({
     subtitle,
     program,
     subprogram,
@@ -385,9 +385,9 @@ const titleElement = ({ subtitle, program, subprogram, year }): JSX.Element => {
                 </Typography>
             )}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#585858", textAlign: "center" }}>
-                <i>2022 payments for Title I have not yet been paid</i>
+                <i>2024 payments for Title I have not yet been paid</i>
             </Typography>
         </Box>
     );
 };
-export default Title1Map;
+export default Title1SubtitleMap;

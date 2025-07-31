@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import Box from "@mui/material/Box";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
@@ -7,6 +8,7 @@ import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
 import { formatCurrency } from "../shared/ConvertionFormats";
+import getCSVData from "../shared/getCSVData";
 
 const Styles = styled.div`
     padding: 0;
@@ -63,9 +65,21 @@ const Styles = styled.div`
             margin-top: 1.5em;
         }
     }
+
+    .downloadbtn {
+        background-color: rgba(47, 113, 100, 1);
+        padding: 8px 16px;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        margin-bottom: 1em;
+        text-align: center;
+    }
 `;
 
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTitle: string }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -91,9 +105,15 @@ function Table({ columns, data }: { columns: any; data: any }) {
         useSortBy,
         usePagination
     );
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
 
     return (
         <div style={{ width: "100%" }}>
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -218,7 +238,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
     );
 }
 
-function Title2TotalTable({
+function Title1TotalTable({
     TableTitle,
     statePerformance,
     year,
@@ -229,19 +249,19 @@ function Title2TotalTable({
     year: any;
     stateCodes: any;
 }): JSX.Element {
-    const rcppTableData: any[] = [];
+    const tableData: any[] = [];
 
     statePerformance[year].forEach((value) => {
-        const totalRcpp = value;
+        const totalTitle1 = value;
         let stateName;
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
                 stateName = sValue.name;
             }
         });
-        rcppTableData.push({
+        tableData.push({
             state: stateName,
-            rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0)
+            benefit: formatCurrency(totalTitle1.totalPaymentInDollars, 0)
         });
     });
 
@@ -253,8 +273,8 @@ function Title2TotalTable({
                 sortType: "alphanumeric"
             },
             {
-                Header: "TOTAL TITLE II BENEFITS",
-                accessor: "rcppBenefit",
+                Header: "TOTAL TITLE I BENEFITS",
+                accessor: "benefit",
                 align: "right",
                 sortType: compareWithDollarSign,
                 Cell: ({ value }: any) => <div style={{ textAlign: "right" }}>{value}</div>
@@ -292,11 +312,11 @@ function Title2TotalTable({
                     </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
-                    <Table columns={columns} data={rcppTableData} />
+                    <Table columns={columns} data={tableData} tableTitle={TableTitle} />
                 </TableContainer>
             </Styles>
         </Box>
     );
 }
 
-export default Title2TotalTable;
+export default Title1TotalTable;
