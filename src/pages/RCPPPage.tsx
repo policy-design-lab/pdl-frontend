@@ -62,7 +62,7 @@ export default function RCPPPage(): JSX.Element {
         totalContracts = cur1.totalContracts;
         totalAreaInAcres = cur1.totalAreaInAcres;
         setZeroCategories(zeroCategory);
-        setTotalBenefit(formatCurrency(totalRCPPPaymentInDollars, { minimumFractionDigits: 0 }));
+        setTotalBenefit(formatCurrency(totalRCPPPaymentInDollars, 0));
     };
 
     return (

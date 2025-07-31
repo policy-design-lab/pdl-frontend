@@ -252,7 +252,7 @@ function Title1TotalTable({
     const tableData: any[] = [];
 
     statePerformance[year].forEach((value) => {
-        const totalRcpp = value;
+        const totalTitle1 = value;
         let stateName;
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
@@ -261,7 +261,7 @@ function Title1TotalTable({
         });
         tableData.push({
             state: stateName,
-            benefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 })
+            benefit: formatCurrency(totalTitle1.totalPaymentInDollars, 0)
         });
     });
 

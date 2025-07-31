@@ -94,9 +94,7 @@ function Title1ProgramTable({
                     // SADA's program
                     return {
                         state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                        totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, {
-                            minimumFractionDigits: 0
-                        }),
+                        totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                         totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                         totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                         averageRecipientCount: `${value.averageRecipientCount}`,
@@ -107,7 +105,7 @@ function Title1ProgramTable({
                 return {
                     // subtitle D and E
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     averageRecipientCount: `${value.averageRecipientCount}`,
                     averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
@@ -117,7 +115,7 @@ function Title1ProgramTable({
             if (subtitle && !program) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`
                 };
             }
@@ -125,35 +123,29 @@ function Title1ProgramTable({
             if (subprogram) {
                 return {
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                    totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                     averageAreaInAcres:
-                        value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, true)}`,
+                        value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, 0)}`,
                     averageRecipientCount:
                         value.averageRecipientCount === 0
                             ? "0"
-                            : `${value.averageRecipientCount
-                                  .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                                  .toString()}`
+                            : `${formatNumericValue(value.averageRecipientCount, 0)}`
                 };
             }
             // ARC & PLC
             return value.totalPaymentInDollars !== undefined
                 ? {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
-                      totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                      totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                       totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                       averageAreaInAcres:
-                          value.averageAreaInAcres === 0
-                              ? "0"
-                              : `${formatNumericValue(value.averageAreaInAcres, true)}`,
+                          value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, 0)}`,
                       averageRecipientCount:
                           value.averageRecipientCount === 0
                               ? "0"
-                              : `${value.averageRecipientCount
-                                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                                    .toString()}`
+                              : `${formatNumericValue(value.averageRecipientCount, 0)}`
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
@@ -615,7 +607,17 @@ function Title1ProgramTable({
 }
 
 // eslint-disable-next-line
-function Table({ columns, data, initialState, tableTitle }: { columns: any; data: any; initialState: any; tableTitle: string }) {
+function Table({
+    columns,
+    data,
+    initialState,
+    tableTitle
+}: {
+    columns: any;
+    data: any;
+    initialState: any;
+    tableTitle: string;
+}) {
     const {
         getTableProps,
         getTableBodyProps,

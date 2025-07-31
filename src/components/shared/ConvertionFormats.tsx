@@ -111,25 +111,26 @@ export function formatPaymentRate(value: number, isForDifference = false): strin
  * Rounding a number to 2 decimal places then converting the result into a string with a dollar sign prefix
  * @param value
  * @param options
- * @returns
+ * @returns string with a dollar sign prefix and the number rounded to the specified number of decimal places
  */
-export const formatCurrency = (value: number, options = { minimumFractionDigits: 2 }): string => {
-    const roundedValue = Math.round(value * 100) / 100;
-    return `$${roundedValue.toLocaleString(undefined, options)}`;
+export const formatCurrency = (value: number, decimals: 0 | 1 | 2 = 2): string => {
+    const factor = 10 ** decimals;
+    const roundedValue = Math.round(value * factor) / factor;
+    return `$${roundedValue.toLocaleString(undefined, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    })}`;
 };
 
 /**
- * Format numbers to either 0 or 2 decimal places while avoiding floating point errors
+ * Format numbers to 0,1 or 2 decimal places while avoiding floating point errors
  * @param value
  * @param roundToInteger
  * @param returnAsString
  * @returns Number always
  */
-export const formatNumericValue = (value: number, roundToInteger = false): number => {
-    if (roundToInteger) {
-        return Math.round(value);
-    }
-    return Number(value.toFixed(2));
+export const formatNumericValue = (value: number, decimals: 0 | 1 | 2 = 0): number => {
+    return Number(value.toFixed(decimals));
 };
 
 export function ToPercentageString(value: string): string {

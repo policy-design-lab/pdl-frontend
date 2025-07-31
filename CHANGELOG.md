@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add the 'Download CSV' feature to all tables in Title I page [#412](https://github.com/policy-design-lab/pdl-frontend/issues/412)
 
 ### Changed
-- Changed the 'Total Count' variables in Title I page to be 'Average Recipient' variables[#410](https://github.com/policy-design-lab/pdl-frontend/issues/410)
+- Rounded all of the 'Payment' columns in Title I page to be integer value [#414](https://github.com/policy-design-lab/pdl-frontend/issues/414)
+- Changed the 'Total Count' variables in Title I page to be 'Average Recipient' variables [#410](https://github.com/policy-design-lab/pdl-frontend/issues/410)
 - Rounding the Base Acres columns in Title I page to integer [#409](https://github.com/policy-design-lab/pdl-frontend/issues/409)
 - Refactor SNAP map [#395](https://github.com/policy-design-lab/pdl-frontend/issues/395)
 - Update Title-1 map to use 2014 - 2023 data [#403](https://github.com/policy-design-lab/pdl-frontend/issues/403)

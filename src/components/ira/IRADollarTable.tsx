@@ -100,7 +100,7 @@ function IRADollarTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
-                const formattedValue = formatCurrency(value, { minimumFractionDigits: 0 });
+                const formattedValue = formatCurrency(value, 0);
                 if (attr.includes("Dollar")) {
                     newRecord[attr] = `$${formattedValue}`;
                 } else {

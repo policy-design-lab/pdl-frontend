@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { compareWithDollarSign, compareWithNumber } from "../shared/TableCompareFunctions";
-import { formatCurrency } from "../shared/ConvertionFormats";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -151,14 +151,10 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0),
                 percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
-                noContract: `${totalRcpp.totalContracts
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`,
-                totAcre: `${totalRcpp.totalAreaInAcres
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`
+                noContract: `${formatNumericValue(totalRcpp.totalContracts, 0)}`,
+                totAcre: `${formatNumericValue(totalRcpp.totalAreaInAcres, 0)}`
             };
         };
         rcppTableData.push(newRecord());

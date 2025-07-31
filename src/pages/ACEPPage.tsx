@@ -139,7 +139,7 @@ export default function ACEPPage(): JSX.Element {
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h6" sx={{ my: 2 }}>
                                     Total Benefits ({year}):
-                                    <strong>{formatCurrency(totalAcep, { minimumFractionDigits: 0 })}</strong>
+                                    <strong>{formatCurrency(totalAcep, 0)}</strong>
                                 </Typography>
                             </Box>
                         </Box>

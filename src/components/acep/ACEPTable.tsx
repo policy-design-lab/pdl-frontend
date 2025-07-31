@@ -46,9 +46,9 @@ function AcepProgramTable({
             if (attr.includes("Percentage")) {
                 newRecord[attr] = `${value.toString()}%`;
             } else if (attr === "totalAreaInAcres" || attr === "totalContracts") {
-                newRecord[attr] = `${formatCurrency(value, { minimumFractionDigits: 0 })}`;
+                newRecord[attr] = `${formatCurrency(value, 0)}`;
             } else {
-                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
+                newRecord[attr] = formatCurrency(value, 0);
             }
         });
         resultData.push(newRecord);

@@ -151,14 +151,10 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 }),
+                rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0),
                 percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
-                noContract: `${totalRcpp.totalContracts
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`,
-                totAcre: `${totalRcpp.totalAreaInAcres
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`
+                noContract: `${totalRcpp.totalContracts.toLocaleString(undefined, 0).toString()}`,
+                totAcre: `${totalRcpp.totalAreaInAcres.toLocaleString(undefined, 0).toString()}`
             };
         };
         rcppTableData.push(newRecord());

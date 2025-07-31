@@ -39,9 +39,9 @@ function CropInsuranceProgramTable({
             if (attr === "lossRatio") {
                 newRecord[attr] = `${ShortFormat((Number(value) * 100).toString(), undefined, 1)}%`;
             } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
-                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
+                newRecord[attr] = formatCurrency(value, 0);
             } else {
-                newRecord[attr] = formatCurrency(value, { minimumFractionDigits: 0 });
+                newRecord[attr] = formatCurrency(value, 0);
             }
         });
         resultData.push(newRecord);

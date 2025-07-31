@@ -241,7 +241,7 @@ function Title2TotalTable({
         });
         rcppTableData.push({
             state: stateName,
-            rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, { minimumFractionDigits: 0 })
+            rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0)
         });
     });
 
