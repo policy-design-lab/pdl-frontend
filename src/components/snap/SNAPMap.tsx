@@ -236,7 +236,7 @@ const SNAPMap = ({ mapColor, statePerformance, stateCodes, allStates }) => {
 const titleElement = ({ summaryKey }) => (
     <Box>
         <Typography noWrap variant="h6">
-            <strong>Supplemental Nutrition Assistance Program (SNAP)</strong> Payments{" "}
+            <strong>Supplemental Nutrition Assistance Program (SNAP)</strong> Benefits{" "}
             <strong>{summaryKey ? `from ${summaryKey}` : ""}</strong>
         </Typography>
     </Box>
