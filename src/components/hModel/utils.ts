@@ -1,5 +1,5 @@
 import countyFipsMapping from "../../files/maps/fips_county_mapping.json";
-import { formatPaymentRateUnified } from "../shared/ConvertionFormats";
+import { formatCurrency, formatPaymentRate } from "../shared/ConvertionFormats";
 
 export interface YearBreakdownData {
     current?: string | number;
@@ -44,17 +44,6 @@ interface TableCell {
     value: string | number;
     render: (type: string) => string | number;
 }
-
-export const formatCurrency = (value: number, options = { minimumFractionDigits: 2 }): string => {
-    const roundedValue = Math.round(value * 100) / 100;
-    return `$${roundedValue.toLocaleString(undefined, options)}`;
-};
-
-export const formatPaymentRate = formatPaymentRateUnified;
-
-export const formatNumericValue = (value: number): number => {
-    return Math.round(value * 100) / 100;
-};
 
 export const getCountyNameFromFips = (countyFIPS: string): string => {
     return countyFipsMapping[countyFIPS] || "";

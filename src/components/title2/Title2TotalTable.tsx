@@ -6,6 +6,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 const Styles = styled.div`
     padding: 0;
@@ -108,7 +109,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: column.align === "right" ? "flex-end" : "flex-start"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {/* eslint-disable-next-line no-nested-ternary */}
@@ -234,9 +241,7 @@ function Title2TotalTable({
         });
         rcppTableData.push({
             state: stateName,
-            rcppBenefit: `$${
-                totalRcpp.totalPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).split(".")[0]
-            }`
+            rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0)
         });
     });
 
@@ -250,6 +255,7 @@ function Title2TotalTable({
             {
                 Header: "TOTAL TITLE II BENEFITS",
                 accessor: "rcppBenefit",
+                align: "right",
                 sortType: compareWithDollarSign,
                 Cell: ({ value }: any) => <div style={{ textAlign: "right" }}>{value}</div>
             }

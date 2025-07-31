@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import Box from "@mui/material/Box";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
+import { formatCurrency } from "../shared/ConvertionFormats";
+import getCSVData from "../shared/getCSVData";
 
 const Styles = styled.div`
     padding: 0;
@@ -62,9 +65,21 @@ const Styles = styled.div`
             margin-top: 1.5em;
         }
     }
+
+    .downloadbtn {
+        background-color: rgba(47, 113, 100, 1);
+        padding: 8px 16px;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        margin-bottom: 1em;
+        text-align: center;
+    }
 `;
 
-function Table({ columns, data }: { columns: any; data: any }) {
+function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTitle: string }) {
     const {
         getTableProps,
         getTableBodyProps,
@@ -90,9 +105,15 @@ function Table({ columns, data }: { columns: any; data: any }) {
         useSortBy,
         usePagination
     );
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
 
     return (
         <div style={{ width: "100%" }}>
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -108,7 +129,13 @@ function Table({ columns, data }: { columns: any; data: any }) {
                                         }
                                     })}
                                 >
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: column.align === "right" ? "flex-end" : "flex-start"
+                                        }}
+                                    >
                                         {column.render("Header")}
                                         <div>
                                             {/* eslint-disable-next-line no-nested-ternary */}
@@ -225,7 +252,7 @@ function Title1TotalTable({
     const tableData: any[] = [];
 
     statePerformance[year].forEach((value) => {
-        const totalRcpp = value;
+        const totalTitle1 = value;
         let stateName;
         stateCodes.forEach((sValue) => {
             if (sValue.code.toUpperCase() === value.state.toUpperCase()) {
@@ -234,9 +261,7 @@ function Title1TotalTable({
         });
         tableData.push({
             state: stateName,
-            benefit: `$${
-                totalRcpp.totalPaymentInDollars.toLocaleString(undefined, { minimumFractionDigits: 2 }).split(".")[0]
-            }`
+            benefit: formatCurrency(totalTitle1.totalPaymentInDollars, 0)
         });
     });
 
@@ -250,6 +275,7 @@ function Title1TotalTable({
             {
                 Header: "TOTAL TITLE I BENEFITS",
                 accessor: "benefit",
+                align: "right",
                 sortType: compareWithDollarSign,
                 Cell: ({ value }: any) => <div style={{ textAlign: "right" }}>{value}</div>
             }
@@ -286,7 +312,7 @@ function Title1TotalTable({
                     </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
-                    <Table columns={columns} data={tableData} />
+                    <Table columns={columns} data={tableData} tableTitle={TableTitle} />
                 </TableContainer>
             </Styles>
         </Box>

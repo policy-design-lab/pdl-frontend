@@ -155,13 +155,9 @@ function App({
                     .toLocaleString(undefined, { minimumFractionDigits: 2 })
                     .toString()}`,
                 percentage: `${totalCrp.totalPaymentInPercentageNationwide.toString()}%`,
-                noContract: `${totalCrp.totalContracts
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`,
-                noFarm: `${totalCrp.totalFarms.toLocaleString(undefined, { minimumFractionDigits: 0 }).toString()}`,
-                totAcre: `${totalCrp.totalAreaInAcres
-                    .toLocaleString(undefined, { minimumFractionDigits: 0 })
-                    .toString()}`
+                noContract: `${totalCrp.totalContracts.toLocaleString(undefined, 0).toString()}`,
+                noFarm: `${totalCrp.totalFarms.toLocaleString(undefined, 0).toString()}`,
+                totAcre: `${totalCrp.totalAreaInAcres.toLocaleString(undefined, 0).toString()}`
             };
         };
         crpTableData.push(newRecord());
