@@ -4,6 +4,7 @@ import { useTable, useSortBy } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import Box from "@mui/material/Box";
 import "../../styles/table.css";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 
 const Styles = styled.div`
     padding: 1rem;
@@ -173,15 +174,9 @@ function App({
         const newRecord = () => {
             return {
                 state: stateName,
-                categoryBenefit: `$${categoryCrp.totalPaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
-                categoryPercentage: `${categoryCrp.totalPaymentInPercentageWithinState
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}%`,
-                crpBenefit: `$${totalCrp.totalPaymentInDollars
-                    .toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    .toString()}`,
+                categoryBenefit: formatCurrency(categoryCrp.totalPaymentInDollars, 2),
+                categoryPercentage: `${formatNumericValue(categoryCrp.totalPaymentInPercentageWithinState, 2)}%`,
+                crpBenefit: formatCurrency(totalCrp.totalPaymentInDollars, 2),
                 percentage: `${categoryCrp.totalPaymentInPercentageNationwide.toString()}%`
             };
         };

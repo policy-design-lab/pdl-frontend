@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2025-07-31
+
+### Added
+- Add the 'Download CSV' feature to all tables in Title I page [#412](https://github.com/policy-design-lab/pdl-frontend/issues/412)
+
+### Changed
+- Rounded all of the 'Payment' columns in Title I page to be integer value [#414](https://github.com/policy-design-lab/pdl-frontend/issues/414)
+- Changed the 'Total Count' variables in Title I page to be 'Average Recipient' variables [#410](https://github.com/policy-design-lab/pdl-frontend/issues/410)
+- Rounding the Base Acres columns in Title I page to integer [#409](https://github.com/policy-design-lab/pdl-frontend/issues/409)
+- Refactor SNAP map [#395](https://github.com/policy-design-lab/pdl-frontend/issues/395)
+- Update Title-1 map to use 2014 - 2023 data [#403](https://github.com/policy-design-lab/pdl-frontend/issues/403)
+
+### Fixed
+- Used rounding instead of truncating for all numbers that need a integer format [#408](https://github.com/policy-design-lab/pdl-frontend/issues/408)
+- Fixed the sorting function for all tables [#407](https://github.com/policy-design-lab/pdl-frontend/issues/407)
+
 ## [1.10.0] - 2025-07-09
 
 ### Changed
@@ -371,6 +387,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.11.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.10.0...1.11.0
 [1.10.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.9.0...1.10.0
 [1.9.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.8.0...1.9.0
 [1.8.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.7.0...1.8.0

@@ -180,13 +180,14 @@ MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func
 };
 
-const Title2TotalMap = ({
+const Title1TotalMap = ({
     program,
     attribute,
     year,
     statePerformance,
     stateCodes,
-    allStates
+    allStates,
+    mapColor
 }: {
     program: string;
     attribute: any;
@@ -205,15 +206,14 @@ const Title2TotalMap = ({
         ACur[key] === 0 && zeroPoints.push(value.state);
         return null;
     });
-    const category = "Title II Total";
+    const category = "Title I Total";
     const maxValue = Math.max(...quantizeArray);
-    const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
     const classes = useStyles();
     return (
         <div>
-            <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
+            <Box display="flex" justifyContent="center">
                 {maxValue !== 0 ? (
                     <DrawLegend
                         colorScale={colorScale}
@@ -244,6 +244,7 @@ const Title2TotalMap = ({
                 year={year}
                 stateCodes={stateCodes}
                 colorScale={colorScale}
+                mapColor={mapColor}
             />
 
             <div className="tooltip-container">
@@ -258,7 +259,7 @@ const titleElement = (attribute, year): JSX.Element => {
     return (
         <Box>
             <Typography noWrap variant="h6">
-                <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
+                Total Commodities Programs (Title I) from <strong>{year}</strong>
             </Typography>{" "}
             <Typography noWrap style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
                 <i>In any state that appears in gray, there is no available data</i>
@@ -266,4 +267,4 @@ const titleElement = (attribute, year): JSX.Element => {
         </Box>
     );
 };
-export default Title2TotalMap;
+export default Title1TotalMap;
