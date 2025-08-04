@@ -108,6 +108,7 @@ interface CountyCommodityTableProps {
     yearAggregation: number;
     aggregationEnabled: boolean;
     showMeanValues: boolean;
+    enableScenarioSwitching?: boolean;
 }
 
 const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
@@ -121,7 +122,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
     stateCodesData,
     yearAggregation,
     aggregationEnabled,
-    showMeanValues
+    showMeanValues,
+    enableScenarioSwitching = true
 }) => {
     const [isTableLoading] = useState(false);
     const handleScrollToMap = () => {
@@ -166,7 +168,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
             yearRange.forEach((year) => {
                 if (!countyData[year]) return;
                 const currentYearData = viewMode === "proposed" ? countyDataProposed[year] : countyData[year];
-                if (viewMode === "difference") {
+                if (viewMode === "difference" && enableScenarioSwitching) {
                     const currentData = countyData[year] || [];
                     const proposedData = countyDataProposed[year] || [];
                     currentData.forEach((state) => {
@@ -215,9 +217,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 countyObject.commodityBreakdown = {};
                             }
                             county.scenarios.forEach((scenario) => {
-                                const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
-                                if (scenario.scenarioName !== scenarioName) {
-                                    return;
+                                if (enableScenarioSwitching) {
+                                    const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
+                                    if (scenario.scenarioName !== scenarioName) {
+                                        return;
+                                    }
                                 }
                                 let countyTotalPayment = 0;
                                 scenario.commodities.forEach((commodity) => {
@@ -323,7 +327,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     }
                                 });
                             });
-                            if (proposedCounty) {
+                            if (proposedCounty && enableScenarioSwitching) {
                                 proposedCounty.scenarios.forEach((scenario) => {
                                     if (scenario.scenarioName !== "Proposed") return;
                                     scenario.commodities.forEach((commodity) => {
@@ -494,9 +498,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 countyObject.baseAcres = formatNumericValue(yearBaseAcres);
                             }
                             county.scenarios.forEach((scenario) => {
-                                const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
-                                if (scenario.scenarioName !== scenarioName) {
-                                    return;
+                                if (enableScenarioSwitching) {
+                                    const scenarioName = viewMode === "proposed" ? "Proposed" : "Current";
+                                    if (scenario.scenarioName !== scenarioName) {
+                                        return;
+                                    }
                                 }
                                 let countyTotalPayment = 0;
                                 scenario.commodities.forEach((commodity) => {
@@ -725,7 +731,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             countyObject.commodityBreakdown[commodity.commodityName].baseAcres = commodityBaseAcres;
                         });
                     });
-                    if (proposedCounty) {
+                    if (proposedCounty && enableScenarioSwitching) {
                         proposedCounty.scenarios.forEach((scenario) => {
                             if (scenario.scenarioName !== "Proposed") return;
                             scenario.commodities.forEach((commodity) => {

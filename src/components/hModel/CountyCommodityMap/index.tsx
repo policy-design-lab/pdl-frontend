@@ -33,7 +33,8 @@ const CountyCommodityMap = ({
     setYearAggregation,
     aggregationEnabled,
     setAggregationEnabled,
-    stateCodeToName
+    stateCodeToName,
+    enableScenarioSwitching = true
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[availableYears.length - 1] || "2024");
@@ -80,35 +81,28 @@ const CountyCommodityMap = ({
         if (!isLoadingEnabled()) {
             return processMapData(params);
         }
-
         setIsProcessing(true);
         setProcessingMessage("Processing map data...");
-
         return new Promise((resolve) => {
-            const chunks = [];
+            const chunks: string[][] = [];
             const years = params.aggregationEnabled ? params.selectedYears : [params.selectedYear];
             const configuredChunkSize = getChunkSize();
             const chunkSize = Math.max(1, Math.floor(years.length / configuredChunkSize));
-
             for (let i = 0; i < years.length; i += chunkSize) {
                 chunks.push(years.slice(i, i + chunkSize));
             }
-
-            let processedData = { counties: {}, thresholds: [], data: [] };
+            let processedData: any = { counties: {}, thresholds: [], data: [] };
             let chunkIndex = 0;
-
             const processChunk = () => {
                 if (chunkIndex >= chunks.length) {
                     setIsProcessing(false);
                     resolve(processedData);
                     return;
                 }
-
                 const config = getUIConfig();
                 if (config.loadingStates.enableProgressMessages) {
                     setProcessingMessage(`Processing data... (${chunkIndex + 1}/${chunks.length})`);
                 }
-
                 const processFunction = () => {
                     try {
                         const chunkParams = { ...params, selectedYears: chunks[chunkIndex] };
@@ -139,7 +133,6 @@ const CountyCommodityMap = ({
                     setTimeout(processFunction, 0);
                 }
             };
-
             processChunk();
         });
     }, []);
@@ -353,10 +346,17 @@ const CountyCommodityMap = ({
         setContent(newContent);
     };
     const handleSetViewMode = (newValue) => {
-        setViewMode(newValue);
-        setIsAtTop(false);
-        setShowTableButton(true);
+        if (enableScenarioSwitching) {
+            setViewMode(newValue);
+            setIsAtTop(false);
+            setShowTableButton(true);
+        }
     };
+    useEffect(() => {
+        if (!enableScenarioSwitching) {
+            setViewMode("current");
+        }
+    }, [enableScenarioSwitching]);
     const handleScrollToTable = () => {
         const tableElement = document.getElementById("county-commodity-table");
         if (tableElement) {
@@ -532,6 +532,7 @@ const CountyCommodityMap = ({
                             setIsAtTop(false);
                             setShowTableButton(true);
                         }}
+                        enableScenarioSwitching={enableScenarioSwitching}
                     />
                     <Box
                         sx={{
