@@ -129,9 +129,7 @@ function Title1ProgramTable({
                     averageAreaInAcres:
                         value.averageAreaInAcres === 0 ? "0" : formatNumericValue(value.averageAreaInAcres, 0),
                     averageRecipientCount:
-                        value.averageRecipientCount === 0
-                            ? "0"
-                            : formatNumericValue(value.averageRecipientCount, 0)
+                        value.averageRecipientCount === 0 ? "0" : formatNumericValue(value.averageRecipientCount, 0)
                 };
             }
             // ARC & PLC
@@ -143,9 +141,7 @@ function Title1ProgramTable({
                       averageAreaInAcres:
                           value.averageAreaInAcres === 0 ? "0" : formatNumericValue(value.averageAreaInAcres, 0),
                       averageRecipientCount:
-                          value.averageRecipientCount === 0
-                              ? "0"
-                              : formatNumericValue(value.averageRecipientCount, 0)
+                          value.averageRecipientCount === 0 ? "0" : formatNumericValue(value.averageRecipientCount, 0)
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
