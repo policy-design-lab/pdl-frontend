@@ -242,7 +242,7 @@ function Title1ProgramTable({
                           sortType: compareWithNumber
                       },
                       {
-                          Header: "AVG. AVG. RECIPIENTS",
+                          Header: "AVG. RECIPIENTS",
                           accessor: "averageRecipientCount",
                           sortType: compareWithNumber
                       }
