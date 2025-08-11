@@ -97,7 +97,7 @@ function Title1ProgramTable({
                         totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                         totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                         totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
-                        averageRecipientCount: `${value.averageRecipientCount}`,
+                        averageRecipientCount: formatNumericValue(value.averageRecipientCount, 0),
                         averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`,
                         averageRecipientCountInPercentageWithinState: `${value.averageRecipientCountInPercentageWithinState.toString()}%`
                     };
@@ -107,7 +107,7 @@ function Title1ProgramTable({
                     state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],
                     totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
-                    averageRecipientCount: `${value.averageRecipientCount}`,
+                    averageRecipientCount: formatNumericValue(value.averageRecipientCount, 0),
                     averageRecipientCountInPercentageNationwide: `${value.averageRecipientCountInPercentageNationwide.toString()}%`
                 };
             }
@@ -127,11 +127,11 @@ function Title1ProgramTable({
                     totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                     totalPaymentInPercentageWithinState: `${value.totalPaymentInPercentageWithinState.toString()}%`,
                     averageAreaInAcres:
-                        value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, 0)}`,
+                        value.averageAreaInAcres === 0 ? "0" : formatNumericValue(value.averageAreaInAcres, 0),
                     averageRecipientCount:
                         value.averageRecipientCount === 0
                             ? "0"
-                            : `${formatNumericValue(value.averageRecipientCount, 0)}`
+                            : formatNumericValue(value.averageRecipientCount, 0)
                 };
             }
             // ARC & PLC
@@ -141,11 +141,11 @@ function Title1ProgramTable({
                       totalPaymentInDollars: formatCurrency(value.totalPaymentInDollars, 0),
                       totalPaymentInPercentageNationwide: `${value.totalPaymentInPercentageNationwide.toString()}%`,
                       averageAreaInAcres:
-                          value.averageAreaInAcres === 0 ? "0" : `${formatNumericValue(value.averageAreaInAcres, 0)}`,
+                          value.averageAreaInAcres === 0 ? "0" : formatNumericValue(value.averageAreaInAcres, 0),
                       averageRecipientCount:
                           value.averageRecipientCount === 0
                               ? "0"
-                              : `${formatNumericValue(value.averageRecipientCount, 0)}`
+                              : formatNumericValue(value.averageRecipientCount, 0)
                   }
                 : {
                       state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === key)[0]],

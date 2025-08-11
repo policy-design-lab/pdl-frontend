@@ -129,8 +129,9 @@ export const formatCurrency = (value: number, decimals: 0 | 1 | 2 = 2): string =
  * @param returnAsString
  * @returns Number always
  */
-export const formatNumericValue = (value: number, decimals: 0 | 1 | 2 = 0): number => {
-    return Number(value.toFixed(decimals));
+export const formatNumericValue = (value: number, decimals: 0 | 1 | 2 = 0): string => {
+    const rounded = value.toFixed(decimals);
+    return rounded.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 export function ToPercentageString(value: string): string {

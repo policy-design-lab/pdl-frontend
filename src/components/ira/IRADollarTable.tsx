@@ -102,7 +102,7 @@ function IRADollarTable({
             if (value) {
                 const formattedValue = formatCurrency(value, 0);
                 if (attr.includes("Dollar")) {
-                    newRecord[attr] = `$${formattedValue}`;
+                    newRecord[attr] = `${formattedValue}`;
                 } else {
                     newRecord[attr] = `${formattedValue}`;
                 }
