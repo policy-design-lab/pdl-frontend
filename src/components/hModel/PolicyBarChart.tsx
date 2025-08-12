@@ -58,6 +58,10 @@ interface PolicyBarChartProps {
     width?: number;
     height?: number;
     margin?: { top: number; right: number; bottom: number; left: number };
+    currentLabel?: string;
+    proposedLabel?: string;
+    chartCurrentLabel?: string;
+    chartProposedLabel?: string;
 }
 
 const StyledContainer = styled.div`
@@ -181,7 +185,9 @@ const generateColorPalette = (commodities: string[]): Record<string, string> => 
 const CommoditySummaryTable: React.FC<{
     data: YearData[];
     selectedCommodities: string[];
-}> = ({ data, selectedCommodities }) => {
+    currentLabel: string;
+    proposedLabel: string;
+}> = ({ data, selectedCommodities, currentLabel, proposedLabel }) => {
     const commoditySummaries = React.useMemo(() => {
         const summaryMap = new Map<string, { currentTotal: number; proposedTotal: number }>();
 
@@ -251,13 +257,13 @@ const CommoditySummaryTable: React.FC<{
                                     align="right"
                                     sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "#FF8C00" }}
                                 >
-                                    Current Policy
+                                    {currentLabel}
                                 </TableCell>
                                 <TableCell
                                     align="right"
                                     sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}
                                 >
-                                    Proposed Policy
+                                    {proposedLabel}
                                 </TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
                                     Difference
@@ -392,7 +398,11 @@ export default function PolicyBarChart({
     data,
     width,
     height = 400,
-    margin = { top: 60, right: 80, bottom: 80, left: 80 }
+    margin = { top: 60, right: 80, bottom: 80, left: 80 },
+    currentLabel = "Baseline",
+    proposedLabel = "OBBBA",
+    chartCurrentLabel = "B",
+    chartProposedLabel = "O"
 }: PolicyBarChartProps): JSX.Element {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const svgRef = React.useRef<SVGSVGElement>(null);
@@ -738,7 +748,7 @@ export default function PolicyBarChart({
                                 .style("top", `${event.clientY - 10}px`).html(`
                                     <strong>${commodity.commodityName}</strong><br/>
                                     Fiscal Year: ${yearData.year}<br/>
-                                    Type: ${type === "current" ? "Current Policy" : "Proposed Policy"}<br/>
+                                    Type: ${type === "current" ? currentLabel : proposedLabel}<br/>
                                     Payment: $${ShortFormatInteger(commodity.totalPaymentInDollars)}<br/>
                                     <em>Total ${type}: $${ShortFormatInteger(totalPayment)}</em>
                                 `);
@@ -764,7 +774,7 @@ export default function PolicyBarChart({
                 .style("font-family", "Roboto, sans-serif")
                 .style("fill", "#FF8C00")
                 .style("font-weight", "700")
-                .text("C");
+                .text(chartCurrentLabel);
             chartGroup
                 .append("text")
                 .attr("x", (xScale(yearData.year) || 0) + barWidth + barGap + barWidth / 2)
@@ -774,7 +784,7 @@ export default function PolicyBarChart({
                 .style("font-family", "Roboto, sans-serif")
                 .style("fill", "rgb(1, 87, 155)")
                 .style("font-weight", "700")
-                .text("P");
+                .text(chartProposedLabel);
         });
         svg.attr("width", chartWidth).attr("height", height);
     };
@@ -782,7 +792,12 @@ export default function PolicyBarChart({
         <StyledContainer ref={containerRef}>
             <svg ref={svgRef} />
             <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
-            <CommoditySummaryTable data={processedData} selectedCommodities={selectedCommodities} />
+            <CommoditySummaryTable
+                data={processedData}
+                selectedCommodities={selectedCommodities}
+                currentLabel={currentLabel}
+                proposedLabel={proposedLabel}
+            />
         </StyledContainer>
     );
 }

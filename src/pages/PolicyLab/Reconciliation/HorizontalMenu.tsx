@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Menu, MenuItem } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useNavigate } from "react-router-dom";
 import { MenuItem as MenuItemType } from "./Menu";
 
 const buttonBaseStyle = {
@@ -20,32 +21,42 @@ export function HorizontalMenu({
     selectedItem: string;
     onMenuSelect: (value: string) => void;
 }): JSX.Element {
+    const navigate = useNavigate();
     const [topLevel, midLevel] = selectedItem.split("-").map(Number);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const handleDropdownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleMainButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleDropdownClose = () => {
         setAnchorEl(null);
     };
     const handleDropdownSelect = (subIndex: number) => {
-        onMenuSelect(`0-${subIndex}`);
+        if (subIndex === 0) {
+            navigate("/policy-lab/2025-reconciliation-farm-bill");
+            onMenuSelect("0-0");
+        } else if (subIndex === 1) {
+            navigate("/policy-lab/2025-reconciliation-farm-bill/title-i/arc-plc-payments");
+            onMenuSelect(`0-${subIndex}`);
+        }
         setAnchorEl(null);
     };
     const getSecondLevelTitle = (level: number): string => {
-        if (level === 0) return "ARC-PLC Payments";
+        if (level === 0) return "Overview";
+        if (level === 1) return "ARC-PLC Payments";
         return "";
     };
     const getMenuItemTitle = (index: number, itemTitle: string): string => {
-        if (index === 0) return "Title I";
+        if (index === 0) return "Overview";
+        if (index === 1) return "Title I";
         return itemTitle;
     };
 
     const getMainButtonTitle = (): string => {
         if (!Number.isNaN(topLevel) && topLevel === 0 && !Number.isNaN(midLevel)) {
-            return "Title I";
+            if (midLevel === 0) return "Titles";
+            if (midLevel === 1) return "Title I";
         }
         return "Titles";
     };
@@ -78,7 +89,7 @@ export function HorizontalMenu({
                             "display": "flex",
                             "alignItems": "center"
                         }}
-                        onClick={handleDropdownClick}
+                        onClick={handleMainButtonClick}
                         endIcon={<ArrowDropDownIcon sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }} />}
                     >
                         {getMainButtonTitle()}

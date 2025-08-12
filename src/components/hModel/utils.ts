@@ -120,7 +120,9 @@ export const generateTableTitle = (
     selectedPrograms: string[],
     viewMode: string,
     isAggregatedYear: boolean,
-    showMeanValues = false
+    showMeanValues = false,
+    currentPolicyTitle = "Current Policy",
+    proposedPolicyTitle = "Proposed Policy"
 ): string => {
     const isMultiYearSelection = Array.isArray(selectedYear) && selectedYear.length > 1;
     let yearDisplay = "";
@@ -161,7 +163,7 @@ export const generateTableTitle = (
         metrics = showMeanValues ? "Mean Rate" : "Payment";
         title = `${metrics} Differences Between Current and Proposed Policy`;
     } else {
-        policyMode = viewMode === "current" ? "Current Policy" : "Proposed Policy";
+        policyMode = viewMode === "current" ? currentPolicyTitle : proposedPolicyTitle;
         metrics = showMeanValues ? "Payment Rate" : "Total Payments";
         title = `${policyMode}: ${metrics}`;
     }

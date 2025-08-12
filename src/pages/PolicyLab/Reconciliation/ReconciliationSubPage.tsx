@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, CircularProgress, Link } from "@mui/material";
+import { Box, Typography, Grid, CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { config } from "../../../app.config";
@@ -33,6 +33,7 @@ export default function ReconciliationSubPage({
     const [selectedItem, setSelectedItem] = useState("");
     const [hModelDistributionData, setHModelDistributionData] = useState({});
     const [hModelDistributionProposedData, setHModelDistributionProposedData] = useState({});
+    const [hModelBaselineData, setHModelBaselineData] = useState({});
     const [hModelDataReady, setHModelDataReady] = useState(false);
     const [hModelLoading, setHModelLoading] = useState(false);
     const [menuSwitchLoading, setMenuSwitchLoading] = useState(false);
@@ -58,34 +59,34 @@ export default function ReconciliationSubPage({
         if (currentPath === "/policy-lab/2025-reconciliation-farm-bill") {
             setShowReconciliationIntro(true);
             setShowARCPLCPayments(false);
-            setSelectedItem("");
+            setSelectedItem("0-0");
         } else if (currentPath.endsWith("/arc-plc-payments")) {
             setShowReconciliationIntro(false);
             setShowARCPLCPayments(true);
-            setSelectedItem("0-0");
+            setSelectedItem("0-1");
         } else if (currentPath.includes("/title-i") && !currentPath.endsWith("/title-i")) {
             setShowReconciliationIntro(false);
             setShowARCPLCPayments(true);
-            setSelectedItem("0-0");
+            setSelectedItem("0-1");
         } else if (currentPath.endsWith("/title-i")) {
             setShowReconciliationIntro(false);
             setShowARCPLCPayments(true);
-            setSelectedItem("0-0");
+            setSelectedItem("0-1");
         } else if (
             currentPath.startsWith("/policy-lab/2025-reconciliation-farm-bill") &&
             subtab === "arc-plc-payments"
         ) {
             setShowReconciliationIntro(false);
             setShowARCPLCPayments(true);
-            setSelectedItem("0-0");
+            setSelectedItem("0-1");
         } else if (currentPath.startsWith("/policy-lab/2025-reconciliation-farm-bill") && subtab === "title-i") {
             setShowReconciliationIntro(false);
             setShowARCPLCPayments(true);
-            setSelectedItem("0-0");
+            setSelectedItem("0-1");
         } else {
             setShowReconciliationIntro(true);
             setShowARCPLCPayments(false);
-            setSelectedItem("");
+            setSelectedItem("0-0");
         }
     }, [subtab, location.pathname]);
 
@@ -106,10 +107,12 @@ export default function ReconciliationSubPage({
                 setLoadingStates((prev) => ({ ...prev, practices: false }));
                 setLoadingStates((prev) => ({ ...prev, performance: false }));
                 setHModelLoading(true);
-                const hModelDistributionResponse = await getJsonDataFromUrl(
-                    `${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/obbba`
-                );
+                const [hModelDistributionResponse, hModelBaselineResponse] = await Promise.all([
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/obbba`),
+                    getJsonDataFromUrl(`${config.apiUrl}/titles/title-i/subtitles/subtitle-a/arc-plc-payments/baseline`)
+                ]);
                 setHModelDistributionData(hModelDistributionResponse);
+                setHModelBaselineData(hModelBaselineResponse);
                 const emptyProposedData = {};
                 Object.keys(hModelDistributionResponse).forEach((year) => {
                     emptyProposedData[year] = [];
@@ -155,6 +158,8 @@ export default function ReconciliationSubPage({
         if (selectedItem === "") {
             setShowReconciliationIntro(true);
         } else if (topIndex === 0 && midIndex === 0) {
+            setShowReconciliationIntro(true);
+        } else if (topIndex === 0 && midIndex === 1) {
             setShowARCPLCPayments(true);
         }
     }, [selectedItem]);
@@ -162,17 +167,17 @@ export default function ReconciliationSubPage({
     const handleMenuSelect = (value: string) => {
         const [topIndex, midIndex] = value.split("-").map(Number);
 
-        if (topIndex === 0 && midIndex === 0 && !hModelDataReady) {
+        if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
-        } else if (topIndex === 0 && midIndex === 0) {
+        } else if (topIndex === 0 && midIndex === 1) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
 
         setSelectedItem(value);
 
-        if (topIndex === 0 && midIndex === 0) {
+        if (topIndex === 0 && midIndex === 1) {
             navigate("/policy-lab/2025-reconciliation-farm-bill/title-i/arc-plc-payments");
         }
     };
@@ -396,6 +401,8 @@ export default function ReconciliationSubPage({
                                                         aggregationEnabled={aggregationEnabled}
                                                         setAggregationEnabled={setAggregationEnabled}
                                                         enableScenarioSwitching={false}
+                                                        currentPolicyTitle="OBBBA Policy"
+                                                        proposedPolicyTitle="OBBBA Policy"
                                                         stateCodeToName={metaData.stateCodesArray.reduce(
                                                             (acc, curr) => {
                                                                 acc[curr.code] = curr.name;
@@ -431,6 +438,10 @@ export default function ReconciliationSubPage({
                                                         yearAggregation={yearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
                                                         enableScenarioSwitching={false}
+                                                        currentScenarioName="Proposed"
+                                                        proposedScenarioName="Proposed"
+                                                        currentPolicyTitle="OBBBA Policy"
+                                                        proposedPolicyTitle="OBBBA Policy"
                                                     />
                                                 </Box>
                                             </Box>
@@ -452,7 +463,7 @@ export default function ReconciliationSubPage({
                                                         }}
                                                     >
                                                         <PolicyComparisonSection
-                                                            currentData={hModelDistributionData}
+                                                            currentData={hModelBaselineData}
                                                             proposedData={hModelDistributionData}
                                                             title="Policy Analysis: OBBBA Scenario Budgetary Impacts"
                                                             subTitle="Projected Spending on a Fiscal Year Basis; 10-year Budget Window."
@@ -460,6 +471,10 @@ export default function ReconciliationSubPage({
                                                                 "Projected costs for the OBBBA scenario are produced on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
                                                             }
                                                             enableScenarioSwitching={false}
+                                                            currentLabel="Baseline"
+                                                            proposedLabel="OBBBA"
+                                                            chartCurrentLabel="B"
+                                                            chartProposedLabel="O"
                                                         />
                                                     </Box>
                                                 </Box>

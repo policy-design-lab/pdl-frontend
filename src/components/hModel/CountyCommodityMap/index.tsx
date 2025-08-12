@@ -34,7 +34,9 @@ const CountyCommodityMap = ({
     aggregationEnabled,
     setAggregationEnabled,
     stateCodeToName,
-    enableScenarioSwitching = true
+    enableScenarioSwitching = true,
+    currentPolicyTitle = "Current Policy",
+    proposedPolicyTitle = "Proposed Policy"
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[availableYears.length - 1] || "2024");
@@ -43,7 +45,7 @@ const CountyCommodityMap = ({
     const [selectedPrograms, setSelectedPrograms] = useState(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
-    const [proposedPolicyName, setProposedPolicyName] = useState("2025 Policy");
+    const [proposedPolicyName, setProposedPolicyName] = useState(proposedPolicyTitle);
     const [yearRange, setYearRange] = useState(() => {
         const numYears = Math.min(10, availableYears.length);
         return Array.from({ length: numYears }, (_, i) => i);
@@ -568,6 +570,7 @@ const CountyCommodityMap = ({
                         percentileMode={percentileMode}
                         onPercentileModeChange={handlePercentileModeChange}
                         selectedCommodities={selectedCommodities}
+                        currentPolicyTitle={currentPolicyTitle}
                     />
                 </Box>
             </Box>

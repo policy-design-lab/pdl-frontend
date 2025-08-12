@@ -578,6 +578,8 @@ export default function HouseProjectionSubPageProps({
                                                         setYearAggregation={setYearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
                                                         setAggregationEnabled={setAggregationEnabled}
+                                                        currentPolicyTitle="Current Policy"
+                                                        proposedPolicyTitle="Proposed Policy"
                                                         stateCodeToName={metaData.stateCodesArray.reduce(
                                                             (acc, curr) => {
                                                                 acc[curr.code] = curr.name;
@@ -612,6 +614,10 @@ export default function HouseProjectionSubPageProps({
                                                         showMeanValues={showMeanValues}
                                                         yearAggregation={yearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
+                                                        currentScenarioName="Current"
+                                                        proposedScenarioName="Proposed"
+                                                        currentPolicyTitle="Current Policy"
+                                                        proposedPolicyTitle="Proposed Policy"
                                                     />
                                                 </Box>
                                             </Box>
@@ -642,6 +648,10 @@ export default function HouseProjectionSubPageProps({
                                                                 tooltip={
                                                                     "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
                                                                 }
+                                                                currentLabel="Current Policy"
+                                                                proposedLabel="Proposed Policy"
+                                                                chartCurrentLabel="C"
+                                                                chartProposedLabel="P"
                                                             />
                                                         </Box>
                                                     </Box>

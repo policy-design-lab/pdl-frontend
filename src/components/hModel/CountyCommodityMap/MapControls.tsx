@@ -35,7 +35,7 @@ const MapControls: React.FC<MapControlsProps> = ({
         if (newValue) {
             setViewMode(newValue);
             if (newValue === "proposed" && !proposedPolicyName) {
-                setProposedPolicyName("2025 Policy");
+                setProposedPolicyName("Proposed Policy");
             }
         }
     };

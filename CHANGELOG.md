@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [unreleased]
 
+### Added
+- Add the '2025 Reconciliation/Farm Bill' page with OBBBA model and Baseline data visualization [#401](https://github.com/policy-design-lab/pdl-frontend/issues/401)
+
 ### Fixed
 - Fixed the wrong base acre for the Policy Analysis model when user select a single program [#419](https://github.com/policy-design-lab/pdl-frontend/issues/419)
 
