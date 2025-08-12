@@ -74,23 +74,27 @@ export function ShortFormatInteger(labelValue) {
     return result;
 }
 
-export function ShortFormatPaymentRate(labelValue, isForDifference = false) {
+export function ShortFormatPaymentRate(labelValue, isForDifference = false, useScaling = true) {
     if (labelValue === undefined || labelValue === null) {
-        return "0";
+        return useScaling ? "0" : "0.00";
     }
     const decimalPlaces = isForDifference ? 2 : 2;
     const absoluteValue = Math.abs(Number.parseFloat(labelValue));
     const roundedValue = Math.round(absoluteValue * 100) / 100;
     let result = "";
-    if (absoluteValue >= 1.0e9) {
-        const scaledValue = roundedValue / 1.0e9;
-        result = `${scaledValue.toFixed(decimalPlaces)}B`;
-    } else if (absoluteValue >= 1.0e6) {
-        const scaledValue = roundedValue / 1.0e6;
-        result = `${scaledValue.toFixed(decimalPlaces)}M`;
-    } else if (absoluteValue >= 1.0e3) {
-        const scaledValue = roundedValue / 1.0e3;
-        result = `${scaledValue.toFixed(decimalPlaces)}K`;
+    if (useScaling) {
+        if (absoluteValue >= 1.0e9) {
+            const scaledValue = roundedValue / 1.0e9;
+            result = `${scaledValue.toFixed(decimalPlaces)}B`;
+        } else if (absoluteValue >= 1.0e6) {
+            const scaledValue = roundedValue / 1.0e6;
+            result = `${scaledValue.toFixed(decimalPlaces)}M`;
+        } else if (absoluteValue >= 1.0e3) {
+            const scaledValue = roundedValue / 1.0e3;
+            result = `${scaledValue.toFixed(decimalPlaces)}K`;
+        } else {
+            result = `${roundedValue.toFixed(decimalPlaces)}`;
+        }
     } else {
         result = `${roundedValue.toFixed(decimalPlaces)}`;
     }
