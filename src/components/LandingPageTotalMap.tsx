@@ -258,7 +258,7 @@ const LandingPageTotalMap = ({
             if (!allPrograms || !summary) return 0;
             if (selectedPrograms.includes("All Programs")) {
                 const stateProgram = allPrograms.find((s) => s.State === state);
-                return stateProgram ? stateProgram["18-22 All Programs Total"] : 0;
+                return stateProgram ? stateProgram["2018-2022 All Programs Total"] : 0;
             }
             return selectedPrograms.reduce((total, program) => {
                 const programTotal = summary
@@ -273,7 +273,7 @@ const LandingPageTotalMap = ({
         if (selectedPrograms.includes("All Programs")) {
             return allStates.reduce((total, state) => {
                 const stateProgram = allPrograms.find((s) => s.State === state.id);
-                return total + (stateProgram?.["18-22 All Programs Total"] || 0);
+                return total + (stateProgram?.["2018-2022 All Programs Total"] || 0);
             }, 0);
         }
         return allStates.reduce((total, state) => {
@@ -337,7 +337,7 @@ const LandingPageTotalMap = ({
             const hasData = allStates.some((state) => {
                 setSelectedPrograms((prev) => [...prev]);
                 const stateProgram = allPrograms.find((s) => s.State === state.id);
-                return stateProgram && stateProgram["18-22 All Programs Total"] > 0;
+                return stateProgram && stateProgram["2018-2022 All Programs Total"] > 0;
             });
             if (hasData) {
                 setIsDataReady(true);
