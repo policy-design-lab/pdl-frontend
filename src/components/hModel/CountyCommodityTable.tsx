@@ -14,7 +14,7 @@ import {
     getTotalBaseAcres,
     formatCellValue
 } from "./utils";
-import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 interface ExtendedYearBreakdownData extends YearBreakdownData {
     paymentRate?: number;
@@ -436,7 +436,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 countyObject.yearBreakdown[year].current = yearCurrentTotal;
                                 countyObject.yearBreakdown[year].proposed = yearProposedTotal;
                                 countyObject.yearBreakdown[year].difference = yearProposedTotal - yearCurrentTotal;
-                                countyObject.yearBreakdown[year].baseAcres = formatNumericValue(yearBaseAcres);
+                                countyObject.yearBreakdown[year].baseAcres = yearBaseAcres;
                             }
                             countyObject.current = ((countyObject.current as number) || 0) + yearCurrentTotal;
                             countyObject.proposed = ((countyObject.proposed as number) || 0) + yearProposedTotal;
@@ -460,7 +460,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 (countyObject.proposedBaseAcres as number) + yearProposedBaseAcres;
 
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
-                                countyObject.baseAcres = formatNumericValue(yearBaseAcres);
+                                countyObject.baseAcres = yearBaseAcres;
                             }
                         });
                     });
@@ -509,13 +509,13 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 selectedPrograms,
                                 "Current"
                             );
-                            countyObject.baseAcres = formatNumericValue(currentBaseAcres);
+                            countyObject.baseAcres = currentBaseAcres;
                             const yearBaseAcres = currentBaseAcres;
                             if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
-                                countyObject.yearBreakdown[year].baseAcres = formatNumericValue(yearBaseAcres);
+                                countyObject.yearBreakdown[year].baseAcres = yearBaseAcres;
                             }
                             if (yearBaseAcres > (countyObject.baseAcres || 0)) {
-                                countyObject.baseAcres = formatNumericValue(yearBaseAcres);
+                                countyObject.baseAcres = yearBaseAcres;
                             }
                             county.scenarios.forEach((scenario) => {
                                 if (enableScenarioSwitching) {
@@ -691,9 +691,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         ? getTotalBaseAcres(proposedCounty, selectedCommodities, selectedPrograms, "Proposed")
                         : currentBaseAcres;
 
-                    countyObject.baseAcres = formatNumericValue(currentBaseAcres);
-                    countyObject.currentBaseAcres = formatNumericValue(currentBaseAcres);
-                    countyObject.proposedBaseAcres = formatNumericValue(proposedBaseAcres);
+                    countyObject.baseAcres = Number(currentBaseAcres);
+                    countyObject.currentBaseAcres = Number(currentBaseAcres);
+                    countyObject.proposedBaseAcres = Number(proposedBaseAcres);
 
                     if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
                         countyObject.yearBreakdown[year].baseAcres = countyObject.baseAcres;
@@ -848,9 +848,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             selectedPrograms,
                             scenarioName
                         );
-                        countyObject.baseAcres = formatNumericValue(baseAcres);
+                        countyObject.baseAcres = Number(baseAcres);
                         if (countyObject.yearBreakdown && countyObject.yearBreakdown[year]) {
-                            countyObject.yearBreakdown[year].baseAcres = formatNumericValue(baseAcres);
+                            countyObject.yearBreakdown[year].baseAcres = Number(baseAcres);
                         }
                     }
                     let totalPayment = 0;
@@ -1007,8 +1007,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         const proposedRate = actualProposedBaseAcres > 0 ? proposedTotal / actualProposedBaseAcres : 0;
                         row.weightedAverageRate = proposedRate - currentRate;
                     } else if (totalBaseAcres > 0) {
-                        const precisedTotal = formatNumericValue(aggTotal);
-                        const precisedBaseAcres = formatNumericValue(totalBaseAcres);
+                        const precisedTotal = Math.round(aggTotal * 100) / 100;
+                        const precisedBaseAcres = Math.round(totalBaseAcres * 100) / 100;
                         row.weightedAverageRate = precisedTotal / precisedBaseAcres;
                     } else {
                         row.weightedAverageRate = 0;
