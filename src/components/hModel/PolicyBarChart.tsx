@@ -12,7 +12,7 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import { ShortFormatInteger, CurrencyFormat } from "../shared/ConvertionFormats";
+import { ShortFormatInteger } from "../shared/ConvertionFormats";
 import { transformYearDataForward } from "./utils";
 import InfoTooltip from "./CountyCommodityMap/InfoTooltip";
 
@@ -280,7 +280,7 @@ const CommoditySummaryTable: React.FC<{
                                     {currentLabelExplain && (
                                         <span>
                                             {" "}
-                                            <InfoTooltip title={currentLabelExplain} />
+                                            <InfoTooltip title={currentLabelExplain} compact />
                                         </span>
                                     )}
                                 </TableCell>
@@ -292,7 +292,7 @@ const CommoditySummaryTable: React.FC<{
                                     {proposedLabelExplain && (
                                         <span>
                                             {" "}
-                                            <InfoTooltip title={proposedLabelExplain} />
+                                            <InfoTooltip title={proposedLabelExplain} compact />
                                         </span>
                                     )}
                                 </TableCell>
@@ -301,7 +301,7 @@ const CommoditySummaryTable: React.FC<{
                                     {differenceExplain && (
                                         <span>
                                             {" "}
-                                            <InfoTooltip title={differenceExplain} />
+                                            <InfoTooltip title={differenceExplain} compact />
                                         </span>
                                     )}
                                 </TableCell>
