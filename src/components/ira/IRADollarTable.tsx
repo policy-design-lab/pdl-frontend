@@ -7,7 +7,7 @@ import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
 import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCSVData from "../shared/getCSVData";
-import { formatCurrency } from "../shared/ConvertionFormats";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 
 function IRADollarTable({
     tableTitle,
@@ -100,11 +100,10 @@ function IRADollarTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (value) {
-                const formattedValue = formatCurrency(value, 0);
                 if (attr.includes("Dollar")) {
-                    newRecord[attr] = `${formattedValue}`;
+                    newRecord[attr] = `${formatCurrency(value, 0)}`;
                 } else {
-                    newRecord[attr] = `${formattedValue}`;
+                    newRecord[attr] = `${formatNumericValue(value, 0)}`;
                 }
             } else {
                 newRecord[attr] = attr.includes("Dollar") ? "$0" : "0";
