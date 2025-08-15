@@ -62,11 +62,11 @@ export default function HouseProjectionSubPageProps({
 
     useEffect(() => {
         if (subtab === "eqip-projection") {
-            setSelectedItem("0-1");
+            setSelectedItem("0-2-0");
         } else if (subtab === "arc-plc-payments") {
-            setSelectedItem("0-0");
+            setSelectedItem("0-1-0");
         } else if (!subtab) {
-            setSelectedItem("");
+            setSelectedItem("0-0");
         }
     }, [subtab]);
 
@@ -135,26 +135,30 @@ export default function HouseProjectionSubPageProps({
     }, []);
 
     useEffect(() => {
-        const [topIndex, midIndex] = selectedItem.split("-").map(Number);
+        const parts = selectedItem.split("-").map(Number);
+        const topIndex = parts[0] ?? 0;
+        const midIndex = parts[1] ?? 0;
         setShowHouseAgCommittee(false);
         setShowEQIPProjection(false);
         setShowARCPLCPayments(false);
-        if (selectedItem === "") {
+        if (selectedItem === "" || (topIndex === 0 && midIndex === 0)) {
             setShowHouseAgCommittee(true);
-        } else if (topIndex === 0 && midIndex === 0) {
-            setShowARCPLCPayments(true);
         } else if (topIndex === 0 && midIndex === 1) {
+            setShowARCPLCPayments(true);
+        } else if (topIndex === 0 && midIndex === 2) {
             setShowEQIPProjection(true);
         }
     }, [selectedItem]);
 
     const handleMenuSelect = (value: string) => {
-        const [topIndex, midIndex] = value.split("-").map(Number);
+        const parts = value.split("-").map(Number);
+        const topIndex = parts[0] ?? 0;
+        const midIndex = parts[1] ?? 0;
 
-        if (topIndex === 0 && midIndex === 0 && !hModelDataReady) {
+        if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
-        } else if (topIndex === 0 && midIndex === 0) {
+        } else if (topIndex === 0 && midIndex === 1) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
@@ -162,8 +166,10 @@ export default function HouseProjectionSubPageProps({
         setSelectedItem(value);
 
         if (topIndex === 0 && midIndex === 0) {
-            navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+            navigate("/policy-lab/proposal-analysis");
         } else if (topIndex === 0 && midIndex === 1) {
+            navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+        } else if (topIndex === 0 && midIndex === 2) {
             navigate("/policy-lab/proposal-analysis/eqip-projection");
         }
     };

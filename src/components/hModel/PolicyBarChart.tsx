@@ -836,9 +836,21 @@ export default function PolicyBarChart({
                 selectedCommodities={selectedCommodities}
                 currentLabel={currentLabel}
                 proposedLabel={proposedLabel}
-                currentLabelExplain="The baseline projections are for the ARC/PLC policy design from the 2018 Farm Bill, prior to the changes enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for the previous policy design as if it were in operation for the next ten years."
-                proposedLabelExplain="Projected total outlays for the current ARC/PLC policy designs as enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for these revised policy designs as if they are in operation for the next ten years."
-                differenceExplain="The difference represents an estimated score of the policy design changes in the Reconciliation Farm Bill (Reconciliation Farm Bill minus Baseline) in total for the next ten years."
+                currentLabelExplain={
+                    proposedLabel?.includes("Reconciliation Farm Bill")
+                        ? "The baseline projections are for the ARC/PLC policy design from the 2018 Farm Bill, prior to the changes enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for the previous policy design as if it were in operation for the next ten years."
+                        : undefined
+                }
+                proposedLabelExplain={
+                    proposedLabel?.includes("Reconciliation Farm Bill")
+                        ? "Projected total outlays for the current ARC/PLC policy designs as enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for these revised policy designs as if they are in operation for the next ten years."
+                        : undefined
+                }
+                differenceExplain={
+                    proposedLabel?.includes("Reconciliation Farm Bill")
+                        ? "The difference represents an estimated score of the policy design changes in the Reconciliation Farm Bill (Reconciliation Farm Bill minus Baseline) in total for the next ten years."
+                        : undefined
+                }
             />
         </StyledContainer>
     );

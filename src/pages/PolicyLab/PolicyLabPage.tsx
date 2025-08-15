@@ -54,6 +54,10 @@ export default function PolicyLabPage(): JSX.Element {
             setValue(2);
         } else if (currentPath.startsWith("/policy-lab/2025-reconciliation-farm-bill/title-i")) {
             setValue(2);
+        } else if (currentPath === "/policy-lab/proposal-analysis") {
+            setValue(1);
+        } else if (currentPath === "/policy-lab/arc-plc-payments" || currentPath === "/policy-lab/eqip-projection") {
+            setValue(1);
         } else if (tab === "proposal-analysis") {
             setValue(1);
         } else if (tab === "2025-reconciliation-farm-bill" || tab === "title-i") {

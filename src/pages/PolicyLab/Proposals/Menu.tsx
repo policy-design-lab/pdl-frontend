@@ -11,10 +11,15 @@ export const houseProjectionMenu: MenuItem[] = [
         title: "Proposals",
         items: [
             {
-                title: "2025"
+                title: "Overview"
             },
             {
-                title: "2024"
+                title: "2025",
+                items: [{ title: "ARC-PLC Payments" }]
+            },
+            {
+                title: "2024",
+                items: [{ title: "EQIP Projection" }]
             }
         ]
     }
@@ -44,7 +49,14 @@ export function MenuItem({
     const handleClick = () => {
         if (isHouseAgCommittee) {
             setIsOpen(!isOpen);
-        } else if (!isTop2024Proposals) {
+            return;
+        }
+        if (item.items && item.items.length > 0) {
+            setIsOpen(true);
+            onMenuSelect(`${index}-0`);
+            return;
+        }
+        if (!isTop2024Proposals) {
             onMenuSelect(index);
         }
     };

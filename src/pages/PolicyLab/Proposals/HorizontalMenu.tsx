@@ -31,17 +31,27 @@ export function HorizontalMenu({
         setAnchorEl(null);
     };
     const handleDropdownSelect = (subIndex: number) => {
-        onMenuSelect(`0-${subIndex}`);
+        if (subIndex === 0) {
+            onMenuSelect("0-0");
+        } else if (subIndex === 1) {
+            onMenuSelect("0-1-0");
+        } else if (subIndex === 2) {
+            onMenuSelect("0-2-0");
+        } else {
+            onMenuSelect(`0-${subIndex}`);
+        }
         setAnchorEl(null);
     };
     const getSecondLevelTitle = (level: number): string => {
-        if (level === 0) return "ARC-PLC Payments";
-        if (level === 1) return "EQIP Projection";
+        if (level === 0) return "Overview";
+        if (level === 1) return "ARC-PLC Payments";
+        if (level === 2) return "EQIP Projection";
         return "";
     };
     const getMenuItemTitle = (index: number, itemTitle: string): string => {
-        if (index === 0) return "2025";
-        if (index === 1) return "2024";
+        if (index === 0) return "Overview";
+        if (index === 1) return "2025";
+        if (index === 2) return "2024";
         return itemTitle;
     };
 
