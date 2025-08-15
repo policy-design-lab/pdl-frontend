@@ -644,6 +644,7 @@ export default function HouseProjectionSubPageProps({
                                                                 currentData={hModelDistributionData}
                                                                 proposedData={hModelDistributionProposedData}
                                                                 title="Policy Analysis: Budgetary Impacts of Proposed Changes in Policy Design"
+                                                                chartTitle="Payment Totals by Commodity: Total for 10 Fiscal Years"
                                                                 subTitle="Projected Changes in Spending on a Fiscal Year Basis; 10-year Budget Window."
                                                                 tooltip={
                                                                     "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."

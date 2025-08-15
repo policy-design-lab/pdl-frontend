@@ -91,7 +91,7 @@ export default function PolicyLabPage(): JSX.Element {
                     <CustomTab label={<Box>Proof of Concept</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
                     <CustomTab label={<Box>Proposal Analysis</Box>} customsx={tabStyle} selectedsx={selectedStyle} />
                     <CustomTab
-                        label={<Box>2025 Reconciliation/Farm Bill</Box>}
+                        label={<Box>2025 Reconciliation Farm Bill</Box>}
                         customsx={tabStyle}
                         selectedsx={selectedStyle}
                     />

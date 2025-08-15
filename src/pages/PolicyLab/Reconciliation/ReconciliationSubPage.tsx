@@ -265,7 +265,7 @@ export default function ReconciliationSubPage({
                                 {showReconciliationIntro && (
                                     <Box sx={{ mt: 4 }}>
                                         <Typography variant="h5" sx={{ mb: 3, color: "#2F7164", fontWeight: 600 }}>
-                                            Introduction: 2025 Reconciliation/Farm Bill Analysis
+                                            Introduction: 2025 Reconciliation Farm Bill Analysis
                                         </Typography>
                                         <Box
                                             sx={{
@@ -277,31 +277,39 @@ export default function ReconciliationSubPage({
                                             }}
                                         >
                                             <Typography sx={{ fontSize: "1.125rem" }}>
-                                                One goal of the Policy Design Lab is to provide useful visualizations of
-                                                alternative policy designs, including proposals pending in Congress.
-                                                Such visualizations are intended to advance understanding of policies
-                                                and the impacts of different designs. The visualizations consist
-                                                primarily of interactive maps built using complex modeling, a variety of
-                                                data sources, and legislative textual analysis. Early developments will
-                                                visualize the distribution of benefits, and changes in distribution,
-                                                projected to result from changes in policy designs; later developments
-                                                will build upon the distributional projections to include estimates of
-                                                other outcomes, benefits, or impacts of policy designs, including the
-                                                application of ecosystem or biophysical models and other science and
-                                                research.
+                                                Congress reauthorized the major mandatory programs of the Farm Bill in
+                                                the budget reconciliation legislation enacted into law on July 4, 2025
+                                                (P.L.{" "}
+                                                <a
+                                                    href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    119-21
+                                                </a>
+                                                ). The reauthorizations also included significant revisions to the
+                                                programs and work by the Policy Design Lab will visualize the revised
+                                                policy designs, available in this tab when completed. The visualizations
+                                                are intended to advance understanding of the policies and the impacts of
+                                                the revisions to them with interactive resources projecting benefit
+                                                distributions and other estimated outcomes or impacts. Visualizations
+                                                consist primarily of interactive maps built using complex modeling, a
+                                                variety of data sources, and legislative textual analysis. The maps are
+                                                accompanied by charts and data tables, which are downloadable for
+                                                further analysis.
                                             </Typography>
                                         </Box>
                                         <Box sx={{ mt: 4, p: 3, backgroundColor: "white", borderRadius: 1 }}>
                                             <Typography variant="h6" sx={{ mb: 2, color: "#2F7164" }}>
-                                                The visualizations of policy designs are grouped relative to the timing
-                                                and authorship of proposed changes to policies. Each visualization will
-                                                include background information on the modeling and data, as well as
-                                                links to more detailed explanations including doctorate dissertations or
-                                                other academic outputs.
+                                                The visualizations of revised policy designs are grouped by traditional
+                                                Farm Bill titles: Title I, commodities subsidies; Title II,
+                                                conservation; Crop Insurance; and Supplemental Nutrition Assistance
+                                                Program (SNAP).
                                             </Typography>
                                             <Typography paragraph>
-                                                Summary discussions and analysis using the work visualized will also be
-                                                available on{" "}
+                                                Visualizations include relevant background information and other
+                                                explanations, as well as links to more detailed explanations and summary
+                                                discussions on{" "}
                                                 <a
                                                     href="https://farmdocdaily.illinois.edu/"
                                                     target="_blank"
@@ -323,10 +331,16 @@ export default function ReconciliationSubPage({
                                             lineHeight: 1.5
                                         }}
                                     >
-                                        Analysis of proposed changes to the Agriculture Risk Coverage (ARC) and Price
-                                        Loss Coverage (PLC) programs under the 2025 reconciliation framework. The
-                                        visualizations below show projected impacts on program payments, distribution
-                                        patterns, and policy effectiveness across different regions and commodity types.
+                                        Analysis on this page contains model projections of the revisions in the design
+                                        of the Agriculture Risk Coverage (ARC) and Price Loss Coverage (PLC) programs as
+                                        authorized through 2031. The visualized analysis includes distribution of
+                                        program payment rates and total payments for the ten-year window generally used
+                                        in policy discussions. Users can select either program, individual crops, and
+                                        States, as well as download the data in CSV format. The visualization begins
+                                        with the total weighted average payment rates per base acre at the county level,
+                                        for all ten years and all major program crops: corn, soybeans, wheat, seed
+                                        cotton, sorghum, rice, and peanuts. Users can change the visualization to total
+                                        payments per county.
                                     </Typography>
                                 )}
                             </Box>
@@ -369,8 +383,10 @@ export default function ReconciliationSubPage({
                                                             textAlign: "center"
                                                         }}
                                                     >
-                                                        Interactive Map & Data Analysis: Projected Payment Amounts and
-                                                        Payment Rates (per base acre)
+                                                        Interactive Map & Data of Policy Design Analysis:
+                                                        <br />
+                                                        Projected Payment Rates (per base acre) and Total Payments;
+                                                        County Level
                                                     </Typography>
                                                     <Typography
                                                         sx={{
@@ -381,8 +397,12 @@ export default function ReconciliationSubPage({
                                                             textAlign: "center"
                                                         }}
                                                     >
-                                                        Use controls to filter data and interact with the map for
-                                                        detailed county information
+                                                        The visualizations are an application of research, policy
+                                                        analysis, and a model developed by Henrique Monaco, a PhD
+                                                        candidate at the University of Illinois at Urbana-Champaign.
+                                                        <br />
+                                                        Upon publication, the dissertation and other information will be
+                                                        available here.
                                                     </Typography>
                                                     <CountyCommodityMap
                                                         countyData={hModelDistributionData}
@@ -401,8 +421,8 @@ export default function ReconciliationSubPage({
                                                         aggregationEnabled={aggregationEnabled}
                                                         setAggregationEnabled={setAggregationEnabled}
                                                         enableScenarioSwitching={false}
-                                                        currentPolicyTitle="OBBBA Policy"
-                                                        proposedPolicyTitle="OBBBA Policy"
+                                                        currentPolicyTitle="Reconciliation Farm Bill"
+                                                        proposedPolicyTitle="Reconciliation Farm Bill"
                                                         stateCodeToName={metaData.stateCodesArray.reduce(
                                                             (acc, curr) => {
                                                                 acc[curr.code] = curr.name;
@@ -440,8 +460,8 @@ export default function ReconciliationSubPage({
                                                         enableScenarioSwitching={false}
                                                         currentScenarioName="Proposed"
                                                         proposedScenarioName="Proposed"
-                                                        currentPolicyTitle="OBBBA Policy"
-                                                        proposedPolicyTitle="OBBBA Policy"
+                                                        currentPolicyTitle="Reconciliation Farm Bill"
+                                                        proposedPolicyTitle="Reconciliation Farm Bill"
                                                     />
                                                 </Box>
                                             </Box>
@@ -465,16 +485,17 @@ export default function ReconciliationSubPage({
                                                         <PolicyComparisonSection
                                                             currentData={hModelBaselineData}
                                                             proposedData={hModelDistributionData}
-                                                            title="Policy Analysis: OBBBA Scenario Budgetary Impacts"
+                                                            title="Policy Analysis: Reconciliation Farm Bill Scenario Budgetary Impacts"
+                                                            chartTitle="Total Projected Outlays by Commodity: Total for 10 Fiscal Years"
                                                             subTitle="Projected Spending on a Fiscal Year Basis; 10-year Budget Window."
                                                             tooltip={
-                                                                "Projected costs for the OBBBA scenario are produced on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
+                                                                "Projected costs for the Reconciliation Farm Bill scenario are produced on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
                                                             }
                                                             enableScenarioSwitching={false}
                                                             currentLabel="Baseline"
-                                                            proposedLabel="OBBBA"
+                                                            proposedLabel="Reconciliation Farm Bill"
                                                             chartCurrentLabel="B"
-                                                            chartProposedLabel="O"
+                                                            chartProposedLabel="R"
                                                         />
                                                     </Box>
                                                 </Box>

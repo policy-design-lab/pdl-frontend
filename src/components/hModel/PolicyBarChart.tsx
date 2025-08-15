@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { ShortFormatInteger, CurrencyFormat } from "../shared/ConvertionFormats";
 import { transformYearDataForward } from "./utils";
+import InfoTooltip from "./CountyCommodityMap/InfoTooltip";
 
 interface CommodityData {
     commodityName: string;
@@ -54,6 +55,7 @@ interface ProcessedData {
 }
 
 interface PolicyBarChartProps {
+    title?: string;
     data: ProcessedData;
     width?: number;
     height?: number;
@@ -183,11 +185,24 @@ const generateColorPalette = (commodities: string[]): Record<string, string> => 
 };
 
 const CommoditySummaryTable: React.FC<{
+    title: string;
     data: YearData[];
     selectedCommodities: string[];
     currentLabel: string;
     proposedLabel: string;
-}> = ({ data, selectedCommodities, currentLabel, proposedLabel }) => {
+    currentLabelExplain?: string;
+    proposedLabelExplain?: string;
+    differenceExplain?: string;
+}> = ({
+    title,
+    data,
+    selectedCommodities,
+    currentLabel,
+    proposedLabel,
+    currentLabelExplain,
+    proposedLabelExplain,
+    differenceExplain
+}) => {
     const commoditySummaries = React.useMemo(() => {
         const summaryMap = new Map<string, { currentTotal: number; proposedTotal: number }>();
 
@@ -245,7 +260,7 @@ const CommoditySummaryTable: React.FC<{
                     textAlign: "center"
                 }}
             >
-                Payment Totals by Commodity: Total for 10 Fiscal Years
+                {title}
             </Typography>
             <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
                 <TableContainer component={Paper} sx={{ maxHeight: 400, flex: 1 }}>
@@ -255,18 +270,40 @@ const CommoditySummaryTable: React.FC<{
                                 <TableCell sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>Commodity</TableCell>
                                 <TableCell
                                     align="right"
-                                    sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "#FF8C00" }}
+                                    sx={{
+                                        fontWeight: 600,
+                                        backgroundColor: "#f5f5f5",
+                                        color: "#FF8C00"
+                                    }}
                                 >
                                     {currentLabel}
+                                    {currentLabelExplain && (
+                                        <span>
+                                            {" "}
+                                            <InfoTooltip title={currentLabelExplain} />
+                                        </span>
+                                    )}
                                 </TableCell>
                                 <TableCell
                                     align="right"
                                     sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}
                                 >
                                     {proposedLabel}
+                                    {proposedLabelExplain && (
+                                        <span>
+                                            {" "}
+                                            <InfoTooltip title={proposedLabelExplain} />
+                                        </span>
+                                    )}
                                 </TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
                                     Difference
+                                    {differenceExplain && (
+                                        <span>
+                                            {" "}
+                                            <InfoTooltip title={differenceExplain} />
+                                        </span>
+                                    )}
                                 </TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 600, backgroundColor: "#f5f5f5" }}>
                                     % Change
@@ -395,6 +432,7 @@ const CommoditySummaryTable: React.FC<{
 };
 
 export default function PolicyBarChart({
+    title,
     data,
     width,
     height = 400,
@@ -670,7 +708,7 @@ export default function PolicyBarChart({
             .style("fill", "#00000099")
             .style("font-size", "0.85rem")
             .style("font-family", "Roboto, sans-serif")
-            .text("Payment Amount ($)");
+            .text(chartCurrentLabel === "C" ? "Payment Amount ($)" : "Total Projected Outlays");
 
         const gridLines = chartGroup.append("g").attr("class", "grid");
         gridLines
@@ -793,10 +831,14 @@ export default function PolicyBarChart({
             <svg ref={svgRef} />
             <div ref={tooltipRef} className="tooltip" style={{ opacity: 0 }} />
             <CommoditySummaryTable
+                title={title || ""}
                 data={processedData}
                 selectedCommodities={selectedCommodities}
                 currentLabel={currentLabel}
                 proposedLabel={proposedLabel}
+                currentLabelExplain="The baseline projections are for the ARC/PLC policy design from the 2018 Farm Bill, prior to the changes enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for the previous policy design as if it were in operation for the next ten years."
+                proposedLabelExplain="Projected total outlays for the current ARC/PLC policy designs as enacted in the Reconciliation Farm Bill. The projections are the 10-year outlays for these revised policy designs as if they are in operation for the next ten years."
+                differenceExplain="The difference represents an estimated score of the policy design changes in the Reconciliation Farm Bill (Reconciliation Farm Bill minus Baseline) in total for the next ten years."
             />
         </StyledContainer>
     );

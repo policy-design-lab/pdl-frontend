@@ -1143,7 +1143,7 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <th style="${tableHeaderStyle}; text-align: left; width: 40%;">Commodity/Program</th>
                             <th style="${tableHeaderStyle}; width: 30%;">${
-            showMeanValues ? "Rate ($/acre)" : "Total ($)"
+            showMeanValues ? "Rate ($/base acre)" : "Total ($)"
         }</th>
                             <th style="${tableHeaderStyle}; width: 30%;">${baseAcresLabel}</th>
                         </tr>

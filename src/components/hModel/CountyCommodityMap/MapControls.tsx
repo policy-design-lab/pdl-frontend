@@ -161,7 +161,7 @@ const MapControls: React.FC<MapControlsProps> = ({
                     }}
                 >
                     Select Data Projection
-                    <InfoTooltip title="Choose the data projections to be visualized on the map. ‘Total Payments ($)’ visualizes the total dollar amount projected for each county, useful for seeing overall funding allocation. ‘Payment Rate ($/acre)’ visualizes the average payment per base acre, useful for understanding the direct impact of policy design changes on farmers and by program crop." />
+                    <InfoTooltip title="Choose the data projections to be visualized on the map. ‘Payment Rate ($/base acre)’ visualizes the average payment per base acre, useful for understanding the direct impact of policy design changes on farmers and by program crop. ‘Total Payments ($)’ visualizes the total dollar amount projected for each county, useful for seeing overall funding allocation." />
                 </FormLabel>
                 <ToggleButtonGroup
                     value={showMeanValues ? "mean" : "total"}
@@ -190,7 +190,7 @@ const MapControls: React.FC<MapControlsProps> = ({
                             }
                         }}
                     >
-                        Payment Rate ($/acre)
+                        Payment Rate ($/base acre)
                     </ToggleButton>
                     <ToggleButton
                         value="total"

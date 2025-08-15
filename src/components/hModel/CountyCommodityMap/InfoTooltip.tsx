@@ -27,25 +27,22 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
     );
 
     return (
-        <Tooltip
-            title={formattedContent}
-            arrow
-            placement="top"
-            sx={{
-                maxWidth: 350,
-                fontSize: "0.8rem"
-            }}
-        >
+        <Tooltip title={formattedContent} arrow placement="top" sx={{ maxWidth: 350 }}>
             <IconButton
                 size="small"
                 sx={{
                     color: "rgba(47, 113, 100, 0.7)",
-                    padding: "2px",
                     marginLeft: "4px",
-                    verticalAlign: "middle"
+                    verticalAlign: "middle",
+                    width: "1.25rem !important",
+                    height: "1.25rem !important",
+                    minWidth: "1.25rem !important",
+                    minHeight: "1.25rem !important",
+                    padding: "0.125rem !important",
+                    fontSize: "0.8rem !important"
                 }}
             >
-                <InfoIcon fontSize="small" />
+                <InfoIcon sx={{ fontSize: "0.8rem" }} />
             </IconButton>
         </Tooltip>
     );

@@ -1297,7 +1297,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         } else {
             let headerText;
             if (showMeanValues) {
-                headerText = "Payment Rate";
+                headerText = "Payment Rate ($/base acre)";
             } else if (viewMode === "difference") {
                 headerText = "Total Difference";
             } else if (viewMode === "proposed") {

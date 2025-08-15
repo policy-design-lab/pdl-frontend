@@ -7,6 +7,7 @@ interface PolicyComparisonSectionProps {
     currentData: any;
     proposedData: any;
     title?: string;
+    chartTitle?: string;
     subTitle?: string;
     tooltip?: string;
     enableScenarioSwitching?: boolean;
@@ -20,6 +21,7 @@ export default function PolicyComparisonSection({
     currentData,
     proposedData,
     title = "Policy Impact Comparison",
+    chartTitle,
     subTitle,
     tooltip,
     enableScenarioSwitching = true,
@@ -77,6 +79,7 @@ export default function PolicyComparisonSection({
             </Typography>
             <Box sx={{ width: "100%" }}>
                 <PolicyBarChart
+                    title={chartTitle}
                     data={chartData}
                     width={undefined}
                     height={450}

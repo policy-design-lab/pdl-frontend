@@ -164,7 +164,7 @@ export const generateTableTitle = (
         title = `${metrics} Differences Between Current and Proposed Policy`;
     } else {
         policyMode = viewMode === "current" ? currentPolicyTitle : proposedPolicyTitle;
-        metrics = showMeanValues ? "Payment Rate" : "Total Payments";
+        metrics = showMeanValues ? "Payment Rate ($/base acre)" : "Total Payments";
         title = `${policyMode}: ${metrics}`;
     }
 
