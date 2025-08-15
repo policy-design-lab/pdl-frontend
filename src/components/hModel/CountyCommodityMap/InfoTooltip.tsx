@@ -16,7 +16,7 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
                     variant="body2"
                     style={{
                         marginBottom: index < paragraphs.length - 1 ? "8px" : 0,
-                        fontSize: "0.8rem",
+                        fontSize: "1.25rem",
                         whiteSpace: "pre-line"
                     }}
                 >
@@ -39,10 +39,10 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
                     minWidth: "1.25rem !important",
                     minHeight: "1.25rem !important",
                     padding: "0.125rem !important",
-                    fontSize: "0.8rem !important"
+                    fontSize: "1.25rem !important"
                 }}
             >
-                <InfoIcon sx={{ fontSize: "0.8rem" }} />
+                <InfoIcon sx={{ fontSize: "1.25rem" }} />
             </IconButton>
         </Tooltip>
     );
