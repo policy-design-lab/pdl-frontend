@@ -153,8 +153,8 @@ function App({
                 state: stateName,
                 rcppBenefit: formatCurrency(totalRcpp.totalPaymentInDollars, 0),
                 percentage: `${totalRcpp.totalPaymentInPercentageNationwide.toString()}%`,
-                noContract: `${formatNumericValue(totalRcpp.totalContracts, 0)}`,
-                totAcre: `${formatNumericValue(totalRcpp.totalAreaInAcres, 0)}`
+                noContract: formatNumericValue(totalRcpp.totalContracts, 0),
+                totAcre: formatNumericValue(totalRcpp.totalAreaInAcres, 0)
             };
         };
         rcppTableData.push(newRecord());
