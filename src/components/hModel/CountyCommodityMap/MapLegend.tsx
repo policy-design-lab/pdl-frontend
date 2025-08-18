@@ -6,7 +6,12 @@ import { PercentileMode } from "./percentileConfig";
 import InfoTooltip from "./InfoTooltip";
 
 interface MapLegendProps {
-    mapData: { thresholds: number[]; data: unknown[]; counties: Record<string, unknown> };
+    mapData: {
+        thresholds: number[];
+        data: unknown[];
+        counties?: Record<string, unknown>;
+        districts?: Record<string, unknown>;
+    };
     mapColor: string[];
     viewMode: string;
     selectedYear: string | string[];
@@ -19,6 +24,7 @@ interface MapLegendProps {
     percentileMode: string;
     onPercentileModeChange: (mode: string) => void;
     selectedCommodities?: string[];
+    boundaryType?: string;
 }
 
 const MapLegend: React.FC<MapLegendProps> = ({
@@ -34,7 +40,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
     showTooltips = true,
     percentileMode,
     onPercentileModeChange,
-    selectedCommodities = []
+    selectedCommodities = [],
+    boundaryType = "county"
 }) => {
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
 
@@ -211,12 +218,19 @@ const MapLegend: React.FC<MapLegendProps> = ({
                     isRatio={false}
                     notDollar={showMeanValues}
                     isPaymentRate={showMeanValues}
-                    countyData={mapData.counties as Record<string, any>}
+                    countyData={
+                        (boundaryType === "congressional-district" ? mapData.districts : mapData.counties) as Record<
+                            string,
+                            any
+                        >
+                    }
                     stateCodeToName={stateCodeToName}
                     showTooltips={showTooltips}
-                    regionType="county"
+                    regionType={boundaryType === "congressional-district" ? "congressional-district" : "county"}
                     percentileMode={percentileMode}
                     viewMode={viewMode}
+                    boundaryType={boundaryType}
+                    selectedState={selectedState}
                 />
             </Box>
         </Box>
