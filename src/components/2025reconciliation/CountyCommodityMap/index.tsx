@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Box, Button, CircularProgress, Backdrop, LinearProgress, Fade } from "@mui/material";
 import TableChartIcon from "@mui/icons-material/TableChart";
-import MapLegend from "../../hModel/CountyCommodityMap/MapLegend";
-import CountyMap from "../../hModel/CountyCommodityMap/CountyMap";
-import { processMapData } from "../../hModel/CountyCommodityMap/processMapData";
-import MapControls from "../../hModel/CountyCommodityMap/MapControls";
-import FilterSelectors from "../../hModel/CountyCommodityMap/FilterSelectors";
-import { PercentileMode } from "../../hModel/CountyCommodityMap/percentileConfig";
+import MapLegend from "../../ProposalAnalysis/CountyCommodityMap/MapLegend";
+import CountyMap from "../../ProposalAnalysis/CountyCommodityMap/CountyMap";
+import { processMapData } from "../../ProposalAnalysis/CountyCommodityMap/processMapData";
+import MapControls from "../../ProposalAnalysis/CountyCommodityMap/MapControls";
+import FilterSelectors from "../../ProposalAnalysis/CountyCommodityMap/FilterSelectors";
+import { PercentileMode } from "../../ProposalAnalysis/CountyCommodityMap/percentileConfig";
 import {
     isLoadingEnabled,
     isChunkedProcessingEnabled,
@@ -79,35 +79,28 @@ const CountyCommodityMap = ({
         if (!isLoadingEnabled()) {
             return processMapData(params);
         }
-
         setIsProcessing(true);
         setProcessingMessage("Processing map data...");
-
         return new Promise((resolve) => {
             const chunks = [];
             const years = params.aggregationEnabled ? params.selectedYears : [params.selectedYear];
             const configuredChunkSize = getChunkSize();
             const chunkSize = Math.max(1, Math.floor(years.length / configuredChunkSize));
-
             for (let i = 0; i < years.length; i += chunkSize) {
                 chunks.push(years.slice(i, i + chunkSize));
             }
-
             let processedData = { counties: {}, thresholds: [], data: [] };
             let chunkIndex = 0;
-
             const processChunk = () => {
                 if (chunkIndex >= chunks.length) {
                     setIsProcessing(false);
                     resolve(processedData);
                     return;
                 }
-
                 const config = getUIConfig();
                 if (config.loadingStates.enableProgressMessages) {
                     setProcessingMessage(`Processing data... (${chunkIndex + 1}/${chunks.length})`);
                 }
-
                 const processFunction = () => {
                     try {
                         const chunkParams = { ...params, selectedYears: chunks[chunkIndex] };
@@ -127,14 +120,12 @@ const CountyCommodityMap = ({
                         setTimeout(processChunk, 0);
                     }
                 };
-
                 if (config.performance.useRequestAnimationFrame) {
                     requestAnimationFrame(processFunction);
                 } else {
                     setTimeout(processFunction, 0);
                 }
             };
-
             processChunk();
         });
     }, []);
@@ -152,13 +143,11 @@ const CountyCommodityMap = ({
                 params.selectedPrograms.length > thresholds.complexProgramFilters;
             const shouldUseChunking =
                 isChunkedProcessingEnabled() && (hasMultipleYears || hasComplexFilters) && !params.aggregationEnabled;
-
             if (shouldUseChunking) {
                 return processMapDataInChunks(params);
             }
             setIsProcessing(true);
             setProcessingMessage("Processing map data...");
-
             return new Promise((resolve) => {
                 const config = getUIConfig();
                 const processFunction = () => {
@@ -172,7 +161,6 @@ const CountyCommodityMap = ({
                         resolve({ counties: {}, thresholds: [], data: [] });
                     }
                 };
-
                 if (config.performance.useRequestAnimationFrame) {
                     requestAnimationFrame(processFunction);
                 } else {
@@ -248,7 +236,6 @@ const CountyCommodityMap = ({
             } else if (yearRange.length === 1 && aggregationEnabled) {
                 setAggregationEnabled(false);
             }
-
             if (aggregationEnabled && yearRange.length > 0) {
                 const selectedYearsList = yearRange.map((index) => availableYears[index] || "2024");
                 setSelectedYears(selectedYearsList);
@@ -360,7 +347,6 @@ const CountyCommodityMap = ({
             setShowTableButton(false);
         }
     };
-
     useEffect(() => {
         const handleScroll = () => {
             const tableElement = document.getElementById("county-commodity-table");
@@ -410,7 +396,6 @@ const CountyCommodityMap = ({
         aggregationEnabled,
         forceUpdate
     ]);
-
     const mapColor = useMemo(() => {
         if (viewMode === "difference") {
             return [

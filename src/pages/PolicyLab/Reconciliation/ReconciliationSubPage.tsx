@@ -4,9 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { config } from "../../../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../../../utils/apiutil";
 import { reconciliationMenu } from "./Menu";
-import CountyCommodityMap from "../../../components/hModel/CountyCommodityMap";
-import CountyCommodityTable from "../../../components/hModel/CountyCommodityTable";
-import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
+import CountyCommodityMap from "../../../components/ProposalAnalysis/CountyCommodityMap";
+import CountyCommodityTable from "../../../components/ProposalAnalysis/CountyCommodityTable";
+import PolicyComparisonSection from "../../../components/ProposalAnalysis/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
 
 export default function ReconciliationSubPage({
@@ -55,7 +55,6 @@ export default function ReconciliationSubPage({
 
     useEffect(() => {
         const currentPath = location.pathname;
-
         if (currentPath === "/policy-lab/2025-reconciliation-farm-bill") {
             setShowReconciliationIntro(true);
             setShowARCPLCPayments(false);
@@ -166,7 +165,6 @@ export default function ReconciliationSubPage({
 
     const handleMenuSelect = (value: string) => {
         const [topIndex, midIndex] = value.split("-").map(Number);
-
         if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
@@ -174,9 +172,7 @@ export default function ReconciliationSubPage({
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
-
         setSelectedItem(value);
-
         if (topIndex === 0 && midIndex === 1) {
             navigate("/policy-lab/2025-reconciliation-farm-bill/title-i/arc-plc-payments");
         }

@@ -55,7 +55,7 @@ export default function CardPaper({ id, title, description, author, date, link }
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex" }}>
+                <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex", mt: 0 }}>
                     <Grid item xs={12} sm={6}>
                         <Typography variant="body1" component="div">
                             Author: {author}

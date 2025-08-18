@@ -13,18 +13,35 @@ export default function IssueWhitePaperPage(): JSX.Element {
     const { id } = useParams();
     const [cardId, setCardId] = React.useState<string>("");
     const [tab, setTab] = React.useState(0);
-
+    const [dimensions, setDimensions] = React.useState({
+        width: window.innerWidth * 0.9,
+        height: Math.floor(window.innerWidth * 0.9 * 0.6)
+    });
     const defaultTheme = createTheme({
         spacing: 8
     });
-    const switchBarTable = (event, newTab) => {
+    const switchBarTable = (_event, newTab) => {
         if (newTab !== null) {
             setTab(newTab);
         }
     };
-    const iframeWidth = window.innerWidth * 0.9;
-    const iframeHeight = window.innerWidth > 1679 ? window.innerHeight * 0.92 : window.innerHeight * 0.95;
-
+    React.useEffect(() => {
+        const calculateResponsiveDimensions = () => {
+            const newWidth = window.innerWidth * 0.9;
+            const aspectRatio = 0.4;
+            const newHeight = Math.floor(newWidth * aspectRatio);
+            setDimensions({
+                width: newWidth,
+                height: newHeight
+            });
+        };
+        calculateResponsiveDimensions();
+        const handleResize = () => {
+            calculateResponsiveDimensions();
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     React.useEffect(() => {
         if (id) {
             setCardId(id);
@@ -146,6 +163,17 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardIFrame
+                                                id="issue-protecting-conservation-investments-from-the-reconciliation-farm-bill"
+                                                title="ISSUE BRIEF: Protecting Conservation Investments from the Reconciliation Farm Bill"
+                                                iframeTitle="Protecting Conservation Investments from the Reconciliation Farm Bill"
+                                                author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
+                                                date="August 2025"
+                                                description="The interactive map projects total potential conservation investment for each State from the new budget authority provided by Congress in the Reconciliation Farm Bill (P.L. 119-21) for four conservation programs: Environmental Quality Incentives Program (EQIP); Conservation Stewardship Program (CSP); Agricultural Conservation Easement Program ACEP); and the Regional Conservation Partnership Program (RCPP)."
+                                                iframeLink="https://datawrapper.dwcdn.net/QUD3Z/3/"
+                                                iframeWidth={dimensions.width}
+                                                iframeHeight={dimensions.height}
+                                            />
+                                            <CardIFrame
                                                 id="issue-projected-allocation-of-remaining-ira"
                                                 title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
                                                 iframeTitle="Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
@@ -153,8 +181,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 date="March 2025"
                                                 description="The interactive map updates earlier projections of the potential allocation of remaining Inflation Reduction Act appropriations for conservation programs based on an estimate of how much funding may remain that could potentially be spent; projected allocations were made using a combination of historic allocations from both the Farm Bill and the IRA."
                                                 iframeLink="https://datawrapper.dwcdn.net/8siz1/7/"
-                                                iframeWidth={iframeWidth}
-                                                iframeHeight={iframeHeight}
+                                                iframeWidth={dimensions.width}
+                                                iframeHeight={dimensions.height}
                                             />
                                             <CardIFrame
                                                 id="issue-what-farmers-stand"
@@ -165,8 +193,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 description="As Congress considers reauthorizing the Farm Bill, vital resources that are available to farmers and ranchers today are at risk — specifically the $18 billion investment from the Inflation Reduction Act (IRA) for the U.S. Department of Agriculture’s (USDA) popular conservation programs. This issue brief provides a first look at what farmers stand to lose in each state if these investments are eliminated by Congress."
                                                 link={WhatFarmsStand}
                                                 iframeLink="https://datawrapper.dwcdn.net/jeiT4/5/"
-                                                iframeWidth={iframeWidth}
-                                                iframeHeight={iframeHeight}
+                                                iframeWidth={dimensions.width}
+                                                iframeHeight={dimensions.height}
                                             />
                                         </Grid>
                                     </Grid>

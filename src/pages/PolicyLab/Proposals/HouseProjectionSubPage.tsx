@@ -6,9 +6,9 @@ import HouseOutlayMap from "../../../components/policylab/HouseOutlayMap";
 import { convertAllState, getJsonDataFromUrl } from "../../../utils/apiutil";
 import { houseProjectionMenu } from "./Menu";
 import HouseOutlayTable from "../../../components/policylab/HouseOutlayTable";
-import CountyCommodityMap from "../../../components/hModel/CountyCommodityMap";
-import CountyCommodityTable from "../../../components/hModel/CountyCommodityTable";
-import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
+import CountyCommodityMap from "../../../components/ProposalAnalysis/CountyCommodityMap";
+import CountyCommodityTable from "../../../components/ProposalAnalysis/CountyCommodityTable";
+import PolicyComparisonSection from "../../../components/ProposalAnalysis/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
 
 export default function HouseProjectionSubPageProps({
@@ -154,7 +154,6 @@ export default function HouseProjectionSubPageProps({
         const parts = value.split("-").map(Number);
         const topIndex = parts[0] ?? 0;
         const midIndex = parts[1] ?? 0;
-
         if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
@@ -162,9 +161,7 @@ export default function HouseProjectionSubPageProps({
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
-
         setSelectedItem(value);
-
         if (topIndex === 0 && midIndex === 0) {
             navigate("/policy-lab/proposal-analysis");
         } else if (topIndex === 0 && midIndex === 1) {
@@ -231,23 +228,6 @@ export default function HouseProjectionSubPageProps({
             return isLoading || hModelLoading || !hModelDataReady || menuSwitchLoading;
         }
         return false;
-    };
-    const getDescriptionContent = (description: string, author?: string, link?: string) => {
-        return (
-            <>
-                {description}
-                <br />
-                {link && author && (
-                    <>
-                        Details of model can by found by{" "}
-                        <Link href={link} target="_blank" rel="noopener" style={{ color: "#2F7164" }}>
-                            Link
-                        </Link>
-                        , authored by {author}.
-                    </>
-                )}
-            </>
-        );
     };
     return (
         <Box sx={{ width: "100%" }}>
