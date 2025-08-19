@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Add comma to separate integer columns in Title I [#418](https://github.com/policy-design-lab/pdl-frontend/issues/418)
+- Reduced bottom marge for issue briefs on the Issue/White Paper page [#425](https://github.com/policy-design-lab/pdl-frontend/issues/425)
 
 ## [1.11.0] - 2025-07-31
 
