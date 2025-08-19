@@ -6,9 +6,9 @@ import HouseOutlayMap from "../../../components/policylab/HouseOutlayMap";
 import { convertAllState, getJsonDataFromUrl } from "../../../utils/apiutil";
 import { houseProjectionMenu } from "./Menu";
 import HouseOutlayTable from "../../../components/policylab/HouseOutlayTable";
-import CountyCommodityMap from "../../../components/hModel/CountyCommodityMap";
-import CountyCommodityTable from "../../../components/hModel/CountyCommodityTable";
-import PolicyComparisonSection from "../../../components/hModel/PolicyComparisonSection";
+import CountyCommodityMap from "../../../components/ProposalAnalysis/CountyCommodityMap";
+import CountyCommodityTable from "../../../components/ProposalAnalysis/CountyCommodityTable";
+import PolicyComparisonSection from "../../../components/ProposalAnalysis/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
 
 export default function HouseProjectionSubPageProps({
@@ -62,11 +62,11 @@ export default function HouseProjectionSubPageProps({
 
     useEffect(() => {
         if (subtab === "eqip-projection") {
-            setSelectedItem("0-1");
+            setSelectedItem("0-2-0");
         } else if (subtab === "arc-plc-payments") {
-            setSelectedItem("0-0");
+            setSelectedItem("0-1-0");
         } else if (!subtab) {
-            setSelectedItem("");
+            setSelectedItem("0-0");
         }
     }, [subtab]);
 
@@ -135,35 +135,38 @@ export default function HouseProjectionSubPageProps({
     }, []);
 
     useEffect(() => {
-        const [topIndex, midIndex] = selectedItem.split("-").map(Number);
+        const parts = selectedItem.split("-").map(Number);
+        const topIndex = parts[0] ?? 0;
+        const midIndex = parts[1] ?? 0;
         setShowHouseAgCommittee(false);
         setShowEQIPProjection(false);
         setShowARCPLCPayments(false);
-        if (selectedItem === "") {
+        if (selectedItem === "" || (topIndex === 0 && midIndex === 0)) {
             setShowHouseAgCommittee(true);
-        } else if (topIndex === 0 && midIndex === 0) {
-            setShowARCPLCPayments(true);
         } else if (topIndex === 0 && midIndex === 1) {
+            setShowARCPLCPayments(true);
+        } else if (topIndex === 0 && midIndex === 2) {
             setShowEQIPProjection(true);
         }
     }, [selectedItem]);
 
     const handleMenuSelect = (value: string) => {
-        const [topIndex, midIndex] = value.split("-").map(Number);
-
-        if (topIndex === 0 && midIndex === 0 && !hModelDataReady) {
+        const parts = value.split("-").map(Number);
+        const topIndex = parts[0] ?? 0;
+        const midIndex = parts[1] ?? 0;
+        if (topIndex === 0 && midIndex === 1 && !hModelDataReady) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 1500);
-        } else if (topIndex === 0 && midIndex === 0) {
+        } else if (topIndex === 0 && midIndex === 1) {
             setMenuSwitchLoading(true);
             setTimeout(() => setMenuSwitchLoading(false), 800);
         }
-
         setSelectedItem(value);
-
         if (topIndex === 0 && midIndex === 0) {
-            navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+            navigate("/policy-lab/proposal-analysis");
         } else if (topIndex === 0 && midIndex === 1) {
+            navigate("/policy-lab/proposal-analysis/arc-plc-payments");
+        } else if (topIndex === 0 && midIndex === 2) {
             navigate("/policy-lab/proposal-analysis/eqip-projection");
         }
     };
@@ -225,23 +228,6 @@ export default function HouseProjectionSubPageProps({
             return isLoading || hModelLoading || !hModelDataReady || menuSwitchLoading;
         }
         return false;
-    };
-    const getDescriptionContent = (description: string, author?: string, link?: string) => {
-        return (
-            <>
-                {description}
-                <br />
-                {link && author && (
-                    <>
-                        Details of model can by found by{" "}
-                        <Link href={link} target="_blank" rel="noopener" style={{ color: "#2F7164" }}>
-                            Link
-                        </Link>
-                        , authored by {author}.
-                    </>
-                )}
-            </>
-        );
     };
     return (
         <Box sx={{ width: "100%" }}>
@@ -578,6 +564,8 @@ export default function HouseProjectionSubPageProps({
                                                         setYearAggregation={setYearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
                                                         setAggregationEnabled={setAggregationEnabled}
+                                                        currentPolicyTitle="Current Policy"
+                                                        proposedPolicyTitle="Proposed Policy"
                                                         stateCodeToName={metaData.stateCodesArray.reduce(
                                                             (acc, curr) => {
                                                                 acc[curr.code] = curr.name;
@@ -612,6 +600,10 @@ export default function HouseProjectionSubPageProps({
                                                         showMeanValues={showMeanValues}
                                                         yearAggregation={yearAggregation}
                                                         aggregationEnabled={aggregationEnabled}
+                                                        currentScenarioName="Current"
+                                                        proposedScenarioName="Proposed"
+                                                        currentPolicyTitle="Current Policy"
+                                                        proposedPolicyTitle="Proposed Policy"
                                                     />
                                                 </Box>
                                             </Box>
@@ -638,10 +630,15 @@ export default function HouseProjectionSubPageProps({
                                                                 currentData={hModelDistributionData}
                                                                 proposedData={hModelDistributionProposedData}
                                                                 title="Policy Analysis: Budgetary Impacts of Proposed Changes in Policy Design"
+                                                                chartTitle="Payment Totals by Commodity: Total for 10 Fiscal Years"
                                                                 subTitle="Projected Changes in Spending on a Fiscal Year Basis; 10-year Budget Window."
                                                                 tooltip={
                                                                     "Projected costs and changes in spending resulting from changes in policy design are produced by the Congressional Budget Office on a federal fiscal year basis for 10 fiscal years. The information in this section is presented in a format relevant to CBO projections. \n\n Note: farm programs are designed by Congress to include a 'timing shift' for CBO purposes that push payments out a fiscal year; for example, payments for the 2025 crop year are made after October 1, 2026, which is fiscal year 2027. In the chart and table, the policy costs for crop years 2025 to 2034 are projected for fiscal years 2027 to 2036."
                                                                 }
+                                                                currentLabel="Current Policy"
+                                                                proposedLabel="Proposed Policy"
+                                                                chartCurrentLabel="C"
+                                                                chartProposedLabel="P"
                                                             />
                                                         </Box>
                                                     </Box>

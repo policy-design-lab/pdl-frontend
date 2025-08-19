@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Menu, MenuItem } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useNavigate } from "react-router-dom";
 import { MenuItem as MenuItemType } from "./Menu";
 
 const buttonBaseStyle = {
@@ -20,11 +21,12 @@ export function HorizontalMenu({
     selectedItem: string;
     onMenuSelect: (value: string) => void;
 }): JSX.Element {
+    const navigate = useNavigate();
     const [topLevel, midLevel] = selectedItem.split("-").map(Number);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const handleDropdownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleMainButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleDropdownClose = () => {
@@ -32,12 +34,10 @@ export function HorizontalMenu({
     };
     const handleDropdownSelect = (subIndex: number) => {
         if (subIndex === 0) {
+            navigate("/policy-lab/2025-reconciliation-farm-bill");
             onMenuSelect("0-0");
         } else if (subIndex === 1) {
-            onMenuSelect("0-1-0");
-        } else if (subIndex === 2) {
-            onMenuSelect("0-2-0");
-        } else {
+            navigate("/policy-lab/2025-reconciliation-farm-bill/title-i/arc-plc-payments");
             onMenuSelect(`0-${subIndex}`);
         }
         setAnchorEl(null);
@@ -45,14 +45,20 @@ export function HorizontalMenu({
     const getSecondLevelTitle = (level: number): string => {
         if (level === 0) return "Overview";
         if (level === 1) return "ARC-PLC Payments";
-        if (level === 2) return "EQIP Projection";
         return "";
     };
     const getMenuItemTitle = (index: number, itemTitle: string): string => {
         if (index === 0) return "Overview";
-        if (index === 1) return "2025";
-        if (index === 2) return "2024";
+        if (index === 1) return "Title I";
         return itemTitle;
+    };
+
+    const getMainButtonTitle = (): string => {
+        if (!Number.isNaN(topLevel) && topLevel === 0 && !Number.isNaN(midLevel)) {
+            if (midLevel === 0) return "Titles";
+            if (midLevel === 1) return "Title I";
+        }
+        return "Titles";
     };
 
     return (
@@ -83,10 +89,10 @@ export function HorizontalMenu({
                             "display": "flex",
                             "alignItems": "center"
                         }}
-                        onClick={handleDropdownClick}
+                        onClick={handleMainButtonClick}
                         endIcon={<ArrowDropDownIcon sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }} />}
                     >
-                        {menu[0].title}
+                        {getMainButtonTitle()}
                     </Button>
                     {selectedItem && topLevel === 0 && midLevel >= 0 && (
                         <>

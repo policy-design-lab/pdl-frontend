@@ -56,7 +56,7 @@ export const processMapData = ({
     showMeanValues: boolean;
     percentileMode?: PercentileMode;
 }) => {
-    if (!countyData[selectedYear] && !countyDataProposed[selectedYear]) {
+    if (!countyData[selectedYear] && (!countyDataProposed || !countyDataProposed[selectedYear])) {
         return { counties: {}, thresholds: [], data: [], selectedCommodities, selectedPrograms };
     }
 
