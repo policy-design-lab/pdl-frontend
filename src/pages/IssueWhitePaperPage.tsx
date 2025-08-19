@@ -162,7 +162,9 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             justifyContent="flex-start"
                                             sx={{ display: "flex", width: "100%" }}
                                         >
-                                            <CardIFrame
+                                            {/* 
+                                               // Pause for now as PI requested in Slack
+                                               <CardIFrame
                                                 id="issue-protecting-conservation-investments-from-the-reconciliation-farm-bill"
                                                 title="ISSUE BRIEF: Protecting Conservation Investments from the Reconciliation Farm Bill"
                                                 iframeTitle="Protecting Conservation Investments from the Reconciliation Farm Bill"
@@ -172,7 +174,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 iframeLink="https://datawrapper.dwcdn.net/QUD3Z/3/"
                                                 iframeWidth={dimensions.width}
                                                 iframeHeight={dimensions.height}
-                                            />
+                                            /> */}
                                             <CardIFrame
                                                 id="issue-projected-allocation-of-remaining-ira"
                                                 title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
