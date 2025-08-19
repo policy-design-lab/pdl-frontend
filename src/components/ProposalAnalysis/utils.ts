@@ -330,8 +330,7 @@ export const formatCellValue = (
 ): string | number => {
     if (includesPaymentRate || headerIncludesRate) {
         if (cell.value && Number(cell.value) > 0) {
-            const isForDifference = accessor === "difference" || accessor.includes("difference");
-            const formattedRate = formatPaymentRate(Number(cell.value), isForDifference);
+            const formattedRate = formatPaymentRate(Number(cell.value));
             return formattedRate ? `$${formattedRate}` : "";
         }
         return "";

@@ -329,10 +329,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     ].baseAcres = commodityBaseAcres;
                                     countyObject.commodityBreakdown[commodity.commodityName].total +=
                                         commodityCurrentTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres = Math.max(
-                                        countyObject.commodityBreakdown[commodity.commodityName].baseAcres || 0,
-                                        commodityBaseAcres
-                                    );
+                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres +=
+                                        commodityBaseAcres;
                                     const commodityKey = `${commodity.commodityName}`;
                                     if (!countyObject[`${commodityKey} Current`]) {
                                         countyObject[`${commodityKey} Current`] = 0;
@@ -611,10 +609,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     ].baseAcres = commodityBaseAcres;
                                     countyObject.commodityBreakdown[commodity.commodityName].total +=
                                         commodityCurrentTotal;
-                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres = Math.max(
-                                        countyObject.commodityBreakdown[commodity.commodityName].baseAcres || 0,
-                                        commodityBaseAcres
-                                    );
+                                    countyObject.commodityBreakdown[commodity.commodityName].baseAcres +=
+                                        commodityBaseAcres;
                                     const commodityKey = `${commodity.commodityName}`;
                                     if (!countyObject[`${commodityKey} Current`]) {
                                         countyObject[`${commodityKey} Current`] = 0;
@@ -963,10 +959,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         const currentBaseAcres = Number(yearData.currentBaseAcres) || Number(yearData.baseAcres) || 0;
                         const proposedBaseAcres = Number(yearData.proposedBaseAcres) || Number(yearData.baseAcres) || 0;
                         const baseAcres = Number(yearData.baseAcres) || 0;
-
-                        aggCurrentBaseAcres = Math.max(aggCurrentBaseAcres, currentBaseAcres);
-                        aggProposedBaseAcres = Math.max(aggProposedBaseAcres, proposedBaseAcres);
-                        aggBaseAcres = Math.max(aggBaseAcres, baseAcres);
+                        aggCurrentBaseAcres += currentBaseAcres;
+                        aggProposedBaseAcres += proposedBaseAcres;
+                        aggBaseAcres += baseAcres;
                         if (showMeanValues && baseAcres > 0) {
                             let yearValue = 0;
                             if (viewMode === "difference") {
@@ -1001,8 +996,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     if (viewMode === "difference") {
                         const currentTotal = aggCurrentTotal || 0;
                         const proposedTotal = aggProposedTotal || 0;
-                        const actualCurrentBaseAcres = (row.currentBaseAcres as number) || totalBaseAcres;
-                        const actualProposedBaseAcres = (row.proposedBaseAcres as number) || totalBaseAcres;
+                        const actualCurrentBaseAcres = (row.currentBaseAcres as number) || aggCurrentBaseAcres;
+                        const actualProposedBaseAcres = (row.proposedBaseAcres as number) || aggProposedBaseAcres;
                         const currentRate = actualCurrentBaseAcres > 0 ? currentTotal / actualCurrentBaseAcres : 0;
                         const proposedRate = actualProposedBaseAcres > 0 ? proposedTotal / actualProposedBaseAcres : 0;
                         row.weightedAverageRate = proposedRate - currentRate;
@@ -1026,7 +1021,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             const commodityData = row.commodityBreakdown[commodity];
                             let commodityTotal = 0;
                             let commodityWeightedSum = 0;
-                            let maxCommodityBaseAcres = 0;
+                            let totalCommodityBaseAcres = 0;
                             let commodityYearCount = 0;
                             commodityData.total = 0;
                             if (viewMode === "difference" && commodityData.yearBreakdown) {
@@ -1041,7 +1036,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                         const proposedRate = proposedPayment / yearBaseAcres;
                                         const rateDiff = proposedRate - currentRate;
                                         commodityWeightedSum += rateDiff * yearBaseAcres;
-                                        maxCommodityBaseAcres = Math.max(maxCommodityBaseAcres, yearBaseAcres);
+                                        totalCommodityBaseAcres += yearBaseAcres;
                                         commodityYearCount += 1;
                                     }
                                 });
@@ -1055,19 +1050,21 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                     const yearBaseAcres = Number(yearData.baseAcres || 0);
                                     if (yearBaseAcres > 0) {
                                         commodityWeightedSum += yearValue;
-                                        maxCommodityBaseAcres = Math.max(maxCommodityBaseAcres, yearBaseAcres);
+                                        totalCommodityBaseAcres += yearBaseAcres;
                                         commodityYearCount += 1;
                                     }
                                 });
                             }
                             commodityData.total = commodityTotal;
-                            const adjustedCommodityBaseAcres =
-                                commodityYearCount > 1
-                                    ? maxCommodityBaseAcres * commodityYearCount
-                                    : maxCommodityBaseAcres;
-                            commodityData.baseAcres = adjustedCommodityBaseAcres;
-                            if (showMeanValues && adjustedCommodityBaseAcres > 0) {
-                                commodityData.paymentRate = commodityWeightedSum / adjustedCommodityBaseAcres;
+                            commodityData.baseAcres = commodityYearCount > 1 ? totalCommodityBaseAcres / commodityYearCount : totalCommodityBaseAcres;
+                            if (showMeanValues && totalCommodityBaseAcres > 0) {
+                                if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                    commodityData.paymentRate = row.weightedAverageRate || 0;
+                                } else if (viewMode === "difference") {
+                                    commodityData.paymentRate = commodityWeightedSum / totalCommodityBaseAcres;
+                                } else {
+                                    commodityData.paymentRate = commodityTotal / totalCommodityBaseAcres;
+                                }
                             }
                         }
                     });
@@ -1146,7 +1143,35 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     Object.keys(row.commodityBreakdown).forEach((commodity) => {
                         const commodityData = row.commodityBreakdown![commodity];
                         if (showMeanValues && commodityData.baseAcres > 0) {
-                            commodityData.paymentRate = commodityData.total / commodityData.baseAcres;
+                            if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                commodityData.paymentRate = row.weightedAverageRate || 0;
+                            } else if (yearRange.length > 1) {
+                                if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                    commodityData.paymentRate = row.weightedAverageRate || 0;
+                                } else {
+                                    let totalBaseAcres = 0;
+                                    if (commodityData.yearBreakdown) {
+                                        yearRange.forEach((year) => {
+                                            if (commodityData.yearBreakdown && commodityData.yearBreakdown[year]) {
+                                                totalBaseAcres += Number(commodityData.yearBreakdown[year].baseAcres || 0);
+                                            }
+                                        });
+                                    }
+                                    if (totalBaseAcres > 0) {
+                                        commodityData.paymentRate = commodityData.total / totalBaseAcres;
+                                    } else {
+                                        const fallbackTotalBaseAcres = commodityData.baseAcres * yearRange.length;
+                                        commodityData.paymentRate = commodityData.total / fallbackTotalBaseAcres;
+                                    }
+                                }
+                            } else {
+                                if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                    commodityData.paymentRate = row.weightedAverageRate || 0;
+                                } else {
+                                    const totalBaseAcresForRate = yearRange.length > 1 ? commodityData.baseAcres * yearRange.length : commodityData.baseAcres;
+                                    commodityData.paymentRate = commodityData.total / totalBaseAcresForRate;
+                                }
+                            }
                         }
                         if (isAggregatedYear && yearRange.length > 1) {
                             let aggregatedTotal = 0;
@@ -1171,9 +1196,13 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 });
                                 if (aggregatedTotal > 0) {
                                     commodityData.total = aggregatedTotal;
-                                    commodityData.baseAcres = baseAcresSum;
+                                    commodityData.baseAcres = baseAcresSum / yearRange.length;
                                     if (showMeanValues && baseAcresSum > 0) {
-                                        commodityData.paymentRate = aggregatedTotal / baseAcresSum;
+                                        if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                            commodityData.paymentRate = row.weightedAverageRate || 0;
+                                        } else {
+                                            commodityData.paymentRate = aggregatedTotal / baseAcresSum;
+                                        }
                                     }
                                 }
                             }
@@ -1216,23 +1245,24 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
             }
             return { ...row };
         });
-        processedData.forEach((row) => {
-            if (row.commodityBreakdown && selectedCommodities && !selectedCommodities.includes("All Program Crops")) {
-                selectedCommodities.forEach((commodity) => {
-                    if (
-                        row.commodityBreakdown &&
-                        row.commodityBreakdown[commodity] &&
-                        showMeanValues &&
-                        row.commodityBreakdown[commodity].baseAcres > 0 &&
-                        row.commodityBreakdown[commodity].total > 0
-                    ) {
-                        const total = row.commodityBreakdown[commodity].total;
-                        const baseAcres = row.commodityBreakdown[commodity].baseAcres;
-                        row.commodityBreakdown[commodity].paymentRate = total / baseAcres;
-                    }
-                });
-            }
-        });
+        if (!isAggregatedYear && yearRange.length > 1) {
+            processedData.forEach((row) => {
+                if (row.commodityBreakdown) {
+                    Object.keys(row.commodityBreakdown).forEach((commodity) => {
+                        const commodityData = row.commodityBreakdown![commodity];
+                        const originalTotalBaseAcres = commodityData.baseAcres * yearRange.length;
+                        commodityData.baseAcres = commodityData.baseAcres / yearRange.length;
+                        if (showMeanValues && originalTotalBaseAcres > 0) {
+                            if (selectedCommodities.length === 1 && !selectedCommodities.includes("All Program Crops")) {
+                                commodityData.paymentRate = row.weightedAverageRate || 0;
+                            } else {
+                                commodityData.paymentRate = commodityData.total / originalTotalBaseAcres;
+                            }
+                        }
+                    });
+                }
+            });
+        }
         return [...processedData];
     }, [
         getTableData,

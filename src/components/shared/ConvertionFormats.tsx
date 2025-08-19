@@ -104,11 +104,10 @@ export function ShortFormatPaymentRate(labelValue, isForDifference = false, useS
     return result;
 }
 
-export function formatPaymentRate(value: number, isForDifference = false): string {
+export function formatPaymentRate(value: number): string {
     if (value === 0 || value === null || value === undefined) return "";
-    const decimalPlaces = isForDifference ? 2 : 2;
     const roundedValue = Math.round(value * 100) / 100;
-    return roundedValue.toFixed(decimalPlaces);
+    return roundedValue.toFixed(2);
 }
 
 /**
