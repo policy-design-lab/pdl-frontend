@@ -4,9 +4,10 @@ import InfoIcon from "@mui/icons-material/Info";
 
 interface InfoTooltipProps {
     title: string;
+    compact?: boolean;
 }
 
-const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
+const InfoTooltip: React.FC<InfoTooltipProps> = ({ title, compact = false }) => {
     const paragraphs = title.split("\n\n");
     const formattedContent = (
         <>
@@ -27,25 +28,22 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title }) => {
     );
 
     return (
-        <Tooltip
-            title={formattedContent}
-            arrow
-            placement="top"
-            sx={{
-                maxWidth: 350,
-                fontSize: "0.8rem"
-            }}
-        >
+        <Tooltip title={formattedContent} arrow placement="top" sx={{ maxWidth: 350 }}>
             <IconButton
                 size="small"
                 sx={{
                     color: "rgba(47, 113, 100, 0.7)",
-                    padding: "2px",
                     marginLeft: "4px",
-                    verticalAlign: "middle"
+                    verticalAlign: "middle",
+                    width: "1.25rem !important",
+                    height: "1.25rem !important",
+                    minWidth: "1.25rem !important",
+                    minHeight: "1.25rem !important",
+                    fontSize: "1.25rem !important",
+                    ...(compact ? { padding: "0.01rem !important", marginBottom: "0.25rem !important" } : {})
                 }}
             >
-                <InfoIcon fontSize="small" />
+                <InfoIcon sx={{ fontSize: "1.25rem" }} />
             </IconButton>
         </Tooltip>
     );

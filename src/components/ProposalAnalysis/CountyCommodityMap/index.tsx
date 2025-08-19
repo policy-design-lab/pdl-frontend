@@ -33,7 +33,10 @@ const CountyCommodityMap = ({
     setYearAggregation,
     aggregationEnabled,
     setAggregationEnabled,
-    stateCodeToName
+    stateCodeToName,
+    enableScenarioSwitching = true,
+    currentPolicyTitle = "Current Policy",
+    proposedPolicyTitle = "Proposed Policy"
 }) => {
     const [content, setContent] = useState("");
     const [selectedYear, setSelectedYear] = useState(availableYears[availableYears.length - 1] || "2024");
@@ -42,7 +45,7 @@ const CountyCommodityMap = ({
     const [selectedPrograms, setSelectedPrograms] = useState(["All Programs"]);
     const [selectedState, setSelectedState] = useState("All States");
     const [viewMode, setViewMode] = useState("current");
-    const [proposedPolicyName, setProposedPolicyName] = useState("2025 Policy");
+    const [proposedPolicyName, setProposedPolicyName] = useState(proposedPolicyTitle);
     const [yearRange, setYearRange] = useState(() => {
         const numYears = Math.min(10, availableYears.length);
         return Array.from({ length: numYears }, (_, i) => i);
@@ -80,35 +83,28 @@ const CountyCommodityMap = ({
         if (!isLoadingEnabled()) {
             return processMapData(params);
         }
-
         setIsProcessing(true);
         setProcessingMessage("Processing map data...");
-
         return new Promise((resolve) => {
-            const chunks = [];
+            const chunks: string[][] = [];
             const years = params.aggregationEnabled ? params.selectedYears : [params.selectedYear];
             const configuredChunkSize = getChunkSize();
             const chunkSize = Math.max(1, Math.floor(years.length / configuredChunkSize));
-
             for (let i = 0; i < years.length; i += chunkSize) {
                 chunks.push(years.slice(i, i + chunkSize));
             }
-
-            let processedData = { counties: {}, thresholds: [], data: [] };
+            let processedData: any = { counties: {}, thresholds: [], data: [] };
             let chunkIndex = 0;
-
             const processChunk = () => {
                 if (chunkIndex >= chunks.length) {
                     setIsProcessing(false);
                     resolve(processedData);
                     return;
                 }
-
                 const config = getUIConfig();
                 if (config.loadingStates.enableProgressMessages) {
                     setProcessingMessage(`Processing data... (${chunkIndex + 1}/${chunks.length})`);
                 }
-
                 const processFunction = () => {
                     try {
                         const chunkParams = { ...params, selectedYears: chunks[chunkIndex] };
@@ -139,7 +135,6 @@ const CountyCommodityMap = ({
                     setTimeout(processFunction, 0);
                 }
             };
-
             processChunk();
         });
     }, []);
@@ -353,10 +348,17 @@ const CountyCommodityMap = ({
         setContent(newContent);
     };
     const handleSetViewMode = (newValue) => {
-        setViewMode(newValue);
-        setIsAtTop(false);
-        setShowTableButton(true);
+        if (enableScenarioSwitching) {
+            setViewMode(newValue);
+            setIsAtTop(false);
+            setShowTableButton(true);
+        }
     };
+    useEffect(() => {
+        if (!enableScenarioSwitching) {
+            setViewMode("current");
+        }
+    }, [enableScenarioSwitching]);
     const handleScrollToTable = () => {
         const tableElement = document.getElementById("county-commodity-table");
         if (tableElement) {
@@ -532,6 +534,7 @@ const CountyCommodityMap = ({
                             setIsAtTop(false);
                             setShowTableButton(true);
                         }}
+                        enableScenarioSwitching={enableScenarioSwitching}
                     />
                     <Box
                         sx={{
@@ -567,6 +570,7 @@ const CountyCommodityMap = ({
                         percentileMode={percentileMode}
                         onPercentileModeChange={handlePercentileModeChange}
                         selectedCommodities={selectedCommodities}
+                        currentPolicyTitle={currentPolicyTitle}
                     />
                 </Box>
             </Box>

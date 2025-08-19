@@ -7,16 +7,28 @@ interface PolicyComparisonSectionProps {
     currentData: any;
     proposedData: any;
     title?: string;
+    chartTitle?: string;
     subTitle?: string;
     tooltip?: string;
+    enableScenarioSwitching?: boolean;
+    currentLabel?: string;
+    proposedLabel?: string;
+    chartCurrentLabel?: string;
+    chartProposedLabel?: string;
 }
 
 export default function PolicyComparisonSection({
     currentData,
     proposedData,
     title = "Policy Impact Comparison",
+    chartTitle,
     subTitle,
-    tooltip
+    tooltip,
+    enableScenarioSwitching = true,
+    currentLabel = "Current Policy",
+    proposedLabel = "Proposed Policy",
+    chartCurrentLabel = "C",
+    chartProposedLabel = "P"
 }: PolicyComparisonSectionProps): JSX.Element {
     const chartData = {
         current: currentData,
@@ -61,15 +73,21 @@ export default function PolicyComparisonSection({
                     textAlign: "center"
                 }}
             >
-                Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed
-                breakdown. C = Current Policy, P = Proposed Policy.
+                {enableScenarioSwitching
+                    ? `Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown. ${chartCurrentLabel} = ${currentLabel}, ${chartProposedLabel} = ${proposedLabel}.`
+                    : `Click commodity checkboxes to filter view (at least one must be selected). Hover over bars for detailed breakdown. ${chartCurrentLabel} = ${currentLabel}, ${chartProposedLabel} = ${proposedLabel}.`}
             </Typography>
             <Box sx={{ width: "100%" }}>
                 <PolicyBarChart
+                    title={chartTitle}
                     data={chartData}
                     width={undefined}
                     height={450}
                     margin={{ top: 50, right: 80, bottom: 40, left: 80 }}
+                    currentLabel={currentLabel}
+                    proposedLabel={proposedLabel}
+                    chartCurrentLabel={chartCurrentLabel}
+                    chartProposedLabel={chartProposedLabel}
                 />
             </Box>
         </Box>
