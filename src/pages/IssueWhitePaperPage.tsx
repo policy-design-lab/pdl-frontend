@@ -4,10 +4,11 @@ import { useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../styles/issueWhitePaper.css";
 import Footer from "../components/Footer";
-import CardIFrame from "../components/issueWhitePaper/cardIframe";
 import WhatFarmsStand from "../files/issues/What_Farmers_Stand.pdf";
 import CardPaper from "../components/issueWhitePaper/cardPaper";
 import KnowTheScore from "../files/issues/Know_the_Score.pdf";
+import CardIFrameReconciliation from "../components/issueWhitePaper/cardIframe-reconcilation";
+import CardIFrame from "../components/issueWhitePaper/cardIframe";
 
 export default function IssueWhitePaperPage(): JSX.Element {
     const { id } = useParams();
@@ -162,16 +163,20 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             justifyContent="flex-start"
                                             sx={{ display: "flex", width: "100%" }}
                                         >
-                                            <CardIFrame
+                                            <CardIFrameReconciliation
                                                 id="issue-reviewing-projections-for-the-additional-conservation-investments-from-the-reconciliation-farm-bill"
                                                 title="ISSUE BRIEF: Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
                                                 iframeTitle="Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
                                                 date="August 2025"
-                                                description="<b>INCREASED POTENTIAL INVESTMENTS FOR CONSERVATION.</b> <br/>çIn the recently-enacted Reconciliation Farm Bill (P.L. 119-21), Congress increased total available funding for investing in conservation on America’s farms, including for working lands practices that increase resilience to extreme weather, improve soil health, and reduce greenhouse gas emissions—all while boosting farm productivity. During the next 10 federal fiscal years (FY2026 to FY2035), farmers will have access to an additional $18 billion in conservation funding. The interactive map provides initial projections of the potential allocations for those new conservation funds to each State."
+                                                description="<b>INCREASED POTENTIAL INVESTMENTS FOR CONSERVATION.</b> <p>In the recently-enacted Reconciliation Farm Bill (P.L. 119-21), Congress increased total available funding for investing in conservation on America's farms, including for working lands practices that increase resilience to extreme weather, improve soil health, and reduce greenhouse gas emissions—all while boosting farm productivity. During the next 10 federal fiscal years (FY2026 to FY2035), farmers will have access to an additional $18 billion in conservation funding. The interactive map provides initial projections of the potential allocations for those new conservation funds to each State.</p>"
                                                 iframeLink="https://datawrapper.dwcdn.net/HG50w/1/"
                                                 iframeWidth={dimensions.width}
                                                 iframeHeight={dimensions.height}
+                                                midDescription="<p>The projections are for the increased budget authority to four conservation programs: Environmental Quality Incentives Program (EQIP); Conservation Stewardship Program (CSP); Agricultural Conservation Easement Program ACEP); and the Regional Conservation Partnership Program (RCPP). The map provides projections for increases in each program and State based on historic allocations for each program and the increased budget authority in the statute.</p> <p> If maintained, these funds will support working lands practices that increase resilience to extreme weather, improve soil health, and reduce greenhouse gas emissions—all while boosting farm productivity. The increased level of conservation investment represents a trade-off, however. Congress eliminated the additional conservation investments made by the Inflation Reduction Act (and reviewed in earlier Issue Briefs), using those funds to increase budget authority for the programs over the longer term. In short, the short-term temporary gains in conservation spending were traded for longer-term funding that is expected to be permanent. For this trade-off to be good for farmers, however, the long-term funding must be protected and sustained. </p><p> The increases represent a total potential investment in conservation of over $56 billion in the next ten years and should continue long into the future so long as a future Congress does not cut the funding or eliminate programs. The map also includes each State's projected allocation of the ten-year total funding available. </p><b>CONSERVATION RESERVE PROGRAM AT RISK OF EXPIRATION.</b> <p>A potential risk to conservation remains. The Reconciliation Farm Bill did not include a reauthorization or extension of the Conservation Reserve Program (CRP), the nation's oldest and most prominent farm conservation program. Without further action by Congress, CRP will expire on September 30, 2025. The following chart illustrates what is at risk if CRP expires, including the acres that could come out of the program and the lost investment in terms of potential funding that could be lost.</p>"
+                                                midChart="https://datawrapper.dwcdn.net/GKiCP/2/"
+                                                midChartAspectRatio={0.6}
+                                                endDescription="CRP works through ten-year contracts, which will continue until they expire, but if Congress does not reauthorize the program those contracts expire. As contracts expire, the acres leave the program and could go back into production; acres leaving the program represent the loss of 10-years of rental payments, as well as the lost conservation investments previously made when those acres were enrolled. The consequences of CRP expiration could be extraordinary given experiences of the past, from the Dust Bowl to the erosion crisis of the 1970s and 1980s."
                                             />
                                             <CardIFrame
                                                 id="issue-projected-allocation-of-remaining-ira"
