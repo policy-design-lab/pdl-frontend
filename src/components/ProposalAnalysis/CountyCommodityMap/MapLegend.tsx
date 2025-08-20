@@ -19,6 +19,7 @@ interface MapLegendProps {
     percentileMode: string;
     onPercentileModeChange: (mode: string) => void;
     selectedCommodities?: string[];
+    currentPolicyTitle?: string;
 }
 
 const MapLegend: React.FC<MapLegendProps> = ({
@@ -34,7 +35,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
     showTooltips = true,
     percentileMode,
     onPercentileModeChange,
-    selectedCommodities = []
+    selectedCommodities = [],
+    currentPolicyTitle = "Current Policy"
 }) => {
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
 
@@ -78,7 +80,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
             metrics = showMeanValues ? "Mean Rate" : "Payment";
             title = `${metrics} Differences Between Current and Proposed Policy`;
         } else {
-            policyMode = viewMode === "current" ? "Current Policy" : `${proposedPolicyName}`;
+            policyMode = viewMode === "current" ? currentPolicyTitle : `${proposedPolicyName}`;
             metrics = showMeanValues ? "Payment Rate" : "Total Payments";
             title = `${policyMode}: ${metrics}`;
         }

@@ -8,7 +8,7 @@ import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import DrawLegend from "../shared/DrawLegend";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { CheckAddZero } from "../shared/ColorFunctions";
-import InfoTooltip from "../hModel/CountyCommodityMap/InfoTooltip";
+import InfoTooltip from "../ProposalAnalysis/CountyCommodityMap/InfoTooltip";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 

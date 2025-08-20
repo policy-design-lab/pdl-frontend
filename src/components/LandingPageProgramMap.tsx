@@ -49,7 +49,7 @@ const MapChart = (props) => {
     });
     switch (title) {
         case "All Programs":
-            searchKey = "18-22 All Programs Total";
+            searchKey = "2018-2022 All Programs Total";
             color1 = "#FFF9D8";
             color2 = "#E1F2C4";
             color3 = "#9FD9BA";
@@ -161,7 +161,7 @@ const MapChart = (props) => {
                                     if (title === "All Programs") {
                                         records = allPrograms.filter((s) => s.State === cur.id);
                                         records.forEach((record) => {
-                                            total += record["18-22 All Programs Total"];
+                                            total += record["2018-2022 All Programs Total"];
                                         });
                                     } else {
                                         records = summary.filter((s) => s.State === cur.id && s.Title === title);

@@ -5,7 +5,7 @@ import { ShortFormat, ShortFormatPaymentRate } from "./ConvertionFormats";
 import "../../styles/drawLegend.css";
 import { processRegionsInRange, TooltipData } from "./LegendTooltipUtils";
 import LegendTooltipContent from "./LegendTooltipContent";
-import { PercentileMode, getMapPercentiles } from "../hModel/CountyCommodityMap/percentileConfig";
+import { PercentileMode, getMapPercentiles } from "../ProposalAnalysis/CountyCommodityMap/percentileConfig";
 import { CheckAddZero } from "./ColorFunctions";
 
 interface CountyDataItem {

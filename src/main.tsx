@@ -41,10 +41,19 @@ export default function Main(): JSX.Element {
                 <Route path="/issues-whitepapers" element={<IssueWhitePaperPage />} />
                 <Route path="/issues-whitepapers/:id" element={<IssueWhitePaperPage />} />
                 <Route path="/policy-lab" element={<PolicyLabPage />} />
+                <Route path="/policy-lab/proof-of-concept" element={<PolicyLabPage />} />
+                <Route path="/policy-lab/proposal-analysis" element={<PolicyLabPage />} />
                 <Route path="/policy-lab/arc-plc-payments" element={<PolicyLabPage />} />
                 <Route path="/policy-lab/eqip-projection" element={<PolicyLabPage />} />
+                <Route path="/policy-lab/2025-reconciliation-farm-bill" element={<PolicyLabPage />} />
+                <Route path="/policy-lab/2025-reconciliation-farm-bill/title-i" element={<PolicyLabPage />} />
+                <Route
+                    path="/policy-lab/2025-reconciliation-farm-bill/title-i/arc-plc-payments"
+                    element={<PolicyLabPage />}
+                />
                 <Route path="/policy-lab/:tab" element={<PolicyLabPage />} />
                 <Route path="/policy-lab/:tab/:subtab" element={<PolicyLabPage />} />
+                <Route path="/policy-lab/:tab/:subtab/:subsubtab" element={<PolicyLabPage />} />
                 <Route path="/ira" element={<IRAPage />} />
             </Routes>
         </ScrollToTop>

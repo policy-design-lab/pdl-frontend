@@ -14,6 +14,7 @@ interface CardIFrameProps {
     iframeLink: string;
     iframeWidth: number;
     iframeHeight: number;
+    aspectRatio?: number;
 }
 
 export default function CardIFrame({
@@ -26,8 +27,14 @@ export default function CardIFrame({
     iframeTitle,
     iframeLink,
     iframeWidth,
-    iframeHeight
+    iframeHeight,
+    aspectRatio = 0.45
 }: CardIFrameProps): JSX.Element {
+    const [responsiveHeight, setResponsiveHeight] = React.useState(iframeHeight);
+    React.useEffect(() => {
+        const calculatedHeight = Math.floor(iframeWidth * aspectRatio);
+        setResponsiveHeight(calculatedHeight);
+    }, [iframeWidth, aspectRatio, iframeHeight]);
     const useStyles = makeStyles(() => ({
         downloadButton: {
             "&:hover": {
@@ -36,7 +43,6 @@ export default function CardIFrame({
         }
     }));
     const classes = useStyles();
-
     return (
         <Grid id={id} container className="paperCard" sx={{ display: "flex", justifyContent: "space-between" }}>
             <Grid container xs={12} sm={12}>
@@ -77,7 +83,7 @@ export default function CardIFrame({
                         )}
                     </Grid>
                 </Grid>
-                <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex" }}>
+                <Grid className="inCardContainer subItems" container xs={12} sm={12} sx={{ display: "flex", mt: 0 }}>
                     <Grid item xs={12} sm={6}>
                         <Typography variant="body1" component="div">
                             Author: {author}
@@ -106,7 +112,7 @@ export default function CardIFrame({
                     <iframe
                         title={iframeTitle}
                         width={iframeWidth}
-                        height={iframeHeight}
+                        height={responsiveHeight}
                         src={iframeLink}
                         style={{ border: "none" }}
                         allowFullScreen
