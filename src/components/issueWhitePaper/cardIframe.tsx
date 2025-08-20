@@ -98,7 +98,7 @@ export default function CardIFrame({
                 {description && (
                     <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
                         <Typography variant="body1" component="div">
-                            {description}
+                            <div dangerouslySetInnerHTML={{ __html: description }} />
                         </Typography>
                     </Grid>
                 )}

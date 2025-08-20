@@ -168,8 +168,8 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 iframeTitle="Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
                                                 date="August 2025"
-                                                description="The interactive map projects total potential conservation investment for each State from the new budget authority provided by Congress in the Reconciliation Farm Bill (P.L. 119-21) for four conservation programs: Environmental Quality Incentives Program (EQIP); Conservation Stewardship Program (CSP); Agricultural Conservation Easement Program ACEP); and the Regional Conservation Partnership Program (RCPP)."
-                                                iframeLink="https://datawrapper.dwcdn.net/QUD3Z/3/"
+                                                description="<b>INCREASED POTENTIAL INVESTMENTS FOR CONSERVATION.</b> <br/>çIn the recently-enacted Reconciliation Farm Bill (P.L. 119-21), Congress increased total available funding for investing in conservation on America’s farms, including for working lands practices that increase resilience to extreme weather, improve soil health, and reduce greenhouse gas emissions—all while boosting farm productivity. During the next 10 federal fiscal years (FY2026 to FY2035), farmers will have access to an additional $18 billion in conservation funding. The interactive map provides initial projections of the potential allocations for those new conservation funds to each State."
+                                                iframeLink="https://datawrapper.dwcdn.net/HG50w/1/"
                                                 iframeWidth={dimensions.width}
                                                 iframeHeight={dimensions.height}
                                             />
