@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.12.0] - 2025-08-20
 
 ### Added
 - Add the '2025 Reconciliation/Farm Bill' page with OBBBA model and Baseline data visualization [#401](https://github.com/policy-design-lab/pdl-frontend/issues/401)
@@ -402,6 +402,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.12.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.11.0...1.12.0
 [1.11.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.10.0...1.11.0
 [1.10.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.9.0...1.10.0
 [1.9.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.8.0...1.9.0
