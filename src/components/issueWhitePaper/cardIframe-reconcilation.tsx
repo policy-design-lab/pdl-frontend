@@ -15,9 +15,13 @@ interface CardIFrameProps {
     iframeWidth: number;
     iframeHeight: number;
     aspectRatio?: number;
+    midDescription?: string | undefined;
+    midChart?: string | undefined;
+    midChartAspectRatio?: number;
+    endDescription?: string | undefined;
 }
 
-export default function CardIFrame({
+export default function CardIFrameReconciliation({
     id,
     title,
     author,
@@ -28,13 +32,28 @@ export default function CardIFrame({
     iframeLink,
     iframeWidth,
     iframeHeight,
-    aspectRatio = 0.45
+    midDescription,
+    midChart,
+    midChartAspectRatio,
+    endDescription,
+    aspectRatio = 0.52
 }: CardIFrameProps): JSX.Element {
     const [responsiveHeight, setResponsiveHeight] = React.useState(iframeHeight);
+    const [midChartHeight, setMidChartHeight] = React.useState(iframeHeight);
+
     React.useEffect(() => {
         const calculatedHeight = Math.floor(iframeWidth * aspectRatio);
         setResponsiveHeight(calculatedHeight);
     }, [iframeWidth, aspectRatio, iframeHeight]);
+
+    React.useEffect(() => {
+        if (midChartAspectRatio) {
+            const calculatedMidHeight = Math.floor(iframeWidth * midChartAspectRatio);
+            setMidChartHeight(calculatedMidHeight);
+        } else {
+            setMidChartHeight(responsiveHeight);
+        }
+    }, [iframeWidth, midChartAspectRatio, responsiveHeight]);
     const useStyles = makeStyles(() => ({
         downloadButton: {
             "&:hover": {
@@ -96,7 +115,13 @@ export default function CardIFrame({
                     </Grid>
                 </Grid>
                 {description && (
-                    <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        className="inCardContainer subItems"
+                        sx={{ justifyContent: "space-between" }}
+                    >
                         <Typography variant="body1" component="div">
                             <div dangerouslySetInnerHTML={{ __html: description }} />
                         </Typography>
@@ -107,7 +132,7 @@ export default function CardIFrame({
                     container
                     xs={12}
                     sm={12}
-                    sx={{ display: "flex", justifyContent: "center" }}
+                    sx={{ display: "flex", justifyContent: "center", marginBottom: 0 }}
                 >
                     <iframe
                         title={iframeTitle}
@@ -118,6 +143,50 @@ export default function CardIFrame({
                         allowFullScreen
                     />
                 </Grid>
+                {midDescription && (
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        className="inCardContainer subItems"
+                        sx={{ justifyContent: "space-between", margin: "0rem auto 1rem auto" }}
+                    >
+                        <Typography variant="body1" component="div">
+                            <div dangerouslySetInnerHTML={{ __html: midDescription }} />
+                        </Typography>
+                    </Grid>
+                )}
+                {midChart && (
+                    <Grid
+                        className="inCardContainer subItems"
+                        container
+                        xs={12}
+                        sm={12}
+                        sx={{ display: "flex", justifyContent: "center", marginBottom: 0 }}
+                    >
+                        <iframe
+                            title={iframeTitle}
+                            width={iframeWidth}
+                            height={midChartHeight}
+                            src={midChart}
+                            style={{ border: "none" }}
+                            allowFullScreen
+                        />
+                    </Grid>
+                )}
+                {endDescription && (
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        className="inCardContainer subItems"
+                        sx={{ justifyContent: "space-between", margin: "0rem auto 1rem auto" }}
+                    >
+                        <Typography variant="body1" component="div">
+                            <div dangerouslySetInnerHTML={{ __html: endDescription }} />
+                        </Typography>
+                    </Grid>
+                )}
             </Grid>
         </Grid>
     );
