@@ -115,7 +115,13 @@ export default function CardIFrameReconciliation({
                     </Grid>
                 </Grid>
                 {description && (
-                    <Grid item xs={12} sm={12} className="inCardContainer subItems" sx={{ justifyContent: "center" }}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        className="inCardContainer subItems"
+                        sx={{ justifyContent: "space-between" }}
+                    >
                         <Typography variant="body1" component="div">
                             <div dangerouslySetInnerHTML={{ __html: description }} />
                         </Typography>
@@ -143,7 +149,7 @@ export default function CardIFrameReconciliation({
                         xs={12}
                         sm={12}
                         className="inCardContainer subItems"
-                        sx={{ justifyContent: "center", margin: "-5rem auto 1rem auto" }}
+                        sx={{ justifyContent: "space-between", margin: "0rem auto 1rem auto" }}
                     >
                         <Typography variant="body1" component="div">
                             <div dangerouslySetInnerHTML={{ __html: midDescription }} />
@@ -174,7 +180,7 @@ export default function CardIFrameReconciliation({
                         xs={12}
                         sm={12}
                         className="inCardContainer subItems"
-                        sx={{ justifyContent: "center", margin: "-5rem auto 1rem auto" }}
+                        sx={{ justifyContent: "space-between", margin: "0rem auto 1rem auto" }}
                     >
                         <Typography variant="body1" component="div">
                             <div dangerouslySetInnerHTML={{ __html: endDescription }} />

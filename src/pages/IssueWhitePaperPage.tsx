@@ -169,7 +169,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                                 iframeTitle="Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
                                                 author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
                                                 date="August 2025"
-                                                description="<b>INCREASED POTENTIAL INVESTMENTS FOR CONSERVATION.</b> <p>In the recently-enacted Reconciliation Farm Bill (P.L. 119-21), Congress increased total available funding for investing in conservation on America's farms, including for working lands practices that increase resilience to extreme weather, improve soil health, and reduce greenhouse gas emissions—all while boosting farm productivity. During the next 10 federal fiscal years (FY2026 to FY2035), farmers will have access to an additional $18 billion in conservation funding. The interactive map provides initial projections of the potential allocations for those new conservation funds to each State.</p>"
+                                                description="<p><b>INCREASED POTENTIAL INVESTMENTS FOR CONSERVATION.</b> <br/>In the recently-enacted Reconciliation Farm Bill (P.L. 119-21), Congress increased total available funding for investing in conservation on America's farms.</p>"
                                                 iframeLink="https://datawrapper.dwcdn.net/HG50w/1/"
                                                 iframeWidth={dimensions.width}
                                                 iframeHeight={dimensions.height}
