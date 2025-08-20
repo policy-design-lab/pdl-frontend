@@ -252,7 +252,6 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                         return;
                                     }
                                     let commodityCurrentTotal = 0;
-                                    const commodityProposedTotal = 0;
                                     let commodityBaseAcres = 0;
                                     commodity.programs.forEach((program) => {
                                         if (

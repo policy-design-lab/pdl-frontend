@@ -163,6 +163,17 @@ export default function IssueWhitePaperPage(): JSX.Element {
                                             sx={{ display: "flex", width: "100%" }}
                                         >
                                             <CardIFrame
+                                                id="issue-reviewing-projections-for-the-additional-conservation-investments-from-the-reconciliation-farm-bill"
+                                                title="ISSUE BRIEF: Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
+                                                iframeTitle="Reviewing Projections for the Additional Conservation Investments from the Reconciliation Farm Bill"
+                                                author="Professor Jonathan Coppess, Policy Design Lab, University of Illinois"
+                                                date="August 2025"
+                                                description="The interactive map projects total potential conservation investment for each State from the new budget authority provided by Congress in the Reconciliation Farm Bill (P.L. 119-21) for four conservation programs: Environmental Quality Incentives Program (EQIP); Conservation Stewardship Program (CSP); Agricultural Conservation Easement Program ACEP); and the Regional Conservation Partnership Program (RCPP)."
+                                                iframeLink="https://datawrapper.dwcdn.net/QUD3Z/3/"
+                                                iframeWidth={dimensions.width}
+                                                iframeHeight={dimensions.height}
+                                            />
+                                            <CardIFrame
                                                 id="issue-projected-allocation-of-remaining-ira"
                                                 title="ISSUE BRIEF: Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
                                                 iframeTitle="Projected Allocation of Remaining Inflation Reduction Act Conservation Investments"
