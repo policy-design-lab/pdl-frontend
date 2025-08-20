@@ -139,7 +139,7 @@ export default function LandingPageMapTab({
     let cropTotal = "";
     let snapTotal = "";
     if (cur !== undefined) {
-        allProgramTotal = cur["18-22 All Programs Total"];
+        allProgramTotal = cur["2018-2022 All Programs Total"];
         titleITotal = cur["Title I Total"];
         titleIITotal = cur["Title II Total"];
         cropTotal = cur["Crop Insurance Total"];
