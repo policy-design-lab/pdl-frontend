@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Fixed
+- Updated the new issue brief to the new version [#430](https://github.com/policy-design-lab/pdl-frontend/issues/430)
+
+### Changed
+- Add the '2025 Reconciliation/Farm Bill' page with OBBBA model and Baseline data visualization [#401](https://github.com/policy-design-lab/pdl-frontend/issues/401)
+
 ## [1.12.0] - 2025-08-20
 
 ### Added
