@@ -34,7 +34,7 @@ export default function CropInsurancePage(): JSX.Element {
     const [checked, setChecked] = React.useState("0");
     const mapColor = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
     const startYear = 2014;
-    const endYear = 2023;
+    const endYear = 2024;
 
     React.useEffect(() => {
         const allstates_url = `${config.apiUrl}/states`;
