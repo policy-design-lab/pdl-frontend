@@ -346,14 +346,15 @@ export default function ReconciliationSubPage({
                                             sx={{
                                                 fontSize: "1.1rem",
                                                 color: "#000000B2 !important",
-                                                lineHeight: 1.5
+                                                lineHeight: 1.5,
+                                                fontStyle: "italic"
                                             }}
                                         >
                                             Please note that for the 2025 crop year, Congress modified the statute after
                                             farmers enrolled base acres and thus included a provision that enrolled base
                                             will receive the higher of the ARC-CO or PLC payment for the 2025 crop year.
                                             The projections here DO NOT include the higher of the ARC or PLC payments,
-                                            projecting payments based on the enrollment data for the 2025 program year
+                                            projecting payments based on the enrollment data for the 2025 program year.
                                         </Typography>
                                     </Box>
                                 )}
