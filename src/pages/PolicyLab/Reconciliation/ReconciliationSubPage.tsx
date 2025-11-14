@@ -328,7 +328,6 @@ export default function ReconciliationSubPage({
                                                 color: "#000000B2 !important",
                                                 lineHeight: 1.5
                                             }}
-
                                         >
                                             Analysis on this page contains model projections of the revisions in the
                                             design of the Agriculture Risk Coverage (ARC) and Price Loss Coverage (PLC)
