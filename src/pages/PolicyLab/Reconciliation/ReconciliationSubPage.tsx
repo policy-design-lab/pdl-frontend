@@ -319,25 +319,44 @@ export default function ReconciliationSubPage({
                                     </Box>
                                 )}
                                 {showARCPLCPayments && (
-                                    <Typography
-                                        variant="body1"
-                                        sx={{
-                                            fontSize: "1.1rem",
-                                            color: "#000000B2 !important",
-                                            lineHeight: 1.5
-                                        }}
-                                    >
-                                        Analysis on this page contains model projections of the revisions in the design
-                                        of the Agriculture Risk Coverage (ARC) and Price Loss Coverage (PLC) programs as
-                                        authorized through 2031. The visualized analysis includes distribution of
-                                        program payment rates and total payments for the ten-year window generally used
-                                        in policy discussions. Users can select either program, individual crops, and
-                                        States, as well as download the data in CSV format. The visualization begins
-                                        with the total weighted average payment rates per base acre at the county level,
-                                        for all ten years and all major program crops: corn, soybeans, wheat, seed
-                                        cotton, sorghum, rice, and peanuts. Users can change the visualization to total
-                                        payments per county.
-                                    </Typography>
+                                    <Box>
+                                        <Typography
+                                            variant="body1"
+                                            paragraph
+                                            sx={{
+                                                fontSize: "1.1rem",
+                                                color: "#000000B2 !important",
+                                                lineHeight: 1.5
+                                            }}
+
+                                        >
+                                            Analysis on this page contains model projections of the revisions in the
+                                            design of the Agriculture Risk Coverage (ARC) and Price Loss Coverage (PLC)
+                                            programs as authorized through 2031. The visualized analysis includes
+                                            distribution of program payment rates and total payments for the ten-year
+                                            window generally used in policy discussions. Users can select either
+                                            program, individual crops, and States, as well as download the data in CSV
+                                            format. The visualization begins with the total weighted average payment
+                                            rates per base acre at the county level, for all ten years and all major
+                                            program crops: corn, soybeans, wheat, seed cotton, sorghum, rice, and
+                                            peanuts. Users can change the visualization to total payments per county.
+                                        </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            paragraph
+                                            sx={{
+                                                fontSize: "1.1rem",
+                                                color: "#000000B2 !important",
+                                                lineHeight: 1.5
+                                            }}
+                                        >
+                                            Please note that for the 2025 crop year, Congress modified the statute after
+                                            farmers enrolled base acres and thus included a provision that enrolled base
+                                            will receive the higher of the ARC-CO or PLC payment for the 2025 crop year.
+                                            The projections here DO NOT include the higher of the ARC or PLC payments,
+                                            projecting payments based on the enrollment data for the 2025 program year
+                                        </Typography>
+                                    </Box>
                                 )}
                             </Box>
                             {shouldShowLoading() ? (
