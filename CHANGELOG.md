@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Added disclaimer text to the Reconciliation/Farm Bill page [#436](https://github.com/policy-design-lab/pdl-frontend/issues/436)
+
 ### Changed
 - Update Crop Insurance data years to 2014-2024 [#434](https://github.com/policy-design-lab/pdl-frontend/issues/434)
 
