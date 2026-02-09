@@ -10,7 +10,7 @@ export const CheckAddZero = (thresholds: number[]): number[] => {
             }
         }
     }
-    return thresholds.slice(1, thresholds.length - 2);
+    return thresholds.slice(1, thresholds.length - 1);
 };
 
 const formatNumber = (value: number): string => {
