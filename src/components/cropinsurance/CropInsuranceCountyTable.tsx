@@ -3,14 +3,9 @@ import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import {
-    compareWithNumber,
-    compareWithAlphabetic,
-    compareWithDollarSign,
-    compareWithPercentSign
-} from "../shared/TableCompareFunctions";
+import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { formatCurrency, ShortFormat } from "../shared/ConvertionFormats";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 interface CropInsuranceCountyTableProps {
     tableTitle: string;
@@ -33,7 +28,18 @@ function CropInsuranceCountyTable({
     selectedState,
     onStateChange
 }: CropInsuranceCountyTableProps): JSX.Element {
-    const resultData: any[] = [];
+    const countyRows = React.useMemo(() => {
+        if (!countyData || !countyData[year]) {
+            return [];
+        }
+        if (selectedState === "All States") {
+            return countyData[year];
+        }
+        return countyData[year].filter((county: any) => {
+            const stateName = stateCodes[county.state] || county.state;
+            return stateName === selectedState;
+        });
+    }, [countyData, year, selectedState, stateCodes]);
 
     const availableStates = React.useMemo(() => {
         const states = new Set<string>();
@@ -47,57 +53,61 @@ function CropInsuranceCountyTable({
         return Array.from(states).sort();
     }, [countyData, year, stateCodes]);
 
-    if (countyData && countyData[year]) {
-        countyData[year].forEach((county: any) => {
-            const stateName = stateCodes[county.state] || county.state;
-            if (selectedState !== "All States" && stateName !== selectedState) {
-                return;
+    const resultData = React.useMemo(
+        () =>
+            countyRows.map((county: any) => {
+                const stateName = stateCodes[county.state] || county.state;
+                const newRecord: any = {
+                    state: stateName,
+                    county: county.countyName
+                };
+
+                attributes.forEach((attribute) => {
+                    const attributeData = county[attribute];
+                    if (attribute === "lossRatio") {
+                        const ratioValue = Number(attributeData);
+                        newRecord[attribute] = Number.isFinite(ratioValue)
+                            ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                            : "0";
+                    } else if (
+                        attribute === "averageInsuredAreaInAcres" ||
+                        attribute === "totalPoliciesEarningPremium"
+                    ) {
+                        newRecord[attribute] = formatCurrency(attributeData, 0);
+                    } else {
+                        newRecord[attribute] = formatCurrency(attributeData, 0);
+                    }
+                });
+
+                return newRecord;
+            }),
+        [countyRows, attributes, stateCodes]
+    );
+
+    const columns = React.useMemo(() => {
+        const columnPrep: any[] = [];
+        columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
+        columnPrep.push({ Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic });
+        attributes.forEach((attribute) => {
+            let sortMethod = compareWithDollarSign;
+            if (attribute === "lossRatio") sortMethod = compareWithNumber;
+            if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") {
+                sortMethod = compareWithNumber;
             }
-
-            const newRecord: any = {
-                state: stateName,
-                county: county.countyName
-            };
-
-            attributes.forEach((attribute) => {
-                const attributeData = county[attribute];
-                if (attribute === "lossRatio") {
-                    newRecord[attribute] = `${ShortFormat((Number(attributeData) * 100).toString(), undefined, 1)}%`;
-                } else if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") {
-                    newRecord[attribute] = formatCurrency(attributeData, 0);
-                } else {
-                    newRecord[attribute] = formatCurrency(attributeData, 0);
-                }
+            columnPrep.push({
+                Header: attribute
+                    .replace(/([A-Z])/g, " $1")
+                    .trim()
+                    .split(" ")
+                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")
+                    .toUpperCase(),
+                accessor: attribute,
+                sortType: sortMethod
             });
-
-            resultData.push(newRecord);
         });
-    }
-
-    const columnPrep: any[] = [];
-    columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-    columnPrep.push({ Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic });
-
-    attributes.forEach((attribute) => {
-        let sortMethod = compareWithDollarSign;
-        if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
-        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
-            sortMethod = compareWithNumber;
-        const json = {
-            Header: attribute
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-                .split(" ")
-                .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-                .toUpperCase(),
-            accessor: attribute,
-            sortType: sortMethod
-        };
-        columnPrep.push(json);
-    });
-
-    const columns = React.useMemo(() => columnPrep, [attributes]);
+        return columnPrep;
+    }, [attributes]);
 
     const Styles = styled.div`
         padding: 0;

@@ -3,14 +3,9 @@ import styled from "styled-components";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
-import {
-    compareWithNumber,
-    compareWithAlphabetic,
-    compareWithDollarSign,
-    compareWithPercentSign
-} from "../shared/TableCompareFunctions";
+import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { formatCurrency, ShortFormat } from "../shared/ConvertionFormats";
+import { formatCurrency } from "../shared/ConvertionFormats";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -37,7 +32,10 @@ function CropInsuranceProgramTable({
         const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
         Object.entries(hashmap[s]).forEach(([attr, value]) => {
             if (attr === "lossRatio") {
-                newRecord[attr] = `${ShortFormat((Number(value) * 100).toString(), undefined, 1)}%`;
+                const ratioValue = Number(value);
+                newRecord[attr] = Number.isFinite(ratioValue)
+                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                    : "0";
             } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
                 newRecord[attr] = formatCurrency(value, 0);
             } else {
@@ -50,7 +48,7 @@ function CropInsuranceProgramTable({
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     attributes.forEach((attribute) => {
         let sortMethod = compareWithDollarSign;
-        if (attribute === "lossRatio") sortMethod = compareWithPercentSign;
+        if (attribute === "lossRatio") sortMethod = compareWithNumber;
         if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
             sortMethod = compareWithNumber;
         const json = {

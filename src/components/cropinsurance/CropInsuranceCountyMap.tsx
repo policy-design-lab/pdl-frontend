@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import ReactTooltip from "react-tooltip";
@@ -13,6 +13,15 @@ import { getCountyPercentiles } from "../../utils/countyLegendConfig";
 
 const geoCountyUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
 const geoStateUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5]; // PI requests the loss ratio to have specific thresholds that are different from the value-based attributes
+
+const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
+    mapColor[4],
+    mapColor[3],
+    "#E8C9A3",
+    "#B65700",
+    "#662500"
+];
 
 const stateViewSettings = {
     "Alabama": { center: [-86.8, 32.7], zoom: 5 },
@@ -122,6 +131,11 @@ const stateFipsToName: Record<string, string> = {
     "56": "Wyoming"
 };
 
+const stateNameToFips: Record<string, string> = Object.entries(stateFipsToName).reduce((acc, [fips, name]) => {
+    acc[name] = fips;
+    return acc;
+}, {} as Record<string, string>);
+
 const getValueFromAttrDollar = (record: any, attribute: string): string => {
     let ans = "";
     Object.keys(record).forEach((key) => {
@@ -132,6 +146,27 @@ const getValueFromAttrDollar = (record: any, attribute: string): string => {
         }
     });
     return ans;
+};
+
+const countyAttributeKeyMap: Record<string, string> = {
+    totalNetFarmerBenefit: "totalNetFarmerBenefitInDollars",
+    totalIndemnities: "totalIndemnitiesInDollars",
+    totalPremium: "totalPremiumInDollars",
+    totalPremiumSubsidy: "totalPremiumSubsidyInDollars",
+    totalFarmerPaidPremium: "totalFarmerPaidPremiumInDollars",
+    averageLiabilities: "averageLiabilitiesInDollars",
+    averageInsuredAreaInAcres: "averageInsuredAreaInAcres",
+    totalPoliciesEarningPremium: "totalPoliciesEarningPremium",
+    lossRatio: "lossRatio"
+};
+
+const resolveCountyAttributeKey = (record: any, attribute: string): string => {
+    const mappedKey = countyAttributeKeyMap[attribute];
+    if (mappedKey && Object.prototype.hasOwnProperty.call(record, mappedKey)) {
+        return mappedKey;
+    }
+    const matchedKey = getValueFromAttrDollar(record, attribute);
+    return matchedKey !== "" ? matchedKey : attribute;
 };
 
 interface CropInsuranceCountyMapProps {
@@ -145,6 +180,150 @@ interface CropInsuranceCountyMapProps {
     onStateChange: (state: string) => void;
 }
 
+interface CountyGeographyLayerProps {
+    geographies: any[];
+    selectedStateFips: string | null;
+    getCountyFillColor: (countyFIPS: string) => string;
+    onMouseEnter: (geo: any, countyFIPS: string) => void;
+    onMouseLeave: () => void;
+    onGeographiesReady: () => void;
+}
+
+const CountyGeographyLayerComponent = ({
+    geographies,
+    selectedStateFips,
+    getCountyFillColor,
+    onMouseEnter,
+    onMouseLeave,
+    onGeographiesReady
+}: CountyGeographyLayerProps): JSX.Element => {
+    const readyNotifiedRef = useRef(false);
+
+    useEffect(() => {
+        if (!readyNotifiedRef.current && geographies.length > 0) {
+            readyNotifiedRef.current = true;
+            onGeographiesReady();
+        }
+    }, [geographies.length, onGeographiesReady]);
+
+    const visibleGeographies = useMemo(
+        () =>
+            selectedStateFips === null
+                ? geographies
+                : geographies.filter((geo) => String(geo.id || "").startsWith(selectedStateFips)),
+        [geographies, selectedStateFips]
+    );
+
+    return (
+        <>
+            {visibleGeographies.map((geo) => {
+                const countyFIPS = String(geo.id || "");
+                if (!countyFIPS) return null;
+                return (
+                    <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onMouseEnter={() => onMouseEnter(geo, countyFIPS)}
+                        onMouseLeave={onMouseLeave}
+                        fill={getCountyFillColor(countyFIPS)}
+                        stroke="#FFFFFF"
+                        strokeWidth={0.15}
+                        style={{
+                            default: {
+                                outline: "none"
+                            },
+                            hover: {
+                                stroke: "#232323",
+                                strokeWidth: 0.5,
+                                outline: "none"
+                            },
+                            pressed: { outline: "none" }
+                        }}
+                    />
+                );
+            })}
+        </>
+    );
+};
+
+const CountyGeographyLayer = React.memo(CountyGeographyLayerComponent);
+
+interface StateGeographyLayerProps {
+    geographies: any[];
+    selectedState: string;
+    stateAbbrevByVal: Record<string, string>;
+    onGeographiesReady: () => void;
+}
+
+const StateGeographyLayerComponent = ({
+    geographies,
+    selectedState,
+    stateAbbrevByVal,
+    onGeographiesReady
+}: StateGeographyLayerProps): JSX.Element => {
+    const readyNotifiedRef = useRef(false);
+
+    useEffect(() => {
+        if (!readyNotifiedRef.current && geographies.length > 0) {
+            readyNotifiedRef.current = true;
+            onGeographiesReady();
+        }
+    }, [geographies.length, onGeographiesReady]);
+
+    return (
+        <>
+            {geographies.map((geo) => (
+                <Geography
+                    key={`state-${geo.rsmKey}`}
+                    geography={geo}
+                    fill="none"
+                    stroke="#000"
+                    strokeWidth={0.5}
+                    style={{
+                        default: { outline: "none", pointerEvents: "none" },
+                        hover: { outline: "none", pointerEvents: "none" },
+                        pressed: { outline: "none", pointerEvents: "none" }
+                    }}
+                />
+            ))}
+            {selectedState === "All States" &&
+                geographies.map((geo) => {
+                    const centroid = geoCentroid(geo);
+                    const stateAbbrev = stateAbbrevByVal[String(geo.id)];
+                    if (!stateAbbrev || centroid[0] < -160 || centroid[0] > -67) {
+                        return null;
+                    }
+                    return (
+                        <g key={`${geo.rsmKey}-name`}>
+                            <Marker coordinates={centroid}>
+                                <rect
+                                    x="-10"
+                                    y="-6"
+                                    width="20"
+                                    height="14"
+                                    fill="white"
+                                    opacity="0.7"
+                                    style={{ pointerEvents: "none" }}
+                                />
+                                <text
+                                    y="2"
+                                    fontSize={12}
+                                    textAnchor="middle"
+                                    fill="#555"
+                                    style={{ fontWeight: "bold", pointerEvents: "none" }}
+                                >
+                                    {stateAbbrev}
+                                </text>
+                            </Marker>
+                        </g>
+                    );
+                })}
+        </>
+    );
+};
+
+const StateGeographyLayer = React.memo(StateGeographyLayerComponent);
+
 const CropInsuranceCountyMap = ({
     attribute,
     year,
@@ -156,37 +335,50 @@ const CropInsuranceCountyMap = ({
     onStateChange
 }: CropInsuranceCountyMapProps): JSX.Element => {
     const classes = useStyles();
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState<React.ReactNode>("");
     const [position, setPosition] = useState({ coordinates: [-95, 40], zoom: 1 });
     const [userZoomLevel, setUserZoomLevel] = useState(1);
+    const [countyTopoReady, setCountyTopoReady] = useState(false);
+    const [stateTopoReady, setStateTopoReady] = useState(false);
+    const [mapDrawSettled, setMapDrawSettled] = useState(false);
+    const [interactionReady, setInteractionReady] = useState(false);
     const mountedRef = useRef(true);
+    const hoveredCountyRef = useRef<string | null>(null);
+    const tooltipFrameRef = useRef<number | null>(null);
+    const pendingTooltipContentRef = useRef<React.ReactNode>("");
     const defaultCenter: [number, number] = [-95, 40];
     const mapBounds = { minLon: -170, maxLon: -60, minLat: 15, maxLat: 75 };
 
-    const countyDataMap = React.useMemo(() => {
+    const { countyDataMap, countyValueMap, quantizeArray, zeroPoints } = useMemo(() => {
         const map: Record<string, any> = {};
-        if (countyPerformance && countyPerformance[year]) {
-            countyPerformance[year].forEach((county: any) => {
-                map[county.countyFips] = county;
-            });
-        }
-        return map;
-    }, [countyPerformance, year]);
-
-    const { quantizeArray, zeroPoints } = useMemo(() => {
+        const valueMap: Record<string, number> = {};
         const qArray: number[] = [];
         const zPoints: string[] = [];
         if (countyPerformance && countyPerformance[year]) {
-            countyPerformance[year].forEach((value: any) => {
-                let key = getValueFromAttrDollar(value, attribute);
-                key = key !== "" ? key : attribute;
-                const val = value[key] || 0;
-                qArray.push(val);
-                if (val === 0) zPoints.push(value.countyFips);
+            countyPerformance[year].forEach((county: any) => {
+                const stateName = stateCodes[county.state] || county.state;
+                if (selectedState !== "All States" && stateName !== selectedState) {
+                    return;
+                }
+                const countyFips = String(county.countyFips || "");
+                if (!countyFips) {
+                    return;
+                }
+                map[countyFips] = county;
+                const key = resolveCountyAttributeKey(county, attribute);
+                const value = Number(county[key]);
+                if (!Number.isFinite(value)) {
+                    return;
+                }
+                valueMap[countyFips] = value;
+                qArray.push(value);
+                if (value === 0) {
+                    zPoints.push(countyFips);
+                }
             });
         }
-        return { quantizeArray: qArray, zeroPoints: zPoints };
-    }, [countyPerformance, year, attribute]);
+        return { countyDataMap: map, countyValueMap: valueMap, quantizeArray: qArray, zeroPoints: zPoints };
+    }, [countyPerformance, year, attribute, selectedState, stateCodes]);
 
     const countyPercentiles = getCountyPercentiles(attribute);
 
@@ -227,18 +419,115 @@ const CropInsuranceCountyMap = ({
         return thresholds;
     }, [quantizeArray, countyPercentiles]);
 
+    const isLossRatio = attribute === "lossRatio";
+    const lossRatioColors = getLossRatioColors(mapColor);
     const customScale = quantileScale || [0, 1000000, 5000000, 10000000];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const colorScale = d3.scaleThreshold(
+        isLossRatio ? lossRatioThresholds : customScale,
+        isLossRatio ? lossRatioColors : mapColor
+    );
+    const mapIsReady = countyTopoReady && stateTopoReady && mapDrawSettled;
+    const selectedStateFips = selectedState === "All States" ? null : stateNameToFips[selectedState] || null;
+
+    const stateAbbrevByVal = useMemo(() => {
+        const mapped: Record<string, string> = {};
+        allStates.forEach((state: any) => {
+            if (state?.val !== undefined && state?.id) {
+                mapped[String(state.val)] = state.id;
+            }
+        });
+        return mapped;
+    }, [allStates]);
 
     let attr = 0;
     if (attribute === "lossRatio") attr = 1;
     if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") attr = 2;
 
     useEffect(() => {
+        fetch(geoCountyUrl).catch(() => undefined);
+        fetch(geoStateUrl).catch(() => undefined);
         return () => {
             mountedRef.current = false;
+            if (tooltipFrameRef.current !== null) {
+                window.cancelAnimationFrame(tooltipFrameRef.current);
+            }
         };
     }, []);
+
+    useEffect(() => {
+        setMapDrawSettled(false);
+        setInteractionReady(false);
+        const timer = setTimeout(() => {
+            if (mountedRef.current) {
+                setMapDrawSettled(true);
+            }
+        }, 220);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [selectedState, attribute, year]);
+
+    useEffect(() => {
+        if (!mapIsReady) {
+            setInteractionReady(false);
+            return undefined;
+        }
+
+        let rafA: number | null = null;
+        let rafB: number | null = null;
+        let idleId: number | null = null;
+        let fallbackTimeoutId: number | null = null;
+        let finished = false;
+
+        const finish = () => {
+            if (finished || !mountedRef.current) return;
+            finished = true;
+            if (fallbackTimeoutId !== null) {
+                clearTimeout(fallbackTimeoutId);
+            }
+            setInteractionReady(true);
+        };
+
+        fallbackTimeoutId = window.setTimeout(finish, 1200);
+        const scheduleViaRaf = () => {
+            rafA = window.requestAnimationFrame(() => {
+                rafB = window.requestAnimationFrame(finish);
+            });
+        };
+        const windowWithIdle = window as Window & {
+            requestIdleCallback?: (cb: IdleRequestCallback, options?: IdleRequestOptions) => number;
+            cancelIdleCallback?: (handle: number) => void;
+        };
+
+        // Fallback to double requestAnimationFrame for a similar effect if requestIdleCallback is not supported.
+        if (typeof windowWithIdle.requestIdleCallback === "function") {
+            idleId = windowWithIdle.requestIdleCallback(
+                () => {
+                    scheduleViaRaf();
+                },
+                { timeout: 900 }
+            );
+        } else {
+            scheduleViaRaf();
+        }
+
+        // Noticed that in some cases the pop-up of the county map still need extra time to make sure the mouse transition is smooth without getting stuck,
+        // So extra loading buffer in case the county map is still not fully interactive after the above timers
+        return () => {
+            if (rafA !== null) {
+                window.cancelAnimationFrame(rafA);
+            }
+            if (rafB !== null) {
+                window.cancelAnimationFrame(rafB);
+            }
+            if (idleId !== null && typeof windowWithIdle.cancelIdleCallback === "function") {
+                windowWithIdle.cancelIdleCallback(idleId);
+            }
+            if (fallbackTimeoutId !== null) {
+                clearTimeout(fallbackTimeoutId);
+            }
+        };
+    }, [mapIsReady]);
 
     const getBasePosition = useCallback(
         (zoomLevel: number) => {
@@ -257,6 +546,29 @@ const CropInsuranceCountyMap = ({
     useEffect(() => {
         setPosition(getBasePosition(userZoomLevel));
     }, [getBasePosition, userZoomLevel]);
+
+    const handleCountyTopoReady = useCallback(() => {
+        if (mountedRef.current) {
+            setCountyTopoReady(true);
+        }
+    }, []);
+
+    const handleStateTopoReady = useCallback(() => {
+        if (mountedRef.current) {
+            setStateTopoReady(true);
+        }
+    }, []);
+
+    const scheduleTooltipContent = useCallback((nextContent: React.ReactNode) => {
+        pendingTooltipContentRef.current = nextContent;
+        if (tooltipFrameRef.current !== null) {
+            return;
+        }
+        tooltipFrameRef.current = window.requestAnimationFrame(() => {
+            tooltipFrameRef.current = null;
+            setContent(pendingTooltipContentRef.current);
+        });
+    }, []);
 
     const handleZoomIn = useCallback(() => {
         if (!mountedRef.current) return;
@@ -309,19 +621,21 @@ const CropInsuranceCountyMap = ({
     );
 
     const getCountyFillColor = useCallback(
-        (countyData: any) => {
-            if (!countyData) return "#EEE";
-            let key = getValueFromAttrDollar(countyData, attribute);
-            key = key !== "" ? key : attribute;
-            const value = countyData[key] || 0;
+        (countyFIPS: string) => {
+            const value = countyValueMap[countyFIPS];
+            if (value === undefined) return "#EEE";
             if (value === 0) return "#CCC";
             return colorScale(value);
         },
-        [attribute, colorScale]
+        [countyValueMap, colorScale]
     );
 
     const handleMouseEnter = useCallback(
         (geo: any, countyFIPS: string) => {
+            if (hoveredCountyRef.current === countyFIPS) {
+                return;
+            }
+            hoveredCountyRef.current = countyFIPS;
             const countyData = countyDataMap[countyFIPS];
             if (!countyData) {
                 const tooltipContent = (
@@ -339,13 +653,11 @@ const CropInsuranceCountyMap = ({
                         </table>
                     </div>
                 );
-                setContent(tooltipContent as any);
+                scheduleTooltipContent(tooltipContent);
                 return;
             }
 
-            let key = getValueFromAttrDollar(countyData, attribute);
-            key = key !== "" ? key : attribute;
-            const value = countyData[key] || 0;
+            const value = countyValueMap[countyFIPS] || 0;
             const stateName = stateCodes[countyData.state] || countyData.state;
 
             const tooltipContent = (
@@ -360,7 +672,7 @@ const CropInsuranceCountyMap = ({
                             <tbody>
                                 <tr>
                                     <td className={classes.tooltip_topcell_left}>
-                                        {Number(value * 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}%
+                                        {Number(value).toLocaleString(undefined, { maximumFractionDigits: 3 })}
                                     </td>
                                     <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                 </tr>
@@ -385,14 +697,15 @@ const CropInsuranceCountyMap = ({
                     )}
                 </div>
             );
-            setContent(tooltipContent as any);
+            scheduleTooltipContent(tooltipContent);
         },
-        [countyDataMap, attribute, stateCodes, classes, attr]
+        [countyDataMap, countyValueMap, stateCodes, classes, attr, scheduleTooltipContent]
     );
 
     const handleMouseLeave = useCallback(() => {
-        setContent("");
-    }, []);
+        hoveredCountyRef.current = null;
+        scheduleTooltipContent("");
+    }, [scheduleTooltipContent]);
 
     const titleElement = (): JSX.Element => {
         const displayAttribute = attribute
@@ -433,13 +746,12 @@ const CropInsuranceCountyMap = ({
                 {attribute === "lossRatio" ? (
                     <DrawLegend
                         isRatio
+                        ratioAsPercent={false}
                         colorScale={colorScale}
                         title={titleElement()}
                         programData={quantizeArray}
-                        prepColor={mapColor}
+                        prepColor={lossRatioColors}
                         emptyState={zeroPoints}
-                        useQuantileSpread
-                        quantilePercentiles={countyPercentiles}
                     />
                 ) : (
                     <div>
@@ -498,7 +810,34 @@ const CropInsuranceCountyMap = ({
                         </Button>
                     </Box>
                 )}
-                <div data-tip="" data-for="county-map-tooltip">
+                {!interactionReady && (
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            zIndex: 1600,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 1.5
+                        }}
+                    >
+                        <CircularProgress size={36} />
+                        <Typography variant="body2" sx={{ color: "#2F7164" }}>
+                            Rendering county map...
+                        </Typography>
+                    </Box>
+                )}
+                <div
+                    data-tip=""
+                    data-for="county-map-tooltip"
+                    style={{ pointerEvents: interactionReady ? "auto" : "none" }}
+                >
                     <ComposableMap projection="geoAlbersUsa">
                         <ZoomableGroup
                             zoom={position.zoom}
@@ -509,105 +848,26 @@ const CropInsuranceCountyMap = ({
                         >
                             <Geographies geography={geoCountyUrl}>
                                 {({ geographies }) => (
-                                    <>
-                                        {geographies.map((geo) => {
-                                            const countyFIPS = geo.id;
-                                            if (!countyFIPS) return null;
-                                            const stateFips = countyFIPS.substring(0, 2);
-                                            const stateName = stateFipsToName[stateFips];
-
-                                            if (selectedState !== "All States" && stateName !== selectedState) {
-                                                return null;
-                                            }
-
-                                            const countyData = countyDataMap[countyFIPS];
-                                            const fillColor = getCountyFillColor(countyData);
-
-                                            return (
-                                                <Geography
-                                                    key={geo.rsmKey}
-                                                    geography={geo}
-                                                    onMouseEnter={() => handleMouseEnter(geo, countyFIPS)}
-                                                    onMouseLeave={handleMouseLeave}
-                                                    fill={fillColor}
-                                                    stroke="#FFFFFF"
-                                                    strokeWidth={0.15}
-                                                    style={{
-                                                        default: {
-                                                            outline: "none",
-                                                            transition:
-                                                                "fill 160ms ease, stroke 160ms ease, stroke-width 160ms ease"
-                                                        },
-                                                        hover: {
-                                                            stroke: "#232323",
-                                                            strokeWidth: 0.5,
-                                                            outline: "none",
-                                                            transition:
-                                                                "fill 160ms ease, stroke 160ms ease, stroke-width 160ms ease"
-                                                        },
-                                                        pressed: { outline: "none" }
-                                                    }}
-                                                />
-                                            );
-                                        })}
-                                    </>
+                                    <CountyGeographyLayer
+                                        geographies={geographies}
+                                        selectedStateFips={selectedStateFips}
+                                        getCountyFillColor={getCountyFillColor}
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={handleMouseLeave}
+                                        onGeographiesReady={handleCountyTopoReady}
+                                    />
                                 )}
                             </Geographies>
                             <Geographies geography={geoStateUrl}>
-                                {({ geographies: stateGeographies }) =>
-                                    stateGeographies.map((geo) => (
-                                        <Geography
-                                            key={`state-${geo.rsmKey}`}
-                                            geography={geo}
-                                            fill="none"
-                                            stroke="#000"
-                                            strokeWidth={0.5}
-                                            style={{
-                                                default: { outline: "none", pointerEvents: "none" },
-                                                hover: { outline: "none", pointerEvents: "none" },
-                                                pressed: { outline: "none", pointerEvents: "none" }
-                                            }}
-                                        />
-                                    ))
-                                }
+                                {({ geographies }) => (
+                                    <StateGeographyLayer
+                                        geographies={geographies}
+                                        selectedState={selectedState}
+                                        stateAbbrevByVal={stateAbbrevByVal}
+                                        onGeographiesReady={handleStateTopoReady}
+                                    />
+                                )}
                             </Geographies>
-                            {selectedState === "All States" && (
-                                <Geographies geography={geoStateUrl}>
-                                    {({ geographies: labelGeographies }) =>
-                                        labelGeographies.map((geo) => {
-                                            const centroid = geoCentroid(geo);
-                                            const cur = allStates.find((s) => s.val === geo.id);
-                                            if (!cur || centroid[0] < -160 || centroid[0] > -67) {
-                                                return null;
-                                            }
-                                            return (
-                                                <g key={`${geo.rsmKey}-name`}>
-                                                    <Marker coordinates={centroid}>
-                                                        <rect
-                                                            x="-10"
-                                                            y="-6"
-                                                            width="20"
-                                                            height="14"
-                                                            fill="white"
-                                                            opacity="0.7"
-                                                            style={{ pointerEvents: "none" }}
-                                                        />
-                                                        <text
-                                                            y="2"
-                                                            fontSize={12}
-                                                            textAnchor="middle"
-                                                            fill="#555"
-                                                            style={{ fontWeight: "bold", pointerEvents: "none" }}
-                                                        >
-                                                            {cur.id}
-                                                        </text>
-                                                    </Marker>
-                                                </g>
-                                            );
-                                        })
-                                    }
-                                </Geographies>
-                            )}
                         </ZoomableGroup>
                     </ComposableMap>
                 </div>
@@ -713,4 +973,4 @@ const CropInsuranceCountyMap = ({
     );
 };
 
-export default CropInsuranceCountyMap;
+export default React.memo(CropInsuranceCountyMap);

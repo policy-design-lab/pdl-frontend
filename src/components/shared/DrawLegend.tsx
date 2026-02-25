@@ -17,7 +17,8 @@ export default function DrawLegend({
     useQuantileSpread = false,
     quantilePercentiles = [20, 40, 60, 80],
     quantileSpread = [0, 20, 40, 60, 80, 100],
-    quantileCaps = [5, 95]
+    quantileCaps = [5, 95],
+    ratioAsPercent = true
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const margin = 40;
@@ -59,7 +60,8 @@ export default function DrawLegend({
         notDollar,
         useQuantiles,
         useQuantileSpread,
-        quantilePercentiles
+        quantilePercentiles,
+        ratioAsPercent
     ]);
 
     const percentile = (values: number[], p: number) => {
@@ -225,7 +227,10 @@ export default function DrawLegend({
                             })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    const ratioValue = Number(cut_points[i]);
+                                    return ratioAsPercent
+                                        ? `${Math.round(ratioValue * 100)}%`
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {
@@ -250,7 +255,10 @@ export default function DrawLegend({
                             })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    const ratioValue = Number(cut_points[i]);
+                                    return ratioAsPercent
+                                        ? `${Math.round(ratioValue * 100)}%`
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {

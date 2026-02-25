@@ -34,6 +34,8 @@ export default function CropInsurancePage(): JSX.Element {
     const [countyDataLoading, setCountyDataLoading] = React.useState(false);
     const [countyDataLoaded, setCountyDataLoaded] = React.useState(false);
     const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
+    const [countyViewUpdating, setCountyViewUpdating] = React.useState(false);
+    const countyStateUpdateTimerRef = React.useRef<number | null>(null);
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
     const [initChartWidthRatio] = React.useState(0.9);
@@ -93,6 +95,35 @@ export default function CropInsurancePage(): JSX.Element {
                 setCountyDataLoading(false);
             });
     }, [countyDataLoaded, countyDataLoading]);
+
+    React.useEffect(
+        () => () => {
+            if (countyStateUpdateTimerRef.current !== null) {
+                clearTimeout(countyStateUpdateTimerRef.current);
+            }
+        },
+        []
+    );
+
+    const handleCountyStateChange = React.useCallback(
+        (nextState: string) => {
+            if (nextState === selectedCountyState) {
+                return;
+            }
+            if (countyStateUpdateTimerRef.current !== null) {
+                clearTimeout(countyStateUpdateTimerRef.current);
+            }
+            setCountyViewUpdating(true);
+            countyStateUpdateTimerRef.current = window.setTimeout(() => {
+                setSelectedCountyState(nextState);
+                countyStateUpdateTimerRef.current = window.setTimeout(() => {
+                    setCountyViewUpdating(false);
+                    countyStateUpdateTimerRef.current = null;
+                }, 220);
+            }, 0);
+        },
+        [selectedCountyState]
+    );
 
     const switchChartTable = (_event: React.MouseEvent<HTMLElement>, newTab: number | null) => {
         if (newTab !== null) {
@@ -250,7 +281,7 @@ export default function CropInsurancePage(): JSX.Element {
                         countyData={countyDistributionData}
                         year={`${startYear}-${endYear}`}
                         selectedState={selectedCountyState}
-                        onStateChange={setSelectedCountyState}
+                        onStateChange={handleCountyStateChange}
                     />
                 </Box>
             </Grid>
@@ -282,6 +313,29 @@ export default function CropInsurancePage(): JSX.Element {
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#888" }}>
                         This may take longer the first time. Subsequent loads will be faster.
+                    </Typography>
+                </Box>
+            )}
+            {!countyDataLoading && countyViewUpdating && (
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.72)",
+                        zIndex: 9998,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 2
+                    }}
+                >
+                    <CircularProgress size={44} />
+                    <Typography variant="h6" sx={{ color: "#2F7164" }}>
+                        Updating county map and table...
                     </Typography>
                 </Box>
             )}
@@ -322,7 +376,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateChartTableContent(
@@ -377,7 +431,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateChartTableContent(
@@ -432,7 +486,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateChartTableContent(
@@ -487,7 +541,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateChartTableContent(
@@ -542,7 +596,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateChartTableContent(
@@ -597,7 +651,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateTableOnlyContent(`Loss Ratio (${startYear}-${endYear})`, [
@@ -638,7 +692,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateTableOnlyContent(
@@ -681,7 +735,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={
@@ -790,7 +844,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     stateCodes={stateCodesData}
                                     allStates={allStatesData}
                                     selectedState={selectedCountyState}
-                                    onStateChange={setSelectedCountyState}
+                                    onStateChange={handleCountyStateChange}
                                 />
                             }
                             stateContentComponent={renderStateTableOnlyContent(

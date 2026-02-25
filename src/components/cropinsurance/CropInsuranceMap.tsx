@@ -13,6 +13,16 @@ import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
+
+const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
+    mapColor[4],
+    mapColor[3],
+    "#5A5A5A", // Change this to "#E8C9A3" if we agree to use designed color. Temporarily using gray as last discussion
+    "#B65700",
+    "#662500"
+];
+
 const offsets = {
     VT: [50, -8],
     NH: [34, 2],
@@ -72,10 +82,9 @@ const MapChart = ({
                                                 <tbody key={geo.properties.name}>
                                                     <tr>
                                                         <td className={classes.tooltip_topcell_left}>
-                                                            {Number(programPayment * 100).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 2
+                                                            {Number(programPayment).toLocaleString(undefined, {
+                                                                maximumFractionDigits: 3
                                                             })}
-                                                            %
                                                         </td>
                                                         <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                                     </tr>
@@ -209,8 +218,10 @@ const CropInsuranceMap = ({
 
     const maxValue = Math.max(...quantizeArray);
     const searchKey = attribute === undefined ? program : attribute;
-    const customScale = legendConfig[searchKey];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const isLossRatio = attribute === "lossRatio";
+    const customScale = isLossRatio ? lossRatioThresholds : legendConfig[searchKey];
+    const legendColors = isLossRatio ? getLossRatioColors(mapColor) : mapColor;
+    const colorScale = d3.scaleThreshold(customScale, legendColors);
     const classes = useStyles();
     return (
         <div>
@@ -218,10 +229,11 @@ const CropInsuranceMap = ({
                 {attribute === "lossRatio" ? (
                     <DrawLegend
                         isRatio
+                        ratioAsPercent={false}
                         colorScale={colorScale}
                         title={titleElement({ attribute, year })}
                         programData={quantizeArray}
-                        prepColor={mapColor}
+                        prepColor={legendColors}
                         emptyState={zeroPoints}
                     />
                 ) : (
@@ -233,7 +245,7 @@ const CropInsuranceMap = ({
                                 colorScale={colorScale}
                                 title={titleElement({ attribute, year })}
                                 programData={quantizeArray}
-                                prepColor={mapColor}
+                                prepColor={legendColors}
                                 emptyState={zeroPoints}
                             />
                         ) : (
@@ -242,7 +254,7 @@ const CropInsuranceMap = ({
                                 colorScale={colorScale}
                                 title={titleElement({ attribute, year })}
                                 programData={quantizeArray}
-                                prepColor={mapColor}
+                                prepColor={legendColors}
                                 emptyState={zeroPoints}
                             />
                         )}
