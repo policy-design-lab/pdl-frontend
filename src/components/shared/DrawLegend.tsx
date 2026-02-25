@@ -18,7 +18,8 @@ export default function DrawLegend({
     quantilePercentiles = [20, 40, 60, 80],
     quantileSpread = [0, 20, 40, 60, 80, 100],
     quantileCaps = [5, 95],
-    ratioAsPercent = true
+    ratioAsPercent = true,
+    grayAreasSuffix = ""
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const margin = 40;
@@ -61,7 +62,8 @@ export default function DrawLegend({
         useQuantiles,
         useQuantileSpread,
         quantilePercentiles,
-        ratioAsPercent
+        ratioAsPercent,
+        grayAreasSuffix
     ]);
 
     const percentile = (values: number[], p: number) => {
@@ -273,7 +275,7 @@ export default function DrawLegend({
                         .attr("class", "legendTextSide")
                         .attr("x", width / 2 - 150)
                         .attr("y", 80)
-                        .text("Gray areas indicate no available data");
+                        .text(`Gray areas indicate no available data${grayAreasSuffix ? ` ${grayAreasSuffix}` : ""}`);
                 } else {
                     baseSVG.attr("height", 90);
                     baseSVG

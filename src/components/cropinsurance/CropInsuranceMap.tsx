@@ -18,7 +18,7 @@ const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
 const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
     mapColor[4],
     mapColor[3],
-    "#5A5A5A", // Change this to "#E8C9A3" if we agree to use designed color. Temporarily using gray as last discussion
+    "#E8C9A3",
     "#B65700",
     "#662500"
 ];
@@ -235,6 +235,7 @@ const CropInsuranceMap = ({
                         programData={quantizeArray}
                         prepColor={legendColors}
                         emptyState={zeroPoints}
+                        grayAreasSuffix="for acreage-based policies"
                     />
                 ) : (
                     <div>
@@ -247,6 +248,7 @@ const CropInsuranceMap = ({
                                 programData={quantizeArray}
                                 prepColor={legendColors}
                                 emptyState={zeroPoints}
+                                grayAreasSuffix="for acreage-based policies"
                             />
                         ) : (
                             <DrawLegend
@@ -256,6 +258,7 @@ const CropInsuranceMap = ({
                                 programData={quantizeArray}
                                 prepColor={legendColors}
                                 emptyState={zeroPoints}
+                                grayAreasSuffix="for acreage-based policies"
                             />
                         )}
                     </div>
@@ -282,6 +285,79 @@ const CropInsuranceMap = ({
     );
 };
 const titleElement = ({ attribute, year }): JSX.Element => {
+    if (attribute === "totalNetFarmerBenefit")
+        return (
+            <div>
+                <Box display="flex" justifyContent="center" mb={2}>
+                    <Typography
+                        noWrap
+                        variant="subtitle2"
+                        sx={{
+                            color: "#2F7164",
+                            backgroundColor: "rgba(47, 113, 100, 0.12)",
+                            border: "1px solid rgba(47, 113, 100, 0.28)",
+                            borderRadius: "999px",
+                            px: 1.25,
+                            py: 0.35,
+                            fontWeight: 400
+                        }}
+                    >
+                        <b>Net farmer benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
+                        Farmer Paid Premium, Net Farmer Benefits = $0)
+                    </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
+                    </Typography>
+                </Box>
+            </div>
+        );
+
+    if (attribute === "lossRatio")
+        return (
+            <div>
+                <Box display="flex" justifyContent="center" mb={2}>
+                    <Typography
+                        noWrap
+                        variant="subtitle2"
+                        sx={{
+                            color: "#2F7164",
+                            backgroundColor: "rgba(47, 113, 100, 0.12)",
+                            border: "1px solid rgba(47, 113, 100, 0.28)",
+                            borderRadius: "999px",
+                            px: 1.25,
+                            py: 0.35,
+                            fontWeight: 600
+                        }}
+                    >
+                        Loss Ratio = Total Indemnities / Total Premium
+                    </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
+                    </Typography>
+                </Box>
+            </div>
+        );
+
     if (attribute === "averageInsuredAreaInAcres")
         return (
             <div>

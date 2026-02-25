@@ -163,13 +163,6 @@ function CropInsuranceProgramTable({
                             >
                                 Comparing {tableTitle}
                             </Typography>
-                            {attributes.includes("lossRatio") ? (
-                                <Box display="flex" justifyContent="center" style={{ marginTop: "0.5em" }}>
-                                    <Typography variant="h5" sx={{ mb: 1, fontSize: "1.2em" }}>
-                                        Loss Ratio = Total Indemnities / Total Premium
-                                    </Typography>
-                                </Box>
-                            ) : null}
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
