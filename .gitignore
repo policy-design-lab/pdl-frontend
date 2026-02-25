@@ -15,4 +15,4 @@ node_modules/
 
 .nvmrc
 
-tsconfig.tsbuildinfo
+*.tsbuildinfo
