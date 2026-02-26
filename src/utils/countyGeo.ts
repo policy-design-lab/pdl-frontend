@@ -20,6 +20,84 @@ export type CountyMapBounds = {
 export const COUNTY_TOPOJSON_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
 export const STATE_TOPOJSON_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
+type TopoJsonData = Record<string, unknown>;
+
+const TOPOJSON_CACHE_KEY_PREFIX = "pdl-topojson-cache-v1::";
+const topoJsonMemoryCache = new Map<string, TopoJsonData>();
+const topoJsonInFlightCache = new Map<string, Promise<TopoJsonData>>();
+
+const getTopoJsonStorageKey = (url: string): string => `${TOPOJSON_CACHE_KEY_PREFIX}${url}`;
+
+const canUseLocalStorage = (): boolean => typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+
+// #443: In-memory cache with localStorage fallback for topojson data to speed up the map loading
+const readTopoJsonFromLocalStorage = (url: string): TopoJsonData | null => {
+    if (!canUseLocalStorage()) {
+        return null;
+    }
+    const storageKey = getTopoJsonStorageKey(url);
+    const raw = window.localStorage.getItem(storageKey);
+    if (!raw) {
+        return null;
+    }
+    try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+            return parsed as TopoJsonData;
+        }
+        window.localStorage.removeItem(storageKey);
+        return null;
+    } catch {
+        window.localStorage.removeItem(storageKey);
+        return null;
+    }
+};
+
+const writeTopoJsonToLocalStorage = (url: string, topoJson: TopoJsonData): void => {
+    if (!canUseLocalStorage()) {
+        return;
+    }
+    try {
+        window.localStorage.setItem(getTopoJsonStorageKey(url), JSON.stringify(topoJson));
+    } catch {
+        // Ignore quota or storage access errors and continue using in-memory cache.
+    }
+};
+
+export const loadTopoJson = async (url: string): Promise<TopoJsonData> => {
+    const existing = topoJsonMemoryCache.get(url);
+    if (existing) {
+        return existing;
+    }
+    const cachedFromStorage = readTopoJsonFromLocalStorage(url);
+    if (cachedFromStorage) {
+        topoJsonMemoryCache.set(url, cachedFromStorage);
+        return cachedFromStorage;
+    }
+    const inFlight = topoJsonInFlightCache.get(url);
+    if (inFlight) {
+        return inFlight;
+    }
+    const request = fetch(url, { cache: "force-cache" })
+        .then(async (response) => {
+            if (!response.ok) {
+                throw new Error(`Failed to load topojson: ${url} (${response.status})`);
+            }
+            const topoJson = (await response.json()) as TopoJsonData;
+            topoJsonMemoryCache.set(url, topoJson);
+            writeTopoJsonToLocalStorage(url, topoJson);
+            return topoJson;
+        })
+        .finally(() => {
+            topoJsonInFlightCache.delete(url);
+        });
+    topoJsonInFlightCache.set(url, request);
+    return request;
+};
+
+export const loadCountyAndStateTopoJson = async (): Promise<[TopoJsonData, TopoJsonData]> =>
+    Promise.all([loadTopoJson(COUNTY_TOPOJSON_URL), loadTopoJson(STATE_TOPOJSON_URL)]);
+
 export const COUNTY_MAP_DEFAULT_CENTER: [number, number] = [-95, 40];
 export const COUNTY_MAP_DEFAULT_ZOOM = 1;
 

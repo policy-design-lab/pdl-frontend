@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added the county-level visualization to crop insurance pages [#440](https://github.com/policy-design-lab/pdl-frontend/issues/440)
+- Added cache for the states-10m.json and counties-10m.json for maps enhancement (crop insurance pages and proposal analysis pages) [#443](https://github.com/policy-design-lab/pdl-frontend/issues/443)
+- Added the "export table to csv" feature to the tables in crop insurance pages [#433](https://github.com/policy-design-lab/pdl-frontend/issues/433)
 
 ### Changed
 - Derived common components from counties maps in crop insurance pages and proposal analysis pages for reusability [#441](https://github.com/policy-design-lab/pdl-frontend/issues/441)

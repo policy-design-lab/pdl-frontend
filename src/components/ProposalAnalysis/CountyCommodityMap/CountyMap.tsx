@@ -13,7 +13,8 @@ import {
     STATE_ABBR_TO_FIPS,
     getCountyMapPosition,
     getStateFipsFromName,
-    getStateViewport
+    getStateViewport,
+    loadCountyAndStateTopoJson
 } from "../../../utils/countyGeo";
 
 const findCountyData = (counties, countyFIPS) => {
@@ -74,6 +75,9 @@ const CountyMap = ({
     const colorScale = d3.scaleThreshold().domain(mapData.thresholds).range(mapColor);
     const [position, setPosition] = useState(getCountyMapPosition("All States", 1));
     const [userZoomLevel, setUserZoomLevel] = useState(1);
+    const [countyTopology, setCountyTopology] = useState<Record<string, unknown> | null>(null);
+    const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
+    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
     const mountedRef = useRef(true);
     const resolvedStateCodes = useMemo(() => {
         const mapped: Record<string, string> = { ...stateCodesData };
@@ -89,6 +93,8 @@ const CountyMap = ({
         return mapped;
     }, [stateCodesData]);
     const selectedStateFips = selectedState === "All States" ? null : getStateFipsFromName(selectedState);
+    const countyGeographySource = countyTopology || (topologyLoadAttempted ? COUNTY_TOPOJSON_URL : null);
+    const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
     const stateAbbrevByVal = useMemo(() => {
         const mapped: Record<string, string> = {};
         allStates.forEach((state: any) => {
@@ -100,6 +106,21 @@ const CountyMap = ({
     }, [allStates]);
 
     useEffect(() => {
+        mountedRef.current = true;
+        loadCountyAndStateTopoJson()
+            .then(([countyTopo, stateTopo]) => {
+                if (!mountedRef.current) {
+                    return;
+                }
+                setCountyTopology(countyTopo);
+                setStateTopology(stateTopo);
+            })
+            .catch(() => undefined)
+            .finally(() => {
+                if (mountedRef.current) {
+                    setTopologyLoadAttempted(true);
+                }
+            });
         return () => {
             mountedRef.current = false;
         };
@@ -349,7 +370,7 @@ const CountyMap = ({
         },
         [mapData, getCountyFillColor]
     );
-    if (isLoading) {
+    if (isLoading || !countyGeographySource || !stateGeographySource) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
                 <CircularProgress />
@@ -474,7 +495,7 @@ const CountyMap = ({
                             minZoom={0.5}
                             maxZoom={3}
                         >
-                            <Geographies geography={COUNTY_TOPOJSON_URL}>
+                            <Geographies geography={countyGeographySource}>
                                 {({ geographies }) => (
                                     <CountyGeographyLayer
                                         geographies={geographies}
@@ -498,7 +519,7 @@ const CountyMap = ({
                                     />
                                 )}
                             </Geographies>
-                            <Geographies geography={STATE_TOPOJSON_URL}>
+                            <Geographies geography={stateGeographySource}>
                                 {({ geographies }) => (
                                     <>
                                         <StateBoundaryLayer geographies={geographies} />

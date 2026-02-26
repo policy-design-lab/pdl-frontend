@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -11,8 +12,8 @@ import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
 
 const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
@@ -45,7 +46,8 @@ const MapChart = ({
     statePerformance,
     stateCodes,
     allStates,
-    colorScale
+    colorScale,
+    stateTopology
 }) => {
     let attr = 0;
     if (attribute === "lossRatio") attr = 1;
@@ -55,7 +57,7 @@ const MapChart = ({
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
-                <Geographies geography={geoUrl}>
+                <Geographies geography={stateTopology}>
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
@@ -184,7 +186,8 @@ MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func,
     attribute: PropTypes.string,
     program: PropTypes.string,
-    maxValue: PropTypes.number
+    maxValue: PropTypes.number,
+    stateTopology: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 };
 
 const CropInsuranceMap = ({
@@ -205,6 +208,29 @@ const CropInsuranceMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
+    const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
+    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
+
+    useEffect(() => {
+        let active = true;
+        loadTopoJson(STATE_TOPOJSON_URL)
+            .then((topology) => {
+                if (!active) {
+                    return;
+                }
+                setStateTopology(topology);
+            })
+            .catch(() => undefined)
+            .finally(() => {
+                if (active) {
+                    setTopologyLoadAttempted(true);
+                }
+            });
+        return () => {
+            active = false;
+        };
+    }, []);
+
     const quantizeArray: number[] = [];
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
@@ -264,18 +290,26 @@ const CropInsuranceMap = ({
                     </div>
                 )}
             </Box>
-            <MapChart
-                setReactTooltipContent={setContent}
-                program={program}
-                attribute={attribute}
-                maxValue={maxValue}
-                year={year}
-                mapColor={mapColor}
-                statePerformance={statePerformance}
-                stateCodes={stateCodes}
-                allStates={allStates}
-                colorScale={colorScale}
-            />
+            {!topologyLoadAttempted && (
+                <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+                    <CircularProgress />
+                </Box>
+            )}
+            {topologyLoadAttempted && (
+                <MapChart
+                    setReactTooltipContent={setContent}
+                    program={program}
+                    attribute={attribute}
+                    maxValue={maxValue}
+                    year={year}
+                    mapColor={mapColor}
+                    statePerformance={statePerformance}
+                    stateCodes={stateCodes}
+                    allStates={allStates}
+                    colorScale={colorScale}
+                    stateTopology={stateTopology || STATE_TOPOJSON_URL}
+                />
+            )}
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}

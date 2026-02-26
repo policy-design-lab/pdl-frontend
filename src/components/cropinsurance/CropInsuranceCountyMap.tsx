@@ -17,6 +17,7 @@ import {
     getCountyMapPosition,
     getStateFipsFromName,
     getStateViewport,
+    loadCountyAndStateTopoJson,
     normalizeCountyFips
 } from "../../utils/countyGeo";
 
@@ -90,6 +91,9 @@ const CropInsuranceCountyMap = ({
     const [userZoomLevel, setUserZoomLevel] = useState(1);
     const [countyTopoReady, setCountyTopoReady] = useState(false);
     const [stateTopoReady, setStateTopoReady] = useState(false);
+    const [countyTopology, setCountyTopology] = useState<Record<string, unknown> | null>(null);
+    const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
+    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
     const [mapDrawSettled, setMapDrawSettled] = useState(false);
     const [interactionReady, setInteractionReady] = useState(false);
     const mountedRef = useRef(true);
@@ -173,7 +177,14 @@ const CropInsuranceCountyMap = ({
         isLossRatio ? lossRatioThresholds : customScale,
         isLossRatio ? lossRatioColors : mapColor
     );
-    const mapIsReady = countyTopoReady && stateTopoReady && mapDrawSettled;
+    const countyGeographySource = countyTopology || (topologyLoadAttempted ? COUNTY_TOPOJSON_URL : null);
+    const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
+    const mapIsReady =
+        countyGeographySource !== null &&
+        stateGeographySource !== null &&
+        countyTopoReady &&
+        stateTopoReady &&
+        mapDrawSettled;
     const selectedStateFips = selectedState === "All States" ? null : getStateFipsFromName(selectedState);
 
     const stateAbbrevByVal = useMemo(() => {
@@ -191,8 +202,22 @@ const CropInsuranceCountyMap = ({
     if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") attr = 2;
 
     useEffect(() => {
-        fetch(COUNTY_TOPOJSON_URL).catch(() => undefined);
-        fetch(STATE_TOPOJSON_URL).catch(() => undefined);
+        mountedRef.current = true;
+        loadCountyAndStateTopoJson()
+            .then(([countyTopo, stateTopo]) => {
+                if (!mountedRef.current) {
+                    return;
+                }
+                setCountyTopology(countyTopo);
+                setStateTopology(stateTopo);
+            })
+            .catch(() => undefined)
+            .finally(() => {
+                if (mountedRef.current) {
+                    setTopologyLoadAttempted(true);
+                }
+            });
+
         return () => {
             mountedRef.current = false;
             if (tooltipFrameRef.current !== null) {
@@ -643,33 +668,37 @@ const CropInsuranceCountyMap = ({
                             minZoom={0.5}
                             maxZoom={3}
                         >
-                            <Geographies geography={COUNTY_TOPOJSON_URL}>
-                                {({ geographies }) => (
-                                    <CountyGeographyLayer
-                                        geographies={geographies}
-                                        selectedStateFips={selectedStateFips}
-                                        getCountyFillColor={getCountyFillColor}
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={handleMouseLeave}
-                                        onGeographiesReady={handleCountyTopoReady}
-                                    />
-                                )}
-                            </Geographies>
-                            <Geographies geography={STATE_TOPOJSON_URL}>
-                                {({ geographies }) => (
-                                    <>
-                                        <StateBoundaryLayer
+                            {countyGeographySource && (
+                                <Geographies geography={countyGeographySource}>
+                                    {({ geographies }) => (
+                                        <CountyGeographyLayer
                                             geographies={geographies}
-                                            onGeographiesReady={handleStateTopoReady}
+                                            selectedStateFips={selectedStateFips}
+                                            getCountyFillColor={getCountyFillColor}
+                                            onMouseEnter={handleMouseEnter}
+                                            onMouseLeave={handleMouseLeave}
+                                            onGeographiesReady={handleCountyTopoReady}
                                         />
-                                        <StateLabelLayer
-                                            geographies={geographies}
-                                            selectedState={selectedState}
-                                            stateAbbrevByVal={stateAbbrevByVal}
-                                        />
-                                    </>
-                                )}
-                            </Geographies>
+                                    )}
+                                </Geographies>
+                            )}
+                            {stateGeographySource && (
+                                <Geographies geography={stateGeographySource}>
+                                    {({ geographies }) => (
+                                        <>
+                                            <StateBoundaryLayer
+                                                geographies={geographies}
+                                                onGeographiesReady={handleStateTopoReady}
+                                            />
+                                            <StateLabelLayer
+                                                geographies={geographies}
+                                                selectedState={selectedState}
+                                                stateAbbrevByVal={stateAbbrevByVal}
+                                            />
+                                        </>
+                                    )}
+                                </Geographies>
+                            )}
                         </ZoomableGroup>
                     </ComposableMap>
                 </div>

@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import { formatCurrency } from "../shared/ConvertionFormats";
+import getCSVData from "../shared/getCSVData";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -122,6 +124,18 @@ function CropInsuranceProgramTable({
             margin-top: 1.5em;
         }
 
+        .downloadbtn {
+            background-color: rgba(47, 113, 100, 1);
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+
         @media screen and (max-width: 1024px) {
             th,
             td {
@@ -182,6 +196,7 @@ function CropInsuranceProgramTable({
                             pageSize: 5,
                             pageIndex: 0
                         }}
+                        tableTitle={`Comparing ${tableTitle}`}
                     />
                 </TableContainer>
             </Styles>
@@ -190,7 +205,17 @@ function CropInsuranceProgramTable({
 }
 
 // eslint-disable-next-line
-function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
+function Table({
+    columns,
+    data,
+    initialState,
+    tableTitle
+}: {
+    columns: any;
+    data: any;
+    initialState: any;
+    tableTitle: string;
+}) {
     const state = React.useMemo(() => initialState, []);
     const {
         getTableProps,
@@ -217,8 +242,15 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         useSortBy,
         usePagination
     );
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+
     return (
         <div style={{ width: "100%" }}>
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
