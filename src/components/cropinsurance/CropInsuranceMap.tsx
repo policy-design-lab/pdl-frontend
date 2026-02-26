@@ -3,7 +3,6 @@ import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -209,7 +208,6 @@ const CropInsuranceMap = ({
 }): JSX.Element => {
     const [content, setContent] = useState("");
     const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
-    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
 
     useEffect(() => {
         let active = true;
@@ -220,12 +218,7 @@ const CropInsuranceMap = ({
                 }
                 setStateTopology(topology);
             })
-            .catch(() => undefined)
-            .finally(() => {
-                if (active) {
-                    setTopologyLoadAttempted(true);
-                }
-            });
+            .catch(() => undefined);
         return () => {
             active = false;
         };
@@ -290,26 +283,19 @@ const CropInsuranceMap = ({
                     </div>
                 )}
             </Box>
-            {!topologyLoadAttempted && (
-                <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-                    <CircularProgress />
-                </Box>
-            )}
-            {topologyLoadAttempted && (
-                <MapChart
-                    setReactTooltipContent={setContent}
-                    program={program}
-                    attribute={attribute}
-                    maxValue={maxValue}
-                    year={year}
-                    mapColor={mapColor}
-                    statePerformance={statePerformance}
-                    stateCodes={stateCodes}
-                    allStates={allStates}
-                    colorScale={colorScale}
-                    stateTopology={stateTopology || STATE_TOPOJSON_URL}
-                />
-            )}
+            <MapChart
+                setReactTooltipContent={setContent}
+                program={program}
+                attribute={attribute}
+                maxValue={maxValue}
+                year={year}
+                mapColor={mapColor}
+                statePerformance={statePerformance}
+                stateCodes={stateCodes}
+                allStates={allStates}
+                colorScale={colorScale}
+                stateTopology={stateTopology || STATE_TOPOJSON_URL}
+            />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}
