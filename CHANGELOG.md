@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added the county-level visualization to crop insurance pages [#440](https://github.com/policy-design-lab/pdl-frontend/issues/440)
+- Added cache for the states-10m.json and counties-10m.json for maps enhancement (crop insurance pages and proposal analysis pages) [#443](https://github.com/policy-design-lab/pdl-frontend/issues/443)
+- Added the "export table to csv" feature to the tables in crop insurance pages [#433](https://github.com/policy-design-lab/pdl-frontend/issues/433)
+
+### Changed
+- Derived common components from counties maps in crop insurance pages and proposal analysis pages for reusability [#441](https://github.com/policy-design-lab/pdl-frontend/issues/441)
+
 ## [1.14.0] - 2025-11-17
 
 ### Added
@@ -27,7 +37,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed the wrong base acre for the Policy Analysis model when user select a single program [#419](https://github.com/policy-design-lab/pdl-frontend/issues/419)
 
-### Changed
 - Add comma to separate integer columns in Title I [#418](https://github.com/policy-design-lab/pdl-frontend/issues/418)
 - Reduced bottom marge for issue briefs on the Issue/White Paper page [#425](https://github.com/policy-design-lab/pdl-frontend/issues/425)
 - Change All Programs Total key format [#421](https://github.com/policy-design-lab/pdl-frontend/issues/421)

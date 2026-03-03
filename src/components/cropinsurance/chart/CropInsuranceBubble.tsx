@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
+import { FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
 import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
@@ -569,16 +569,6 @@ export default function CropInsuranceBubble({
                     Hover on the state names to see detailed data
                 </Typography>
             </Grid>
-            <Box display="flex" justifyContent="center" style={{ marginTop: "2em" }}>
-                <Typography variant="h5" sx={{ mb: 0.5, fontSize: "1.2em" }}>
-                    <strong>Net farmer benefit</strong> = Total Indemnities - Farmer Paid Premium
-                </Typography>
-            </Box>
-            <Box display="flex" justifyContent="center">
-                <Typography variant="h6" sx={{ mb: 4, fontSize: "0.9em" }}>
-                    <i>(If Total Indemnities = Farmer Paid Premium, Net Farmer Benefits = $0)</i>
-                </Typography>
-            </Box>
             <Styles>
                 <svg ref={rn} className="CropInsuranceBubble" />
             </Styles>
