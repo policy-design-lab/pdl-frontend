@@ -382,7 +382,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",
@@ -391,7 +391,7 @@ export default function CropInsurancePage(): JSX.Element {
                                 ]
                             )}
                             countyTableComponent={renderCountyTable(
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",
@@ -437,7 +437,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",
@@ -492,7 +492,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",
@@ -547,7 +547,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",
@@ -602,7 +602,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
                                 [
                                     "totalNetFarmerBenefitInDollars",
                                     "totalIndemnitiesInDollars",

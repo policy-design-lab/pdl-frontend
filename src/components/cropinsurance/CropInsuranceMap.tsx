@@ -366,7 +366,7 @@ const titleElement = ({ attribute, year }): JSX.Element => {
                             fontWeight: 400
                         }}
                     >
-                        <b>Net farmer benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
+                        <b>Net Farmer Benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
                         Farmer Paid Premium, Net Farmer Benefits = $0)
                     </Typography>
                 </Box>
