@@ -3,70 +3,114 @@ import styled from "styled-components";
 import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Grid, TableContainer, Typography, Box } from "@mui/material";
+import { Grid, TableContainer, Typography, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import { formatCurrency } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
 
-function CropInsuranceProgramTable({
+interface CropInsuranceCountyTableProps {
+    tableTitle: string;
+    attributes: string[];
+    stateCodes: Record<string, string>;
+    countyData: any;
+    year: string;
+    skipColumns: string[];
+    selectedState: string;
+    onStateChange: (state: string) => void;
+}
+
+function CropInsuranceCountyTable({
     tableTitle,
-    program,
     attributes,
     stateCodes,
-    CropInsuranceData,
+    countyData,
     year,
-    colors,
-    skipColumns
-}): JSX.Element {
-    const resultData = [];
-    const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
-    CropInsuranceData[year].forEach((stateData) => {
-        const state = stateData.state;
-        hashmap[state] = {};
+    skipColumns,
+    selectedState,
+    onStateChange
+}: CropInsuranceCountyTableProps): JSX.Element {
+    const countyRows = React.useMemo(() => {
+        if (!countyData || !countyData[year]) {
+            return [];
+        }
+        if (selectedState === "All States") {
+            return countyData[year];
+        }
+        return countyData[year].filter((county: any) => {
+            const stateName = stateCodes[county.state] || county.state;
+            return stateName === selectedState;
+        });
+    }, [countyData, year, selectedState, stateCodes]);
+
+    const availableStates = React.useMemo(() => {
+        const states = new Set<string>();
+        if (countyData && countyData[year]) {
+            countyData[year].forEach((county: any) => {
+                if (county.state && stateCodes[county.state]) {
+                    states.add(stateCodes[county.state]);
+                }
+            });
+        }
+        return Array.from(states).sort();
+    }, [countyData, year, stateCodes]);
+
+    const resultData = React.useMemo(
+        () =>
+            countyRows.map((county: any) => {
+                const stateName = stateCodes[county.state] || county.state;
+                const newRecord: any = {
+                    state: stateName,
+                    county: county.countyName
+                };
+
+                attributes.forEach((attribute) => {
+                    const attributeData = county[attribute];
+                    if (attribute === "lossRatio") {
+                        const ratioValue = Number(attributeData);
+                        newRecord[attribute] = Number.isFinite(ratioValue)
+                            ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                            : "0";
+                    } else if (
+                        attribute === "averageInsuredAreaInAcres" ||
+                        attribute === "totalPoliciesEarningPremium"
+                    ) {
+                        newRecord[attribute] = formatCurrency(attributeData, 0);
+                    } else {
+                        newRecord[attribute] = formatCurrency(attributeData, 0);
+                    }
+                });
+
+                return newRecord;
+            }),
+        [countyRows, attributes, stateCodes]
+    );
+
+    const columns = React.useMemo(() => {
+        const columnPrep: any[] = [];
+        columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
+        columnPrep.push({ Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic });
         attributes.forEach((attribute) => {
-            const attributeData = stateData[attribute];
-            hashmap[state][attribute] = attributeData;
-        });
-    });
-    Object.keys(hashmap).forEach((s) => {
-        const newRecord = { state: stateCodes[Object.keys(stateCodes).filter((stateCode) => stateCode === s)[0]] };
-        Object.entries(hashmap[s]).forEach(([attr, value]) => {
-            if (attr === "lossRatio") {
-                const ratioValue = Number(value);
-                newRecord[attr] = Number.isFinite(ratioValue)
-                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
-                    : "0";
-            } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
-                newRecord[attr] = formatCurrency(value, 0);
-            } else {
-                newRecord[attr] = formatCurrency(value, 0);
+            let sortMethod = compareWithDollarSign;
+            if (attribute === "lossRatio") sortMethod = compareWithNumber;
+            if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") {
+                sortMethod = compareWithNumber;
             }
+            columnPrep.push({
+                Header: attribute
+                    .replace(/([A-Z])/g, " $1")
+                    .trim()
+                    .split(" ")
+                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")
+                    .toUpperCase(),
+                accessor: attribute,
+                sortType: sortMethod
+            });
         });
-        resultData.push(newRecord);
-    });
-    const columnPrep = [];
-    columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-    attributes.forEach((attribute) => {
-        let sortMethod = compareWithDollarSign;
-        if (attribute === "lossRatio") sortMethod = compareWithNumber;
-        if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium")
-            sortMethod = compareWithNumber;
-        const json = {
-            Header: attribute
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-                .split(" ")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-                .toUpperCase(),
-            accessor: attribute,
-            sortType: sortMethod
-        };
-        columnPrep.push(json);
-    });
-    const columns = React.useMemo(() => columnPrep, []);
+        return columnPrep;
+    }, [attributes]);
+
     const Styles = styled.div`
         padding: 0;
         margin: 0;
@@ -88,20 +132,23 @@ function CropInsuranceProgramTable({
 
             th {
                 background-color: rgba(241, 241, 241, 1);
-                padding: 1em 3em;
+                padding: 1em 2em;
                 cursor: pointer;
                 text-align: left;
             }
 
-            th:not(:first-of-type) {
+            th:not(:first-of-type):not(:nth-of-type(2)) {
                 text-align: right;
             }
 
             td[class$="cell0"] {
-                padding-right: 10em;
+                padding-right: 2em;
             }
 
-            td[class$="cell1"],
+            td[class$="cell1"] {
+                padding-right: 2em;
+            }
+
             td[class$="cell2"],
             td[class$="cell3"],
             td[class$="cell4"],
@@ -111,7 +158,7 @@ function CropInsuranceProgramTable({
             }
 
             td {
-                padding: 1em 3em;
+                padding: 1em 2em;
                 border-bottom: 1px solid #e4ebe7;
                 border-right: none;
 
@@ -141,7 +188,8 @@ function CropInsuranceProgramTable({
             td {
                 padding: 8px;
             }
-            td[class$="cell0"] {
+            td[class$="cell0"],
+            td[class$="cell1"] {
                 padding-right: 1em;
             }
             .pagination {
@@ -149,29 +197,30 @@ function CropInsuranceProgramTable({
             }
         }
     `;
+
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
-            <Styles value={attributes[0]}>
+            <Styles>
                 <Grid
                     container
                     columns={{ xs: 12 }}
                     className="stateChartTableContainer"
                     sx={{
                         display: "flex",
-                        justifyContent: "space-between"
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 2
                     }}
                 >
-                    <Grid item xs={12} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
-                        <Box id="cropInsuranceTableHeader" sx={{ width: "100%" }}>
+                    <Grid item xs={8} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
+                        <Box id="cropInsuranceCountyTableHeader" sx={{ width: "100%" }}>
                             <Typography
-                                id="cropInsuranceBarHeader"
                                 variant="h6"
                                 sx={{
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
                                     color: "#212121",
-                                    marginBottom: 4,
                                     paddingTop: 0.6
                                 }}
                             >
@@ -187,13 +236,39 @@ function CropInsuranceProgramTable({
                             ) : null}
                         </Box>
                     </Grid>
+                    <Grid item xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+                        <FormControl size="small" sx={{ minWidth: 200 }}>
+                            <InputLabel id="state-filter-label">Filter by State</InputLabel>
+                            <Select
+                                labelId="state-filter-label"
+                                id="state-filter"
+                                value={selectedState}
+                                label="Filter by State"
+                                onChange={(e) => onStateChange(e.target.value)}
+                                MenuProps={{
+                                    PaperProps: {
+                                        style: {
+                                            maxHeight: 240
+                                        }
+                                    }
+                                }}
+                            >
+                                <MenuItem value="All States">All States</MenuItem>
+                                {availableStates.map((state) => (
+                                    <MenuItem key={state} value={state}>
+                                        {state}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
                         columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
                         data={resultData}
                         initialState={{
-                            pageSize: 5,
+                            pageSize: 10,
                             pageIndex: 0
                         }}
                         tableTitle={`Comparing ${tableTitle}`}
@@ -204,7 +279,6 @@ function CropInsuranceProgramTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({
     columns,
     data,
@@ -256,7 +330,6 @@ function Table({
                     {headerGroups.map((headerGroup) => (
                         <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting.
                                 <th
                                     className={column.render("Header").replace(/\s/g, "")}
                                     key={column.id}
@@ -288,28 +361,25 @@ function Table({
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {
-                        // eslint-disable-next-line
-                        page.map((row, i) => {
-                            prepareRow(row);
-                            return (
-                                <tr key={row.id} {...row.getRowProps()}>
-                                    {row.cells.map((cell, j) => {
-                                        return (
-                                            <td
-                                                className={`cell${j}`}
-                                                key={cell.id}
-                                                {...cell.getCellProps()}
-                                                style={{ width: "100%", whiteSpace: "nowrap" }}
-                                            >
-                                                {cell.render("Cell")}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })
-                    }
+                    {page.map((row, i) => {
+                        prepareRow(row);
+                        return (
+                            <tr key={row.id} {...row.getRowProps()}>
+                                {row.cells.map((cell, j) => {
+                                    return (
+                                        <td
+                                            className={`cell${j}`}
+                                            key={cell.id}
+                                            {...cell.getCellProps()}
+                                            style={{ width: "100%", whiteSpace: "nowrap" }}
+                                        >
+                                            {cell.render("Cell")}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
             <Box className="pagination" sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
@@ -352,7 +422,7 @@ function Table({
                             setPageSize(Number(e.target.value));
                         }}
                     >
-                        {[10, 25, 40, 51].map((p) => (
+                        {[10, 25, 50, 100].map((p) => (
                             <option key={p} value={p}>
                                 Show {p}
                             </option>
@@ -360,14 +430,13 @@ function Table({
                     </select>
                 </Box>
                 <Box>
-                    {" "}
                     {pageSize * (pageIndex + 1) <= rows.length ? (
                         <Typography>
                             Showing the first {parseInt(pageSize, 10) * (pageIndex + 1)} results of {rows.length} rows
                         </Typography>
                     ) : (
                         <Typography>
-                            Showing the first {rows.length} results of {rows.length}rows
+                            Showing the first {rows.length} results of {rows.length} rows
                         </Typography>
                     )}
                 </Box>
@@ -376,4 +445,4 @@ function Table({
     );
 }
 
-export default CropInsuranceProgramTable;
+export default CropInsuranceCountyTable;

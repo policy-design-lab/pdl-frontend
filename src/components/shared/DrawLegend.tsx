@@ -2,13 +2,9 @@ import * as React from "react";
 import * as d3 from "d3";
 import { Box, Typography } from "@mui/material";
 import { ShortFormat } from "./ConvertionFormats";
+import { CheckAddZero } from "./ColorFunctions";
 import "../../styles/drawLegend.css";
 
-/**
- * Keys in legendConfig.json must match the 'searchKey' variable in DrawLegend.tsx file.
- * If there's any changes in legendConfig.json, please re-check and update the 'searchKey' variable here.
- * The programData parameter is the array of all data points that will be used to draw the legend.
- */
 export default function DrawLegend({
     isRatio = false,
     notDollar = false,
@@ -16,7 +12,14 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState = []
+    emptyState = [],
+    useQuantiles = false,
+    useQuantileSpread = false,
+    quantilePercentiles = [20, 40, 60, 80],
+    quantileSpread = [0, 20, 40, 60, 80, 100],
+    quantileCaps = [5, 95],
+    ratioAsPercent = true,
+    grayAreasSuffix = ""
 }): JSX.Element {
     const legendRn = React.useRef<HTMLDivElement>(null);
     const margin = 40;
@@ -48,7 +51,45 @@ export default function DrawLegend({
 
     React.useEffect(() => {
         drawLegend();
-    }, [width]); // Run drawLegend when width updates
+    }, [
+        width,
+        programData,
+        colorScale,
+        prepColor,
+        emptyState,
+        isRatio,
+        notDollar,
+        useQuantiles,
+        useQuantileSpread,
+        quantilePercentiles,
+        ratioAsPercent,
+        grayAreasSuffix
+    ]);
+
+    const percentile = (values: number[], p: number) => {
+        if (values.length === 0) return 0;
+        const sorted = [...values].sort((a, b) => a - b);
+        const idx = (p / 100) * (sorted.length - 1);
+        const lower = Math.floor(idx);
+        const upper = Math.ceil(idx);
+        if (lower === upper) return sorted[lower];
+        const weight = idx - lower;
+        return sorted[lower] * (1 - weight) + sorted[upper] * weight;
+    };
+
+    const getQuantileThresholds = () => {
+        const spread =
+            Array.isArray(quantileSpread) && quantileSpread.length === 6 ? quantileSpread : [0, 20, 40, 60, 80, 100];
+        const caps = Array.isArray(quantileCaps) && quantileCaps.length === 2 ? quantileCaps : [5, 95];
+        const capLow = percentile(programData, caps[0]);
+        const capHigh = percentile(programData, caps[1]);
+        const clamped = programData.map((v) => Math.min(capHigh, Math.max(capLow, v)));
+        const thresholds = [];
+        for (let i = 1; i < spread.length - 1; i += 1) {
+            thresholds.push(percentile(clamped, spread[i]));
+        }
+        return thresholds;
+    };
 
     const drawLegend = () => {
         if (legendRn.current && width > 0) {
@@ -60,7 +101,51 @@ export default function DrawLegend({
                 .attr("height", 90)
                 .attr("viewBox", `0 0 ${width} 90`)
                 .attr("preserveAspectRatio", "xMinYMid meet");
-            const customScale = colorScale.domain();
+            let customScale = useQuantiles ? getQuantileThresholds() : colorScale.domain();
+            if (useQuantileSpread && !useQuantiles) {
+                const nonZeroData = programData.filter((v) => v !== 0);
+                if (nonZeroData.length >= 5) {
+                    const sorted = [...nonZeroData].sort((a, b) => a - b);
+                    const p = (arr: number[], pct: number) => {
+                        const idx = (pct / 100) * (arr.length - 1);
+                        const lo = Math.floor(idx);
+                        const hi = Math.ceil(idx);
+                        if (lo === hi) return arr[lo];
+                        return arr[lo] * (1 - (idx - lo)) + arr[hi] * (idx - lo);
+                    };
+                    customScale = quantilePercentiles.map((pct) => p(sorted, pct));
+                    const hasNeg = programData.some((d) => d < 0);
+                    const hasPos = programData.some((d) => d > 0);
+                    if (hasNeg && hasPos && !customScale.includes(0)) {
+                        const negThresholds = customScale.filter((v) => v < 0);
+                        const posThresholds = customScale.filter((v) => v > 0);
+                        if (negThresholds.length > 0 && posThresholds.length > 0) {
+                            const closestNegIdx = customScale.indexOf(Math.max(...negThresholds));
+                            const closestPosIdx = customScale.indexOf(Math.min(...posThresholds));
+                            const closestNeg = Math.abs(customScale[closestNegIdx]);
+                            const closestPos = Math.abs(customScale[closestPosIdx]);
+                            if (closestNeg <= closestPos) {
+                                customScale[closestNegIdx] = 0;
+                            } else {
+                                customScale[closestPosIdx] = 0;
+                            }
+                        } else if (negThresholds.length > 0) {
+                            customScale[customScale.indexOf(Math.max(...negThresholds))] = 0;
+                        } else {
+                            customScale[customScale.indexOf(Math.min(...posThresholds))] = 0;
+                        }
+                    }
+                }
+            }
+            if (!useQuantileSpread) {
+                const hasNegativeAndPositive = programData.some((d) => d < 0) && programData.some((d) => d > 0);
+                if (hasNegativeAndPositive) {
+                    const allThresholds = [Math.min(...programData), ...customScale, Math.max(...programData)];
+                    const sortedAll = [...allThresholds].sort((a, b) => a - b);
+                    const processed = CheckAddZero(sortedAll);
+                    customScale = processed;
+                }
+            }
             cut_points.push(Math.min(...programData));
             cut_points = cut_points.concat(customScale);
             const legendRectX: number[] = [];
@@ -68,24 +153,35 @@ export default function DrawLegend({
                 baseSVG.selectAll("text").remove();
                 baseSVG.selectAll("rect").remove();
                 const data_distribution: number[] = [];
-                const cutCount = Array.from({ length: cut_points.length - 1 }, (v, i) => 1 + i);
-                cutCount.forEach((i) => {
-                    data_distribution.push(
-                        programData.filter((d) => d >= cut_points[i - 1] && d < cut_points[i]).length /
-                            programData.length
-                    );
-                    // Leave following part as the backup of solution 2.
-                    // programData
-                    //     .filter((d) => d >= cut_points[i - 1] && d < cut_points[i])
-                    //     .reduce((accumulator, currentValue) => accumulator + currentValue, 0) /
-                    //     programData.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-                });
-                data_distribution.push(
-                    programData.filter((d) => d >= cut_points[cut_points.length - 1]).length / programData.length
-                );
+                if (useQuantileSpread && !useQuantiles) {
+                    const pctBoundaries = [0, ...quantilePercentiles, 100];
+                    for (let i = 0; i < pctBoundaries.length - 1; i += 1) {
+                        data_distribution.push(pctBoundaries[i + 1] - pctBoundaries[i]);
+                    }
+                    const totalPct = data_distribution.reduce((acc, curr) => acc + curr, 0);
+                    for (let i = 0; i < data_distribution.length; i += 1) {
+                        data_distribution[i] /= totalPct;
+                    }
+                } else {
+                    const cutCount = Array.from({ length: cut_points.length - 1 }, (v, i) => 1 + i);
+                    cutCount.forEach((i) => {
+                        const count =
+                            programData.filter((d) => d >= cut_points[i - 1] && d < cut_points[i]).length ||
+                            Math.max(1, programData.length * 0.01);
+                        data_distribution.push(count);
+                    });
+                    const lastCount =
+                        programData.filter((d) => d >= cut_points[cut_points.length - 1]).length ||
+                        Math.max(1, programData.length * 0.01);
+                    data_distribution.push(lastCount);
+                    const totalCount = data_distribution.reduce((acc, curr) => acc + curr, 0);
+                    for (let i = 0; i < data_distribution.length; i += 1) {
+                        data_distribution[i] /= totalCount;
+                    }
+                }
                 const svgWidth = width - margin * 2;
                 // No need to show color length if there are less than five colors (i.e. not enough data points or label is not correctly identified)
-                if (!data_distribution.includes(0)) {
+                if (data_distribution.length > 0) {
                     baseSVG
                         .selectAll(null)
                         .data(data_distribution)
@@ -133,7 +229,10 @@ export default function DrawLegend({
                             })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    const ratioValue = Number(cut_points[i]);
+                                    return ratioAsPercent
+                                        ? `${Math.round(ratioValue * 100)}%`
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {
@@ -158,7 +257,10 @@ export default function DrawLegend({
                             })
                             .text((d, i) => {
                                 if (isRatio) {
-                                    return `${Math.round(cut_points[i] * 100)}%`;
+                                    const ratioValue = Number(cut_points[i]);
+                                    return ratioAsPercent
+                                        ? `${Math.round(ratioValue * 100)}%`
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {
@@ -168,30 +270,12 @@ export default function DrawLegend({
                                 return ShortFormat(roundedValue.toString(), 0, 0);
                             });
                     }
-                    if (emptyState.length !== 0) {
-                        const zeroState = emptyState.filter((item, index) => emptyState.indexOf(item) === index);
-                        const middleText = baseSVG
-                            .append("text")
-                            .attr("class", "legendTextSide")
-                            .attr("x", -1000)
-                            .attr("y", -1000)
-                            .text(`${zeroState.join(", ")} has no data available`);
-                        const middleBox = middleText.node().getBBox();
-                        middleText.remove();
-                        baseSVG
-                            .append("text")
-                            .attr("class", "legendTextSide")
-                            .attr("x", (svgWidth + margin * 2) / 2 - middleBox.width / 2)
-                            .attr("y", 80)
-                            .text(`${zeroState.join(", ")} has no data available`);
-                    } else {
-                        baseSVG
-                            .append("text")
-                            .attr("class", "legendTextSide")
-                            .attr("x", width / 2 - 150)
-                            .attr("y", 80)
-                            .text("Gray states indicate no available data or a value of 0");
-                    }
+                    baseSVG
+                        .append("text")
+                        .attr("class", "legendTextSide")
+                        .attr("x", width / 2 - 150)
+                        .attr("y", 80)
+                        .text(`Gray areas indicate no available data${grayAreasSuffix ? ` ${grayAreasSuffix}` : ""}`);
                 } else {
                     baseSVG.attr("height", 90);
                     baseSVG

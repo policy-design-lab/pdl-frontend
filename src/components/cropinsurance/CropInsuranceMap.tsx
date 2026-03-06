@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -11,8 +12,18 @@ import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
+
+const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
+    mapColor[4],
+    mapColor[3],
+    "#E8C9A3",
+    "#B65700",
+    "#662500"
+];
+
 const offsets = {
     VT: [50, -8],
     NH: [34, 2],
@@ -35,7 +46,8 @@ const MapChart = ({
     statePerformance,
     stateCodes,
     allStates,
-    colorScale
+    colorScale,
+    stateTopology
 }) => {
     let attr = 0;
     if (attribute === "lossRatio") attr = 1;
@@ -45,7 +57,7 @@ const MapChart = ({
     return (
         <div data-tip="">
             <ComposableMap projection="geoAlbersUsa">
-                <Geographies geography={geoUrl}>
+                <Geographies geography={stateTopology}>
                     {({ geographies }) => (
                         <>
                             {geographies.map((geo) => {
@@ -72,10 +84,9 @@ const MapChart = ({
                                                 <tbody key={geo.properties.name}>
                                                     <tr>
                                                         <td className={classes.tooltip_topcell_left}>
-                                                            {Number(programPayment * 100).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 2
+                                                            {Number(programPayment).toLocaleString(undefined, {
+                                                                maximumFractionDigits: 3
                                                             })}
-                                                            %
                                                         </td>
                                                         <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                                     </tr>
@@ -175,7 +186,8 @@ MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func,
     attribute: PropTypes.string,
     program: PropTypes.string,
-    maxValue: PropTypes.number
+    maxValue: PropTypes.number,
+    stateTopology: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 };
 
 const CropInsuranceMap = ({
@@ -196,6 +208,40 @@ const CropInsuranceMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
+    const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
+    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
+    const [mapDrawSettled, setMapDrawSettled] = useState(false);
+
+    useEffect(() => {
+        let active = true;
+        loadTopoJson(STATE_TOPOJSON_URL)
+            .then((topology) => {
+                if (!active) {
+                    return;
+                }
+                setStateTopology(topology);
+            })
+            .catch(() => undefined)
+            .finally(() => {
+                if (active) {
+                    setTopologyLoadAttempted(true);
+                }
+            });
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        setMapDrawSettled(false);
+        const timer = setTimeout(() => {
+            setMapDrawSettled(true);
+        }, 220);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [program, attribute, year, statePerformance]);
+
     const quantizeArray: number[] = [];
     const zeroPoints = [];
     statePerformance[year].forEach((value) => {
@@ -209,8 +255,11 @@ const CropInsuranceMap = ({
 
     const maxValue = Math.max(...quantizeArray);
     const searchKey = attribute === undefined ? program : attribute;
-    const customScale = legendConfig[searchKey];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const isLossRatio = attribute === "lossRatio";
+    const customScale = isLossRatio ? lossRatioThresholds : legendConfig[searchKey];
+    const legendColors = isLossRatio ? getLossRatioColors(mapColor) : mapColor;
+    const colorScale = d3.scaleThreshold(customScale, legendColors);
+    const showMapLoading = !topologyLoadAttempted || !mapDrawSettled;
     const classes = useStyles();
     return (
         <div>
@@ -218,11 +267,13 @@ const CropInsuranceMap = ({
                 {attribute === "lossRatio" ? (
                     <DrawLegend
                         isRatio
+                        ratioAsPercent={false}
                         colorScale={colorScale}
                         title={titleElement({ attribute, year })}
                         programData={quantizeArray}
-                        prepColor={mapColor}
+                        prepColor={legendColors}
                         emptyState={zeroPoints}
+                        grayAreasSuffix="for acreage-based policies"
                     />
                 ) : (
                     <div>
@@ -233,8 +284,9 @@ const CropInsuranceMap = ({
                                 colorScale={colorScale}
                                 title={titleElement({ attribute, year })}
                                 programData={quantizeArray}
-                                prepColor={mapColor}
+                                prepColor={legendColors}
                                 emptyState={zeroPoints}
+                                grayAreasSuffix="for acreage-based policies"
                             />
                         ) : (
                             <DrawLegend
@@ -242,25 +294,52 @@ const CropInsuranceMap = ({
                                 colorScale={colorScale}
                                 title={titleElement({ attribute, year })}
                                 programData={quantizeArray}
-                                prepColor={mapColor}
+                                prepColor={legendColors}
                                 emptyState={zeroPoints}
+                                grayAreasSuffix="for acreage-based policies"
                             />
                         )}
                     </div>
                 )}
             </Box>
-            <MapChart
-                setReactTooltipContent={setContent}
-                program={program}
-                attribute={attribute}
-                maxValue={maxValue}
-                year={year}
-                mapColor={mapColor}
-                statePerformance={statePerformance}
-                stateCodes={stateCodes}
-                allStates={allStates}
-                colorScale={colorScale}
-            />
+            <Box sx={{ position: "relative" }}>
+                <MapChart
+                    setReactTooltipContent={setContent}
+                    program={program}
+                    attribute={attribute}
+                    maxValue={maxValue}
+                    year={year}
+                    mapColor={mapColor}
+                    statePerformance={statePerformance}
+                    stateCodes={stateCodes}
+                    allStates={allStates}
+                    colorScale={colorScale}
+                    stateTopology={stateTopology || STATE_TOPOJSON_URL}
+                />
+                {showMapLoading && (
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            zIndex: 1200,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 1.5
+                        }}
+                    >
+                        <CircularProgress size={36} />
+                        <Typography variant="body2" sx={{ color: "#2F7164" }}>
+                            Rendering map...
+                        </Typography>
+                    </Box>
+                )}
+            </Box>
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}
@@ -270,6 +349,79 @@ const CropInsuranceMap = ({
     );
 };
 const titleElement = ({ attribute, year }): JSX.Element => {
+    if (attribute === "totalNetFarmerBenefit")
+        return (
+            <div>
+                <Box display="flex" justifyContent="center" mb={2}>
+                    <Typography
+                        noWrap
+                        variant="subtitle2"
+                        sx={{
+                            color: "#2F7164",
+                            backgroundColor: "rgba(47, 113, 100, 0.12)",
+                            border: "1px solid rgba(47, 113, 100, 0.28)",
+                            borderRadius: "999px",
+                            px: 1.25,
+                            py: 0.35,
+                            fontWeight: 400
+                        }}
+                    >
+                        <b>Net Farmer Benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
+                        Farmer Paid Premium, Net Farmer Benefits = $0)
+                    </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
+                    </Typography>
+                </Box>
+            </div>
+        );
+
+    if (attribute === "lossRatio")
+        return (
+            <div>
+                <Box display="flex" justifyContent="center" mb={2}>
+                    <Typography
+                        noWrap
+                        variant="subtitle2"
+                        sx={{
+                            color: "#2F7164",
+                            backgroundColor: "rgba(47, 113, 100, 0.12)",
+                            border: "1px solid rgba(47, 113, 100, 0.28)",
+                            borderRadius: "999px",
+                            px: 1.25,
+                            py: 0.35,
+                            fontWeight: 600
+                        }}
+                    >
+                        Loss Ratio = Total Indemnities / Total Premium
+                    </Typography>
+                </Box>
+                <Box display="flex" justifyContent="center">
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
+                    </Typography>
+                </Box>
+            </div>
+        );
+
     if (attribute === "averageInsuredAreaInAcres")
         return (
             <div>

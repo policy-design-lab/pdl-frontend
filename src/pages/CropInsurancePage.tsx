@@ -23,16 +23,25 @@ import "../styles/subpage.css";
 import "../styles/cropinsurance.css";
 import CropInsuranceBubble from "../components/cropinsurance/chart/CropInsuranceBubble";
 import CropInsuranceBars from "../components/cropinsurance/chart/CropInsuranceBars";
+import MapTableWithLevelSwitch from "../components/shared/MapTableWithLevelSwitch";
+import CropInsuranceCountyMap from "../components/cropinsurance/CropInsuranceCountyMap";
+import CropInsuranceCountyTable from "../components/cropinsurance/CropInsuranceCountyTable";
 
 export default function CropInsurancePage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const [countyDistributionData, setCountyDistributionData] = React.useState({});
+    const [countyDataLoading, setCountyDataLoading] = React.useState(false);
+    const [countyDataLoaded, setCountyDataLoaded] = React.useState(false);
+    const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
+    const [countyViewUpdating, setCountyViewUpdating] = React.useState(false);
+    const countyStateUpdateTimerRef = React.useRef<number | null>(null);
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
-    const [initChartWidthRatio, setChartMapWidthRatio] = React.useState(0.9);
+    const [initChartWidthRatio] = React.useState(0.9);
     const cropInsuranceDiv = React.useRef(null);
     const [checked, setChecked] = React.useState("0");
-    const mapColor = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
+    const mapColor: [string, string, string, string, string] = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
     const startYear = 2014;
     const endYear = 2024;
 
@@ -52,19 +61,80 @@ export default function CropInsurancePage(): JSX.Element {
         });
     }, []);
 
-    const switchChartTable = (event, newTab) => {
+    const COUNTY_CACHE_KEY = `cropInsurance_countyData_${startYear}_${endYear}`;
+
+    const fetchCountyData = React.useCallback(() => {
+        if (countyDataLoaded || countyDataLoading) return;
+        setCountyDataLoading(true);
+        try {
+            const cached = sessionStorage.getItem(COUNTY_CACHE_KEY);
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                setTimeout(() => {
+                    setCountyDistributionData(parsed);
+                    setCountyDataLoaded(true);
+                    setCountyDataLoading(false);
+                }, 50);
+                return;
+            }
+        } catch {
+            sessionStorage.removeItem(COUNTY_CACHE_KEY);
+        }
+        const countydistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/county-distribution?start_year=${startYear}&end_year=${endYear}`;
+        getJsonDataFromUrl(countydistribution_url)
+            .then((response) => {
+                setCountyDistributionData(response);
+                setCountyDataLoaded(true);
+                try {
+                    sessionStorage.setItem(COUNTY_CACHE_KEY, JSON.stringify(response));
+                } catch {
+                    console.error("error in caching");
+                }
+            })
+            .finally(() => {
+                setCountyDataLoading(false);
+            });
+    }, [countyDataLoaded, countyDataLoading]);
+
+    React.useEffect(
+        () => () => {
+            if (countyStateUpdateTimerRef.current !== null) {
+                clearTimeout(countyStateUpdateTimerRef.current);
+            }
+        },
+        []
+    );
+
+    const handleCountyStateChange = React.useCallback(
+        (nextState: string) => {
+            if (nextState === selectedCountyState) {
+                return;
+            }
+            if (countyStateUpdateTimerRef.current !== null) {
+                clearTimeout(countyStateUpdateTimerRef.current);
+            }
+            setCountyViewUpdating(true);
+            countyStateUpdateTimerRef.current = window.setTimeout(() => {
+                setSelectedCountyState(nextState);
+                countyStateUpdateTimerRef.current = window.setTimeout(() => {
+                    setCountyViewUpdating(false);
+                    countyStateUpdateTimerRef.current = null;
+                }, 220);
+            }, 0);
+        },
+        [selectedCountyState]
+    );
+
+    const switchChartTable = (_event: React.MouseEvent<HTMLElement>, newTab: number | null) => {
         if (newTab !== null) {
             setTab(newTab);
         }
     };
     const defaultTheme = createTheme();
-    /**
-     * Derive TotalIndemnities, TotalFarmerPaidPremium, OriginalNetFarmerBenefit for the bubble chart
-     Set NetFarmerBenefit as 0. The post processing will be done in CropInsuranceBubble.tsx
-     */
-    const setBubbleData = (year) => {
+
+    const setBubbleData = (year: string) => {
         const res: any[] = [];
-        stateDistributionData[year].forEach((stateData) => {
+        stateDistributionData[year].forEach((stateData: any) => {
             const initObject = {
                 State: stateData.state,
                 TotalIndemnities: stateData.totalIndemnitiesInDollars,
@@ -76,6 +146,7 @@ export default function CropInsurancePage(): JSX.Element {
         });
         return res;
     };
+
     const subtextMatch = {
         "0": "Total Net Farmer Benefits",
         "01": "Total Farmer Paid Premium",
@@ -87,8 +158,187 @@ export default function CropInsurancePage(): JSX.Element {
         "3": "Total Policies Earning Premium",
         "4": "Average Acres Insured"
     };
+
+    const renderStateChartTableContent = (
+        showBubble: boolean,
+        checkedMenu: string,
+        tableTitle: string,
+        attributes: string[]
+    ) => (
+        <Box
+            className="chartArea"
+            component="div"
+            ref={cropInsuranceDiv}
+            sx={{
+                width: "100%",
+                m: "auto"
+            }}
+        >
+            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                <Typography className="stateTitle" variant="h6">
+                    Performance by States
+                </Typography>
+                <ToggleButtonGroup
+                    className="ChartTableToggle"
+                    value={tab}
+                    exclusive
+                    onChange={switchChartTable}
+                    aria-label="CropInsurance toggle button group"
+                    sx={{ justifyContent: "flex-end" }}
+                >
+                    <ToggleButton value={0}>
+                        <InsertChartIcon />
+                    </ToggleButton>
+                    <ToggleButton value={1}>
+                        <TableChartIcon />
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Grid>
+            <Grid
+                container
+                columns={{ xs: 12 }}
+                sx={{
+                    paddingTop: 6,
+                    justifyContent: "center"
+                }}
+            >
+                <Box className="cropInsuranceTableContainer" sx={{ display: tab !== 0 ? "none" : "div" }}>
+                    {showBubble && (
+                        <CropInsuranceBubble
+                            originalData={setBubbleData(`${startYear}-${endYear}`)}
+                            stateCodesData={stateCodesData}
+                            initChartWidthRatio={initChartWidthRatio}
+                            startYear={startYear}
+                            endYear={endYear}
+                        />
+                    )}
+                    <CropInsuranceBars
+                        stateDistributionData={stateDistributionData}
+                        checkedMenu={checkedMenu}
+                        initChartWidthRatio={initChartWidthRatio}
+                        yearKey={`${startYear}-${endYear}`}
+                    />
+                </Box>
+                <Box className="cropInsuranceTableContainer" sx={{ display: tab !== 1 ? "none" : "div" }}>
+                    <CropInsuranceProgramTable
+                        tableTitle={tableTitle}
+                        program="Crop Insurance"
+                        attributes={attributes}
+                        skipColumns={[]}
+                        stateCodes={stateCodesData}
+                        CropInsuranceData={stateDistributionData}
+                        year={`${startYear}-${endYear}`}
+                        colors={[]}
+                    />
+                </Box>
+            </Grid>
+        </Box>
+    );
+
+    const renderStateTableOnlyContent = (tableTitle: string, attributes: string[]) => (
+        <Grid container justifyContent="center">
+            <Grid item xs={12}>
+                <Box
+                    className="chartArea narrowChartArea"
+                    component="div"
+                    ref={cropInsuranceDiv}
+                    sx={{
+                        width: "100%",
+                        m: "auto"
+                    }}
+                >
+                    <CropInsuranceProgramTable
+                        tableTitle={tableTitle}
+                        program="Crop Insurance"
+                        attributes={attributes}
+                        skipColumns={[]}
+                        stateCodes={stateCodesData}
+                        CropInsuranceData={stateDistributionData}
+                        year={`${startYear}-${endYear}`}
+                        colors={[]}
+                    />
+                </Box>
+            </Grid>
+        </Grid>
+    );
+
+    const renderCountyTable = (tableTitle: string, attributes: string[]) => (
+        <Grid container justifyContent="center">
+            <Grid item xs={12}>
+                <Box
+                    className="chartArea"
+                    component="div"
+                    sx={{
+                        width: "100%",
+                        m: "auto"
+                    }}
+                >
+                    <CropInsuranceCountyTable
+                        tableTitle={tableTitle}
+                        attributes={attributes}
+                        skipColumns={[]}
+                        stateCodes={stateCodesData}
+                        countyData={countyDistributionData}
+                        year={`${startYear}-${endYear}`}
+                        selectedState={selectedCountyState}
+                        onStateChange={handleCountyStateChange}
+                    />
+                </Box>
+            </Grid>
+        </Grid>
+    );
+
     return (
         <ThemeProvider theme={defaultTheme}>
+            {countyDataLoading && (
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        zIndex: 9999,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 2
+                    }}
+                >
+                    <CircularProgress size={60} />
+                    <Typography variant="h6" sx={{ color: "#2F7164" }}>
+                        Loading county data...
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#888" }}>
+                        This may take longer the first time. Subsequent loads will be faster.
+                    </Typography>
+                </Box>
+            )}
+            {!countyDataLoading && countyViewUpdating && (
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(255, 255, 255, 0.72)",
+                        zIndex: 9998,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 2
+                    }}
+                >
+                    <CircularProgress size={44} />
+                    <Typography variant="h6" sx={{ color: "#2F7164" }}>
+                        Updating county map and table...
+                    </Typography>
+                </Box>
+            )}
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
             Object.keys(stateDistributionData).length > 0 ? (
@@ -98,546 +348,281 @@ export default function CropInsurancePage(): JSX.Element {
                         <NavSearchBar text="Crop Insurance" subtext={subtextMatch[checked]} />
                     </Box>
                     <Box sx={{ height: "64px" }} />
-                    {/* Net Farmer Premium Section */}
                     <SideBar setCropInsuranceChecked={setChecked} />
+                    {/* Net Farmer Premium Section */}
                     <Box
                         component="div"
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "0" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalNetFarmerBenefit"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalNetFarmerBenefit"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalNetFarmerBenefit"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateChartTableContent(
+                                true,
+                                checked,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBubble
-                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
-                                        stateCodesData={stateCodesData}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        startYear={startYear}
-                                        endYear={endYear}
-                                    />
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu={checked}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={[
-                                            "totalNetFarmerBenefitInDollars",
-                                            "totalIndemnitiesInDollars",
-                                            "totalFarmerPaidPremiumInDollars",
-                                            "totalPremiumSubsidyInDollars"
-                                        ]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
                     </Box>
+                    {/* Total Farmer Paid Premium Section */}
                     <Box
                         component="div"
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "01" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalFarmerPaidPremium"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalFarmerPaidPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalFarmerPaidPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateChartTableContent(
+                                true,
+                                checked,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBubble
-                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
-                                        stateCodesData={stateCodesData}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        startYear={startYear}
-                                        endYear={endYear}
-                                    />
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu={checked}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={[
-                                            "totalNetFarmerBenefitInDollars",
-                                            "totalIndemnitiesInDollars",
-                                            "totalFarmerPaidPremiumInDollars",
-                                            "totalPremiumSubsidyInDollars"
-                                        ]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
                     </Box>
+                    {/* Total Indemnities Section */}
                     <Box
                         component="div"
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "00" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalIndemnities"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalIndemnities"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalIndemnities"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateChartTableContent(
+                                true,
+                                checked,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBubble
-                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
-                                        stateCodesData={stateCodesData}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        startYear={startYear}
-                                        endYear={endYear}
-                                    />
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu={checked}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={[
-                                            "totalNetFarmerBenefitInDollars",
-                                            "totalIndemnitiesInDollars",
-                                            "totalFarmerPaidPremiumInDollars",
-                                            "totalPremiumSubsidyInDollars"
-                                        ]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
                     </Box>
+                    {/* Total Premium Section */}
                     <Box
                         component="div"
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "02" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalPremium"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateChartTableContent(
+                                true,
+                                checked,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBubble
-                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
-                                        stateCodesData={stateCodesData}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        startYear={startYear}
-                                        endYear={endYear}
-                                    />
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu={checked}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={[
-                                            "totalNetFarmerBenefitInDollars",
-                                            "totalIndemnitiesInDollars",
-                                            "totalFarmerPaidPremiumInDollars",
-                                            "totalPremiumSubsidyInDollars"
-                                        ]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
                     </Box>
+                    {/* Total Premium Subsidy Section */}
                     <Box
                         component="div"
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "03" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalPremiumSubsidy"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalPremiumSubsidy"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalPremiumSubsidy"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateChartTableContent(
+                                true,
+                                checked,
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
+                                [
+                                    "totalNetFarmerBenefitInDollars",
+                                    "totalIndemnitiesInDollars",
+                                    "totalFarmerPaidPremiumInDollars",
+                                    "totalPremiumSubsidyInDollars"
+                                ]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBubble
-                                        originalData={setBubbleData(`${startYear}-${endYear}`)}
-                                        stateCodesData={stateCodesData}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        startYear={startYear}
-                                        endYear={endYear}
-                                    />
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu={checked}
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Net farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={[
-                                            "totalNetFarmerBenefitInDollars",
-                                            "totalIndemnitiesInDollars",
-                                            "totalFarmerPaidPremiumInDollars",
-                                            "totalPremiumSubsidyInDollars"
-                                        ]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
                     </Box>
                     {/* Loss Ratio Section */}
                     <Box
@@ -645,55 +630,40 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "1" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="lossRatio"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="lossRatio"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="lossRatio"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateTableOnlyContent(`Loss Ratio (${startYear}-${endYear})`, [
+                                "lossRatio"
+                            ])}
+                            countyTableComponent={renderCountyTable(`Loss Ratio by County (${startYear}-${endYear})`, [
+                                "lossRatio"
+                            ])}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Grid container justifyContent="center">
-                            <Grid item xs={12}>
-                                <Box
-                                    className="chartArea narrowChartArea"
-                                    component="div"
-                                    ref={cropInsuranceDiv}
-                                    sx={{
-                                        width: "100%",
-                                        m: "auto"
-                                    }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Loss Ratio (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={["lossRatio"]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Grid>
                     </Box>
                     {/* Liabilities Section */}
                     <Box
@@ -701,55 +671,42 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "2" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="averageLiabilities"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="averageLiabilities"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="averageLiabilities"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateTableOnlyContent(
+                                `Average Liabilities (${startYear}-${endYear})`,
+                                ["averageLiabilitiesInDollars"]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Average Liabilities by County (${startYear}-${endYear})`,
+                                ["averageLiabilitiesInDollars"]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
                         />
-                        <Grid container justifyContent="center">
-                            <Grid item xs={12}>
-                                <Box
-                                    className="chartArea narrowChartArea"
-                                    component="div"
-                                    ref={cropInsuranceDiv}
-                                    sx={{
-                                        width: "100%",
-                                        m: "auto"
-                                    }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Average Liabilities (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={["averageLiabilitiesInDollars"]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Grid>
                     </Box>
                     {/* Policy Earning Premium Section */}
                     <Box
@@ -757,132 +714,33 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "3" ? "none" : "block" }}
                     >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="totalPoliciesEarningPremium"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
-                        />
-                        <Box
-                            className="chartArea"
-                            component="div"
-                            ref={cropInsuranceDiv}
-                            sx={{
-                                width: "100%",
-                                m: "auto"
-                            }}
-                        >
-                            <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
-                                <Typography className="stateTitle" variant="h6">
-                                    Performance by States
-                                </Typography>
-                                <ToggleButtonGroup
-                                    className="ChartTableToggle"
-                                    value={tab}
-                                    exclusive
-                                    onChange={switchChartTable}
-                                    aria-label="CropInsurance toggle button group"
-                                    sx={{ justifyContent: "flex-end" }}
-                                >
-                                    <ToggleButton value={0}>
-                                        <InsertChartIcon />
-                                    </ToggleButton>
-                                    <ToggleButton value={1}>
-                                        <TableChartIcon />
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            <Grid
-                                container
-                                columns={{ xs: 12 }}
-                                sx={{
-                                    paddingTop: 6,
-                                    justifyContent: "center"
-                                }}
-                            >
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="totalPoliciesEarningPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="totalPoliciesEarningPremium"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={
                                 <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 0 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceBars
-                                        stateDistributionData={stateDistributionData}
-                                        checkedMenu="totalPoliciesEarningPremium"
-                                        initChartWidthRatio={initChartWidthRatio}
-                                        yearKey={`${startYear}-${endYear}`}
-                                    />
-                                </Box>
-                                <Box
-                                    className="cropInsuranceTableContainer"
-                                    sx={{ display: tab !== 1 ? "none" : "div" }}
-                                >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Total Policies Earning Premium and Total Indemnities (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Box>
-                    </Box>
-                    {/* Average Acres Insured Section */}
-                    <Box
-                        component="div"
-                        className="fullWidthMainContent"
-                        sx={{ display: checked !== "4" ? "none" : "block" }}
-                    >
-                        <Box
-                            className="mapArea"
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto"
-                            }}
-                        >
-                            <CropInsuranceMap
-                                program="Crop Insurance"
-                                attribute="averageInsuredAreaInAcres"
-                                year={`${startYear}-${endYear}`}
-                                mapColor={mapColor}
-                                statePerformance={stateDistributionData}
-                                stateCodes={stateCodesData}
-                                allStates={allStatesData}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                height: 50
-                            }}
-                        />
-                        <Grid container justifyContent="center">
-                            <Grid item xs={12}>
-                                <Box
-                                    className="chartArea narrowChartArea"
+                                    className="chartArea"
                                     component="div"
                                     ref={cropInsuranceDiv}
                                     sx={{
@@ -890,19 +748,117 @@ export default function CropInsurancePage(): JSX.Element {
                                         m: "auto"
                                     }}
                                 >
-                                    <CropInsuranceProgramTable
-                                        tableTitle={`Average Insured Area in Acres (${startYear}-${endYear})`}
-                                        program="Crop Insurance"
-                                        attributes={["averageInsuredAreaInAcres"]}
-                                        skipColumns={[]}
-                                        stateCodes={stateCodesData}
-                                        CropInsuranceData={stateDistributionData}
-                                        year={`${startYear}-${endYear}`}
-                                        colors={[]}
-                                    />
+                                    <Grid container columns={{ xs: 12 }} className="stateTitleContainer">
+                                        <Typography className="stateTitle" variant="h6">
+                                            Performance by States
+                                        </Typography>
+                                        <ToggleButtonGroup
+                                            className="ChartTableToggle"
+                                            value={tab}
+                                            exclusive
+                                            onChange={switchChartTable}
+                                            aria-label="CropInsurance toggle button group"
+                                            sx={{ justifyContent: "flex-end" }}
+                                        >
+                                            <ToggleButton value={0}>
+                                                <InsertChartIcon />
+                                            </ToggleButton>
+                                            <ToggleButton value={1}>
+                                                <TableChartIcon />
+                                            </ToggleButton>
+                                        </ToggleButtonGroup>
+                                    </Grid>
+                                    <Grid
+                                        container
+                                        columns={{ xs: 12 }}
+                                        sx={{
+                                            paddingTop: 6,
+                                            justifyContent: "center"
+                                        }}
+                                    >
+                                        <Box
+                                            className="cropInsuranceTableContainer"
+                                            sx={{ display: tab !== 0 ? "none" : "div" }}
+                                        >
+                                            <CropInsuranceBars
+                                                stateDistributionData={stateDistributionData}
+                                                checkedMenu="totalPoliciesEarningPremium"
+                                                initChartWidthRatio={initChartWidthRatio}
+                                                yearKey={`${startYear}-${endYear}`}
+                                            />
+                                        </Box>
+                                        <Box
+                                            className="cropInsuranceTableContainer"
+                                            sx={{ display: tab !== 1 ? "none" : "div" }}
+                                        >
+                                            <CropInsuranceProgramTable
+                                                tableTitle={`Total Policies Earning Premium and Total Indemnities (${startYear}-${endYear})`}
+                                                program="Crop Insurance"
+                                                attributes={[
+                                                    "totalPoliciesEarningPremium",
+                                                    "totalIndemnitiesInDollars"
+                                                ]}
+                                                skipColumns={[]}
+                                                stateCodes={stateCodesData}
+                                                CropInsuranceData={stateDistributionData}
+                                                year={`${startYear}-${endYear}`}
+                                                colors={[]}
+                                            />
+                                        </Box>
+                                    </Grid>
                                 </Box>
-                            </Grid>
-                        </Grid>
+                            }
+                            countyTableComponent={renderCountyTable(
+                                `Total Policies Earning Premium and Total Indemnities by County (${startYear}-${endYear})`,
+                                ["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
+                        />
+                    </Box>
+                    {/* Average Acres Insured Section */}
+                    <Box
+                        component="div"
+                        className="fullWidthMainContent"
+                        sx={{ display: checked !== "4" ? "none" : "block" }}
+                    >
+                        <MapTableWithLevelSwitch
+                            stateMapComponent={
+                                <CropInsuranceMap
+                                    program="Crop Insurance"
+                                    attribute="averageInsuredAreaInAcres"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    statePerformance={stateDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                />
+                            }
+                            countyMapComponent={
+                                <CropInsuranceCountyMap
+                                    attribute="averageInsuredAreaInAcres"
+                                    year={`${startYear}-${endYear}`}
+                                    mapColor={mapColor}
+                                    countyPerformance={countyDistributionData}
+                                    stateCodes={stateCodesData}
+                                    allStates={allStatesData}
+                                    selectedState={selectedCountyState}
+                                    onStateChange={handleCountyStateChange}
+                                />
+                            }
+                            stateContentComponent={renderStateTableOnlyContent(
+                                `Average Insured Area in Acres (${startYear}-${endYear})`,
+                                ["averageInsuredAreaInAcres"]
+                            )}
+                            countyTableComponent={renderCountyTable(
+                                `Average Insured Area in Acres by County (${startYear}-${endYear})`,
+                                ["averageInsuredAreaInAcres"]
+                            )}
+                            countyDataLoading={countyDataLoading}
+                            onCountyDataRequest={fetchCountyData}
+                            hasCountyData={countyDataLoaded}
+                        />
                     </Box>
                 </Box>
             ) : (
