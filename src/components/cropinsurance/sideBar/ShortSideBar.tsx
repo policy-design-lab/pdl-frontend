@@ -23,10 +23,25 @@ const Styles = styled.div`
 `;
 let currentChecked = "0";
 
-export default function SideBar({ setCropInsuranceChecked }): JSX.Element {
-    const [checked, setChecked] = React.useState(currentChecked);
+export default function SideBar({ setCropInsuranceChecked, selectedValue }): JSX.Element {
+    const initialSelected = selectedValue ?? currentChecked;
+    const [checked, setChecked] = React.useState(initialSelected);
     const [disabled, setDisabled] = React.useState(false);
-    const [selectedItem, setSelectedItem] = useState("0"); // State to track selected item
+    const [selectedItem, setSelectedItem] = useState(initialSelected);
+
+    React.useEffect(() => {
+        if (selectedValue === undefined) {
+            return;
+        }
+        if (selectedValue !== checked) {
+            setChecked(selectedValue);
+        }
+        if (selectedValue !== selectedItem) {
+            setSelectedItem(selectedValue);
+        }
+        currentChecked = selectedValue;
+    }, [selectedValue, checked, selectedItem]);
+
     const handleToggle = (value: string) => () => {
         setChecked(value);
         setCropInsuranceChecked(value);
