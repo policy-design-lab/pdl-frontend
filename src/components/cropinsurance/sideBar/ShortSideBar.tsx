@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-    Box,
-    Collapse,
-    Drawer,
-    List,
-    ListItemButton,
-    ListItemText
-} from "@mui/material";
+import { Box, Collapse, Drawer, List, ListItemButton, ListItemText } from "@mui/material";
 import styled from "styled-components";
 import { menu } from "./SideBarMenuItem";
 import { hasChildren } from "./Utils";
