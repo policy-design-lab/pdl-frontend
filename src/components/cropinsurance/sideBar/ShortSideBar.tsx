@@ -4,12 +4,8 @@ import {
     Collapse,
     Drawer,
     List,
-    ListItem,
     ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    Typography
+    ListItemText
 } from "@mui/material";
 import styled from "styled-components";
 import { menu } from "./SideBarMenuItem";
