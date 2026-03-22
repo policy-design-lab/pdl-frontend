@@ -31,7 +31,7 @@ export default function DrawLegend({
             if (legendRn.current) {
                 requestAnimationFrame(() => {
                     const containerWidth = legendRn.current
-                        ? (legendRn.current as HTMLElement).parentElement?.offsetWidth ?? 0
+                        ? ((legendRn.current as HTMLElement).parentElement?.offsetWidth ?? 0)
                         : 0;
                     if (containerWidth > 0 && containerWidth !== width) {
                         setWidth(containerWidth);

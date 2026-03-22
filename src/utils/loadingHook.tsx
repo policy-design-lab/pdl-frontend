@@ -103,7 +103,6 @@ export const useConfigurableLoading = (): UseConfigurableLoadingReturn => {
                                 const result = await chunkProcessor(chunks[chunkIndex]);
                                 resolve(result);
                             } catch (error) {
-                                // eslint-disable-next-line no-console
                                 console.error("Error processing chunk:", error);
                                 resolve(null);
                             }
@@ -112,14 +111,12 @@ export const useConfigurableLoading = (): UseConfigurableLoadingReturn => {
                         if (config.performance.useRequestAnimationFrame) {
                             requestAnimationFrame(() => {
                                 processChunk().catch((error) => {
-                                    // eslint-disable-next-line no-console
                                     console.error("Error in processChunk:", error);
                                 });
                             });
                         } else {
                             setTimeout(() => {
                                 processChunk().catch((error) => {
-                                    // eslint-disable-next-line no-console
                                     console.error("Error in processChunk:", error);
                                 });
                             }, 0);

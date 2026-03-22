@@ -48,12 +48,10 @@ const MapChart = ({
                         <>
                             {geographies.map((geo) => {
                                 let practicePayment = 0;
-                                const state = predictedPerformance[year].filter(
-                                    (v) =>
-                                        v.state.length !== 2
-                                            ? v.state === geo.properties.name
-                                            : stateCodes[v.state] === geo.properties.name
-                                    /* eslint-disable func-call-spacing */
+                                const state = predictedPerformance[year].filter((v) =>
+                                    v.state.length !== 2
+                                        ? v.state === geo.properties.name
+                                        : stateCodes[v.state] === geo.properties.name
                                 )[0];
                                 if (state === undefined || state.length === 0) {
                                     return null;

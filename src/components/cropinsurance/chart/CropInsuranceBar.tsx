@@ -550,9 +550,9 @@ export default function CropInsuranceBar({
             d3.select(rnBar.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
             Bar.style("opacity", 1);
             const topBar = Bar;
-            // eslint-disable-next-line no-restricted-globals
+
             const mousePos = d3.pointer(event, d3.select(rnBar.current).select(".y0.axis").node());
-            // eslint-disable-next-line no-restricted-globals
+
             const minusMouse = d3.pointer(event, topBar.node());
             const leftLineData = [
                 {
@@ -631,9 +631,9 @@ export default function CropInsuranceBar({
                     .style("opacity", 1);
                 d3.select(rnBar.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 totalIndemnitiesInDollarsBar.style("opacity", 1);
-                // eslint-disable-next-line no-restricted-globals
+
                 const mousePos = d3.pointer(event, d3.select(rnBar.current).select(".y1.axis").node());
-                // eslint-disable-next-line no-restricted-globals
+
                 const minusMouse = d3.pointer(event, totalIndemnitiesInDollarsBar.node());
                 const rightLineData = [
                     {
@@ -700,9 +700,9 @@ export default function CropInsuranceBar({
             if (status === 3 || status === 4) {
                 d3.select(rnBar.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 totalPoliciesEarningPremiumBar.style("opacity", 1);
-                // eslint-disable-next-line no-restricted-globals
+
                 const mousePos = d3.pointer(event, d3.select(rnBar.current).select(".y0.axis").node());
-                // eslint-disable-next-line no-restricted-globals
+
                 const minusMouse = d3.pointer(event, totalPoliciesEarningPremiumBar.node());
                 const leftLineData = [
                     {

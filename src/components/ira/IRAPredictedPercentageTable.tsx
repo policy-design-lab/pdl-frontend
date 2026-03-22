@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
+import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import { compareWithAlphabetic, compareWithPercentSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCSVData from "../shared/getCSVData";
@@ -23,7 +23,6 @@ function IRAPredictedPercentageTable({
     let resultData = [];
     const hashmap = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     IRAPredictedData[year].forEach((stateData) => {
         const state = stateData.state;
         let pData = null;
@@ -165,15 +164,13 @@ function IRAPredictedPercentageTable({
     const columnPrep = [];
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     // filter out all data attributes with the word "percentage" in them
-    resultData = resultData.map(
-        (item) =>
-            Object.keys(item)
-                .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
-                .reduce((obj, key) => {
-                    obj[key] = item[key];
-                    return obj;
-                }, {} as any)
-        /* eslint-disable-next-line function-paren-newline */
+    resultData = resultData.map((item) =>
+        Object.keys(item)
+            .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
+            .reduce((obj, key) => {
+                obj[key] = item[key];
+                return obj;
+            }, {} as any)
     );
     const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
     attrs.forEach((attribute) => {
@@ -326,7 +323,6 @@ function IRAPredictedPercentageTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const [columnPage, setColumnPage] = React.useState(0);

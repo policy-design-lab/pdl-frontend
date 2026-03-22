@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import * as d3 from "d3";
 import { ShortFormat } from "../shared/ConvertionFormats";
@@ -104,7 +104,7 @@ export default function TreeMapSquares({
                     squareGroup
                         .on("mouseover", function (e) {
                             base.selectAll(".TreeMapSquareTip").remove();
-                            // eslint-disable-next-line no-restricted-globals
+
                             const mousePos = d3.pointer(event, squareGroup.node());
                             const tipGroup = base.append("g").attr("class", "TreeMapSquareTip");
                             const xPosition = mousePos[0] + 160 > svgWidth ? mousePos[0] - 160 : mousePos[0];

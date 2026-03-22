@@ -86,7 +86,6 @@ export default function EQIPPage(): JSX.Element {
     const processData = (chartData) => {
         if (chartData.statutes === undefined) return;
 
-        // eslint-disable-next-line
         const cur1 = chartData.statutes.find((s) => s.statuteName === "(6)(A) Practices");
         const cur2 = chartData.statutes.find((s) => s.statuteName === "(6)(B) Practices");
         const sixATotal = cur1.totalPaymentInDollars;

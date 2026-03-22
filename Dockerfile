@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Build application using node
 # ----------------------------------------------------------------------
-FROM node:22.12.0-alpine AS builder
+FROM node:22.13.0-alpine AS builder
 WORKDIR /usr/src/app
 ARG APP_ENV=""
 ENV APP_ENV=${APP_ENV}
@@ -12,7 +12,7 @@ RUN npm install
 
 ENV PATH="./node_modules/.bin:$PATH"
 
-COPY .eslintrc *.js tsconfig.json typedoc.json babel.config.json jest.config.js ./
+COPY eslint.config.mjs *.js tsconfig.json typedoc.json babel.config.json jest.config.js ./
 COPY src ./src/
 
 RUN npm run build

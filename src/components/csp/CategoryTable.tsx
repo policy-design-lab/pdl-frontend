@@ -44,7 +44,6 @@ const Styles = styled.div`
     }
 `;
 
-// eslint-disable-next-line
 function Table({ columns, data }: { columns: any; data: any; statePerformance: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
@@ -141,7 +140,7 @@ function App({
 }): JSX.Element {
     const cspTableData: any[] = [];
     let categoryRecord = [];
-    // eslint-disable-next-line no-restricted-syntax
+
     statePerformance[year].forEach((value) => {
         const statuteRecord = value.statutes;
         const ACur = value.statutes.find((s) => s.statuteName === "2018 Practices");

@@ -44,7 +44,6 @@ const Styles = styled.div`
     }
 `;
 
-// eslint-disable-next-line
 function Table({ columns, data }: { columns: any; data: any }) {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
         {
@@ -139,7 +138,6 @@ function App({
 }): JSX.Element {
     const crpTableData: any[] = [];
 
-    // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
         const totalCrp = value;
         let stateName;

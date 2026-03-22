@@ -21,7 +21,7 @@ function CropInsuranceProgramTable({
 }): JSX.Element {
     const resultData = [];
     const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
+
     CropInsuranceData[year].forEach((stateData) => {
         const state = stateData.state;
         hashmap[state] = {};
@@ -204,7 +204,6 @@ function CropInsuranceProgramTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({
     columns,
     data,

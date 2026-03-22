@@ -29,7 +29,7 @@ function Title1ProgramTable({
 }): JSX.Element {
     const resultData = [];
     const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
+
     Title1Data[year].forEach((stateData) => {
         const state = stateData.state;
         let programData = null;
@@ -602,7 +602,6 @@ function Title1ProgramTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({
     columns,
     data,
