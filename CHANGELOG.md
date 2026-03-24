@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.16.0] - 2026-03-26
 
 ### Added
-
 - Added the anchor to the crop insurance county level maps and reuseable function for the county-level maps in the future [#445](https://github.com/policy-design-lab/pdl-frontend/issues/445)
 
 ## [1.15.0] - 2026-03-04
