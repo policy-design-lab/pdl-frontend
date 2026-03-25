@@ -10,6 +10,9 @@ interface MapTableWithLevelSwitchProps {
     countyDataLoading: boolean;
     onCountyDataRequest: () => void;
     hasCountyData: boolean;
+    level?: "state" | "county";
+    defaultLevel?: "state" | "county";
+    onLevelChange?: (level: "state" | "county") => void;
 }
 
 const MapTableWithLevelSwitch = ({
@@ -19,16 +22,31 @@ const MapTableWithLevelSwitch = ({
     countyTableComponent,
     countyDataLoading,
     onCountyDataRequest,
-    hasCountyData
+    hasCountyData,
+    level: controlledLevel,
+    defaultLevel = "state",
+    onLevelChange
 }: MapTableWithLevelSwitchProps): JSX.Element => {
-    const [level, setLevel] = useState<"state" | "county">("state");
+    const [internalLevel, setInternalLevel] = useState<"state" | "county">(defaultLevel);
+    const level = controlledLevel ?? internalLevel;
 
     const handleLevelChange = (newLevel: "state" | "county") => {
-        setLevel(newLevel);
+        if (controlledLevel === undefined) {
+            setInternalLevel(newLevel);
+        }
+        if (onLevelChange) {
+            onLevelChange(newLevel);
+        }
         if (newLevel === "county" && !hasCountyData) {
             onCountyDataRequest();
         }
     };
+
+    React.useEffect(() => {
+        if (level === "county" && !hasCountyData) {
+            onCountyDataRequest();
+        }
+    }, [level, hasCountyData, onCountyDataRequest]);
 
     return (
         <Box sx={{ width: "100%" }}>

@@ -26,9 +26,25 @@ import CropInsuranceBars from "../components/cropinsurance/chart/CropInsuranceBa
 import MapTableWithLevelSwitch from "../components/shared/MapTableWithLevelSwitch";
 import CropInsuranceCountyMap from "../components/cropinsurance/CropInsuranceCountyMap";
 import CropInsuranceCountyTable from "../components/cropinsurance/CropInsuranceCountyTable";
+import { useMapUrlState } from "../utils/useMapUrlState";
+import { cropInsuranceMapIdByChecked } from "../utils/linkUtil";
+
+const cropInsuranceCheckedByMapId = Object.entries(cropInsuranceMapIdByChecked).reduce((acc, [checked, mapId]) => {
+    acc[mapId] = checked;
+    return acc;
+}, {} as Record<string, string>);
+
+const cropInsuranceMapIds = Object.values(cropInsuranceMapIdByChecked);
+const cropInsuranceDefaultMapId = cropInsuranceMapIdByChecked["0"];
 
 export default function CropInsurancePage(): JSX.Element {
     const [tab, setTab] = React.useState(0);
+    const { mapId, level, setMapId, setMapAndLevel } = useMapUrlState({
+        mapIds: cropInsuranceMapIds,
+        defaultMapId: cropInsuranceDefaultMapId,
+        defaultLevel: "state"
+    });
+    const [checked, setChecked] = React.useState(() => cropInsuranceCheckedByMapId[mapId] ?? "0");
     const [stateDistributionData, setStateDistributionData] = React.useState({});
     const [countyDistributionData, setCountyDistributionData] = React.useState({});
     const [countyDataLoading, setCountyDataLoading] = React.useState(false);
@@ -40,7 +56,6 @@ export default function CropInsurancePage(): JSX.Element {
     const [allStatesData, setAllStatesData] = React.useState([]);
     const [initChartWidthRatio] = React.useState(0.9);
     const cropInsuranceDiv = React.useRef(null);
-    const [checked, setChecked] = React.useState("0");
     const mapColor: [string, string, string, string, string] = ["#C26C06", "#CCECE6", "#66C2A4", "#238B45", "#005C24"];
     const startYear = 2014;
     const endYear = 2024;
@@ -123,6 +138,21 @@ export default function CropInsurancePage(): JSX.Element {
             }, 0);
         },
         [selectedCountyState]
+    );
+
+    React.useEffect(() => {
+        const nextChecked = cropInsuranceCheckedByMapId[mapId] ?? "0";
+        if (nextChecked !== checked) {
+            setChecked(nextChecked);
+        }
+    }, [mapId, checked]);
+
+    const handleCheckedChange = React.useCallback(
+        (value: string) => {
+            setChecked(value);
+            setMapId(cropInsuranceMapIdByChecked[value] ?? cropInsuranceDefaultMapId);
+        },
+        [setMapId]
     );
 
     const switchChartTable = (_event: React.MouseEvent<HTMLElement>, newTab: number | null) => {
@@ -348,7 +378,7 @@ export default function CropInsurancePage(): JSX.Element {
                         <NavSearchBar text="Crop Insurance" subtext={subtextMatch[checked]} />
                     </Box>
                     <Box sx={{ height: "64px" }} />
-                    <SideBar setCropInsuranceChecked={setChecked} />
+                    <SideBar setCropInsuranceChecked={handleCheckedChange} selectedValue={checked} />
                     {/* Net Farmer Premium Section */}
                     <Box
                         component="div"
@@ -402,6 +432,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["0"], nextLevel)}
                         />
                     </Box>
                     {/* Total Farmer Paid Premium Section */}
@@ -457,6 +489,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["01"], nextLevel)}
                         />
                     </Box>
                     {/* Total Indemnities Section */}
@@ -512,6 +546,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["00"], nextLevel)}
                         />
                     </Box>
                     {/* Total Premium Section */}
@@ -567,6 +603,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["02"], nextLevel)}
                         />
                     </Box>
                     {/* Total Premium Subsidy Section */}
@@ -622,6 +660,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["03"], nextLevel)}
                         />
                     </Box>
                     {/* Loss Ratio Section */}
@@ -663,6 +703,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["1"], nextLevel)}
                         />
                     </Box>
                     {/* Liabilities Section */}
@@ -706,6 +748,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["2"], nextLevel)}
                         />
                     </Box>
                     {/* Policy Earning Premium Section */}
@@ -815,6 +859,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["3"], nextLevel)}
                         />
                     </Box>
                     {/* Average Acres Insured Section */}
@@ -858,6 +904,8 @@ export default function CropInsurancePage(): JSX.Element {
                             countyDataLoading={countyDataLoading}
                             onCountyDataRequest={fetchCountyData}
                             hasCountyData={countyDataLoaded}
+                            level={level}
+                            onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["4"], nextLevel)}
                         />
                     </Box>
                 </Box>
