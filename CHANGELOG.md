@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Changed
+- Removed the $ sign for the state-level and county-level insured acres maps in Crop Insurance[#452](https://github.com/policy-design-lab/pdl-frontend/issues/452)
+
 ## [1.16.0] - 2026-03-26
 
 ### Added
