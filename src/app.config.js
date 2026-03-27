@@ -20,7 +20,6 @@ const localConfig = {
     ...baseConfig
 };
 
-// eslint-disable-next-line no-unused-vars
 function getConfig() {
     if (process.env.APP_ENV === "local") {
         return localConfig;

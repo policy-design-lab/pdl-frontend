@@ -141,7 +141,6 @@ function App({
 }): JSX.Element {
     const eqipTableData: any[] = [];
 
-    // eslint-disable-next-line no-restricted-syntax
     statePerformance[year].forEach((value) => {
         const ACur = value.statutes.find((s) => s.statuteName === "(6)(A) Practices");
         const AArray = ACur.practiceCategories;

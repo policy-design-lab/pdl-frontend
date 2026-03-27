@@ -255,59 +255,63 @@ export default function DrawLegendAdvanced({
                 const binRange = percentileRanges[rectIndex];
                 const min = cut_points[rectIndex];
                 const max = cut_points[rectIndex + 1];
-                const dataForProcessing = Object.entries(countyData).reduce((acc, [fips, county]) => {
-                    if (!county || typeof county !== "object" || !county.hasData) {
-                        return acc;
-                    }
-                    if (viewMode === "difference" && isPaymentRate) {
-                        if (county.hasValidBaseAcres) {
-                            const currentBaseAcres =
-                                typeof county.currentBaseAcres === "number" ? county.currentBaseAcres : 0;
-                            const proposedBaseAcres =
-                                typeof county.proposedBaseAcres === "number" ? county.proposedBaseAcres : 0;
-                            const currentValue = typeof county.currentValue === "number" ? county.currentValue : 0;
-                            const proposedValue = typeof county.proposedValue === "number" ? county.proposedValue : 0;
-                            const currentRate = currentBaseAcres > 0 ? currentValue / currentBaseAcres : 0;
-                            const proposedRate = proposedBaseAcres > 0 ? proposedValue / proposedBaseAcres : 0;
-                            const calculatedDifference = proposedRate - currentRate;
-                            acc[fips] = {
-                                ...county,
-                                value: calculatedDifference
-                            };
+                const dataForProcessing = Object.entries(countyData).reduce(
+                    (acc, [fips, county]) => {
+                        if (!county || typeof county !== "object" || !county.hasData) {
+                            return acc;
                         }
-                    } else if (notDollar || isPaymentRate) {
-                        if (county.hasValidBaseAcres) {
-                            let totalPayment = 0;
-                            let baseAcres = 0;
-
-                            if (viewMode === "proposed") {
-                                if (typeof county.proposedValue === "number") {
-                                    totalPayment = county.proposedValue;
-                                }
-                                if (typeof county.proposedBaseAcres === "number") {
-                                    baseAcres = county.proposedBaseAcres;
-                                }
-                            } else {
-                                if (typeof county.currentValue === "number") {
-                                    totalPayment = county.currentValue;
-                                }
-                                if (typeof county.currentBaseAcres === "number") {
-                                    baseAcres = county.currentBaseAcres;
-                                }
+                        if (viewMode === "difference" && isPaymentRate) {
+                            if (county.hasValidBaseAcres) {
+                                const currentBaseAcres =
+                                    typeof county.currentBaseAcres === "number" ? county.currentBaseAcres : 0;
+                                const proposedBaseAcres =
+                                    typeof county.proposedBaseAcres === "number" ? county.proposedBaseAcres : 0;
+                                const currentValue = typeof county.currentValue === "number" ? county.currentValue : 0;
+                                const proposedValue =
+                                    typeof county.proposedValue === "number" ? county.proposedValue : 0;
+                                const currentRate = currentBaseAcres > 0 ? currentValue / currentBaseAcres : 0;
+                                const proposedRate = proposedBaseAcres > 0 ? proposedValue / proposedBaseAcres : 0;
+                                const calculatedDifference = proposedRate - currentRate;
+                                acc[fips] = {
+                                    ...county,
+                                    value: calculatedDifference
+                                };
                             }
-                            const calculatedRate =
-                                (baseAcres as number) > 0 ? (totalPayment as number) / (baseAcres as number) : 0;
-                            const roundedValue = Math.round(calculatedRate * 100) / 100;
-                            acc[fips] = {
-                                ...county,
-                                value: roundedValue
-                            };
+                        } else if (notDollar || isPaymentRate) {
+                            if (county.hasValidBaseAcres) {
+                                let totalPayment = 0;
+                                let baseAcres = 0;
+
+                                if (viewMode === "proposed") {
+                                    if (typeof county.proposedValue === "number") {
+                                        totalPayment = county.proposedValue;
+                                    }
+                                    if (typeof county.proposedBaseAcres === "number") {
+                                        baseAcres = county.proposedBaseAcres;
+                                    }
+                                } else {
+                                    if (typeof county.currentValue === "number") {
+                                        totalPayment = county.currentValue;
+                                    }
+                                    if (typeof county.currentBaseAcres === "number") {
+                                        baseAcres = county.currentBaseAcres;
+                                    }
+                                }
+                                const calculatedRate =
+                                    (baseAcres as number) > 0 ? (totalPayment as number) / (baseAcres as number) : 0;
+                                const roundedValue = Math.round(calculatedRate * 100) / 100;
+                                acc[fips] = {
+                                    ...county,
+                                    value: roundedValue
+                                };
+                            }
+                        } else {
+                            acc[fips] = county;
                         }
-                    } else {
-                        acc[fips] = county;
-                    }
-                    return acc;
-                }, {} as Record<string, CountyDataItem>);
+                        return acc;
+                    },
+                    {} as Record<string, CountyDataItem>
+                );
                 const { minRegion, maxRegion, regionCount } = processRegionsInRange(
                     dataForProcessing,
                     min,

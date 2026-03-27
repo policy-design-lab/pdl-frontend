@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Grid, TableContainer, Typography, Box, Button } from "@mui/material";
+import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import { compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
 import getCSVData from "../shared/getCSVData";
@@ -23,7 +23,6 @@ function IRAPredictedDollarTable({
     const resultData = [];
     const hashmap = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     IRAPredictedData[year].forEach((stateData) => {
         const state = stateData.state;
         let pData = null;
@@ -256,7 +255,6 @@ function IRAPredictedDollarTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const [columnPage, setColumnPage] = useState(0);

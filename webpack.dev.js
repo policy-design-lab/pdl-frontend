@@ -1,50 +1,45 @@
-const Webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const Webpack = require("webpack");
+const ESLintPlugin = require("eslint-webpack-plugin");
+const { merge } = require("webpack-merge");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-const commonConfig = require('./webpack.common');
+const commonConfig = require("./webpack.common");
 
 module.exports = merge(commonConfig, {
-    mode: 'development',
-    devtool: 'eval-source-map',
+    mode: "development",
+    devtool: "eval-source-map",
 
     module: {
         rules: [
             {
-                // Use babel-loader for ts, tsx, js, and jsx files
                 test: /\.[tj]sx?$/,
                 exclude: /node_modules/,
-                use: [
-                    'babel-loader',
-                    {
-                        // Show eslint messages in the output
-                        loader: 'eslint-loader',
-                        options: {
-                            emitWarning: true
-                        }
-                    }
-                ]
-            },
+                use: ["babel-loader"]
+            }
         ]
     },
-    
+
     devServer: {
         hot: true,
-        host: 'localhost',
+        host: "localhost",
         port: 3000,
         open: true,
         inline: true,
-        stats: 'minimal',
+        stats: "minimal",
         historyApiFallback: true,
         allowedHosts: JSON.parse(process.env.ALLOWED_HOSTS || '["localhost"]'),
-        headers: { 'Access-Control-Allow-Origin': '*' }
+        headers: { "Access-Control-Allow-Origin": "*" }
     },
 
     plugins: [
+        new ESLintPlugin({
+            extensions: ["js", "jsx", "ts", "tsx"],
+            files: "src",
+            emitWarning: true
+        }),
         new Webpack.DefinePlugin({
-            ENV: JSON.stringify('development')
+            ENV: JSON.stringify("development")
         }),
         new BundleAnalyzerPlugin({ openAnalyzer: false, analyzerPort: 8081 })
-    ],
-
+    ]
 });

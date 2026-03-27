@@ -10,7 +10,6 @@ import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
-import { getValueFromAttrDollar } from "../../utils/apiutil";
 import { ShortFormat } from "../shared/ConvertionFormats";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";

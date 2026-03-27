@@ -268,7 +268,6 @@ export default function LandingDisplay({ programTitle }: { programTitle: string 
                             </Typography>
                             <Divider sx={{ my: 2 }} />
                             <Typography display="block" sx={{ mt: 1, color: "#242424" }}>
-                                {/* eslint-disable-next-line max-len */}
                                 The Policy Design Lab is a collaboration with ACES Office of Research, iSEE, and NCSA,
                                 that will develop unique capabilities to translate, apply and integrate research from
                                 multiple disciplines to the evaluation of existing federal policy and to the development

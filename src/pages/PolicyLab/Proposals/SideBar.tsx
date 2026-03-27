@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Box } from "@mui/material";
+import { List } from "@mui/material";
 import styled from "styled-components";
 import { MenuItem as MenuItemType, MenuItem } from "./Menu";
 

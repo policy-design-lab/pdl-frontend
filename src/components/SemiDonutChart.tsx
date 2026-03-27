@@ -5,9 +5,7 @@ import { ShortFormat } from "./shared/ConvertionFormats";
 
 const RADIAN = Math.PI / 180;
 
-// eslint-disable-next-line
 export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Element {
-    // eslint-disable-next-line
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
         const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -19,7 +17,7 @@ export default function SemiDonutChart({ data, label1, label2 }: any): JSX.Eleme
             </text>
         );
     };
-    // eslint-disable-next-line
+
     const renderCustomizedLabel2 = ({ x, cx, y, name }: any) => {
         return (
             <text x={x} y={y} fill="#000000" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">

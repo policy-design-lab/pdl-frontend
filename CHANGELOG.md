@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added county-level pages for Title I [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
+
+### Changed
+- Upgrade eslint library to version 89 and adjust code to meet the new standards [#455](https://github.com/policy-design-lab/pdl-frontend/issues/455) 
+
 ## [1.16.1] - 2026-03-26
 
 ### Changed
@@ -13,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Added the anchor to the crop insurance county level maps and reuseable function for the county-level maps in the future [#445](https://github.com/policy-design-lab/pdl-frontend/issues/445)
+
+### Changed
+- Upgrade ESLint to version 9 and adjusted code to meet the new standards [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
 
 ## [1.15.0] - 2026-03-04
 
