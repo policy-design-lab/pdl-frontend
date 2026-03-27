@@ -6,7 +6,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
 import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { formatCurrency } from "../shared/ConvertionFormats";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
 
 function CropInsuranceProgramTable({
@@ -38,7 +38,9 @@ function CropInsuranceProgramTable({
                 newRecord[attr] = Number.isFinite(ratioValue)
                     ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
                     : "0";
-            } else if (attr === "averageInsuredAreaInAcres" || attr === "totalPoliciesEarningPremium") {
+            } else if (attr === "averageInsuredAreaInAcres") {
+                newRecord[attr] = formatNumericValue(Number(value) || 0, 0);
+            } else if (attr === "totalPoliciesEarningPremium") {
                 newRecord[attr] = formatCurrency(value, 0);
             } else {
                 newRecord[attr] = formatCurrency(value, 0);

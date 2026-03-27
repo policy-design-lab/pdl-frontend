@@ -6,7 +6,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
 import "../../styles/table.css";
-import { formatCurrency } from "../shared/ConvertionFormats";
+import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
 
 interface CropInsuranceCountyTableProps {
@@ -71,10 +71,9 @@ function CropInsuranceCountyTable({
                         newRecord[attribute] = Number.isFinite(ratioValue)
                             ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
                             : "0";
-                    } else if (
-                        attribute === "averageInsuredAreaInAcres" ||
-                        attribute === "totalPoliciesEarningPremium"
-                    ) {
+                    } else if (attribute === "averageInsuredAreaInAcres") {
+                        newRecord[attribute] = formatNumericValue(Number(attributeData) || 0, 0);
+                    } else if (attribute === "totalPoliciesEarningPremium") {
                         newRecord[attribute] = formatCurrency(attributeData, 0);
                     } else {
                         newRecord[attribute] = formatCurrency(attributeData, 0);

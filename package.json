@@ -1,6 +1,6 @@
 {
   "name": "policy-design-lab",
-  "version": "1.15.0",
+  "version": "1.16.1",
   "description": "the front end of policy design lab",
   "repository": "https://github.com/policy-design-lab/pdl-frontend",
   "main": "src/app.tsx",
@@ -90,7 +90,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.37.0",
     "webpack-bundle-analyzer": "^4.4.1",
-    "webpack-cli": "^4.7.0",
+    "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
   }

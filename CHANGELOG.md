@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [unreleased]
 
 ### Added
+- Added county-level pages for Title I [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
+
+### Changed
+- Upgrade eslint library to version 89 and adjust code to meet the new standards [#455](https://github.com/policy-design-lab/pdl-frontend/issues/455) 
+
+## [1.16.1] - 2026-03-26
+
+### Changed
+- Removed the $ sign for the state-level and county-level insured acres maps in Crop Insurance[#452](https://github.com/policy-design-lab/pdl-frontend/issues/452)
+
+## [1.16.0] - 2026-03-26
+
+### Added
 - Added the anchor to the crop insurance county level maps and reuseable function for the county-level maps in the future [#445](https://github.com/policy-design-lab/pdl-frontend/issues/445)
 
 ### Changed
@@ -432,6 +445,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.16.1]: https://github.com/policy-design-lab/pdl-frontend/compare/1.16.0...1.16.1
+[1.16.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.15.0...1.16.0
 [1.15.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.14.0...1.15.0
 [1.14.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.13.0...1.14.0
 [1.13.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.12.0...1.13.0
