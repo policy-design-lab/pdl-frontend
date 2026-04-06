@@ -34,7 +34,7 @@ import {
     Title1CountyColumnConfig,
     Title1CountyDatasetKey,
     Title1CountySelector
-} from "../utils/title1County";
+} from "../components/title1/title1County";
 
 const title1CheckedByMapId = Object.entries(title1MapIdByChecked).reduce(
     (acc, [checked, mapId]) => {

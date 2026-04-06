@@ -18,7 +18,7 @@ import {
     getTitle1CountyScopedRecord,
     Title1CountyColumnConfig,
     Title1CountySelector
-} from "../../utils/title1County";
+} from "./title1County";
 
 interface Title1CountyTableProps {
     tableTitle: string;
