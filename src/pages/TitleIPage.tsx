@@ -54,6 +54,9 @@ interface Title1CountyViewConfig extends Title1CountySelector {
     columns: Title1CountyColumnConfig[];
 }
 
+const avgBaseAcresTooltip = "calculating using 19-23 data";
+const avgRecipientsTooltip = "including years with 0 recipants";
+
 const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
     0: [{ accessor: "totalPaymentInDollars", header: "TOTAL TITLE I BENEFITS", type: "currency" }],
     1: [
@@ -63,28 +66,68 @@ const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
     2: [
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
-        { accessor: "averageAreaInAcres", header: "AVG. BASE ACRES", type: "number" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" }
+        {
+            accessor: "averageAreaInAcres",
+            header: "AVG. BASE ACRES",
+            type: "number",
+            tooltip: avgBaseAcresTooltip
+        },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        }
     ],
     20: [
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageAreaInAcres", header: "AVG. BASE ACRES", type: "number" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" }
+        {
+            accessor: "averageAreaInAcres",
+            header: "AVG. BASE ACRES",
+            type: "number",
+            tooltip: avgBaseAcresTooltip
+        },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        }
     ],
     21: [
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageAreaInAcres", header: "AVG. BASE ACRES", type: "number" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" }
+        {
+            accessor: "averageAreaInAcres",
+            header: "AVG. BASE ACRES",
+            type: "number",
+            tooltip: avgBaseAcresTooltip
+        },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        }
     ],
     3: [
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
-        { accessor: "averageAreaInAcres", header: "AVG. BASE ACRES", type: "number" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" }
+        {
+            accessor: "averageAreaInAcres",
+            header: "AVG. BASE ACRES",
+            type: "number",
+            tooltip: avgBaseAcresTooltip
+        },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        }
     ],
     4: [
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
@@ -110,7 +153,12 @@ const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        },
         {
             accessor: "averageRecipientCountInPercentageNationwide",
             header: "AVG. RECIPIENTS PCT. NATIONWIDE",
@@ -126,7 +174,12 @@ const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        },
         {
             accessor: "averageRecipientCountInPercentageNationwide",
             header: "AVG. RECIPIENTS PCT. NATIONWIDE",
@@ -142,7 +195,12 @@ const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        },
         {
             accessor: "averageRecipientCountInPercentageNationwide",
             header: "AVG. RECIPIENTS PCT. NATIONWIDE",
@@ -158,7 +216,12 @@ const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
         { accessor: "totalPaymentInDollars", header: "PAYMENT", type: "currency" },
         { accessor: "totalPaymentInPercentageNationwide", header: "PAYMENT PCT. NATIONWIDE", type: "percent" },
         { accessor: "totalPaymentInPercentageWithinState", header: "PAYMENT PCT. WITHIN STATE", type: "percent" },
-        { accessor: "averageRecipientCount", header: "AVG. RECIPIENTS", type: "number" },
+        {
+            accessor: "averageRecipientCount",
+            header: "AVG. RECIPIENTS",
+            type: "number",
+            tooltip: avgRecipientsTooltip
+        },
         {
             accessor: "averageRecipientCountInPercentageNationwide",
             header: "AVG. RECIPIENTS PCT. NATIONWIDE",
@@ -802,7 +865,7 @@ export default function TitleIPage(): JSX.Element {
                         />,
                         renderStateTableOnlyContent(
                             <Title1ProgramTable
-                                tableTitle={`Comparison of Total Payments for these Commodities Programs and the State's Percentage of that Total (${total_year})`}
+                                tableTitle={`Comparison of Total Payments for these Commodities Programs (${total_year})`}
                                 subtitle="Total Commodities Programs, Subtitle A"
                                 program={undefined}
                                 subprogram={undefined}

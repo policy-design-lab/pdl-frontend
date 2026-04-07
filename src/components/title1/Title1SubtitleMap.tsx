@@ -89,7 +89,6 @@ const MapChart = ({
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            {/* )} */}
                                         </div>
                                     );
                                     return (
@@ -192,7 +191,6 @@ const MapChart = ({
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            {/* )} */}
                                         </div>
                                     );
                                     return (

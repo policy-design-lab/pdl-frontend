@@ -3,7 +3,17 @@ import styled from "styled-components";
 import { CSVLink } from "react-csv";
 import { usePagination, useSortBy, useTable } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TableContainer, Typography } from "@mui/material";
+import {
+    Box,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    TableContainer,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import {
     compareWithAlphabetic,
     compareWithDollarSign,
@@ -169,6 +179,32 @@ function Title1CountyTable({
         return Array.from(states).sort();
     }, [countyData, year, stateCodes]);
 
+    const visibleColumnsConfig = React.useMemo(
+        () => columnsConfig.filter((column) => !column.accessor.toLowerCase().includes("withinstate")),
+        [columnsConfig]
+    );
+    const avgBaseAcresTooltip = React.useMemo(
+        () => columnsConfig.find((column) => column.accessor === "averageAreaInAcres")?.tooltip,
+        [columnsConfig]
+    );
+    const renderedTableTitle = React.useMemo(() => {
+        if (!avgBaseAcresTooltip || !tableTitle.includes("Avg. Base Acres")) {
+            return tableTitle;
+        }
+        const [before, after] = tableTitle.split("Avg. Base Acres");
+        return (
+            <>
+                {before}
+                <Tooltip title={avgBaseAcresTooltip} arrow placement="top">
+                    <Box component="span" sx={{ display: "inline-block" }}>
+                        Avg. Base Acres
+                    </Box>
+                </Tooltip>
+                {after}
+            </>
+        );
+    }, [avgBaseAcresTooltip, tableTitle]);
+
     const resultData = React.useMemo(
         () =>
             countyRows.map((county: any) => {
@@ -178,13 +214,13 @@ function Title1CountyTable({
                     state: stateName,
                     county: county.countyName
                 };
-                columnsConfig.forEach((column) => {
+                visibleColumnsConfig.forEach((column) => {
                     const value = Number(scopedRecord?.[column.accessor]);
                     newRecord[column.accessor] = Number.isFinite(value) ? formatTableValue(value, column.type) : "";
                 });
                 return newRecord;
             }),
-        [columnsConfig, countyRows, selector, stateCodes]
+        [countyRows, selector, stateCodes, visibleColumnsConfig]
     );
 
     const columns = React.useMemo(() => {
@@ -192,15 +228,16 @@ function Title1CountyTable({
             { Header: "STATE", accessor: "state", sortType: compareWithAlphabetic },
             { Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic }
         ];
-        columnsConfig.forEach((column) => {
+        visibleColumnsConfig.forEach((column) => {
             preparedColumns.push({
                 Header: column.header,
                 accessor: column.accessor,
-                sortType: getSortType(column.type)
+                sortType: getSortType(column.type),
+                tooltip: column.tooltip
             });
         });
         return preparedColumns;
-    }, [columnsConfig]);
+    }, [visibleColumnsConfig]);
 
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
@@ -228,7 +265,7 @@ function Title1CountyTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                {tableTitle}
+                                {renderedTableTitle}
                             </Typography>
                         </Box>
                     </Grid>
@@ -328,7 +365,15 @@ function Table({
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
                                 >
-                                    {column.render("Header")}
+                                    {column.tooltip ? (
+                                        <Tooltip title={column.tooltip} arrow placement="top">
+                                            <Box component="span" sx={{ display: "inline-block" }}>
+                                                {column.render("Header")}
+                                            </Box>
+                                        </Tooltip>
+                                    ) : (
+                                        column.render("Header")
+                                    )}
                                     <span>
                                         {!column.isSorted ? (
                                             <Box sx={{ ml: 1, display: "inline" }}>

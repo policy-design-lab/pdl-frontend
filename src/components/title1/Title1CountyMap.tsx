@@ -366,6 +366,9 @@ const Title1CountyMap = ({
             }
             const stateName = stateCodes[countyData.state] || countyData.state;
             const visibleColumns = tooltipColumns.filter((column) => {
+                if (column.accessor.toLowerCase().includes("withinstate")) {
+                    return false;
+                }
                 const value = Number(scopedRecord[column.accessor]);
                 return Number.isFinite(value);
             });
