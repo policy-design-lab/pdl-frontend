@@ -55,7 +55,7 @@ interface Title1CountyViewConfig extends Title1CountySelector {
 }
 
 const avgBaseAcresTooltip = "calculating using 19-23 data";
-const avgRecipientsTooltip = "including years with 0 recipants";
+const avgRecipientsTooltip = "including years with 0 recipients";
 
 const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
     0: [{ accessor: "totalPaymentInDollars", header: "TOTAL TITLE I BENEFITS", type: "currency" }],
