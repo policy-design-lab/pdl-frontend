@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [unreleased]
 
 ### Added
-- Added county-level pages for Title I [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
+- Added county-level pages for Title I [#455](https://github.com/policy-design-lab/pdl-frontend/issues/455) 
 
 ### Changed
-- Upgrade eslint library to version 89 and adjust code to meet the new standards [#455](https://github.com/policy-design-lab/pdl-frontend/issues/455) 
+- Upgrade eslint library to version 89 and adjust code to meet the new standards [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
 
 ## [1.16.1] - 2026-03-26
 
