@@ -54,7 +54,7 @@ interface Title1CountyViewConfig extends Title1CountySelector {
     columns: Title1CountyColumnConfig[];
 }
 
-const avgBaseAcresTooltip = "calculating using 19-23 data";
+const avgBaseAcresTooltip = "calculated using 2019-2023 data";
 const avgRecipientsTooltip = "including years with 0 recipients";
 
 const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
