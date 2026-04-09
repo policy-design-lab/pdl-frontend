@@ -1,20 +1,5 @@
 import * as React from "react";
-import * as d3 from "d3";
-import styled from "styled-components";
-import {
-    ToggleButton,
-    Box,
-    ToggleButtonGroup,
-    createTheme,
-    ThemeProvider,
-    Typography,
-    CardMedia,
-    Grid,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    SvgIcon
-} from "@mui/material";
+import { createTheme, ThemeProvider, Typography, Grid, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import CropInsuranceBar from "./CropInsuranceBar";
 import { DownloadIcon } from "../../shared/DownloadIcon";
 

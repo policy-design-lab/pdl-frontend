@@ -29,10 +29,13 @@ import CropInsuranceCountyTable from "../components/cropinsurance/CropInsuranceC
 import { useMapUrlState } from "../utils/useMapUrlState";
 import { cropInsuranceMapIdByChecked } from "../utils/linkUtil";
 
-const cropInsuranceCheckedByMapId = Object.entries(cropInsuranceMapIdByChecked).reduce((acc, [checked, mapId]) => {
-    acc[mapId] = checked;
-    return acc;
-}, {} as Record<string, string>);
+const cropInsuranceCheckedByMapId = Object.entries(cropInsuranceMapIdByChecked).reduce(
+    (acc, [checked, mapId]) => {
+        acc[mapId] = checked;
+        return acc;
+    },
+    {} as Record<string, string>
+);
 
 const cropInsuranceMapIds = Object.values(cropInsuranceMapIdByChecked);
 const cropInsuranceDefaultMapId = cropInsuranceMapIdByChecked["0"];

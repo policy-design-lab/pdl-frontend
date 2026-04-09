@@ -98,7 +98,7 @@ function SnapTable({
         }
     `;
     const resultData = [];
-    // eslint-disable-next-line no-restricted-syntax
+
     SnapData[yearKey].forEach((d) => {
         const newRecord = () => {
             return {
@@ -162,7 +162,6 @@ function SnapTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const {

@@ -11,3 +11,18 @@ export const cropInsuranceMapIdByChecked: Record<string, string> = {
     "3": "policies-earning-premium",
     "4": "average-insured-area"
 };
+
+export const title1MapIdByChecked: Record<string, string> = {
+    0: "total-commodities-programs",
+    1: "subtitle-a-total",
+    2: "arc",
+    20: "arc-co",
+    21: "arc-ic",
+    3: "plc",
+    4: "subtitle-d-dmc",
+    5: "subtitle-e-total",
+    50: "elap",
+    51: "lfp",
+    52: "lip",
+    53: "tap"
+};

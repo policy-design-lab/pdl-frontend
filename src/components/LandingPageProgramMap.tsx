@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
@@ -190,8 +189,8 @@ const MapChart = (props) => {
                                                                         record["Fiscal Year"] === 2018
                                                                             ? classes.tooltip_topcell_left
                                                                             : record["Fiscal Year"] === 2022
-                                                                            ? classes.tooltip_bottomcell_left
-                                                                            : classes.tooltip_regularcell_left
+                                                                              ? classes.tooltip_bottomcell_left
+                                                                              : classes.tooltip_regularcell_left
                                                                     }
                                                                 >
                                                                     {`${record["Fiscal Year"]} Benefit:`}
@@ -201,8 +200,8 @@ const MapChart = (props) => {
                                                                         record["Fiscal Year"] === 2018
                                                                             ? classes.tooltip_topcell_right
                                                                             : record["Fiscal Year"] === 2022
-                                                                            ? classes.tooltip_bottomcell_right
-                                                                            : classes.tooltip_regularcell_right
+                                                                              ? classes.tooltip_bottomcell_right
+                                                                              : classes.tooltip_regularcell_right
                                                                     }
                                                                 >
                                                                     {`$${ShortFormat(record.Amount, undefined, 2)}`}

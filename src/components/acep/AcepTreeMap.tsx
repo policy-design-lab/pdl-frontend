@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
-import { Checkbox, FormControlLabel, FormGroup, Grid, IconButton, SvgIcon, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Typography } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import TreeMapSquares from "./TreeMapSquares";
 import { DownloadIcon } from "../shared/DownloadIcon";

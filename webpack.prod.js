@@ -15,14 +15,7 @@ module.exports = merge(commonConfig, {
                 test: /\.[tj]sx?$/,
                 exclude: /node_modules/,
                 use: [
-                    'babel-loader',
-                    // {
-                    //     // Show eslint messages in the output
-                    //     loader: 'eslint-loader',
-                    //     options: {
-                    //         emitWarning: true
-                    //     }
-                    // }
+                    'babel-loader'
                 ]
             },
         ]
