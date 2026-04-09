@@ -138,7 +138,7 @@ function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTi
                                     >
                                         {column.render("Header")}
                                         <div>
-                                            {/* eslint-disable-next-line no-nested-ternary */}
+                                            {}
                                             {!column.isSorted ? (
                                                 <Box sx={{ ml: 1 }}>
                                                     <SwapVertIcon />

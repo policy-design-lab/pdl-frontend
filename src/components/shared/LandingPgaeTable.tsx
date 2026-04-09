@@ -95,7 +95,7 @@ export default function LandingPageTable({
     `;
     const resultData = [];
     TableData.sort((a, b) => b[SummaryKey] - a[SummaryKey]);
-    // eslint-disable-next-line no-restricted-syntax
+
     TableData.forEach((d) => {
         if (d.State.length === 2) {
             const newRecord = () => {
@@ -169,7 +169,7 @@ export default function LandingPageTable({
         </Box>
     );
 }
-// eslint-disable-next-line
+
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const {

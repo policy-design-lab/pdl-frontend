@@ -119,9 +119,9 @@ export default function SNAPBar({
                     .style("opacity", 1);
                 d3.select(rn.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 purpleBar.style("opacity", 1);
-                // eslint-disable-next-line no-restricted-globals
+
                 const mousePos = d3.pointer(event, d3.select(rn.current).select(".y1.axis").node());
-                // eslint-disable-next-line no-restricted-globals
+
                 const minusMouse = d3.pointer(event, purpleBar.node());
                 const rightLineData = [
                     {
@@ -180,9 +180,9 @@ export default function SNAPBar({
             if (status === 0 || status === 1) {
                 d3.select(rn.current).selectAll(".barChart").selectAll("rect").style("opacity", 0.1);
                 blueBar.style("opacity", 1);
-                // eslint-disable-next-line no-restricted-globals
+
                 const mousePos = d3.pointer(event, d3.select(rn.current).select(".y0.axis").node());
-                // eslint-disable-next-line no-restricted-globals
+
                 const minusMouse = d3.pointer(event, blueBar.node());
                 const leftLineData = [
                     {

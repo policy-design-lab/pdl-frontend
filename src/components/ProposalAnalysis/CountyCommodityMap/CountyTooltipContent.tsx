@@ -291,8 +291,8 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
                 $${ShortFormatPaymentRate(countyData.currentMeanRatePrecise || 0, false, false)}/acre${
-        isCurrentWeightedAvg ? " (weighted avg)" : ""
-    }
+                    isCurrentWeightedAvg ? " (weighted avg)" : ""
+                }
             </td>
         </tr>
         <tr>
@@ -317,8 +317,8 @@ function generateDifferenceTooltipContent(countyData: any, classes: any, showMea
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
                 $${ShortFormatPaymentRate(countyData.proposedMeanRatePrecise || 0, false, false)}/acre${
-        isProposedWeightedAvg ? " (weighted avg)" : ""
-    }
+                    isProposedWeightedAvg ? " (weighted avg)" : ""
+                }
             </td>
         </tr>
     `;
@@ -366,8 +366,8 @@ function generateRegularTooltipContent(
                 classes.tooltip_regularcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 3px; padding-bottom: 3px;">
                 $${ShortFormatPaymentRate(calculatedMeanRate || 0, false, false)}/acre${
-            countyData.isMeanWeighted ? " (weighted avg)" : ""
-        }
+                    countyData.isMeanWeighted ? " (weighted avg)" : ""
+                }
             </td>
         </tr>`;
     }
@@ -534,8 +534,8 @@ function generateProgramDifferenceContent(
                         classes.tooltip_regularcell_right
                     }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px; ${diffHighlightStyle} border-radius: 0 2px 2px 0;">
                         ${diff !== 0 ? `${diff > 0 ? "+" : ""}${ShortFormatPaymentRate(diff, true, false)}/acre` : ""}${
-                    isWeightedAvg ? " (weighted avg)" : ""
-                }
+                            isWeightedAvg ? " (weighted avg)" : ""
+                        }
                     </td>
                 </tr>`;
             } else {
@@ -668,8 +668,8 @@ function generateProgramRegularContent(
                 classes.tooltip_topcell_right
             }" style="text-align: right; vertical-align: top; padding-top: 2px; padding-bottom: 2px;">
                 <b>$${ShortFormatPaymentRate(Math.abs(calculatedMeanRate), false, false)}/acre${
-            countyData.isMeanWeighted ? " (weighted avg)" : ""
-        }</b>
+                    countyData.isMeanWeighted ? " (weighted avg)" : ""
+                }</b>
             </td>
         </tr>`;
     }
@@ -958,16 +958,16 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <th style="${tableHeaderStyle}; text-align: left; width: 20%;">Commodity</th>
                             <th style="${tableHeaderStyle}; width: 13%;">${
-            showMeanValues ? "Total Rate" : "Total ($)"
-        }</th>
+                                showMeanValues ? "Total Rate" : "Total ($)"
+                            }</th>
                             <th style="${tableHeaderStyle}; width: 13%;">${baseAcresLabel}</th>
                             <th style="${tableHeaderStyle}; width: 13%;">${
-            showMeanValues ? "ARC Rate" : "ARC Total"
-        }</th>
+                                showMeanValues ? "ARC Rate" : "ARC Total"
+                            }</th>
                             <th style="${tableHeaderStyle}; width: 13%;">ARC Acres</th>
                             <th style="${tableHeaderStyle}; width: 13%;">${
-            showMeanValues ? "PLC Rate" : "PLC Total"
-        }</th>
+                                showMeanValues ? "PLC Rate" : "PLC Total"
+                            }</th>
                             <th style="${tableHeaderStyle}; width: 13%;">PLC Acres</th>
                         </tr>
                     </thead>
@@ -1103,28 +1103,28 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <td style="${commodityHeaderStyle}">${commodity}</td>
                             <td style="${cellStyle}">${formatValue(
-                    showMeanValues ? commodityRate : commodityValue,
-                    showMeanValues
-                )}</td>
+                                showMeanValues ? commodityRate : commodityValue,
+                                showMeanValues
+                            )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                    displayBaseAcres
-                )}</td>
+                                                             displayBaseAcres
+                                                         )}</td>
                             <td style="${cellStyle}">${
-                    commodityArcValue > 0
-                        ? formatValue(showMeanValues ? commodityArcRate : commodityArcValue, showMeanValues)
-                        : "-"
-                }</td>
+                                commodityArcValue > 0
+                                    ? formatValue(showMeanValues ? commodityArcRate : commodityArcValue, showMeanValues)
+                                    : "-"
+                            }</td>
                             <td style="${cellStyle}">${
-                    commodityArcAcres > 0 ? ShortFormatInteger(displayArcAcres) : "-"
-                }</td>
+                                commodityArcAcres > 0 ? ShortFormatInteger(displayArcAcres) : "-"
+                            }</td>
                             <td style="${cellStyle}">${
-                    commodityPlcValue > 0
-                        ? formatValue(showMeanValues ? commodityPlcRate : commodityPlcValue, showMeanValues)
-                        : "-"
-                }</td>
+                                commodityPlcValue > 0
+                                    ? formatValue(showMeanValues ? commodityPlcRate : commodityPlcValue, showMeanValues)
+                                    : "-"
+                            }</td>
                             <td style="${cellStyle}">${
-                    commodityPlcAcres > 0 ? ShortFormatInteger(displayPlcAcres) : "-"
-                }</td>
+                                commodityPlcAcres > 0 ? ShortFormatInteger(displayPlcAcres) : "-"
+                            }</td>
                         </tr>`;
             }
         });
@@ -1143,8 +1143,8 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <th style="${tableHeaderStyle}; text-align: left; width: 40%;">Commodity/Program</th>
                             <th style="${tableHeaderStyle}; width: 30%;">${
-            showMeanValues ? "Rate ($/base acre)" : "Total ($)"
-        }</th>
+                                showMeanValues ? "Rate ($/base acre)" : "Total ($)"
+                            }</th>
                             <th style="${tableHeaderStyle}; width: 30%;">${baseAcresLabel}</th>
                         </tr>
                     </thead>
@@ -1217,12 +1217,12 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <td style="${commodityHeaderStyle}">${commodity}</td>
                             <td style="${cellStyle}">${formatValue(
-                    showMeanValues ? commodityRate : commodityValue,
-                    showMeanValues
-                )}</td>
+                                showMeanValues ? commodityRate : commodityValue,
+                                showMeanValues
+                            )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                    displayCommodityBaseAcres
-                )}</td>
+                                                             displayCommodityBaseAcres
+                                                         )}</td>
                         </tr>`;
 
                 if (commodityData.programs) {
@@ -1252,12 +1252,12 @@ function generateCombinedCommodityProgramContent(
                         <tr>
                             <td style="text-align: left; vertical-align: middle; padding: 4px 8px; border: 1px solid rgba(47, 113, 100, 0.15); font-size: 0.9em; padding-left: 16px;">• ${program}</td>
                             <td style="${cellStyle}">${formatValue(
-                                    showMeanValues ? programRate : programValue,
-                                    showMeanValues
-                                )}</td>
+                                showMeanValues ? programRate : programValue,
+                                showMeanValues
+                            )}</td>
                                                          <td style="${cellStyle}">${ShortFormatInteger(
-                                    displayProgramBaseAcres
-                                )}</td>
+                                                             displayProgramBaseAcres
+                                                         )}</td>
                         </tr>`;
                             }
                         }

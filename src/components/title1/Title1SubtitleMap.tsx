@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
@@ -11,8 +11,7 @@ import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
-
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
 
 const offsets = {
     VT: [50, -8],
@@ -31,32 +30,27 @@ const MapChart = ({
     subtitle,
     program,
     subprogram,
-    maxValue,
-    year,
-    mapColor,
-    statePerformance,
-    stateCodes,
-    allStates,
+    stateRecordsByName,
+    stateAbbrevByVal,
+    stateTopology,
     colorScale
 }) => {
     const classes = useStyles();
     return (
         <div data-tip="">
-            {subtitle && program ? (
+            {stateTopology === null ? (
+                <Box display="flex" justifyContent="center" sx={{ pt: 1 }}>
+                    <h1>Loading Map Data...</h1>
+                </Box>
+            ) : subtitle && program ? (
                 <ComposableMap projection="geoAlbersUsa">
-                    <Geographies geography={geoUrl}>
+                    <Geographies geography={stateTopology}>
                         {({ geographies }) => (
                             <>
                                 {geographies.map((geo) => {
                                     let programPayment = 0;
                                     let totalPaymentInPercentage = 0;
-                                    const state = statePerformance[year].filter(
-                                        (v) =>
-                                            v.state.length !== 2
-                                                ? v.state === geo.properties.name
-                                                : stateCodes[v.state] === geo.properties.name
-                                        /* eslint-disable func-call-spacing */
-                                    )[0];
+                                    const state = stateRecordsByName[geo.properties.name];
                                     if (state === undefined || state.length === 0) {
                                         return null;
                                     }
@@ -95,7 +89,6 @@ const MapChart = ({
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            {/* )} */}
                                         </div>
                                     );
                                     return (
@@ -131,7 +124,7 @@ const MapChart = ({
                                 })}
                                 {geographies.map((geo) => {
                                     const centroid = geoCentroid(geo);
-                                    const cur = allStates.find((s) => s.val === geo.id);
+                                    const cur = stateAbbrevByVal[String(geo.id)];
                                     return (
                                         <g key={`${geo.rsmKey}-name`}>
                                             {cur &&
@@ -163,15 +156,13 @@ const MapChart = ({
                 </ComposableMap>
             ) : (
                 <ComposableMap projection="geoAlbersUsa">
-                    <Geographies geography={geoUrl}>
+                    <Geographies geography={stateTopology}>
                         {({ geographies }) => (
                             <>
                                 {geographies.map((geo) => {
                                     let programPayment = 0;
                                     let totalPaymentInPercentage = 0;
-                                    const state = statePerformance[year].filter(
-                                        (v) => stateCodes[v.state] === geo.properties.name
-                                    )[0];
+                                    const state = stateRecordsByName[geo.properties.name];
                                     if (state === undefined || state.length === 0) {
                                         return null;
                                     }
@@ -200,7 +191,6 @@ const MapChart = ({
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            {/* )} */}
                                         </div>
                                     );
                                     return (
@@ -236,7 +226,7 @@ const MapChart = ({
                                 })}
                                 {geographies.map((geo) => {
                                     const centroid = geoCentroid(geo);
-                                    const cur = allStates.find((s) => s.val === geo.id);
+                                    const cur = stateAbbrevByVal[String(geo.id)];
                                     return (
                                         <g key={`${geo.rsmKey}-name`}>
                                             {cur &&
@@ -275,7 +265,8 @@ MapChart.propTypes = {
     setReactTooltipContent: PropTypes.func,
     subprogram: PropTypes.string,
     program: PropTypes.string,
-    maxValue: PropTypes.number
+    maxValue: PropTypes.number,
+    stateTopology: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 };
 
 const Title1SubtitleMap = ({
@@ -298,6 +289,8 @@ const Title1SubtitleMap = ({
     allStates: any;
 }): JSX.Element => {
     const [content, setContent] = useState("");
+    const [stateTopology, setStateTopology] = useState<Record<string, unknown> | null>(null);
+    const [topologyLoadAttempted, setTopologyLoadAttempted] = useState(false);
     const quantizeArray: number[] = [];
     if (subtitle && program) {
         statePerformance[year].forEach((value) => {
@@ -318,7 +311,6 @@ const Title1SubtitleMap = ({
             return null;
         });
     }
-    const maxValue = Math.max(...quantizeArray);
     const searchKey = !subprogram ? program || subtitle : subprogram;
     const customScale = legendConfig[searchKey];
     const colorScale = d3.scaleThreshold(customScale, mapColor);
@@ -338,6 +330,47 @@ const Title1SubtitleMap = ({
             zeroPoints.push(state.state);
         }
     });
+    const stateRecordsByName = useMemo(() => {
+        const mapped: Record<string, any> = {};
+        statePerformance[year].forEach((record) => {
+            const stateName = record.state.length !== 2 ? record.state : stateCodes[record.state];
+            if (stateName) {
+                mapped[stateName] = record;
+            }
+        });
+        return mapped;
+    }, [stateCodes, statePerformance, year]);
+    const stateAbbrevByVal = useMemo(() => {
+        const mapped: Record<string, any> = {};
+        allStates.forEach((state) => {
+            if (state?.val !== undefined && state?.id) {
+                mapped[String(state.val)] = state;
+            }
+        });
+        return mapped;
+    }, [allStates]);
+    const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
+
+    useEffect(() => {
+        let active = true;
+        loadTopoJson(STATE_TOPOJSON_URL)
+            .then((topology) => {
+                if (!active) {
+                    return;
+                }
+                setStateTopology(topology);
+            })
+            .catch(() => undefined)
+            .finally(() => {
+                if (active) {
+                    setTopologyLoadAttempted(true);
+                }
+            });
+        return () => {
+            active = false;
+        };
+    }, []);
+
     const classes = useStyles();
     return (
         <div>
@@ -355,12 +388,9 @@ const Title1SubtitleMap = ({
                 subtitle={subtitle}
                 program={program}
                 subprogram={subprogram}
-                maxValue={maxValue}
-                year={year}
-                mapColor={mapColor}
-                statePerformance={statePerformance}
-                stateCodes={stateCodes}
-                allStates={allStates}
+                stateRecordsByName={stateRecordsByName}
+                stateAbbrevByVal={stateAbbrevByVal}
+                stateTopology={stateGeographySource}
                 colorScale={colorScale}
             />
             <div className="tooltip-container">

@@ -29,7 +29,7 @@ function Title1ProgramTable({
 }): JSX.Element {
     const resultData = [];
     const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
+
     Title1Data[year].forEach((stateData) => {
         const state = stateData.state;
         let programData = null;
@@ -320,12 +320,20 @@ function Title1ProgramTable({
                   []
               );
     }
+    const visibleColumns = React.useMemo(
+        () =>
+            columns.filter(
+                (column) =>
+                    !column.accessor.toLowerCase().includes("withinstate") && !skipColumns.includes(column.accessor)
+            ),
+        [columns, skipColumns]
+    );
     const paymentsIndex =
-        columns.findIndex((c) => c.accessor === "totalPaymentInDollars") !== -1
-            ? columns.findIndex((c) => c.accessor === "totalPaymentInDollars")
-            : columns.findIndex((c) => c.accessor === "totalPaymentInDollars");
-    const averageAreaInAcresIndex = columns.findIndex((c) => c.accessor === "averageAreaInAcres");
-    const averageRecipientCountIndex = columns.findIndex((c) => c.accessor === "averageRecipientCount");
+        visibleColumns.findIndex((c) => c.accessor === "totalPaymentInDollars") !== -1
+            ? visibleColumns.findIndex((c) => c.accessor === "totalPaymentInDollars")
+            : visibleColumns.findIndex((c) => c.accessor === "totalPaymentInDollars");
+    const averageAreaInAcresIndex = visibleColumns.findIndex((c) => c.accessor === "averageAreaInAcres");
+    const averageRecipientCountIndex = visibleColumns.findIndex((c) => c.accessor === "averageRecipientCount");
 
     const Styles =
         program && subtitle.includes("Subtitle A")
@@ -588,7 +596,7 @@ function Title1ProgramTable({
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
-                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
+                        columns={visibleColumns}
                         data={resultData}
                         initialState={{
                             pageSize: 10,
@@ -602,7 +610,6 @@ function Title1ProgramTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({
     columns,
     data,

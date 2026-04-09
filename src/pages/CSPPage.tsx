@@ -95,7 +95,6 @@ export default function CSPPage(): JSX.Element {
     const processData = (chartData) => {
         if (chartData.statutes === undefined) return;
 
-        // eslint-disable-next-line
         const cur1 = chartData.statutes.find((s) => s.statuteName === "2018 Practices");
         const cur2 = chartData.statutes.find((s) => s.statuteName === "2014 Eligible Land");
         const cur3 = chartData.statutes.find((s) => s.statuteName === "Other CSP");

@@ -12,9 +12,24 @@ const Styles = styled.div`
 `;
 let currentChecked = "0";
 
-export default function SideBar({ setTitle1Checked }): JSX.Element {
-    const [checked, setChecked] = React.useState(currentChecked);
-    const [selectedItem, setSelectedItem] = useState("0");
+export default function SideBar({ setTitle1Checked, selectedValue }): JSX.Element {
+    const initialSelected = selectedValue ?? currentChecked;
+    const [checked, setChecked] = React.useState(initialSelected);
+    const [selectedItem, setSelectedItem] = useState(initialSelected);
+
+    React.useEffect(() => {
+        if (selectedValue === undefined) {
+            return;
+        }
+        if (selectedValue !== checked) {
+            setChecked(selectedValue);
+        }
+        if (selectedValue !== selectedItem) {
+            setSelectedItem(selectedValue);
+        }
+        currentChecked = selectedValue;
+    }, [selectedValue, checked, selectedItem]);
+
     const handleToggle = (value: string) => () => {
         setChecked(value);
         setTitle1Checked(value);
@@ -89,12 +104,6 @@ export default function SideBar({ setTitle1Checked }): JSX.Element {
 
     const MultiLevel = ({ value, item }) => {
         const { items: children } = item;
-        const [open, setOpen] = useState(false);
-        const handleClick = (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            setOpen((prev) => !prev);
-        };
         const highlight = sameCategory(item, value);
         return (
             <Box>

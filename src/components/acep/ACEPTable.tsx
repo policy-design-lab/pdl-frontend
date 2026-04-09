@@ -24,7 +24,7 @@ function AcepProgramTable({
 }): JSX.Element {
     const resultData = [];
     const hashmap = {};
-    // eslint-disable-next-line no-restricted-syntax
+
     AcepData[year].forEach((stateData) => {
         let state;
         stateCodes.forEach((sValue) => {
@@ -228,7 +228,6 @@ function AcepProgramTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const {

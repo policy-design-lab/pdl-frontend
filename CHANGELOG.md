@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.17.0] - 2026-4-08
+
+### Added
+- Added county-level pages for Title I [#455](https://github.com/policy-design-lab/pdl-frontend/issues/455) 
+
+### Changed
+- Upgrade eslint library to version 89 and adjust code to meet the new standards [#447](https://github.com/policy-design-lab/pdl-frontend/issues/447)
+
 ## [1.16.1] - 2026-03-26
 
 ### Changed
@@ -434,6 +442,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.17.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.16.1...1.17.0
 [1.16.1]: https://github.com/policy-design-lab/pdl-frontend/compare/1.16.0...1.16.1
 [1.16.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.15.0...1.16.0
 [1.15.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.14.0...1.15.0

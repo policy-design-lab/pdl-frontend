@@ -23,7 +23,6 @@ function IRAPercentageTable({
     let resultData = [];
     const hashmap = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     IRAData[year].forEach((stateData) => {
         const state = stateData.state;
         let pData = null;
@@ -188,15 +187,13 @@ function IRAPercentageTable({
     columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
     // filter out all data attributes with the word "percentage" in them
 
-    resultData = resultData.map(
-        (item) =>
-            Object.keys(item)
-                .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
-                .reduce((obj, key) => {
-                    obj[key] = item[key];
-                    return obj;
-                }, {} as any)
-        /* eslint-disable-next-line function-paren-newline */
+    resultData = resultData.map((item) =>
+        Object.keys(item)
+            .filter((key) => key.toLowerCase().includes("percentage") || key.toLowerCase().includes("state"))
+            .reduce((obj, key) => {
+                obj[key] = item[key];
+                return obj;
+            }, {} as any)
     );
     const attrs = resultData[0] ? Object.keys(resultData[0]).filter((item) => item.toLowerCase() !== "state") : [];
     attrs.forEach((attribute) => {
@@ -349,7 +346,6 @@ function IRAPercentageTable({
     );
 }
 
-// eslint-disable-next-line
 function Table({ columns, data, initialState }: { columns: any; data: any; initialState: any }) {
     const state = React.useMemo(() => initialState, []);
     const [columnPage, setColumnPage] = React.useState(0);
