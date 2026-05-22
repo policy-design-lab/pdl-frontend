@@ -1,0 +1,516 @@
+import React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { curveCatmullRom, line } from "d3";
+import {
+    calculateGrowthPercentage,
+    ChinaCommodityDemandRecord,
+    ChinaSocioeconomicRecord,
+    createNormalizedTrendValues,
+    formatCompactCurrency,
+    formatCompactPopulation,
+    formatPercentage,
+    formatThousandMetricTonsAsMmt,
+    getPreferredYear,
+    getRecentYears,
+    isFiniteNumber,
+    SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+    SoybeanYearRecord
+} from "./soybeanApi";
+
+const CHART_WIDTH = 1480;
+const CHART_HEIGHT = 206;
+const Y_MIN = 0;
+const Y_MAX = 125;
+const AXIS_VALUES = [0, 25, 50, 75, 100, 125];
+const CHART_PADDING = {
+    top: 12,
+    right: 256,
+    bottom: 18,
+    left: 92
+};
+
+type TrendSeries = {
+    id: string;
+    color: string;
+    endLabel: string;
+    pillTone: "light" | "pork" | "poultry";
+    values: number[];
+};
+
+type TrendAxisTick = {
+    label: string;
+    value: number;
+};
+
+type TrendChartDefinition = {
+    id: string;
+    title: string;
+    annotation: string;
+    annotationClassName?: string;
+    axisTicks?: TrendAxisTick[];
+    showProteinPills?: boolean;
+    series: TrendSeries[];
+};
+
+type SoybeanStoryboardInfluenceDriversProps = {
+    commodities: SoybeanYearRecord<ChinaCommodityDemandRecord>;
+    socioeconomic: SoybeanYearRecord<ChinaSocioeconomicRecord>;
+};
+const fallbackInfluenceCharts: TrendChartDefinition[] = [
+    {
+        id: "population-growth",
+        title: "Population Growth",
+        annotation: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+        series: [
+            {
+                id: "population",
+                color: "#A8CCE2",
+                endLabel: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+                pillTone: "light",
+                values: [16, 18, 19, 49, 28, 40, 47, 62, 62, 78, 80, 87, 61, 88, 106, 86, 91, 115, 101, 113]
+            }
+        ]
+    },
+    {
+        id: "income-growth",
+        title: "Income Growth",
+        annotation: "People Get Richer",
+        series: [
+            {
+                id: "income",
+                color: "#A8CCE2",
+                endLabel: "GDP Per Capita",
+                pillTone: "light",
+                values: [15, 11, 23, 31, 49, 55, 35, 44, 54, 68, 86, 71, 84, 76, 77, 93, 79, 118, 118, 118]
+            }
+        ]
+    },
+    {
+        id: "protein-demand",
+        title: "Demand for Pork and Poultry",
+        annotation: "China Has A Big Preference For Pork And Poultry",
+        annotationClassName: "soybean-storyboard-driver-annotation soybean-storyboard-driver-annotation-tight",
+        showProteinPills: true,
+        series: [
+            {
+                id: "pork",
+                color: "#E5DF95",
+                endLabel: "Pork Amount",
+                pillTone: "pork",
+                values: [16, 18, 20, 49, 29, 40, 47, 62, 62, 79, 82, 88, 66, 104, 88, 92, 115, 103, 101, 111]
+            },
+            {
+                id: "poultry",
+                color: "#DDA0D9",
+                endLabel: "Poultry Amount",
+                pillTone: "poultry",
+                values: [5, 1, 12, 20, 38, 46, 25, 34, 45, 58, 76, 61, 63, 65, 81, 69, 105, 105, 106, 93]
+            }
+        ]
+    },
+    {
+        id: "urbanization-growth",
+        title: "Urbanization Growth",
+        annotation: "More Urban Countries Also Increase Food Demand",
+        annotationClassName: "soybean-storyboard-driver-annotation soybean-storyboard-driver-annotation-wide",
+        series: [
+            {
+                id: "urbanization",
+                color: "#A8CCE2",
+                endLabel: "Urbanization Metric",
+                pillTone: "light",
+                values: [12, 29, 12, 16, 44, 58, 45, 61, 41, 76, 90, 89, 58, 81, 98, 113, 92, 99, 118, 121]
+            }
+        ]
+    }
+];
+const fallbackAxisTicks = AXIS_VALUES.map((value) => ({
+    label: `${value}`,
+    value
+}));
+
+function getRoundedPercentage(value: number | null): string {
+    if (!isFiniteNumber(value)) {
+        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+    }
+    return `${value.toLocaleString("en-US", {
+        maximumFractionDigits: Math.abs(value) < 10 ? 1 : 0,
+        minimumFractionDigits: Math.abs(value) < 10 ? 1 : 0
+    })}%`;
+}
+
+function getRecordValues<T>(
+    records: SoybeanYearRecord<T>,
+    years: string[],
+    selector: (record: T) => number | null | undefined
+): number[] {
+    return years.map((year) => selector(records[year])).filter(isFiniteNumber);
+}
+
+function getUrbanizationShare(record: ChinaSocioeconomicRecord): number | null {
+    if (!isFiniteNumber(record.urban_population) || !isFiniteNumber(record.total_population)) {
+        return null;
+    }
+    return (record.urban_population / record.total_population) * 100;
+}
+
+function getLatestValue(values: number[]): number | null {
+    return values.length > 0 ? values[values.length - 1] : null;
+}
+
+function formatAxisDecimal(value: number, fractionDigits: number): string {
+    return value.toLocaleString("en-US", {
+        maximumFractionDigits: fractionDigits,
+        minimumFractionDigits: fractionDigits
+    });
+}
+
+function formatPopulationAxis(value: number): string {
+    return `${formatAxisDecimal(value / 1000000000, 2)}B`;
+}
+
+function formatCurrencyAxis(value: number): string {
+    if (Math.abs(value) >= 1000) {
+        return `$${formatAxisDecimal(value / 1000, 1)}K`;
+    }
+    return `$${formatAxisDecimal(value, 0)}`;
+}
+
+function formatMmtAxis(value: number): string {
+    return `${formatAxisDecimal(value / 1000, 1)} MMT`;
+}
+
+function formatPercentageAxis(value: number): string {
+    return `${formatAxisDecimal(value, 1)}%`;
+}
+
+function createAxisTicks(
+    values: number[],
+    formatter: (value: number) => string,
+    floor = 8,
+    ceiling = 118,
+    domainValues = values,
+    tickCount = 5
+): TrendAxisTick[] {
+    const validValues = domainValues.filter(isFiniteNumber);
+    if (validValues.length === 0) {
+        return fallbackAxisTicks;
+    }
+    const minValue = Math.min(...validValues);
+    const maxValue = Math.max(...validValues);
+    if (maxValue === minValue) {
+        return [
+            {
+                label: formatter(maxValue),
+                value: (floor + ceiling) / 2
+            }
+        ];
+    }
+    const rawRange = maxValue - minValue;
+    const normalizedRange = ceiling - floor;
+    return Array.from({ length: tickCount }, (_, index) => {
+        const ratio = index / (tickCount - 1);
+        const rawDelta = ratio * rawRange;
+        const normalizedDelta = ratio * normalizedRange;
+        const rawValue = minValue + rawDelta;
+        const normalizedValue = floor + normalizedDelta;
+        return {
+            label: formatter(rawValue),
+            value: normalizedValue
+        };
+    });
+}
+
+function createChartFromValues(
+    fallbackChart: TrendChartDefinition,
+    values: number[],
+    seriesOptions: Omit<TrendSeries, "values">,
+    axisTicks: TrendAxisTick[]
+): TrendChartDefinition {
+    if (values.length < 2) {
+        return fallbackChart;
+    }
+    return {
+        ...fallbackChart,
+        axisTicks,
+        series: [
+            {
+                ...seriesOptions,
+                values: createNormalizedTrendValues(values)
+            }
+        ]
+    };
+}
+
+function buildInfluenceCharts(
+    socioeconomic: SoybeanYearRecord<ChinaSocioeconomicRecord>,
+    commodities: SoybeanYearRecord<ChinaCommodityDemandRecord>
+): TrendChartDefinition[] {
+    const socioeconomicYear = getPreferredYear(socioeconomic);
+    const commodityYear = getPreferredYear(commodities, socioeconomicYear);
+    const socioeconomicYears = getRecentYears(socioeconomic, socioeconomicYear, 20);
+    const commodityYears = getRecentYears(commodities, commodityYear, 20);
+    const populationValues = getRecordValues(socioeconomic, socioeconomicYears, (record) => record.total_population);
+    const gdpValues = getRecordValues(socioeconomic, socioeconomicYears, (record) => record.gdp_per_capita);
+    const urbanizationValues = getRecordValues(socioeconomic, socioeconomicYears, getUrbanizationShare);
+    const porkValues = getRecordValues(commodities, commodityYears, (record) => record.pork_demand);
+    const poultryValues = getRecordValues(commodities, commodityYears, (record) => record.poultry_demand);
+    const proteinValues = [...porkValues, ...poultryValues];
+    const populationGrowth = calculateGrowthPercentage(populationValues);
+    const gdpGrowth = calculateGrowthPercentage(gdpValues);
+    const latestUrbanization = getLatestValue(urbanizationValues);
+    const latestPork = getLatestValue(porkValues);
+    const latestPoultry = getLatestValue(poultryValues);
+    const charts = [...fallbackInfluenceCharts];
+    charts[0] = {
+        ...createChartFromValues(
+            charts[0],
+            populationValues,
+            {
+                color: "#A8CCE2",
+                endLabel: formatCompactPopulation(getLatestValue(populationValues)),
+                id: "population",
+                pillTone: "light"
+            },
+            createAxisTicks(populationValues, formatPopulationAxis)
+        ),
+        annotation: `China's Population Grew By Roughly ${getRoundedPercentage(populationGrowth)}`
+    };
+    charts[1] = {
+        ...createChartFromValues(
+            charts[1],
+            gdpValues,
+            {
+                color: "#A8CCE2",
+                endLabel: formatCompactCurrency(getLatestValue(gdpValues)),
+                id: "income",
+                pillTone: "light"
+            },
+            createAxisTicks(gdpValues, formatCurrencyAxis)
+        ),
+        annotation: `GDP Per Capita Rose ${getRoundedPercentage(gdpGrowth)}`
+    };
+    if (porkValues.length > 1 && poultryValues.length > 1 && proteinValues.length > 1) {
+        charts[2] = {
+            ...charts[2],
+            axisTicks: createAxisTicks(proteinValues, formatMmtAxis, 8, 118, proteinValues),
+            series: [
+                {
+                    color: "#E5DF95",
+                    endLabel: formatThousandMetricTonsAsMmt(latestPork, "Pork"),
+                    id: "pork",
+                    pillTone: "pork",
+                    values: createNormalizedTrendValues(porkValues, 8, 118, proteinValues)
+                },
+                {
+                    color: "#DDA0D9",
+                    endLabel: formatThousandMetricTonsAsMmt(latestPoultry, "Poultry"),
+                    id: "poultry",
+                    pillTone: "poultry",
+                    values: createNormalizedTrendValues(poultryValues, 8, 118, proteinValues)
+                }
+            ]
+        };
+    }
+
+    charts[3] = {
+        ...createChartFromValues(
+            charts[3],
+            urbanizationValues,
+            {
+                color: "#A8CCE2",
+                endLabel: `${formatPercentage(latestUrbanization, 1)} Urban`,
+                id: "urbanization",
+                pillTone: "light"
+            },
+            createAxisTicks(urbanizationValues, formatPercentageAxis)
+        ),
+        annotation: `Urban Share Reached ${formatPercentage(latestUrbanization, 1)}`
+    };
+    return charts;
+}
+
+function getChartPointX(index: number, pointCount: number): number {
+    if (pointCount <= 1) {
+        return CHART_PADDING.left;
+    }
+    const chartWidth = CHART_WIDTH - CHART_PADDING.left - CHART_PADDING.right;
+    const pointOffset = (index * chartWidth) / (pointCount - 1);
+    return CHART_PADDING.left + pointOffset;
+}
+
+function getChartPointY(value: number): number {
+    const chartHeight = CHART_HEIGHT - CHART_PADDING.top - CHART_PADDING.bottom;
+    const safeValue = Math.max(Y_MIN, Math.min(Y_MAX, value));
+    const valueRatio = (Y_MAX - safeValue) / (Y_MAX - Y_MIN);
+    const pointOffset = valueRatio * chartHeight;
+    return CHART_PADDING.top + pointOffset;
+}
+
+function getPillWidth(text: string): number {
+    const textWidth = text.length * 9;
+    return textWidth + 28;
+}
+
+function DriverTitle({ chart }: { chart: TrendChartDefinition }): JSX.Element {
+    if (!chart.showProteinPills) {
+        return <Typography className="soybean-storyboard-driver-title">{chart.title}</Typography>;
+    }
+    return (
+        <Box className="soybean-storyboard-driver-title-row">
+            <Typography className="soybean-storyboard-driver-title">Demand for</Typography>
+            <Box className="soybean-storyboard-driver-title-pill soybean-storyboard-driver-title-pill-pork">Pork</Box>
+            <Typography className="soybean-storyboard-driver-title">and</Typography>
+            <Box className="soybean-storyboard-driver-title-pill soybean-storyboard-driver-title-pill-poultry">
+                Poultry
+            </Box>
+            <Typography className="soybean-storyboard-driver-more-info">More info -&gt;</Typography>
+        </Box>
+    );
+}
+
+function renderEndpointPill(x: number, y: number, series: TrendSeries): JSX.Element {
+    const width = getPillWidth(series.endLabel);
+    const className = `soybean-storyboard-driver-pill soybean-storyboard-driver-pill-${series.pillTone}`;
+    const textClassName = `soybean-storyboard-driver-pill-text soybean-storyboard-driver-pill-text-${series.pillTone}`;
+    return (
+        <g transform={`translate(${x + 26} ${y - 18})`}>
+            <foreignObject width={width} height="38">
+                <Box className={className}>
+                    <Typography component="span" className={textClassName}>
+                        {series.endLabel}
+                    </Typography>
+                </Box>
+            </foreignObject>
+        </g>
+    );
+}
+
+function renderSeries(series: TrendSeries, pointCount: number): JSX.Element {
+    const generator = line<number>()
+        .x((_, index) => getChartPointX(index, pointCount))
+        .y((value) => getChartPointY(value))
+        .curve(curveCatmullRom.alpha(0.55));
+    const lastIndex = series.values.length - 1;
+    const lastX = getChartPointX(lastIndex, pointCount);
+    const lastY = getChartPointY(series.values[lastIndex]);
+    const endpointDotClassName = `soybean-storyboard-driver-endpoint soybean-storyboard-driver-endpoint-${series.pillTone}`;
+    return (
+        <g key={series.id}>
+            <path
+                d={generator(series.values) || ""}
+                fill="none"
+                stroke={series.color}
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+            />
+            {series.values.map((value, index) => (
+                <circle
+                    key={`${series.id}-${index}`}
+                    cx={getChartPointX(index, pointCount)}
+                    cy={getChartPointY(value)}
+                    r={index === lastIndex ? 0 : 4.5}
+                    fill={series.color}
+                />
+            ))}
+            <line
+                x1={lastX}
+                x2={lastX}
+                y1={CHART_PADDING.top}
+                y2={CHART_HEIGHT - CHART_PADDING.bottom}
+                stroke="rgba(255, 255, 255, 0.92)"
+                strokeWidth="2"
+                strokeDasharray="18 14"
+            />
+            <circle cx={lastX} cy={lastY} r="10" className={endpointDotClassName} />
+            {renderEndpointPill(lastX, lastY, series)}
+        </g>
+    );
+}
+
+function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
+    const pointCount = chart.series[0].values.length;
+    const axisTicks = chart.axisTicks || fallbackAxisTicks;
+    return (
+        <Box className="soybean-storyboard-driver-chart">
+            <Box className="soybean-storyboard-driver-chart-header">
+                <DriverTitle chart={chart} />
+                <Typography className={chart.annotationClassName || "soybean-storyboard-driver-annotation"}>
+                    {chart.annotation}
+                </Typography>
+            </Box>
+            <svg
+                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+                className="soybean-storyboard-driver-chart-svg"
+                role="img"
+                aria-label={chart.title}
+            >
+                {axisTicks.map((tick) => {
+                    const y = getChartPointY(tick.value);
+                    return (
+                        <g key={`${chart.id}-axis-${tick.value}-${tick.label}`}>
+                            <line
+                                x1={CHART_PADDING.left}
+                                x2={CHART_WIDTH - CHART_PADDING.right}
+                                y1={y}
+                                y2={y}
+                                stroke="rgba(255, 255, 255, 0.08)"
+                                strokeWidth="1"
+                            />
+                            <text
+                                x={16}
+                                y={y + 5}
+                                fill="rgba(197, 214, 222, 0.72)"
+                                fontFamily="Roboto"
+                                fontSize="16"
+                                fontWeight="400"
+                            >
+                                {tick.label}
+                            </text>
+                        </g>
+                    );
+                })}
+                {Array.from({ length: pointCount }, (_, index) => {
+                    const x = getChartPointX(index, pointCount);
+                    return (
+                        <line
+                            key={`${chart.id}-grid-${index}`}
+                            x1={x}
+                            x2={x}
+                            y1={CHART_PADDING.top}
+                            y2={CHART_HEIGHT - CHART_PADDING.bottom}
+                            stroke="rgba(255, 255, 255, 0.05)"
+                            strokeWidth="1"
+                        />
+                    );
+                })}
+                {chart.series.map((series) => renderSeries(series, pointCount))}
+            </svg>
+        </Box>
+    );
+}
+
+export default function SoybeanStoryboardInfluenceDrivers({
+    commodities,
+    socioeconomic
+}: SoybeanStoryboardInfluenceDriversProps): JSX.Element {
+    const influenceCharts = React.useMemo(
+        () => buildInfluenceCharts(socioeconomic, commodities),
+        [commodities, socioeconomic]
+    );
+    return (
+        <Box className="soybean-storyboard-driver-shell">
+            <Typography className="soybean-storyboard-subheader soybean-storyboard-driver-section-title">
+                Why is Mainland China Influential on Soybean Market?
+            </Typography>
+            <Box className="soybean-storyboard-driver-chart-stack">
+                {influenceCharts.map((chart) => (
+                    <TrendChart key={chart.id} chart={chart} />
+                ))}
+            </Box>
+        </Box>
+    );
+}

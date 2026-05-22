@@ -155,7 +155,6 @@ export default function LandingPageMapTab({
                         variant="scrollable"
                         value={value}
                         onChange={handleChange}
-                        centered
                         className="tab"
                     >
                         <Box sx={{ mt: 1.5, pb: 0, mr: 8 }}>

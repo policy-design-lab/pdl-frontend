@@ -1,0 +1,372 @@
+import React from "react";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import utilizationTopFlow7 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-7.svg";
+import utilizationTopFlow8 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-8.svg";
+import utilizationTopFlow9 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-9.svg";
+import utilizationTopFlow10 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-10.svg";
+import utilizationTopFlow11 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-11.svg";
+import utilizationTopFlow12 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-12.svg";
+import utilizationTopFlow13 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-13.svg";
+import utilizationChinaFlow from "../../images/soybean/soybean_utilization/Portugal_Angola_2-15.svg";
+import utilizationOtherCountryFlow from "../../images/soybean/soybean_utilization/Portugal_Angola_2-18.svg";
+import utilizationOtherCountry2Flow from "../../images/soybean/soybean_utilization/Portugal_Angola_2-19.svg";
+import utilizationRestOfWorldFlow from "../../images/soybean/soybean_utilization/Portugal_Angola_2-20.svg";
+import utilizationTotalBlock from "../../images/soybean/soybean_utilization/Rectangle 2561.svg";
+import utilizationDomesticBlock from "../../images/soybean/soybean_utilization/Subtract.svg";
+import utilizationExportBlock from "../../images/soybean/soybean_utilization/Rectangle 2563.svg";
+import utilizationEndingStockConnector from "../../images/soybean/soybean_utilization/Union.svg";
+import {
+    formatRatioAsPercentage,
+    formatSoybeanQuantity,
+    getMarketBalanceForCountry,
+    getPreferredYear,
+    getSortedYears,
+    getSoybeanBalanceValue,
+    getSoybeanTotalSupplyValue,
+    SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+    SOYBEAN_STORYBOARD_PREFERRED_YEAR,
+    SoybeanMarketBalanceCountry,
+    SoybeanQuantityUnit,
+    SoybeanYearRecord
+} from "./soybeanApi";
+const UTILIZATION_CANVAS_WIDTH = 1558;
+const UTILIZATION_CANVAS_HEIGHT = 1648;
+const TOP_FLOW_ASSETS = [
+    utilizationTopFlow7,
+    utilizationTopFlow8,
+    utilizationTopFlow9,
+    utilizationTopFlow10,
+    utilizationTopFlow11,
+    utilizationTopFlow12,
+    utilizationTopFlow13
+];
+const TOP_FLOW_RIGHT_X = [937, 913, 889, 865, 841, 817, 793];
+const TOP_FLOW_LEFT_X = [78, 102, 126, 150, 174, 198, 222];
+const MARKET_LABELS = [
+    { x: 782, label: "Mainland China" },
+    { x: 995, label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL },
+    { x: 1165, label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL },
+    { x: 1354, label: "Rest Of World" }
+];
+const STATIC_LAYERS = [
+    { src: utilizationTotalBlock, x: 608, y: 349, width: 347, height: 359 },
+    { src: utilizationDomesticBlock, x: 541, y: 709, width: 279, height: 329 },
+    { src: utilizationExportBlock, x: 824, y: 709, width: 122, height: 326 },
+    { src: utilizationChinaFlow, x: 687, y: 1037, width: 191, height: 464 },
+    { src: utilizationOtherCountryFlow, x: 880, y: 1037, width: 159, height: 464 },
+    { src: utilizationOtherCountry2Flow, x: 912, y: 1037, width: 280, height: 460 },
+    { src: utilizationRestOfWorldFlow, x: 933, y: 1037, width: 429, height: 460 },
+    { src: utilizationEndingStockConnector, x: 947, y: 709, width: 218, height: 50 }
+];
+
+type SoybeanStoryboardSoybeanUtilizationProps = {
+    marketBalance: SoybeanYearRecord<SoybeanMarketBalanceCountry[]>;
+};
+
+function toPercent(value: number, total: number): string {
+    return `${(value / total) * 100}%`;
+}
+
+function createLayerStyle(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    transform?: string
+): React.CSSProperties {
+    return {
+        position: "absolute",
+        left: toPercent(x, UTILIZATION_CANVAS_WIDTH),
+        top: toPercent(y, UTILIZATION_CANVAS_HEIGHT),
+        width: toPercent(width, UTILIZATION_CANVAS_WIDTH),
+        height: toPercent(height, UTILIZATION_CANVAS_HEIGHT),
+        transform
+    };
+}
+
+function InlineSvgLayer({
+    asset,
+    x,
+    y,
+    width,
+    height,
+    transform
+}: {
+    asset: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    transform?: string;
+}): JSX.Element {
+    return (
+        <Box
+            aria-hidden="true"
+            className="soybean-storyboard-utilization-layer"
+            style={createLayerStyle(x, y, width, height, transform)}
+            dangerouslySetInnerHTML={{ __html: asset }}
+        />
+    );
+}
+
+function createTextStyle(
+    x: number,
+    y: number,
+    options?: {
+        width?: number;
+        align?: "left" | "center" | "right";
+        transform?: string;
+    }
+): React.CSSProperties {
+    return {
+        position: "absolute",
+        left: toPercent(x, UTILIZATION_CANVAS_WIDTH),
+        top: toPercent(y, UTILIZATION_CANVAS_HEIGHT),
+        width: options?.width ? toPercent(options.width, UTILIZATION_CANVAS_WIDTH) : undefined,
+        textAlign: options?.align ?? "center",
+        transform: options?.transform ?? "translate(-50%, -50%)"
+    };
+}
+
+function formatShareMeta(value: number | null | undefined, total: number | null | undefined): string {
+    const percentage = formatRatioAsPercentage(value, total);
+    return percentage === SOYBEAN_STORYBOARD_NEED_DATA_LABEL
+        ? `(${SOYBEAN_STORYBOARD_NEED_DATA_LABEL})`
+        : `(${percentage})`;
+}
+
+export default function SoybeanStoryboardSoybeanUtilization({
+    marketBalance
+}: SoybeanStoryboardSoybeanUtilizationProps): JSX.Element {
+    const [unit, setUnit] = React.useState<SoybeanQuantityUnit>("bushels");
+    const [year, setYear] = React.useState(SOYBEAN_STORYBOARD_PREFERRED_YEAR);
+    const availableYears = React.useMemo(() => getSortedYears(marketBalance), [marketBalance]);
+    const preferredYear = React.useMemo(() => getPreferredYear(marketBalance), [marketBalance]);
+    const activeYear = availableYears.includes(year) ? year : preferredYear;
+    const yearOptions = availableYears.length > 0 ? [...availableYears].reverse() : [activeYear];
+    const usBalance = React.useMemo(
+        () => getMarketBalanceForCountry(marketBalance, activeYear, "US"),
+        [activeYear, marketBalance]
+    );
+    const totalValue = getSoybeanTotalSupplyValue(usBalance, unit);
+    const domesticUseValue = getSoybeanBalanceValue(usBalance, "consumption", unit);
+    const exportValue = getSoybeanBalanceValue(usBalance, "exports", unit);
+    const endingStockValue = getSoybeanBalanceValue(usBalance, "endingStock", unit);
+
+    React.useEffect(() => {
+        if (availableYears.length > 0 && !availableYears.includes(year)) {
+            setYear(preferredYear);
+        }
+    }, [availableYears, preferredYear, year]);
+    const handleUnitChange = (event: SelectChangeEvent<SoybeanQuantityUnit>) => {
+        setUnit(event.target.value as SoybeanQuantityUnit);
+    };
+    const handleYearChange = (event: SelectChangeEvent<string>) => {
+        setYear(event.target.value);
+    };
+    return (
+        <Box className="soybean-storyboard-utilization-shell">
+            <Box className="soybean-storyboard-utilization-stage">
+                <Box className="soybean-storyboard-utilization-header-overlay">
+                    <Typography className="soybean-storyboard-subheader soybean-storyboard-utilization-title">
+                        Soybean Utilization
+                    </Typography>
+                    <Typography className="soybean-storyboard-utilization-description">
+                        Lorem ipsum dolor sit amet consectetur. Ultrices consectetur ipsum mauris porta libero sed sit
+                        diam. Eu ultrices cursus urna sodales.
+                    </Typography>
+                    <Box className="soybean-storyboard-utilization-controls">
+                        <Box className="soybean-storyboard-utilization-control">
+                            <Typography className="soybean-storyboard-utilization-control-label">Units:</Typography>
+                            <FormControl
+                                variant="standard"
+                                size="small"
+                                className="soybean-storyboard-utilization-select-wrap"
+                            >
+                                <Select
+                                    value={unit}
+                                    onChange={handleUnitChange}
+                                    className="soybean-storyboard-utilization-select"
+                                    MenuProps={{
+                                        PaperProps: { className: "soybean-storyboard-utilization-menu-paper" }
+                                    }}
+                                >
+                                    <MenuItem className="soybean-storyboard-utilization-menu-item" value="bushels">
+                                        Bushels
+                                    </MenuItem>
+                                    <MenuItem className="soybean-storyboard-utilization-menu-item" value="mt">
+                                        MT
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box className="soybean-storyboard-utilization-control">
+                            <Typography className="soybean-storyboard-utilization-control-label">Year:</Typography>
+                            <FormControl
+                                variant="standard"
+                                size="small"
+                                className="soybean-storyboard-utilization-select-wrap"
+                            >
+                                <Select
+                                    value={activeYear}
+                                    onChange={handleYearChange}
+                                    className="soybean-storyboard-utilization-select"
+                                    MenuProps={{
+                                        PaperProps: { className: "soybean-storyboard-utilization-menu-paper" }
+                                    }}
+                                >
+                                    {yearOptions.map((yearOption) => (
+                                        <MenuItem
+                                            key={yearOption}
+                                            className="soybean-storyboard-utilization-menu-item"
+                                            value={yearOption}
+                                        >
+                                            {yearOption}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Box>
+                </Box>
+                <Box className="soybean-storyboard-utilization-chart-wrap">
+                    <Box
+                        className="soybean-storyboard-utilization-canvas"
+                        role="img"
+                        aria-label="Soybean utilization flow diagram"
+                    >
+                        {TOP_FLOW_ASSETS.map((asset, index) => (
+                            <InlineSvgLayer
+                                key={`top-right-${index}`}
+                                asset={asset}
+                                x={TOP_FLOW_RIGHT_X[index]}
+                                y={22}
+                                width={545}
+                                height={328}
+                            />
+                        ))}
+                        {TOP_FLOW_ASSETS.map((asset, index) => (
+                            <InlineSvgLayer
+                                key={`top-left-${index}`}
+                                asset={asset}
+                                x={TOP_FLOW_LEFT_X[index]}
+                                y={22}
+                                width={545}
+                                height={328}
+                                transform="scaleX(-1)"
+                            />
+                        ))}
+                        {STATIC_LAYERS.map((layer) => (
+                            <InlineSvgLayer
+                                key={`${layer.src}-${layer.x}-${layer.y}`}
+                                asset={layer.src}
+                                x={layer.x}
+                                y={layer.y}
+                                width={layer.width}
+                                height={layer.height}
+                            />
+                        ))}
+
+                        <Typography
+                            className="soybean-storyboard-utilization-box-label"
+                            style={createTextStyle(779, 505)}
+                        >
+                            Total Supply
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-value"
+                            style={createTextStyle(779, 549)}
+                        >
+                            {formatSoybeanQuantity(totalValue, unit)}
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-label"
+                            style={createTextStyle(638, 943)}
+                        >
+                            Domestic Use
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-value-small"
+                            style={createTextStyle(638, 977)}
+                        >
+                            {formatSoybeanQuantity(domesticUseValue, unit, false)}
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-meta"
+                            style={createTextStyle(638, 1000)}
+                        >
+                            {formatShareMeta(domesticUseValue, totalValue)}
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-label"
+                            style={createTextStyle(886, 902)}
+                        >
+                            Export
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-value-small"
+                            style={createTextStyle(886, 935)}
+                        >
+                            {formatSoybeanQuantity(exportValue, unit, false)}
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-box-meta"
+                            style={createTextStyle(886, 958)}
+                        >
+                            {formatShareMeta(exportValue, totalValue)}
+                        </Typography>
+
+                        <Typography
+                            className="soybean-storyboard-utilization-side-label"
+                            style={createTextStyle(1178, 752, {
+                                width: 260,
+                                align: "left",
+                                transform: "translateY(-50%)"
+                            })}
+                        >
+                            Ending STOCK
+                        </Typography>
+                        <Typography
+                            className="soybean-storyboard-utilization-side-meta"
+                            style={createTextStyle(1178, 773, {
+                                width: 260,
+                                align: "left",
+                                transform: "translateY(-50%)"
+                            })}
+                        >
+                            {formatSoybeanQuantity(endingStockValue, unit, false)}{" "}
+                            {formatShareMeta(endingStockValue, totalValue)}
+                        </Typography>
+
+                        {MARKET_LABELS.map((market) => (
+                            <React.Fragment key={market.label + market.x}>
+                                <Typography
+                                    className="soybean-storyboard-utilization-bottom-label"
+                                    style={createTextStyle(market.x, 1528)}
+                                >
+                                    {market.label}
+                                </Typography>
+                                <Typography
+                                    className="soybean-storyboard-utilization-bottom-meta"
+                                    style={createTextStyle(market.x, 1556)}
+                                >
+                                    {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
+                                </Typography>
+                                <Typography
+                                    className="soybean-storyboard-utilization-bottom-meta"
+                                    style={createTextStyle(market.x, 1576)}
+                                >
+                                    {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
+                                </Typography>
+                            </React.Fragment>
+                        ))}
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+    );
+}
