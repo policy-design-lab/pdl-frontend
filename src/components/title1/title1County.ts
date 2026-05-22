@@ -8,6 +8,7 @@ export interface Title1CountyColumnConfig {
     accessor: string;
     header: string;
     type: "currency" | "number" | "percent";
+    tooltip?: string;
 }
 
 export type Title1CountyDatasetKey = "titleI" | "subtitleA" | "subtitleD" | "subtitleE";
