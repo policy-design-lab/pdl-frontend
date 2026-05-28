@@ -3,7 +3,7 @@ import SoybeanStoryboardProductionOverview, { ProductionDetailColumn } from "./S
 import {
     buildProductionFrames,
     buildTopRankingRows,
-    formatAcres,
+    formatAcresValue,
     formatBrazilMunicipalityName,
     getCanLoadHistoricalFrames,
     getHistoricalFrameRange,
@@ -29,7 +29,7 @@ const DETAIL_COLUMNS: ProductionDetailColumn[] = [
         key: "area",
         label: "AREA PLANTED",
         sortValue: (row) => row.area,
-        value: (row) => formatAcres(row.area)
+        value: (row) => formatAcresValue(row.area)
     }
 ];
 
@@ -72,7 +72,7 @@ export default function SoybeanStoryboardBrazilProduction({
     return (
         <SoybeanStoryboardProductionOverview
             card={{
-                buttonLabel: "View the change over the years",
+                buttonLabel: "View yearly change",
                 label: "Brazil Total area planted (ACRES)"
             }}
             canLoadHistoricalFrames={canLoadHistoricalFrames}

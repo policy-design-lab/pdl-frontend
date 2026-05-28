@@ -11,7 +11,6 @@ import SoybeanStoryboardProductionTrendCard, {
     SoybeanProductionTrendPoint
 } from "./SoybeanStoryboardProductionTrendCard";
 import {
-    formatAcres,
     formatCompactAcres,
     getPlantedAcresLegendValues,
     isFiniteNumber,
@@ -26,7 +25,7 @@ export type { ProductionDetailFrame, ProductionDetailRow, ProductionRankingRow }
 const MAP_VIEWBOX_WIDTH = 760;
 const BRAZIL_MAP_VIEWBOX_HEIGHT = 1080;
 const US_MAP_VIEWBOX_HEIGHT = 620;
-const LEGEND_COLORS = ["#C9F2AD", "#6DEB26", "#53BA10", "#3C8807"];
+const LEGEND_COLORS = ["#D7F7BF", "#9BED69", "#6DEB26", "#53BA10", "#3C8807"];
 
 type LegendConfig = {
     subtitle: string;
@@ -226,13 +225,13 @@ export default function SoybeanStoryboardProductionOverview({
           ? "Pause year playback"
           : card.buttonLabel;
     const legendValues = React.useMemo(
-        () => getPlantedAcresLegendValues(visiblePlantedAcresValues),
+        () => getPlantedAcresLegendValues(visiblePlantedAcresValues, LEGEND_COLORS.length),
         [visiblePlantedAcresValues]
     );
     const legendTickLabels = React.useMemo(
         () =>
             legendValues.length > 0
-                ? legendValues.map(formatCompactAcres)
+                ? legendValues.map((value) => formatCompactAcres(value, 2))
                 : LEGEND_COLORS.map(() => SOYBEAN_STORYBOARD_NEED_DATA_LABEL).concat(
                       SOYBEAN_STORYBOARD_NEED_DATA_LABEL
                   ),
@@ -452,20 +451,28 @@ export default function SoybeanStoryboardProductionOverview({
                     <span>{activeLegendTitleStrong}</span> {legend.subtitle}
                 </Typography>
                 <Box className="soybean-storyboard-production-legend-row">
-                    {legendValues.length === 0 ? (
-                        <Box className="soybean-storyboard-production-legend-item">
-                            <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-hatch" />
-                            <Typography className="soybean-storyboard-production-legend-label">
-                                {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
-                            </Typography>
-                        </Box>
-                    ) : null}
+                    <Box
+                        className={
+                            legendValues.length === 0
+                                ? "soybean-storyboard-production-legend-item"
+                                : "soybean-storyboard-production-legend-item soybean-storyboard-production-legend-item-placeholder"
+                        }
+                        aria-hidden={legendValues.length > 0}
+                    >
+                        <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-hatch" />
+                        <Typography className="soybean-storyboard-production-legend-label">
+                            {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
+                        </Typography>
+                    </Box>
                     <Box className="soybean-storyboard-production-legend-item">
                         <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-none" />
                         <Typography className="soybean-storyboard-production-legend-label">No planted</Typography>
                     </Box>
                     <Box className="soybean-storyboard-production-scale">
-                        <Box className="soybean-storyboard-production-scale-bar">
+                        <Box
+                            className="soybean-storyboard-production-scale-bar"
+                            sx={{ gridTemplateColumns: `repeat(${LEGEND_COLORS.length}, 1fr)` }}
+                        >
                             {LEGEND_COLORS.map((color) => (
                                 <Box
                                     key={color}
@@ -474,7 +481,10 @@ export default function SoybeanStoryboardProductionOverview({
                                 />
                             ))}
                         </Box>
-                        <Box className="soybean-storyboard-production-scale-ticks">
+                        <Box
+                            className="soybean-storyboard-production-scale-ticks"
+                            sx={{ gridTemplateColumns: `repeat(${legendTickLabels.length}, 1fr)` }}
+                        >
                             {legendTickLabels.map((label, index) => (
                                 <Typography
                                     key={`${label}-${index}`}
@@ -599,7 +609,7 @@ export default function SoybeanStoryboardProductionOverview({
                                     </Typography>
                                     <Box className="soybean-storyboard-production-tooltip-row">
                                         <Typography>Area planted</Typography>
-                                        <Typography>{formatAcres(tooltip.row.area)}</Typography>
+                                        <Typography>{formatCompactAcres(tooltip.row.area, 2)}</Typography>
                                     </Box>
                                 </Box>
                             ) : null}
@@ -617,6 +627,7 @@ export default function SoybeanStoryboardProductionOverview({
                         buttonLabel={detailButtonLabel}
                         canStartPlayback={canStartPlayback}
                         isDetailLoading={isDetailLoading}
+                        isPlaying={isPlaybackActive && isPlaying}
                         label={card.label}
                         onButtonClick={handleDetailButtonClick}
                         trendPoints={activeTrendPoints}

@@ -2,13 +2,12 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { curveCatmullRom, line } from "d3";
+import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 import {
     calculateGrowthPercentage,
     ChinaCommodityDemandRecord,
     ChinaSocioeconomicRecord,
     createNormalizedTrendValues,
-    formatCompactCurrency,
-    formatCompactPopulation,
     formatPercentage,
     formatThousandMetricTonsAsMmt,
     getPreferredYear,
@@ -29,13 +28,26 @@ const CHART_PADDING = {
     bottom: 18,
     left: 92
 };
+const DRIVER_TOOLTIP_PADDING_X = 12;
+const DRIVER_TOOLTIP_MIN_WIDTH = 112;
+const DRIVER_TOOLTIP_MAX_WIDTH = 280;
+const DRIVER_TOOLTIP_LINE_HEIGHT = 20;
+const DRIVER_TOOLTIP_VERTICAL_PADDING = 12;
 
 type TrendSeries = {
     id: string;
     color: string;
     endLabel: string;
     pillTone: "light" | "pork" | "poultry";
+    points?: TrendSeriesPoint[];
+    tooltipLabel?: string;
     values: number[];
+};
+
+type TrendSeriesPoint = {
+    value: number;
+    valueLabel: string;
+    year: string;
 };
 
 type TrendAxisTick = {
@@ -134,18 +146,20 @@ function getRoundedPercentage(value: number | null): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${value.toLocaleString("en-US", {
-        maximumFractionDigits: Math.abs(value) < 10 ? 1 : 0,
-        minimumFractionDigits: Math.abs(value) < 10 ? 1 : 0
-    })}%`;
+    return `${formatNumericValue(value, Math.abs(value) < 10 ? 1 : 0)}%`;
 }
 
-function getRecordValues<T>(
+function getRecordValuePoints<T>(
     records: SoybeanYearRecord<T>,
     years: string[],
     selector: (record: T) => number | null | undefined
-): number[] {
-    return years.map((year) => selector(records[year])).filter(isFiniteNumber);
+): { value: number; year: string }[] {
+    return years
+        .map((year) => ({
+            value: selector(records[year]),
+            year
+        }))
+        .filter((point): point is { value: number; year: string } => isFiniteNumber(point.value));
 }
 
 function getUrbanizationShare(record: ChinaSocioeconomicRecord): number | null {
@@ -159,30 +173,37 @@ function getLatestValue(values: number[]): number | null {
     return values.length > 0 ? values[values.length - 1] : null;
 }
 
-function formatAxisDecimal(value: number, fractionDigits: number): string {
-    return value.toLocaleString("en-US", {
-        maximumFractionDigits: fractionDigits,
-        minimumFractionDigits: fractionDigits
-    });
-}
-
 function formatPopulationAxis(value: number): string {
-    return `${formatAxisDecimal(value / 1000000000, 2)}B`;
+    return ShortFormat(value, undefined, 2);
 }
 
 function formatCurrencyAxis(value: number): string {
     if (Math.abs(value) >= 1000) {
-        return `$${formatAxisDecimal(value / 1000, 1)}K`;
+        return `$${ShortFormat(value, undefined, 1)}`;
     }
-    return `$${formatAxisDecimal(value, 0)}`;
+    return `$${formatNumericValue(value, 0)}`;
 }
 
 function formatMmtAxis(value: number): string {
-    return `${formatAxisDecimal(value / 1000, 1)} MMT`;
+    return `${formatNumericValue(value / 1000, 1)} MMT`;
 }
 
 function formatPercentageAxis(value: number): string {
-    return `${formatAxisDecimal(value, 1)}%`;
+    return `${formatNumericValue(value, 1)}%`;
+}
+
+function formatPopulationLabel(value: number | null): string {
+    if (!isFiniteNumber(value)) {
+        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+    }
+    return `${formatPopulationAxis(value)} People`;
+}
+
+function formatCurrencyLabel(value: number | null): string {
+    if (!isFiniteNumber(value)) {
+        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+    }
+    return `${formatCurrencyAxis(value)} GDP Per Capita`;
 }
 
 function createAxisTicks(
@@ -222,13 +243,14 @@ function createAxisTicks(
     });
 }
 
-function createChartFromValues(
+function createChartFromPoints(
     fallbackChart: TrendChartDefinition,
-    values: number[],
-    seriesOptions: Omit<TrendSeries, "values">,
-    axisTicks: TrendAxisTick[]
+    points: { value: number; year: string }[],
+    seriesOptions: Omit<TrendSeries, "points" | "values">,
+    axisTicks: TrendAxisTick[],
+    formatter: (value: number) => string
 ): TrendChartDefinition {
-    if (values.length < 2) {
+    if (points.length < 2) {
         return fallbackChart;
     }
     return {
@@ -237,7 +259,12 @@ function createChartFromValues(
         series: [
             {
                 ...seriesOptions,
-                values: createNormalizedTrendValues(values)
+                points: points.map((point) => ({
+                    value: point.value,
+                    valueLabel: formatter(point.value),
+                    year: point.year
+                })),
+                values: createNormalizedTrendValues(points.map((point) => point.value))
             }
         ]
     };
@@ -251,11 +278,20 @@ function buildInfluenceCharts(
     const commodityYear = getPreferredYear(commodities, socioeconomicYear);
     const socioeconomicYears = getRecentYears(socioeconomic, socioeconomicYear, 20);
     const commodityYears = getRecentYears(commodities, commodityYear, 20);
-    const populationValues = getRecordValues(socioeconomic, socioeconomicYears, (record) => record.total_population);
-    const gdpValues = getRecordValues(socioeconomic, socioeconomicYears, (record) => record.gdp_per_capita);
-    const urbanizationValues = getRecordValues(socioeconomic, socioeconomicYears, getUrbanizationShare);
-    const porkValues = getRecordValues(commodities, commodityYears, (record) => record.pork_demand);
-    const poultryValues = getRecordValues(commodities, commodityYears, (record) => record.poultry_demand);
+    const populationPoints = getRecordValuePoints(
+        socioeconomic,
+        socioeconomicYears,
+        (record) => record.total_population
+    );
+    const gdpPoints = getRecordValuePoints(socioeconomic, socioeconomicYears, (record) => record.gdp_per_capita);
+    const urbanizationPoints = getRecordValuePoints(socioeconomic, socioeconomicYears, getUrbanizationShare);
+    const porkPoints = getRecordValuePoints(commodities, commodityYears, (record) => record.pork_demand);
+    const poultryPoints = getRecordValuePoints(commodities, commodityYears, (record) => record.poultry_demand);
+    const populationValues = populationPoints.map((point) => point.value);
+    const gdpValues = gdpPoints.map((point) => point.value);
+    const urbanizationValues = urbanizationPoints.map((point) => point.value);
+    const porkValues = porkPoints.map((point) => point.value);
+    const poultryValues = poultryPoints.map((point) => point.value);
     const proteinValues = [...porkValues, ...poultryValues];
     const populationGrowth = calculateGrowthPercentage(populationValues);
     const gdpGrowth = calculateGrowthPercentage(gdpValues);
@@ -264,30 +300,34 @@ function buildInfluenceCharts(
     const latestPoultry = getLatestValue(poultryValues);
     const charts = [...fallbackInfluenceCharts];
     charts[0] = {
-        ...createChartFromValues(
+        ...createChartFromPoints(
             charts[0],
-            populationValues,
+            populationPoints,
             {
                 color: "#A8CCE2",
-                endLabel: formatCompactPopulation(getLatestValue(populationValues)),
+                endLabel: formatPopulationLabel(getLatestValue(populationValues)),
                 id: "population",
-                pillTone: "light"
+                pillTone: "light",
+                tooltipLabel: "Population"
             },
-            createAxisTicks(populationValues, formatPopulationAxis)
+            createAxisTicks(populationValues, formatPopulationAxis),
+            formatPopulationAxis
         ),
         annotation: `China's Population Grew By Roughly ${getRoundedPercentage(populationGrowth)}`
     };
     charts[1] = {
-        ...createChartFromValues(
+        ...createChartFromPoints(
             charts[1],
-            gdpValues,
+            gdpPoints,
             {
                 color: "#A8CCE2",
-                endLabel: formatCompactCurrency(getLatestValue(gdpValues)),
+                endLabel: formatCurrencyLabel(getLatestValue(gdpValues)),
                 id: "income",
-                pillTone: "light"
+                pillTone: "light",
+                tooltipLabel: "GDP per capita"
             },
-            createAxisTicks(gdpValues, formatCurrencyAxis)
+            createAxisTicks(gdpValues, formatCurrencyAxis),
+            formatCurrencyAxis
         ),
         annotation: `GDP Per Capita Rose ${getRoundedPercentage(gdpGrowth)}`
     };
@@ -300,14 +340,26 @@ function buildInfluenceCharts(
                     color: "#E5DF95",
                     endLabel: formatThousandMetricTonsAsMmt(latestPork, "Pork"),
                     id: "pork",
+                    points: porkPoints.map((point) => ({
+                        value: point.value,
+                        valueLabel: formatMmtAxis(point.value),
+                        year: point.year
+                    })),
                     pillTone: "pork",
+                    tooltipLabel: "Pork demand",
                     values: createNormalizedTrendValues(porkValues, 8, 118, proteinValues)
                 },
                 {
                     color: "#DDA0D9",
                     endLabel: formatThousandMetricTonsAsMmt(latestPoultry, "Poultry"),
                     id: "poultry",
+                    points: poultryPoints.map((point) => ({
+                        value: point.value,
+                        valueLabel: formatMmtAxis(point.value),
+                        year: point.year
+                    })),
                     pillTone: "poultry",
+                    tooltipLabel: "Poultry demand",
                     values: createNormalizedTrendValues(poultryValues, 8, 118, proteinValues)
                 }
             ]
@@ -315,16 +367,18 @@ function buildInfluenceCharts(
     }
 
     charts[3] = {
-        ...createChartFromValues(
+        ...createChartFromPoints(
             charts[3],
-            urbanizationValues,
+            urbanizationPoints,
             {
                 color: "#A8CCE2",
                 endLabel: `${formatPercentage(latestUrbanization, 1)} Urban`,
                 id: "urbanization",
-                pillTone: "light"
+                pillTone: "light",
+                tooltipLabel: "Urban share"
             },
-            createAxisTicks(urbanizationValues, formatPercentageAxis)
+            createAxisTicks(urbanizationValues, formatPercentageAxis),
+            (value) => formatPercentage(value, 1)
         ),
         annotation: `Urban Share Reached ${formatPercentage(latestUrbanization, 1)}`
     };
@@ -346,6 +400,48 @@ function getChartPointY(value: number): number {
     const valueRatio = (Y_MAX - safeValue) / (Y_MAX - Y_MIN);
     const pointOffset = valueRatio * chartHeight;
     return CHART_PADDING.top + pointOffset;
+}
+
+function getDriverTooltipTextWidth(text: string): number {
+    return text.length * 7.2;
+}
+
+function getDriverTooltipSize(yearLabel: string, valueLabel: string): { height: number; width: number } {
+    const textWidth = Math.max(getDriverTooltipTextWidth(yearLabel), getDriverTooltipTextWidth(valueLabel));
+    return {
+        height: DRIVER_TOOLTIP_VERTICAL_PADDING * 2 + DRIVER_TOOLTIP_LINE_HEIGHT * 2,
+        width: Math.min(
+            DRIVER_TOOLTIP_MAX_WIDTH,
+            Math.max(DRIVER_TOOLTIP_MIN_WIDTH, textWidth + DRIVER_TOOLTIP_PADDING_X * 2)
+        )
+    };
+}
+
+function getDriverTooltipX(pointX: number, tooltipWidth: number): number {
+    return Math.min(CHART_WIDTH - CHART_PADDING.right - tooltipWidth, Math.max(CHART_PADDING.left + 8, pointX + 14));
+}
+
+function getDriverTooltipY(pointY: number, tooltipHeight: number): number {
+    if (pointY - tooltipHeight - 12 < CHART_PADDING.top) {
+        return pointY + 16;
+    }
+    return pointY - tooltipHeight - 12;
+}
+
+function getSeriesPoint(series: TrendSeries, index: number): TrendSeriesPoint | null {
+    const point = series.points?.[index];
+    if (point) {
+        return point;
+    }
+    const value = series.values[index];
+    if (!isFiniteNumber(value)) {
+        return null;
+    }
+    return {
+        value,
+        valueLabel: formatNumericValue(value, 0),
+        year: `${index + 1}`
+    };
 }
 
 function getPillWidth(text: string): number {
@@ -387,7 +483,12 @@ function renderEndpointPill(x: number, y: number, series: TrendSeries): JSX.Elem
     );
 }
 
-function renderSeries(series: TrendSeries, pointCount: number): JSX.Element {
+function renderSeries(
+    series: TrendSeries,
+    pointCount: number,
+    onPointEnter: (seriesId: string, index: number) => void,
+    onPointLeave: () => void
+): JSX.Element {
     const generator = line<number>()
         .x((_, index) => getChartPointX(index, pointCount))
         .y((value) => getChartPointY(value))
@@ -408,13 +509,23 @@ function renderSeries(series: TrendSeries, pointCount: number): JSX.Element {
                 vectorEffect="non-scaling-stroke"
             />
             {series.values.map((value, index) => (
-                <circle
-                    key={`${series.id}-${index}`}
-                    cx={getChartPointX(index, pointCount)}
-                    cy={getChartPointY(value)}
-                    r={index === lastIndex ? 0 : 4.5}
-                    fill={series.color}
-                />
+                <g key={`${series.id}-${index}`}>
+                    <circle
+                        cx={getChartPointX(index, pointCount)}
+                        cy={getChartPointY(value)}
+                        r={index === lastIndex ? 0 : 4.5}
+                        fill={series.color}
+                    />
+                    <circle
+                        cx={getChartPointX(index, pointCount)}
+                        cy={getChartPointY(value)}
+                        r="15"
+                        fill="transparent"
+                        pointerEvents="all"
+                        onMouseEnter={() => onPointEnter(series.id, index)}
+                        onMouseLeave={onPointLeave}
+                    />
+                </g>
             ))}
             <line
                 x1={lastX}
@@ -425,15 +536,39 @@ function renderSeries(series: TrendSeries, pointCount: number): JSX.Element {
                 strokeWidth="2"
                 strokeDasharray="18 14"
             />
-            <circle cx={lastX} cy={lastY} r="10" className={endpointDotClassName} />
+            <circle
+                cx={lastX}
+                cy={lastY}
+                r="16"
+                fill="transparent"
+                pointerEvents="all"
+                onMouseEnter={() => onPointEnter(series.id, lastIndex)}
+                onMouseLeave={onPointLeave}
+            />
+            <circle cx={lastX} cy={lastY} r="10" className={endpointDotClassName} pointerEvents="none" />
             {renderEndpointPill(lastX, lastY, series)}
         </g>
     );
 }
 
 function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
+    const [hoveredPoint, setHoveredPoint] = React.useState<{ index: number; seriesId: string } | null>(null);
     const pointCount = chart.series[0].values.length;
     const axisTicks = chart.axisTicks || fallbackAxisTicks;
+    const hoveredSeries = hoveredPoint
+        ? chart.series.find((series) => series.id === hoveredPoint.seriesId) || null
+        : null;
+    const hoveredSeriesPoint = hoveredSeries && hoveredPoint ? getSeriesPoint(hoveredSeries, hoveredPoint.index) : null;
+    const hoveredTooltipValue =
+        hoveredSeries && hoveredSeriesPoint
+            ? `${hoveredSeries.tooltipLabel ? `${hoveredSeries.tooltipLabel}: ` : ""}${hoveredSeriesPoint.valueLabel}`
+            : "";
+    const hoveredTooltipSize = hoveredSeriesPoint
+        ? getDriverTooltipSize(hoveredSeriesPoint.year, hoveredTooltipValue)
+        : { height: 0, width: 0 };
+    const hoveredPointX = hoveredPoint ? getChartPointX(hoveredPoint.index, pointCount) : 0;
+    const hoveredPointY =
+        hoveredSeries && hoveredPoint ? getChartPointY(hoveredSeries.values[hoveredPoint.index] || 0) : 0;
     return (
         <Box className="soybean-storyboard-driver-chart">
             <Box className="soybean-storyboard-driver-chart-header">
@@ -487,7 +622,37 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                         />
                     );
                 })}
-                {chart.series.map((series) => renderSeries(series, pointCount))}
+                {chart.series.map((series) =>
+                    renderSeries(
+                        series,
+                        pointCount,
+                        (seriesId, index) => setHoveredPoint({ seriesId, index }),
+                        () => setHoveredPoint(null)
+                    )
+                )}
+                {hoveredSeries && hoveredSeriesPoint ? (
+                    <g
+                        transform={`translate(${getDriverTooltipX(
+                            hoveredPointX,
+                            hoveredTooltipSize.width
+                        )} ${getDriverTooltipY(hoveredPointY, hoveredTooltipSize.height)})`}
+                        pointerEvents="none"
+                    >
+                        <rect
+                            width={hoveredTooltipSize.width}
+                            height={hoveredTooltipSize.height}
+                            rx="8"
+                            fill="rgba(7, 22, 28, 0.96)"
+                            stroke="rgba(255, 255, 255, 0.14)"
+                        />
+                        <text x="12" y="20" fill="#ffffff" fontFamily="Roboto" fontSize="14" fontWeight="700">
+                            {hoveredSeriesPoint.year}
+                        </text>
+                        <text x="12" y="40" fill="rgba(216, 223, 226, 0.92)" fontFamily="Roboto" fontSize="13">
+                            {hoveredTooltipValue}
+                        </text>
+                    </g>
+                ) : null}
             </svg>
         </Box>
     );

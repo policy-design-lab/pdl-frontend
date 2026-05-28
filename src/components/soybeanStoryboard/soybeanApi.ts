@@ -1,6 +1,7 @@
 import React from "react";
 import { config } from "../../app.config";
 import { getJsonDataFromUrl } from "../../utils/apiutil";
+import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 
 export const SOYBEAN_STORYBOARD_PREFERRED_YEAR = "2024";
 export const SOYBEAN_STORYBOARD_NEED_DATA_LABEL = "Need Data";
@@ -335,7 +336,7 @@ export function getSoybeanBalanceValue(
     }
 }
 
-export function calculateSoybeanBeginningStock(
+function calculateSoybeanBeginningStock(
     balance: SoybeanMarketBalanceMetric | null,
     unit: SoybeanQuantityUnit
 ): number | null {
@@ -369,21 +370,14 @@ export function getSoybeanTotalSupplyValue(
     return production;
 }
 
-function formatDecimal(value: number, fractionDigits: number): string {
-    return value.toLocaleString("en-US", {
-        maximumFractionDigits: fractionDigits,
-        minimumFractionDigits: fractionDigits
-    });
-}
-
-export function formatPercentage(value: number | null | undefined, fractionDigits = 0): string {
+export function formatPercentage(value: number | null | undefined, fractionDigits: 0 | 1 | 2 = 0): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${formatDecimal(value, fractionDigits)}%`;
+    return `${formatNumericValue(value, fractionDigits)}%`;
 }
 
-export function formatSignedPercentage(value: number | null | undefined, fractionDigits = 0): string {
+export function formatSignedPercentage(value: number | null | undefined, fractionDigits: 0 | 1 | 2 = 0): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
@@ -441,63 +435,37 @@ export function getPlantedAcresTotal(
     return values.reduce((total, value) => total + value, 0);
 }
 
-export function getPlantedAcresSummaryValues(
-    records: SoybeanYearRecord<SoybeanPlantedAcresSummaryRecord>,
-    year: string
-): number[] {
-    const summaryRecord = records[year];
-    if (!summaryRecord || !Array.isArray(summaryRecord.states)) {
-        return [];
-    }
-    return summaryRecord.states.map((record) => record.totalAcres).filter(isFiniteNumber);
-}
-
-export function getPlantedAcresSummaryTotal(
-    records: SoybeanYearRecord<SoybeanPlantedAcresSummaryRecord>,
-    year: string
-): number | null {
-    const summaryRecord = records[year];
-    if (!summaryRecord || !isFiniteNumber(summaryRecord.national_total)) {
-        return null;
-    }
-    return summaryRecord.national_total;
-}
-
-export function getPlantedAcresLegendValues(values: number[]): number[] {
+export function getPlantedAcresLegendValues(values: number[], segmentCount = 5): number[] {
     const sortedValues = values.filter(isFiniteNumber).sort((valueA, valueB) => valueA - valueB);
     if (sortedValues.length === 0) {
         return [];
     }
-    return [0, 0.25, 0.5, 0.75, 1].map((percentile) => {
-        const index = Math.min(sortedValues.length - 1, Math.floor((sortedValues.length - 1) * percentile));
-        return sortedValues[index];
-    });
+    return Array.from({ length: segmentCount + 1 }, (_, percentileIndex) => percentileIndex / segmentCount).map(
+        (percentile) => {
+            const index = Math.min(sortedValues.length - 1, Math.floor((sortedValues.length - 1) * percentile));
+            return sortedValues[index];
+        }
+    );
 }
 
 export function formatCompactAcres(value: number | null | undefined, fractionDigits = 1): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    if (Math.abs(value) >= 1000000) {
-        return `${formatDecimal(value / 1000000, fractionDigits)}M`;
-    }
-    if (Math.abs(value) >= 1000) {
-        return `${formatDecimal(value / 1000, fractionDigits)}K`;
-    }
-    return formatDecimal(value, 0);
+    return ShortFormat(value, fractionDigits === 0 ? 0 : undefined, fractionDigits);
 }
 
-export function formatAcres(value: number | null | undefined): string {
+export function formatAcresValue(value: number | null | undefined): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${formatDecimal(value, 0)} acres`;
+    return formatNumericValue(value, 0);
 }
 
 export function formatRatioAsPercentage(
     value: number | null | undefined,
     total: number | null | undefined,
-    fractionDigits = 0
+    fractionDigits: 0 | 1 | 2 = 0
 ): string {
     if (!isFiniteNumber(value) || !isFiniteNumber(total) || total === 0) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
@@ -509,7 +477,7 @@ export function formatMillionMetricTons(value: number | null | undefined): strin
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${formatDecimal(value / 1000000, 1)} M MT`;
+    return `${ShortFormat(value, undefined, 1)} MT`;
 }
 
 export function formatSoybeanQuantity(
@@ -520,40 +488,15 @@ export function formatSoybeanQuantity(
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    if (unit === "mt") {
-        return `${formatDecimal(value / 1000000, 1)} M${includeUnit ? " MT" : ""}`;
-    }
-    if (Math.abs(value) >= 1000000000) {
-        return `${formatDecimal(value / 1000000000, 1)}b${includeUnit ? " Bushels" : ""}`;
-    }
-    return `${formatDecimal(value / 1000000, 1)} M${includeUnit ? " Bushels" : ""}`;
-}
-
-export function formatCompactPopulation(value: number | null | undefined): string {
-    if (!isFiniteNumber(value)) {
-        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
-    }
-    if (Math.abs(value) >= 1000000000) {
-        return `${formatDecimal(value / 1000000000, 2)}B People`;
-    }
-    return `${formatDecimal(value / 1000000, 1)}M People`;
-}
-
-export function formatCompactCurrency(value: number | null | undefined): string {
-    if (!isFiniteNumber(value)) {
-        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
-    }
-    if (Math.abs(value) >= 1000) {
-        return `$${formatDecimal(value / 1000, 1)}K GDP Per Capita`;
-    }
-    return `$${formatDecimal(value, 0)} GDP Per Capita`;
+    const unitLabel = unit === "mt" ? " MT" : " Bushels";
+    return `${ShortFormat(value, undefined, 1)}${includeUnit ? unitLabel : ""}`;
 }
 
 export function formatThousandMetricTonsAsMmt(value: number | null | undefined, label: string): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${formatDecimal(value / 1000, 1)} MMT ${label}`;
+    return `${formatNumericValue(value / 1000, 1)} MMT ${label}`;
 }
 
 export function createNormalizedTrendValues(

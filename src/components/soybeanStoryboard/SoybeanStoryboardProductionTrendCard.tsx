@@ -2,11 +2,11 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { curveCatmullRom, line } from "d3";
 import {
     calculateGrowthPercentage,
-    formatAcres,
     formatCompactAcres,
     formatSignedPercentage,
     isFiniteNumber,
@@ -32,6 +32,7 @@ type SoybeanStoryboardProductionTrendCardProps = {
     buttonLabel: string;
     canStartPlayback: boolean;
     isDetailLoading: boolean;
+    isPlaying: boolean;
     label: string;
     onButtonClick: () => void;
     trendPoints: SoybeanProductionTrendPoint[];
@@ -71,7 +72,7 @@ function getTrendGrowthText(points: SoybeanProductionTrendPoint[]): string {
     if (!isFiniteNumber(growth) || Number.isNaN(yearSpan)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    return `${formatSignedPercentage(growth, 2)} over the ${yearSpan} years`;
+    return `${formatSignedPercentage(growth, 2)} over ${yearSpan} years`;
 }
 
 function formatTrendAxisTick(value: number): string {
@@ -96,6 +97,7 @@ export default function SoybeanStoryboardProductionTrendCard({
     buttonLabel,
     canStartPlayback,
     isDetailLoading,
+    isPlaying,
     label,
     onButtonClick,
     trendPoints
@@ -239,14 +241,14 @@ export default function SoybeanStoryboardProductionTrendCard({
                             {hoveredPoint.year}
                         </text>
                         <text x="12" y="38" fill="rgba(216, 223, 226, 0.9)" fontSize="13">
-                            {formatAcres(hoveredPoint.totalAcres)}
+                            {formatCompactAcres(hoveredPoint.totalAcres, 2)}
                         </text>
                     </g>
                 ) : null}
             </svg>
             {canStartPlayback ? (
                 <Button
-                    startIcon={<PlayArrowRoundedIcon />}
+                    startIcon={isPlaying ? <PauseRoundedIcon /> : <PlayArrowRoundedIcon />}
                     className="soybean-storyboard-production-button"
                     disabled={isDetailLoading}
                     disableElevation

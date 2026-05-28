@@ -6,7 +6,7 @@ import { STATE_FIPS_TO_NAME } from "../../utils/countyGeo";
 import {
     buildProductionFrames,
     calculateGrowthPercentage,
-    formatAcres,
+    formatAcresValue,
     formatCompactAcres,
     formatPercentage,
     formatUsCountyName,
@@ -44,7 +44,7 @@ const DETAIL_COLUMNS: ProductionDetailColumn[] = [
         key: "area",
         label: "AREA PLANTED",
         sortValue: (row) => row.area,
-        value: (row) => formatAcres(row.area)
+        value: (row) => formatAcresValue(row.area)
     }
 ];
 
@@ -141,7 +141,7 @@ export default function SoybeanStoryboardUSProduction({
     return (
         <SoybeanStoryboardProductionOverview
             card={{
-                buttonLabel: "View the change over the years",
+                buttonLabel: "View yearly change",
                 label: "U.S Total area planted (ACRES)"
             }}
             canLoadHistoricalFrames={canLoadHistoricalFrames}
