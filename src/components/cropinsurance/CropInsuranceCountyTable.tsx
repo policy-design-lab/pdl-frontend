@@ -74,7 +74,7 @@ function CropInsuranceCountyTable({
                     } else if (attribute === "averageInsuredAreaInAcres") {
                         newRecord[attribute] = formatNumericValue(Number(attributeData) || 0, 0);
                     } else if (attribute === "totalPoliciesEarningPremium") {
-                        newRecord[attribute] = formatCurrency(attributeData, 0);
+                        newRecord[attribute] = formatNumericValue(Number(attributeData) || 0, 0);
                     } else {
                         newRecord[attribute] = formatCurrency(attributeData, 0);
                     }
