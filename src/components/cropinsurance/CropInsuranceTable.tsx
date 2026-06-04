@@ -41,7 +41,7 @@ function CropInsuranceProgramTable({
             } else if (attr === "averageInsuredAreaInAcres") {
                 newRecord[attr] = formatNumericValue(Number(value) || 0, 0);
             } else if (attr === "totalPoliciesEarningPremium") {
-                newRecord[attr] = formatCurrency(value, 0);
+                newRecord[attr] = formatNumericValue(Number(value) || 0, 0);
             } else {
                 newRecord[attr] = formatCurrency(value, 0);
             }
