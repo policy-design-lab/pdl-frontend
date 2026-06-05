@@ -28,7 +28,7 @@ import {
     STORYBOARD_SECONDARY_NAV_HEIGHT,
     storyboardSections
 } from "../components/soybeanStoryboard/constants";
-import { getPreferredYear, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
+import { getLatestYear, getPreferredYear, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
 import "../styles/soybeanStoryboard.css";
 
 const defaultTheme = createTheme();
@@ -46,6 +46,10 @@ export default function SoybeanStoryboardPage(): JSX.Element {
     const marketBalanceYear = React.useMemo(
         () => getPreferredYear(soybeanData.marketBalance),
         [soybeanData.marketBalance]
+    );
+    const exportsYear = React.useMemo(
+        () => getLatestYear(soybeanData.exports),
+        [soybeanData.exports]
     );
     const visibleStoryboardFrames = React.useMemo(
         () => globalStoryboardFrames.filter((frame) => frame.sectionId === activeStoryboardSectionId),
@@ -216,6 +220,8 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                         <Box className="soybean-storyboard-map-shell">
                                             <SoybeanStoryboardWorldMap
                                                 variant="overview"
+                                                exports={soybeanData.exports}
+                                                exportsYear={exportsYear}
                                                 marketBalance={soybeanData.marketBalance}
                                                 marketBalanceYear={marketBalanceYear}
                                             />
@@ -265,6 +271,8 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                         {tradeView === "map" ? (
                                             <SoybeanStoryboardWorldMap
                                                 variant="trade"
+                                                exports={soybeanData.exports}
+                                                exportsYear={exportsYear}
                                                 marketBalance={soybeanData.marketBalance}
                                                 marketBalanceYear={marketBalanceYear}
                                             />
@@ -364,7 +372,11 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                 className="soybean-storyboard-section soybean-storyboard-utilization-section"
                             >
                                 {renderSectionLayout(
-                                    <SoybeanStoryboardSoybeanUtilization marketBalance={soybeanData.marketBalance} />
+                                    <SoybeanStoryboardSoybeanUtilization
+                                        exports={soybeanData.exports}
+                                        exportsYear={exportsYear}
+                                        marketBalance={soybeanData.marketBalance}
+                                    />
                                 )}
                             </Box>
                         </>

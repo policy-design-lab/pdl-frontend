@@ -12,8 +12,11 @@ import {
 } from "./constants";
 import {
     formatMillionMetricTons,
+    formatPlainMetricTons,
+    getExportsForCountry,
     getMarketBalanceForCountry,
     SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+    SoybeanExportsRecord,
     SoybeanMarketBalanceCountry,
     SoybeanYearRecord
 } from "./soybeanApi";
@@ -26,6 +29,8 @@ const TRADE_MAP_TARGET_WIDTH = VIEWBOX_WIDTH - 100;
 const TRADE_MAP_TOP = 58;
 
 type SoybeanStoryboardWorldMapProps = {
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>;
+    exportsYear: string;
     marketBalance: SoybeanYearRecord<SoybeanMarketBalanceCountry[]>;
     marketBalanceYear: string;
     variant: "overview" | "trade";
@@ -58,7 +63,6 @@ type TradeFlow = {
     from: [number, number];
     to: [number, number];
     label: string;
-    labelCoordinates: [number, number];
     color: string;
     curveX: number;
     curveY: number;
@@ -86,7 +90,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         shortLabel: "* ARGENTINA",
         fill: argentinaColor,
         textColor: "#FFFFFF",
-        labelCoordinates: [-65.6, -34.2],
+        labelCoordinates: [-63, -34.2],
         labelMaxWidth: 98,
         labelMinFontSize: 11,
         tooltipLabel: "Domestic market",
@@ -98,7 +102,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         label: "BRAZIL",
         fill: brazilColor,
         textColor: "#FFFFFF",
-        labelCoordinates: [-55.2, -12.2],
+        labelCoordinates: [-51, -12.2],
         labelMaxWidth: 76,
         tooltipLabel: "Domestic market",
         tooltipValue: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
@@ -109,7 +113,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         label: "MAINLAND CHINA",
         fill: mainlandChinaColor,
         textColor: "#17242A",
-        labelCoordinates: [99.4, 38.8],
+        labelCoordinates: [101, 38.8],
         labelMaxWidth: 108,
         labelMinFontSize: 11,
         tooltipLabel: "Domestic use",
@@ -121,7 +125,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         label: "UNITED STATES",
         fill: unitedStatesColor,
         textColor: "#FFFFFF",
-        labelCoordinates: [-104.2, 38],
+        labelCoordinates: [-100, 38],
         labelMaxWidth: 124,
         tooltipLabel: "Domestic use",
         tooltipValue: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
@@ -158,76 +162,88 @@ function buildHighlightedCountries(
     };
 }
 
-const tradeFlows: TradeFlow[] = [
-    {
-        id: "us-china",
-        from: [-88, 37] as [number, number],
-        to: [96, 42] as [number, number],
-        label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-        labelCoordinates: [7.5, 55] as [number, number],
-        color: unitedStatesColor,
-        curveX: 12,
-        curveY: -124,
-        width: 6,
-        markerId: "soybean-arrow-us"
-    },
-    {
-        id: "brazil-china",
-        from: [-52, -13] as [number, number],
-        to: [101, 25] as [number, number],
-        label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-        labelCoordinates: [41, -8] as [number, number],
-        color: brazilColor,
-        curveX: 4,
-        curveY: -140,
-        width: 12,
-        markerId: "soybean-arrow-brazil"
-    },
-    {
-        id: "argentina-china",
-        from: [-63, -38] as [number, number],
-        to: [109, 22] as [number, number],
-        label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-        labelCoordinates: [43, -47] as [number, number],
-        color: argentinaColor,
-        curveX: 28,
-        curveY: 104,
-        width: 3.25,
-        markerId: "soybean-arrow-argentina"
-    }
-];
+function buildTradeFlows(
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>,
+    exportsYear: string
+): TradeFlow[] {
+    const usExports = getExportsForCountry(exports, exportsYear, "US");
+    const brExports = getExportsForCountry(exports, exportsYear, "BR");
+    const arExports = getExportsForCountry(exports, exportsYear, "AR");
+    return [
+        {
+            id: "us-china",
+            from: [-88, 37] as [number, number],
+            to: [96, 42] as [number, number],
+            label: formatPlainMetricTons(usExports?.china),
+            color: unitedStatesColor,
+            curveX: 12,
+            curveY: -124,
+            width: 6,
+            markerId: "soybean-arrow-us"
+        },
+        {
+            id: "brazil-china",
+            from: [-52, -13] as [number, number],
+            to: [101, 25] as [number, number],
+            label: formatPlainMetricTons(brExports?.china),
+            color: brazilColor,
+            curveX: 4,
+            curveY: -140,
+            width: 12,
+            markerId: "soybean-arrow-brazil"
+        },
+        {
+            id: "argentina-china",
+            from: [-63, -38] as [number, number],
+            to: [109, 22] as [number, number],
+            label: formatPlainMetricTons(arExports?.china),
+            color: argentinaColor,
+            curveX: 28,
+            curveY: 104,
+            width: 3.25,
+            markerId: "soybean-arrow-argentina"
+        }
+    ];
+}
 
-const restOfWorldFlows: RestOfWorldFlow[] = [
-    {
-        id: "us-rest",
-        from: [-122, 37.1] as [number, number],
-        to: [-147.5, 37.1] as [number, number],
-        topLine: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-        bottomLine: "Rest of the world",
-        color: unitedStatesColor,
-        labelCoordinates: [-149.2, 35.2] as [number, number],
-        strokeWidth: 4.8,
-        markerId: "soybean-arrow-rest-us",
-        textAnchor: "end"
-    },
-    {
-        id: "brazil-rest",
-        from: [-63.5, -11.3] as [number, number],
-        to: [-144.5, -11.3] as [number, number],
-        topLine: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-        bottomLine: "Rest of the world",
-        color: brazilColor,
-        labelCoordinates: [-146.7, -13.9] as [number, number],
-        strokeWidth: 5.4,
-        markerId: "soybean-arrow-rest-brazil",
-        textAnchor: "end"
-    }
-];
+function buildRestOfWorldFlows(
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>,
+    exportsYear: string
+): RestOfWorldFlow[] {
+    const usExports = getExportsForCountry(exports, exportsYear, "US");
+    const brExports = getExportsForCountry(exports, exportsYear, "BR");
+    return [
+        {
+            id: "us-rest",
+            from: [-122, 37.1] as [number, number],
+            to: [-147.5, 37.1] as [number, number],
+            topLine: formatPlainMetricTons(usExports?.rest_of_world),
+            bottomLine: "Rest of the world",
+            color: unitedStatesColor,
+            labelCoordinates: [-149.2, 35.2] as [number, number],
+            strokeWidth: 4.8,
+            markerId: "soybean-arrow-rest-us",
+            textAnchor: "end"
+        },
+        {
+            id: "brazil-rest",
+            from: [-63.5, -11.3] as [number, number],
+            to: [-144.5, -11.3] as [number, number],
+            topLine: formatPlainMetricTons(brExports?.rest_of_world),
+            bottomLine: "Rest of the world",
+            color: brazilColor,
+            labelCoordinates: [-146.7, -13.9] as [number, number],
+            strokeWidth: 5.4,
+            markerId: "soybean-arrow-rest-brazil",
+            textAnchor: "end"
+        }
+    ];
+}
 
-function createTradePath(
+function computeTradeFlowPoints(
     project: (coordinates: [number, number]) => ProjectedPoint,
-    flow: (typeof tradeFlows)[number]
-): string {
+    flow: TradeFlow
+): { path: string; pillX: number; pillY: number } {
     const [x1, y1] = project(flow.from);
     const [x2, y2] = project(flow.to);
     const midX = (x1 + x2) / 2 + flow.curveX;
@@ -236,7 +252,20 @@ function createTradePath(
     const controlAY = y1 + (midY - y1) * 0.9;
     const controlBX = x2 + (midX - x2) * 0.55;
     const controlBY = y2 + (midY - y2) * 0.9;
-    return `M ${x1} ${y1} C ${controlAX} ${controlAY}, ${controlBX} ${controlBY}, ${x2} ${y2}`;
+    const path = `M ${x1} ${y1} C ${controlAX} ${controlAY}, ${controlBX} ${controlBY}, ${x2} ${y2}`;
+    const t = 0.5;
+    const mt = 1 - t;
+    const pillX =
+        mt * mt * mt * x1 +
+        3 * mt * mt * t * controlAX +
+        3 * mt * t * t * controlBX +
+        t * t * t * x2;
+    const pillY =
+        mt * mt * mt * y1 +
+        3 * mt * mt * t * controlAY +
+        3 * mt * t * t * controlBY +
+        t * t * t * y2;
+    return { path, pillX, pillY };
 }
 
 function createLinearPath(
@@ -249,14 +278,20 @@ function createLinearPath(
     return `M ${x1} ${y1} L ${x2} ${y2}`;
 }
 
-function renderMetricPill(
-    project: (coordinates: [number, number]) => ProjectedPoint,
-    coordinates: [number, number],
-    text: string,
-    fill: string
-) {
-    const [x, y] = project(coordinates);
-    const width = text.length * 8 + 18;
+function estimatePillWidth(text: string): number {
+    let w = 0;
+    for (const ch of text) {
+        if ("MW".includes(ch)) w += 12;
+        else if ("m".includes(ch)) w += 10;
+        else if (" ".includes(ch)) w += 5;
+        else if (".,iIl1".includes(ch)) w += 5;
+        else w += 9;
+    }
+    return w + 24;
+}
+
+function renderMetricPill(x: number, y: number, text: string, fill: string) {
+    const width = estimatePillWidth(text);
     return (
         <g transform={`translate(${x - width / 2} ${y - 14})`}>
             <rect width={width} height={28} rx={4} fill={fill} opacity={0.92} />
@@ -336,6 +371,8 @@ function renderRestOfWorldLabel(
 }
 
 export default function SoybeanStoryboardWorldMap({
+    exports,
+    exportsYear,
     marketBalance,
     marketBalanceYear,
     variant
@@ -346,6 +383,14 @@ export default function SoybeanStoryboardWorldMap({
     const highlightedCountries = React.useMemo(
         () => buildHighlightedCountries(marketBalance, marketBalanceYear),
         [marketBalance, marketBalanceYear]
+    );
+    const tradeFlows = React.useMemo(
+        () => buildTradeFlows(exports, exportsYear),
+        [exports, exportsYear]
+    );
+    const restOfWorldFlows = React.useMemo(
+        () => buildRestOfWorldFlows(exports, exportsYear),
+        [exports, exportsYear]
     );
 
     React.useEffect(() => {
@@ -519,20 +564,23 @@ export default function SoybeanStoryboardWorldMap({
                     );
                 })}
                 {variant === "trade" &&
-                    tradeFlows.map((flow) => (
-                        <g key={flow.id}>
-                            <path
-                                d={createTradePath(project, flow)}
-                                fill="none"
-                                stroke={flow.color}
-                                strokeWidth={flow.width}
-                                strokeOpacity="0.88"
-                                strokeLinecap="round"
-                                markerEnd={`url(#${flow.markerId})`}
-                            />
-                            {renderMetricPill(project, flow.labelCoordinates, flow.label, flow.color)}
-                        </g>
-                    ))}
+                    tradeFlows.map((flow) => {
+                        const { path, pillX, pillY } = computeTradeFlowPoints(project, flow);
+                        return (
+                            <g key={flow.id}>
+                                <path
+                                    d={path}
+                                    fill="none"
+                                    stroke={flow.color}
+                                    strokeWidth={flow.width}
+                                    strokeOpacity="0.88"
+                                    strokeLinecap="round"
+                                    markerEnd={`url(#${flow.markerId})`}
+                                />
+                                {renderMetricPill(pillX, pillY, flow.label, flow.color)}
+                            </g>
+                        );
+                    })}
                 {variant === "trade" &&
                     restOfWorldFlows.map((flow) => (
                         <g key={flow.id}>

@@ -69,8 +69,17 @@ export type SoybeanMarketBalanceCountry = {
 
 export type SoybeanPlantedAcresCountryCode = "br" | "us";
 
+export type SoybeanExportsRecord = {
+    country: string;
+    code: string;
+    commodity: string;
+    china: number | null;
+    rest_of_world: number | null;
+};
+
 export type SoybeanStoryboardApiData = {
     commodities: SoybeanYearRecord<ChinaCommodityDemandRecord>;
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>;
     isLoading: boolean;
     loadPlantedAcresRange: (
         country: SoybeanPlantedAcresCountryCode,
@@ -105,6 +114,7 @@ export function useSoybeanStoryboardData(): SoybeanStoryboardApiData {
     const isMountedRef = React.useRef(true);
     const [data, setData] = React.useState<Omit<SoybeanStoryboardApiData, "loadPlantedAcresRange">>({
         commodities: {},
+        exports: {},
         isLoading: true,
         marketBalance: {},
         plantedAcres: {
@@ -179,12 +189,14 @@ export function useSoybeanStoryboardData(): SoybeanStoryboardApiData {
                     socioeconomicResponse,
                     commoditiesResponse,
                     marketBalanceResponse,
+                    exportsResponse,
                     brazilPlantedAcresSummaryResponse,
                     usPlantedAcresSummaryResponse
                 ] = await Promise.all([
                     getJsonDataFromUrl(`${config.apiUrl}/countries/CN/socioeconomic`),
                     getJsonDataFromUrl(`${config.apiUrl}/countries/CN/commodities`),
                     getJsonDataFromUrl(`${config.apiUrl}/countries/marketbalance`),
+                    getJsonDataFromUrl(`${config.apiUrl}/countries/exports`),
                     getJsonDataFromUrl(`${config.apiUrl}/countries/br/plantedacres/summary`),
                     getJsonDataFromUrl(`${config.apiUrl}/countries/us/plantedacres/summary`)
                 ]);
@@ -202,6 +214,7 @@ export function useSoybeanStoryboardData(): SoybeanStoryboardApiData {
                 setData((currentData) => ({
                     ...currentData,
                     commodities: normalizeYearRecord<ChinaCommodityDemandRecord>(commoditiesResponse),
+                    exports: normalizeYearRecord<SoybeanExportsRecord[]>(exportsResponse),
                     isLoading: false,
                     marketBalance: normalizeYearRecord<SoybeanMarketBalanceCountry[]>(marketBalanceResponse),
                     plantedAcresSummary: {
@@ -637,6 +650,25 @@ export function buildTopRankingRows(
         .sort((rowA, rowB) => (rowB.totalAcres || 0) - (rowA.totalAcres || 0))
         .slice(0, 5)
         .map(({ area, areaValue, growth, key, label }) => ({ area, areaValue, growth, key, label }));
+}
+
+export function getExportsForCountry(
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>,
+    year: string,
+    countryCode: string
+): SoybeanExportsRecord | null {
+    const records = exports[year];
+    if (!Array.isArray(records)) {
+        return null;
+    }
+    return records.find((r) => r.code.toUpperCase() === countryCode.toUpperCase()) ?? null;
+}
+
+export function formatPlainMetricTons(value: number | null | undefined): string {
+    if (!isFiniteNumber(value)) {
+        return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+    }
+    return `${ShortFormat(value, undefined, 1)} MT`;
 }
 
 export function calculateGrowthPercentage(values: number[]): number | null {
