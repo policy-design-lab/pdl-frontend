@@ -479,6 +479,30 @@
   height: 1.25rem;
 }
 
+.soybean-storyboard-trade-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.soybean-storyboard-trade-year-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.soybean-storyboard-trade-year-label {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  white-space: nowrap;
+}
+
+.soybean-storyboard-trade-year-select-wrap {
+  width: auto !important;
+  min-width: 80px;
+}
+
 .soybean-storyboard-trade-note {
   margin-bottom: 14px;
   color: rgba(255, 255, 255, 0.62);

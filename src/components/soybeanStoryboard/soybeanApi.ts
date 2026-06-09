@@ -6,7 +6,7 @@ import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 export const SOYBEAN_STORYBOARD_PREFERRED_YEAR = "2024";
 export const SOYBEAN_STORYBOARD_NEED_DATA_LABEL = "Need Data";
 
-export type SoybeanQuantityUnit = "bushels" | "mt";
+export type SoybeanQuantityUnit = "bushels" | "mt" | "mmt";
 
 export type SoybeanYearRecord<T> = Record<string, T>;
 
@@ -317,7 +317,7 @@ export function getSoybeanBalanceValue(
     if (!balance) {
         return null;
     }
-    if (unit === "mt") {
+    if (unit === "mt" || unit === "mmt") {
         switch (metric) {
             case "production":
                 return balance.productionMT;
@@ -501,8 +501,11 @@ export function formatSoybeanQuantity(
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    const unitLabel = unit === "mt" ? " MT" : " Bushels";
-    return `${ShortFormat(value, undefined, 1)}${includeUnit ? unitLabel : ""}`;
+    if (unit === "mmt") {
+        const mmtValue = value / 1_000_000;
+        return `${formatNumericValue(mmtValue, 2)}${includeUnit ? " MMT" : ""}`;
+    }
+    return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
 }
 
 export function formatThousandMetricTonsAsMmt(value: number | null | undefined, label: string): string {

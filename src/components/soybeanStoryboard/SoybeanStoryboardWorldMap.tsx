@@ -162,10 +162,7 @@ function buildHighlightedCountries(
     };
 }
 
-function buildTradeFlows(
-    exports: SoybeanYearRecord<SoybeanExportsRecord[]>,
-    exportsYear: string
-): TradeFlow[] {
+function buildTradeFlows(exports: SoybeanYearRecord<SoybeanExportsRecord[]>, exportsYear: string): TradeFlow[] {
     const usExports = getExportsForCountry(exports, exportsYear, "US");
     const brExports = getExportsForCountry(exports, exportsYear, "BR");
     const arExports = getExportsForCountry(exports, exportsYear, "AR");
@@ -255,16 +252,8 @@ function computeTradeFlowPoints(
     const path = `M ${x1} ${y1} C ${controlAX} ${controlAY}, ${controlBX} ${controlBY}, ${x2} ${y2}`;
     const t = 0.5;
     const mt = 1 - t;
-    const pillX =
-        mt * mt * mt * x1 +
-        3 * mt * mt * t * controlAX +
-        3 * mt * t * t * controlBX +
-        t * t * t * x2;
-    const pillY =
-        mt * mt * mt * y1 +
-        3 * mt * mt * t * controlAY +
-        3 * mt * t * t * controlBY +
-        t * t * t * y2;
+    const pillX = mt * mt * mt * x1 + 3 * mt * mt * t * controlAX + 3 * mt * t * t * controlBX + t * t * t * x2;
+    const pillY = mt * mt * mt * y1 + 3 * mt * mt * t * controlAY + 3 * mt * t * t * controlBY + t * t * t * y2;
     return { path, pillX, pillY };
 }
 
@@ -384,14 +373,8 @@ export default function SoybeanStoryboardWorldMap({
         () => buildHighlightedCountries(marketBalance, marketBalanceYear),
         [marketBalance, marketBalanceYear]
     );
-    const tradeFlows = React.useMemo(
-        () => buildTradeFlows(exports, exportsYear),
-        [exports, exportsYear]
-    );
-    const restOfWorldFlows = React.useMemo(
-        () => buildRestOfWorldFlows(exports, exportsYear),
-        [exports, exportsYear]
-    );
+    const tradeFlows = React.useMemo(() => buildTradeFlows(exports, exportsYear), [exports, exportsYear]);
+    const restOfWorldFlows = React.useMemo(() => buildRestOfWorldFlows(exports, exportsYear), [exports, exportsYear]);
 
     React.useEffect(() => {
         loadWorldFeatures().then((features) => {
