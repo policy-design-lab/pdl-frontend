@@ -49,12 +49,7 @@ const TOP_FLOW_ASSETS = [
 ];
 const TOP_FLOW_RIGHT_X = [937, 913, 889, 865, 841, 817, 793];
 const TOP_FLOW_LEFT_X = [78, 102, 126, 150, 174, 198, 222];
-const MARKET_LABEL_POSITIONS = [
-    { x: 782, label: "Mainland China", countryKey: "china" as const },
-    { x: 995, label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL, countryKey: null },
-    { x: 1165, label: SOYBEAN_STORYBOARD_NEED_DATA_LABEL, countryKey: null },
-    { x: 1354, label: "Rest Of World", countryKey: "rest_of_world" as const }
-];
+const MARKET_LABEL_X_POSITIONS = [782, 995, 1165, 1354];
 const STATIC_LAYERS = [
     { src: utilizationTotalBlock, x: 608, y: 349, width: 347, height: 359 },
     { src: utilizationDomesticBlock, x: 541, y: 709, width: 279, height: 329 },
@@ -166,6 +161,24 @@ export default function SoybeanStoryboardSoybeanUtilization({
     const exportValue = getSoybeanBalanceValue(usBalance, "exports", unit);
     const endingStockValue = getSoybeanBalanceValue(usBalance, "endingStock", unit);
     const usExports = React.useMemo(() => getExportsForCountry(exports, activeYear, "US"), [exports, activeYear]);
+    const marketLabelPositions = React.useMemo(() => {
+        const topDest1 = usExports?.top_destinations?.[1];
+        const topDest2 = usExports?.top_destinations?.[2];
+        return [
+            { x: MARKET_LABEL_X_POSITIONS[0], label: "Mainland China", exportValue: usExports?.china ?? null },
+            {
+                x: MARKET_LABEL_X_POSITIONS[1],
+                label: topDest1?.country ?? SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+                exportValue: topDest1?.amount ?? null
+            },
+            {
+                x: MARKET_LABEL_X_POSITIONS[2],
+                label: topDest2?.country ?? SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+                exportValue: topDest2?.amount ?? null
+            },
+            { x: MARKET_LABEL_X_POSITIONS[3], label: "Rest Of World", exportValue: usExports?.rest_of_world ?? null }
+        ];
+    }, [usExports]);
 
     React.useEffect(() => {
         if (availableYears.length > 0 && !availableYears.includes(year)) {
@@ -352,15 +365,14 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             {formatShareMeta(endingStockValue, totalValue)}
                         </Typography>
 
-                        {MARKET_LABEL_POSITIONS.map((market) => {
-                            const exportValue = market.countryKey !== null ? usExports?.[market.countryKey] : null;
+                        {marketLabelPositions.map((market) => {
                             const exportQuantity =
                                 unit === "mmt"
-                                    ? formatSoybeanQuantity(exportValue, "mmt")
+                                    ? formatSoybeanQuantity(market.exportValue, "mmt")
                                     : SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
                             const exportShare =
-                                isFiniteNumber(exportValue) && isFiniteNumber(totalValue) && unit === "mmt"
-                                    ? formatShareMeta(exportValue, totalValue)
+                                isFiniteNumber(market.exportValue) && isFiniteNumber(totalValue) && unit === "mmt"
+                                    ? formatShareMeta(market.exportValue, totalValue)
                                     : SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
                             return (
                                 <React.Fragment key={market.label + market.x}>
@@ -374,15 +386,13 @@ export default function SoybeanStoryboardSoybeanUtilization({
                                         className="soybean-storyboard-utilization-bottom-meta"
                                         style={createTextStyle(market.x, 1556)}
                                     >
-                                        {market.countryKey !== null
-                                            ? exportQuantity
-                                            : SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
+                                        {exportQuantity}
                                     </Typography>
                                     <Typography
                                         className="soybean-storyboard-utilization-bottom-meta"
                                         style={createTextStyle(market.x, 1576)}
                                     >
-                                        {market.countryKey !== null ? exportShare : SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
+                                        {exportShare}
                                     </Typography>
                                 </React.Fragment>
                             );

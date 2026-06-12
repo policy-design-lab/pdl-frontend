@@ -69,10 +69,16 @@ export type SoybeanMarketBalanceCountry = {
 
 export type SoybeanPlantedAcresCountryCode = "br" | "us";
 
+export type SoybeanExportsTopDestination = {
+    country: string;
+    amount: number;
+};
+
 export type SoybeanExportsRecord = {
     country: string;
     code: string;
     commodity: string;
+    top_destinations: SoybeanExportsTopDestination[];
     china: number | null;
     rest_of_world: number | null;
 };
