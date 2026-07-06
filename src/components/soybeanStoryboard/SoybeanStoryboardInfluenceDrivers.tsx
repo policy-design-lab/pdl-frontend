@@ -28,11 +28,11 @@ const CHART_PADDING = {
     bottom: 18,
     left: 92
 };
-const DRIVER_TOOLTIP_PADDING_X = 12;
-const DRIVER_TOOLTIP_MIN_WIDTH = 112;
-const DRIVER_TOOLTIP_MAX_WIDTH = 280;
-const DRIVER_TOOLTIP_LINE_HEIGHT = 20;
-const DRIVER_TOOLTIP_VERTICAL_PADDING = 12;
+const DRIVER_TOOLTIP_PADDING_X = 14;
+const DRIVER_TOOLTIP_MIN_WIDTH = 128;
+const DRIVER_TOOLTIP_MAX_WIDTH = 320;
+const DRIVER_TOOLTIP_LINE_HEIGHT = 23;
+const DRIVER_TOOLTIP_VERTICAL_PADDING = 14;
 
 type TrendSeries = {
     id: string;
@@ -107,14 +107,14 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         series: [
             {
                 id: "pork",
-                color: "#E5DF95",
+                color: "#E3E1A6",
                 endLabel: "Pork Amount",
                 pillTone: "pork",
                 values: [16, 18, 20, 49, 29, 40, 47, 62, 62, 79, 82, 88, 66, 104, 88, 92, 115, 103, 101, 111]
             },
             {
                 id: "poultry",
-                color: "#DDA0D9",
+                color: "#E3A6DD",
                 endLabel: "Poultry Amount",
                 pillTone: "poultry",
                 values: [5, 1, 12, 20, 38, 46, 25, 34, 45, 58, 76, 61, 63, 65, 81, 69, 105, 105, 106, 93]
@@ -175,6 +175,10 @@ function getLatestValue(values: number[]): number | null {
 
 function formatPopulationAxis(value: number): string {
     return ShortFormat(value, undefined, 2);
+}
+
+function formatPopulationTooltip(value: number): string {
+    return ShortFormat(value, undefined, 3);
 }
 
 function formatCurrencyAxis(value: number): string {
@@ -311,7 +315,7 @@ function buildInfluenceCharts(
                 tooltipLabel: "Population"
             },
             createAxisTicks(populationValues, formatPopulationAxis),
-            formatPopulationAxis
+            formatPopulationTooltip
         ),
         annotation: `China's Population Grew By Roughly ${getRoundedPercentage(populationGrowth)}`
     };
@@ -337,7 +341,7 @@ function buildInfluenceCharts(
             axisTicks: createAxisTicks(proteinValues, formatMmtAxis, 8, 118, proteinValues),
             series: [
                 {
-                    color: "#E5DF95",
+                    color: "#E3E1A6",
                     endLabel: formatThousandMetricTonsAsMmt(latestPork, "Pork"),
                     id: "pork",
                     points: porkPoints.map((point) => ({
@@ -350,7 +354,7 @@ function buildInfluenceCharts(
                     values: createNormalizedTrendValues(porkValues, 8, 118, proteinValues)
                 },
                 {
-                    color: "#DDA0D9",
+                    color: "#E3A6DD",
                     endLabel: formatThousandMetricTonsAsMmt(latestPoultry, "Poultry"),
                     id: "poultry",
                     points: poultryPoints.map((point) => ({
@@ -402,23 +406,27 @@ function getChartPointY(value: number): number {
     return CHART_PADDING.top + pointOffset;
 }
 
-function getDriverTooltipTextWidth(text: string): number {
-    return text.length * 7.2;
+function getDriverTooltipTextWidth(text: string, charWidth: number): number {
+    return text.length * charWidth;
 }
 
 function getDriverTooltipSize(yearLabel: string, valueLabel: string): { height: number; width: number } {
-    const textWidth = Math.max(getDriverTooltipTextWidth(yearLabel), getDriverTooltipTextWidth(valueLabel));
+    const textWidth = Math.max(getDriverTooltipTextWidth(yearLabel, 8.4), getDriverTooltipTextWidth(valueLabel, 10.5));
+    const verticalPadding = DRIVER_TOOLTIP_VERTICAL_PADDING * 2;
+    const contentHeight = DRIVER_TOOLTIP_LINE_HEIGHT * 2;
+    const horizontalPadding = DRIVER_TOOLTIP_PADDING_X * 2;
     return {
-        height: DRIVER_TOOLTIP_VERTICAL_PADDING * 2 + DRIVER_TOOLTIP_LINE_HEIGHT * 2,
-        width: Math.min(
-            DRIVER_TOOLTIP_MAX_WIDTH,
-            Math.max(DRIVER_TOOLTIP_MIN_WIDTH, textWidth + DRIVER_TOOLTIP_PADDING_X * 2)
-        )
+        height: verticalPadding + contentHeight,
+        width: Math.min(DRIVER_TOOLTIP_MAX_WIDTH, Math.max(DRIVER_TOOLTIP_MIN_WIDTH, textWidth + horizontalPadding))
     };
 }
 
 function getDriverTooltipX(pointX: number, tooltipWidth: number): number {
-    return Math.min(CHART_WIDTH - CHART_PADDING.right - tooltipWidth, Math.max(CHART_PADDING.left + 8, pointX + 14));
+    const halfWidth = tooltipWidth / 2;
+    return Math.min(
+        CHART_WIDTH - CHART_PADDING.right - tooltipWidth,
+        Math.max(CHART_PADDING.left + 8, pointX - halfWidth)
+    );
 }
 
 function getDriverTooltipY(pointY: number, tooltipHeight: number): number {
@@ -461,7 +469,8 @@ function DriverTitle({ chart }: { chart: TrendChartDefinition }): JSX.Element {
             <Box className="soybean-storyboard-driver-title-pill soybean-storyboard-driver-title-pill-poultry">
                 Poultry
             </Box>
-            <Typography className="soybean-storyboard-driver-more-info">More info -&gt;</Typography>
+            {/* More info is in design but no data for this */}
+            {/* <Typography className="soybean-storyboard-driver-more-info">More info -&gt;</Typography> */}
         </Box>
     );
 }
@@ -645,10 +654,25 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                             fill="rgba(7, 22, 28, 0.96)"
                             stroke="rgba(255, 255, 255, 0.14)"
                         />
-                        <text x="12" y="20" fill="#ffffff" fontFamily="Roboto" fontSize="14" fontWeight="700">
+                        <text
+                            x={hoveredTooltipSize.width / 2}
+                            y={33}
+                            fill="#ffffff"
+                            fontFamily="Roboto"
+                            fontSize="16"
+                            fontWeight="700"
+                            textAnchor="middle"
+                        >
                             {hoveredSeriesPoint.year}
                         </text>
-                        <text x="12" y="40" fill="rgba(216, 223, 226, 0.92)" fontFamily="Roboto" fontSize="13">
+                        <text
+                            x={hoveredTooltipSize.width / 2}
+                            y={54}
+                            fill="rgba(216, 223, 226, 0.92)"
+                            fontFamily="Roboto"
+                            fontSize="20"
+                            textAnchor="middle"
+                        >
                             {hoveredTooltipValue}
                         </text>
                     </g>

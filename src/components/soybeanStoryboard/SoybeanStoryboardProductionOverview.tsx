@@ -25,7 +25,7 @@ export type { ProductionDetailFrame, ProductionDetailRow, ProductionRankingRow }
 const MAP_VIEWBOX_WIDTH = 760;
 const BRAZIL_MAP_VIEWBOX_HEIGHT = 1080;
 const US_MAP_VIEWBOX_HEIGHT = 620;
-const LEGEND_COLORS = ["#D7F7BF", "#9BED69", "#6DEB26", "#53BA10", "#3C8807"];
+const LEGEND_COLORS = ["#CAF2B2", "#85F047", "#46AF08", "#4DD100", "#276A00"];
 
 type LegendConfig = {
     subtitle: string;
@@ -375,7 +375,7 @@ export default function SoybeanStoryboardProductionOverview({
     function getTableSwatchStyle(area: number | null): React.CSSProperties {
         const style = getProductionFillForValue(area ?? undefined, legendValues);
         return {
-            backgroundColor: style?.fill || "#203A43",
+            backgroundColor: style?.fill || "#1E353B",
             opacity: style?.opacity || 1
         };
     }
@@ -459,7 +459,7 @@ export default function SoybeanStoryboardProductionOverview({
                         }
                         aria-hidden={legendValues.length > 0}
                     >
-                        <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-hatch" />
+                        <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-nodata" />
                         <Typography className="soybean-storyboard-production-legend-label">
                             {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
                         </Typography>
@@ -534,7 +534,7 @@ export default function SoybeanStoryboardProductionOverview({
                                                 <path
                                                     key={municipalityId}
                                                     d={municipalityPath}
-                                                    fill={style?.fill || "#223942"}
+                                                    fill={style?.fill || "#1E353B"}
                                                     opacity={style?.opacity || 1}
                                                     stroke="rgba(223, 241, 216, 0.12)"
                                                     strokeWidth="0.18"
@@ -548,7 +548,7 @@ export default function SoybeanStoryboardProductionOverview({
                                     </>
                                 ) : (
                                     <>
-                                        <path d={basePath} fill="#223942" stroke="#344A52" strokeWidth="1.2" />
+                                        <path d={basePath} fill="#1E353B" stroke="#374B51" strokeWidth="1.2" />
                                         {usCounties.map((countyFeature: any) => {
                                             const countyPath = pathGenerator(countyFeature);
                                             const countyId = String(countyFeature.id).padStart(5, "0");
@@ -564,7 +564,7 @@ export default function SoybeanStoryboardProductionOverview({
                                                 <path
                                                     key={countyFeature.id}
                                                     d={countyPath}
-                                                    fill={style?.fill || "#223942"}
+                                                    fill={style?.fill || "#1E353B"}
                                                     opacity={style?.opacity || 1}
                                                     stroke="rgba(223, 241, 216, 0.16)"
                                                     strokeWidth="0.28"
@@ -585,7 +585,7 @@ export default function SoybeanStoryboardProductionOverview({
                                                     key={stateFeature.id}
                                                     d={statePath}
                                                     fill="none"
-                                                    stroke="rgba(108, 131, 139, 0.24)"
+                                                    stroke="rgba(105, 120, 124, 0.24)"
                                                     strokeWidth="1"
                                                     vectorEffect="non-scaling-stroke"
                                                 />

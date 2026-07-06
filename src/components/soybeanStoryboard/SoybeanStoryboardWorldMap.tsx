@@ -237,23 +237,39 @@ function buildRestOfWorldFlows(
     ];
 }
 
+function lerp(start: number, end: number, ratio: number): number {
+    const delta = end - start;
+    const scaledDelta = delta * ratio;
+    return start + scaledDelta;
+}
+
+function cubicBezierPoint(p0: number, p1: number, p2: number, p3: number, t: number): number {
+    const mt = 1 - t;
+    const term0 = mt * mt * mt * p0;
+    const term1 = 3 * mt * mt * t * p1;
+    const term2 = 3 * mt * t * t * p2;
+    const term3 = t * t * t * p3;
+    return term0 + term1 + term2 + term3;
+}
+
 function computeTradeFlowPoints(
     project: (coordinates: [number, number]) => ProjectedPoint,
     flow: TradeFlow
 ): { path: string; pillX: number; pillY: number } {
     const [x1, y1] = project(flow.from);
     const [x2, y2] = project(flow.to);
-    const midX = (x1 + x2) / 2 + flow.curveX;
-    const midY = (y1 + y2) / 2 + flow.curveY;
-    const controlAX = x1 + (midX - x1) * 0.55;
-    const controlAY = y1 + (midY - y1) * 0.9;
-    const controlBX = x2 + (midX - x2) * 0.55;
-    const controlBY = y2 + (midY - y2) * 0.9;
+    const midpointX = (x1 + x2) / 2;
+    const midpointY = (y1 + y2) / 2;
+    const midX = midpointX + flow.curveX;
+    const midY = midpointY + flow.curveY;
+    const controlAX = lerp(x1, midX, 0.55);
+    const controlAY = lerp(y1, midY, 0.9);
+    const controlBX = lerp(x2, midX, 0.55);
+    const controlBY = lerp(y2, midY, 0.9);
     const path = `M ${x1} ${y1} C ${controlAX} ${controlAY}, ${controlBX} ${controlBY}, ${x2} ${y2}`;
     const t = 0.5;
-    const mt = 1 - t;
-    const pillX = mt * mt * mt * x1 + 3 * mt * mt * t * controlAX + 3 * mt * t * t * controlBX + t * t * t * x2;
-    const pillY = mt * mt * mt * y1 + 3 * mt * mt * t * controlAY + 3 * mt * t * t * controlBY + t * t * t * y2;
+    const pillX = cubicBezierPoint(x1, controlAX, controlBX, x2, t);
+    const pillY = cubicBezierPoint(y1, controlAY, controlBY, y2, t);
     return { path, pillX, pillY };
 }
 
@@ -281,8 +297,9 @@ function estimatePillWidth(text: string): number {
 
 function renderMetricPill(x: number, y: number, text: string, fill: string) {
     const width = estimatePillWidth(text);
+    const halfWidth = width / 2;
     return (
-        <g transform={`translate(${x - width / 2} ${y - 14})`}>
+        <g transform={`translate(${x - halfWidth} ${y - 14})`}>
             <rect width={width} height={28} rx={4} fill={fill} opacity={0.92} />
             <text
                 x={width / 2}

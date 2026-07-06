@@ -45,9 +45,11 @@ export default function SoybeanStoryboardCompetitorMap(): JSX.Element {
         const currentCenterX = (minX + maxX) / 2;
         const currentCenterY = (minY + maxY) / 2;
         mapProjection.scale(mapProjection.scale() * 1.28);
+        const viewBoxCenterX = VIEWBOX_WIDTH / 2;
+        const viewBoxCenterY = VIEWBOX_HEIGHT / 2;
         mapProjection.translate([
-            mapProjection.translate()[0] + (VIEWBOX_WIDTH / 2 - currentCenterX) + 12,
-            mapProjection.translate()[1] + (VIEWBOX_HEIGHT / 2 - currentCenterY) + 8
+            mapProjection.translate()[0] + (viewBoxCenterX - currentCenterX) + 12,
+            mapProjection.translate()[1] + (viewBoxCenterY - currentCenterY) + 8
         ]);
         return mapProjection;
     }, [regionalFeatures]);
@@ -75,12 +77,12 @@ export default function SoybeanStoryboardCompetitorMap(): JSX.Element {
                 const countryId = normalizeCountryId(feature.id);
                 const isBrazil = countryId === BRAZIL_COUNTRY_ID;
                 const [, latitude] = geoCentroid(feature);
-                const baseFill = latitude < 8 ? "rgba(32, 62, 72, 0.82)" : "rgba(22, 47, 57, 0.88)";
+                const baseFill = latitude < 8 ? "rgba(55, 75, 81, 0.82)" : "rgba(30, 53, 59, 0.88)";
                 return (
                     <path
                         key={countryId}
                         d={pathGenerator(feature) || ""}
-                        fill={isBrazil ? "#78A175" : baseFill}
+                        fill={isBrazil ? "#4D9F45" : baseFill}
                         stroke={isBrazil ? "rgba(236, 245, 235, 0.62)" : "rgba(20, 39, 47, 0.95)"}
                         strokeWidth={isBrazil ? 2.4 : 1.1}
                         vectorEffect="non-scaling-stroke"

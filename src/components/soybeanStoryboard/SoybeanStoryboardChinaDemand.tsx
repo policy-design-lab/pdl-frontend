@@ -1,57 +1,82 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import { geoCentroid, geoMercator, geoPath } from "d3-geo";
 import soybeanGlyph from "../../images/soybean/soybean.svg";
 import { mainlandChinaColor, mutedCountryFill, mutedCountryStroke } from "./constants";
 import {
+    convertMetricTonsToUnit,
     formatPercentage,
+    formatSoybeanQuantity,
     getMarketBalanceForCountry,
+    getPreferredYear,
+    getSortedYears,
+    SoybeanQuantityUnit,
     SoybeanYearRecord,
     SoybeanMarketBalanceCountry
 } from "./soybeanApi";
+import SoybeanStoryboardUnitSelect from "./SoybeanStoryboardUnitSelect";
+import SoybeanStoryboardYearSelect from "./SoybeanStoryboardYearSelect";
 import { loadWorldFeatures, normalizeCountryId } from "./worldMapData";
 
 const VIEWBOX_WIDTH = 920;
 const VIEWBOX_HEIGHT = 620;
 const SOYBEAN_GRID_COUNT = 100;
-const SOYBEAN_GLYPH_MARKUP = soybeanGlyph.replace(/fill="white"/g, 'fill="currentColor"');
+const SOYBEAN_GOLD_COLOR = "#D69830";
+const SOYBEAN_GREY_COLOR = "rgba(214, 222, 228, 0.74)";
 
 type SoybeanStoryboardChinaDemandProps = {
     marketBalance: SoybeanYearRecord<SoybeanMarketBalanceCountry[]>;
-    marketBalanceYear: string;
 };
 
-function SoybeanShareGlyph({ active }: { active: boolean }): JSX.Element {
-    const color = active ? "#D69830" : "rgba(214, 222, 228, 0.74)";
+function buildGlyphMarkup(goldRatio: number, gradientId: string): string {
+    if (goldRatio >= 1) {
+        return soybeanGlyph.replace(/fill="white"/g, `fill="${SOYBEAN_GOLD_COLOR}"`);
+    }
+    if (goldRatio <= 0) {
+        return soybeanGlyph.replace(/fill="white"/g, `fill="${SOYBEAN_GREY_COLOR}"`);
+    }
+    const offset = `${(goldRatio * 100).toFixed(2)}%`;
+    const gradient =
+        `<defs><linearGradient id="${gradientId}" x1="0" y1="0" x2="0" y2="1">` +
+        `<stop offset="0" stop-color="${SOYBEAN_GOLD_COLOR}"/>` +
+        `<stop offset="${offset}" stop-color="${SOYBEAN_GOLD_COLOR}"/>` +
+        `<stop offset="${offset}" stop-color="${SOYBEAN_GREY_COLOR}"/>` +
+        `<stop offset="1" stop-color="${SOYBEAN_GREY_COLOR}"/>` +
+        "</linearGradient></defs>";
+    return soybeanGlyph.replace(/fill="white"/g, `fill="url(#${gradientId})"`).replace(/(<svg[^>]*>)/, `$1${gradient}`);
+}
+
+function SoybeanShareGlyph({ goldRatio, gradientId }: { goldRatio: number; gradientId: string }): JSX.Element {
     return (
         <Box
             component="span"
             className="soybean-storyboard-demand-grid-icon"
-            sx={{ color }}
-            dangerouslySetInnerHTML={{ __html: SOYBEAN_GLYPH_MARKUP }}
+            dangerouslySetInnerHTML={{ __html: buildGlyphMarkup(goldRatio, gradientId) }}
         />
     );
 }
 
 export default function SoybeanStoryboardChinaDemand({
-    marketBalance,
-    marketBalanceYear
+    marketBalance
 }: SoybeanStoryboardChinaDemandProps): JSX.Element {
-    const [unit, setUnit] = React.useState("MMT");
     const [worldFeatures, setWorldFeatures] = React.useState<any[]>([]);
+    const [unit, setUnit] = React.useState<SoybeanQuantityUnit>("mmt");
+    const [selectedYear, setSelectedYear] = React.useState("");
+    const availableYears = React.useMemo(() => getSortedYears(marketBalance), [marketBalance]);
+    const preferredYear = React.useMemo(() => getPreferredYear(marketBalance), [marketBalance]);
+    const marketBalanceYear = availableYears.includes(selectedYear) ? selectedYear : preferredYear;
     React.useEffect(() => {
         loadWorldFeatures().then((features) => {
             setWorldFeatures(features);
         });
     }, []);
-    const handleUnitChange = (event: SelectChangeEvent<string>) => {
-        setUnit(event.target.value);
-    };
+    React.useEffect(() => {
+        if (availableYears.length > 0 && !availableYears.includes(selectedYear)) {
+            setSelectedYear(preferredYear);
+        }
+    }, [availableYears, preferredYear, selectedYear]);
+    const yearOptions = availableYears.length > 0 ? [...availableYears].reverse() : [marketBalanceYear];
     const chinaFeature = React.useMemo(
         () => worldFeatures.find((feature: any) => normalizeCountryId(feature.id) === "156") || null,
         [worldFeatures]
@@ -82,9 +107,11 @@ export default function SoybeanStoryboardChinaDemand({
         if (chinaFeature) {
             const chinaPoint = projectionInstance(geoCentroid(chinaFeature) as [number, number]);
             if (chinaPoint) {
+                const chinaAnchorX = VIEWBOX_WIDTH * 0.48;
+                const chinaAnchorY = VIEWBOX_HEIGHT * 0.54;
                 projectionInstance.translate([
-                    projectionInstance.translate()[0] + (VIEWBOX_WIDTH * 0.48 - chinaPoint[0]),
-                    projectionInstance.translate()[1] + (VIEWBOX_HEIGHT * 0.54 - chinaPoint[1])
+                    projectionInstance.translate()[0] + (chinaAnchorX - chinaPoint[0]),
+                    projectionInstance.translate()[1] + (chinaAnchorY - chinaPoint[1])
                 ]);
             }
         }
@@ -95,8 +122,8 @@ export default function SoybeanStoryboardChinaDemand({
         () => getMarketBalanceForCountry(marketBalance, marketBalanceYear, "CN"),
         [marketBalance, marketBalanceYear]
     );
-    const soybeanImportShare = chinaBalance?.importPercentageWorldwide ?? 0;
-    const activeGlyphCount = Math.max(0, Math.min(SOYBEAN_GRID_COUNT, Math.round(soybeanImportShare)));
+    const soybeanImportShare = Math.max(0, Math.min(SOYBEAN_GRID_COUNT, chinaBalance?.importPercentageWorldwide ?? 0));
+    const importVolume = convertMetricTonsToUnit(chinaBalance?.importsMT, unit);
     return (
         <Box className="soybean-storyboard-demand-shell">
             <Box className="soybean-storyboard-demand-title-row">
@@ -105,20 +132,17 @@ export default function SoybeanStoryboardChinaDemand({
                 </Typography>
             </Box>
             <Box className="soybean-storyboard-demand-control-row">
-                <Typography className="soybean-storyboard-demand-control-label">Unit</Typography>
-                <FormControl size="small" className="soybean-storyboard-demand-select-wrap">
-                    <InputLabel id="soybean-storyboard-demand-unit-label">Unit</InputLabel>
-                    <Select
-                        labelId="soybean-storyboard-demand-unit-label"
-                        id="soybean-storyboard-demand-unit"
-                        value={unit}
-                        label="Unit"
-                        onChange={handleUnitChange}
-                        className="soybean-storyboard-demand-select"
-                    >
-                        <MenuItem value="MMT">MMT</MenuItem>
-                    </Select>
-                </FormControl>
+                <SoybeanStoryboardUnitSelect
+                    value={unit}
+                    onChange={setUnit}
+                    selectWrapClassName="soybean-storyboard-trade-year-select-wrap"
+                />
+                <SoybeanStoryboardYearSelect
+                    value={marketBalanceYear}
+                    years={yearOptions}
+                    onChange={setSelectedYear}
+                    selectWrapClassName="soybean-storyboard-trade-year-select-wrap"
+                />
             </Box>
             <Box className="soybean-storyboard-demand-visual">
                 <Box className="soybean-storyboard-demand-map-frame">
@@ -136,7 +160,7 @@ export default function SoybeanStoryboardChinaDemand({
                                     <path
                                         key={countryId}
                                         d={pathGenerator(feature) || ""}
-                                        fill={isChina ? "rgba(255, 197, 126, 0.08)" : mutedCountryFill}
+                                        fill={isChina ? "rgba(255, 179, 104, 0.08)" : mutedCountryFill}
                                         stroke={isChina ? mainlandChinaColor : mutedCountryStroke}
                                         strokeWidth={isChina ? 4.5 : 1.3}
                                         vectorEffect="non-scaling-stroke"
@@ -146,7 +170,7 @@ export default function SoybeanStoryboardChinaDemand({
                             {chinaFeature ? (
                                 <path
                                     d={pathGenerator(chinaFeature) || ""}
-                                    fill="rgba(255, 197, 126, 0.06)"
+                                    fill="rgba(255, 179, 104, 0.06)"
                                     stroke={mainlandChinaColor}
                                     strokeWidth={6}
                                     vectorEffect="non-scaling-stroke"
@@ -162,17 +186,24 @@ export default function SoybeanStoryboardChinaDemand({
                     )}
                     <Box className="soybean-storyboard-demand-card">
                         <Box component="div" className="soybean-storyboard-demand-card-text">
-                            Mainland China accounted for roughly <span>~{formatPercentage(soybeanImportShare)}</span> of
+                            Mainland China imported roughly <span>{formatSoybeanQuantity(importVolume, unit)}</span> of
+                            soybeans, accounting for about <span>~{formatPercentage(soybeanImportShare, 1)}</span> of
                             the global soybean import market in {marketBalanceYear}
                         </Box>
                     </Box>
                 </Box>
                 <Box className="soybean-storyboard-demand-grid" aria-label="Soybean import share illustration">
-                    {Array.from({ length: SOYBEAN_GRID_COUNT }, (_, index) => (
-                        <Box key={index} className="soybean-storyboard-demand-grid-item">
-                            <SoybeanShareGlyph active={index < activeGlyphCount} />
-                        </Box>
-                    ))}
+                    {Array.from({ length: SOYBEAN_GRID_COUNT }, (_, index) => {
+                        const goldRatio = Math.max(0, Math.min(1, soybeanImportShare - index));
+                        return (
+                            <Box key={index} className="soybean-storyboard-demand-grid-item">
+                                <SoybeanShareGlyph
+                                    goldRatio={goldRatio}
+                                    gradientId={`soybean-demand-glyph-gradient-${index}`}
+                                />
+                            </Box>
+                        );
+                    })}
                 </Box>
             </Box>
         </Box>

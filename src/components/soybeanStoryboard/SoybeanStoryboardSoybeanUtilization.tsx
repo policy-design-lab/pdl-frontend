@@ -1,8 +1,5 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import utilizationTopFlow7 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-7.svg";
 import utilizationTopFlow8 from "../../images/soybean/soybean_utilization/Portugal_Angola_2-8.svg";
@@ -20,6 +17,7 @@ import utilizationDomesticBlock from "../../images/soybean/soybean_utilization/S
 import utilizationExportBlock from "../../images/soybean/soybean_utilization/Rectangle 2563.svg";
 import utilizationEndingStockConnector from "../../images/soybean/soybean_utilization/Union.svg";
 import {
+    convertMetricTonsToUnit,
     formatRatioAsPercentage,
     formatSoybeanQuantity,
     getExportsForCountry,
@@ -36,6 +34,8 @@ import {
     SoybeanQuantityUnit,
     SoybeanYearRecord
 } from "./soybeanApi";
+import SoybeanStoryboardUnitSelect from "./SoybeanStoryboardUnitSelect";
+import SoybeanStoryboardYearSelect from "./SoybeanStoryboardYearSelect";
 const UTILIZATION_CANVAS_WIDTH = 1558;
 const UTILIZATION_CANVAS_HEIGHT = 1648;
 const TOP_FLOW_ASSETS = [
@@ -185,12 +185,6 @@ export default function SoybeanStoryboardSoybeanUtilization({
             setYear(preferredYear);
         }
     }, [availableYears, preferredYear, year]);
-    const handleUnitChange = (event: SelectChangeEvent<SoybeanQuantityUnit>) => {
-        setUnit(event.target.value as SoybeanQuantityUnit);
-    };
-    const handleYearChange = (event: SelectChangeEvent<string>) => {
-        setYear(event.target.value);
-    };
     return (
         <Box className="soybean-storyboard-utilization-shell">
             <Box className="soybean-storyboard-utilization-stage">
@@ -203,57 +197,17 @@ export default function SoybeanStoryboardSoybeanUtilization({
                         diam. Eu ultrices cursus urna sodales.
                     </Typography>
                     <Box className="soybean-storyboard-utilization-controls">
-                        <Box className="soybean-storyboard-utilization-control">
-                            <Typography className="soybean-storyboard-utilization-control-label">Units:</Typography>
-                            <FormControl
-                                variant="standard"
-                                size="small"
-                                className="soybean-storyboard-utilization-select-wrap"
-                            >
-                                <Select
-                                    value={unit}
-                                    onChange={handleUnitChange}
-                                    className="soybean-storyboard-utilization-select"
-                                    MenuProps={{
-                                        PaperProps: { className: "soybean-storyboard-utilization-menu-paper" }
-                                    }}
-                                >
-                                    <MenuItem className="soybean-storyboard-utilization-menu-item" value="mmt">
-                                        MMT
-                                    </MenuItem>
-                                    <MenuItem className="soybean-storyboard-utilization-menu-item" value="bushels">
-                                        Bushels
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Box className="soybean-storyboard-utilization-control">
-                            <Typography className="soybean-storyboard-utilization-control-label">Year:</Typography>
-                            <FormControl
-                                variant="standard"
-                                size="small"
-                                className="soybean-storyboard-utilization-select-wrap"
-                            >
-                                <Select
-                                    value={activeYear}
-                                    onChange={handleYearChange}
-                                    className="soybean-storyboard-utilization-select"
-                                    MenuProps={{
-                                        PaperProps: { className: "soybean-storyboard-utilization-menu-paper" }
-                                    }}
-                                >
-                                    {yearOptions.map((yearOption) => (
-                                        <MenuItem
-                                            key={yearOption}
-                                            className="soybean-storyboard-utilization-menu-item"
-                                            value={yearOption}
-                                        >
-                                            {yearOption}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        <SoybeanStoryboardUnitSelect
+                            value={unit}
+                            onChange={setUnit}
+                            className="soybean-storyboard-utilization-control"
+                        />
+                        <SoybeanStoryboardYearSelect
+                            value={activeYear}
+                            years={yearOptions}
+                            onChange={setYear}
+                            className="soybean-storyboard-utilization-control"
+                        />
                     </Box>
                 </Box>
                 <Box className="soybean-storyboard-utilization-chart-wrap">
@@ -366,13 +320,11 @@ export default function SoybeanStoryboardSoybeanUtilization({
                         </Typography>
 
                         {marketLabelPositions.map((market) => {
-                            const exportQuantity =
-                                unit === "mmt"
-                                    ? formatSoybeanQuantity(market.exportValue, "mmt")
-                                    : SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+                            const marketValue = convertMetricTonsToUnit(market.exportValue, unit);
+                            const exportQuantity = formatSoybeanQuantity(marketValue, unit);
                             const exportShare =
-                                isFiniteNumber(market.exportValue) && isFiniteNumber(totalValue) && unit === "mmt"
-                                    ? formatShareMeta(market.exportValue, totalValue)
+                                isFiniteNumber(marketValue) && isFiniteNumber(totalValue)
+                                    ? formatShareMeta(marketValue, totalValue)
                                     : SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
                             return (
                                 <React.Fragment key={market.label + market.x}>

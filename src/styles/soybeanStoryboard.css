@@ -413,7 +413,7 @@
 }
 
 .soybean-storyboard-demand-card-text span {
-  color: #ffc57e;
+  color: #ffb83e;
   font-weight: 700;
 }
 
@@ -483,6 +483,13 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.soybean-storyboard-year-select,
+.soybean-storyboard-unit-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .soybean-storyboard-trade-year-row {
@@ -694,18 +701,18 @@
 .soybean-storyboard-driver-title-pill {
   padding: 4px 10px 5px;
   border-radius: 6px;
-  color: #0e4b63;
+  color: #0b4a5c;
   font-size: 1.95rem;
   font-weight: 400;
   line-height: 1;
 }
 
 .soybean-storyboard-driver-title-pill-pork {
-  background: #e7df95;
+  background: #e3e1a6;
 }
 
 .soybean-storyboard-driver-title-pill-poultry {
-  background: #dda0d9;
+  background: #e3a6dd;
 }
 
 .soybean-storyboard-driver-more-info {
@@ -752,11 +759,11 @@
 }
 
 .soybean-storyboard-driver-pill-pork {
-  background: #e7df95;
+  background: #e3e1a6;
 }
 
 .soybean-storyboard-driver-pill-poultry {
-  background: #dda0d9;
+  background: #e3a6dd;
 }
 
 .soybean-storyboard-driver-pill-text {
@@ -769,7 +776,7 @@
 .soybean-storyboard-driver-pill-text-light,
 .soybean-storyboard-driver-pill-text-pork,
 .soybean-storyboard-driver-pill-text-poultry {
-  color: #1d5d79;
+  color: #0b4a5c;
 }
 
 .soybean-storyboard-driver-endpoint {
@@ -781,11 +788,11 @@
 }
 
 .soybean-storyboard-driver-endpoint-pork {
-  fill: #e7df95;
+  fill: #e3e1a6;
 }
 
 .soybean-storyboard-driver-endpoint-poultry {
-  fill: #dda0d9;
+  fill: #e3a6dd;
 }
 
 .soybean-storyboard-competitor-shell {
@@ -888,18 +895,23 @@
   transform: translateX(-50%);
 }
 
+.MuiTypography-root.soybean-storyboard-production-legend-title,
 .soybean-storyboard-production-legend-title {
-  margin-bottom: 22px;
-  color: rgba(229, 235, 237, 0.88);
-  font-size: 2rem;
-  font-weight: 300;
+  margin-bottom: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
   line-height: 1.2;
+  letter-spacing: 0.15px;
   text-align: center;
+  text-transform: capitalize;
 }
 
+.MuiTypography-root.soybean-storyboard-production-legend-title span,
 .soybean-storyboard-production-legend-title span {
   color: #ffffff;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .soybean-storyboard-production-legend-row {
@@ -907,7 +919,7 @@
   grid-template-columns: auto auto minmax(38rem, 1fr);
   align-items: start;
   justify-content: center;
-  gap: 24px;
+  gap: 32px;
   width: min(100%, 980px);
   text-align: left;
 }
@@ -929,27 +941,28 @@
   border: 2px solid rgba(198, 208, 213, 0.32);
 }
 
-.soybean-storyboard-production-legend-swatch-hatch {
-  background:
-    repeating-linear-gradient(30deg, rgba(220, 236, 215, 0.85) 0 2px, rgba(220, 236, 215, 0) 2px 6px),
-    rgba(255, 255, 255, 0.05);
+.soybean-storyboard-production-legend-swatch-nodata {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .soybean-storyboard-production-legend-swatch-none {
-  background: #203a43;
+  background: #0b4a5c;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .soybean-storyboard-production-legend-label {
-  color: rgba(183, 195, 200, 0.86);
-  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 1.25;
+  line-height: 14px;
+  letter-spacing: 0.15px;
 }
 
 .soybean-storyboard-production-scale {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   min-width: 38rem;
   width: 100%;
 }
@@ -972,9 +985,10 @@
 }
 
 .soybean-storyboard-production-scale-tick {
-  color: rgba(183, 195, 200, 0.72);
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
   font-weight: 400;
+  letter-spacing: 0.15px;
   text-align: left;
 }
 
@@ -1095,7 +1109,7 @@
 
 .soybean-storyboard-production-card-growth {
   margin-top: 56px;
-  color: #61eba9;
+  color: #69f0ae;
   font-size: 1.08rem;
   font-style: italic;
   font-weight: 400;
@@ -1226,7 +1240,7 @@
 }
 
 .soybean-storyboard-production-table-growth {
-  color: #61eba9 !important;
+  color: #69f0ae !important;
 }
 
 .soybean-storyboard-production-detail {
@@ -1379,7 +1393,7 @@
 }
 
 .soybean-storyboard-us-overview-card-text span {
-  color: #84f4ef;
+  color: #51ffd0;
   font-family: "Roboto Serif", serif !important;
   font-feature-settings: "liga" off, "clig" off !important;
   font-weight: 700;
@@ -1816,7 +1830,6 @@
 
   .soybean-storyboard-production-legend-title {
     margin-bottom: 18px;
-    font-size: 1.45rem;
     text-align: left;
   }
 

@@ -4,12 +4,12 @@ import soybeanGlyph from "../../images/soybean/soybean.svg";
 export const STORYBOARD_HEADER_HEIGHT = 68;
 export const STORYBOARD_SECONDARY_NAV_HEIGHT = 56;
 
-export const unitedStatesColor = "#63D6D1";
-export const brazilColor = "#74B354";
-export const argentinaColor = "#4F87D7";
-export const mainlandChinaColor = "#FFC57E";
-export const mutedCountryFill = "#2B4048";
-export const mutedCountryStroke = "#1E3239";
+export const unitedStatesColor = "#00A098";
+export const brazilColor = "#4D9F45";
+export const argentinaColor = "#167AB4";
+export const mainlandChinaColor = "#FFB368";
+export const mutedCountryFill = "#1E353B";
+export const mutedCountryStroke = "#374B51";
 export const worldGeographyUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 export type StoryboardSection = {

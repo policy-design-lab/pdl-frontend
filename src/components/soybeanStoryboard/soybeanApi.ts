@@ -5,8 +5,22 @@ import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 
 export const SOYBEAN_STORYBOARD_PREFERRED_YEAR = "2024";
 export const SOYBEAN_STORYBOARD_NEED_DATA_LABEL = "Need Data";
+export const BUSHELS_PER_METRIC_TON = 36.7437;
 
 export type SoybeanQuantityUnit = "bushels" | "mt" | "mmt";
+
+export function convertMetricTonsToUnit(
+    metricTons: number | null | undefined,
+    unit: SoybeanQuantityUnit
+): number | null {
+    if (!isFiniteNumber(metricTons)) {
+        return null;
+    }
+    if (unit === "bushels") {
+        return metricTons * BUSHELS_PER_METRIC_TON;
+    }
+    return metricTons;
+}
 
 export type SoybeanYearRecord<T> = Record<string, T>;
 
@@ -323,36 +337,27 @@ export function getSoybeanBalanceValue(
     if (!balance) {
         return null;
     }
-    if (unit === "mt" || unit === "mmt") {
-        switch (metric) {
-            case "production":
-                return balance.productionMT;
-            case "exports":
-                return balance.exportsMT;
-            case "imports":
-                return balance.importsMT;
-            case "consumption":
-                return balance.consumptionMT;
-            case "endingStock":
-                return balance.endingStockMT;
-            default:
-                return null;
-        }
-    }
+    let metricTons: number | null;
     switch (metric) {
         case "production":
-            return balance.productionBushels;
+            metricTons = balance.productionMT;
+            break;
         case "exports":
-            return balance.exportsBushels;
+            metricTons = balance.exportsMT;
+            break;
         case "imports":
-            return balance.importsBushels;
+            metricTons = balance.importsMT;
+            break;
         case "consumption":
-            return balance.consumptionBushels;
+            metricTons = balance.consumptionMT;
+            break;
         case "endingStock":
-            return balance.endingStockBushels;
+            metricTons = balance.endingStockMT;
+            break;
         default:
             return null;
     }
+    return convertMetricTonsToUnit(metricTons, unit);
 }
 
 function calculateSoybeanBeginningStock(
@@ -507,11 +512,11 @@ export function formatSoybeanQuantity(
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
-    if (unit === "mmt") {
-        const mmtValue = value / 1_000_000;
-        return `${formatNumericValue(mmtValue, 2)}${includeUnit ? " MMT" : ""}`;
+    if (unit === "bushels") {
+        return `${ShortFormat(value, undefined, 2)}${includeUnit ? " Bu" : ""}`;
     }
-    return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
+    const mmtValue = value / 1_000_000;
+    return `${formatNumericValue(mmtValue, 2)}${includeUnit ? " MMT" : ""}`;
 }
 
 export function formatThousandMetricTonsAsMmt(value: number | null | undefined, label: string): string {

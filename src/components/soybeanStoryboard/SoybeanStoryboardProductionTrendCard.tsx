@@ -20,8 +20,8 @@ const TREND_CHART_PADDING = {
     bottom: 54,
     left: 52
 };
-const TREND_TOOLTIP_WIDTH = 172;
-const TREND_TOOLTIP_HEIGHT = 50;
+const TREND_TOOLTIP_WIDTH = 216;
+const TREND_TOOLTIP_HEIGHT = 62;
 
 export type SoybeanProductionTrendPoint = {
     totalAcres: number | null;
@@ -80,9 +80,10 @@ function formatTrendAxisTick(value: number): string {
 }
 
 function getTooltipX(pointX: number): number {
+    const halfWidth = TREND_TOOLTIP_WIDTH / 2;
     return Math.min(
         TREND_CHART_WIDTH - TREND_CHART_PADDING.right - TREND_TOOLTIP_WIDTH,
-        Math.max(TREND_CHART_PADDING.left + 8, pointX + 12)
+        Math.max(TREND_CHART_PADDING.left + 8, pointX - halfWidth)
     );
 }
 
@@ -237,10 +238,23 @@ export default function SoybeanStoryboardProductionTrendCard({
                             fill="rgba(7, 22, 28, 0.96)"
                             stroke="rgba(255, 255, 255, 0.14)"
                         />
-                        <text x="12" y="20" fill="#ffffff" fontSize="14" fontWeight="700">
+                        <text
+                            x={TREND_TOOLTIP_WIDTH / 2}
+                            y={27}
+                            fill="#ffffff"
+                            fontSize="16"
+                            fontWeight="700"
+                            textAnchor="middle"
+                        >
                             {hoveredPoint.year}
                         </text>
-                        <text x="12" y="38" fill="rgba(216, 223, 226, 0.9)" fontSize="13">
+                        <text
+                            x={TREND_TOOLTIP_WIDTH / 2}
+                            y={48}
+                            fill="rgba(216, 223, 226, 0.9)"
+                            fontSize="20"
+                            textAnchor="middle"
+                        >
                             {formatCompactAcres(hoveredPoint.totalAcres, 2)}
                         </text>
                     </g>

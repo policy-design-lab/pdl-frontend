@@ -73,7 +73,7 @@ export default function SoybeanStoryboardUSOverview(): JSX.Element {
                 viewBoxHeight={VIEWBOX_HEIGHT}
                 viewBoxWidth={VIEWBOX_WIDTH}
             >
-                <path d={pathGenerator(nationFeature) || ""} fill="#21353E" stroke="#344A52" strokeWidth="1.3" />
+                <path d={pathGenerator(nationFeature) || ""} fill="#1E353B" stroke="#374B51" strokeWidth="1.3" />
                 {stateFeatures.map((stateFeature: any) => {
                     const stateCode = fipsToState[String(stateFeature.id).padStart(2, "0")];
                     const isHighlighted = stateCode ? HIGHLIGHT_STATES.has(stateCode) : false;
@@ -87,9 +87,9 @@ export default function SoybeanStoryboardUSOverview(): JSX.Element {
                                     ? "rgba(89, 188, 195, 0.56)"
                                     : isHighlighted
                                       ? "rgba(89, 188, 195, 0.4)"
-                                      : "#223741"
+                                      : "#1E353B"
                             }
-                            stroke="rgba(120, 149, 157, 0.42)"
+                            stroke="rgba(105, 120, 124, 0.42)"
                             strokeWidth={1.2}
                             vectorEffect="non-scaling-stroke"
                         />

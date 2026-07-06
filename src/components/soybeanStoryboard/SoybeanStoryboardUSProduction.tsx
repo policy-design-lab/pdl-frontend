@@ -1,6 +1,4 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import SoybeanStoryboardProductionOverview, { ProductionDetailColumn } from "./SoybeanStoryboardProductionOverview";
 import { STATE_FIPS_TO_NAME } from "../../utils/countyGeo";
 import {
@@ -178,19 +176,6 @@ export default function SoybeanStoryboardUSProduction({
                     title: "Top 5 States Ranking"
                 };
             }}
-            secondarySidebarContent={
-                <Box className="soybean-storyboard-production-info-card soybean-storyboard-production-info-card-compact">
-                    <Box className="soybean-storyboard-production-info-card-header">
-                        <Typography className="soybean-storyboard-production-info-card-title">
-                            Counties Newly Planted Soybean (20Y)
-                        </Typography>
-                        <Typography className="soybean-storyboard-production-info-card-link">View more ↗</Typography>
-                    </Box>
-                    <Typography className="soybean-storyboard-production-info-card-emphasis">
-                        {SOYBEAN_STORYBOARD_NEED_DATA_LABEL}
-                    </Typography>
-                </Box>
-            }
             tabs={PRODUCTION_SEGMENT_TABS}
             title="U.S Soybean Production"
             trendPoints={trendPoints}

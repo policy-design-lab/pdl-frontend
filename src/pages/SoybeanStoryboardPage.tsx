@@ -2,11 +2,8 @@ import * as React from "react";
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { ThemeProvider, createTheme } from "@mui/material";
@@ -22,6 +19,7 @@ import SoybeanStoryboardSoybeanUtilization from "../components/soybeanStoryboard
 import SoybeanStoryboardUSOverview from "../components/soybeanStoryboard/SoybeanStoryboardUSOverview";
 import SoybeanStoryboardUSProduction from "../components/soybeanStoryboard/SoybeanStoryboardUSProduction";
 import SoybeanStoryboardTradeTable from "../components/soybeanStoryboard/SoybeanStoryboardTradeTable";
+import SoybeanStoryboardYearSelect from "../components/soybeanStoryboard/SoybeanStoryboardYearSelect";
 import SoybeanStoryboardWorldMap from "../components/soybeanStoryboard/SoybeanStoryboardWorldMap";
 import {
     globalStoryboardFrames,
@@ -62,9 +60,6 @@ export default function SoybeanStoryboardPage(): JSX.Element {
         }
     }, [sharedYears, preferredSharedYear, tradeYear]);
 
-    const handleTradeYearChange = (event: SelectChangeEvent<string>) => {
-        setTradeYear(event.target.value);
-    };
     const visibleStoryboardFrames = React.useMemo(
         () => globalStoryboardFrames.filter((frame) => frame.sectionId === activeStoryboardSectionId),
         [activeStoryboardSectionId]
@@ -261,41 +256,17 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                                 <Typography className="soybean-storyboard-subheader soybean-storyboard-trade-title">
                                                     {marketBalanceYear} Soybean Trading Market (MMT)
                                                 </Typography>
-                                                <Box className="soybean-storyboard-trade-year-row">
-                                                    <Typography className="soybean-storyboard-trade-year-label">
-                                                        Year:
-                                                    </Typography>
-                                                    <FormControl
-                                                        variant="standard"
-                                                        size="small"
-                                                        className="soybean-storyboard-utilization-select-wrap soybean-storyboard-trade-year-select-wrap"
-                                                    >
-                                                        <Select
-                                                            value={marketBalanceYear}
-                                                            onChange={handleTradeYearChange}
-                                                            className="soybean-storyboard-utilization-select"
-                                                            MenuProps={{
-                                                                PaperProps: {
-                                                                    className:
-                                                                        "soybean-storyboard-utilization-menu-paper"
-                                                                }
-                                                            }}
-                                                        >
-                                                            {(sharedYears.length > 0
-                                                                ? [...sharedYears].reverse()
-                                                                : [marketBalanceYear]
-                                                            ).map((yearOption) => (
-                                                                <MenuItem
-                                                                    key={yearOption}
-                                                                    className="soybean-storyboard-utilization-menu-item"
-                                                                    value={yearOption}
-                                                                >
-                                                                    {yearOption}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    </FormControl>
-                                                </Box>
+                                                <SoybeanStoryboardYearSelect
+                                                    value={marketBalanceYear}
+                                                    years={
+                                                        sharedYears.length > 0
+                                                            ? [...sharedYears].reverse()
+                                                            : [marketBalanceYear]
+                                                    }
+                                                    onChange={setTradeYear}
+                                                    className="soybean-storyboard-trade-year-row"
+                                                    selectWrapClassName="soybean-storyboard-trade-year-select-wrap"
+                                                />
                                             </Box>
                                             <Tooltip title={tradeView === "map" ? "Show table" : "Show map"}>
                                                 <IconButton
@@ -343,10 +314,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                 className="soybean-storyboard-section soybean-storyboard-demand-section"
                             >
                                 {renderSectionLayout(
-                                    <SoybeanStoryboardChinaDemand
-                                        marketBalance={soybeanData.marketBalance}
-                                        marketBalanceYear={marketBalanceYear}
-                                    />
+                                    <SoybeanStoryboardChinaDemand marketBalance={soybeanData.marketBalance} />
                                 )}
                             </Box>
                             <Box
