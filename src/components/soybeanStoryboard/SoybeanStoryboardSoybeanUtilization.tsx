@@ -270,7 +270,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             className="soybean-storyboard-utilization-box-value-small"
                             style={createTextStyle(638, 977)}
                         >
-                            {formatSoybeanQuantity(domesticUseValue, unit, false)}
+                            {formatSoybeanQuantity(domesticUseValue, unit)}
                         </Typography>
                         <Typography
                             className="soybean-storyboard-utilization-box-meta"
@@ -288,7 +288,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             className="soybean-storyboard-utilization-box-value-small"
                             style={createTextStyle(886, 935)}
                         >
-                            {formatSoybeanQuantity(exportValue, unit, false)}
+                            {formatSoybeanQuantity(exportValue, unit)}
                         </Typography>
                         <Typography
                             className="soybean-storyboard-utilization-box-meta"
@@ -315,7 +315,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                                 transform: "translateY(-50%)"
                             })}
                         >
-                            {formatSoybeanQuantity(endingStockValue, unit, false)}{" "}
+                            {formatSoybeanQuantity(endingStockValue, unit)}{" "}
                             {formatShareMeta(endingStockValue, totalValue)}
                         </Typography>
 

@@ -504,19 +504,15 @@ export function formatMillionMetricTons(value: number | null | undefined): strin
     return `${ShortFormat(value, undefined, 1)} MT`;
 }
 
-export function formatSoybeanQuantity(
-    value: number | null | undefined,
-    unit: SoybeanQuantityUnit,
-    includeUnit = true
-): string {
+export function formatSoybeanQuantity(value: number | null | undefined, unit: SoybeanQuantityUnit): string {
     if (!isFiniteNumber(value)) {
         return SOYBEAN_STORYBOARD_NEED_DATA_LABEL;
     }
     if (unit === "bushels") {
-        return `${ShortFormat(value, undefined, 2)}${includeUnit ? " Bu" : ""}`;
+        return `${ShortFormat(value, undefined, 2)} Bu`;
     }
     const mmtValue = value / 1_000_000;
-    return `${formatNumericValue(mmtValue, 2)}${includeUnit ? " MMT" : ""}`;
+    return `${formatNumericValue(mmtValue, 2)} MMT`;
 }
 
 export function formatThousandMetricTonsAsMmt(value: number | null | undefined, label: string): string {
