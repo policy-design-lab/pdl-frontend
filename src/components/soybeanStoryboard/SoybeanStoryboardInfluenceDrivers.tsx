@@ -18,16 +18,18 @@ import {
 } from "./soybeanApi";
 
 const CHART_WIDTH = 1480;
-const CHART_HEIGHT = 206;
+const CHART_HEIGHT = 234;
 const Y_MIN = 0;
 const Y_MAX = 125;
 const AXIS_VALUES = [0, 25, 50, 75, 100, 125];
 const CHART_PADDING = {
     top: 12,
     right: 256,
-    bottom: 18,
+    bottom: 46,
     left: 92
 };
+const YEAR_AXIS_MAX_LABELS = 6;
+const YEAR_AXIS_LABEL_OFFSET = 28;
 const DRIVER_TOOLTIP_PADDING_X = 14;
 const DRIVER_TOOLTIP_MIN_WIDTH = 128;
 const DRIVER_TOOLTIP_MAX_WIDTH = 320;
@@ -457,6 +459,28 @@ function getPillWidth(text: string): number {
     return textWidth + 28;
 }
 
+function getYearAxisLabels(chart: TrendChartDefinition, pointCount: number): { index: number; year: string }[] {
+    const points = chart.series[0].points;
+    if (!points || points.length === 0 || pointCount <= 1) {
+        return [];
+    }
+    const lastIndex = pointCount - 1;
+    const step = Math.max(1, Math.ceil(pointCount / YEAR_AXIS_MAX_LABELS));
+    const selectedIndexes: number[] = [];
+    for (let index = 0; index <= lastIndex; index += step) {
+        selectedIndexes.push(index);
+    }
+    if (selectedIndexes[selectedIndexes.length - 1] !== lastIndex) {
+        if (lastIndex - selectedIndexes[selectedIndexes.length - 1] < step / 2) {
+            selectedIndexes.pop();
+        }
+        selectedIndexes.push(lastIndex);
+    }
+    return selectedIndexes
+        .map((index) => ({ index, year: points[index]?.year || "" }))
+        .filter((label) => label.year.length > 0);
+}
+
 function DriverTitle({ chart }: { chart: TrendChartDefinition }): JSX.Element {
     if (!chart.showProteinPills) {
         return <Typography className="soybean-storyboard-driver-title">{chart.title}</Typography>;
@@ -564,6 +588,7 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
     const [hoveredPoint, setHoveredPoint] = React.useState<{ index: number; seriesId: string } | null>(null);
     const pointCount = chart.series[0].values.length;
     const axisTicks = chart.axisTicks || fallbackAxisTicks;
+    const yearAxisLabels = getYearAxisLabels(chart, pointCount);
     const hoveredSeries = hoveredPoint
         ? chart.series.find((series) => series.id === hoveredPoint.seriesId) || null
         : null;
@@ -629,6 +654,25 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                             stroke="rgba(255, 255, 255, 0.05)"
                             strokeWidth="1"
                         />
+                    );
+                })}
+                {yearAxisLabels.map((label) => {
+                    const x = getChartPointX(label.index, pointCount);
+                    const isFirst = label.index === 0;
+                    const isLast = label.index === pointCount - 1;
+                    return (
+                        <text
+                            key={`${chart.id}-year-${label.index}`}
+                            x={x}
+                            y={CHART_HEIGHT - CHART_PADDING.bottom + YEAR_AXIS_LABEL_OFFSET}
+                            fill="rgba(197, 214, 222, 0.72)"
+                            fontFamily="Roboto"
+                            fontSize="16"
+                            fontWeight="400"
+                            textAnchor={isFirst ? "start" : isLast ? "end" : "middle"}
+                        >
+                            {label.year}
+                        </text>
                     );
                 })}
                 {chart.series.map((series) =>

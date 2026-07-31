@@ -2,6 +2,7 @@ import React from "react";
 import { config } from "../../app.config";
 import { getJsonDataFromUrl } from "../../utils/apiutil";
 import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
+import { cleanRegionName } from "../shared/TextFormats";
 
 export const SOYBEAN_STORYBOARD_PREFERRED_YEAR = "2024";
 export const SOYBEAN_STORYBOARD_NEED_DATA_LABEL = "Need Data";
@@ -409,14 +410,16 @@ export function formatSignedPercentage(value: number | null | undefined, fractio
 }
 
 export function formatBrazilMunicipalityName(name: string): string {
-    return name
+    return cleanRegionName(name)
         .replace(/\s+-\s+[^-]+$/, "")
         .replace(/\s+\([^)]+\)$/, "")
         .trim();
 }
 
 export function formatUsCountyName(name: string): string {
-    return name.replace(/\s+County$/i, "").trim();
+    return cleanRegionName(name)
+        .replace(/\s+County$/i, "")
+        .trim();
 }
 
 export function getPlantedAcresForYear(
