@@ -28,7 +28,7 @@ export const storyboardSections: StoryboardSection[] = [
     {
         id: "global-soybean-landscape",
         navLabel: "Global soybean landscape",
-        title: "Global Landscape of Soybean"
+        title: "Global Trade in Soybeans"
     },
     {
         id: "us-soy-industry",
@@ -41,6 +41,19 @@ export const storyboardSections: StoryboardSection[] = [
         title: "Policy Approaches"
     }
 ];
+
+export type StoryboardIntro = {
+    title: string;
+    description: string;
+};
+
+export const storyboardIntros: Record<string, StoryboardIntro> = {
+    "global-soybean-landscape": {
+        title: "Introducing the Global Trade in Soybeans Storyboard",
+        description:
+            "Today, soybeans are the second largest crop in the United States in terms of acres planted; second only to corn, with which it is often planted in rotation (e.g., corn one year followed by soybeans the next). U.S. farmers have planted nearly 85 million acres to soybeans in recent years. In terms of federal policy, however, soybeans are in a relatively unique position. The crop was added to federal support programs in 2002, and the crop consistently receives the lowest level of payments while also experiencing relatively few losses in the federal crop insurance program. Soybeans status in federal policy has received additional attention in recent years due to trade conflicts and other geopolitical challenges; at the same time the crop is looked to for food, feed, and increasingly fuel. This storyboard seeks to provide an interactive visualization about soybeans with a goal of developing a better understanding of the issues facing soybean farmers. From that, this project’s goals include visualizing analysis of various policy design alternatives, options, and innovations. The work has been funded in part by the Illinois Soybean Association and is part of ongoing efforts at understanding policy design."
+    }
+};
 
 export const globalStoryboardFrames: StoryboardFrame[] = [
     {
@@ -71,7 +84,7 @@ export const globalStoryboardFrames: StoryboardFrame[] = [
     {
         id: "brazil-soybean-production",
         sectionId: "global-soybean-landscape",
-        title: "Brazil Soybean Production"
+        title: "Brazilian Soybean Production"
     },
     {
         id: "us-soybean-overview",
@@ -103,7 +116,7 @@ export function SoybeanStoryboardGlyph(): JSX.Element {
 export function InsightStatement(): JSX.Element {
     return (
         <>
-            Global soybean flows reveal a concentrated trade structure, with{" "}
+            Public data on global soybean flows reveal a trade structure in which{" "}
             <span style={{ color: brazilColor }}>Brazil</span>,{" "}
             <span style={{ color: unitedStatesColor }}>the United States</span>, and{" "}
             <span style={{ color: argentinaColor }}>Argentina</span> as primary suppliers and{" "}
@@ -111,3 +124,30 @@ export function InsightStatement(): JSX.Element {
         </>
     );
 }
+
+export const soybeanDataSources = {
+    marketView: {
+        href: "https://marketviewdb.unitedsoybean.org/dashboards/?bi=Soy_SupplyDisappearance_TimeSeries",
+        label: "United Soybean Board MarketView"
+    },
+    usdaGats: {
+        href: "https://apps.fas.usda.gov/gats/",
+        label: "USDA FAS Global Agricultural Trade System (GATS)"
+    },
+    usPlantedAcres: {
+        href: "https://www.fsa.usda.gov/tools/informational/freedom-information-act-foia/electronic-reading-room/frequently-requested/crop-acreage-data",
+        label: "USDA FSA Crop Acreage Data"
+    },
+    worldBankGdpPerCapita: {
+        href: "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD?locations=CN",
+        label: "World Bank: GDP Per Capita"
+    },
+    worldBankTotalPopulation: {
+        href: "https://data.worldbank.org/indicator/SP.POP.TOTL?locations=CN",
+        label: "World Bank: Total Population"
+    },
+    worldBankUrbanPopulation: {
+        href: "https://data.worldbank.org/indicator/SP.URB.TOTL?end=2024&locations=CN&start=1960&view=chart",
+        label: "World Bank: Urban Population"
+    }
+};

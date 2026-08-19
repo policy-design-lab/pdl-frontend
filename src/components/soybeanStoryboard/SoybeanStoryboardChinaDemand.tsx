@@ -3,13 +3,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { geoCentroid, geoMercator, geoPath } from "d3-geo";
 import soybeanGlyph from "../../images/soybean/soybean.svg";
-import { mainlandChinaColor, mutedCountryFill, mutedCountryStroke } from "./constants";
+import { mainlandChinaColor, mutedCountryFill, mutedCountryStroke, soybeanDataSources } from "./constants";
+import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
 import {
     convertMetricTonsToUnit,
     formatPercentage,
     formatSoybeanQuantity,
     getMarketBalanceForCountry,
-    getPreferredYear,
+    getLatestYear,
     getSortedYears,
     SoybeanQuantityUnit,
     SoybeanYearRecord,
@@ -64,7 +65,7 @@ export default function SoybeanStoryboardChinaDemand({
     const [unit, setUnit] = React.useState<SoybeanQuantityUnit>("mmt");
     const [selectedYear, setSelectedYear] = React.useState("");
     const availableYears = React.useMemo(() => getSortedYears(marketBalance), [marketBalance]);
-    const preferredYear = React.useMemo(() => getPreferredYear(marketBalance), [marketBalance]);
+    const preferredYear = React.useMemo(() => getLatestYear(marketBalance), [marketBalance]);
     const marketBalanceYear = availableYears.includes(selectedYear) ? selectedYear : preferredYear;
     React.useEffect(() => {
         loadWorldFeatures().then((features) => {
@@ -128,7 +129,7 @@ export default function SoybeanStoryboardChinaDemand({
         <Box className="soybean-storyboard-demand-shell">
             <Box className="soybean-storyboard-demand-title-row">
                 <Typography className="soybean-storyboard-subheader soybean-storyboard-demand-title">
-                    {marketBalanceYear} China&apos;s Demand Of Soybean
+                    China&apos;s Demand Of Soybean
                 </Typography>
             </Box>
             <Box className="soybean-storyboard-demand-control-row">
@@ -192,20 +193,29 @@ export default function SoybeanStoryboardChinaDemand({
                         </Box>
                     </Box>
                 </Box>
-                <Box className="soybean-storyboard-demand-grid" aria-label="Soybean import share illustration">
-                    {Array.from({ length: SOYBEAN_GRID_COUNT }, (_, index) => {
-                        const goldRatio = Math.max(0, Math.min(1, soybeanImportShare - index));
-                        return (
-                            <Box key={index} className="soybean-storyboard-demand-grid-item">
-                                <SoybeanShareGlyph
-                                    goldRatio={goldRatio}
-                                    gradientId={`soybean-demand-glyph-gradient-${index}`}
-                                />
-                            </Box>
-                        );
-                    })}
+                <Box className="soybean-storyboard-demand-grid-panel">
+                    <Typography className="soybean-storyboard-demand-grid-explainer">
+                        Each soybean represents 1% of global soybean imports. Colored soybeans show Mainland
+                        China&apos;s {formatPercentage(soybeanImportShare, 1)} share (
+                        {formatSoybeanQuantity(importVolume, unit)}) of the {marketBalanceYear} world import market;
+                        uncolored soybeans are the remainder imported by the rest of the world.
+                    </Typography>
+                    <Box className="soybean-storyboard-demand-grid" aria-label="Soybean import share illustration">
+                        {Array.from({ length: SOYBEAN_GRID_COUNT }, (_, index) => {
+                            const goldRatio = Math.max(0, Math.min(1, soybeanImportShare - index));
+                            return (
+                                <Box key={index} className="soybean-storyboard-demand-grid-item">
+                                    <SoybeanShareGlyph
+                                        goldRatio={goldRatio}
+                                        gradientId={`soybean-demand-glyph-gradient-${index}`}
+                                    />
+                                </Box>
+                            );
+                        })}
+                    </Box>
                 </Box>
             </Box>
+            <SoybeanStoryboardDataSources sources={[soybeanDataSources.marketView]} />
         </Box>
     );
 }

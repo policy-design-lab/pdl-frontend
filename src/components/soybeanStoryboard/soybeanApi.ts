@@ -4,7 +4,6 @@ import { getJsonDataFromUrl } from "../../utils/apiutil";
 import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 import { cleanRegionName } from "../shared/TextFormats";
 
-export const SOYBEAN_STORYBOARD_PREFERRED_YEAR = "2024";
 export const SOYBEAN_STORYBOARD_NEED_DATA_LABEL = "Need Data";
 export const BUSHELS_PER_METRIC_TON = 36.7437;
 
@@ -283,23 +282,16 @@ export function getSortedYears<T>(records: SoybeanYearRecord<T>): string[] {
         .sort((yearA, yearB) => Number(yearA) - Number(yearB));
 }
 
-export function getLatestYear<T>(
-    records: SoybeanYearRecord<T>,
-    fallbackYear = SOYBEAN_STORYBOARD_PREFERRED_YEAR
-): string {
+export function getLatestYear<T>(records: SoybeanYearRecord<T>, fallbackYear = ""): string {
     const years = getSortedYears(records);
     return years[years.length - 1] || fallbackYear;
 }
 
-export function getPreferredYear<T>(
-    records: SoybeanYearRecord<T>,
-    preferredYear = SOYBEAN_STORYBOARD_PREFERRED_YEAR
-): string {
-    if (records[preferredYear]) {
-        return preferredYear;
+export function getAlignedYear<T>(records: SoybeanYearRecord<T>, targetYear: string): string {
+    if (records[targetYear]) {
+        return targetYear;
     }
-    const years = getSortedYears(records);
-    return years[years.length - 1] || preferredYear;
+    return getLatestYear(records, targetYear);
 }
 
 export function getRecentYears<T>(records: SoybeanYearRecord<T>, endYear: string, count: number): string[] {
@@ -414,6 +406,78 @@ export function formatBrazilMunicipalityName(name: string): string {
         .replace(/\s+-\s+[^-]+$/, "")
         .replace(/\s+\([^)]+\)$/, "")
         .trim();
+}
+
+const BRAZIL_IBGE_PREFIX_TO_STATE: Record<string, string> = {
+    11: "RO",
+    12: "AC",
+    13: "AM",
+    14: "RR",
+    15: "PA",
+    16: "AP",
+    17: "TO",
+    21: "MA",
+    22: "PI",
+    23: "CE",
+    24: "RN",
+    25: "PB",
+    26: "PE",
+    27: "AL",
+    28: "SE",
+    29: "BA",
+    31: "MG",
+    32: "ES",
+    33: "RJ",
+    35: "SP",
+    41: "PR",
+    42: "SC",
+    43: "RS",
+    50: "MS",
+    51: "MT",
+    52: "GO",
+    53: "DF"
+};
+
+const BRAZIL_STATE_NAMES: Record<string, string> = {
+    AC: "Acre",
+    AL: "Alagoas",
+    AM: "Amazonas",
+    AP: "Amapá",
+    BA: "Bahia",
+    CE: "Ceará",
+    DF: "Distrito Federal",
+    ES: "Espírito Santo",
+    GO: "Goiás",
+    MA: "Maranhão",
+    MG: "Minas Gerais",
+    MS: "Mato Grosso do Sul",
+    MT: "Mato Grosso",
+    PA: "Pará",
+    PB: "Paraíba",
+    PE: "Pernambuco",
+    PI: "Piauí",
+    PR: "Paraná",
+    RJ: "Rio de Janeiro",
+    RN: "Rio Grande do Norte",
+    RO: "Rondônia",
+    RR: "Roraima",
+    RS: "Rio Grande do Sul",
+    SC: "Santa Catarina",
+    SE: "Sergipe",
+    SP: "São Paulo",
+    TO: "Tocantins"
+};
+
+export function getBrazilStateAbbrev(name: string, id?: string): string {
+    const suffixMatch = cleanRegionName(name).match(/\s+-\s+([A-Za-z]{2})$/);
+    if (suffixMatch) {
+        return suffixMatch[1].toUpperCase();
+    }
+    return BRAZIL_IBGE_PREFIX_TO_STATE[String(id ?? "").slice(0, 2)] || "";
+}
+
+export function getBrazilStateName(abbrev: string): string {
+    return BRAZIL_STATE_NAMES[abbrev.toUpperCase()] || abbrev.toUpperCase();
 }
 
 export function formatUsCountyName(name: string): string {
@@ -569,6 +633,43 @@ export type ProductionDetailFrame = {
     year: string;
 };
 
+export function buildTopStateRankingRows(
+    records: { id: string; name: string; totalAcres: number | null }[],
+    baselineRecords: { id: string; name: string; totalAcres: number | null }[],
+    hasBaseline: boolean,
+    groupKey: (record: { id: string; name: string }) => string,
+    formatLabel: (key: string) => string
+): ProductionRankingRow[] {
+    const sumByGroup = (source: { id: string; name: string; totalAcres: number | null }[]) =>
+        source.reduce<Record<string, number>>((totals, record) => {
+            const key = groupKey(record);
+            if (!key || !isFiniteNumber(record.totalAcres)) {
+                return totals;
+            }
+            totals[key] = (totals[key] || 0) + record.totalAcres;
+            return totals;
+        }, {});
+    const currentTotals = sumByGroup(records);
+    const baselineTotals = hasBaseline ? sumByGroup(baselineRecords) : {};
+    return Object.entries(currentTotals)
+        .map(([key, totalAcres]) => {
+            const growth = hasBaseline
+                ? calculateGrowthPercentage([baselineTotals[key], totalAcres].filter(isFiniteNumber))
+                : null;
+            return {
+                area: formatCompactAcres(totalAcres),
+                areaValue: totalAcres,
+                growth: formatPercentage(growth, 0),
+                key,
+                label: formatLabel(key),
+                totalAcres
+            };
+        })
+        .sort((rowA, rowB) => (rowB.totalAcres || 0) - (rowA.totalAcres || 0))
+        .slice(0, 5)
+        .map(({ area, areaValue, growth, key, label }) => ({ area, areaValue, growth, key, label }));
+}
+
 export type ProductionRankingRow = {
     area: string;
     areaValue: number | null;
@@ -637,32 +738,6 @@ export function buildProductionFrames(
             year
         };
     });
-}
-
-export function buildTopRankingRows(
-    records: { id: string; name: string; totalAcres: number | null }[],
-    baselineRecords: { id: string; totalAcres: number | null }[],
-    hasBaseline: boolean,
-    formatLabel: (name: string) => string
-): ProductionRankingRow[] {
-    return records
-        .map((record) => {
-            const baselineRecord = hasBaseline ? baselineRecords.find((b) => b.id === record.id) : null;
-            const growth = hasBaseline
-                ? calculateGrowthPercentage([baselineRecord?.totalAcres, record.totalAcres].filter(isFiniteNumber))
-                : null;
-            return {
-                area: formatCompactAcres(record.totalAcres),
-                areaValue: record.totalAcres,
-                growth: formatPercentage(growth, 0),
-                key: record.id,
-                label: formatLabel(record.name),
-                totalAcres: record.totalAcres
-            };
-        })
-        .sort((rowA, rowB) => (rowB.totalAcres || 0) - (rowA.totalAcres || 0))
-        .slice(0, 5)
-        .map(({ area, areaValue, growth, key, label }) => ({ area, areaValue, growth, key, label }));
 }
 
 export function getExportsForCountry(

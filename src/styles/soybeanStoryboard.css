@@ -89,8 +89,9 @@
 
 .soybean-storyboard-section {
   position: relative;
+  box-sizing: border-box;
   padding: 56px 0 36px;
-  scroll-margin-top: 140px;
+  scroll-margin-top: 80px;
 }
 
 .soybean-storyboard-section-grid {
@@ -121,7 +122,7 @@
 .soybean-storyboard-us-overview-section,
 .soybean-storyboard-us-production-section,
 .soybean-storyboard-utilization-section {
-  min-height: calc(100vh - 148px);
+  min-height: calc(100vh - 80px);
 }
 
 .soybean-storyboard-title-block {
@@ -318,40 +319,6 @@
   margin-bottom: 28px;
 }
 
-.soybean-storyboard-demand-control-label {
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.soybean-storyboard-demand-select-wrap {
-  min-width: 208px;
-}
-
-.soybean-storyboard-demand-select-wrap .MuiInputLabel-root {
-  color: transparent;
-}
-
-.soybean-storyboard-demand-select-wrap .MuiOutlinedInput-root {
-  border-radius: 10px;
-  color: #fff;
-  background: rgba(8, 27, 33, 0.62);
-}
-
-.soybean-storyboard-demand-select-wrap .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-.soybean-storyboard-demand-select-wrap .MuiSvgIcon-root {
-  color: rgba(255, 255, 255, 0.68);
-}
-
-.soybean-storyboard-demand-select.MuiSelect-select,
-.soybean-storyboard-demand-select .MuiSelect-select {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-
 .soybean-storyboard-demand-visual {
   display: grid;
   grid-template-columns: minmax(0, 1.36fr) minmax(250px, 320px);
@@ -417,6 +384,28 @@
   font-weight: 700;
 }
 
+.soybean-storyboard-demand-grid-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 308px;
+  margin-left: auto;
+  padding-top: 38px;
+}
+
+.MuiTypography-root.soybean-storyboard-demand-grid-explainer,
+.soybean-storyboard-demand-grid-explainer {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: "Roboto", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938rem;
+}
+
 .soybean-storyboard-demand-grid {
   display: grid;
   grid-template-columns: repeat(10, 28px);
@@ -424,9 +413,6 @@
   justify-content: start;
   align-content: start;
   width: 100%;
-  max-width: 308px;
-  margin-left: auto;
-  padding-top: 38px;
 }
 
 .soybean-storyboard-demand-grid-item {
@@ -496,13 +482,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.soybean-storyboard-trade-year-label {
-  color: rgba(255, 255, 255, 0.74);
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  white-space: nowrap;
 }
 
 .soybean-storyboard-trade-year-select-wrap {
@@ -1155,10 +1134,6 @@
   background: rgba(27, 50, 59, 0.88);
 }
 
-.soybean-storyboard-production-info-card-compact {
-  padding-bottom: 22px;
-}
-
 .soybean-storyboard-production-info-card-header {
   display: flex;
   align-items: flex-start;
@@ -1189,12 +1164,6 @@
 
 .soybean-storyboard-production-info-card-link-button:hover {
   color: rgba(255, 255, 255, 0.95);
-}
-
-.soybean-storyboard-production-info-card-emphasis {
-  color: #FFF;
-  font-size: 2rem;
-  font-weight: 700;
 }
 
 .soybean-storyboard-production-table {
@@ -1265,7 +1234,6 @@
 .soybean-storyboard-production-download-link:hover {
   color: rgba(255, 255, 255, 0.95);
 }
-
 
 .soybean-storyboard-production-detail-search-wrap {
   display: flex;
@@ -1637,7 +1605,7 @@
     grid-template-columns: 1fr;
   }
 
-  .soybean-storyboard-demand-grid {
+  .soybean-storyboard-demand-grid-panel {
     max-width: none;
     margin-left: 0;
     padding-top: 0;
@@ -1670,11 +1638,6 @@
     margin-bottom: 22px;
   }
 
-  .soybean-storyboard-demand-select-wrap {
-    width: 100%;
-    min-width: 0;
-  }
-
   .soybean-storyboard-demand-visual {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -1700,11 +1663,14 @@
     line-height: 1.5;
   }
 
+  .soybean-storyboard-demand-grid-panel {
+    padding-top: 0;
+  }
+
   .soybean-storyboard-demand-grid {
     grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 8px;
     justify-content: stretch;
-    padding-top: 0;
   }
 
   .soybean-storyboard-insight-card {
@@ -1911,5 +1877,183 @@
   .soybean-storyboard-us-overview-card {
     width: calc(100% - 32px);
     padding: 20px 22px;
+  }
+}
+
+.soybean-storyboard-intro-band {
+  position: relative;
+  padding: 4px 0 8px;
+}
+
+.soybean-storyboard-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.MuiTypography-root.soybean-storyboard-intro-title,
+.soybean-storyboard-intro-title {
+  color: #8FC079;
+  font-family: "Roboto Serif", serif;
+  font-feature-settings: "liga" off, "clig" off;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.00938rem;
+  text-align: center;
+}
+
+.MuiTypography-root.soybean-storyboard-intro-description,
+.soybean-storyboard-intro-description {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: "Roboto", sans-serif;
+  font-feature-settings: "liga" off, "clig" off;
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: 0.00938rem;
+  text-align: center;
+}
+
+@media (max-width: 899px) {
+  .soybean-storyboard-intro-title {
+    font-size: 1.375rem;
+  }
+
+  .soybean-storyboard-intro-description {
+    font-size: 0.9375rem;
+  }
+}
+
+.soybean-storyboard-info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Roboto", sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  transition: color 180ms ease, opacity 180ms ease;
+}
+
+.soybean-storyboard-info-tip:hover,
+.soybean-storyboard-info-tip:focus-visible {
+  color: #FFFFFF;
+  outline: none;
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+}
+
+.MuiTooltip-tooltip.soybean-storyboard-info-tip-popper {
+  max-width: 20rem;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(6, 24, 30, 0.97);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
+  color: rgba(255, 255, 255, 0.92);
+  font-family: "Roboto", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938rem;
+  text-align: left;
+}
+
+.MuiTooltip-arrow.soybean-storyboard-info-tip-arrow {
+  color: rgba(6, 24, 30, 0.97);
+}
+
+.soybean-storyboard-competitor-card-text .soybean-storyboard-competitor-highlight-brazil {
+  color: #8FC079;
+  font-weight: 700;
+}
+
+.soybean-storyboard-competitor-card-text .soybean-storyboard-competitor-highlight-china {
+  color: #FFB368;
+  font-weight: 700;
+}
+
+.soybean-storyboard-utilization-domestic-branches {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.soybean-storyboard-data-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  width: 100%;
+  max-width: 80rem;
+  margin: 20px auto 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.soybean-storyboard-data-sources-right {
+  justify-content: flex-end;
+}
+
+.MuiTypography-root.soybean-storyboard-data-sources-label,
+.soybean-storyboard-data-sources-label {
+  color: rgba(255, 255, 255, 0.52);
+  font-family: "Roboto", sans-serif;
+  font-feature-settings: "liga" off, "clig" off;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.00938rem;
+  text-transform: uppercase;
+}
+
+.soybean-storyboard-data-sources-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: "Roboto", sans-serif;
+  font-feature-settings: "liga" off, "clig" off;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.00938rem;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.soybean-storyboard-data-sources-link:hover,
+.soybean-storyboard-data-sources-link:focus-visible {
+  color: #FFFFFF;
+  text-decoration: underline;
+  outline: none;
+}
+
+.soybean-storyboard-data-sources-link .soybean-storyboard-data-sources-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  opacity: 0.72;
+}
+
+.soybean-storyboard-data-sources-link:hover .soybean-storyboard-data-sources-icon {
+  opacity: 1;
+}
+
+@media (max-width: 899px) {
+  .soybean-storyboard-data-sources {
+    gap: 6px 14px;
   }
 }

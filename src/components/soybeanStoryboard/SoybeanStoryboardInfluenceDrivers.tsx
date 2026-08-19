@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { curveCatmullRom, line } from "d3";
 import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
+import SoybeanStoryboardInfoTip from "./SoybeanStoryboardInfoTip";
+import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
+import { soybeanDataSources } from "./constants";
 import {
     calculateGrowthPercentage,
     ChinaCommodityDemandRecord,
@@ -10,7 +13,8 @@ import {
     createNormalizedTrendValues,
     formatPercentage,
     formatThousandMetricTonsAsMmt,
-    getPreferredYear,
+    getAlignedYear,
+    getLatestYear,
     getRecentYears,
     isFiniteNumber,
     SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
@@ -35,6 +39,7 @@ const DRIVER_TOOLTIP_MIN_WIDTH = 128;
 const DRIVER_TOOLTIP_MAX_WIDTH = 320;
 const DRIVER_TOOLTIP_LINE_HEIGHT = 23;
 const DRIVER_TOOLTIP_VERTICAL_PADDING = 14;
+const INFO_TIP_SIZE = 60;
 
 type TrendSeries = {
     id: string;
@@ -62,6 +67,7 @@ type TrendChartDefinition = {
     title: string;
     annotation: string;
     annotationClassName?: string;
+    explainer?: string;
     axisTicks?: TrendAxisTick[];
     showProteinPills?: boolean;
     series: TrendSeries[];
@@ -76,6 +82,8 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         id: "population-growth",
         title: "Population Growth",
         annotation: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
+        explainer:
+            "Soybeans are an important source of protein for both human and animal feed; a growing population will have increased demand for food.",
         series: [
             {
                 id: "population",
@@ -90,6 +98,8 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         id: "income-growth",
         title: "Income Growth",
         annotation: "People Get Richer",
+        explainer:
+            "As consumer income grows they purchase more meat and similar products, which cost more, and that drives up demand for soybeans to feed livestock.",
         series: [
             {
                 id: "income",
@@ -105,6 +115,8 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         title: "Demand for Pork and Poultry",
         annotation: "China Has A Big Preference For Pork And Poultry",
         annotationClassName: "soybean-storyboard-driver-annotation soybean-storyboard-driver-annotation-tight",
+        explainer:
+            "Pork and poultry food products are the primary sources of animal proteins in Chinese diets as consumer's wealth becomes sufficient to afford those foods; soybeans are a primary feed ingredient and source of protein for hogs and chickens.",
         showProteinPills: true,
         series: [
             {
@@ -128,6 +140,8 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         title: "Urbanization Growth",
         annotation: "More Urban Countries Also Increase Food Demand",
         annotationClassName: "soybean-storyboard-driver-annotation soybean-storyboard-driver-annotation-wide",
+        explainer:
+            "Urban residents do not grow or produce their own food and more urban societies purchase more food, including imported foods and imported ingredients, such as soybeans.",
         series: [
             {
                 id: "urbanization",
@@ -280,8 +294,8 @@ function buildInfluenceCharts(
     socioeconomic: SoybeanYearRecord<ChinaSocioeconomicRecord>,
     commodities: SoybeanYearRecord<ChinaCommodityDemandRecord>
 ): TrendChartDefinition[] {
-    const socioeconomicYear = getPreferredYear(socioeconomic);
-    const commodityYear = getPreferredYear(commodities, socioeconomicYear);
+    const socioeconomicYear = getLatestYear(socioeconomic);
+    const commodityYear = getAlignedYear(commodities, socioeconomicYear);
     const socioeconomicYears = getRecentYears(socioeconomic, socioeconomicYear, 20);
     const commodityYears = getRecentYears(commodities, commodityYear, 20);
     const populationPoints = getRecordValuePoints(
@@ -721,6 +735,19 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                         </text>
                     </g>
                 ) : null}
+                {chart.explainer ? (
+                    <foreignObject
+                        x={getChartPointX(pointCount - 1, pointCount) + 26}
+                        y={Math.min(
+                            getChartPointY(chart.series[0].values[pointCount - 1]) + 34,
+                            CHART_HEIGHT - INFO_TIP_SIZE
+                        )}
+                        width={INFO_TIP_SIZE}
+                        height={INFO_TIP_SIZE}
+                    >
+                        <SoybeanStoryboardInfoTip explainer={chart.explainer} label={`About ${chart.title}`} />
+                    </foreignObject>
+                ) : null}
             </svg>
         </Box>
     );
@@ -737,13 +764,20 @@ export default function SoybeanStoryboardInfluenceDrivers({
     return (
         <Box className="soybean-storyboard-driver-shell">
             <Typography className="soybean-storyboard-subheader soybean-storyboard-driver-section-title">
-                Why is Mainland China Influential on Soybean Market?
+                Key Drivers of China’s Demand for Soybeans
             </Typography>
             <Box className="soybean-storyboard-driver-chart-stack">
                 {influenceCharts.map((chart) => (
                     <TrendChart key={chart.id} chart={chart} />
                 ))}
             </Box>
+            <SoybeanStoryboardDataSources
+                sources={[
+                    soybeanDataSources.worldBankTotalPopulation,
+                    soybeanDataSources.worldBankUrbanPopulation,
+                    soybeanDataSources.worldBankGdpPerCapita
+                ]}
+            />
         </Box>
     );
 }

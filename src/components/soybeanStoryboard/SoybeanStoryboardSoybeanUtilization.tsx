@@ -22,20 +22,47 @@ import {
     formatSoybeanQuantity,
     getExportsForCountry,
     getMarketBalanceForCountry,
-    getPreferredYear,
+    getLatestYear,
     getSortedYears,
     getSoybeanBalanceValue,
     getSoybeanTotalSupplyValue,
     isFiniteNumber,
     SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
-    SOYBEAN_STORYBOARD_PREFERRED_YEAR,
     SoybeanExportsRecord,
     SoybeanMarketBalanceCountry,
     SoybeanQuantityUnit,
     SoybeanYearRecord
 } from "./soybeanApi";
+import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
 import SoybeanStoryboardUnitSelect from "./SoybeanStoryboardUnitSelect";
+import { soybeanDataSources } from "./constants";
 import SoybeanStoryboardYearSelect from "./SoybeanStoryboardYearSelect";
+
+const DOMESTIC_USE_CATEGORIES = ["Feed", "Food", "Fuel", "Seed", "Other"];
+const DOMESTIC_BRANCH_TOP_Y = 1038;
+const DOMESTIC_BRANCH_BOTTOM_Y = 1501;
+const DOMESTIC_BRANCH_ORIGIN_LEFT_X = 541;
+const DOMESTIC_BRANCH_ORIGIN_RIGHT_X = 687;
+const DOMESTIC_BRANCH_END_LEFT_X = 62;
+const DOMESTIC_BRANCH_END_RIGHT_X = 498;
+const DOMESTIC_BRANCH_END_WIDTH = 74;
+const DOMESTIC_BRANCH_LABEL_Y = 1528;
+
+function getDomesticBranchGeometry(index: number, count: number) {
+    const ratio = count > 1 ? index / (count - 1) : 0;
+    const originWidth = (DOMESTIC_BRANCH_ORIGIN_RIGHT_X - DOMESTIC_BRANCH_ORIGIN_LEFT_X) / count;
+    const originLeft = DOMESTIC_BRANCH_ORIGIN_LEFT_X + originWidth * index;
+    const endSpan = DOMESTIC_BRANCH_END_RIGHT_X - DOMESTIC_BRANCH_END_LEFT_X;
+    const endCenter = DOMESTIC_BRANCH_END_LEFT_X + endSpan * ratio;
+    const endHalfWidth = DOMESTIC_BRANCH_END_WIDTH / 2;
+    return {
+        endCenter,
+        endLeft: endCenter - endHalfWidth,
+        endRight: endCenter + endHalfWidth,
+        originLeft,
+        originRight: originLeft + originWidth
+    };
+}
 const UTILIZATION_CANVAS_WIDTH = 1558;
 const UTILIZATION_CANVAS_HEIGHT = 1648;
 const TOP_FLOW_ASSETS = [
@@ -143,13 +170,13 @@ export default function SoybeanStoryboardSoybeanUtilization({
     marketBalance
 }: SoybeanStoryboardSoybeanUtilizationProps): JSX.Element {
     const [unit, setUnit] = React.useState<SoybeanQuantityUnit>("mmt");
-    const [year, setYear] = React.useState(SOYBEAN_STORYBOARD_PREFERRED_YEAR);
+    const [year, setYear] = React.useState("");
     const exportsYears = React.useMemo(() => new Set(getSortedYears(exports)), [exports]);
     const availableYears = React.useMemo(
         () => getSortedYears(marketBalance).filter((y) => exportsYears.has(y)),
         [marketBalance, exportsYears]
     );
-    const preferredYear = React.useMemo(() => getPreferredYear(exports), [exports]);
+    const preferredYear = React.useMemo(() => getLatestYear(exports), [exports]);
     const activeYear = availableYears.includes(year) ? year : preferredYear;
     const yearOptions = availableYears.length > 0 ? [...availableYears].reverse() : [activeYear];
     const usBalance = React.useMemo(
@@ -193,8 +220,9 @@ export default function SoybeanStoryboardSoybeanUtilization({
                         Soybean Utilization
                     </Typography>
                     <Typography className="soybean-storyboard-utilization-description">
-                        Lorem ipsum dolor sit amet consectetur. Ultrices consectetur ipsum mauris porta libero sed sit
-                        diam. Eu ultrices cursus urna sodales.
+                        The graphic below visualizes the market for soybeans. It follows the market through major uses
+                        or consumption of soybeans by source, from the total supply (ending stocks from previous year,
+                        plus production and imports) to domestic uses and exports.
                     </Typography>
                     <Box className="soybean-storyboard-utilization-controls">
                         <SoybeanStoryboardUnitSelect
@@ -264,7 +292,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             className="soybean-storyboard-utilization-box-label"
                             style={createTextStyle(638, 943)}
                         >
-                            Domestic Use
+                            US Domestic Uses
                         </Typography>
                         <Typography
                             className="soybean-storyboard-utilization-box-value-small"
@@ -282,7 +310,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             className="soybean-storyboard-utilization-box-label"
                             style={createTextStyle(886, 902)}
                         >
-                            Export
+                            Exports
                         </Typography>
                         <Typography
                             className="soybean-storyboard-utilization-box-value-small"
@@ -305,7 +333,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                                 transform: "translateY(-50%)"
                             })}
                         >
-                            Ending STOCK
+                            Ending stocks (carryover)
                         </Typography>
                         <Typography
                             className="soybean-storyboard-utilization-side-meta"
@@ -318,6 +346,51 @@ export default function SoybeanStoryboardSoybeanUtilization({
                             {formatSoybeanQuantity(endingStockValue, unit)}{" "}
                             {formatShareMeta(endingStockValue, totalValue)}
                         </Typography>
+
+                        <Box
+                            aria-hidden="true"
+                            className="soybean-storyboard-utilization-domestic-branches"
+                            component="svg"
+                            viewBox={`0 0 ${UTILIZATION_CANVAS_WIDTH} ${UTILIZATION_CANVAS_HEIGHT}`}
+                            preserveAspectRatio="none"
+                        >
+                            <defs>
+                                <linearGradient
+                                    id="soybean-domestic-branch-gradient"
+                                    x1="0"
+                                    y1={DOMESTIC_BRANCH_TOP_Y}
+                                    x2="0"
+                                    y2={DOMESTIC_BRANCH_BOTTOM_Y}
+                                    gradientUnits="userSpaceOnUse"
+                                >
+                                    <stop offset="0" stopColor="#0F326E" />
+                                    <stop offset="1" stopColor="#3C7A8C" />
+                                </linearGradient>
+                            </defs>
+                            {DOMESTIC_USE_CATEGORIES.map((category, index) => {
+                                const branch = getDomesticBranchGeometry(index, DOMESTIC_USE_CATEGORIES.length);
+                                return (
+                                    <path
+                                        key={category}
+                                        d={`M${branch.originLeft} ${DOMESTIC_BRANCH_TOP_Y} L${branch.originRight} ${DOMESTIC_BRANCH_TOP_Y} L${branch.endRight} ${DOMESTIC_BRANCH_BOTTOM_Y} L${branch.endLeft} ${DOMESTIC_BRANCH_BOTTOM_Y} Z`}
+                                        fill="url(#soybean-domestic-branch-gradient)"
+                                        stroke="rgba(0, 0, 0, 0.05)"
+                                    />
+                                );
+                            })}
+                        </Box>
+                        {DOMESTIC_USE_CATEGORIES.map((category, index) => (
+                            <Typography
+                                key={category}
+                                className="soybean-storyboard-utilization-bottom-label"
+                                style={createTextStyle(
+                                    getDomesticBranchGeometry(index, DOMESTIC_USE_CATEGORIES.length).endCenter,
+                                    DOMESTIC_BRANCH_LABEL_Y
+                                )}
+                            >
+                                {category}
+                            </Typography>
+                        ))}
 
                         {marketLabelPositions.map((market) => {
                             const marketValue = convertMetricTonsToUnit(market.exportValue, unit);
@@ -352,6 +425,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                     </Box>
                 </Box>
             </Box>
+            <SoybeanStoryboardDataSources sources={[soybeanDataSources.marketView, soybeanDataSources.usdaGats]} />
         </Box>
     );
 }

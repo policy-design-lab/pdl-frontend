@@ -11,6 +11,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import SoybeanStoryboardSecondaryNav from "../components/soybeanStoryboard/SoybeanStoryboardSecondaryNav";
 import SoybeanStoryboardProgressNav from "../components/soybeanStoryboard/SoybeanStoryboardProgressNav";
+import SoybeanStoryboardIntro from "../components/soybeanStoryboard/SoybeanStoryboardIntro";
 import SoybeanStoryboardChinaDemand from "../components/soybeanStoryboard/SoybeanStoryboardChinaDemand";
 import SoybeanStoryboardInfluenceDrivers from "../components/soybeanStoryboard/SoybeanStoryboardInfluenceDrivers";
 import SoybeanStoryboardCompetitorMap from "../components/soybeanStoryboard/SoybeanStoryboardCompetitorMap";
@@ -27,14 +28,23 @@ import {
     SoybeanStoryboardGlyph,
     STORYBOARD_HEADER_HEIGHT,
     STORYBOARD_SECONDARY_NAV_HEIGHT,
+    storyboardIntros,
     storyboardSections
 } from "../components/soybeanStoryboard/constants";
-import { getPreferredYear, getSortedYears, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
+import { getLatestYear, getSortedYears, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
 import "../styles/soybeanStoryboard.css";
 
 const defaultTheme = createTheme();
 const STORYBOARD_GRID_COLUMNS = 1000;
 const STORYBOARD_CONTENT_COLUMNS = 928;
+const STORYBOARD_HEADER_HIDE_THRESHOLD = 36;
+const STORYBOARD_SCROLL_GUTTER = 24;
+
+function getStoryboardScrollOffset(targetTop: number): number {
+    const collapsedOffset = STORYBOARD_SECONDARY_NAV_HEIGHT + STORYBOARD_SCROLL_GUTTER;
+    const expandedOffset = STORYBOARD_HEADER_HEIGHT + collapsedOffset;
+    return targetTop - collapsedOffset > STORYBOARD_HEADER_HIDE_THRESHOLD ? collapsedOffset : expandedOffset;
+}
 
 export default function SoybeanStoryboardPage(): JSX.Element {
     const [activeStoryboardSectionId, setActiveStoryboardSectionId] = React.useState(storyboardSections[0].id);
@@ -49,7 +59,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
         () => getSortedYears(soybeanData.marketBalance).filter((y) => exportsYearSet.has(y)),
         [soybeanData.marketBalance, exportsYearSet]
     );
-    const preferredSharedYear = React.useMemo(() => getPreferredYear(soybeanData.exports), [soybeanData.exports]);
+    const preferredSharedYear = React.useMemo(() => getLatestYear(soybeanData.exports), [soybeanData.exports]);
     const [tradeYear, setTradeYear] = React.useState(preferredSharedYear);
     const marketBalanceYear = sharedYears.includes(tradeYear) ? tradeYear : preferredSharedYear;
     const exportsYear = marketBalanceYear;
@@ -67,7 +77,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
 
     React.useEffect(() => {
         const handleScroll = () => {
-            setHeaderHidden(window.scrollY > 36);
+            setHeaderHidden(window.scrollY > STORYBOARD_HEADER_HIDE_THRESHOLD);
         };
 
         handleScroll();
@@ -112,16 +122,14 @@ export default function SoybeanStoryboardPage(): JSX.Element {
         }
 
         setActiveFrameId(firstVisibleFrame.id);
-        const offset = headerHidden
-            ? STORYBOARD_SECONDARY_NAV_HEIGHT + 24
-            : STORYBOARD_HEADER_HEIGHT + STORYBOARD_SECONDARY_NAV_HEIGHT + 24;
         const contentTop = contentRef.current?.getBoundingClientRect().top;
         if (contentTop === undefined) {
             return;
         }
 
+        const targetTop = window.scrollY + contentTop;
         window.scrollTo({
-            top: window.scrollY + contentTop - offset,
+            top: targetTop - getStoryboardScrollOffset(targetTop),
             behavior: "smooth"
         });
     }, [activeStoryboardSectionId]);
@@ -130,10 +138,8 @@ export default function SoybeanStoryboardPage(): JSX.Element {
         if (!element) {
             return;
         }
-        const offset = headerHidden
-            ? STORYBOARD_SECONDARY_NAV_HEIGHT + 24
-            : STORYBOARD_HEADER_HEIGHT + STORYBOARD_SECONDARY_NAV_HEIGHT + 24;
-        const top = element.getBoundingClientRect().top + window.scrollY - offset;
+        const elementTop = element.getBoundingClientRect().top + window.scrollY;
+        const top = elementTop - getStoryboardScrollOffset(elementTop);
 
         window.scrollTo({
             top,
@@ -152,6 +158,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
     const handleTradeViewToggle = () => {
         setTradeView((currentTradeView) => (currentTradeView === "map" ? "table" : "map"));
     };
+    const activeStoryboardIntro = storyboardIntros[activeStoryboardSectionId];
     const renderSectionLayout = (content: JSX.Element, wide = false) => (
         <Grid
             container
@@ -208,6 +215,16 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                         pt: `${STORYBOARD_HEADER_HEIGHT + STORYBOARD_SECONDARY_NAV_HEIGHT + 24}px`
                     }}
                 >
+                    {activeStoryboardIntro ? (
+                        <Box component="section" className="soybean-storyboard-intro-band">
+                            {renderSectionLayout(
+                                <SoybeanStoryboardIntro
+                                    title={activeStoryboardIntro.title}
+                                    description={activeStoryboardIntro.description}
+                                />
+                            )}
+                        </Box>
+                    ) : null}
                     {activeStoryboardSectionId === "global-soybean-landscape" ? (
                         <>
                             <Box
@@ -336,7 +353,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                 component="section"
                                 className="soybean-storyboard-section soybean-storyboard-competitor-section"
                             >
-                                {renderSectionLayout(<SoybeanStoryboardCompetitorMap />)}
+                                {renderSectionLayout(<SoybeanStoryboardCompetitorMap exports={soybeanData.exports} />)}
                             </Box>
                             <Box
                                 id={globalStoryboardFrames[5].id}

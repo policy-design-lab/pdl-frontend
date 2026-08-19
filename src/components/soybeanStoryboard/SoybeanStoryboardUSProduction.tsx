@@ -1,6 +1,7 @@
 import React from "react";
 import SoybeanStoryboardProductionOverview, { ProductionDetailColumn } from "./SoybeanStoryboardProductionOverview";
 import { STATE_FIPS_TO_NAME } from "../../utils/countyGeo";
+import { soybeanDataSources } from "./constants";
 import {
     buildProductionFrames,
     calculateGrowthPercentage,
@@ -40,7 +41,7 @@ const DETAIL_COLUMNS: ProductionDetailColumn[] = [
     },
     {
         key: "area",
-        label: "AREA PLANTED",
+        label: "ACRES",
         sortValue: (row) => row.area,
         value: (row) => formatAcresValue(row.area)
     }
@@ -143,20 +144,21 @@ export default function SoybeanStoryboardUSProduction({
                 label: "U.S Total area planted (ACRES)"
             }}
             canLoadHistoricalFrames={canLoadHistoricalFrames}
+            dataSources={[soybeanDataSources.usPlantedAcres]}
             detailColumns={DETAIL_COLUMNS}
             detailFileNamePrefix="us-soybean-production"
             geography="us"
             isDetailLoading={isPlantedAcresLoading}
             legend={{
-                subtitle: "Soybean Area Planted",
-                titleStrong: `${plantedAcresYear} U.S`
+                regionLabel: "the U.S.",
+                subtitle: "Area Planted to Soybeans"
             }}
             mapAriaLabel="U.S soybean area planted county map"
             onRequestHistoricalFrames={() => {
                 const [startYear, endYear] = getHistoricalFrameRange(summaryYears, plantedAcresYear);
                 return onRequestHistoricalFrames(startYear, endYear);
             }}
-            overlayNote="Hover the map to view details"
+            overlayNote="Hover over areas of the map to view details"
             productionFrames={productionFrames}
             rankingForYear={(year) => {
                 const topStates = getTopStateRows(plantedAcres, plantedAcresSummary, year);
@@ -173,7 +175,7 @@ export default function SoybeanStoryboardUSProduction({
                                   key: state,
                                   label: state
                               })),
-                    title: "Top 5 States Ranking"
+                    title: "Top 5 States Ranked by Area Planted"
                 };
             }}
             tabs={PRODUCTION_SEGMENT_TABS}

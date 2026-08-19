@@ -4,12 +4,23 @@ import Typography from "@mui/material/Typography";
 import { geoCentroid, geoMercator, geoPath } from "d3-geo";
 import { loadWorldFeatures, normalizeCountryId } from "./worldMapData";
 import SoybeanStoryboardNarrativeMap from "./SoybeanStoryboardNarrativeMap";
+import {
+    formatPlainMetricTons,
+    getExportsForCountry,
+    getLatestYear,
+    SoybeanExportsRecord,
+    SoybeanYearRecord
+} from "./soybeanApi";
 
 const VIEWBOX_WIDTH = 1360;
 const VIEWBOX_HEIGHT = 920;
 const BRAZIL_COUNTRY_ID = "076";
 
-export default function SoybeanStoryboardCompetitorMap(): JSX.Element {
+type SoybeanStoryboardCompetitorMapProps = {
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>;
+};
+
+export default function SoybeanStoryboardCompetitorMap({ exports }: SoybeanStoryboardCompetitorMapProps): JSX.Element {
     const [worldFeatures, setWorldFeatures] = React.useState<any[]>([]);
 
     React.useEffect(() => {
@@ -54,6 +65,25 @@ export default function SoybeanStoryboardCompetitorMap(): JSX.Element {
         return mapProjection;
     }, [regionalFeatures]);
     const pathGenerator = React.useMemo(() => (projection ? geoPath(projection) : null), [projection]);
+    const latestExportsYear = React.useMemo(() => getLatestYear(exports), [exports]);
+    const brazilExports = React.useMemo(
+        () => getExportsForCountry(exports, latestExportsYear, "BR"),
+        [exports, latestExportsYear]
+    );
+    const competitorBanner = (
+        <>
+            Brazil is the major competitor with the U.S. for soybeans production and exports. In {latestExportsYear},
+            Brazil shipped{" "}
+            <span className="soybean-storyboard-competitor-highlight-china">
+                {formatPlainMetricTons(brazilExports?.china)}
+            </span>{" "}
+            of soybeans to Mainland China and{" "}
+            <span className="soybean-storyboard-competitor-highlight-brazil">
+                {formatPlainMetricTons(brazilExports?.rest_of_world)}
+            </span>{" "}
+            to the rest of the world.
+        </>
+    );
     if (!pathGenerator) {
         return (
             <Box className="soybean-storyboard-competitor-map-frame soybean-storyboard-map-loading">
@@ -64,7 +94,7 @@ export default function SoybeanStoryboardCompetitorMap(): JSX.Element {
     return (
         <SoybeanStoryboardNarrativeMap
             ariaLabel="Brazil highlighted within the Americas soybean market landscape"
-            banner="Brazil is the major competitor."
+            banner={competitorBanner}
             bannerClassName="soybean-storyboard-competitor-card"
             bannerTextClassName="soybean-storyboard-banner-text soybean-storyboard-competitor-card-text"
             frameClassName="soybean-storyboard-competitor-map-frame"

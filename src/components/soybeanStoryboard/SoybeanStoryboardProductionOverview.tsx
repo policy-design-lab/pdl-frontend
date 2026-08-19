@@ -7,6 +7,7 @@ import { geoAlbersUsa, geoMercator, geoPath } from "d3-geo";
 import * as topojson from "topojson-client";
 import countiesTopoJson from "../../files/maps/counties-10m.json";
 import brazilMunicipalitiesTopoJson from "../../files/maps/brazil-municipalities-min.json";
+import SoybeanStoryboardDataSources, { SoybeanStoryboardDataSource } from "./SoybeanStoryboardDataSources";
 import SoybeanStoryboardProductionTrendCard, {
     SoybeanProductionTrendPoint
 } from "./SoybeanStoryboardProductionTrendCard";
@@ -28,8 +29,8 @@ const US_MAP_VIEWBOX_HEIGHT = 620;
 const LEGEND_COLORS = ["#CAF2B2", "#85F047", "#46AF08", "#4DD100", "#276A00"];
 
 type LegendConfig = {
+    regionLabel: string;
     subtitle: string;
-    titleStrong: string;
 };
 
 type TrendCardConfig = {
@@ -53,6 +54,7 @@ type ProductionRankingConfig = {
 
 type SoybeanStoryboardProductionOverviewProps = {
     card: TrendCardConfig;
+    dataSources?: SoybeanStoryboardDataSource[];
     detailColumns: ProductionDetailColumn[];
     detailFileNamePrefix: string;
     geography: "brazil" | "us";
@@ -104,6 +106,7 @@ function getCsvData(columns: ProductionDetailColumn[], rows: ProductionDetailRow
 
 export default function SoybeanStoryboardProductionOverview({
     card,
+    dataSources = [],
     detailColumns,
     detailFileNamePrefix,
     geography,
@@ -214,9 +217,7 @@ export default function SoybeanStoryboardProductionOverview({
         const filteredPoints = baseTrendPoints.filter((point) => Number(point.year) <= activeYearNumber);
         return filteredPoints.length > 0 ? filteredPoints : baseTrendPoints;
     }, [baseTrendPoints, hasAnimatedFrames, isPlaybackActive, visibleFrame]);
-    const activeLegendTitleStrong = visibleFrame
-        ? `${visibleFrame.year} ${geography === "us" ? "U.S" : "Brazil"}`
-        : legend.titleStrong;
+    const activeLegendYear = visibleFrame?.year || latestFrame?.year || "";
     const detailRows = tableFrame?.rows || [];
     const ranking = rankingForYear(visibleFrame?.year || latestFrame?.year || "");
     const detailButtonLabel = isDetailLoading
@@ -448,7 +449,10 @@ export default function SoybeanStoryboardProductionOverview({
             </Box>
             <Box className="soybean-storyboard-production-legend-wrap">
                 <Typography className="soybean-storyboard-production-legend-title">
-                    <span>{activeLegendTitleStrong}</span> {legend.subtitle}
+                    <span>
+                        {legend.subtitle} in {legend.regionLabel}
+                    </span>
+                    {activeLegendYear ? ` (${activeLegendYear})` : ""}
                 </Typography>
                 <Box className="soybean-storyboard-production-legend-row">
                     <Box
@@ -466,7 +470,7 @@ export default function SoybeanStoryboardProductionOverview({
                     </Box>
                     <Box className="soybean-storyboard-production-legend-item">
                         <Box className="soybean-storyboard-production-legend-swatch soybean-storyboard-production-legend-swatch-none" />
-                        <Typography className="soybean-storyboard-production-legend-label">No planted</Typography>
+                        <Typography className="soybean-storyboard-production-legend-label">Not planted</Typography>
                     </Box>
                     <Box className="soybean-storyboard-production-scale">
                         <Box
@@ -673,7 +677,9 @@ export default function SoybeanStoryboardProductionOverview({
                         <Box className="soybean-storyboard-production-info-card soybean-storyboard-production-detail">
                             <Box className="soybean-storyboard-production-detail-header">
                                 <Typography className="soybean-storyboard-production-info-card-title">
-                                    {tableFrame ? `${tableFrame.year} ${legend.subtitle}` : legend.subtitle}
+                                    {`${legend.subtitle} in ${legend.regionLabel}${
+                                        tableFrame ? ` (${tableFrame.year})` : ""
+                                    }`}
                                 </Typography>
                                 <CSVLink
                                     className="soybean-storyboard-production-download-link"
@@ -750,6 +756,7 @@ export default function SoybeanStoryboardProductionOverview({
                     {secondarySidebarContent}
                 </Box>
             </Box>
+            <SoybeanStoryboardDataSources sources={dataSources} />
         </Box>
     );
 }
