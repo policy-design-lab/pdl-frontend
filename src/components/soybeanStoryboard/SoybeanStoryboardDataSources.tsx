@@ -23,14 +23,14 @@ export default function SoybeanStoryboardDataSources({
         return null;
     }
     const resolvedLabel = label || (sources.length > 1 ? "Sources" : "Source");
+    const className = [
+        "soybean-storyboard-data-sources",
+        align === "right" ? "soybean-storyboard-data-sources-right" : ""
+    ]
+        .filter(Boolean)
+        .join(" ");
     return (
-        <Box
-            className={
-                align === "right"
-                    ? "soybean-storyboard-data-sources soybean-storyboard-data-sources-right"
-                    : "soybean-storyboard-data-sources"
-            }
-        >
+        <Box className={className}>
             <Typography component="span" className="soybean-storyboard-data-sources-label">
                 {resolvedLabel}:
             </Typography>

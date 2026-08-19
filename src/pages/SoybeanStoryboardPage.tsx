@@ -22,6 +22,7 @@ import SoybeanStoryboardUSProduction from "../components/soybeanStoryboard/Soybe
 import SoybeanStoryboardTradeTable from "../components/soybeanStoryboard/SoybeanStoryboardTradeTable";
 import SoybeanStoryboardYearSelect from "../components/soybeanStoryboard/SoybeanStoryboardYearSelect";
 import SoybeanStoryboardWorldMap from "../components/soybeanStoryboard/SoybeanStoryboardWorldMap";
+import SoybeanStoryboardDataSources from "../components/soybeanStoryboard/SoybeanStoryboardDataSources";
 import {
     globalStoryboardFrames,
     InsightStatement,
@@ -29,6 +30,7 @@ import {
     STORYBOARD_HEADER_HEIGHT,
     STORYBOARD_SECONDARY_NAV_HEIGHT,
     storyboardIntros,
+    soybeanDataSources,
     storyboardSections
 } from "../components/soybeanStoryboard/constants";
 import { getLatestYear, getSortedYears, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
@@ -257,6 +259,9 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                                 </Box>
                                             </Box>
                                         </Box>
+                                        <SoybeanStoryboardDataSources
+                                            sources={[soybeanDataSources.marketView, soybeanDataSources.usdaGats]}
+                                        />
                                     </Box>
                                 )}
                             </Box>
@@ -321,6 +326,9 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                                                 marketBalanceYear={marketBalanceYear}
                                             />
                                         )}
+                                        <SoybeanStoryboardDataSources
+                                            sources={[soybeanDataSources.marketView, soybeanDataSources.usdaGats]}
+                                        />
                                     </Box>
                                 )}
                             </Box>
