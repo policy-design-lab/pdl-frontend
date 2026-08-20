@@ -24,7 +24,7 @@ import {
 
 export type { ProductionDetailFrame, ProductionDetailRow, ProductionRankingRow } from "./soybeanApi";
 const MAP_VIEWBOX_WIDTH = 760;
-const BRAZIL_MAP_VIEWBOX_HEIGHT = 1080;
+const BRAZIL_MAP_VIEWBOX_HEIGHT = 740;
 const US_MAP_VIEWBOX_HEIGHT = 620;
 const LEGEND_COLORS = ["#CAF2B2", "#85F047", "#46AF08", "#4DD100", "#276A00"];
 

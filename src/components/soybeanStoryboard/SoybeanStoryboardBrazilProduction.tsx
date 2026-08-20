@@ -1,5 +1,6 @@
 import React from "react";
 import SoybeanStoryboardProductionOverview, { ProductionDetailColumn } from "./SoybeanStoryboardProductionOverview";
+import { soybeanDataSources } from "./constants";
 import {
     buildProductionFrames,
     buildTopStateRankingRows,
@@ -90,6 +91,7 @@ export default function SoybeanStoryboardBrazilProduction({
                 label: "Brazil Total area planted (ACRES)"
             }}
             canLoadHistoricalFrames={canLoadHistoricalFrames}
+            dataSources={[soybeanDataSources.brazilPlantedAcres]}
             detailColumns={DETAIL_COLUMNS}
             detailFileNamePrefix="brazil-soybean-production"
             geography="brazil"

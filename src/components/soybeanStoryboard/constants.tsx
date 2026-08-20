@@ -130,6 +130,10 @@ export const soybeanDataSources = {
         href: "https://marketviewdb.unitedsoybean.org/dashboards/?bi=Soy_SupplyDisappearance_TimeSeries",
         label: "United Soybean Board MarketView"
     },
+    brazilPlantedAcres: {
+        href: "https://sidra.ibge.gov.br/tabela/1612",
+        label: "IBGE SIDRA Table 1612 (PAM)"
+    },
     usdaGats: {
         href: "https://apps.fas.usda.gov/gats/",
         label: "USDA FAS Global Agricultural Trade System (GATS)"

@@ -988,6 +988,10 @@
   min-height: 760px;
 }
 
+.soybean-storyboard-production-map-wrap-brazil {
+  min-height: 0;
+}
+
 .soybean-storyboard-production-map-wrap-us {
   min-height: 560px;
 }
