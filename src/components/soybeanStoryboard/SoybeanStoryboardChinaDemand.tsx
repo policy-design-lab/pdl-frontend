@@ -3,7 +3,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { geoCentroid, geoMercator, geoPath } from "d3-geo";
 import soybeanGlyph from "../../images/soybean/soybean.svg";
-import { mainlandChinaColor, mutedCountryFill, mutedCountryStroke, soybeanDataSources } from "./constants";
+import {
+    mainlandChinaColor,
+    mapDemandFillColor,
+    mapDemandGlowColor,
+    mutedCountryFill,
+    mutedCountryStroke,
+    soybeanDataSources,
+    soybeanGoldColor,
+    soybeanGreyColor
+} from "./constants";
 import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
 import {
     convertMetricTonsToUnit,
@@ -23,8 +32,6 @@ import { loadWorldFeatures, normalizeCountryId } from "./worldMapData";
 const VIEWBOX_WIDTH = 920;
 const VIEWBOX_HEIGHT = 620;
 const SOYBEAN_GRID_COUNT = 100;
-const SOYBEAN_GOLD_COLOR = "#D69830";
-const SOYBEAN_GREY_COLOR = "rgba(214, 222, 228, 0.74)";
 
 type SoybeanStoryboardChinaDemandProps = {
     marketBalance: SoybeanYearRecord<SoybeanMarketBalanceCountry[]>;
@@ -32,18 +39,18 @@ type SoybeanStoryboardChinaDemandProps = {
 
 function buildGlyphMarkup(goldRatio: number, gradientId: string): string {
     if (goldRatio >= 1) {
-        return soybeanGlyph.replace(/fill="white"/g, `fill="${SOYBEAN_GOLD_COLOR}"`);
+        return soybeanGlyph.replace(/fill="white"/g, `fill="${soybeanGoldColor}"`);
     }
     if (goldRatio <= 0) {
-        return soybeanGlyph.replace(/fill="white"/g, `fill="${SOYBEAN_GREY_COLOR}"`);
+        return soybeanGlyph.replace(/fill="white"/g, `fill="${soybeanGreyColor}"`);
     }
     const offset = `${(goldRatio * 100).toFixed(2)}%`;
     const gradient =
         `<defs><linearGradient id="${gradientId}" x1="0" y1="0" x2="0" y2="1">` +
-        `<stop offset="0" stop-color="${SOYBEAN_GOLD_COLOR}"/>` +
-        `<stop offset="${offset}" stop-color="${SOYBEAN_GOLD_COLOR}"/>` +
-        `<stop offset="${offset}" stop-color="${SOYBEAN_GREY_COLOR}"/>` +
-        `<stop offset="1" stop-color="${SOYBEAN_GREY_COLOR}"/>` +
+        `<stop offset="0" stop-color="${soybeanGoldColor}"/>` +
+        `<stop offset="${offset}" stop-color="${soybeanGoldColor}"/>` +
+        `<stop offset="${offset}" stop-color="${soybeanGreyColor}"/>` +
+        `<stop offset="1" stop-color="${soybeanGreyColor}"/>` +
         "</linearGradient></defs>";
     return soybeanGlyph.replace(/fill="white"/g, `fill="url(#${gradientId})"`).replace(/(<svg[^>]*>)/, `$1${gradient}`);
 }
@@ -161,7 +168,7 @@ export default function SoybeanStoryboardChinaDemand({
                                     <path
                                         key={countryId}
                                         d={pathGenerator(feature) || ""}
-                                        fill={isChina ? "rgba(255, 179, 104, 0.08)" : mutedCountryFill}
+                                        fill={isChina ? mapDemandFillColor : mutedCountryFill}
                                         stroke={isChina ? mainlandChinaColor : mutedCountryStroke}
                                         strokeWidth={isChina ? 4.5 : 1.3}
                                         vectorEffect="non-scaling-stroke"
@@ -171,7 +178,7 @@ export default function SoybeanStoryboardChinaDemand({
                             {chinaFeature ? (
                                 <path
                                     d={pathGenerator(chinaFeature) || ""}
-                                    fill="rgba(255, 179, 104, 0.06)"
+                                    fill={mapDemandGlowColor}
                                     stroke={mainlandChinaColor}
                                     strokeWidth={6}
                                     vectorEffect="non-scaling-stroke"

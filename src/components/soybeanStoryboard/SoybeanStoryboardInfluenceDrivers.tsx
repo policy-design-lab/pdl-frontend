@@ -5,7 +5,21 @@ import { curveCatmullRom, line } from "d3";
 import { formatNumericValue, ShortFormat } from "../shared/ConvertionFormats";
 import SoybeanStoryboardInfoTip from "./SoybeanStoryboardInfoTip";
 import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
-import { soybeanDataSources } from "./constants";
+import { getPointX, getTooltipX, getTooltipY } from "./chartGeometry";
+import {
+    chartGridLineColor,
+    chartGridLineSubtleColor,
+    chartHighlightLineColor,
+    chartLabelColor,
+    driverPrimaryColor,
+    driverSecondaryColor,
+    driverTertiaryColor,
+    soybeanDataSources,
+    tooltipFillColor,
+    tooltipStrokeColor,
+    tooltipTitleColor,
+    tooltipValueStrongColor
+} from "./constants";
 import {
     calculateGrowthPercentage,
     ChinaCommodityDemandRecord,
@@ -87,7 +101,7 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         series: [
             {
                 id: "population",
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: SOYBEAN_STORYBOARD_NEED_DATA_LABEL,
                 pillTone: "light",
                 values: [16, 18, 19, 49, 28, 40, 47, 62, 62, 78, 80, 87, 61, 88, 106, 86, 91, 115, 101, 113]
@@ -103,7 +117,7 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         series: [
             {
                 id: "income",
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: "GDP Per Capita",
                 pillTone: "light",
                 values: [15, 11, 23, 31, 49, 55, 35, 44, 54, 68, 86, 71, 84, 76, 77, 93, 79, 118, 118, 118]
@@ -121,14 +135,14 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         series: [
             {
                 id: "pork",
-                color: "#E3E1A6",
+                color: driverSecondaryColor,
                 endLabel: "Pork Amount",
                 pillTone: "pork",
                 values: [16, 18, 20, 49, 29, 40, 47, 62, 62, 79, 82, 88, 66, 104, 88, 92, 115, 103, 101, 111]
             },
             {
                 id: "poultry",
-                color: "#E3A6DD",
+                color: driverTertiaryColor,
                 endLabel: "Poultry Amount",
                 pillTone: "poultry",
                 values: [5, 1, 12, 20, 38, 46, 25, 34, 45, 58, 76, 61, 63, 65, 81, 69, 105, 105, 106, 93]
@@ -145,7 +159,7 @@ const fallbackInfluenceCharts: TrendChartDefinition[] = [
         series: [
             {
                 id: "urbanization",
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: "Urbanization Metric",
                 pillTone: "light",
                 values: [12, 29, 12, 16, 44, 58, 45, 61, 41, 76, 90, 89, 58, 81, 98, 113, 92, 99, 118, 121]
@@ -324,7 +338,7 @@ function buildInfluenceCharts(
             charts[0],
             populationPoints,
             {
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: formatPopulationLabel(getLatestValue(populationValues)),
                 id: "population",
                 pillTone: "light",
@@ -340,7 +354,7 @@ function buildInfluenceCharts(
             charts[1],
             gdpPoints,
             {
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: formatCurrencyLabel(getLatestValue(gdpValues)),
                 id: "income",
                 pillTone: "light",
@@ -357,7 +371,7 @@ function buildInfluenceCharts(
             axisTicks: createAxisTicks(proteinValues, formatMmtAxis, 8, 118, proteinValues),
             series: [
                 {
-                    color: "#E3E1A6",
+                    color: driverSecondaryColor,
                     endLabel: formatThousandMetricTonsAsMmt(latestPork, "Pork"),
                     id: "pork",
                     points: porkPoints.map((point) => ({
@@ -370,7 +384,7 @@ function buildInfluenceCharts(
                     values: createNormalizedTrendValues(porkValues, 8, 118, proteinValues)
                 },
                 {
-                    color: "#E3A6DD",
+                    color: driverTertiaryColor,
                     endLabel: formatThousandMetricTonsAsMmt(latestPoultry, "Poultry"),
                     id: "poultry",
                     points: poultryPoints.map((point) => ({
@@ -391,7 +405,7 @@ function buildInfluenceCharts(
             charts[3],
             urbanizationPoints,
             {
-                color: "#A8CCE2",
+                color: driverPrimaryColor,
                 endLabel: `${formatPercentage(latestUrbanization, 1)} Urban`,
                 id: "urbanization",
                 pillTone: "light",
@@ -406,12 +420,7 @@ function buildInfluenceCharts(
 }
 
 function getChartPointX(index: number, pointCount: number): number {
-    if (pointCount <= 1) {
-        return CHART_PADDING.left;
-    }
-    const chartWidth = CHART_WIDTH - CHART_PADDING.left - CHART_PADDING.right;
-    const pointOffset = (index * chartWidth) / (pointCount - 1);
-    return CHART_PADDING.left + pointOffset;
+    return getPointX(index, pointCount, CHART_WIDTH, CHART_PADDING);
 }
 
 function getChartPointY(value: number): number {
@@ -438,18 +447,11 @@ function getDriverTooltipSize(yearLabel: string, valueLabel: string): { height: 
 }
 
 function getDriverTooltipX(pointX: number, tooltipWidth: number): number {
-    const halfWidth = tooltipWidth / 2;
-    return Math.min(
-        CHART_WIDTH - CHART_PADDING.right - tooltipWidth,
-        Math.max(CHART_PADDING.left + 8, pointX - halfWidth)
-    );
+    return getTooltipX(pointX, tooltipWidth, CHART_WIDTH, CHART_PADDING);
 }
 
 function getDriverTooltipY(pointY: number, tooltipHeight: number): number {
-    if (pointY - tooltipHeight - 12 < CHART_PADDING.top) {
-        return pointY + 16;
-    }
-    return pointY - tooltipHeight - 12;
+    return getTooltipY(pointY, tooltipHeight, CHART_PADDING);
 }
 
 function getSeriesPoint(series: TrendSeries, index: number): TrendSeriesPoint | null {
@@ -579,7 +581,7 @@ function renderSeries(
                 x2={lastX}
                 y1={CHART_PADDING.top}
                 y2={CHART_HEIGHT - CHART_PADDING.bottom}
-                stroke="rgba(255, 255, 255, 0.92)"
+                stroke={chartHighlightLineColor}
                 strokeWidth="2"
                 strokeDasharray="18 14"
             />
@@ -640,13 +642,13 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                                 x2={CHART_WIDTH - CHART_PADDING.right}
                                 y1={y}
                                 y2={y}
-                                stroke="rgba(255, 255, 255, 0.08)"
+                                stroke={chartGridLineColor}
                                 strokeWidth="1"
                             />
                             <text
                                 x={16}
                                 y={y + 5}
-                                fill="rgba(197, 214, 222, 0.72)"
+                                fill={chartLabelColor}
                                 fontFamily="Roboto"
                                 fontSize="16"
                                 fontWeight="400"
@@ -665,7 +667,7 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                             x2={x}
                             y1={CHART_PADDING.top}
                             y2={CHART_HEIGHT - CHART_PADDING.bottom}
-                            stroke="rgba(255, 255, 255, 0.05)"
+                            stroke={chartGridLineSubtleColor}
                             strokeWidth="1"
                         />
                     );
@@ -679,7 +681,7 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                             key={`${chart.id}-year-${label.index}`}
                             x={x}
                             y={CHART_HEIGHT - CHART_PADDING.bottom + YEAR_AXIS_LABEL_OFFSET}
-                            fill="rgba(197, 214, 222, 0.72)"
+                            fill={chartLabelColor}
                             fontFamily="Roboto"
                             fontSize="16"
                             fontWeight="400"
@@ -709,13 +711,13 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                             width={hoveredTooltipSize.width}
                             height={hoveredTooltipSize.height}
                             rx="8"
-                            fill="rgba(7, 22, 28, 0.96)"
-                            stroke="rgba(255, 255, 255, 0.14)"
+                            fill={tooltipFillColor}
+                            stroke={tooltipStrokeColor}
                         />
                         <text
                             x={hoveredTooltipSize.width / 2}
                             y={33}
-                            fill="#ffffff"
+                            fill={tooltipTitleColor}
                             fontFamily="Roboto"
                             fontSize="16"
                             fontWeight="700"
@@ -726,7 +728,7 @@ function TrendChart({ chart }: { chart: TrendChartDefinition }): JSX.Element {
                         <text
                             x={hoveredTooltipSize.width / 2}
                             y={54}
-                            fill="rgba(216, 223, 226, 0.92)"
+                            fill={tooltipValueStrongColor}
                             fontFamily="Roboto"
                             fontSize="20"
                             textAnchor="middle"

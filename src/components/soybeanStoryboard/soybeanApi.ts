@@ -702,27 +702,6 @@ export function getProductionTrendPoints(
     return { trendPoints, trendYears };
 }
 
-export function getTrendLabelStride(pointCount: number, availableWidth: number, minLabelSpacing: number): number {
-    if (pointCount <= 1 || availableWidth <= 0 || minLabelSpacing <= 0) {
-        return 1;
-    }
-    const spacing = availableWidth / (pointCount - 1);
-    if (spacing >= minLabelSpacing) {
-        return 1;
-    }
-    return Math.max(1, Math.ceil(minLabelSpacing / spacing));
-}
-
-export function isTrendLabelVisible(index: number, pointCount: number, stride: number): boolean {
-    if (index === 0 || index === pointCount - 1) {
-        return true;
-    }
-    if (index % stride !== 0) {
-        return false;
-    }
-    return pointCount - 1 - index >= stride;
-}
-
 export function getProductionGrowthLabel(trendYears: string[]): string {
     if (trendYears.length > 1) {
         return `AREA GROWTH (${Number(trendYears[trendYears.length - 1]) - Number(trendYears[0])}Y)`;

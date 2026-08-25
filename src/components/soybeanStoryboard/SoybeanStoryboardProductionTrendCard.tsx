@@ -6,12 +6,30 @@ import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { curveCatmullRom, line } from "d3";
 import {
+    chartAxisLabelColor,
+    chartAxisLineColor,
+    chartPointFillColor,
+    chartSeriesLineColor,
+    tooltipFillColor,
+    tooltipStrokeColor,
+    tooltipTitleColor,
+    tooltipValueColor
+} from "./constants";
+import {
+    getLabelStride,
+    getNiceAxisMax,
+    getPlotWidth,
+    getPointX,
+    getPointY,
+    getTooltipX,
+    getTooltipY,
+    isLabelVisible
+} from "./chartGeometry";
+import {
     calculateGrowthPercentage,
     formatCompactAcres,
     formatSignedPercentage,
-    getTrendLabelStride,
     isFiniteNumber,
-    isTrendLabelVisible,
     SOYBEAN_STORYBOARD_NEED_DATA_LABEL
 } from "./soybeanApi";
 const TREND_CHART_WIDTH = 740;
@@ -43,27 +61,11 @@ type SoybeanStoryboardProductionTrendCardProps = {
 };
 
 function getTrendX(index: number, valueCount: number): number {
-    const chartWidth = TREND_CHART_WIDTH - TREND_CHART_PADDING.left - TREND_CHART_PADDING.right;
-    const pointOffset = (index * chartWidth) / Math.max(1, valueCount - 1);
-    return TREND_CHART_PADDING.left + pointOffset;
-}
-
-function getNiceAxisMax(values: number[]): number {
-    const maxValue = Math.max(...values, 0);
-    if (maxValue <= 0) {
-        return 100;
-    }
-    const magnitude = 10 ** Math.floor(Math.log10(maxValue));
-    const normalizedValue = maxValue / magnitude;
-    const niceStep = [1, 1.2, 1.5, 2, 2.5, 5, 10].find((step) => normalizedValue <= step) || 10;
-    return niceStep * magnitude;
+    return getPointX(index, valueCount, TREND_CHART_WIDTH, TREND_CHART_PADDING);
 }
 
 function getTrendY(value: number, axisMax: number): number {
-    const chartHeight = TREND_CHART_HEIGHT - TREND_CHART_PADDING.top - TREND_CHART_PADDING.bottom;
-    const valueRatio = Math.min(1, Math.max(0, value / axisMax));
-    const pointOffset = (1 - valueRatio) * chartHeight;
-    return TREND_CHART_PADDING.top + pointOffset;
+    return getPointY(value / axisMax, TREND_CHART_HEIGHT, TREND_CHART_PADDING);
 }
 
 function getTrendGrowthText(points: SoybeanProductionTrendPoint[]): string {
@@ -81,21 +83,6 @@ function getTrendGrowthText(points: SoybeanProductionTrendPoint[]): string {
 
 function formatTrendAxisTick(value: number): string {
     return value === 0 ? "0" : formatCompactAcres(value, 0);
-}
-
-function getTooltipX(pointX: number): number {
-    const halfWidth = TREND_TOOLTIP_WIDTH / 2;
-    return Math.min(
-        TREND_CHART_WIDTH - TREND_CHART_PADDING.right - TREND_TOOLTIP_WIDTH,
-        Math.max(TREND_CHART_PADDING.left + 8, pointX - halfWidth)
-    );
-}
-
-function getTooltipY(pointY: number): number {
-    if (pointY - TREND_TOOLTIP_HEIGHT - 12 < TREND_CHART_PADDING.top) {
-        return pointY + 16;
-    }
-    return pointY - TREND_TOOLTIP_HEIGHT - 12;
 }
 
 export default function SoybeanStoryboardProductionTrendCard({
@@ -117,9 +104,9 @@ export default function SoybeanStoryboardProductionTrendCard({
     const axisTicks = React.useMemo(() => [0, axisMax / 2, axisMax], [axisMax]);
     const labelStride = React.useMemo(
         () =>
-            getTrendLabelStride(
+            getLabelStride(
                 Math.max(totalPointCount || 0, trendPoints.length),
-                TREND_CHART_WIDTH - TREND_CHART_PADDING.left - TREND_CHART_PADDING.right,
+                getPlotWidth(TREND_CHART_WIDTH, TREND_CHART_PADDING),
                 TREND_LABEL_MIN_SPACING
             ),
         [totalPointCount, trendPoints.length]
@@ -167,7 +154,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                     x2={TREND_CHART_PADDING.left}
                     y1={TREND_CHART_PADDING.top}
                     y2={TREND_CHART_HEIGHT - TREND_CHART_PADDING.bottom}
-                    stroke="rgba(156, 173, 179, 0.26)"
+                    stroke={chartAxisLineColor}
                     strokeWidth="1.5"
                 />
                 <line
@@ -175,7 +162,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                     x2={TREND_CHART_WIDTH - TREND_CHART_PADDING.right}
                     y1={TREND_CHART_HEIGHT - TREND_CHART_PADDING.bottom}
                     y2={TREND_CHART_HEIGHT - TREND_CHART_PADDING.bottom}
-                    stroke="rgba(156, 173, 179, 0.26)"
+                    stroke={chartAxisLineColor}
                     strokeWidth="1.5"
                 />
                 {axisTicks.map((tick) => (
@@ -183,7 +170,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                         key={tick}
                         x={TREND_CHART_PADDING.left - 10}
                         y={getTrendY(tick, axisMax) + 4}
-                        fill="rgba(176, 191, 196, 0.56)"
+                        fill={chartAxisLabelColor}
                         fontSize="14"
                         textAnchor="end"
                     >
@@ -191,12 +178,12 @@ export default function SoybeanStoryboardProductionTrendCard({
                     </text>
                 ))}
                 {trendPoints.map((point, index) =>
-                    isTrendLabelVisible(index, trendPoints.length, labelStride) ? (
+                    isLabelVisible(index, trendPoints.length, labelStride) ? (
                         <text
                             key={`${point.year}-${index}`}
                             x={getTrendX(index, trendPoints.length)}
                             y={TREND_CHART_HEIGHT - 16}
-                            fill="rgba(176, 191, 196, 0.56)"
+                            fill={chartAxisLabelColor}
                             fontSize="13"
                             textAnchor={index === trendPoints.length - 1 ? "end" : "middle"}
                         >
@@ -208,7 +195,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                     <path
                         d={trendLine}
                         fill="none"
-                        stroke="rgba(228, 232, 233, 0.72)"
+                        stroke={chartSeriesLineColor}
                         strokeWidth="3"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -227,7 +214,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                                 cx={pointX}
                                 cy={pointY}
                                 r={isLatest ? 12 : 5}
-                                fill="rgba(255, 255, 255, 0.9)"
+                                fill={chartPointFillColor}
                                 opacity={isLatest ? 1 : 0.82}
                             />
                             <circle
@@ -244,20 +231,20 @@ export default function SoybeanStoryboardProductionTrendCard({
                 })}
                 {hoveredPoint ? (
                     <g
-                        transform={`translate(${getTooltipX(hoveredPointX)} ${getTooltipY(hoveredPointY)})`}
+                        transform={`translate(${getTooltipX(hoveredPointX, TREND_TOOLTIP_WIDTH, TREND_CHART_WIDTH, TREND_CHART_PADDING)} ${getTooltipY(hoveredPointY, TREND_TOOLTIP_HEIGHT, TREND_CHART_PADDING)})`}
                         pointerEvents="none"
                     >
                         <rect
                             width={TREND_TOOLTIP_WIDTH}
                             height={TREND_TOOLTIP_HEIGHT}
                             rx="8"
-                            fill="rgba(7, 22, 28, 0.96)"
-                            stroke="rgba(255, 255, 255, 0.14)"
+                            fill={tooltipFillColor}
+                            stroke={tooltipStrokeColor}
                         />
                         <text
                             x={TREND_TOOLTIP_WIDTH / 2}
                             y={27}
-                            fill="#ffffff"
+                            fill={tooltipTitleColor}
                             fontSize="16"
                             fontWeight="700"
                             textAnchor="middle"
@@ -267,7 +254,7 @@ export default function SoybeanStoryboardProductionTrendCard({
                         <text
                             x={TREND_TOOLTIP_WIDTH / 2}
                             y={48}
-                            fill="rgba(216, 223, 226, 0.9)"
+                            fill={tooltipValueColor}
                             fontSize="20"
                             textAnchor="middle"
                         >

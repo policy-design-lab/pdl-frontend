@@ -10,6 +10,51 @@ export const argentinaColor = "#167AB4";
 export const mainlandChinaColor = "#FFB368";
 export const mutedCountryFill = "#1E353B";
 export const mutedCountryStroke = "#374B51";
+export const soybeanGoldColor = "#D69830";
+export const soybeanGreyColor = "rgba(214, 222, 228, 0.74)";
+
+export const surfaceTextColor = "#FFFFFF";
+export const surfaceTextInverseColor = "#17242A";
+export const chartAxisLineColor = "rgba(156, 173, 179, 0.26)";
+export const chartAxisLabelColor = "rgba(176, 191, 196, 0.56)";
+export const chartGridLineColor = "rgba(255, 255, 255, 0.08)";
+export const chartGridLineSubtleColor = "rgba(255, 255, 255, 0.05)";
+export const chartSeriesLineColor = "rgba(228, 232, 233, 0.72)";
+export const chartPointFillColor = "rgba(255, 255, 255, 0.9)";
+export const chartHighlightLineColor = "rgba(255, 255, 255, 0.92)";
+export const chartLabelColor = "rgba(197, 214, 222, 0.72)";
+
+export const tooltipFillColor = "rgba(7, 22, 28, 0.96)";
+export const tooltipStrokeColor = "rgba(255, 255, 255, 0.14)";
+export const tooltipTitleColor = "#ffffff";
+export const tooltipValueColor = "rgba(216, 223, 226, 0.9)";
+export const tooltipValueStrongColor = "rgba(216, 223, 226, 0.92)";
+export const overlayFillColor = "rgba(7, 22, 28, 0.82)";
+export const overlayTextColor = "rgba(255, 255, 255, 0.84)";
+
+export const mapRegionStrokeColor = "rgba(223, 241, 216, 0.12)";
+export const mapRegionStrokeStrongColor = "rgba(223, 241, 216, 0.16)";
+export const mapStateStrokeColor = "rgba(105, 120, 124, 0.24)";
+export const mapStateStrokeStrongColor = "rgba(105, 120, 124, 0.42)";
+export const mapLandmassFillColor = "rgba(30, 53, 59, 0.88)";
+export const mapLandmassSouthFillColor = "rgba(55, 75, 81, 0.82)";
+export const mapLandmassStrokeColor = "rgba(20, 39, 47, 0.95)";
+export const mapHighlightStrokeColor = "rgba(236, 245, 235, 0.62)";
+export const mapMutedLabelColor = "rgba(255, 255, 255, 0.5)";
+export const mapSelectedFillColor = "rgba(89, 188, 195, 0.56)";
+export const mapRelatedFillColor = "rgba(89, 188, 195, 0.4)";
+export const mapDemandFillColor = "rgba(255, 179, 104, 0.08)";
+export const mapDemandGlowColor = "rgba(255, 179, 104, 0.06)";
+
+export const driverPrimaryColor = "#A8CCE2";
+export const driverSecondaryColor = "#E3E1A6";
+export const driverTertiaryColor = "#E3A6DD";
+
+export const productionLegendColors = ["#CAF2B2", "#85F047", "#46AF08", "#4DD100", "#276A00"];
+export const utilizationGradientStartColor = "#0F326E";
+export const utilizationGradientEndColor = "#3C7A8C";
+export const utilizationSegmentStrokeColor = "rgba(0, 0, 0, 0.05)";
+
 export const worldGeographyUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 export type StoryboardSection = {

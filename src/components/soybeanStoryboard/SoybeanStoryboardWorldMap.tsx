@@ -7,7 +7,10 @@ import {
     brazilColor,
     mainlandChinaColor,
     mutedCountryFill,
+    mapMutedLabelColor,
     mutedCountryStroke,
+    surfaceTextColor,
+    surfaceTextInverseColor,
     unitedStatesColor
 } from "./constants";
 import {
@@ -89,7 +92,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         label: "ARGENTINA",
         shortLabel: "* ARGENTINA",
         fill: argentinaColor,
-        textColor: "#FFFFFF",
+        textColor: surfaceTextColor,
         labelCoordinates: [-63, -34.2],
         labelMaxWidth: 98,
         labelMinFontSize: 11,
@@ -101,7 +104,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         id: "076",
         label: "BRAZIL",
         fill: brazilColor,
-        textColor: "#FFFFFF",
+        textColor: surfaceTextColor,
         labelCoordinates: [-51, -12.2],
         labelMaxWidth: 76,
         tooltipLabel: "Domestic market",
@@ -112,7 +115,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         id: "156",
         label: "MAINLAND CHINA",
         fill: mainlandChinaColor,
-        textColor: "#17242A",
+        textColor: surfaceTextInverseColor,
         labelCoordinates: [101, 38.8],
         labelMaxWidth: 108,
         labelMinFontSize: 11,
@@ -124,7 +127,7 @@ const baseHighlightedCountries: Record<string, HighlightCountry> = {
         id: "840",
         label: "UNITED STATES",
         fill: unitedStatesColor,
-        textColor: "#FFFFFF",
+        textColor: surfaceTextColor,
         labelCoordinates: [-100, 38],
         labelMaxWidth: 124,
         tooltipLabel: "Domestic use",
@@ -304,7 +307,7 @@ function renderMetricPill(x: number, y: number, text: string, fill: string) {
             <text
                 x={width / 2}
                 y={18}
-                fill="#FFFFFF"
+                fill={surfaceTextColor}
                 fontFamily="Roboto"
                 fontSize="16"
                 fontStyle="normal"
@@ -357,7 +360,7 @@ function renderRestOfWorldLabel(
         <text
             x={x}
             y={y}
-            fill="rgba(255, 255, 255, 0.5)"
+            fill={mapMutedLabelColor}
             textAnchor={textAnchor}
             fontFamily="Roboto"
             fontSize="12"

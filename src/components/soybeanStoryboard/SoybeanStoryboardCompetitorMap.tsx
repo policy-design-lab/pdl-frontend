@@ -2,6 +2,13 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { geoCentroid, geoMercator, geoPath } from "d3-geo";
+import {
+    brazilColor,
+    mapHighlightStrokeColor,
+    mapLandmassFillColor,
+    mapLandmassSouthFillColor,
+    mapLandmassStrokeColor
+} from "./constants";
 import { loadWorldFeatures, normalizeCountryId } from "./worldMapData";
 import SoybeanStoryboardNarrativeMap from "./SoybeanStoryboardNarrativeMap";
 import {
@@ -107,13 +114,13 @@ export default function SoybeanStoryboardCompetitorMap({ exports }: SoybeanStory
                 const countryId = normalizeCountryId(feature.id);
                 const isBrazil = countryId === BRAZIL_COUNTRY_ID;
                 const [, latitude] = geoCentroid(feature);
-                const baseFill = latitude < 8 ? "rgba(55, 75, 81, 0.82)" : "rgba(30, 53, 59, 0.88)";
+                const baseFill = latitude < 8 ? mapLandmassSouthFillColor : mapLandmassFillColor;
                 return (
                     <path
                         key={countryId}
                         d={pathGenerator(feature) || ""}
-                        fill={isBrazil ? "#4D9F45" : baseFill}
-                        stroke={isBrazil ? "rgba(236, 245, 235, 0.62)" : "rgba(20, 39, 47, 0.95)"}
+                        fill={isBrazil ? brazilColor : baseFill}
+                        stroke={isBrazil ? mapHighlightStrokeColor : mapLandmassStrokeColor}
                         strokeWidth={isBrazil ? 2.4 : 1.1}
                         vectorEffect="non-scaling-stroke"
                     />

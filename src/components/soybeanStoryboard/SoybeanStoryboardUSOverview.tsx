@@ -1,6 +1,13 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { geoAlbersUsa, geoPath } from "d3-geo";
+import {
+    mapRelatedFillColor,
+    mapSelectedFillColor,
+    mapStateStrokeStrongColor,
+    mutedCountryFill,
+    mutedCountryStroke
+} from "./constants";
 import * as topojson from "topojson-client";
 import countiesTopoJson from "../../files/maps/counties-10m.json";
 import fipsToState from "../../files/maps/fipsToStateMap";
@@ -73,7 +80,12 @@ export default function SoybeanStoryboardUSOverview(): JSX.Element {
                 viewBoxHeight={VIEWBOX_HEIGHT}
                 viewBoxWidth={VIEWBOX_WIDTH}
             >
-                <path d={pathGenerator(nationFeature) || ""} fill="#1E353B" stroke="#374B51" strokeWidth="1.3" />
+                <path
+                    d={pathGenerator(nationFeature) || ""}
+                    fill={mutedCountryFill}
+                    stroke={mutedCountryStroke}
+                    strokeWidth="1.3"
+                />
                 {stateFeatures.map((stateFeature: any) => {
                     const stateCode = fipsToState[String(stateFeature.id).padStart(2, "0")];
                     const isHighlighted = stateCode ? HIGHLIGHT_STATES.has(stateCode) : false;
@@ -84,12 +96,12 @@ export default function SoybeanStoryboardUSOverview(): JSX.Element {
                             d={pathGenerator(stateFeature) || ""}
                             fill={
                                 isMidwest
-                                    ? "rgba(89, 188, 195, 0.56)"
+                                    ? mapSelectedFillColor
                                     : isHighlighted
-                                      ? "rgba(89, 188, 195, 0.4)"
-                                      : "#1E353B"
+                                      ? mapRelatedFillColor
+                                      : mutedCountryFill
                             }
-                            stroke="rgba(105, 120, 124, 0.42)"
+                            stroke={mapStateStrokeStrongColor}
                             strokeWidth={1.2}
                             vectorEffect="non-scaling-stroke"
                         />

@@ -7,6 +7,16 @@ import { geoAlbersUsa, geoMercator, geoPath } from "d3-geo";
 import * as topojson from "topojson-client";
 import countiesTopoJson from "../../files/maps/counties-10m.json";
 import brazilMunicipalitiesTopoJson from "../../files/maps/brazil-municipalities-min.json";
+import {
+    mapRegionStrokeColor,
+    mapRegionStrokeStrongColor,
+    mapStateStrokeColor,
+    mutedCountryFill,
+    mutedCountryStroke,
+    overlayFillColor,
+    overlayTextColor,
+    productionLegendColors
+} from "./constants";
 import SoybeanStoryboardDataSources, { SoybeanStoryboardDataSource } from "./SoybeanStoryboardDataSources";
 import SoybeanStoryboardProductionTrendCard, {
     SoybeanProductionTrendPoint
@@ -26,7 +36,6 @@ export type { ProductionDetailFrame, ProductionDetailRow, ProductionRankingRow }
 const MAP_VIEWBOX_WIDTH = 760;
 const BRAZIL_MAP_VIEWBOX_HEIGHT = 740;
 const US_MAP_VIEWBOX_HEIGHT = 620;
-const LEGEND_COLORS = ["#CAF2B2", "#85F047", "#46AF08", "#4DD100", "#276A00"];
 
 type LegendConfig = {
     regionLabel: string;
@@ -95,7 +104,7 @@ function getProductionFillForValue(
         }
     }
     return {
-        fill: LEGEND_COLORS[Math.min(LEGEND_COLORS.length - 1, colorIndex)],
+        fill: productionLegendColors[Math.min(productionLegendColors.length - 1, colorIndex)],
         opacity: 0.96
     };
 }
@@ -226,16 +235,16 @@ export default function SoybeanStoryboardProductionOverview({
           ? "Pause year playback"
           : card.buttonLabel;
     const legendValues = React.useMemo(
-        () => getPlantedAcresLegendValues(visiblePlantedAcresValues, LEGEND_COLORS.length),
+        () => getPlantedAcresLegendValues(visiblePlantedAcresValues, productionLegendColors.length),
         [visiblePlantedAcresValues]
     );
     const legendTickLabels = React.useMemo(
         () =>
             legendValues.length > 0
                 ? legendValues.map((value) => formatCompactAcres(value, 2))
-                : LEGEND_COLORS.map(() => SOYBEAN_STORYBOARD_NEED_DATA_LABEL).concat(
-                      SOYBEAN_STORYBOARD_NEED_DATA_LABEL
-                  ),
+                : productionLegendColors
+                      .map(() => SOYBEAN_STORYBOARD_NEED_DATA_LABEL)
+                      .concat(SOYBEAN_STORYBOARD_NEED_DATA_LABEL),
         [legendValues]
     );
     const brazilMunicipalities = React.useMemo(
@@ -376,7 +385,7 @@ export default function SoybeanStoryboardProductionOverview({
     function getTableSwatchStyle(area: number | null): React.CSSProperties {
         const style = getProductionFillForValue(area ?? undefined, legendValues);
         return {
-            backgroundColor: style?.fill || "#1E353B",
+            backgroundColor: style?.fill || mutedCountryFill,
             opacity: style?.opacity || 1
         };
     }
@@ -475,9 +484,9 @@ export default function SoybeanStoryboardProductionOverview({
                     <Box className="soybean-storyboard-production-scale">
                         <Box
                             className="soybean-storyboard-production-scale-bar"
-                            sx={{ gridTemplateColumns: `repeat(${LEGEND_COLORS.length}, 1fr)` }}
+                            sx={{ gridTemplateColumns: `repeat(${productionLegendColors.length}, 1fr)` }}
                         >
-                            {LEGEND_COLORS.map((color) => (
+                            {productionLegendColors.map((color) => (
                                 <Box
                                     key={color}
                                     className="soybean-storyboard-production-scale-segment"
@@ -538,9 +547,9 @@ export default function SoybeanStoryboardProductionOverview({
                                                 <path
                                                     key={municipalityId}
                                                     d={municipalityPath}
-                                                    fill={style?.fill || "#1E353B"}
+                                                    fill={style?.fill || mutedCountryFill}
                                                     opacity={style?.opacity || 1}
-                                                    stroke="rgba(223, 241, 216, 0.12)"
+                                                    stroke={mapRegionStrokeColor}
                                                     strokeWidth="0.18"
                                                     vectorEffect="non-scaling-stroke"
                                                     onMouseEnter={(event) => handleTooltipEnter(event, row)}
@@ -552,7 +561,12 @@ export default function SoybeanStoryboardProductionOverview({
                                     </>
                                 ) : (
                                     <>
-                                        <path d={basePath} fill="#1E353B" stroke="#374B51" strokeWidth="1.2" />
+                                        <path
+                                            d={basePath}
+                                            fill={mutedCountryFill}
+                                            stroke={mutedCountryStroke}
+                                            strokeWidth="1.2"
+                                        />
                                         {usCounties.map((countyFeature: any) => {
                                             const countyPath = pathGenerator(countyFeature);
                                             const countyId = String(countyFeature.id).padStart(5, "0");
@@ -568,9 +582,9 @@ export default function SoybeanStoryboardProductionOverview({
                                                 <path
                                                     key={countyFeature.id}
                                                     d={countyPath}
-                                                    fill={style?.fill || "#1E353B"}
+                                                    fill={style?.fill || mutedCountryFill}
                                                     opacity={style?.opacity || 1}
-                                                    stroke="rgba(223, 241, 216, 0.16)"
+                                                    stroke={mapRegionStrokeStrongColor}
                                                     strokeWidth="0.28"
                                                     vectorEffect="non-scaling-stroke"
                                                     onMouseEnter={(event) => handleTooltipEnter(event, row)}
@@ -589,7 +603,7 @@ export default function SoybeanStoryboardProductionOverview({
                                                     key={stateFeature.id}
                                                     d={statePath}
                                                     fill="none"
-                                                    stroke="rgba(105, 120, 124, 0.24)"
+                                                    stroke={mapStateStrokeColor}
                                                     strokeWidth="1"
                                                     vectorEffect="non-scaling-stroke"
                                                 />
@@ -600,9 +614,9 @@ export default function SoybeanStoryboardProductionOverview({
                             </svg>
                             {isDetailLoading ? (
                                 <MapLoadingOverlay
-                                    backgroundColor="rgba(7, 22, 28, 0.82)"
+                                    backgroundColor={overlayFillColor}
                                     label="Loading yearly map data..."
-                                    textColor="rgba(255, 255, 255, 0.84)"
+                                    textColor={overlayTextColor}
                                     zIndex={4}
                                 />
                             ) : null}

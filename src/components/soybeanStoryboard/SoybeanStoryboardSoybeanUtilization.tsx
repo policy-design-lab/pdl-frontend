@@ -35,7 +35,12 @@ import {
 } from "./soybeanApi";
 import SoybeanStoryboardDataSources from "./SoybeanStoryboardDataSources";
 import SoybeanStoryboardUnitSelect from "./SoybeanStoryboardUnitSelect";
-import { soybeanDataSources } from "./constants";
+import {
+    soybeanDataSources,
+    utilizationGradientEndColor,
+    utilizationGradientStartColor,
+    utilizationSegmentStrokeColor
+} from "./constants";
 import SoybeanStoryboardYearSelect from "./SoybeanStoryboardYearSelect";
 
 const DOMESTIC_USE_CATEGORIES = ["Feed", "Food", "Fuel", "Seed", "Other"];
@@ -363,8 +368,8 @@ export default function SoybeanStoryboardSoybeanUtilization({
                                     y2={DOMESTIC_BRANCH_BOTTOM_Y}
                                     gradientUnits="userSpaceOnUse"
                                 >
-                                    <stop offset="0" stopColor="#0F326E" />
-                                    <stop offset="1" stopColor="#3C7A8C" />
+                                    <stop offset="0" stopColor={utilizationGradientStartColor} />
+                                    <stop offset="1" stopColor={utilizationGradientEndColor} />
                                 </linearGradient>
                             </defs>
                             {DOMESTIC_USE_CATEGORIES.map((category, index) => {
@@ -374,7 +379,7 @@ export default function SoybeanStoryboardSoybeanUtilization({
                                         key={category}
                                         d={`M${branch.originLeft} ${DOMESTIC_BRANCH_TOP_Y} L${branch.originRight} ${DOMESTIC_BRANCH_TOP_Y} L${branch.endRight} ${DOMESTIC_BRANCH_BOTTOM_Y} L${branch.endLeft} ${DOMESTIC_BRANCH_BOTTOM_Y} Z`}
                                         fill="url(#soybean-domestic-branch-gradient)"
-                                        stroke="rgba(0, 0, 0, 0.05)"
+                                        stroke={utilizationSegmentStrokeColor}
                                     />
                                 );
                             })}
