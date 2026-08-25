@@ -634,6 +634,7 @@ export default function SoybeanStoryboardProductionOverview({
                         isPlaying={isPlaybackActive && isPlaying}
                         label={card.label}
                         onButtonClick={handleDetailButtonClick}
+                        totalPointCount={baseTrendPoints.length}
                         trendPoints={activeTrendPoints}
                     />
                     <Box className="soybean-storyboard-production-info-card">

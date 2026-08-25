@@ -9,7 +9,9 @@ import {
     calculateGrowthPercentage,
     formatCompactAcres,
     formatSignedPercentage,
+    getTrendLabelStride,
     isFiniteNumber,
+    isTrendLabelVisible,
     SOYBEAN_STORYBOARD_NEED_DATA_LABEL
 } from "./soybeanApi";
 const TREND_CHART_WIDTH = 740;
@@ -22,6 +24,7 @@ const TREND_CHART_PADDING = {
 };
 const TREND_TOOLTIP_WIDTH = 216;
 const TREND_TOOLTIP_HEIGHT = 62;
+const TREND_LABEL_MIN_SPACING = 44;
 
 export type SoybeanProductionTrendPoint = {
     totalAcres: number | null;
@@ -35,6 +38,7 @@ type SoybeanStoryboardProductionTrendCardProps = {
     isPlaying: boolean;
     label: string;
     onButtonClick: () => void;
+    totalPointCount?: number;
     trendPoints: SoybeanProductionTrendPoint[];
 };
 
@@ -101,6 +105,7 @@ export default function SoybeanStoryboardProductionTrendCard({
     isPlaying,
     label,
     onButtonClick,
+    totalPointCount,
     trendPoints
 }: SoybeanStoryboardProductionTrendCardProps): JSX.Element {
     const [hoveredPointIndex, setHoveredPointIndex] = React.useState<number | null>(null);
@@ -110,6 +115,15 @@ export default function SoybeanStoryboardProductionTrendCard({
     );
     const axisMax = React.useMemo(() => getNiceAxisMax(validTrendValues), [validTrendValues]);
     const axisTicks = React.useMemo(() => [0, axisMax / 2, axisMax], [axisMax]);
+    const labelStride = React.useMemo(
+        () =>
+            getTrendLabelStride(
+                Math.max(totalPointCount || 0, trendPoints.length),
+                TREND_CHART_WIDTH - TREND_CHART_PADDING.left - TREND_CHART_PADDING.right,
+                TREND_LABEL_MIN_SPACING
+            ),
+        [totalPointCount, trendPoints.length]
+    );
     const trendLine = React.useMemo(
         () =>
             line<SoybeanProductionTrendPoint>()
@@ -176,18 +190,20 @@ export default function SoybeanStoryboardProductionTrendCard({
                         {formatTrendAxisTick(tick)}
                     </text>
                 ))}
-                {trendPoints.map((point, index) => (
-                    <text
-                        key={`${point.year}-${index}`}
-                        x={getTrendX(index, trendPoints.length)}
-                        y={TREND_CHART_HEIGHT - 16}
-                        fill="rgba(176, 191, 196, 0.56)"
-                        fontSize="13"
-                        textAnchor={index === trendPoints.length - 1 ? "end" : "middle"}
-                    >
-                        {point.year}
-                    </text>
-                ))}
+                {trendPoints.map((point, index) =>
+                    isTrendLabelVisible(index, trendPoints.length, labelStride) ? (
+                        <text
+                            key={`${point.year}-${index}`}
+                            x={getTrendX(index, trendPoints.length)}
+                            y={TREND_CHART_HEIGHT - 16}
+                            fill="rgba(176, 191, 196, 0.56)"
+                            fontSize="13"
+                            textAnchor={index === trendPoints.length - 1 ? "end" : "middle"}
+                        >
+                            {point.year}
+                        </text>
+                    ) : null
+                )}
                 {trendLine ? (
                     <path
                         d={trendLine}
