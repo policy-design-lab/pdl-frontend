@@ -1,0 +1,131 @@
+import React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { geoCentroid, geoMercator, geoPath } from "d3-geo";
+import {
+    brazilColor,
+    mapHighlightStrokeColor,
+    mapLandmassFillColor,
+    mapLandmassSouthFillColor,
+    mapLandmassStrokeColor
+} from "./constants";
+import { loadWorldFeatures, normalizeCountryId } from "./worldMapData";
+import SoybeanStoryboardNarrativeMap from "./SoybeanStoryboardNarrativeMap";
+import {
+    formatPlainMetricTons,
+    getExportsForCountry,
+    getLatestYear,
+    SoybeanExportsRecord,
+    SoybeanYearRecord
+} from "./soybeanApi";
+
+const VIEWBOX_WIDTH = 1360;
+const VIEWBOX_HEIGHT = 920;
+const BRAZIL_COUNTRY_ID = "076";
+
+type SoybeanStoryboardCompetitorMapProps = {
+    exports: SoybeanYearRecord<SoybeanExportsRecord[]>;
+};
+
+export default function SoybeanStoryboardCompetitorMap({ exports }: SoybeanStoryboardCompetitorMapProps): JSX.Element {
+    const [worldFeatures, setWorldFeatures] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+        loadWorldFeatures().then((features) => {
+            setWorldFeatures(features);
+        });
+    }, []);
+    const regionalFeatures = React.useMemo(
+        () =>
+            worldFeatures.filter((feature: any) => {
+                const [longitude, latitude] = geoCentroid(feature);
+                return longitude >= -130 && longitude <= -20 && latitude >= -60 && latitude <= 45;
+            }),
+        [worldFeatures]
+    );
+    const projection = React.useMemo(() => {
+        if (regionalFeatures.length === 0) {
+            return null;
+        }
+        const featureCollection = {
+            type: "FeatureCollection",
+            features: regionalFeatures
+        } as any;
+        const mapProjection = geoMercator().fitExtent(
+            [
+                [44, 28],
+                [VIEWBOX_WIDTH - 26, VIEWBOX_HEIGHT - 20]
+            ],
+            featureCollection
+        );
+        const previewPath = geoPath(mapProjection);
+        const [[minX, minY], [maxX, maxY]] = previewPath.bounds(featureCollection);
+        const currentCenterX = (minX + maxX) / 2;
+        const currentCenterY = (minY + maxY) / 2;
+        mapProjection.scale(mapProjection.scale() * 1.28);
+        const viewBoxCenterX = VIEWBOX_WIDTH / 2;
+        const viewBoxCenterY = VIEWBOX_HEIGHT / 2;
+        mapProjection.translate([
+            mapProjection.translate()[0] + (viewBoxCenterX - currentCenterX) + 12,
+            mapProjection.translate()[1] + (viewBoxCenterY - currentCenterY) + 8
+        ]);
+        return mapProjection;
+    }, [regionalFeatures]);
+    const pathGenerator = React.useMemo(() => (projection ? geoPath(projection) : null), [projection]);
+    const latestExportsYear = React.useMemo(() => getLatestYear(exports), [exports]);
+    const brazilExports = React.useMemo(
+        () => getExportsForCountry(exports, latestExportsYear, "BR"),
+        [exports, latestExportsYear]
+    );
+    const competitorBanner = (
+        <>
+            Brazil is the major competitor with the U.S. for soybeans production and exports. In {latestExportsYear},
+            Brazil shipped{" "}
+            <span className="soybean-storyboard-competitor-highlight-china">
+                {formatPlainMetricTons(brazilExports?.china)}
+            </span>{" "}
+            of soybeans to Mainland China and{" "}
+            <span className="soybean-storyboard-competitor-highlight-brazil">
+                {formatPlainMetricTons(brazilExports?.rest_of_world)}
+            </span>{" "}
+            to the rest of the world.
+        </>
+    );
+    if (!pathGenerator) {
+        return (
+            <Box className="soybean-storyboard-competitor-map-frame soybean-storyboard-map-loading">
+                <Typography className="soybean-storyboard-map-loading-text">Loading Americas map...</Typography>
+            </Box>
+        );
+    }
+    return (
+        <SoybeanStoryboardNarrativeMap
+            ariaLabel="Brazil highlighted within the Americas soybean market landscape"
+            banner={competitorBanner}
+            bannerClassName="soybean-storyboard-competitor-card"
+            bannerTextClassName="soybean-storyboard-banner-text soybean-storyboard-competitor-card-text"
+            frameClassName="soybean-storyboard-competitor-map-frame"
+            shellClassName="soybean-storyboard-competitor-shell"
+            svgClassName="soybean-storyboard-competitor-map"
+            viewBoxHeight={VIEWBOX_HEIGHT}
+            viewBoxWidth={VIEWBOX_WIDTH}
+        >
+            {regionalFeatures.map((feature: any) => {
+                const countryId = normalizeCountryId(feature.id);
+                const isBrazil = countryId === BRAZIL_COUNTRY_ID;
+                const [, latitude] = geoCentroid(feature);
+                const baseFill = latitude < 8 ? mapLandmassSouthFillColor : mapLandmassFillColor;
+                return (
+                    <path
+                        key={countryId}
+                        d={pathGenerator(feature) || ""}
+                        fill={isBrazil ? brazilColor : baseFill}
+                        stroke={isBrazil ? mapHighlightStrokeColor : mapLandmassStrokeColor}
+                        strokeWidth={isBrazil ? 2.4 : 1.1}
+                        vectorEffect="non-scaling-stroke"
+                    />
+                );
+            })}
+        </SoybeanStoryboardNarrativeMap>
+    );
+}

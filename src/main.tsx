@@ -13,6 +13,7 @@ import IssueWhitePaperPage from "./pages/IssueWhitePaperPage";
 import TitleIIPage from "./pages/TitleIIPage";
 import PolicyLabPage from "./pages/PolicyLab/PolicyLabPage";
 import IRAPage from "./pages/IRAPage";
+import SoybeanStoryboardPage from "./pages/SoybeanStoryboardPage";
 
 const ScrollToTop = (props: any) => {
     const location = useLocation();
@@ -55,6 +56,7 @@ export default function Main(): JSX.Element {
                 <Route path="/policy-lab/:tab/:subtab" element={<PolicyLabPage />} />
                 <Route path="/policy-lab/:tab/:subtab/:subsubtab" element={<PolicyLabPage />} />
                 <Route path="/ira" element={<IRAPage />} />
+                <Route path="/soybean-storyboard" element={<SoybeanStoryboardPage />} />
             </Routes>
         </ScrollToTop>
     );

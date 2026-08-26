@@ -12,7 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PDLLogo from "./PDLLogo";
 
 const drawerWidth = 240;
@@ -21,13 +21,26 @@ const navItems = [
     { title: "POLICY LAB".toUpperCase(), link: "/policy-lab" },
     { title: "INFLATION REDUCTION ACT".toUpperCase(), link: "/ira" },
     { title: "ISSUES & WHITE PAPERS", link: "/issues-whitepapers" },
+    { title: "SOYBEAN STORYBOARD", link: "/soybean-storyboard" },
     { title: "ABOUT PDL" }
 ];
+
+function isNavItemActive(pathname: string, link?: string): boolean {
+    if (!link) {
+        return false;
+    }
+    if (link === "/") {
+        return pathname === "/";
+    }
+    return pathname === link || pathname.startsWith(`${link}/`);
+}
+
 export default function NavBar({
     bkColor = "rgba(255, 255, 255, 1)",
     ftColor = "rgba(255, 255, 255, 1)",
     logo = "Dark"
 }): JSX.Element {
+    const location = useLocation();
     const theme = createTheme({
         components: {
             MuiAppBar: {
@@ -52,19 +65,30 @@ export default function NavBar({
             </Typography>
             <Divider />
             <List>
-                {navItems.map((item) => (
-                    <ListItem key={item.title} disablePadding>
-                        <ListItemButton sx={{ textAlign: "center" }}>
-                            {item.link ? (
-                                // <a href={item.link}>
-                                <ListItemText primary={item.title} />
-                            ) : (
-                                // </a>
-                                <ListItemText primary={item.title} />
-                            )}
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                {navItems.map((item) => {
+                    const isActive = isNavItemActive(location.pathname, item.link);
+                    return (
+                        <ListItem key={item.title} disablePadding>
+                            <ListItemButton
+                                component={item.link ? Link : "button"}
+                                to={item.link}
+                                sx={{
+                                    textAlign: "center",
+                                    color: ftColor,
+                                    backgroundColor: isActive ? "rgba(255, 255, 255, 0.08)" : "transparent"
+                                }}
+                            >
+                                <ListItemText
+                                    primary={item.title}
+                                    primaryTypographyProps={{
+                                        fontWeight: isActive ? 700 : 500,
+                                        letterSpacing: "0.04em"
+                                    }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                })}
             </List>
         </Box>
     );
@@ -105,20 +129,25 @@ export default function NavBar({
                         </Button>
                         <Box sx={{ display: { xs: "none", sm: "block" } }}>
                             {navItems.map((item) => {
+                                const isActive = isNavItemActive(location.pathname, item.link);
                                 if (item.link) {
                                     return (
                                         <Button
                                             component={Link}
                                             to={item.link}
                                             key={item.title}
-                                            sx={{ color: ftColor }}
+                                            sx={{
+                                                color: ftColor,
+                                                fontWeight: isActive ? 700 : 500,
+                                                opacity: isActive ? 1 : 0.74
+                                            }}
                                         >
                                             {item.title}
                                         </Button>
                                     );
                                 }
                                 return (
-                                    <Button key={item.title} sx={{ color: ftColor }}>
+                                    <Button key={item.title} sx={{ color: ftColor, opacity: 0.74 }}>
                                         {item.title}
                                     </Button>
                                 );
