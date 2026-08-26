@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added the Soybean dashboard components and page to the main site [449](https://github.com/policy-design-lab/pdl-frontend/issues/449)
+
 ## [1.17.1] - 2026-6-04
 
 ### Fixed
