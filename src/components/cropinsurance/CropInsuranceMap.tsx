@@ -3,7 +3,6 @@ import { geoCentroid } from "d3-geo";
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
@@ -13,6 +12,7 @@ import legendConfig from "../../utils/legendConfig.json";
 import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
+import MapLoadingOverlay from "../shared/MapLoadingOverlay";
 
 const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
 
@@ -316,29 +316,7 @@ const CropInsuranceMap = ({
                     colorScale={colorScale}
                     stateTopology={stateTopology || STATE_TOPOJSON_URL}
                 />
-                {showMapLoading && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
-                            zIndex: 1200,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 1.5
-                        }}
-                    >
-                        <CircularProgress size={36} />
-                        <Typography variant="body2" sx={{ color: "#2F7164" }}>
-                            Rendering map...
-                        </Typography>
-                    </Box>
-                )}
+                {showMapLoading && <MapLoadingOverlay label="Rendering map..." />}
             </Box>
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
