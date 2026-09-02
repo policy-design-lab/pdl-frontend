@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { ComposableMap, Geographies, ZoomableGroup } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import * as d3 from "d3";
@@ -10,6 +10,7 @@ import { ShortFormat } from "../shared/ConvertionFormats";
 import DrawLegend from "../shared/DrawLegend";
 import { getCountyPercentiles } from "../../utils/countyLegendConfig";
 import { CountyGeographyLayer, StateBoundaryLayer, StateLabelLayer } from "../shared/countyMap/CountyMapLayers";
+import MapLoadingOverlay from "../shared/MapLoadingOverlay";
 import {
     COUNTY_TOPOJSON_URL,
     STATE_TOPOJSON_URL,
@@ -663,29 +664,7 @@ const CropInsuranceCountyMap = ({
                         </Button>
                     </Box>
                 )}
-                {!interactionReady && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
-                            zIndex: 1600,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 1.5
-                        }}
-                    >
-                        <CircularProgress size={36} />
-                        <Typography variant="body2" sx={{ color: "#2F7164" }}>
-                            Rendering county map...
-                        </Typography>
-                    </Box>
-                )}
+                {!interactionReady && <MapLoadingOverlay label="Rendering county map..." zIndex={1600} />}
                 <div
                     data-tip=""
                     data-for="county-map-tooltip"
