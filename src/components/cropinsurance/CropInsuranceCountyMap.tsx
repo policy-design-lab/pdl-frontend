@@ -20,6 +20,7 @@ import {
     loadCountyAndStateTopoJson,
     normalizeCountyFips
 } from "../../utils/countyGeo";
+import CountyBreakdownTables from "./cropSelection/CountyBreakdownTables";
 
 const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5]; // PI requests the loss ratio to have specific thresholds that are different from the value-based attributes
 
@@ -73,6 +74,9 @@ interface CropInsuranceCountyMapProps {
     allStates: any[];
     selectedState: string;
     onStateChange: (state: string) => void;
+    selectedCrops?: string[];
+    yearKeys?: string[];
+    metricLabel?: string;
 }
 
 const CropInsuranceCountyMap = ({
@@ -83,7 +87,10 @@ const CropInsuranceCountyMap = ({
     stateCodes,
     allStates,
     selectedState,
-    onStateChange
+    onStateChange,
+    selectedCrops = [],
+    yearKeys = [],
+    metricLabel = ""
 }: CropInsuranceCountyMapProps): JSX.Element => {
     const classes = useStyles();
     const [content, setContent] = useState<React.ReactNode>("");
@@ -398,17 +405,20 @@ const CropInsuranceCountyMap = ({
             if (!countyData) {
                 const tooltipContent = (
                     <div className="map_tooltip">
-                        <div className={classes.tooltip_header}>
-                            <b>{geo.properties?.name || "Unknown County"}</b>
+                        <div className={classes.tooltip_overall}>
+                            <div className={classes.tooltip_header}>
+                                <b>{geo.properties?.name || "Unknown County"}</b>
+                            </div>
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    <tr>
+                                        <td className={classes.tooltip_topcell_left}>No data available</td>
+                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                <tr>
-                                    <td className={classes.tooltip_topcell_left}>No data available</td>
-                                    <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div style={{ height: "8px", backgroundColor: tooltipBkgColor }} />
                     </div>
                 );
                 scheduleTooltipContent(tooltipContent);
@@ -420,44 +430,65 @@ const CropInsuranceCountyMap = ({
 
             const tooltipContent = (
                 <div className="map_tooltip">
-                    <div className={classes.tooltip_header}>
-                        <b>
-                            {countyData.countyName}, {stateName}
-                        </b>
+                    <div className={classes.tooltip_overall}>
+                        <div className={classes.tooltip_header}>
+                            <b>
+                                {countyData.countyName}, {stateName}
+                            </b>
+                        </div>
+                        {attr === 1 ? (
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    <tr>
+                                        <td className={classes.tooltip_topcell_left}>
+                                            {Number(value).toLocaleString(undefined, { maximumFractionDigits: 3 })}
+                                        </td>
+                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        ) : (
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    {attr === 2 ? (
+                                        <tr>
+                                            <td className={classes.tooltip_topcell_left}>{ShortFormat(value)}</td>
+                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                        </tr>
+                                    ) : (
+                                        <tr>
+                                            <td className={classes.tooltip_topcell_left}>${ShortFormat(value)}</td>
+                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
+                        <CountyBreakdownTables
+                            record={countyData}
+                            attribute={attribute}
+                            metricLabel={metricLabel}
+                            yearKeys={yearKeys}
+                            selectedCrops={selectedCrops}
+                        />
                     </div>
-                    {attr === 1 ? (
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                <tr>
-                                    <td className={classes.tooltip_topcell_left}>
-                                        {Number(value).toLocaleString(undefined, { maximumFractionDigits: 3 })}
-                                    </td>
-                                    <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    ) : (
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                {attr === 2 ? (
-                                    <tr>
-                                        <td className={classes.tooltip_topcell_left}>{ShortFormat(value)}</td>
-                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                    </tr>
-                                ) : (
-                                    <tr>
-                                        <td className={classes.tooltip_topcell_left}>${ShortFormat(value)}</td>
-                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    )}
+                    <div style={{ height: "8px", backgroundColor: tooltipBkgColor }} />
                 </div>
             );
             scheduleTooltipContent(tooltipContent);
         },
-        [countyDataMap, countyValueMap, stateCodes, classes, attr, scheduleTooltipContent]
+        [
+            countyDataMap,
+            countyValueMap,
+            stateCodes,
+            classes,
+            attr,
+            scheduleTooltipContent,
+            attribute,
+            metricLabel,
+            yearKeys,
+            selectedCrops
+        ]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -795,6 +826,10 @@ const CropInsuranceCountyMap = ({
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
                     backgroundColor={tooltipBkgColor}
+                    effect="float"
+                    clickable={false}
+                    offset={{ top: 5, left: 5 }}
+                    place="right"
                     id="county-map-tooltip"
                 >
                     {content}

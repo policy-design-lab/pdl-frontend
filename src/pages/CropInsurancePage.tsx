@@ -23,9 +23,8 @@ import "../styles/subpage.css";
 import "../styles/cropinsurance.css";
 import CropInsuranceBubble from "../components/cropinsurance/chart/CropInsuranceBubble";
 import CropInsuranceBars from "../components/cropinsurance/chart/CropInsuranceBars";
-import MapTableWithLevelSwitch from "../components/shared/MapTableWithLevelSwitch";
-import CropInsuranceCountyMap from "../components/cropinsurance/CropInsuranceCountyMap";
-import CropInsuranceCountyTable from "../components/cropinsurance/CropInsuranceCountyTable";
+import CropInsuranceCountySection from "../components/cropinsurance/CropInsuranceCountySection";
+import { loadCropInsuranceCountyData } from "../components/cropinsurance/cropSelection/loadCropInsuranceCountyData";
 import { useMapUrlState } from "../utils/useMapUrlState";
 import { cropInsuranceMapIdByChecked } from "../utils/linkUtil";
 
@@ -79,40 +78,37 @@ export default function CropInsurancePage(): JSX.Element {
         });
     }, []);
 
-    const COUNTY_CACHE_KEY = `cropInsurance_countyData_${startYear}_${endYear}`;
-
-    const fetchCountyData = React.useCallback(() => {
-        if (countyDataLoaded || countyDataLoading) return;
-        setCountyDataLoading(true);
+    React.useEffect(() => {
         try {
-            const cached = sessionStorage.getItem(COUNTY_CACHE_KEY);
-            if (cached) {
-                const parsed = JSON.parse(cached);
-                setTimeout(() => {
-                    setCountyDistributionData(parsed);
-                    setCountyDataLoaded(true);
-                    setCountyDataLoading(false);
-                }, 50);
-                return;
-            }
+            sessionStorage.removeItem(`cropInsurance_countyData_${startYear}_${endYear}`);
         } catch {
-            sessionStorage.removeItem(COUNTY_CACHE_KEY);
+            // ignore
         }
-        const countydistribution_url = `${config.apiUrl}/titles/title-xi/programs/crop-insurance/county-distribution?start_year=${startYear}&end_year=${endYear}`;
-        getJsonDataFromUrl(countydistribution_url)
+    }, []);
+
+    const countyRequestSeqRef = React.useRef(0);
+
+    const fetchCountyData = React.useCallback((years: string[]) => {
+        const requested = Array.from(new Set(years)).sort();
+        if (requested.length === 0) return;
+        countyRequestSeqRef.current += 1;
+        const requestSeq = countyRequestSeqRef.current;
+        setCountyDataLoading(true);
+        loadCropInsuranceCountyData(requested)
             .then((response) => {
+                if (requestSeq !== countyRequestSeqRef.current) return;
                 setCountyDistributionData(response);
                 setCountyDataLoaded(true);
-                try {
-                    sessionStorage.setItem(COUNTY_CACHE_KEY, JSON.stringify(response));
-                } catch {
-                    console.error("error in caching");
-                }
+            })
+            .catch((error) => {
+                console.error("error loading crop insurance county data", error);
             })
             .finally(() => {
-                setCountyDataLoading(false);
+                if (requestSeq === countyRequestSeqRef.current) {
+                    setCountyDataLoading(false);
+                }
             });
-    }, [countyDataLoaded, countyDataLoading]);
+    }, []);
 
     React.useEffect(
         () => () => {
@@ -295,31 +291,39 @@ export default function CropInsurancePage(): JSX.Element {
         </Grid>
     );
 
-    const renderCountyTable = (tableTitle: string, attributes: string[]) => (
-        <Grid container justifyContent="center">
-            <Grid item xs={12}>
-                <Box
-                    className="chartArea"
-                    component="div"
-                    sx={{
-                        width: "100%",
-                        m: "auto"
-                    }}
-                >
-                    <CropInsuranceCountyTable
-                        tableTitle={tableTitle}
-                        attributes={attributes}
-                        skipColumns={[]}
-                        stateCodes={stateCodesData}
-                        countyData={countyDistributionData}
-                        year={`${startYear}-${endYear}`}
-                        selectedState={selectedCountyState}
-                        onStateChange={handleCountyStateChange}
-                    />
-                </Box>
-            </Grid>
-        </Grid>
+    const renderStateMap = (attribute: string) => (
+        <CropInsuranceMap
+            program="Crop Insurance"
+            attribute={attribute}
+            year={`${startYear}-${endYear}`}
+            mapColor={mapColor}
+            statePerformance={stateDistributionData}
+            stateCodes={stateCodesData}
+            allStates={allStatesData}
+        />
     );
+
+    const commonSectionProps = {
+        mapColor,
+        countyDistributionData,
+        stateCodesData,
+        allStatesData,
+        selectedCountyState,
+        onCountyStateChange: handleCountyStateChange,
+        countyDataLoading,
+        onCountyDataRequest: fetchCountyData,
+        hasCountyData: countyDataLoaded,
+        level
+    };
+
+    const benefitAttributes = [
+        "totalNetFarmerBenefitInDollars",
+        "totalIndemnitiesInDollars",
+        "totalFarmerPaidPremiumInDollars",
+        "totalPremiumSubsidyInDollars"
+    ];
+    const benefitStateTitle = `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`;
+    const benefitCountyTitle = `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`;
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -388,54 +392,20 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "0" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalNetFarmerBenefit"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalNetFarmerBenefit"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalNetFarmerBenefit"
+                            metricLabel="Total Net Farmer Benefits"
+                            isVisible={checked === "0"}
+                            stateMapComponent={renderStateMap("totalNetFarmerBenefit")}
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
+                                benefitStateTitle,
+                                benefitAttributes
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={benefitCountyTitle}
+                            countyTableAttributes={benefitAttributes}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["0"], nextLevel)}
                         />
                     </Box>
@@ -445,54 +415,20 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "01" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalFarmerPaidPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalFarmerPaidPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalFarmerPaidPremium"
+                            metricLabel="Total Farmer Paid Premium"
+                            isVisible={checked === "01"}
+                            stateMapComponent={renderStateMap("totalFarmerPaidPremium")}
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
+                                benefitStateTitle,
+                                benefitAttributes
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={benefitCountyTitle}
+                            countyTableAttributes={benefitAttributes}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["01"], nextLevel)}
                         />
                     </Box>
@@ -502,54 +438,20 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "00" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalIndemnities"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalIndemnities"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalIndemnities"
+                            metricLabel="Total Indemnities"
+                            isVisible={checked === "00"}
+                            stateMapComponent={renderStateMap("totalIndemnities")}
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
+                                benefitStateTitle,
+                                benefitAttributes
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={benefitCountyTitle}
+                            countyTableAttributes={benefitAttributes}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["00"], nextLevel)}
                         />
                     </Box>
@@ -559,54 +461,20 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "02" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalPremium"
+                            metricLabel="Total Premium"
+                            isVisible={checked === "02"}
+                            stateMapComponent={renderStateMap("totalPremium")}
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
+                                benefitStateTitle,
+                                benefitAttributes
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={benefitCountyTitle}
+                            countyTableAttributes={benefitAttributes}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["02"], nextLevel)}
                         />
                     </Box>
@@ -616,54 +484,20 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "03" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalPremiumSubsidy"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalPremiumSubsidy"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalPremiumSubsidy"
+                            metricLabel="Total Premium Subsidy"
+                            isVisible={checked === "03"}
+                            stateMapComponent={renderStateMap("totalPremiumSubsidy")}
                             stateContentComponent={renderStateChartTableContent(
                                 true,
                                 checked,
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
+                                benefitStateTitle,
+                                benefitAttributes
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`,
-                                [
-                                    "totalNetFarmerBenefitInDollars",
-                                    "totalIndemnitiesInDollars",
-                                    "totalFarmerPaidPremiumInDollars",
-                                    "totalPremiumSubsidyInDollars"
-                                ]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={benefitCountyTitle}
+                            countyTableAttributes={benefitAttributes}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["03"], nextLevel)}
                         />
                     </Box>
@@ -673,40 +507,17 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "1" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="lossRatio"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="lossRatio"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="lossRatio"
+                            metricLabel="Loss Ratio"
+                            isVisible={checked === "1"}
+                            stateMapComponent={renderStateMap("lossRatio")}
                             stateContentComponent={renderStateTableOnlyContent(`Loss Ratio (${startYear}-${endYear})`, [
                                 "lossRatio"
                             ])}
-                            countyTableComponent={renderCountyTable(`Loss Ratio by County (${startYear}-${endYear})`, [
-                                "lossRatio"
-                            ])}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={`Loss Ratio by County (${startYear}-${endYear})`}
+                            countyTableAttributes={["lossRatio"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["1"], nextLevel)}
                         />
                     </Box>
@@ -716,42 +527,18 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "2" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="averageLiabilities"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="averageLiabilities"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="averageLiabilities"
+                            metricLabel="Average Liabilities"
+                            isVisible={checked === "2"}
+                            stateMapComponent={renderStateMap("averageLiabilities")}
                             stateContentComponent={renderStateTableOnlyContent(
                                 `Average Liabilities (${startYear}-${endYear})`,
                                 ["averageLiabilitiesInDollars"]
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Average Liabilities by County (${startYear}-${endYear})`,
-                                ["averageLiabilitiesInDollars"]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={`Average Liabilities by County (${startYear}-${endYear})`}
+                            countyTableAttributes={["averageLiabilitiesInDollars"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["2"], nextLevel)}
                         />
                     </Box>
@@ -761,30 +548,12 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "3" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="totalPoliciesEarningPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="totalPoliciesEarningPremium"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="totalPoliciesEarningPremium"
+                            metricLabel="Total Policies Earning Premium"
+                            isVisible={checked === "3"}
+                            stateMapComponent={renderStateMap("totalPoliciesEarningPremium")}
                             stateContentComponent={
                                 <Box
                                     className="chartArea"
@@ -855,14 +624,8 @@ export default function CropInsurancePage(): JSX.Element {
                                     </Grid>
                                 </Box>
                             }
-                            countyTableComponent={renderCountyTable(
-                                `Total Policies Earning Premium and Total Indemnities by County (${startYear}-${endYear})`,
-                                ["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={`Total Policies Earning Premium and Total Indemnities by County (${startYear}-${endYear})`}
+                            countyTableAttributes={["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["3"], nextLevel)}
                         />
                     </Box>
@@ -872,42 +635,18 @@ export default function CropInsurancePage(): JSX.Element {
                         className="fullWidthMainContent"
                         sx={{ display: checked !== "4" ? "none" : "block" }}
                     >
-                        <MapTableWithLevelSwitch
-                            stateMapComponent={
-                                <CropInsuranceMap
-                                    program="Crop Insurance"
-                                    attribute="averageInsuredAreaInAcres"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    statePerformance={stateDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                />
-                            }
-                            countyMapComponent={
-                                <CropInsuranceCountyMap
-                                    attribute="averageInsuredAreaInAcres"
-                                    year={`${startYear}-${endYear}`}
-                                    mapColor={mapColor}
-                                    countyPerformance={countyDistributionData}
-                                    stateCodes={stateCodesData}
-                                    allStates={allStatesData}
-                                    selectedState={selectedCountyState}
-                                    onStateChange={handleCountyStateChange}
-                                />
-                            }
+                        <CropInsuranceCountySection
+                            {...commonSectionProps}
+                            attribute="averageInsuredAreaInAcres"
+                            metricLabel="Average Insured Area in Acres"
+                            isVisible={checked === "4"}
+                            stateMapComponent={renderStateMap("averageInsuredAreaInAcres")}
                             stateContentComponent={renderStateTableOnlyContent(
                                 `Average Insured Area in Acres (${startYear}-${endYear})`,
                                 ["averageInsuredAreaInAcres"]
                             )}
-                            countyTableComponent={renderCountyTable(
-                                `Average Insured Area in Acres by County (${startYear}-${endYear})`,
-                                ["averageInsuredAreaInAcres"]
-                            )}
-                            countyDataLoading={countyDataLoading}
-                            onCountyDataRequest={fetchCountyData}
-                            hasCountyData={countyDataLoaded}
-                            level={level}
+                            countyTableTitle={`Average Insured Area in Acres by County (${startYear}-${endYear})`}
+                            countyTableAttributes={["averageInsuredAreaInAcres"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["4"], nextLevel)}
                         />
                     </Box>
