@@ -22,6 +22,8 @@ import {
     normalizeCountyFips
 } from "../../utils/countyGeo";
 import CountyBreakdownTables from "./cropSelection/CountyBreakdownTables";
+import SelectionTitle from "../shared/SelectionTitle";
+import { ALL_CROPS_SENTINEL } from "./cropSelection/commodityMapping";
 
 const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5]; // PI requests the loss ratio to have specific thresholds that are different from the value-based attributes
 
@@ -504,6 +506,16 @@ const CropInsuranceCountyMap = ({
             .split(" ")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+        const selectionTitle = (
+            <SelectionTitle
+                metricLabel={metricLabel || displayAttribute}
+                selectedYears={yearKeys.length > 0 ? yearKeys : [year]}
+                selectedCrops={selectedCrops}
+                allCropsSentinel={ALL_CROPS_SENTINEL}
+                selectedState={selectedState}
+                noWrap
+            />
+        );
 
         if (attribute === "totalNetFarmerBenefit") {
             return (
@@ -527,10 +539,7 @@ const CropInsuranceCountyMap = ({
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                 </div>
             );
@@ -557,10 +566,7 @@ const CropInsuranceCountyMap = ({
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                 </div>
             );
@@ -570,10 +576,7 @@ const CropInsuranceCountyMap = ({
             return (
                 <div>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                     <Box display="flex" justifyContent="center">
                         <Typography noWrap variant="subtitle2" sx={{ color: "#AAA" }}>
@@ -583,12 +586,7 @@ const CropInsuranceCountyMap = ({
                 </div>
             );
         }
-        return (
-            <Typography noWrap variant="h6">
-                <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                {selectedState !== "All States" && <span> - {selectedState}</span>}
-            </Typography>
-        );
+        return selectionTitle;
     };
 
     return (

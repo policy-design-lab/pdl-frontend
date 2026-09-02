@@ -9,6 +9,7 @@ import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
 import { formatCurrency } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
+import { csvFilenameFromTitle } from "../shared/titleUtils";
 
 const Styles = styled.div`
     padding: 0;
@@ -105,7 +106,7 @@ function Table({ columns, data, tableTitle }: { columns: any; data: any; tableTi
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
 
     return (
         <div style={{ width: "100%" }}>

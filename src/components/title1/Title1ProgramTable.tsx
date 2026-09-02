@@ -13,6 +13,7 @@ import {
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
 import "../../styles/table.css";
+import { csvFilenameFromTitle } from "../shared/titleUtils";
 
 function Title1ProgramTable({
     tableTitle,
@@ -646,7 +647,7 @@ function Table({
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
     return (
         <div style={{ width: "100%" }}>
             {data && data.length > 0 && (

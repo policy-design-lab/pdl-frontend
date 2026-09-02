@@ -8,6 +8,7 @@ import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from 
 import "../../styles/table.css";
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
+import { csvFilenameFromTitle } from "../shared/titleUtils";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -243,7 +244,7 @@ function Table({
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
 
     return (
         <div style={{ width: "100%" }}>

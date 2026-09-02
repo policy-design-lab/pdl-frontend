@@ -323,7 +323,8 @@ export default function CropInsurancePage(): JSX.Element {
         "totalPremiumSubsidyInDollars"
     ];
     const benefitStateTitle = `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy (${startYear}-${endYear})`;
-    const benefitCountyTitle = `Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County (${startYear}-${endYear})`;
+    const benefitCountyTitle =
+        "Total Net Farmer Benefits, Total Indemnities, Total Farmer Paid Premium and Premium Subsidy by County";
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -516,7 +517,7 @@ export default function CropInsurancePage(): JSX.Element {
                             stateContentComponent={renderStateTableOnlyContent(`Loss Ratio (${startYear}-${endYear})`, [
                                 "lossRatio"
                             ])}
-                            countyTableTitle={`Loss Ratio by County (${startYear}-${endYear})`}
+                            countyTableTitle="Loss Ratio by County"
                             countyTableAttributes={["lossRatio"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["1"], nextLevel)}
                         />
@@ -537,7 +538,7 @@ export default function CropInsurancePage(): JSX.Element {
                                 `Average Liabilities (${startYear}-${endYear})`,
                                 ["averageLiabilitiesInDollars"]
                             )}
-                            countyTableTitle={`Average Liabilities by County (${startYear}-${endYear})`}
+                            countyTableTitle="Average Liabilities by County"
                             countyTableAttributes={["averageLiabilitiesInDollars"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["2"], nextLevel)}
                         />
@@ -624,7 +625,7 @@ export default function CropInsurancePage(): JSX.Element {
                                     </Grid>
                                 </Box>
                             }
-                            countyTableTitle={`Total Policies Earning Premium and Total Indemnities by County (${startYear}-${endYear})`}
+                            countyTableTitle="Total Policies Earning Premium and Total Indemnities by County"
                             countyTableAttributes={["totalPoliciesEarningPremium", "totalIndemnitiesInDollars"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["3"], nextLevel)}
                         />
@@ -645,7 +646,7 @@ export default function CropInsurancePage(): JSX.Element {
                                 `Average Insured Area in Acres (${startYear}-${endYear})`,
                                 ["averageInsuredAreaInAcres"]
                             )}
-                            countyTableTitle={`Average Insured Area in Acres by County (${startYear}-${endYear})`}
+                            countyTableTitle="Average Insured Area in Acres by County"
                             countyTableAttributes={["averageInsuredAreaInAcres"]}
                             onLevelChange={(nextLevel) => setMapAndLevel(cropInsuranceMapIdByChecked["4"], nextLevel)}
                         />

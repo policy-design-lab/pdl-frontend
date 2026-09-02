@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import {
@@ -17,6 +16,10 @@ import {
 import "../../styles/table.css";
 import { ALL_CROPS_SENTINEL } from "./cropSelection/commodityMapping";
 import { formatMetric, resolveMetricKey } from "./cropSelection/CountyBreakdownTables";
+import ExportCsvButton from "../shared/ExportCsvButton";
+import InfoTooltip from "../shared/InfoTooltip";
+import SelectionTitle from "../shared/SelectionTitle";
+import { csvFilenameFromTitle, formatSelectionTitle } from "../shared/titleUtils";
 
 interface CropInsuranceCountyTableProps {
     tableTitle: string;
@@ -83,14 +86,23 @@ const Styles = styled.div`
     th.numeric {
         text-align: right;
     }
-    .downloadbtn {
-        display: inline-block;
-        margin-bottom: 0.5rem;
-        color: #2f7164;
-        text-decoration: none;
-        font-size: 0.9em;
-    }
 `;
+
+const LOSS_RATIO_TOOLTIP = "Loss Ratio = Total Indemnities / Total Premium";
+
+const lossRatioHeader = (
+    <Box component="span" sx={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-end" }}>
+        <Box component="span" sx={{ display: "inline-flex", alignItems: "center" }}>
+            LOSS RATIO
+            <Box component="span" onClick={(event) => event.stopPropagation()}>
+                <InfoTooltip title={LOSS_RATIO_TOOLTIP} compact />
+            </Box>
+        </Box>
+        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
+            (selected)
+        </Box>
+    </Box>
+);
 
 function CropInsuranceCountyTable({
     tableTitle,
@@ -158,7 +170,8 @@ function CropInsuranceCountyTable({
             .filter((attr) => !skipColumns.includes(attr))
             .forEach((attr) => {
                 columnPrep.push({
-                    Header: headerFromAttribute(attr).toUpperCase(),
+                    Header: attr === "lossRatio" ? lossRatioHeader : headerFromAttribute(attr).toUpperCase(),
+                    csvHeader: headerFromAttribute(attr).toUpperCase(),
                     accessor: attr,
                     metric: attr,
                     numeric: true
@@ -204,7 +217,7 @@ function CropInsuranceCountyTable({
         const startIndex = columnPage * COLUMNS_PER_PAGE + IDENTITY_COLUMN_COUNT;
         const endIndex = Math.min(startIndex + COLUMNS_PER_PAGE, baseColumns.length);
         const trailing = Array.from({ length: Math.max(0, endIndex - startIndex) }, (_, i) => i + startIndex);
-        return [0, 1, 2, ...trailing];
+        return [0, 1, ...trailing];
     }, [columnPage, baseColumns.length]);
 
     const csvData = React.useMemo(
@@ -213,10 +226,11 @@ function CropInsuranceCountyTable({
                 const csvRow: Record<string, string | number> = {};
                 baseColumns.forEach((column: any) => {
                     const value = readPath(row, column.accessor);
+                    const header = column.csvHeader ?? column.Header;
                     if (column.numeric) {
-                        csvRow[column.Header] = Number.isFinite(Number(value)) ? Number(value) : 0;
+                        csvRow[header] = Number.isFinite(Number(value)) ? Number(value) : 0;
                     } else {
-                        csvRow[column.Header] = value ?? "";
+                        csvRow[header] = value ?? "";
                     }
                 });
                 return csvRow;
@@ -240,8 +254,12 @@ function CropInsuranceCountyTable({
                 >
                     <Grid item xs={8} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
                         <Box id="cropInsuranceCountyTableHeader" sx={{ width: "100%" }}>
-                            <Typography
-                                variant="h6"
+                            <SelectionTitle
+                                metricLabel={`Comparing ${tableTitle}`}
+                                selectedYears={yearKeys}
+                                selectedCrops={selectedCrops}
+                                allCropsSentinel={ALL_CROPS_SENTINEL}
+                                selectedState={selectedState}
                                 sx={{
                                     fontWeight: 400,
                                     paddingLeft: 0,
@@ -249,9 +267,7 @@ function CropInsuranceCountyTable({
                                     color: "#212121",
                                     paddingTop: 0.6
                                 }}
-                            >
-                                Comparing {tableTitle}
-                            </Typography>
+                            />
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
@@ -330,7 +346,14 @@ function CropInsuranceCountyTable({
                             pageSize: 10,
                             pageIndex: 0
                         }}
-                        tableTitle={`Comparing ${tableTitle}`}
+                        tableTitle={formatSelectionTitle(
+                            `Comparing ${tableTitle}`,
+                            yearKeys,
+                            selectedCrops,
+                            ALL_CROPS_SENTINEL,
+                            "All Commodities",
+                            selectedState
+                        )}
                     />
                 </TableContainer>
             </Styles>
@@ -406,15 +429,11 @@ function Table({
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
 
     return (
         <div style={{ width: "100%" }}>
-            {data && data.length > 0 && (
-                <CSVLink className="downloadbtn" filename={fileName} data={csvData}>
-                    Export This Table to CSV
-                </CSVLink>
-            )}
+            {data && data.length > 0 && <ExportCsvButton filename={fileName} data={csvData} />}
             <table {...getTableProps()} style={{ width: "100%" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
