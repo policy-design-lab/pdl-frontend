@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { CSVLink } from "react-csv";
+import ExportCsvButton from "../ExportCsvButton";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
@@ -80,18 +80,6 @@ const Styles = styled.div`
             margin-top: 8px;
         }
     }
-
-    .downloadbtn {
-        background-color: rgba(47, 113, 100, 1);
-        padding: 8px 16px;
-        border-radius: 4px;
-        color: #fff;
-        text-decoration: none;
-        display: block;
-        cursor: pointer;
-        margin-bottom: 1em;
-        text-align: center;
-    }
 `;
 
 function Table({ programName, columns, data }) {
@@ -136,9 +124,7 @@ function Table({ programName, columns, data }) {
         <div>
             {data && data.length > 0 ? (
                 <div style={{ width: "100%" }}>
-                    <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
-                        Export This Table to CSV
-                    </CSVLink>
+                    <ExportCsvButton filename={fileName} data={getCSVData(headerGroups, data)} />
                     <Box
                         sx={{
                             display: "flex",
