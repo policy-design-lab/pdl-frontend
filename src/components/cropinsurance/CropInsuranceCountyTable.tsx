@@ -1,13 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import { CSVLink } from "react-csv";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Grid, TableContainer, Typography, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from "../shared/TableCompareFunctions";
+import {
+    Button,
+    Grid,
+    TableContainer,
+    Typography,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+} from "@mui/material";
 import "../../styles/table.css";
-import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
-import getCSVData from "../shared/getCSVData";
+import { ALL_CROPS_SENTINEL } from "./cropSelection/commodityMapping";
+import { formatMetric, resolveMetricKey } from "./cropSelection/CountyBreakdownTables";
+import ExportCsvButton from "../shared/ExportCsvButton";
+import InfoTooltip from "../shared/InfoTooltip";
+import SelectionTitle from "../shared/SelectionTitle";
+import { csvFilenameFromTitle, formatSelectionTitle } from "../shared/titleUtils";
 
 interface CropInsuranceCountyTableProps {
     tableTitle: string;
@@ -18,7 +30,79 @@ interface CropInsuranceCountyTableProps {
     skipColumns: string[];
     selectedState: string;
     onStateChange: (state: string) => void;
+    selectedCrops?: string[];
+    yearKeys?: string[];
+    attribute?: string;
 }
+
+const IDENTITY_COLUMN_COUNT = 3;
+const COLUMNS_PER_PAGE = 6;
+
+const headerFromAttribute = (attribute: string): string =>
+    attribute
+        .replace(/InDollars$/, "")
+        .replace(/InAcres$/, "")
+        .replace(/([A-Z])/g, " $1")
+        .trim()
+        .split(" ")
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+const readPath = (row: any, path: string): any => {
+    if (!path.includes(".")) {
+        return row ? row[path] : undefined;
+    }
+    return path.split(".").reduce((acc: any, key: string) => (acc == null ? acc : acc[key]), row);
+};
+
+const Styles = styled.div`
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    table {
+        border-spacing: 0;
+        border: 1px solid #e4ebe7;
+        border-left: none;
+        border-right: none;
+        width: 100%;
+    }
+    th,
+    td {
+        margin: 0;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e4ebe7;
+        border-right: none;
+    }
+    th {
+        background-color: rgba(47, 113, 100, 0.08);
+        color: #2f7164;
+        font-weight: 400;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    td.numeric {
+        text-align: right;
+    }
+    th.numeric {
+        text-align: right;
+    }
+`;
+
+const LOSS_RATIO_TOOLTIP = "Loss Ratio = Total Indemnities / Total Premium";
+
+const lossRatioHeader = (
+    <Box component="span" sx={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-end" }}>
+        <Box component="span" sx={{ display: "inline-flex", alignItems: "center" }}>
+            LOSS RATIO
+            <Box component="span" onClick={(event) => event.stopPropagation()}>
+                <InfoTooltip title={LOSS_RATIO_TOOLTIP} compact />
+            </Box>
+        </Box>
+        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
+            (selected)
+        </Box>
+    </Box>
+);
 
 function CropInsuranceCountyTable({
     tableTitle,
@@ -28,8 +112,13 @@ function CropInsuranceCountyTable({
     year,
     skipColumns,
     selectedState,
-    onStateChange
+    onStateChange,
+    selectedCrops = [],
+    yearKeys = [],
+    attribute = ""
 }: CropInsuranceCountyTableProps): JSX.Element {
+    const [columnPage, setColumnPage] = React.useState(0);
+
     const countyRows = React.useMemo(() => {
         if (!countyData || !countyData[year]) {
             return [];
@@ -57,145 +146,97 @@ function CropInsuranceCountyTable({
 
     const resultData = React.useMemo(
         () =>
-            countyRows.map((county: any) => {
-                const stateName = stateCodes[county.state] || county.state;
-                const newRecord: any = {
-                    state: stateName,
-                    county: county.countyName
-                };
-
-                attributes.forEach((attribute) => {
-                    const attributeData = county[attribute];
-                    if (attribute === "lossRatio") {
-                        const ratioValue = Number(attributeData);
-                        newRecord[attribute] = Number.isFinite(ratioValue)
-                            ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
-                            : "0";
-                    } else if (attribute === "averageInsuredAreaInAcres") {
-                        newRecord[attribute] = formatNumericValue(Number(attributeData) || 0, 0);
-                    } else if (attribute === "totalPoliciesEarningPremium") {
-                        newRecord[attribute] = formatNumericValue(Number(attributeData) || 0, 0);
-                    } else {
-                        newRecord[attribute] = formatCurrency(attributeData, 0);
-                    }
-                });
-
-                return newRecord;
-            }),
-        [countyRows, attributes, stateCodes]
+            countyRows.map((county: any) => ({
+                ...county,
+                state: stateCodes[county.state] || county.state,
+                county: county.countyName,
+                fips: county.countyFips
+            })),
+        [countyRows, stateCodes]
     );
 
-    const columns = React.useMemo(() => {
-        const columnPrep: any[] = [];
-        columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
-        columnPrep.push({ Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic });
-        attributes.forEach((attribute) => {
-            let sortMethod = compareWithDollarSign;
-            if (attribute === "lossRatio") sortMethod = compareWithNumber;
-            if (attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium") {
-                sortMethod = compareWithNumber;
-            }
-            columnPrep.push({
-                Header: attribute
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()
-                    .split(" ")
-                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")
-                    .toUpperCase(),
-                accessor: attribute,
-                sortType: sortMethod
+    const showYearColumns = yearKeys.length > 1;
+    const showCropColumns = selectedCrops.length > 0 && !selectedCrops.includes(ALL_CROPS_SENTINEL);
+    const breakdownAttribute = attribute || attributes[0] || "";
+
+    const baseColumns = React.useMemo(() => {
+        const columnPrep: any[] = [
+            { Header: "County Name", accessor: "county", numeric: false },
+            { Header: "State", accessor: "state", numeric: false },
+            { Header: "FIPS Code", accessor: "fips", numeric: false }
+        ];
+
+        attributes
+            .filter((attr) => !skipColumns.includes(attr))
+            .forEach((attr) => {
+                columnPrep.push({
+                    Header: attr === "lossRatio" ? lossRatioHeader : headerFromAttribute(attr).toUpperCase(),
+                    csvHeader: headerFromAttribute(attr).toUpperCase(),
+                    accessor: attr,
+                    metric: attr,
+                    numeric: true
+                });
             });
-        });
+
+        const breakdownKey = resolveMetricKey(breakdownAttribute);
+
+        if (showYearColumns) {
+            yearKeys.forEach((yearKey) => {
+                columnPrep.push({
+                    Header: `${yearKey} ${headerFromAttribute(breakdownAttribute)}`,
+                    accessor: `yearBreakdown.${yearKey}.${breakdownKey}`,
+                    metric: breakdownAttribute,
+                    numeric: true
+                });
+            });
+        }
+
+        if (showCropColumns) {
+            selectedCrops.forEach((crop) => {
+                columnPrep.push({
+                    Header: `${crop} ${headerFromAttribute(breakdownAttribute)}`,
+                    accessor: `commodityBreakdown.${crop}.${breakdownKey}`,
+                    metric: breakdownAttribute,
+                    numeric: true
+                });
+            });
+        }
+
         return columnPrep;
-    }, [attributes]);
+    }, [attributes, skipColumns, showYearColumns, showCropColumns, yearKeys, selectedCrops, breakdownAttribute]);
 
-    const Styles = styled.div`
-        padding: 0;
-        margin: 0;
+    const totalColumnPages = Math.max(1, Math.ceil((baseColumns.length - IDENTITY_COLUMN_COUNT) / COLUMNS_PER_PAGE));
 
-        table {
-            border-spacing: 0;
-            border: 1px solid #e4ebe7;
-            border-left: none;
-            border-right: none;
-            width: 100%;
+    React.useEffect(() => {
+        if (columnPage > totalColumnPages - 1) {
+            setColumnPage(0);
+        }
+    }, [columnPage, totalColumnPages]);
 
-            tr {
-                :last-child {
-                    td {
-                        border-bottom: 0;
+    const visibleColumnIndices = React.useMemo(() => {
+        const startIndex = columnPage * COLUMNS_PER_PAGE + IDENTITY_COLUMN_COUNT;
+        const endIndex = Math.min(startIndex + COLUMNS_PER_PAGE, baseColumns.length);
+        const trailing = Array.from({ length: Math.max(0, endIndex - startIndex) }, (_, i) => i + startIndex);
+        return [0, 1, ...trailing];
+    }, [columnPage, baseColumns.length]);
+
+    const csvData = React.useMemo(
+        () =>
+            resultData.map((row: any) => {
+                const csvRow: Record<string, string | number> = {};
+                baseColumns.forEach((column: any) => {
+                    const value = readPath(row, column.accessor);
+                    const header = column.csvHeader ?? column.Header;
+                    if (column.numeric) {
+                        csvRow[header] = Number.isFinite(Number(value)) ? Number(value) : 0;
+                    } else {
+                        csvRow[header] = value ?? "";
                     }
-                }
-            }
-
-            th {
-                background-color: rgba(241, 241, 241, 1);
-                padding: 1em 2em;
-                cursor: pointer;
-                text-align: left;
-            }
-
-            th:not(:first-of-type):not(:nth-of-type(2)) {
-                text-align: right;
-            }
-
-            td[class$="cell0"] {
-                padding-right: 2em;
-            }
-
-            td[class$="cell1"] {
-                padding-right: 2em;
-            }
-
-            td[class$="cell2"],
-            td[class$="cell3"],
-            td[class$="cell4"],
-            td[class$="cell5"],
-            td[class$="cell6"] {
-                text-align: right;
-            }
-
-            td {
-                padding: 1em 2em;
-                border-bottom: 1px solid #e4ebe7;
-                border-right: none;
-
-                :last-child {
-                    border-right: 0;
-                }
-            }
-        }
-        .pagination {
-            margin-top: 1.5em;
-        }
-
-        .downloadbtn {
-            background-color: rgba(47, 113, 100, 1);
-            padding: 8px 16px;
-            border-radius: 4px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
-            margin-bottom: 1em;
-            text-align: center;
-        }
-
-        @media screen and (max-width: 1024px) {
-            th,
-            td {
-                padding: 8px;
-            }
-            td[class$="cell0"],
-            td[class$="cell1"] {
-                padding-right: 1em;
-            }
-            .pagination {
-                margin-top: 8px;
-            }
-        }
-    `;
+                });
+                return csvRow;
+            }),
+        [resultData, baseColumns]
+    );
 
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
@@ -213,8 +254,12 @@ function CropInsuranceCountyTable({
                 >
                     <Grid item xs={8} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
                         <Box id="cropInsuranceCountyTableHeader" sx={{ width: "100%" }}>
-                            <Typography
-                                variant="h6"
+                            <SelectionTitle
+                                metricLabel={`Comparing ${tableTitle}`}
+                                selectedYears={yearKeys}
+                                selectedCrops={selectedCrops}
+                                allCropsSentinel={ALL_CROPS_SENTINEL}
+                                selectedState={selectedState}
                                 sx={{
                                     fontWeight: 400,
                                     paddingLeft: 0,
@@ -222,9 +267,7 @@ function CropInsuranceCountyTable({
                                     color: "#212121",
                                     paddingTop: 0.6
                                 }}
-                            >
-                                Comparing {tableTitle}
-                            </Typography>
+                            />
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
@@ -262,15 +305,55 @@ function CropInsuranceCountyTable({
                         </FormControl>
                     </Grid>
                 </Grid>
+                {totalColumnPages > 1 && (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2, gap: 0.5 }}>
+                        <Button size="small" onClick={() => setColumnPage(0)} disabled={columnPage === 0}>
+                            {"<<"}
+                        </Button>
+                        <Button
+                            size="small"
+                            onClick={() => setColumnPage((prev) => Math.max(0, prev - 1))}
+                            disabled={columnPage === 0}
+                        >
+                            {"<"}
+                        </Button>
+                        <Typography variant="body2" sx={{ px: 1, color: "#2F7164" }}>
+                            Column Page <strong>{columnPage + 1}</strong> of <strong>{totalColumnPages}</strong>
+                        </Typography>
+                        <Button
+                            size="small"
+                            onClick={() => setColumnPage((prev) => Math.min(totalColumnPages - 1, prev + 1))}
+                            disabled={columnPage >= totalColumnPages - 1}
+                        >
+                            {">"}
+                        </Button>
+                        <Button
+                            size="small"
+                            onClick={() => setColumnPage(totalColumnPages - 1)}
+                            disabled={columnPage >= totalColumnPages - 1}
+                        >
+                            {">>"}
+                        </Button>
+                    </Box>
+                )}
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
-                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
+                        columns={baseColumns}
                         data={resultData}
+                        csvData={csvData}
+                        visibleColumnIndices={visibleColumnIndices}
                         initialState={{
                             pageSize: 10,
                             pageIndex: 0
                         }}
-                        tableTitle={`Comparing ${tableTitle}`}
+                        tableTitle={formatSelectionTitle(
+                            `Comparing ${tableTitle}`,
+                            yearKeys,
+                            selectedCrops,
+                            ALL_CROPS_SENTINEL,
+                            "All Commodities",
+                            selectedState
+                        )}
                     />
                 </TableContainer>
             </Styles>
@@ -281,15 +364,44 @@ function CropInsuranceCountyTable({
 function Table({
     columns,
     data,
+    csvData,
+    visibleColumnIndices,
     initialState,
     tableTitle
 }: {
     columns: any;
     data: any;
+    csvData: any;
+    visibleColumnIndices: number[];
     initialState: any;
     tableTitle: string;
 }) {
     const state = React.useMemo(() => initialState, []);
+    const sortTypes = React.useMemo(
+        () => ({
+            emptyBottomNumeric: (rowA: any, rowB: any, columnId: string) => {
+                const a = Number(rowA.values[columnId]);
+                const b = Number(rowB.values[columnId]);
+                const safeA = Number.isFinite(a) ? a : 0;
+                const safeB = Number.isFinite(b) ? b : 0;
+                if (safeA === safeB) return 0;
+                return safeA > safeB ? 1 : -1;
+            },
+            emptyBottomText: (rowA: any, rowB: any, columnId: string) =>
+                String(rowA.values[columnId] ?? "").localeCompare(String(rowB.values[columnId] ?? ""))
+        }),
+        []
+    );
+
+    const tableColumns = React.useMemo(
+        () =>
+            columns.map((column: any) => ({
+                ...column,
+                sortType: column.numeric ? "emptyBottomNumeric" : "emptyBottomText"
+            })),
+        [columns]
+    );
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -308,74 +420,73 @@ function Table({
         state: { pageIndex, pageSize }
     } = useTable(
         {
-            columns,
+            columns: tableColumns,
             data,
-            state
+            state,
+            sortTypes,
+            autoResetSortBy: false
         },
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
 
     return (
         <div style={{ width: "100%" }}>
-            {data && data.length > 0 && (
-                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
-                    Export This Table to CSV
-                </CSVLink>
-            )}
-            <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
+            {data && data.length > 0 && <ExportCsvButton filename={fileName} data={csvData} />}
+            <table {...getTableProps()} style={{ width: "100%" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
                         <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (
-                                <th
-                                    className={column.render("Header").replace(/\s/g, "")}
-                                    key={column.id}
-                                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    {...column.getHeaderProps({
-                                        style: {
-                                            paddingLeft: column.paddingLeft,
-                                            paddingRight: column.paddingRight
-                                        }
-                                    })}
-                                >
-                                    {column.render("Header")}
-                                    <span>
-                                        {(() => {
-                                            if (!column.isSorted)
-                                                return (
-                                                    <Box sx={{ ml: 1, display: "inline" }}>
-                                                        <SwapVertIcon />
-                                                    </Box>
-                                                );
-                                            if (column.isSortedDesc)
-                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
-                                            return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
-                                        })()}
-                                    </span>
-                                </th>
-                            ))}
+                            {headerGroup.headers
+                                .filter((_, index) => visibleColumnIndices.includes(index))
+                                .map((column: any) => (
+                                    <th
+                                        className={column.numeric ? "numeric" : ""}
+                                        key={column.id}
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    >
+                                        {column.render("Header")}
+                                        <span>
+                                            {(() => {
+                                                if (!column.isSorted)
+                                                    return (
+                                                        <Box sx={{ ml: 1, display: "inline" }}>
+                                                            <SwapVertIcon />
+                                                        </Box>
+                                                    );
+                                                if (column.isSortedDesc)
+                                                    return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
+                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
+                                            })()}
+                                        </span>
+                                    </th>
+                                ))}
                         </tr>
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {page.map((row, i) => {
+                    {page.map((row) => {
                         prepareRow(row);
                         return (
                             <tr key={row.id} {...row.getRowProps()}>
-                                {row.cells.map((cell, j) => {
-                                    return (
-                                        <td
-                                            className={`cell${j}`}
-                                            key={cell.id}
-                                            {...cell.getCellProps()}
-                                            style={{ width: "100%", whiteSpace: "nowrap" }}
-                                        >
-                                            {cell.render("Cell")}
-                                        </td>
-                                    );
-                                })}
+                                {row.cells
+                                    .filter((_, index) => visibleColumnIndices.includes(index))
+                                    .map((cell: any) => {
+                                        const { numeric, metric } = cell.column;
+                                        return (
+                                            <td
+                                                className={numeric ? "numeric" : ""}
+                                                key={cell.id}
+                                                {...cell.getCellProps()}
+                                                style={{ whiteSpace: "nowrap" }}
+                                            >
+                                                {numeric
+                                                    ? formatMetric(metric, Number(cell.value) || 0)
+                                                    : cell.render("Cell")}
+                                            </td>
+                                        );
+                                    })}
                             </tr>
                         );
                     })}

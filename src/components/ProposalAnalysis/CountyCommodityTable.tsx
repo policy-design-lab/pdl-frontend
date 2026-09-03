@@ -5,16 +5,9 @@ import { useTable, useSortBy, usePagination, useGlobalFilter } from "react-table
 import { CSVLink } from "react-csv";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import MapIcon from "@mui/icons-material/Map";
-import {
-    YearBreakdownData,
-    CountyObject,
-    getCountyNameFromFips,
-    generateTableTitle,
-    generateCsvFilename,
-    getTotalBaseAcres,
-    formatCellValue
-} from "./utils";
+import { YearBreakdownData, CountyObject, getCountyNameFromFips, getTotalBaseAcres, formatCellValue } from "./utils";
 import { formatCurrency } from "../shared/ConvertionFormats";
+import { csvFilenameFromTitle, generateTableTitle } from "../shared/titleUtils";
 
 interface ExtendedYearBreakdownData extends YearBreakdownData {
     paymentRate?: number;
@@ -177,9 +170,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
         currentPolicyTitle,
         proposedPolicyTitle
     ]);
-    const getCsvFilename = useMemo(() => {
-        return generateCsvFilename(selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear);
-    }, [selectedYear, selectedCommodities, selectedPrograms, viewMode, isAggregatedYear]);
+    const getCsvFilename = useMemo(() => csvFilenameFromTitle(getTableTitle), [getTableTitle]);
     const getTableData = React.useCallback(() => {
         if (isAggregatedYear) {
             const result: ExtendedCountyObject[] = [];
