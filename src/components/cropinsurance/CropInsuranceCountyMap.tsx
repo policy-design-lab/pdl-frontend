@@ -506,9 +506,10 @@ const CropInsuranceCountyMap = ({
             .split(" ")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+        const titleMetricLabel = (metricLabel || displayAttribute).replace(/^Average\s+/i, "");
         const selectionTitle = (
             <SelectionTitle
-                metricLabel={metricLabel || displayAttribute}
+                metricLabel={titleMetricLabel}
                 selectedYears={yearKeys.length > 0 ? yearKeys : [year]}
                 selectedCrops={selectedCrops}
                 allCropsSentinel={ALL_CROPS_SENTINEL}

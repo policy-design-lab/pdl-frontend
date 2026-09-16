@@ -171,6 +171,7 @@ function CropInsuranceCountyTable({
     );
 
     const showYearColumns = yearKeys.length > 1;
+    const isSingleYear = yearKeys.length === 1;
     const showCropColumns = selectedCrops.length > 0 && !selectedCrops.includes(ALL_CROPS_SENTINEL);
     const breakdownAttribute = attribute || attributes[0] || "";
 
@@ -185,14 +186,21 @@ function CropInsuranceCountyTable({
             .filter((attr) => !skipColumns.includes(attr))
             .forEach((attr) => {
                 let header: React.ReactNode = headerFromAttribute(attr).toUpperCase();
+                let csvHeader = headerFromAttribute(attr).toUpperCase();
                 if (attr === "lossRatio") {
                     header = lossRatioHeader;
                 } else if (AVERAGE_ATTRIBUTES.includes(attr)) {
-                    header = averageHeader(headerFromAttribute(attr).toUpperCase());
+                    if (isSingleYear) {
+                        csvHeader =
+                            `${yearKeys[0]} ${headerFromAttribute(attr).replace(/^Average\s+/i, "")}`.toUpperCase();
+                        header = csvHeader;
+                    } else {
+                        header = averageHeader(headerFromAttribute(attr).toUpperCase());
+                    }
                 }
                 columnPrep.push({
                     Header: header,
-                    csvHeader: headerFromAttribute(attr).toUpperCase(),
+                    csvHeader,
                     accessor: attr,
                     metric: attr,
                     numeric: true
@@ -225,7 +233,16 @@ function CropInsuranceCountyTable({
         }
 
         return columnPrep;
-    }, [attributes, skipColumns, showYearColumns, showCropColumns, yearKeys, selectedCrops, breakdownAttribute]);
+    }, [
+        attributes,
+        skipColumns,
+        showYearColumns,
+        showCropColumns,
+        isSingleYear,
+        yearKeys,
+        selectedCrops,
+        breakdownAttribute
+    ]);
 
     const totalColumnPages = Math.max(1, Math.ceil((baseColumns.length - IDENTITY_COLUMN_COUNT) / COLUMNS_PER_PAGE));
 

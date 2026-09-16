@@ -15,9 +15,7 @@ export const AVERAGE_ATTRIBUTES = ["averageLiabilitiesInDollars", "averageInsure
 
 export const AVERAGE_BASIS_NOTE = "Averaged per year = total across selected years / number of years selected";
 
-export const AVERAGE_METRIC_TOOLTIP =
-    "Averaged per year: the total across the selected years divided by the number of years selected. " +
-    "When a single year is selected, this equals that year's total.";
+export const AVERAGE_METRIC_TOOLTIP = AVERAGE_BASIS_NOTE;
 
 export const LOSS_RATIO_NOTE = "Loss Ratio = Total Indemnities / Total Premium";
 
