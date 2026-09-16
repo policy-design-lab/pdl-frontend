@@ -13,8 +13,6 @@ import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
 import MapLoadingOverlay from "../shared/MapLoadingOverlay";
-import DataSourceNote from "../shared/DataSourceNote";
-import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
 import {
     AVERAGE_BASIS_NOTE,
     HighlightPill,
@@ -321,7 +319,6 @@ const CropInsuranceMap = ({
                 />
                 {showMapLoading && <MapLoadingOverlay label="Rendering map..." />}
             </Box>
-            <DataSourceNote source={RMA_SUMMARY_OF_BUSINESS_SOURCE} href={RMA_SUMMARY_OF_BUSINESS_URL} />
             <div className="tooltip-container">
                 <ReactTooltip className={`${classes.customized_tooltip} tooltip`} backgroundColor={tooltipBkgColor}>
                     {content}

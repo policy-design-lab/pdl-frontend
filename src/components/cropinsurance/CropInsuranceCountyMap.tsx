@@ -22,8 +22,6 @@ import {
 } from "../../utils/countyGeo";
 import CountyBreakdownTables from "./cropSelection/CountyBreakdownTables";
 import SelectionTitle from "../shared/SelectionTitle";
-import DataSourceNote from "../shared/DataSourceNote";
-import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
 import {
     AVERAGE_BASIS_NOTE,
     HighlightPill,
@@ -777,7 +775,6 @@ const CropInsuranceCountyMap = ({
                     </Box>
                 </Box>
             </Box>
-            <DataSourceNote source={RMA_SUMMARY_OF_BUSINESS_SOURCE} href={RMA_SUMMARY_OF_BUSINESS_URL} />
             <div className="tooltip-container">
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
