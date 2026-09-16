@@ -20,6 +20,9 @@ import ExportCsvButton from "../shared/ExportCsvButton";
 import InfoTooltip from "../shared/InfoTooltip";
 import SelectionTitle from "../shared/SelectionTitle";
 import { csvFilenameFromTitle, formatSelectionTitle } from "../shared/titleUtils";
+import DataSourceNote from "../shared/DataSourceNote";
+import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
+import { AVERAGE_ATTRIBUTES, AVERAGE_METRIC_TOOLTIP, LOSS_RATIO_NOTE, PRF_ACRES_NOTE } from "./cropInsuranceConstants";
 
 interface CropInsuranceCountyTableProps {
     tableTitle: string;
@@ -88,14 +91,26 @@ const Styles = styled.div`
     }
 `;
 
-const LOSS_RATIO_TOOLTIP = "Loss Ratio = Total Indemnities / Total Premium";
+const averageHeader = (label: string) => (
+    <Box component="span" sx={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-end" }}>
+        <Box component="span" sx={{ display: "inline-flex", alignItems: "center" }}>
+            {label}
+            <Box component="span" onClick={(event) => event.stopPropagation()}>
+                <InfoTooltip title={AVERAGE_METRIC_TOOLTIP} compact />
+            </Box>
+        </Box>
+        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
+            (per year)
+        </Box>
+    </Box>
+);
 
 const lossRatioHeader = (
     <Box component="span" sx={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-end" }}>
         <Box component="span" sx={{ display: "inline-flex", alignItems: "center" }}>
             LOSS RATIO
             <Box component="span" onClick={(event) => event.stopPropagation()}>
-                <InfoTooltip title={LOSS_RATIO_TOOLTIP} compact />
+                <InfoTooltip title={LOSS_RATIO_NOTE} compact />
             </Box>
         </Box>
         <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
@@ -169,8 +184,14 @@ function CropInsuranceCountyTable({
         attributes
             .filter((attr) => !skipColumns.includes(attr))
             .forEach((attr) => {
+                let header: React.ReactNode = headerFromAttribute(attr).toUpperCase();
+                if (attr === "lossRatio") {
+                    header = lossRatioHeader;
+                } else if (AVERAGE_ATTRIBUTES.includes(attr)) {
+                    header = averageHeader(headerFromAttribute(attr).toUpperCase());
+                }
                 columnPrep.push({
-                    Header: attr === "lossRatio" ? lossRatioHeader : headerFromAttribute(attr).toUpperCase(),
+                    Header: header,
                     csvHeader: headerFromAttribute(attr).toUpperCase(),
                     accessor: attr,
                     metric: attr,
@@ -181,9 +202,10 @@ function CropInsuranceCountyTable({
         const breakdownKey = resolveMetricKey(breakdownAttribute);
 
         if (showYearColumns) {
+            const yearColumnLabel = headerFromAttribute(breakdownAttribute).replace(/^Average\s+/, "");
             yearKeys.forEach((yearKey) => {
                 columnPrep.push({
-                    Header: `${yearKey} ${headerFromAttribute(breakdownAttribute)}`,
+                    Header: `${yearKey} ${yearColumnLabel}`,
                     accessor: `yearBreakdown.${yearKey}.${breakdownKey}`,
                     metric: breakdownAttribute,
                     numeric: true
@@ -271,8 +293,7 @@ function CropInsuranceCountyTable({
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
-                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
-                                        policies)
+                                        {PRF_ACRES_NOTE}
                                     </Typography>
                                 </Box>
                             ) : null}
@@ -356,6 +377,7 @@ function CropInsuranceCountyTable({
                         )}
                     />
                 </TableContainer>
+                <DataSourceNote source={RMA_SUMMARY_OF_BUSINESS_SOURCE} href={RMA_SUMMARY_OF_BUSINESS_URL} />
             </Styles>
         </Box>
     );

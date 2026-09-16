@@ -9,6 +9,9 @@ import "../../styles/table.css";
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
 import { csvFilenameFromTitle } from "../shared/titleUtils";
+import DataSourceNote from "../shared/DataSourceNote";
+import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
+import { AVERAGE_ATTRIBUTES, AVERAGE_BASIS_NOTE, PRF_ACRES_NOTE } from "./cropInsuranceConstants";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -37,7 +40,7 @@ function CropInsuranceProgramTable({
             if (attr === "lossRatio") {
                 const ratioValue = Number(value);
                 newRecord[attr] = Number.isFinite(ratioValue)
-                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 2 })
                     : "0";
             } else if (attr === "averageInsuredAreaInAcres") {
                 newRecord[attr] = formatNumericValue(Number(value) || 0, 0);
@@ -168,11 +171,17 @@ function CropInsuranceProgramTable({
                             >
                                 Comparing {tableTitle}
                             </Typography>
+                            {attributes.some((attr) => AVERAGE_ATTRIBUTES.includes(attr)) ? (
+                                <Box display="flex" justifyContent="start">
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                        ({AVERAGE_BASIS_NOTE})
+                                    </Typography>
+                                </Box>
+                            ) : null}
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
-                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
-                                        policies)
+                                        {PRF_ACRES_NOTE}
                                     </Typography>
                                 </Box>
                             ) : null}
@@ -190,6 +199,7 @@ function CropInsuranceProgramTable({
                         tableTitle={`Comparing ${tableTitle}`}
                     />
                 </TableContainer>
+                <DataSourceNote source={RMA_SUMMARY_OF_BUSINESS_SOURCE} href={RMA_SUMMARY_OF_BUSINESS_URL} />
             </Styles>
         </Box>
     );

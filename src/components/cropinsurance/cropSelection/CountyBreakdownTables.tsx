@@ -37,7 +37,7 @@ export function formatMetric(attribute: string, value: number): string {
         return "-";
     }
     if (RATIO_ATTRIBUTES.includes(attribute)) {
-        return value.toLocaleString(undefined, { maximumFractionDigits: 3 });
+        return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
     }
     if (COUNT_ATTRIBUTES.includes(attribute)) {
         return formatNumericValue(value, 0);
