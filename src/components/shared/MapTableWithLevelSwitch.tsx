@@ -13,6 +13,8 @@ interface MapTableWithLevelSwitchProps {
     level?: "state" | "county";
     defaultLevel?: "state" | "county";
     onLevelChange?: (level: "state" | "county") => void;
+    countyControlsComponent?: React.ReactNode;
+    countyUnavailableComponent?: React.ReactNode;
 }
 
 const MapTableWithLevelSwitch = ({
@@ -25,7 +27,9 @@ const MapTableWithLevelSwitch = ({
     hasCountyData,
     level: controlledLevel,
     defaultLevel = "state",
-    onLevelChange
+    onLevelChange,
+    countyControlsComponent,
+    countyUnavailableComponent
 }: MapTableWithLevelSwitchProps): JSX.Element => {
     const [internalLevel, setInternalLevel] = useState<"state" | "county">(defaultLevel);
     const level = controlledLevel ?? internalLevel;
@@ -59,7 +63,10 @@ const MapTableWithLevelSwitch = ({
                 }}
             >
                 <Box sx={{ display: level !== "state" ? "none" : "block" }}>{stateMapComponent}</Box>
-                <Box sx={{ display: level !== "county" ? "none" : "block" }}>{hasCountyData && countyMapComponent}</Box>
+                <Box sx={{ display: level !== "county" ? "none" : "block" }}>
+                    {hasCountyData && countyControlsComponent}
+                    {hasCountyData && (countyUnavailableComponent || countyMapComponent)}
+                </Box>
                 <MapLevelSwitch level={level} onLevelChange={handleLevelChange} disabled={countyDataLoading} />
             </Box>
             <Box
@@ -79,7 +86,7 @@ const MapTableWithLevelSwitch = ({
                         m: "auto"
                     }}
                 >
-                    {hasCountyData && countyTableComponent}
+                    {hasCountyData && !countyUnavailableComponent && countyTableComponent}
                 </Box>
             </Box>
         </Box>

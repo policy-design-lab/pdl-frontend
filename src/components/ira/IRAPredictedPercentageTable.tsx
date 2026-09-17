@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { CSVLink } from "react-csv";
+import ExportCsvButton from "../shared/ExportCsvButton";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
@@ -264,18 +264,6 @@ function IRAPredictedPercentageTable({
                 margin-top: 8px;
             }
         }
-
-        .downloadbtn {
-            background-color: rgba(47, 113, 100, 1);
-            padding: 8px 16px;
-            border-radius: 4px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
-            margin-bottom: 1em;
-            text-align: center;
-        }
     `;
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
@@ -366,9 +354,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
         <div>
             {data && data.length > 0 ? (
                 <div style={{ width: "100%" }}>
-                    <CSVLink className="downloadbtn" filename="pdl-data.csv" data={getCSVData(headerGroups, data)}>
-                        Export This Table to CSV
-                    </CSVLink>
+                    <ExportCsvButton filename="pdl-data.csv" data={getCSVData(headerGroups, data)} />
                     <Box
                         sx={{
                             display: "flex",
