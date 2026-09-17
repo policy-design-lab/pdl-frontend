@@ -4,7 +4,6 @@ import { ComposableMap, Geographies, ZoomableGroup } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import * as d3 from "d3";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import DrawLegend from "../shared/DrawLegend";
@@ -21,16 +20,20 @@ import {
     loadCountyAndStateTopoJson,
     normalizeCountyFips
 } from "../../utils/countyGeo";
+import CountyBreakdownTables from "./cropSelection/CountyBreakdownTables";
+import SelectionTitle from "../shared/SelectionTitle";
+import {
+    AVERAGE_BASIS_NOTE,
+    HighlightPill,
+    LOSS_RATIO_NOTE,
+    LOSS_RATIO_THRESHOLDS,
+    NetFarmerBenefitNote,
+    PrfAcresCaption,
+    getLossRatioColors
+} from "./cropInsuranceConstants";
+import { ALL_CROPS_SENTINEL } from "./cropSelection/commodityMapping";
 
-const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5]; // PI requests the loss ratio to have specific thresholds that are different from the value-based attributes
-
-const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
-    mapColor[4],
-    mapColor[3],
-    "#E8C9A3",
-    "#B65700",
-    "#662500"
-];
+const lossRatioThresholds = LOSS_RATIO_THRESHOLDS;
 
 const getValueFromAttrDollar = (record: any, attribute: string): string => {
     let ans = "";
@@ -74,6 +77,9 @@ interface CropInsuranceCountyMapProps {
     allStates: any[];
     selectedState: string;
     onStateChange: (state: string) => void;
+    selectedCrops?: string[];
+    yearKeys?: string[];
+    metricLabel?: string;
 }
 
 const CropInsuranceCountyMap = ({
@@ -84,7 +90,10 @@ const CropInsuranceCountyMap = ({
     stateCodes,
     allStates,
     selectedState,
-    onStateChange
+    onStateChange,
+    selectedCrops = [],
+    yearKeys = [],
+    metricLabel = ""
 }: CropInsuranceCountyMapProps): JSX.Element => {
     const classes = useStyles();
     const [content, setContent] = useState<React.ReactNode>("");
@@ -399,17 +408,20 @@ const CropInsuranceCountyMap = ({
             if (!countyData) {
                 const tooltipContent = (
                     <div className="map_tooltip">
-                        <div className={classes.tooltip_header}>
-                            <b>{geo.properties?.name || "Unknown County"}</b>
+                        <div className={classes.tooltip_overall}>
+                            <div className={classes.tooltip_header}>
+                                <b>{geo.properties?.name || "Unknown County"}</b>
+                            </div>
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    <tr>
+                                        <td className={classes.tooltip_topcell_left}>No data available</td>
+                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                <tr>
-                                    <td className={classes.tooltip_topcell_left}>No data available</td>
-                                    <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div style={{ height: "8px", backgroundColor: tooltipBkgColor }} />
                     </div>
                 );
                 scheduleTooltipContent(tooltipContent);
@@ -421,44 +433,65 @@ const CropInsuranceCountyMap = ({
 
             const tooltipContent = (
                 <div className="map_tooltip">
-                    <div className={classes.tooltip_header}>
-                        <b>
-                            {countyData.countyName}, {stateName}
-                        </b>
+                    <div className={classes.tooltip_overall}>
+                        <div className={classes.tooltip_header}>
+                            <b>
+                                {countyData.countyName}, {stateName}
+                            </b>
+                        </div>
+                        {attr === 1 ? (
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    <tr>
+                                        <td className={classes.tooltip_topcell_left}>
+                                            {Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                                        </td>
+                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        ) : (
+                            <table className={classes.tooltip_table}>
+                                <tbody>
+                                    {attr === 2 ? (
+                                        <tr>
+                                            <td className={classes.tooltip_topcell_left}>{ShortFormat(value)}</td>
+                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                        </tr>
+                                    ) : (
+                                        <tr>
+                                            <td className={classes.tooltip_topcell_left}>${ShortFormat(value)}</td>
+                                            <td className={classes.tooltip_topcell_right}>&nbsp;</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
+                        <CountyBreakdownTables
+                            record={countyData}
+                            attribute={attribute}
+                            metricLabel={metricLabel}
+                            yearKeys={yearKeys}
+                            selectedCrops={selectedCrops}
+                        />
                     </div>
-                    {attr === 1 ? (
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                <tr>
-                                    <td className={classes.tooltip_topcell_left}>
-                                        {Number(value).toLocaleString(undefined, { maximumFractionDigits: 3 })}
-                                    </td>
-                                    <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    ) : (
-                        <table className={classes.tooltip_table}>
-                            <tbody>
-                                {attr === 2 ? (
-                                    <tr>
-                                        <td className={classes.tooltip_topcell_left}>{ShortFormat(value)}</td>
-                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                    </tr>
-                                ) : (
-                                    <tr>
-                                        <td className={classes.tooltip_topcell_left}>${ShortFormat(value)}</td>
-                                        <td className={classes.tooltip_topcell_right}>&nbsp;</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    )}
+                    <div style={{ height: "8px", backgroundColor: tooltipBkgColor }} />
                 </div>
             );
             scheduleTooltipContent(tooltipContent);
         },
-        [countyDataMap, countyValueMap, stateCodes, classes, attr, scheduleTooltipContent]
+        [
+            countyDataMap,
+            countyValueMap,
+            stateCodes,
+            classes,
+            attr,
+            scheduleTooltipContent,
+            attribute,
+            metricLabel,
+            yearKeys,
+            selectedCrops
+        ]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -473,33 +506,26 @@ const CropInsuranceCountyMap = ({
             .split(" ")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+        const titleMetricLabel = (metricLabel || displayAttribute).replace(/^Average\s+/i, "");
+        const selectionTitle = (
+            <SelectionTitle
+                metricLabel={titleMetricLabel}
+                selectedYears={yearKeys.length > 0 ? yearKeys : [year]}
+                selectedCrops={selectedCrops}
+                allCropsSentinel={ALL_CROPS_SENTINEL}
+                selectedState={selectedState}
+                noWrap
+            />
+        );
 
         if (attribute === "totalNetFarmerBenefit") {
             return (
                 <div>
-                    <Box display="flex" justifyContent="center" mb={2}>
-                        <Typography
-                            noWrap
-                            variant="subtitle2"
-                            sx={{
-                                color: "#2F7164",
-                                backgroundColor: "rgba(47, 113, 100, 0.12)",
-                                border: "1px solid rgba(47, 113, 100, 0.28)",
-                                borderRadius: "999px",
-                                px: 1.25,
-                                py: 0.35,
-                                fontWeight: 400
-                            }}
-                        >
-                            <b>Net Farmer Benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
-                            Farmer Paid Premium, Net Farmer Benefits = $0)
-                        </Typography>
-                    </Box>
+                    <HighlightPill>
+                        <NetFarmerBenefitNote />
+                    </HighlightPill>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                 </div>
             );
@@ -508,28 +534,9 @@ const CropInsuranceCountyMap = ({
         if (attribute === "lossRatio") {
             return (
                 <div>
-                    <Box display="flex" justifyContent="center" mb={2}>
-                        <Typography
-                            noWrap
-                            variant="subtitle2"
-                            sx={{
-                                color: "#2F7164",
-                                backgroundColor: "rgba(47, 113, 100, 0.12)",
-                                border: "1px solid rgba(47, 113, 100, 0.28)",
-                                borderRadius: "999px",
-                                px: 1.25,
-                                py: 0.35,
-                                fontWeight: 600
-                            }}
-                        >
-                            Loss Ratio = Total Indemnities / Total Premium
-                        </Typography>
-                    </Box>
+                    <HighlightPill fontWeight={600}>{LOSS_RATIO_NOTE}</HighlightPill>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                 </div>
             );
@@ -538,26 +545,25 @@ const CropInsuranceCountyMap = ({
         if (attribute === "averageInsuredAreaInAcres") {
             return (
                 <div>
+                    <HighlightPill>{AVERAGE_BASIS_NOTE}</HighlightPill>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="h6">
-                            <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                            {selectedState !== "All States" && <span> - {selectedState}</span>}
-                        </Typography>
+                        {selectionTitle}
                     </Box>
+                    <PrfAcresCaption />
+                </div>
+            );
+        }
+        if (attribute === "averageLiabilities") {
+            return (
+                <div>
+                    <HighlightPill>{AVERAGE_BASIS_NOTE}</HighlightPill>
                     <Box display="flex" justifyContent="center">
-                        <Typography noWrap variant="subtitle2" sx={{ color: "#AAA" }}>
-                            (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF) policies)
-                        </Typography>
+                        {selectionTitle}
                     </Box>
                 </div>
             );
         }
-        return (
-            <Typography noWrap variant="h6">
-                <strong>{displayAttribute}</strong> from <strong>{year}</strong>
-                {selectedState !== "All States" && <span> - {selectedState}</span>}
-            </Typography>
-        );
+        return selectionTitle;
     };
 
     return (
@@ -774,6 +780,10 @@ const CropInsuranceCountyMap = ({
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
                     backgroundColor={tooltipBkgColor}
+                    effect="float"
+                    clickable={false}
+                    offset={{ top: 5, left: 5 }}
+                    place="right"
                     id="county-map-tooltip"
                 >
                     {content}

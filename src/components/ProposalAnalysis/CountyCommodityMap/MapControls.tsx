@@ -1,6 +1,9 @@
 import React from "react";
 import { Box, Grid, ToggleButton, ToggleButtonGroup, FormLabel } from "@mui/material";
 import InfoTooltip from "./InfoTooltip";
+import YearToggleGroup from "../../shared/selectors/YearToggleGroup";
+import { toggleIndexNeverEmpty } from "../../shared/selectors/multiSelectUtils";
+import { formLabelStyleBasic, toggleButtonSx } from "../../shared/selectors/selectorStyles";
 
 interface MapControlsProps {
     availableYears: string[];
@@ -41,12 +44,7 @@ const MapControls: React.FC<MapControlsProps> = ({
     };
 
     const handleYearSelectionChange = (yearIndex) => {
-        let newYearRange = [...yearRange];
-        if (newYearRange.includes(yearIndex) && newYearRange.length > 1) {
-            newYearRange = newYearRange.filter((idx) => idx !== yearIndex);
-        } else if (!newYearRange.includes(yearIndex)) {
-            newYearRange.push(yearIndex);
-        }
+        const newYearRange = toggleIndexNeverEmpty(yearRange, yearIndex);
 
         setYearRange(newYearRange);
 
@@ -60,23 +58,11 @@ const MapControls: React.FC<MapControlsProps> = ({
         }
     };
 
-    const toggleButtonHeight = "44px";
-
     return (
         <Grid container spacing={3} alignItems="flex-start">
             {enableScenarioSwitching && (
                 <Grid item xs={12} md={4}>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                            color: "rgba(47, 113, 100, 1)",
-                            mb: 1,
-                            display: "flex",
-                            alignItems: "center"
-                        }}
-                    >
+                    <FormLabel component="legend" sx={formLabelStyleBasic}>
                         Select Policy Design to View
                         <InfoTooltip title="Select the policy option to view payment projections. Under ‘Current Policy’ payments are projected using the programs as designed in the 2018 Farm Bill. Under ‘Proposed Policy’ payments are projected based on the changes proposed in the 2024 House Agriculture Committee bill. The ‘Policy Differences’ presents the numerical and percentage differences if the proposed policy designs replaced current policy designs. This tab highlights the estimated impacts of the proposed changes." />
                     </FormLabel>
@@ -91,54 +77,13 @@ const MapControls: React.FC<MapControlsProps> = ({
                         }}
                         size="small"
                     >
-                        <ToggleButton
-                            value="current"
-                            sx={{
-                                "flex": 1,
-                                "color": viewMode === "current" ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor": viewMode === "current" ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                                "fontWeight": viewMode === "current" ? "bold" : "normal",
-                                "border": "1px solid rgba(47, 113, 100, 0.5)",
-                                "height": toggleButtonHeight,
-                                "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 0.05)"
-                                }
-                            }}
-                        >
+                        <ToggleButton value="current" sx={{ ...toggleButtonSx(viewMode === "current"), flex: 1 }}>
                             Current Policy
                         </ToggleButton>
-                        <ToggleButton
-                            value="proposed"
-                            sx={{
-                                "flex": 1,
-                                "color": viewMode === "proposed" ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor": viewMode === "proposed" ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                                "fontWeight": viewMode === "proposed" ? "bold" : "normal",
-                                "border": "1px solid rgba(47, 113, 100, 0.5)",
-                                "height": toggleButtonHeight,
-                                "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 0.05)"
-                                }
-                            }}
-                        >
+                        <ToggleButton value="proposed" sx={{ ...toggleButtonSx(viewMode === "proposed"), flex: 1 }}>
                             Proposed Policy
                         </ToggleButton>
-                        <ToggleButton
-                            value="difference"
-                            sx={{
-                                "flex": 1,
-                                "color":
-                                    viewMode === "difference" ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor":
-                                    viewMode === "difference" ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                                "fontWeight": viewMode === "difference" ? "bold" : "normal",
-                                "border": "1px solid rgba(47, 113, 100, 0.5)",
-                                "height": toggleButtonHeight,
-                                "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 0.05)"
-                                }
-                            }}
-                        >
+                        <ToggleButton value="difference" sx={{ ...toggleButtonSx(viewMode === "difference"), flex: 1 }}>
                             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                 <div>Difference</div>
                                 <div style={{ fontSize: "0.5rem" }}>(Proposed - Current)</div>
@@ -149,17 +94,7 @@ const MapControls: React.FC<MapControlsProps> = ({
             )}
 
             <Grid item xs={12} md={4}>
-                <FormLabel
-                    component="legend"
-                    sx={{
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                        color: "rgba(47, 113, 100, 1)",
-                        mb: 1,
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <FormLabel component="legend" sx={formLabelStyleBasic}>
                     Select Data Projection
                     <InfoTooltip title="Choose the data projections to be visualized on the map. ‘Payment Rate ($/base acre)’ visualizes the average payment per base acre, useful for understanding the direct impact of policy design changes on farmers and by program crop. ‘Total Payments ($)’ visualizes the total dollar amount projected for each county, useful for seeing overall funding allocation." />
                 </FormLabel>
@@ -176,97 +111,25 @@ const MapControls: React.FC<MapControlsProps> = ({
                     }}
                     size="small"
                 >
-                    <ToggleButton
-                        value="mean"
-                        sx={{
-                            "flex": 1,
-                            "color": showMeanValues ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                            "backgroundColor": showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                            "fontWeight": showMeanValues ? "bold" : "normal",
-                            "border": "1px solid rgba(47, 113, 100, 0.5)",
-                            "height": toggleButtonHeight,
-                            "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.05)"
-                            }
-                        }}
-                    >
+                    <ToggleButton value="mean" sx={{ ...toggleButtonSx(showMeanValues), flex: 1 }}>
                         Payment Rate ($/base acre)
                     </ToggleButton>
-                    <ToggleButton
-                        value="total"
-                        sx={{
-                            "flex": 1,
-                            "color": !showMeanValues ? "rgba(47, 113, 100, 1)" : "rgba(47, 113, 100, 0.8)",
-                            "backgroundColor": !showMeanValues ? "rgba(47, 113, 100, 0.1)" : "transparent",
-                            "fontWeight": !showMeanValues ? "bold" : "normal",
-                            "border": "1px solid rgba(47, 113, 100, 0.5)",
-                            "height": toggleButtonHeight,
-                            "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.05)"
-                            }
-                        }}
-                    >
+                    <ToggleButton value="total" sx={{ ...toggleButtonSx(!showMeanValues), flex: 1 }}>
                         Total Payments ($)
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Grid>
             <Grid item xs={12} md={enableScenarioSwitching ? 4 : 8}>
-                <FormLabel
-                    component="legend"
-                    sx={{
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                        color: "rgba(47, 113, 100, 1)",
-                        mb: 1,
-                        display: "flex",
-                        alignItems: "center"
-                    }}
-                >
+                <FormLabel component="legend" sx={formLabelStyleBasic}>
                     Select Crop Year or Combination of Crop Years
                     <InfoTooltip title="Choose the crop year or combination of crop years for which data will be visualized on the map and provided in the table below. The crop year is the year associated with enrollment of the program crop in the farm program (ARC-CO or PLC) and is the year in which the crop is planted and/or harvested. Selecting a single year displays projected payments for only that crop year in both the map and the table; selecting multiple years visualizes an aggregation of those years in the map, with each year included in the table. Note that, in general, Congress authorizes the programs for five crop years." />
                 </FormLabel>
 
-                <Box
-                    sx={{
-                        "display": "flex",
-                        "width": "100%",
-                        "flexWrap": "wrap",
-                        "gap": "4px",
-                        ".MuiToggleButton-root": {
-                            borderRadius: "4px !important"
-                        }
-                    }}
-                >
-                    {availableYears.map((year, index) => (
-                        <ToggleButton
-                            key={`year-${year}`}
-                            value={index}
-                            selected={yearRange.includes(index)}
-                            onClick={() => {
-                                handleYearSelectionChange(index);
-                            }}
-                            sx={{
-                                "flex": 1,
-                                "minWidth": "80px",
-                                "color": yearRange.includes(index)
-                                    ? "rgba(47, 113, 100, 1)"
-                                    : "rgba(47, 113, 100, 0.8)",
-                                "backgroundColor": yearRange.includes(index)
-                                    ? "rgba(47, 113, 100, 0.1)"
-                                    : "transparent",
-                                "fontWeight": yearRange.includes(index) ? "bold" : "normal",
-                                "border": "1px solid rgba(47, 113, 100, 0.5)",
-                                "height": toggleButtonHeight,
-                                "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 0.05)"
-                                },
-                                "marginBottom": "4px"
-                            }}
-                        >
-                            {year}
-                        </ToggleButton>
-                    ))}
-                </Box>
+                <YearToggleGroup
+                    years={availableYears}
+                    selectedIndices={yearRange}
+                    onToggle={handleYearSelectionChange}
+                />
             </Grid>
         </Grid>
     );

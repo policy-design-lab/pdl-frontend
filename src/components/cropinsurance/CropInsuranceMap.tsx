@@ -13,16 +13,17 @@ import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
 import MapLoadingOverlay from "../shared/MapLoadingOverlay";
+import {
+    AVERAGE_BASIS_NOTE,
+    HighlightPill,
+    LOSS_RATIO_NOTE,
+    LOSS_RATIO_THRESHOLDS,
+    NetFarmerBenefitNote,
+    PrfAcresCaption,
+    getLossRatioColors
+} from "./cropInsuranceConstants";
 
-const lossRatioThresholds = [0.6, 0.8, 1.0001, 1.5];
-
-const getLossRatioColors = (mapColor: [string, string, string, string, string]): string[] => [
-    mapColor[4],
-    mapColor[3],
-    "#E8C9A3",
-    "#B65700",
-    "#662500"
-];
+const lossRatioThresholds = LOSS_RATIO_THRESHOLDS;
 
 const offsets = {
     VT: [50, -8],
@@ -85,7 +86,7 @@ const MapChart = ({
                                                     <tr>
                                                         <td className={classes.tooltip_topcell_left}>
                                                             {Number(programPayment).toLocaleString(undefined, {
-                                                                maximumFractionDigits: 3
+                                                                maximumFractionDigits: 2
                                                             })}
                                                         </td>
                                                         <td className={classes.tooltip_topcell_right}>&nbsp;</td>
@@ -330,24 +331,9 @@ const titleElement = ({ attribute, year }): JSX.Element => {
     if (attribute === "totalNetFarmerBenefit")
         return (
             <div>
-                <Box display="flex" justifyContent="center" mb={2}>
-                    <Typography
-                        noWrap
-                        variant="subtitle2"
-                        sx={{
-                            color: "#2F7164",
-                            backgroundColor: "rgba(47, 113, 100, 0.12)",
-                            border: "1px solid rgba(47, 113, 100, 0.28)",
-                            borderRadius: "999px",
-                            px: 1.25,
-                            py: 0.35,
-                            fontWeight: 400
-                        }}
-                    >
-                        <b>Net Farmer Benefit = Total Indemnities - Farmer Paid Premium</b> (If Total Indemnities =
-                        Farmer Paid Premium, Net Farmer Benefits = $0)
-                    </Typography>
-                </Box>
+                <HighlightPill>
+                    <NetFarmerBenefitNote />
+                </HighlightPill>
                 <Box display="flex" justifyContent="center">
                     <Typography noWrap variant="h6">
                         <strong>
@@ -367,23 +353,7 @@ const titleElement = ({ attribute, year }): JSX.Element => {
     if (attribute === "lossRatio")
         return (
             <div>
-                <Box display="flex" justifyContent="center" mb={2}>
-                    <Typography
-                        noWrap
-                        variant="subtitle2"
-                        sx={{
-                            color: "#2F7164",
-                            backgroundColor: "rgba(47, 113, 100, 0.12)",
-                            border: "1px solid rgba(47, 113, 100, 0.28)",
-                            borderRadius: "999px",
-                            px: 1.25,
-                            py: 0.35,
-                            fontWeight: 600
-                        }}
-                    >
-                        Loss Ratio = Total Indemnities / Total Premium
-                    </Typography>
-                </Box>
+                <HighlightPill fontWeight={600}>{LOSS_RATIO_NOTE}</HighlightPill>
                 <Box display="flex" justifyContent="center">
                     <Typography noWrap variant="h6">
                         <strong>
@@ -403,7 +373,7 @@ const titleElement = ({ attribute, year }): JSX.Element => {
     if (attribute === "averageInsuredAreaInAcres")
         return (
             <div>
-                {" "}
+                <HighlightPill>{AVERAGE_BASIS_NOTE}</HighlightPill>
                 <Box display="flex" justifyContent="center">
                     <Typography noWrap variant="h6">
                         <strong>
@@ -417,9 +387,25 @@ const titleElement = ({ attribute, year }): JSX.Element => {
                         from <strong>{year}</strong>
                     </Typography>
                 </Box>
+                <PrfAcresCaption />
+            </div>
+        );
+
+    if (attribute === "averageLiabilities")
+        return (
+            <div>
+                <HighlightPill>{AVERAGE_BASIS_NOTE}</HighlightPill>
                 <Box display="flex" justifyContent="center">
-                    <Typography noWrap variant="subtitle2" sx={{ color: "#AAA" }}>
-                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF) policies)
+                    <Typography noWrap variant="h6">
+                        <strong>
+                            {attribute
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ")}
+                        </strong>{" "}
+                        from <strong>{year}</strong>
                     </Typography>
                 </Box>
             </div>

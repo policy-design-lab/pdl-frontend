@@ -232,7 +232,7 @@ export default function DrawLegend({
                                     const ratioValue = Number(cut_points[i]);
                                     return ratioAsPercent
                                         ? `${Math.round(ratioValue * 100)}%`
-                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 2 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {
@@ -260,7 +260,7 @@ export default function DrawLegend({
                                     const ratioValue = Number(cut_points[i]);
                                     return ratioAsPercent
                                         ? `${Math.round(ratioValue * 100)}%`
-                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 });
+                                        : ratioValue.toLocaleString(undefined, { maximumFractionDigits: 2 });
                                 }
                                 const roundedValue = Math.round(cut_points[i]);
                                 if (!notDollar) {
