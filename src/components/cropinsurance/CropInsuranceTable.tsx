@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { CSVLink } from "react-csv";
+import ExportCsvButton from "../shared/ExportCsvButton";
 import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Grid, TableContainer, Typography, Box } from "@mui/material";
@@ -8,6 +8,10 @@ import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from 
 import "../../styles/table.css";
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import getCSVData from "../shared/getCSVData";
+import { csvFilenameFromTitle } from "../shared/titleUtils";
+import DataSourceNote from "../shared/DataSourceNote";
+import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
+import { AVERAGE_ATTRIBUTES, AVERAGE_BASIS_NOTE, PRF_ACRES_NOTE } from "./cropInsuranceConstants";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -36,7 +40,7 @@ function CropInsuranceProgramTable({
             if (attr === "lossRatio") {
                 const ratioValue = Number(value);
                 newRecord[attr] = Number.isFinite(ratioValue)
-                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                    ? ratioValue.toLocaleString(undefined, { maximumFractionDigits: 2 })
                     : "0";
             } else if (attr === "averageInsuredAreaInAcres") {
                 newRecord[attr] = formatNumericValue(Number(value) || 0, 0);
@@ -126,18 +130,6 @@ function CropInsuranceProgramTable({
             margin-top: 1.5em;
         }
 
-        .downloadbtn {
-            background-color: rgba(47, 113, 100, 1);
-            padding: 8px 16px;
-            border-radius: 4px;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            cursor: pointer;
-            margin-bottom: 1em;
-            text-align: center;
-        }
-
         @media screen and (max-width: 1024px) {
             th,
             td {
@@ -179,11 +171,17 @@ function CropInsuranceProgramTable({
                             >
                                 Comparing {tableTitle}
                             </Typography>
+                            {attributes.some((attr) => AVERAGE_ATTRIBUTES.includes(attr)) ? (
+                                <Box display="flex" justifyContent="start">
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                        ({AVERAGE_BASIS_NOTE})
+                                    </Typography>
+                                </Box>
+                            ) : null}
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
                                     <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
-                                        (Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF)
-                                        policies)
+                                        {PRF_ACRES_NOTE}
                                     </Typography>
                                 </Box>
                             ) : null}
@@ -201,6 +199,7 @@ function CropInsuranceProgramTable({
                         tableTitle={`Comparing ${tableTitle}`}
                     />
                 </TableContainer>
+                <DataSourceNote source={RMA_SUMMARY_OF_BUSINESS_SOURCE} href={RMA_SUMMARY_OF_BUSINESS_URL} />
             </Styles>
         </Box>
     );
@@ -243,15 +242,11 @@ function Table({
         useSortBy,
         usePagination
     );
-    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
+    const fileName = csvFilenameFromTitle(tableTitle);
 
     return (
         <div style={{ width: "100%" }}>
-            {data && data.length > 0 && (
-                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
-                    Export This Table to CSV
-                </CSVLink>
-            )}
+            {data && data.length > 0 && <ExportCsvButton filename={fileName} data={getCSVData(headerGroups, data)} />}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (

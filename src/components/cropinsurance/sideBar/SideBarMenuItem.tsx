@@ -27,7 +27,7 @@ export const menu = [
     },
     {
         icon: "",
-        title: "Average Liabilities"
+        title: "Liabilities"
     },
 
     {
@@ -37,6 +37,6 @@ export const menu = [
 
     {
         icon: "",
-        title: "Average Insured Area in Acres"
+        title: "Insured Area in Acres"
     }
 ];
