@@ -14,6 +14,7 @@ import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats"
 import getCSVData from "../shared/getCSVData";
 import "../../styles/table.css";
 import { csvFilenameFromTitle } from "../shared/titleUtils";
+import { BLACK_TEXT, TEXT_GRAY } from "../shared/colors";
 
 function Title1ProgramTable({
     tableTitle,
@@ -542,7 +543,7 @@ function Title1ProgramTable({
                                         fontWeight: 400,
                                         paddingLeft: 0,
                                         fontSize: "0.7em",
-                                        color: "rgb(163, 163, 163)"
+                                        color: TEXT_GRAY
                                     }}
                                 >
                                     <i>
@@ -561,7 +562,7 @@ function Title1ProgramTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     marginBottom: 4,
                                     paddingTop: 0.6
                                 }}

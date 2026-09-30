@@ -9,6 +9,7 @@ import DrawLegend from "../shared/DrawLegend";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { CheckAddZero } from "../shared/ColorFunctions";
 import InfoTooltip from "../ProposalAnalysis/CountyCommodityMap/InfoTooltip";
+import { ACCENT_BLUE, BRAND_GREEN, TEXT_DARKER, TEXT_FAINT, WHITE } from "../shared/colors";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -143,12 +144,12 @@ const MapChart = ({
                                         geography={geo}
                                         onMouseEnter={() => handleMouseEnter(geo, state)}
                                         onMouseLeave={handleMouseLeave}
-                                        fill={value === 0 ? "#CCC" : colorScale(value)}
+                                        fill={value === 0 ? TEXT_FAINT : colorScale(value)}
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
-                                            hover: { stroke: "#232323", strokeWidth: 2, outline: "none" },
-                                            pressed: { fill: "#345feb", outline: "none" }
+                                            default: { stroke: WHITE, strokeWidth: 0.75, outline: "none" },
+                                            hover: { stroke: TEXT_DARKER, strokeWidth: 2, outline: "none" },
+                                            pressed: { fill: ACCENT_BLUE, outline: "none" }
                                         }}
                                     />
                                 );
@@ -311,7 +312,7 @@ const HouseOutlayMap = ({
                             "minWidth": "5em",
                             "fontWeight": "bold",
                             "fontSize": "1.25rem",
-                            "color": "rgba(47, 113, 100, 1)",
+                            "color": BRAND_GREEN,
                             "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
                         }}
                     >
@@ -334,7 +335,7 @@ const HouseOutlayMap = ({
                                         sx={{
                                             borderRadius: 1,
                                             borderColor: "lightgray",
-                                            color: "rgba(47, 113, 100, 1)"
+                                            color: BRAND_GREEN
                                         }}
                                     />
                                 ))}

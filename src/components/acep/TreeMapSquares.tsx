@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import * as d3 from "d3";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { BRAND_GREEN } from "../shared/colors";
 
 export default function TreeMapSquares({
     svgWidth,
@@ -117,7 +118,7 @@ export default function TreeMapSquares({
                                 .attr("height", tipHeight)
                                 .attr("rx", 5)
                                 .attr("ry", 5)
-                                .attr("fill", "#2F7164")
+                                .attr("fill", BRAND_GREEN)
                                 .style("opacity", 0.8)
                                 .style("z-index", 100000);
                             tipGroup

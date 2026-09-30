@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import LandingPageMapTab from "../components/LandingPageMapTab";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function LandingPage(): JSX.Element {
     // connect to api endpoint
@@ -45,7 +46,7 @@ export default function LandingPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {allStates.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
-                    <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
+                    <NavBar bkColor={BRAND_GREEN} ftColor={WHITE} logo="dark" />
                     <div style={{ position: "relative" }}>
                         <CardMedia component="img" src={forest} sx={{ maxHeight: "650px" }} />
                         <Typography

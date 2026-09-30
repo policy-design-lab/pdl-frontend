@@ -16,6 +16,16 @@ import {
     getStateViewport,
     loadCountyAndStateTopoJson
 } from "../../../utils/countyGeo";
+import {
+    BRAND_GREEN,
+    BRAND_GREEN_10,
+    BRAND_GREEN_50,
+    BRAND_GREEN_90,
+    TEXT_DARKER,
+    TEXT_FAINT,
+    WHITE,
+    WHITE_90
+} from "../../shared/colors";
 
 const findCountyData = (counties, countyFIPS) => {
     if (!countyFIPS) return { countyData: null, usedKey: null };
@@ -319,7 +329,7 @@ const CountyMap = ({
         (countyData) => {
             if (!countyData || countyData.hasData === false) return "#EEE";
             if (showMeanValues && (!countyData.hasValidBaseAcres || countyData.baseAcres <= 0)) {
-                return "#CCC";
+                return TEXT_FAINT;
             }
             let valueToUse;
             if (showMeanValues) {
@@ -394,7 +404,7 @@ const CountyMap = ({
                         variant="contained"
                         startIcon={<CloseIcon />}
                         sx={{
-                            "bgcolor": "rgba(47, 113, 100, 0.9)",
+                            "bgcolor": BRAND_GREEN_90,
                             "color": "white",
                             "border": "2px solid white",
                             "boxShadow": "0 2px 10px rgba(0,0,0,0.2)",
@@ -412,7 +422,7 @@ const CountyMap = ({
                             },
                             "animation": "pulse 2s infinite",
                             "&:hover": {
-                                bgcolor: "rgba(47, 113, 100, 1)",
+                                bgcolor: BRAND_GREEN,
                                 transform: "scale(1.05)"
                             }
                         }}
@@ -505,14 +515,14 @@ const CountyMap = ({
                                         onMouseLeave={handleMouseLeave}
                                         defaultStyle={{ outline: "none", pointerEvents: "auto" }}
                                         hoverStyle={{
-                                            stroke: "#232323",
+                                            stroke: TEXT_DARKER,
                                             strokeWidth: 0.5,
                                             outline: "none",
                                             pointerEvents: "auto"
                                         }}
                                         pressedStyle={{
                                             outline: "none",
-                                            stroke: "#FFFFFF",
+                                            stroke: WHITE,
                                             strokeWidth: 0.15,
                                             pointerEvents: "auto"
                                         }}
@@ -565,7 +575,7 @@ const CountyMap = ({
                     sx={{
                         fontSize: "11px",
                         color: "#666",
-                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        backgroundColor: WHITE_90,
                         padding: "4px 8px",
                         borderRadius: "4px",
                         boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
@@ -581,7 +591,7 @@ const CountyMap = ({
                     sx={{
                         display: "flex",
                         gap: 1,
-                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        backgroundColor: WHITE_90,
                         borderRadius: "8px",
                         padding: "8px",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
@@ -596,12 +606,12 @@ const CountyMap = ({
                             "minWidth": "auto",
                             "width": "32px",
                             "height": "32px",
-                            "borderColor": "rgba(47, 113, 100, 0.5)",
-                            "color": "#2F7164",
+                            "borderColor": BRAND_GREEN_50,
+                            "color": BRAND_GREEN,
                             "pointerEvents": "auto",
                             "&:hover": {
-                                borderColor: "#2F7164",
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                borderColor: BRAND_GREEN,
+                                backgroundColor: BRAND_GREEN_10
                             }
                         }}
                     >
@@ -613,12 +623,12 @@ const CountyMap = ({
                         variant="outlined"
                         sx={{
                             "fontSize": "11px",
-                            "borderColor": "rgba(47, 113, 100, 0.5)",
-                            "color": "#2F7164",
+                            "borderColor": BRAND_GREEN_50,
+                            "color": BRAND_GREEN,
                             "pointerEvents": "auto",
                             "&:hover": {
-                                borderColor: "#2F7164",
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                borderColor: BRAND_GREEN,
+                                backgroundColor: BRAND_GREEN_10
                             }
                         }}
                     >
@@ -632,12 +642,12 @@ const CountyMap = ({
                             "minWidth": "auto",
                             "width": "32px",
                             "height": "32px",
-                            "borderColor": "rgba(47, 113, 100, 0.5)",
-                            "color": "#2F7164",
+                            "borderColor": BRAND_GREEN_50,
+                            "color": BRAND_GREEN,
                             "pointerEvents": "auto",
                             "&:hover": {
-                                borderColor: "#2F7164",
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                borderColor: BRAND_GREEN,
+                                backgroundColor: BRAND_GREEN_10
                             }
                         }}
                     >

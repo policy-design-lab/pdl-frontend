@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Typography, TypographyProps } from "@mui/material";
 import { formatCommoditySelection, formatYearDisplay } from "./titleUtils";
+import { BRAND_GREEN_10 } from "./colors";
 
 const highlightSx = {
     fontWeight: 700,
-    backgroundColor: "rgba(47, 113, 100, 0.1)",
+    backgroundColor: BRAND_GREEN_10,
     padding: "0 4px",
     borderRadius: "4px"
 };

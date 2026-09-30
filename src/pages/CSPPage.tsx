@@ -12,6 +12,7 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import { PracticeName } from "../components/shared/titleii/Interface";
 import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CSPPage(): JSX.Element {
     const [checked, setChecked] = React.useState(0);
@@ -167,7 +168,7 @@ export default function CSPPage(): JSX.Element {
             {
                 name: "Existing activity payments",
                 value: existingAPTotal,
-                color: "#2F7164"
+                color: BRAND_GREEN
             },
             { name: "Structural", value: structuralTotal, color: "#4D847A" },
             { name: "Land management", value: landManagementTotal, color: "#749F97" },
@@ -191,7 +192,7 @@ export default function CSPPage(): JSX.Element {
         ]);
 
         setOld2014ChartData([
-            { name: "Cropland", value: croplandTotal, color: "#2F7164" },
+            { name: "Cropland", value: croplandTotal, color: BRAND_GREEN },
             {
                 name: "Non-Industrial Private Forestland (NIPF)",
                 value: NIPFTotal,
@@ -203,13 +204,13 @@ export default function CSPPage(): JSX.Element {
         ]);
 
         setOtherCSPChartData([
-            { name: "Miscellaneous", value: miscellaneousTotal, color: "#2F7164" },
+            { name: "Miscellaneous", value: miscellaneousTotal, color: BRAND_GREEN },
             { name: "Bundles", value: bundlesTotal, color: "#9CBAB4" },
             { name: "(6)(B) Planning", value: sixBPlanningTotal, color: "#CAD4C5" }
         ]);
 
         setTotalChartData([
-            { name: "2018 Practices", value: new2018Total, color: "#2F7164" },
+            { name: "2018 Practices", value: new2018Total, color: BRAND_GREEN },
             { name: "2014 Eligible Land", value: old2014Total, color: "#9CBAB4" },
             { name: "Other CSP", value: otherCSPTotal, color: "#B9CDC9" }
         ]);
@@ -224,7 +225,7 @@ export default function CSPPage(): JSX.Element {
             stateCodesArray.length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
                             subtext="Conversation Stewardship Program (CSP)"
