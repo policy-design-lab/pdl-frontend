@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added county-level visualizations for EQIP [#469](https://github.com/policy-design-lab/pdl-frontend/issues/469)
+
+### Changed
+- Updated site-wide color constants to used the shared value [#472](https://github.com/policy-design-lab/pdl-frontend/issues/472)
+
 ## [1.19.0] - 2026-09-17
 
 ### Added
