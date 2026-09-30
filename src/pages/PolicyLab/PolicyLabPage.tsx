@@ -8,6 +8,7 @@ import Surface51SubPage from "./Surface51SubPage";
 import { CustomTab } from "../../components/shared/CustomTab";
 import HouseProjectionSubPage from "./Proposals/HouseProjectionSubPage";
 import ReconciliationSubPage from "./Reconciliation/ReconciliationSubPage";
+import { BRAND_GREEN, WHITE } from "../../components/shared/colors";
 
 const useStyles = makeStyles(() => ({
     iframeContainer: {
@@ -87,7 +88,7 @@ export default function PolicyLabPage(): JSX.Element {
     return (
         <Box sx={{ width: "100%" }}>
             <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
             </Box>
             <Box sx={{ height: "64px" }} />
             <Box display="flex" justifyContent="center" sx={{ borderBottom: 0, borderColor: "divider", mx: 4 }}>

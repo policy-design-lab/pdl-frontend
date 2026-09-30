@@ -1,68 +1,66 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { Box, Button } from "@mui/material";
 import { ComposableMap, Geographies, ZoomableGroup } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import * as d3 from "d3";
-import DrawLegend from "../shared/DrawLegend";
-import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
-import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
-import { CountyGeographyLayer, StateBoundaryLayer, StateLabelLayer } from "../shared/countyMap/CountyMapLayers";
+import CloseIcon from "@mui/icons-material/Close";
+import { useStyles, tooltipBkgColor } from "../MapTooltip";
+import MapLoadingOverlay from "../MapLoadingOverlay";
+import { CountyGeographyLayer, StateBoundaryLayer, StateLabelLayer } from "./CountyMapLayers";
 import {
-    clampCountyMapCenter,
     COUNTY_TOPOJSON_URL,
+    STATE_TOPOJSON_URL,
+    clampCountyMapCenter,
     getCountyMapPosition,
     getStateFipsFromName,
     getStateViewport,
     loadCountyAndStateTopoJson,
-    normalizeCountyFips,
-    STATE_TOPOJSON_URL
-} from "../../utils/countyGeo";
-import { getCountyPercentiles } from "../../utils/countyLegendConfig";
-import {
-    formatTitle1Percent,
-    getTitle1CountyMetricValue,
-    getTitle1CountyScopedRecord,
-    Title1CountyColumnConfig,
-    Title1CountySelector
-} from "./title1County";
-import { BRAND_GREEN, BRAND_GREEN_10, BRAND_GREEN_50, BRAND_GREEN_90, TEXT_FAINT, WHITE_90 } from "../shared/colors";
+    normalizeCountyFips
+} from "../../../utils/countyGeo";
+import { BRAND_GREEN, BRAND_GREEN_10, BRAND_GREEN_50, BRAND_GREEN_90, TEXT_FAINT, WHITE_90 } from "../colors";
 
-interface Title1CountyMapProps {
-    title: string;
-    selector: Title1CountySelector;
-    tooltipColumns: Title1CountyColumnConfig[];
+export interface CountyTooltipContext {
+    geo: any;
+    countyFips: string;
+    countyData: any;
+    value: number | undefined;
+    classes: Record<string, string>;
+}
+
+interface CountyChoroplethMapProps {
+    countyData: any;
     year: string;
-    mapColor: [string, string, string, string, string];
-    countyPerformance: any;
     stateCodes: Record<string, string>;
     allStates: any[];
     selectedState: string;
     onStateChange: (state: string) => void;
+    valueAccessor: (county: any) => number;
+    colorScale: (value: number) => string;
+    renderTooltip: (context: CountyTooltipContext) => React.ReactNode;
+    legendComponent: (context: { quantizeArray: number[]; zeroPoints: string[] }) => React.ReactNode;
+    controlsComponent?: React.ReactNode;
+    tooltipId?: string;
+    loadingLabel?: string;
+    noDataFill?: string;
+    zeroFill?: string;
 }
 
-const formatTooltipValue = (value: number, type: Title1CountyColumnConfig["type"]): string => {
-    if (type === "currency") {
-        return formatCurrency(value, 0);
-    }
-    if (type === "percent") {
-        return formatTitle1Percent(value);
-    }
-    return formatNumericValue(value, 0);
-};
-
-const Title1CountyMap = ({
-    title,
-    selector,
-    tooltipColumns,
+const CountyChoroplethMap = ({
+    countyData,
     year,
-    mapColor,
-    countyPerformance,
     stateCodes,
     allStates,
     selectedState,
-    onStateChange
-}: Title1CountyMapProps): JSX.Element => {
+    onStateChange,
+    valueAccessor,
+    colorScale,
+    renderTooltip,
+    legendComponent,
+    controlsComponent = null,
+    tooltipId = "county-map-tooltip",
+    loadingLabel = "Rendering county map...",
+    noDataFill = "#EEE",
+    zeroFill = TEXT_FAINT
+}: CountyChoroplethMapProps): JSX.Element => {
     const classes = useStyles();
     const [content, setContent] = useState<React.ReactNode>("");
     const [position, setPosition] = useState(getCountyMapPosition("All States", 1));
@@ -80,12 +78,12 @@ const Title1CountyMap = ({
     const pendingTooltipContentRef = useRef<React.ReactNode>("");
 
     const { countyDataMap, countyValueMap, quantizeArray, zeroPoints } = useMemo(() => {
-        const dataMap: Record<string, any> = {};
+        const map: Record<string, any> = {};
         const valueMap: Record<string, number> = {};
-        const values: number[] = [];
-        const zeros: string[] = [];
-        if (countyPerformance && countyPerformance[year]) {
-            countyPerformance[year].forEach((county: any) => {
+        const qArray: number[] = [];
+        const zPoints: string[] = [];
+        if (countyData && countyData[year]) {
+            countyData[year].forEach((county: any) => {
                 const stateName = stateCodes[county.state] || county.state;
                 if (selectedState !== "All States" && stateName !== selectedState) {
                     return;
@@ -94,47 +92,21 @@ const Title1CountyMap = ({
                 if (!countyFips) {
                     return;
                 }
-                dataMap[countyFips] = county;
-                const paymentValue = getTitle1CountyMetricValue(county, selector, "totalPaymentInDollars");
-                if (paymentValue === null) {
+                map[countyFips] = county;
+                const value = Number(valueAccessor(county));
+                if (!Number.isFinite(value)) {
                     return;
                 }
-                valueMap[countyFips] = paymentValue;
-                values.push(paymentValue);
-                if (paymentValue === 0) {
-                    zeros.push(countyFips);
+                valueMap[countyFips] = value;
+                qArray.push(value);
+                if (value === 0) {
+                    zPoints.push(countyFips);
                 }
             });
         }
-        return { countyDataMap: dataMap, countyValueMap: valueMap, quantizeArray: values, zeroPoints: zeros };
-    }, [countyPerformance, year, selectedState, selector, stateCodes]);
+        return { countyDataMap: map, countyValueMap: valueMap, quantizeArray: qArray, zeroPoints: zPoints };
+    }, [countyData, year, selectedState, stateCodes, valueAccessor]);
 
-    const countyPercentiles = getCountyPercentiles("default");
-    const quantileScale = useMemo(() => {
-        if (quantizeArray.length === 0) {
-            return null;
-        }
-        const nonZeroData = quantizeArray.filter((value) => value !== 0);
-        if (nonZeroData.length < 5) {
-            return null;
-        }
-        const sorted = [...nonZeroData].sort((a, b) => a - b);
-        const percentile = (values: number[], pct: number) => {
-            const index = (pct / 100) * (values.length - 1);
-            const low = Math.floor(index);
-            const high = Math.ceil(index);
-            if (low === high) {
-                return values[low];
-            }
-            const lowValue = values[low] * (1 - (index - low));
-            const highValue = values[high] * (index - low);
-            return lowValue + highValue;
-        };
-        return countyPercentiles.map((pct) => percentile(sorted, pct));
-    }, [countyPercentiles, quantizeArray]);
-
-    const customScale = quantileScale || [0, 1000000, 5000000, 10000000];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
     const countyGeographySource = countyTopology || (topologyLoadAttempted ? COUNTY_TOPOJSON_URL : null);
     const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
     const mapIsReady =
@@ -171,6 +143,7 @@ const Title1CountyMap = ({
                     setTopologyLoadAttempted(true);
                 }
             });
+
         return () => {
             mountedRef.current = false;
             if (tooltipFrameRef.current !== null) {
@@ -187,14 +160,17 @@ const Title1CountyMap = ({
                 setMapDrawSettled(true);
             }
         }, 220);
-        return () => clearTimeout(timer);
-    }, [selectedState, selector, year]);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [selectedState, year, valueAccessor]);
 
     useEffect(() => {
         if (!mapIsReady) {
             setInteractionReady(false);
             return undefined;
         }
+
         let rafA: number | null = null;
         let rafB: number | null = null;
         let idleId: number | null = null;
@@ -202,9 +178,7 @@ const Title1CountyMap = ({
         let finished = false;
 
         const finish = () => {
-            if (finished || !mountedRef.current) {
-                return;
-            }
+            if (finished || !mountedRef.current) return;
             finished = true;
             if (fallbackTimeoutId !== null) {
                 clearTimeout(fallbackTimeoutId);
@@ -283,126 +257,77 @@ const Title1CountyMap = ({
     }, []);
 
     const handleZoomIn = useCallback(() => {
-        if (!mountedRef.current) {
-            return;
-        }
-        setUserZoomLevel((currentZoomLevel) => Math.min(currentZoomLevel * 1.2, 3));
-    }, []);
+        if (!mountedRef.current) return;
+        const newZoomLevel = Math.min(userZoomLevel * 1.2, 3);
+        setUserZoomLevel(newZoomLevel);
+    }, [userZoomLevel]);
 
     const handleZoomOut = useCallback(() => {
-        if (!mountedRef.current) {
-            return;
-        }
-        setUserZoomLevel((currentZoomLevel) => Math.max(currentZoomLevel / 1.2, 0.5));
-    }, []);
+        if (!mountedRef.current) return;
+        const newZoomLevel = Math.max(userZoomLevel / 1.2, 0.5);
+        setUserZoomLevel(newZoomLevel);
+    }, [userZoomLevel]);
 
     const handleResetZoom = useCallback(() => {
-        if (!mountedRef.current) {
-            return;
-        }
+        if (!mountedRef.current) return;
         setUserZoomLevel(1);
         setPosition(getBasePosition(1));
     }, [getBasePosition]);
 
     const handleCloseStateView = useCallback(() => {
-        if (!mountedRef.current) {
-            return;
+        if (mountedRef.current) {
+            onStateChange("All States");
+            setUserZoomLevel(1);
+            setPosition(getCountyMapPosition("All States", 1));
         }
-        onStateChange("All States");
-        setUserZoomLevel(1);
-        setPosition(getCountyMapPosition("All States", 1));
     }, [onStateChange]);
 
     const handleMoveEnd = useCallback(
         (positionObj: { coordinates: number[]; zoom: number }) => {
-            if (!mountedRef.current) {
-                return;
-            }
+            if (!mountedRef.current) return;
             if (selectedState === "All States") {
                 const clamped = clampCountyMapCenter(positionObj.coordinates);
                 setPosition({ coordinates: clamped, zoom: positionObj.zoom });
-                return;
-            }
-            const stateView = getStateViewport(selectedState);
-            if (!stateView) {
-                return;
-            }
-            const [centerLon, centerLat] = stateView.center;
-            if (positionObj.coordinates[0] !== centerLon || positionObj.coordinates[1] !== centerLat) {
-                setPosition({ coordinates: stateView.center, zoom: positionObj.zoom });
+            } else {
+                const stateView = getStateViewport(selectedState);
+                if (stateView) {
+                    const [centerLon, centerLat] = stateView.center;
+                    if (positionObj.coordinates[0] !== centerLon || positionObj.coordinates[1] !== centerLat) {
+                        setPosition({ coordinates: stateView.center, zoom: positionObj.zoom });
+                    }
+                }
             }
         },
         [selectedState]
     );
 
     const getCountyFillColor = useCallback(
-        (countyFips: string) => {
-            const value = countyValueMap[countyFips];
-            if (value === undefined) {
-                return "#EEE";
-            }
-            if (value === 0) {
-                return TEXT_FAINT;
-            }
+        (countyFIPS: string) => {
+            const value = countyValueMap[countyFIPS];
+            if (value === undefined) return noDataFill;
+            if (value === 0) return zeroFill;
             return colorScale(value);
         },
-        [countyValueMap, colorScale]
+        [countyValueMap, colorScale, noDataFill, zeroFill]
     );
 
     const handleMouseEnter = useCallback(
-        (geo: any, countyFips: string) => {
-            if (hoveredCountyRef.current === countyFips) {
+        (geo: any, countyFIPS: string) => {
+            if (hoveredCountyRef.current === countyFIPS) {
                 return;
             }
-            hoveredCountyRef.current = countyFips;
-            const countyData = countyDataMap[countyFips];
-            if (!countyData) {
-                scheduleTooltipContent("");
-                return;
-            }
-            const scopedRecord = getTitle1CountyScopedRecord(countyData, selector);
-            if (!scopedRecord) {
-                scheduleTooltipContent("");
-                return;
-            }
-            const stateName = stateCodes[countyData.state] || countyData.state;
-            const visibleColumns = tooltipColumns.filter((column) => {
-                if (column.accessor.toLowerCase().includes("withinstate")) {
-                    return false;
-                }
-                const value = Number(scopedRecord[column.accessor]);
-                return Number.isFinite(value);
-            });
-
-            const tooltipContent = (
-                <div className="map_tooltip">
-                    <div className={classes.tooltip_header}>
-                        <b>
-                            {countyData.countyName || geo.properties?.name || "Unknown County"}, {stateName}
-                        </b>
-                    </div>
-                    <table className={classes.tooltip_table}>
-                        <tbody>
-                            {visibleColumns.map((column, index) => {
-                                const value = Number(scopedRecord[column.accessor]);
-                                const leftClassName =
-                                    index === 0 ? classes.tooltip_topcell_left : classes.tooltip_regularcell_left;
-                                const rightClassName =
-                                    index === 0 ? classes.tooltip_topcell_right : classes.tooltip_regularcell_right;
-                                return (
-                                    <tr key={column.accessor}>
-                                        <td className={leftClassName}>{column.header}:</td>
-                                        <td className={rightClassName}>{formatTooltipValue(value, column.type)}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+            hoveredCountyRef.current = countyFIPS;
+            scheduleTooltipContent(
+                renderTooltip({
+                    geo,
+                    countyFips: countyFIPS,
+                    countyData: countyDataMap[countyFIPS],
+                    value: countyValueMap[countyFIPS],
+                    classes
+                })
             );
-            scheduleTooltipContent(tooltipContent);
         },
-        [classes, countyDataMap, scheduleTooltipContent, selector, stateCodes, tooltipColumns]
+        [countyDataMap, countyValueMap, classes, scheduleTooltipContent, renderTooltip]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -410,39 +335,18 @@ const Title1CountyMap = ({
         scheduleTooltipContent("");
     }, [scheduleTooltipContent]);
 
-    const titleElement = (): JSX.Element => (
-        <Typography noWrap variant="h6">
-            <strong>{title}</strong> from <strong>{year}</strong>
-            {selectedState !== "All States" && <span> - {selectedState}</span>}
-        </Typography>
-    );
-
     return (
         <div>
             <Box display="flex" justifyContent="center">
-                {quantizeArray.length > 0 ? (
-                    <DrawLegend
-                        isRatio={false}
-                        colorScale={colorScale}
-                        title={titleElement()}
-                        programData={quantizeArray}
-                        prepColor={mapColor}
-                        emptyState={zeroPoints}
-                        useQuantileSpread
-                        quantilePercentiles={countyPercentiles}
-                    />
-                ) : (
-                    <div>
-                        {titleElement()}
-                        <Box display="flex" justifyContent="center">
-                            <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
-                                County payment data in {year} is unavailable.
-                            </Typography>
-                        </Box>
-                    </div>
-                )}
+                {legendComponent({ quantizeArray, zeroPoints })}
             </Box>
-            <Box sx={{ position: "relative", width: "100%" }}>
+            {controlsComponent}
+            <Box
+                sx={{
+                    position: "relative",
+                    width: "100%"
+                }}
+            >
                 {selectedState !== "All States" && (
                     <Box sx={{ position: "absolute", top: 10, right: 10, zIndex: 2000 }}>
                         <Button
@@ -465,34 +369,8 @@ const Title1CountyMap = ({
                         </Button>
                     </Box>
                 )}
-                {!interactionReady && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: WHITE_90,
-                            zIndex: 1600,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 1.5
-                        }}
-                    >
-                        <CircularProgress size={36} />
-                        <Typography variant="body2" sx={{ color: BRAND_GREEN }}>
-                            Rendering county map...
-                        </Typography>
-                    </Box>
-                )}
-                <div
-                    data-tip=""
-                    data-for="title1-county-map-tooltip"
-                    style={{ pointerEvents: interactionReady ? "auto" : "none" }}
-                >
+                {!interactionReady && <MapLoadingOverlay label={loadingLabel} zIndex={1600} />}
+                <div data-tip="" data-for={tooltipId} style={{ pointerEvents: interactionReady ? "auto" : "none" }}>
                     <ComposableMap projection="geoAlbersUsa">
                         <ZoomableGroup
                             zoom={position.zoom}
@@ -628,7 +506,7 @@ const Title1CountyMap = ({
                 <ReactTooltip
                     className={`${classes.customized_tooltip} tooltip`}
                     backgroundColor={tooltipBkgColor}
-                    id="title1-county-map-tooltip"
+                    id={tooltipId}
                 >
                     {content}
                 </ReactTooltip>
@@ -637,4 +515,4 @@ const Title1CountyMap = ({
     );
 };
 
-export default React.memo(Title1CountyMap);
+export default React.memo(CountyChoroplethMap);

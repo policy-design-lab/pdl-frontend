@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { BRAND_GREEN, BRAND_GREEN_05, SURFACE_MINT, TEXT_MUTED } from "../../shared/colors";
 
 interface CropInsuranceDataUnavailableProps {
     reason: string;
@@ -23,20 +24,20 @@ const CropInsuranceDataUnavailable: React.FC<CropInsuranceDataUnavailableProps> 
             px: 3,
             py: 6,
             mb: 3,
-            backgroundColor: "#ECF0EE",
+            backgroundColor: SURFACE_MINT,
             borderRadius: "4px",
             border: "1px solid rgba(47, 113, 100, 0.2)"
         }}
     >
-        <InfoOutlinedIcon sx={{ color: "rgba(47, 113, 100, 1)", fontSize: "2rem" }} />
-        <Typography variant="h6" sx={{ color: "#2F7164" }}>
+        <InfoOutlinedIcon sx={{ color: BRAND_GREEN, fontSize: "2rem" }} />
+        <Typography variant="h6" sx={{ color: BRAND_GREEN }}>
             Data not available for this year selection
         </Typography>
         <Typography variant="body2" sx={{ color: "#555", maxWidth: "42rem" }}>
             {reason}
         </Typography>
         {selectedYears.length > 0 && (
-            <Typography variant="body2" sx={{ color: "#888" }}>
+            <Typography variant="body2" sx={{ color: TEXT_MUTED }}>
                 Currently selected: {selectedYears.join(", ")}
             </Typography>
         )}
@@ -44,11 +45,11 @@ const CropInsuranceDataUnavailable: React.FC<CropInsuranceDataUnavailableProps> 
             onClick={onResetYears}
             sx={{
                 "mt": 1,
-                "color": "rgba(47, 113, 100, 1)",
+                "color": BRAND_GREEN,
                 "border": "1px solid rgba(47, 113, 100, 0.5)",
                 "textTransform": "none",
                 "&:hover": {
-                    backgroundColor: "rgba(47, 113, 100, 0.05)"
+                    backgroundColor: BRAND_GREEN_05
                 }
             }}
         >

@@ -1,3 +1,5 @@
+export { TITLE_II_MAP_COLOR } from "./colors";
+
 export const CheckAddZero = (thresholds: number[]): number[] => {
     if (thresholds.some((d) => d < 0) && thresholds.some((d) => d > 0)) {
         if (!thresholds.includes(0)) {

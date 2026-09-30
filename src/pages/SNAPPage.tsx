@@ -24,6 +24,7 @@ import "../styles/snap.css";
 import "../styles/table.css";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { BLACK_TEXT, BRAND_GREEN, TEXT_GRAY, WHITE } from "../components/shared/colors";
 
 export default function SNAPPage(): JSX.Element {
     const paddingLR = 40;
@@ -132,7 +133,7 @@ export default function SNAPPage(): JSX.Element {
             {isDataLoaded ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar text="Supplemental Nutrition ... (SNAP)" />
                     </Box>
                     <Box
@@ -226,7 +227,7 @@ export default function SNAPPage(): JSX.Element {
                                                     fontWeight: 400,
                                                     paddingLeft: 0,
                                                     fontSize: "1.2em",
-                                                    color: "#212121"
+                                                    color: BLACK_TEXT
                                                 }}
                                             >
                                                 Total SNAP Benefits and Avg. Monthly Participation ({yearKey})
@@ -236,7 +237,7 @@ export default function SNAPPage(): JSX.Element {
                                                     paddingLeft: 1,
                                                     paddingTop: 1.5,
                                                     fontSize: "2.5em",
-                                                    color: "#212121",
+                                                    color: BLACK_TEXT,
                                                     cursor: "pointer",
                                                     justifyContent: "center",
                                                     alignItems: "center"
@@ -266,7 +267,7 @@ export default function SNAPPage(): JSX.Element {
                                                     value={0}
                                                     control={<Radio />}
                                                     label="Both"
-                                                    sx={{ color: "#212121" }}
+                                                    sx={{ color: BLACK_TEXT }}
                                                 />
                                                 <FormControlLabel
                                                     id="totalBenefitsRadio"
@@ -299,7 +300,7 @@ export default function SNAPPage(): JSX.Element {
                                                 fontWeight: 400,
                                                 paddingLeft: 0,
                                                 fontSize: "0.8em",
-                                                color: "rgb(163, 163, 163)"
+                                                color: TEXT_GRAY
                                             }}
                                         >
                                             Hover on the state names to see detailed data
@@ -364,7 +365,7 @@ export default function SNAPPage(): JSX.Element {
                                                         fontWeight: 400,
                                                         paddingLeft: 0,
                                                         fontSize: "1.2em",
-                                                        color: "#212121",
+                                                        color: BLACK_TEXT,
                                                         paddingTop: 1.5
                                                     }}
                                                 >

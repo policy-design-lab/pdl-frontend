@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { makeStyles } from "@mui/styles";
+import { EQIP_CATEGORIES } from "./eqip/EQIPCategoryMethods";
 
 /** ALL MENUs */
 const drawerWidth = 240;
@@ -121,21 +122,7 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
         setShowPopUp(false);
     };
 
-    const EQIPList = [
-        "Total EQIP Benefits",
-        "Land management",
-        "Forest management",
-        "Structural",
-        "Soil remediation",
-        "Vegetative",
-        "Other improvements",
-        "Soil testing",
-        "Other planning",
-        "Conservation planning assessment",
-        "Resource-conserving crop rotation",
-        "Soil health",
-        "Comprehensive Nutrient Mgt."
-    ];
+    const EQIPList = EQIP_CATEGORIES;
 
     const classes = useStyles();
     return (

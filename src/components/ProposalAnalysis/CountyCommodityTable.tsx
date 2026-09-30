@@ -8,6 +8,14 @@ import MapIcon from "@mui/icons-material/Map";
 import { YearBreakdownData, CountyObject, getCountyNameFromFips, getTotalBaseAcres, formatCellValue } from "./utils";
 import { formatCurrency } from "../shared/ConvertionFormats";
 import { csvFilenameFromTitle, generateTableTitle } from "../shared/titleUtils";
+import {
+    BRAND_GREEN,
+    BRAND_GREEN_05,
+    BRAND_GREEN_08,
+    BRAND_GREEN_10,
+    BRAND_GREEN_90,
+    WHITE_80
+} from "../shared/colors";
 
 interface ExtendedYearBreakdownData extends YearBreakdownData {
     paymentRate?: number;
@@ -1660,7 +1668,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        backgroundColor: WHITE_80,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1681,11 +1689,11 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
                             }}
                         >
-                            <CircularProgress size={40} thickness={4} sx={{ color: "rgba(47, 113, 100, 1)" }} />
+                            <CircularProgress size={40} thickness={4} sx={{ color: BRAND_GREEN }} />
                             <Typography
                                 variant="body1"
                                 sx={{
-                                    color: "rgba(47, 113, 100, 1)",
+                                    color: BRAND_GREEN,
                                     fontWeight: 500
                                 }}
                             >
@@ -1702,13 +1710,13 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                     "left": "50%",
                     "transform": "translateX(-50%)",
                     "zIndex": 2000,
-                    "backgroundColor": "rgba(47, 113, 100, 0.9)",
+                    "backgroundColor": BRAND_GREEN_90,
                     "boxShadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
                     "borderRadius": "8px",
                     "padding": "10px 20px",
                     "cursor": "pointer",
                     "&:hover": {
-                        backgroundColor: "rgba(47, 113, 100, 1)"
+                        backgroundColor: BRAND_GREEN
                     }
                 }}
                 onClick={handleScrollToMap}
@@ -1727,9 +1735,9 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                             variant="h6"
                             sx={{
                                 "& .highlight": {
-                                    color: "rgba(47, 113, 100, 1)",
+                                    color: BRAND_GREEN,
                                     fontWeight: 700,
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)",
+                                    backgroundColor: BRAND_GREEN_10,
                                     padding: "0 4px",
                                     borderRadius: "4px"
                                 }
@@ -1823,7 +1831,7 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                 alignItems: "center",
                                 width: "100%",
                                 padding: "12px",
-                                backgroundColor: "rgba(47, 113, 100, 0.05)",
+                                backgroundColor: BRAND_GREEN_05,
                                 borderRadius: "6px"
                             }}
                         >
@@ -1888,8 +1896,8 @@ const CountyCommodityTable: React.FC<CountyCommodityTableProps> = ({
                                             <th
                                                 {...column.getHeaderProps(column.getSortByToggleProps())}
                                                 style={{
-                                                    background: "rgba(47, 113, 100, 0.08)",
-                                                    color: "#2F7164",
+                                                    background: BRAND_GREEN_08,
+                                                    color: BRAND_GREEN,
                                                     padding: "10px",
                                                     cursor: "pointer"
                                                 }}

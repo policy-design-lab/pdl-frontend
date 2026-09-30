@@ -23,6 +23,7 @@ import { csvFilenameFromTitle, formatSelectionTitle } from "../shared/titleUtils
 import DataSourceNote from "../shared/DataSourceNote";
 import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
 import { AVERAGE_ATTRIBUTES, AVERAGE_METRIC_TOOLTIP, LOSS_RATIO_NOTE, PRF_ACRES_NOTE } from "./cropInsuranceConstants";
+import { BLACK_TEXT, BRAND_GREEN, TEXT_DIM } from "../shared/colors";
 
 interface CropInsuranceCountyTableProps {
     tableTitle: string;
@@ -99,7 +100,7 @@ const averageHeader = (label: string) => (
                 <InfoTooltip title={AVERAGE_METRIC_TOOLTIP} compact />
             </Box>
         </Box>
-        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
+        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: BRAND_GREEN }}>
             (per year)
         </Box>
     </Box>
@@ -113,7 +114,7 @@ const lossRatioHeader = (
                 <InfoTooltip title={LOSS_RATIO_NOTE} compact />
             </Box>
         </Box>
-        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: "#2F7164" }}>
+        <Box component="span" sx={{ fontSize: "0.9em", fontWeight: 700, color: BRAND_GREEN }}>
             (selected)
         </Box>
     </Box>
@@ -303,13 +304,13 @@ function CropInsuranceCountyTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     paddingTop: 0.6
                                 }}
                             />
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
-                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: TEXT_DIM }}>
                                         {PRF_ACRES_NOTE}
                                     </Typography>
                                 </Box>
@@ -355,7 +356,7 @@ function CropInsuranceCountyTable({
                         >
                             {"<"}
                         </Button>
-                        <Typography variant="body2" sx={{ px: 1, color: "#2F7164" }}>
+                        <Typography variant="body2" sx={{ px: 1, color: BRAND_GREEN }}>
                             Column Page <strong>{columnPage + 1}</strong> of <strong>{totalColumnPages}</strong>
                         </Typography>
                         <Button

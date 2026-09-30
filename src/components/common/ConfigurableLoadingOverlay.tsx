@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, CircularProgress, Backdrop, LinearProgress, Fade } from "@mui/material";
 import { isLoadingOverlayEnabled, getUIConfig } from "../../utils/configUtil";
+import { SHADOW_MEDIUM, WHITE_30 } from "../shared/colors";
 
 interface ConfigurableLoadingOverlayProps {
     isProcessing: boolean;
@@ -26,7 +27,7 @@ export const ConfigurableLoadingOverlay: React.FC<ConfigurableLoadingOverlayProp
             sx={{
                 color: "#fff",
                 zIndex,
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backgroundColor: SHADOW_MEDIUM,
                 backdropFilter: config.animations.backdropBlur ? "blur(2px)" : "none"
             }}
             open={isProcessing}
@@ -69,7 +70,7 @@ export const ConfigurableLoadingOverlay: React.FC<ConfigurableLoadingOverlayProp
                             "width": 200,
                             "height": 6,
                             "borderRadius": 3,
-                            "backgroundColor": "rgba(255, 255, 255, 0.3)",
+                            "backgroundColor": WHITE_30,
                             "& .MuiLinearProgress-bar": {
                                 backgroundColor: "#fff",
                                 borderRadius: 3

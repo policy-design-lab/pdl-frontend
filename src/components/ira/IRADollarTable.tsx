@@ -8,6 +8,7 @@ import { compareWithNumber, compareWithAlphabetic, compareWithDollarSign } from 
 import "../../styles/table.css";
 import getCSVData from "../shared/getCSVData";
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
+import { BLACK_TEXT, SURFACE_GRAY } from "../shared/colors";
 
 function IRADollarTable({
     tableTitle,
@@ -230,7 +231,7 @@ function IRADollarTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     marginBottom: 4,
                                     paddingTop: 0.6
                                 }}
@@ -349,7 +350,7 @@ function Table({ columns, data, initialState }: { columns: any; data: any; initi
                                         style={{
                                             position: "sticky",
                                             left: 0,
-                                            background: "rgba(241, 241, 241, 1)",
+                                            background: SURFACE_GRAY,
                                             zIndex: 2
                                         }}
                                     >

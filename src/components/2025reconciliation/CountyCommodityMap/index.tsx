@@ -15,6 +15,7 @@ import {
     getChunkSize,
     getUIConfig
 } from "../../../utils/configUtil";
+import { ACCENT_PURPLE, BRAND_GREEN, BRAND_GREEN_90, INFO_BLUE, SHADOW_MEDIUM, WHITE_30 } from "../../shared/colors";
 
 const CountyCommodityMap = ({
     countyData,
@@ -404,7 +405,7 @@ const CountyCommodityMap = ({
                 "#ce93d8",
                 "#ba68c8",
                 "#ab47bc",
-                "#9c27b0",
+                ACCENT_PURPLE,
                 "#8e24aa",
                 "#7b1fa2",
                 "#6a1b9a",
@@ -438,7 +439,7 @@ const CountyCommodityMap = ({
                 "#039be5",
                 "#0288d1",
                 "#0277bd",
-                "#01579b",
+                INFO_BLUE,
                 "#0268a6"
             ];
         }
@@ -603,9 +604,9 @@ const CountyCommodityMap = ({
                             onClick={handleScrollToTable}
                             size="small"
                             sx={{
-                                "backgroundColor": "rgba(47, 113, 100, 0.9)",
+                                "backgroundColor": BRAND_GREEN_90,
                                 "&:hover": {
-                                    backgroundColor: "rgba(47, 113, 100, 1)"
+                                    backgroundColor: BRAND_GREEN
                                 },
                                 "display": "flex",
                                 "alignItems": "center",
@@ -628,7 +629,7 @@ const CountyCommodityMap = ({
                     sx={{
                         color: "#fff",
                         zIndex: 2000,
-                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        backgroundColor: SHADOW_MEDIUM,
                         backdropFilter: getUIConfig().animations.backdropBlur ? "blur(2px)" : "none"
                     }}
                     open={isProcessing}
@@ -671,7 +672,7 @@ const CountyCommodityMap = ({
                                 "width": 200,
                                 "height": 6,
                                 "borderRadius": 3,
-                                "backgroundColor": "rgba(255, 255, 255, 0.3)",
+                                "backgroundColor": WHITE_30,
                                 "& .MuiLinearProgress-bar": {
                                     backgroundColor: "#fff",
                                     borderRadius: 3

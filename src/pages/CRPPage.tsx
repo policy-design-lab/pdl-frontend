@@ -11,6 +11,7 @@ import CategoryMap from "../components/crp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CRPPage(): JSX.Element {
     const year = "2014-2023";
@@ -103,13 +104,13 @@ export default function CRPPage(): JSX.Element {
             else setZeroCategories(["None"]);
 
             setTotalChartData([
-                { name: "General Sign-up", value: generalSignUpPaymentInDollars, color: "#2F7164" },
+                { name: "General Sign-up", value: generalSignUpPaymentInDollars, color: BRAND_GREEN },
                 { name: "Continuous Sign-up", value: continuousSingUpPaymentInDollars, color: "#9CBAB4" },
                 { name: "Grassland", value: grasslandPyamentInDollars, color: "#CDDBD8" }
             ]);
 
             setSubChartData([
-                { name: "CREP Only", value: crepPaymentInDollars, color: "#2F7164" },
+                { name: "CREP Only", value: crepPaymentInDollars, color: BRAND_GREEN },
                 { name: "Continuous Non-CREP", value: nocCrepPaymentInDollars, color: "#9CBAB4" },
                 { name: "Farmable Wetland", value: wetlandPaymentInDollars, color: "#CDDBD8" }
             ]);
@@ -124,7 +125,7 @@ export default function CRPPage(): JSX.Element {
             zeroCategories.length >= 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
                             subtext="Conversation Reserve Program (CRP)"

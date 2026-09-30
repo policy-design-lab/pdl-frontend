@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import { BRAND_GREEN, WHITE_90 } from "./colors";
 
 type MapLoadingOverlayProps = {
     backgroundColor?: string;
@@ -11,9 +12,9 @@ type MapLoadingOverlayProps = {
 };
 
 export default function MapLoadingOverlay({
-    backgroundColor = "rgba(255, 255, 255, 0.9)",
+    backgroundColor = WHITE_90,
     label,
-    textColor = "#2F7164",
+    textColor = BRAND_GREEN,
     zIndex = 1200
 }: MapLoadingOverlayProps): JSX.Element {
     return (

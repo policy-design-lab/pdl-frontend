@@ -8,6 +8,7 @@ import { compareWithDollarSign, compareWithPercentSign } from "../TableCompareFu
 import "../../../styles/table.css";
 import getCSVData from "../getCSVData";
 import { getPracticeTotal } from "./PracticeMethods";
+import { BLACK_TEXT, SURFACE_GRAY } from "../colors";
 
 const Styles = styled.div`
     padding: 0;
@@ -177,7 +178,7 @@ function Table({ programName, columns, data }) {
                                             style={{
                                                 position: "sticky",
                                                 left: 0,
-                                                background: "rgba(241, 241, 241, 1)",
+                                                background: SURFACE_GRAY,
                                                 zIndex: 2
                                             }}
                                         >
@@ -500,7 +501,7 @@ function TitleIIPracticeTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     marginBottom: 4,
                                     paddingTop: 0.6
                                 }}

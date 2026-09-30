@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Tab } from "@mui/material";
 import React from "react";
+import { BRAND_GREEN } from "./colors";
 
 interface StyledTabProps {
     label: JSX.Element;
@@ -14,7 +15,7 @@ export const CustomTab = styled((props: StyledTabProps) => (
         {...props}
         sx={{
             "&.Mui-selected": {
-                color: "#2f7164",
+                color: BRAND_GREEN,
                 fontWeight: 600,
                 ...props.selectedsx
             },

@@ -26,6 +26,7 @@ import IRAPercentageTable from "./IRAPercentageTable";
 import IRAPredictedMap from "./IRAPredictedMap";
 import IRAPredictedDollarTable from "./IRAPredictedDollarTable";
 import IRAPredictedPercentageTable from "./IRAPredictedPercentageTable";
+import { BRAND_GREEN } from "../shared/colors";
 
 function TabPanel({
     v,
@@ -334,13 +335,11 @@ function TabPanel({
                             <FormControlLabel
                                 control={<Switch checked={isPredictionOn} onChange={handleSwitchChange} />}
                                 label={
-                                    <Typography
-                                        sx={{ fontWeight: "bold", fontSize: "1.25rem", color: "rgba(47, 113, 100, 1)" }}
-                                    >
+                                    <Typography sx={{ fontWeight: "bold", fontSize: "1.25rem", color: BRAND_GREEN }}>
                                         {`${predictedYear} Prediction`}
                                     </Typography>
                                 }
-                                sx={{ mt: 3, mb: 10, fontStyle: "bold", color: "rgba(47, 113, 100, 1)" }}
+                                sx={{ mt: 3, mb: 10, fontStyle: "bold", color: BRAND_GREEN }}
                             />
                             <FormControl fullWidth>
                                 <Typography variant="h6" sx={{ mb: 1 }}>
@@ -360,7 +359,7 @@ function TabPanel({
                                                     sx={{
                                                         borderRadius: 1,
                                                         borderColor: "lightgray",
-                                                        color: "rgba(47, 113, 100, 1)"
+                                                        color: BRAND_GREEN
                                                     }}
                                                 />
                                             ))}
@@ -387,7 +386,7 @@ function TabPanel({
                                         key={practice}
                                         variant="contained"
                                         onClick={() => handleRemovePractice(practice)}
-                                        sx={{ mr: 1, mb: 1, backgroundColor: "rgba(47, 113, 100, 1)" }}
+                                        sx={{ mr: 1, mb: 1, backgroundColor: BRAND_GREEN }}
                                     >
                                         {practice} &times;
                                     </Button>
@@ -438,10 +437,10 @@ function TabPanel({
                                     }}
                                 >
                                     <ToggleButton value={0}>
-                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: "#2F7164" }} />
+                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: BRAND_GREEN }} />
                                     </ToggleButton>
                                     <ToggleButton value={1}>
-                                        <Percent style={{ fontSize: "1.25rem", color: "#2F7164" }} />
+                                        <Percent style={{ fontSize: "1.25rem", color: BRAND_GREEN }} />
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Grid>
@@ -520,10 +519,10 @@ function TabPanel({
                                     }}
                                 >
                                     <ToggleButton value={0}>
-                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: "#2F7164" }} />
+                                        <CurrencyDollar style={{ fontSize: "1.25rem", color: BRAND_GREEN }} />
                                     </ToggleButton>
                                     <ToggleButton value={1}>
-                                        <Percent style={{ fontSize: "1.25rem", color: "#2F7164" }} />
+                                        <Percent style={{ fontSize: "1.25rem", color: BRAND_GREEN }} />
                                     </ToggleButton>
                                 </ToggleButtonGroup>
                             </Grid>

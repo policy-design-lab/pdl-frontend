@@ -35,6 +35,7 @@ import {
 } from "../components/soybeanStoryboard/constants";
 import { getLatestYear, getSortedYears, useSoybeanStoryboardData } from "../components/soybeanStoryboard/soybeanApi";
 import "../styles/soybeanStoryboard.css";
+import { WHITE } from "../components/shared/colors";
 
 const defaultTheme = createTheme();
 const STORYBOARD_GRID_COLUMNS = 1000;
@@ -191,7 +192,7 @@ export default function SoybeanStoryboardPage(): JSX.Element {
                             : "soybean-storyboard-header"
                     }
                 >
-                    <NavBar bkColor="rgba(5, 22, 27, 0.94)" ftColor="#FFFFFF" logo="dark" />
+                    <NavBar bkColor="rgba(5, 22, 27, 0.94)" ftColor={WHITE} logo="dark" />
                 </Box>
                 <Box
                     className="soybean-storyboard-secondary-nav-wrap"

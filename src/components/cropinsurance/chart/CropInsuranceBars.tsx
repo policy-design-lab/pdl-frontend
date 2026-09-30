@@ -2,6 +2,7 @@ import * as React from "react";
 import { createTheme, ThemeProvider, Typography, Grid, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import CropInsuranceBar from "./CropInsuranceBar";
 import { DownloadIcon } from "../../shared/DownloadIcon";
+import { BLACK_TEXT } from "../../shared/colors";
 
 export default function CropInsuranceBars({
     stateDistributionData,
@@ -75,7 +76,7 @@ export default function CropInsuranceBars({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121"
+                                    color: BLACK_TEXT
                                 }}
                             >
                                 How is the <b>Farmer Paid Premium</b> Calculated?
@@ -85,7 +86,7 @@ export default function CropInsuranceBars({
                                     paddingLeft: 1,
                                     paddingTop: 1.5,
                                     fontSize: "2.5em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     cursor: "pointer",
                                     justifyContent: "center",
                                     alignItems: "center"
@@ -184,7 +185,7 @@ export default function CropInsuranceBars({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121"
+                                    color: BLACK_TEXT
                                 }}
                             >
                                 Total Policies Earning Premium and Total Indemnities ({yearKey})
@@ -194,7 +195,7 @@ export default function CropInsuranceBars({
                                     paddingLeft: 1,
                                     paddingTop: 1.5,
                                     fontSize: "2.5em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     cursor: "pointer",
                                     justifyContent: "center",
                                     alignItems: "center"

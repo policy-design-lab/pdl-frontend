@@ -11,6 +11,7 @@ import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
 import { getValueFromAttrDollar } from "../../utils/apiutil";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { ACCENT_BLUE, NO_DATA_GRAY, TEXT_DARKER, TEXT_DIM, TEXT_FAINT, WHITE } from "../shared/colors";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -142,9 +143,9 @@ const MapChart = ({ year, setReactTooltipContent, category, allStates, stateCode
                                         if (categoryPayment !== 0) {
                                             return getColorForValue(categoryPayment);
                                         }
-                                        return "#D2D2D2";
+                                        return NO_DATA_GRAY;
                                     }
-                                    return "#D2D2D2";
+                                    return NO_DATA_GRAY;
                                 };
                                 return (
                                     <Geography
@@ -157,16 +158,16 @@ const MapChart = ({ year, setReactTooltipContent, category, allStates, stateCode
                                             setReactTooltipContent("");
                                         }}
                                         fill={fillColour()}
-                                        stroke="#FFFFFF"
+                                        stroke={WHITE}
                                         style={{
-                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
+                                            default: { stroke: WHITE, strokeWidth: 0.75, outline: "none" },
                                             hover: {
-                                                stroke: "#232323",
+                                                stroke: TEXT_DARKER,
                                                 strokeWidth: 2,
                                                 outline: "none"
                                             },
                                             pressed: {
-                                                fill: "#345feb",
+                                                fill: ACCENT_BLUE,
                                                 outline: "none"
                                             }
                                         }}
@@ -283,7 +284,7 @@ const CategoryMap = ({
                         <div>
                             {titleElement(category, year)}
                             <Box display="flex" justifyContent="center">
-                                <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                                <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
                                     {category} data in {year} is unavailable for all states.
                                 </Typography>
                             </Box>
@@ -305,7 +306,7 @@ const CategoryMap = ({
                         </Typography>
                     </Box>
                     <Box display="flex" justifyContent="center">
-                        <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                        <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
                             {title} data is unavailable for all states.
                         </Typography>
                     </Box>
@@ -334,7 +335,7 @@ const titleElement = (attribute, year): JSX.Element => {
             <Typography noWrap variant="h6">
                 <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
             </Typography>{" "}
-            <Typography noWrap style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
+            <Typography noWrap style={{ fontSize: "0.5em", color: TEXT_DIM, textAlign: "center" }}>
                 <i>In any state that appears in gray, there is no available data</i>
             </Typography>
         </Box>

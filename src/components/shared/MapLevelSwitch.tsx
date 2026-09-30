@@ -2,6 +2,7 @@ import React from "react";
 import { Box, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import MapIcon from "@mui/icons-material/Map";
 import GridOnIcon from "@mui/icons-material/GridOn";
+import { BRAND_GREEN, BRAND_GREEN_10, BRAND_GREEN_20 } from "./colors";
 
 interface MapLevelSwitchProps {
     level: "state" | "county";
@@ -43,10 +44,10 @@ const MapLevelSwitch = ({ level, onLevelChange, disabled = false }: MapLevelSwit
                         "py": 0.5,
                         "textTransform": "none",
                         "&.Mui-selected": {
-                            "backgroundColor": "rgba(47, 113, 100, 0.1)",
-                            "color": "#2F7164",
+                            "backgroundColor": BRAND_GREEN_10,
+                            "color": BRAND_GREEN,
                             "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.2)"
+                                backgroundColor: BRAND_GREEN_20
                             }
                         }
                     }

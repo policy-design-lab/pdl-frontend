@@ -9,6 +9,7 @@ import CardPaper from "../components/issueWhitePaper/cardPaper";
 import KnowTheScore from "../files/issues/Know_the_Score.pdf";
 import CardIFrameReconciliation from "../components/issueWhitePaper/cardIframe-reconcilation";
 import CardIFrame from "../components/issueWhitePaper/cardIframe";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function IssueWhitePaperPage(): JSX.Element {
     const { id } = useParams();
@@ -71,7 +72,7 @@ export default function IssueWhitePaperPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             <Box sx={{ width: "100%" }}>
                 <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                    <NavBar bkColor="#2F7164" ftColor="#FFFFFF" logo="dark" />
+                    <NavBar bkColor={BRAND_GREEN} ftColor={WHITE} logo="dark" />
                 </Box>
                 <Box
                     sx={{

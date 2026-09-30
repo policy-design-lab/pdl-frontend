@@ -5,6 +5,7 @@ import { FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/mate
 import ReactDOMServer from "react-dom/server";
 import { ToDollarString } from "../../shared/ConvertionFormats";
 import { DownloadIcon } from "../../shared/DownloadIcon";
+import { BLACK_TEXT, TEXT_GRAY } from "../../shared/colors";
 
 export default function CropInsuranceBubble({
     originalData,
@@ -500,7 +501,7 @@ export default function CropInsuranceBubble({
                             fontWeight: 400,
                             paddingLeft: 0,
                             fontSize: "1.2em",
-                            color: "#212121"
+                            color: BLACK_TEXT
                         }}
                     >
                         How is the <b>Net Farmer Benefits</b> calculated ({startYear} - {endYear})?
@@ -510,7 +511,7 @@ export default function CropInsuranceBubble({
                             paddingLeft: 1,
                             paddingTop: 1.5,
                             fontSize: "2.5em",
-                            color: "#212121",
+                            color: BLACK_TEXT,
                             cursor: "pointer",
                             justifyContent: "center",
                             alignItems: "center"
@@ -563,7 +564,7 @@ export default function CropInsuranceBubble({
                         fontWeight: 400,
                         paddingLeft: 0,
                         fontSize: "0.8em",
-                        color: "rgb(163, 163, 163)"
+                        color: TEXT_GRAY
                     }}
                 >
                     Hover on the state names to see detailed data
