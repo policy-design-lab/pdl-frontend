@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Link, Typography } from "@mui/material";
+import { BRAND_GREEN } from "./colors";
 
 interface DataSourceNoteProps {
     source: string;
@@ -23,7 +24,7 @@ const DataSourceNote = ({ source, href, align = "center", sx }: DataSourceNotePr
             {href ? (
                 <>
                     {" "}
-                    <Link href={href} target="_blank" rel="noopener noreferrer" sx={{ color: "#2F7164" }}>
+                    <Link href={href} target="_blank" rel="noopener noreferrer" sx={{ color: BRAND_GREEN }}>
                         {href}
                     </Link>
                 </>

@@ -12,6 +12,7 @@ import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { STATE_TOPOJSON_URL, loadTopoJson } from "../../utils/countyGeo";
+import { ACCENT_BLUE, TEXT_DARKER, TEXT_FAINT, WHITE } from "../shared/colors";
 
 const offsets = {
     VT: [50, -8],
@@ -101,21 +102,21 @@ const MapChart = ({
                                             onMouseLeave={() => {
                                                 setReactTooltipContent("");
                                             }}
-                                            fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
+                                            fill={programPayment === 0 ? TEXT_FAINT : colorScale(programPayment)}
                                             stroke="#FFF"
                                             style={{
                                                 default: {
-                                                    stroke: "#FFFFFF",
+                                                    stroke: WHITE,
                                                     strokeWidth: 0.75,
                                                     outline: "none"
                                                 },
                                                 hover: {
-                                                    stroke: "#232323",
+                                                    stroke: TEXT_DARKER,
                                                     strokeWidth: 2,
                                                     outline: "none"
                                                 },
                                                 pressed: {
-                                                    fill: "#345feb",
+                                                    fill: ACCENT_BLUE,
                                                     outline: "none"
                                                 }
                                             }}
@@ -203,21 +204,21 @@ const MapChart = ({
                                             onMouseLeave={() => {
                                                 setReactTooltipContent("");
                                             }}
-                                            fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
+                                            fill={programPayment === 0 ? TEXT_FAINT : colorScale(programPayment)}
                                             stroke="#FFF"
                                             style={{
                                                 default: {
-                                                    stroke: "#FFFFFF",
+                                                    stroke: WHITE,
                                                     strokeWidth: 0.75,
                                                     outline: "none"
                                                 },
                                                 hover: {
-                                                    stroke: "#232323",
+                                                    stroke: TEXT_DARKER,
                                                     strokeWidth: 2,
                                                     outline: "none"
                                                 },
                                                 pressed: {
-                                                    fill: "#345feb",
+                                                    fill: ACCENT_BLUE,
                                                     outline: "none"
                                                 }
                                             }}

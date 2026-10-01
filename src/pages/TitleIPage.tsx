@@ -35,6 +35,7 @@ import {
     Title1CountyDatasetKey,
     Title1CountySelector
 } from "../components/title1/title1County";
+import { BRAND_GREEN, TEXT_MUTED, WHITE, WHITE_72, WHITE_80 } from "../components/shared/colors";
 
 const title1CheckedByMapId = Object.entries(title1MapIdByChecked).reduce(
     (acc, [checked, mapId]) => {
@@ -782,7 +783,7 @@ export default function TitleIPage(): JSX.Element {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        backgroundColor: WHITE_80,
                         zIndex: 9999,
                         display: "flex",
                         flexDirection: "column",
@@ -792,10 +793,10 @@ export default function TitleIPage(): JSX.Element {
                     }}
                 >
                     <CircularProgress size={60} />
-                    <Typography variant="h6" sx={{ color: "#2F7164" }}>
+                    <Typography variant="h6" sx={{ color: BRAND_GREEN }}>
                         Loading county data...
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "#888" }}>
+                    <Typography variant="body2" sx={{ color: TEXT_MUTED }}>
                         This may take longer the first time. Subsequent loads will be faster.
                     </Typography>
                 </Box>
@@ -808,7 +809,7 @@ export default function TitleIPage(): JSX.Element {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: "rgba(255, 255, 255, 0.72)",
+                        backgroundColor: WHITE_72,
                         zIndex: 9998,
                         display: "flex",
                         flexDirection: "column",
@@ -818,7 +819,7 @@ export default function TitleIPage(): JSX.Element {
                     }}
                 >
                     <CircularProgress size={44} />
-                    <Typography variant="h6" sx={{ color: "#2F7164" }}>
+                    <Typography variant="h6" sx={{ color: BRAND_GREEN }}>
                         Updating county map and table...
                     </Typography>
                 </Box>
@@ -826,7 +827,7 @@ export default function TitleIPage(): JSX.Element {
             {isDataLoaded ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar text="Commodities Programs (Title I)" subtext={subtextMatch[checked]} />
                     </Box>
                     <Box sx={{ height: "64px" }} />

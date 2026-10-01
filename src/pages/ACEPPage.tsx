@@ -11,6 +11,7 @@ import NavSearchBar from "../components/shared/NavSearchBar";
 import DataTable from "../components/acep/ACEPTotalTable";
 import "../styles/subpage.css";
 import { formatCurrency } from "../components/shared/ConvertionFormats";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function ACEPPage(): JSX.Element {
     const year = "2014-2023";
@@ -99,7 +100,7 @@ export default function ACEPPage(): JSX.Element {
             Object.keys(stateDistributionData).length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
                             subtext="Conversation Reserve Program (ACEP)"

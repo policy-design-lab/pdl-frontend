@@ -1,5 +1,6 @@
 import React from "react";
 import soybeanGlyph from "../../images/soybean/soybean.svg";
+import { WHITE, WHITE_90 } from "../shared/colors";
 
 export const STORYBOARD_HEADER_HEIGHT = 68;
 export const STORYBOARD_SECONDARY_NAV_HEIGHT = 56;
@@ -13,20 +14,20 @@ export const mutedCountryStroke = "#374B51";
 export const soybeanGoldColor = "#D69830";
 export const soybeanGreyColor = "rgba(214, 222, 228, 0.74)";
 
-export const surfaceTextColor = "#FFFFFF";
+export const surfaceTextColor = WHITE;
 export const surfaceTextInverseColor = "#17242A";
 export const chartAxisLineColor = "rgba(156, 173, 179, 0.26)";
 export const chartAxisLabelColor = "rgba(176, 191, 196, 0.56)";
 export const chartGridLineColor = "rgba(255, 255, 255, 0.08)";
 export const chartGridLineSubtleColor = "rgba(255, 255, 255, 0.05)";
 export const chartSeriesLineColor = "rgba(228, 232, 233, 0.72)";
-export const chartPointFillColor = "rgba(255, 255, 255, 0.9)";
+export const chartPointFillColor = WHITE_90;
 export const chartHighlightLineColor = "rgba(255, 255, 255, 0.92)";
 export const chartLabelColor = "rgba(197, 214, 222, 0.72)";
 
 export const tooltipFillColor = "rgba(7, 22, 28, 0.96)";
 export const tooltipStrokeColor = "rgba(255, 255, 255, 0.14)";
-export const tooltipTitleColor = "#ffffff";
+export const tooltipTitleColor = WHITE;
 export const tooltipValueColor = "rgba(216, 223, 226, 0.9)";
 export const tooltipValueStrongColor = "rgba(216, 223, 226, 0.92)";
 export const overlayFillColor = "rgba(7, 22, 28, 0.82)";

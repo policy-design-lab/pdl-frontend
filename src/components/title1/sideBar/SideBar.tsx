@@ -3,6 +3,7 @@ import { Box, Collapse, Drawer, List, ListItemButton, ListItemText } from "@mui/
 import styled from "styled-components";
 import { menu } from "./SideBarMenuItem";
 import { hasChildren } from "./Utils";
+import { BRAND_GREEN, SURFACE_MINT, WHITE } from "../../shared/colors";
 
 const Styles = styled.div`
     .Mui-disabled {
@@ -57,10 +58,10 @@ export default function SideBar({ setTitle1Checked, selectedValue }): JSX.Elemen
                 sx={{
                     my: 0,
                     py: 3,
-                    color: selectedItem === value ? "#2F7164" : "#272727",
+                    color: selectedItem === value ? BRAND_GREEN : "#272727",
                     width: 300,
                     maxHeight: "7em",
-                    backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
+                    backgroundColor: selectedItem === value || highlight === true ? SURFACE_MINT : "inherit"
                 }}
                 selected={selectedItem === item}
                 disabled={selectedItem === value}
@@ -117,7 +118,7 @@ export default function SideBar({ setTitle1Checked, selectedValue }): JSX.Elemen
                         maxHeight: "7em",
                         color: "#272727",
                         width: 300,
-                        backgroundColor: selectedItem === value || highlight === true ? "#ECF0EE" : "inherit"
+                        backgroundColor: selectedItem === value || highlight === true ? SURFACE_MINT : "inherit"
                     }}
                     disabled={selectedItem === value}
                 >
@@ -126,7 +127,7 @@ export default function SideBar({ setTitle1Checked, selectedValue }): JSX.Elemen
                             <Box
                                 sx={{
                                     mx: 3,
-                                    color: selectedItem === value ? "#2F7164" : "#272727",
+                                    color: selectedItem === value ? BRAND_GREEN : "#272727",
                                     fontWeight: selectedItem === value ? 600 : 400
                                 }}
                             >
@@ -163,7 +164,7 @@ export default function SideBar({ setTitle1Checked, selectedValue }): JSX.Elemen
                 }}
                 PaperProps={{
                     sx: {
-                        backgroundColor: "#ffffff",
+                        backgroundColor: WHITE,
                         color: "gray"
                     }
                 }}

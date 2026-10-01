@@ -12,6 +12,7 @@ import { csvFilenameFromTitle } from "../shared/titleUtils";
 import DataSourceNote from "../shared/DataSourceNote";
 import { RMA_SUMMARY_OF_BUSINESS_SOURCE, RMA_SUMMARY_OF_BUSINESS_URL } from "../shared/dataSourceConstants";
 import { AVERAGE_ATTRIBUTES, AVERAGE_BASIS_NOTE, PRF_ACRES_NOTE } from "./cropInsuranceConstants";
+import { BLACK_TEXT, TEXT_DIM } from "../shared/colors";
 
 function CropInsuranceProgramTable({
     tableTitle,
@@ -164,7 +165,7 @@ function CropInsuranceProgramTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     marginBottom: 4,
                                     paddingTop: 0.6
                                 }}
@@ -173,14 +174,14 @@ function CropInsuranceProgramTable({
                             </Typography>
                             {attributes.some((attr) => AVERAGE_ATTRIBUTES.includes(attr)) ? (
                                 <Box display="flex" justifyContent="start">
-                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: TEXT_DIM }}>
                                         ({AVERAGE_BASIS_NOTE})
                                     </Typography>
                                 </Box>
                             ) : null}
                             {attributes.includes("averageInsuredAreaInAcres") ? (
                                 <Box display="flex" justifyContent="start">
-                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#AAA" }}>
+                                    <Typography variant="subtitle2" sx={{ mb: 0.5, color: TEXT_DIM }}>
                                         {PRF_ACRES_NOTE}
                                     </Typography>
                                 </Box>

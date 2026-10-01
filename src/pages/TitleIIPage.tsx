@@ -8,6 +8,7 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import Title2TotalMap from "../components/title2/Title2TotalMap";
 import DataTable from "../components/title2/Title2TotalTable";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function TitleIIPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -103,7 +104,7 @@ export default function TitleIIPage(): JSX.Element {
             {isDataLoaded ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
                             subtext="Total Conservation Programs (Title II)"

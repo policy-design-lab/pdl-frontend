@@ -32,6 +32,7 @@ import {
     getLossRatioColors
 } from "./cropInsuranceConstants";
 import { ALL_CROPS_SENTINEL } from "./cropSelection/commodityMapping";
+import { BRAND_GREEN, BRAND_GREEN_10, BRAND_GREEN_50, BRAND_GREEN_90, TEXT_FAINT, WHITE_90 } from "../shared/colors";
 
 const lossRatioThresholds = LOSS_RATIO_THRESHOLDS;
 
@@ -392,7 +393,7 @@ const CropInsuranceCountyMap = ({
         (countyFIPS: string) => {
             const value = countyValueMap[countyFIPS];
             if (value === undefined) return "#EEE";
-            if (value === 0) return "#CCC";
+            if (value === 0) return TEXT_FAINT;
             return colorScale(value);
         },
         [countyValueMap, colorScale]
@@ -625,12 +626,12 @@ const CropInsuranceCountyMap = ({
                             variant="contained"
                             startIcon={<CloseIcon />}
                             sx={{
-                                "bgcolor": "rgba(47, 113, 100, 0.9)",
+                                "bgcolor": BRAND_GREEN_90,
                                 "color": "white",
                                 "border": "2px solid white",
                                 "boxShadow": "0 2px 10px rgba(0,0,0,0.2)",
                                 "&:hover": {
-                                    bgcolor: "rgba(47, 113, 100, 1)",
+                                    bgcolor: BRAND_GREEN,
                                     transform: "scale(1.05)"
                                 }
                             }}
@@ -703,7 +704,7 @@ const CropInsuranceCountyMap = ({
                         sx={{
                             fontSize: "11px",
                             color: "#666",
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            backgroundColor: WHITE_90,
                             padding: "4px 8px",
                             borderRadius: "4px",
                             boxShadow: "0 1px 4px rgba(0,0,0,0.1)"
@@ -715,7 +716,7 @@ const CropInsuranceCountyMap = ({
                         sx={{
                             display: "flex",
                             gap: 1,
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            backgroundColor: WHITE_90,
                             borderRadius: "8px",
                             padding: "8px",
                             boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
@@ -729,11 +730,11 @@ const CropInsuranceCountyMap = ({
                                 "minWidth": "auto",
                                 "width": "32px",
                                 "height": "32px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >
@@ -745,11 +746,11 @@ const CropInsuranceCountyMap = ({
                             variant="outlined"
                             sx={{
                                 "fontSize": "11px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >
@@ -763,11 +764,11 @@ const CropInsuranceCountyMap = ({
                                 "minWidth": "auto",
                                 "width": "32px",
                                 "height": "32px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >

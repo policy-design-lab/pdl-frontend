@@ -5,6 +5,7 @@ import { Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Typography } f
 import SortIcon from "@mui/icons-material/Sort";
 import TreeMapSquares from "./TreeMapSquares";
 import { DownloadIcon } from "../shared/DownloadIcon";
+import { BLACK_TEXT, TEXT_FAINT, TEXT_GRAY } from "../shared/colors";
 
 const Styles = styled.div`
     ".muibuttonbase-root, muicheckbox-root:hover": {
@@ -71,8 +72,8 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
     const rn = React.useRef(null);
     const acepDiv = React.useRef(null);
     const [sortPaymentButtonColor, setPaymentSortButtonColor] = React.useState(paymentsColor);
-    const [sortBaseAcresButtonColor, setSortBaseAcresButtonColor] = React.useState("#CCC");
-    const [sortRecipientsButtonColor, setSortRecipientsButtonColor] = React.useState("#CCC");
+    const [sortBaseAcresButtonColor, setSortBaseAcresButtonColor] = React.useState(TEXT_FAINT);
+    const [sortRecipientsButtonColor, setSortRecipientsButtonColor] = React.useState(TEXT_FAINT);
     const [AcepTreeMapIllustration, setAcepTreeMapIllustration] = React.useState(window.innerWidth * 0.06);
     const [chartData, setChartData] = React.useState(sortDataByAttribute(transform(TreeMapData[1]), "payments"));
     const [availableAttributes, setAvailableAttributes] = React.useState(["payments", "acres", "contracts"]);
@@ -100,9 +101,9 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
         return () => window.removeEventListener("resize", handleResize);
     });
     const handleSortClick = (e, attr) => {
-        setPaymentSortButtonColor("#CCC");
-        setSortBaseAcresButtonColor("#CCC");
-        setSortRecipientsButtonColor("#CCC");
+        setPaymentSortButtonColor(TEXT_FAINT);
+        setSortBaseAcresButtonColor(TEXT_FAINT);
+        setSortRecipientsButtonColor(TEXT_FAINT);
         Array.from(document.querySelectorAll(".sortIcon")).forEach((el) => {
             if (el.parentElement === e.currentTarget) {
                 if (el.classList.contains("sortPayments")) {
@@ -200,7 +201,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                                 fontWeight: 400,
                                 paddingLeft: 0,
                                 fontSize: "1.2em",
-                                color: "#212121"
+                                color: BLACK_TEXT
                             }}
                         >
                             {program.includes("(")
@@ -213,7 +214,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                                     paddingLeft: 1,
                                     paddingTop: 1.5,
                                     fontSize: "2.5em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     cursor: "pointer",
                                     justifyContent: "center",
                                     alignItems: "center",
@@ -234,7 +235,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                                 fontWeight: 400,
                                 paddingLeft: 0,
                                 fontSize: "0.8em",
-                                color: "rgb(163, 163, 163)"
+                                color: TEXT_GRAY
                             }}
                         >
                             <b>Hover over the squares to view detailed data.</b>
@@ -359,7 +360,7 @@ export default function AcepTreeMap({ program, TreeMapData, year, stateCodes, sv
                             sx={{
                                 fontWeight: 400,
                                 fontSize: "0.8em",
-                                color: "rgb(163, 163, 163)",
+                                color: TEXT_GRAY,
                                 marginTop: 1,
                                 paddingLeft: "1em"
                             }}

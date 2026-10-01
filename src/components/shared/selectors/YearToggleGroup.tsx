@@ -2,6 +2,7 @@ import { Box, FormLabel, ToggleButton } from "@mui/material";
 import React from "react";
 import InfoTooltip from "../InfoTooltip";
 import { formLabelStyleBasic, toggleButtonSx } from "./selectorStyles";
+import { BRAND_GREEN_15, BRAND_GREEN_30 } from "../colors";
 
 interface YearToggleGroupProps {
     label?: string;
@@ -60,8 +61,8 @@ const YearToggleGroup: React.FC<YearToggleGroupProps> = ({
                             "minWidth": `${minButtonWidth}px`,
                             "marginBottom": "4px",
                             "&.Mui-disabled": {
-                                color: "rgba(47, 113, 100, 0.3)",
-                                borderColor: "rgba(47, 113, 100, 0.15)"
+                                color: BRAND_GREEN_30,
+                                borderColor: BRAND_GREEN_15
                             }
                         }}
                     >

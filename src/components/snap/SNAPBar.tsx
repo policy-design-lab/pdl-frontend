@@ -2,6 +2,7 @@ import * as React from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
 import { ShortFormat, ToPercentageString, ToDollarString } from "../shared/ConvertionFormats";
+import { TEXT_GRAY } from "../shared/colors";
 
 export default function SNAPBar({
     SnapData,
@@ -452,7 +453,7 @@ export default function SNAPBar({
             .selectAll("text")
             .attr("x", graphWidth / 2)
             .attr("dy", "-0.75em")
-            .style("color", "#A3A3A3")
+            .style("color", TEXT_GRAY)
             .style("font-size", "1em");
         y0GridTicks
             .selectAll("text")

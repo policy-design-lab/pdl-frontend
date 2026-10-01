@@ -1,6 +1,7 @@
 import React from "react";
 import { Tooltip, IconButton, Typography } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
+import { BRAND_GREEN_70 } from "./colors";
 
 interface InfoTooltipProps {
     title: string;
@@ -31,7 +32,7 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title, compact = false }) => 
             <IconButton
                 size="small"
                 sx={{
-                    color: "rgba(47, 113, 100, 0.7)",
+                    color: BRAND_GREEN_70,
                     marginLeft: "4px",
                     verticalAlign: "middle",
                     width: "1.25rem !important",

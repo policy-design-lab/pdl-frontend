@@ -1,5 +1,6 @@
 import { ListItemButton, Box, ListItemText, Collapse, List } from "@mui/material";
 import React, { useState } from "react";
+import { BRAND_GREEN, BRAND_GREEN_08 } from "../../../components/shared/colors";
 
 export interface MenuItem {
     title: string;
@@ -46,8 +47,8 @@ export function MenuItem({
         }
     };
 
-    const textColor = isSelected || level === 0 ? "#2F7164" : "#666";
-    const backgroundColor = isSelected ? "rgba(47, 113, 100, 0.08)" : "transparent";
+    const textColor = isSelected || level === 0 ? BRAND_GREEN : "#666";
+    const backgroundColor = isSelected ? BRAND_GREEN_08 : "transparent";
     const fontSize = level === 0 ? "1.1rem" : "1rem";
     const fontWeight = level === 0 || isSelected ? 600 : 400;
 

@@ -1,46 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import ExportCsvButton from "../shared/ExportCsvButton";
-import { usePagination, useSortBy, useTable } from "react-table";
+import { CSVLink } from "react-csv";
+import { useTable, useSortBy, usePagination } from "react-table";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import {
-    Box,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TableContainer,
-    Tooltip,
-    Typography
-} from "@mui/material";
-import {
-    compareWithAlphabetic,
-    compareWithDollarSign,
-    compareWithNumber,
-    compareWithPercentSign
-} from "../shared/TableCompareFunctions";
-import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
-import getCSVData from "../shared/getCSVData";
-import "../../styles/table.css";
-import { csvFilenameFromTitle } from "../shared/titleUtils";
-import {
-    formatTitle1Percent,
-    getTitle1CountyScopedRecord,
-    Title1CountyColumnConfig,
-    Title1CountySelector
-} from "./title1County";
-import { BLACK_TEXT } from "../shared/colors";
+import { Grid, TableContainer, Typography, Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { compareWithAlphabetic } from "../TableCompareFunctions";
+import "../../../styles/table.css";
+import getCSVData from "../getCSVData";
+import { BLACK_TEXT } from "../colors";
 
-interface Title1CountyTableProps {
+export interface CountyTableColumn {
+    key: string;
+    header: string;
+    format: (county: any) => string;
+    sortType: (rowA: any, rowB: any, id: string) => number;
+}
+
+interface CountyDataTableProps {
     tableTitle: string;
-    selector: Title1CountySelector;
-    columnsConfig: Title1CountyColumnConfig[];
+    columns: CountyTableColumn[];
     stateCodes: Record<string, string>;
     countyData: any;
     year: string;
     selectedState: string;
     onStateChange: (state: string) => void;
+    skipColumns?: string[];
+    subtitle?: React.ReactNode;
 }
 
 const Styles = styled.div`
@@ -73,12 +58,19 @@ const Styles = styled.div`
             text-align: right;
         }
 
-        td[class$="cell0"],
+        td[class$="cell0"] {
+            padding-right: 2em;
+        }
+
         td[class$="cell1"] {
             padding-right: 2em;
         }
 
-        td[class^="cell"]:not(.cell0):not(.cell1) {
+        td[class$="cell2"],
+        td[class$="cell3"],
+        td[class$="cell4"],
+        td[class$="cell5"],
+        td[class$="cell6"] {
             text-align: right;
         }
 
@@ -92,9 +84,20 @@ const Styles = styled.div`
             }
         }
     }
-
     .pagination {
         margin-top: 1.5em;
+    }
+
+    .downloadbtn {
+        background-color: rgba(47, 113, 100, 1);
+        padding: 8px 16px;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        margin-bottom: 1em;
+        text-align: center;
     }
 
     @media screen and (max-width: 1024px) {
@@ -102,60 +105,39 @@ const Styles = styled.div`
         td {
             padding: 8px;
         }
-
         td[class$="cell0"],
         td[class$="cell1"] {
             padding-right: 1em;
         }
-
         .pagination {
             margin-top: 8px;
         }
     }
 `;
 
-const formatTableValue = (value: number, type: Title1CountyColumnConfig["type"]): string => {
-    if (type === "currency") {
-        return formatCurrency(value, 0);
-    }
-    if (type === "percent") {
-        return formatTitle1Percent(value);
-    }
-    return formatNumericValue(value, 0);
-};
-
-const getSortType = (type: Title1CountyColumnConfig["type"]) => {
-    if (type === "currency") {
-        return compareWithDollarSign;
-    }
-    if (type === "percent") {
-        return compareWithPercentSign;
-    }
-    return compareWithNumber;
-};
-
-function Title1CountyTable({
+function CountyDataTable({
     tableTitle,
-    selector,
-    columnsConfig,
+    columns: columnConfig,
     stateCodes,
     countyData,
     year,
     selectedState,
-    onStateChange
-}: Title1CountyTableProps): JSX.Element {
+    onStateChange,
+    skipColumns = [],
+    subtitle
+}: CountyDataTableProps): JSX.Element {
     const countyRows = React.useMemo(() => {
         if (!countyData || !countyData[year]) {
             return [];
         }
+        if (selectedState === "All States") {
+            return countyData[year];
+        }
         return countyData[year].filter((county: any) => {
             const stateName = stateCodes[county.state] || county.state;
-            if (selectedState !== "All States" && stateName !== selectedState) {
-                return false;
-            }
-            return getTitle1CountyScopedRecord(county, selector) !== null;
+            return stateName === selectedState;
         });
-    }, [countyData, year, selectedState, selector, stateCodes]);
+    }, [countyData, year, selectedState, stateCodes]);
 
     const availableStates = React.useMemo(() => {
         const states = new Set<string>();
@@ -169,65 +151,35 @@ function Title1CountyTable({
         return Array.from(states).sort();
     }, [countyData, year, stateCodes]);
 
-    const visibleColumnsConfig = React.useMemo(
-        () => columnsConfig.filter((column) => !column.accessor.toLowerCase().includes("withinstate")),
-        [columnsConfig]
-    );
-    const avgBaseAcresTooltip = React.useMemo(
-        () => columnsConfig.find((column) => column.accessor === "averageAreaInAcres")?.tooltip,
-        [columnsConfig]
-    );
-    const renderedTableTitle = React.useMemo(() => {
-        if (!avgBaseAcresTooltip || !tableTitle.includes("Avg. Base Acres")) {
-            return tableTitle;
-        }
-        const [before, after] = tableTitle.split("Avg. Base Acres");
-        return (
-            <>
-                {before}
-                <Tooltip title={avgBaseAcresTooltip} arrow placement="top">
-                    <Box component="span" sx={{ display: "inline-block" }}>
-                        Avg. Base Acres
-                    </Box>
-                </Tooltip>
-                {after}
-            </>
-        );
-    }, [avgBaseAcresTooltip, tableTitle]);
-
     const resultData = React.useMemo(
         () =>
             countyRows.map((county: any) => {
-                const scopedRecord = getTitle1CountyScopedRecord(county, selector);
                 const stateName = stateCodes[county.state] || county.state;
-                const newRecord: Record<string, string> = {
+                const newRecord: any = {
                     state: stateName,
                     county: county.countyName
                 };
-                visibleColumnsConfig.forEach((column) => {
-                    const value = Number(scopedRecord?.[column.accessor]);
-                    newRecord[column.accessor] = Number.isFinite(value) ? formatTableValue(value, column.type) : "";
+                columnConfig.forEach((column) => {
+                    newRecord[column.key] = column.format(county);
                 });
                 return newRecord;
             }),
-        [countyRows, selector, stateCodes, visibleColumnsConfig]
+        [countyRows, columnConfig, stateCodes]
     );
 
     const columns = React.useMemo(() => {
-        const preparedColumns: any[] = [
-            { Header: "STATE", accessor: "state", sortType: compareWithAlphabetic },
-            { Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic }
-        ];
-        visibleColumnsConfig.forEach((column) => {
-            preparedColumns.push({
+        const columnPrep: any[] = [];
+        columnPrep.push({ Header: "STATE", accessor: "state", sortType: compareWithAlphabetic });
+        columnPrep.push({ Header: "COUNTY", accessor: "county", sortType: compareWithAlphabetic });
+        columnConfig.forEach((column) => {
+            columnPrep.push({
                 Header: column.header,
-                accessor: column.accessor,
-                sortType: getSortType(column.type),
-                tooltip: column.tooltip
+                accessor: column.key,
+                sortType: column.sortType
             });
         });
-        return preparedColumns;
-    }, [visibleColumnsConfig]);
+        return columnPrep;
+    }, [columnConfig]);
 
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
@@ -244,7 +196,7 @@ function Title1CountyTable({
                     }}
                 >
                     <Grid item xs={8} justifyContent="flex-start" alignItems="center" sx={{ display: "flex" }}>
-                        <Box sx={{ width: "100%" }}>
+                        <Box id="countyTableHeader" sx={{ width: "100%" }}>
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -255,19 +207,20 @@ function Title1CountyTable({
                                     paddingTop: 0.6
                                 }}
                             >
-                                {renderedTableTitle}
+                                Comparing {tableTitle}
                             </Typography>
+                            {subtitle}
                         </Box>
                     </Grid>
                     <Grid item xs={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
                         <FormControl size="small" sx={{ minWidth: 200 }}>
-                            <InputLabel id="title1-county-state-filter-label">Filter by State</InputLabel>
+                            <InputLabel id="state-filter-label">Filter by State</InputLabel>
                             <Select
-                                labelId="title1-county-state-filter-label"
-                                id="title1-county-state-filter"
+                                labelId="state-filter-label"
+                                id="state-filter"
                                 value={selectedState}
                                 label="Filter by State"
-                                onChange={(event) => onStateChange(event.target.value)}
+                                onChange={(e) => onStateChange(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
                                         style: {
@@ -288,10 +241,13 @@ function Title1CountyTable({
                 </Grid>
                 <TableContainer sx={{ width: "100%" }}>
                     <Table
-                        columns={columns}
+                        columns={columns.filter((column: any) => !skipColumns.includes(column.accessor))}
                         data={resultData}
-                        initialState={{ pageSize: 10, pageIndex: 0 }}
-                        tableTitle={tableTitle}
+                        initialState={{
+                            pageSize: 10,
+                            pageIndex: 0
+                        }}
+                        tableTitle={`Comparing ${tableTitle}`}
                     />
                 </TableContainer>
             </Styles>
@@ -336,11 +292,15 @@ function Table({
         useSortBy,
         usePagination
     );
-    const fileName = csvFilenameFromTitle(tableTitle);
+    const fileName = `${tableTitle.replace(/\s+/g, "-").toLowerCase()}-data.csv`;
 
     return (
         <div style={{ width: "100%" }}>
-            {data && data.length > 0 && <ExportCsvButton filename={fileName} data={getCSVData(headerGroups, data)} />}
+            {data && data.length > 0 && (
+                <CSVLink className="downloadbtn" filename={fileName} data={getCSVData(headerGroups, data)}>
+                    Export This Table to CSV
+                </CSVLink>
+            )}
             <table {...getTableProps()} style={{ width: "100%", tableLayout: "fixed" }}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -350,26 +310,26 @@ function Table({
                                     className={column.render("Header").replace(/\s/g, "")}
                                     key={column.id}
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    {...column.getHeaderProps({
+                                        style: {
+                                            paddingLeft: column.paddingLeft,
+                                            paddingRight: column.paddingRight
+                                        }
+                                    })}
                                 >
-                                    {column.tooltip ? (
-                                        <Tooltip title={column.tooltip} arrow placement="top">
-                                            <Box component="span" sx={{ display: "inline-block" }}>
-                                                {column.render("Header")}
-                                            </Box>
-                                        </Tooltip>
-                                    ) : (
-                                        column.render("Header")
-                                    )}
+                                    {column.render("Header")}
                                     <span>
-                                        {!column.isSorted ? (
-                                            <Box sx={{ ml: 1, display: "inline" }}>
-                                                <SwapVertIcon />
-                                            </Box>
-                                        ) : column.isSortedDesc ? (
-                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>
-                                        ) : (
-                                            <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>
-                                        )}
+                                        {(() => {
+                                            if (!column.isSorted)
+                                                return (
+                                                    <Box sx={{ ml: 1, display: "inline" }}>
+                                                        <SwapVertIcon />
+                                                    </Box>
+                                                );
+                                            if (column.isSortedDesc)
+                                                return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25BC}"}</Box>;
+                                            return <Box sx={{ ml: 1, display: "inline" }}>{"\u{25B2}"}</Box>;
+                                        })()}
                                     </span>
                                 </th>
                             ))}
@@ -381,16 +341,18 @@ function Table({
                         prepareRow(row);
                         return (
                             <tr key={row.id} {...row.getRowProps()}>
-                                {row.cells.map((cell, columnIndex) => (
-                                    <td
-                                        className={`cell${columnIndex}`}
-                                        key={cell.id}
-                                        {...cell.getCellProps()}
-                                        style={{ width: "100%", whiteSpace: "nowrap" }}
-                                    >
-                                        {cell.render("Cell")}
-                                    </td>
-                                ))}
+                                {row.cells.map((cell, j) => {
+                                    return (
+                                        <td
+                                            className={`cell${j}`}
+                                            key={cell.id}
+                                            {...cell.getCellProps()}
+                                            style={{ width: "100%", whiteSpace: "nowrap" }}
+                                        >
+                                            {cell.render("Cell")}
+                                        </td>
+                                    );
+                                })}
                             </tr>
                         );
                     })}
@@ -421,28 +383,24 @@ function Table({
                         <input
                             type="number"
                             defaultValue={pageIndex + 1}
-                            onChange={(event) => {
-                                let nextPageIndex = event.target.value ? Number(event.target.value) - 1 : 0;
-                                if (nextPageIndex > pageOptions.length) {
-                                    nextPageIndex = pageOptions.length - 1;
-                                }
-                                if (nextPageIndex < 0) {
-                                    nextPageIndex = 0;
-                                }
-                                gotoPage(nextPageIndex);
+                            onChange={(e) => {
+                                let p = e.target.value ? Number(e.target.value) - 1 : 0;
+                                if (p > pageOptions.length) p = pageOptions.length - 1;
+                                if (p < 0) p = 0;
+                                gotoPage(p);
                             }}
                             style={{ width: "3em" }}
                         />{" "}
                     </span>
                     <select
                         value={pageSize}
-                        onChange={(event) => {
-                            setPageSize(Number(event.target.value));
+                        onChange={(e) => {
+                            setPageSize(Number(e.target.value));
                         }}
                     >
-                        {[10, 25, 50, 100].map((pageCountValue) => (
-                            <option key={pageCountValue} value={pageCountValue}>
-                                Show {pageCountValue}
+                        {[10, 25, 50, 100].map((p) => (
+                            <option key={p} value={p}>
+                                Show {p}
                             </option>
                         ))}
                     </select>
@@ -450,7 +408,7 @@ function Table({
                 <Box>
                     {pageSize * (pageIndex + 1) <= rows.length ? (
                         <Typography>
-                            Showing the first {pageSize * (pageIndex + 1)} results of {rows.length} rows
+                            Showing the first {parseInt(pageSize, 10) * (pageIndex + 1)} results of {rows.length} rows
                         </Typography>
                     ) : (
                         <Typography>
@@ -463,4 +421,4 @@ function Table({
     );
 }
 
-export default Title1CountyTable;
+export default CountyDataTable;

@@ -15,6 +15,7 @@ interface MapTableWithLevelSwitchProps {
     onLevelChange?: (level: "state" | "county") => void;
     countyControlsComponent?: React.ReactNode;
     countyUnavailableComponent?: React.ReactNode;
+    mapAreaWidth?: string;
 }
 
 const MapTableWithLevelSwitch = ({
@@ -29,7 +30,8 @@ const MapTableWithLevelSwitch = ({
     defaultLevel = "state",
     onLevelChange,
     countyControlsComponent,
-    countyUnavailableComponent
+    countyUnavailableComponent,
+    mapAreaWidth = "85%"
 }: MapTableWithLevelSwitchProps): JSX.Element => {
     const [internalLevel, setInternalLevel] = useState<"state" | "county">(defaultLevel);
     const level = controlledLevel ?? internalLevel;
@@ -58,7 +60,7 @@ const MapTableWithLevelSwitch = ({
                 className="mapArea"
                 component="div"
                 sx={{
-                    width: "85%",
+                    width: mapAreaWidth,
                     m: "auto"
                 }}
             >

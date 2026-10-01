@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Grid, Typography, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { SHADOW_MEDIUM, SURFACE_OFFWHITE, WHITE } from "./colors";
 
 export default function NavSearchBar({
-    bkColor = "rgba(255, 255, 255, 1)",
+    bkColor = WHITE,
     brColor = "rgba(205, 205, 205, 0.3)",
     text,
     subtext = ""
@@ -52,7 +53,7 @@ export default function NavSearchBar({
                             className="NavSearchBar-subtext"
                             sx={{
                                 fontSize: "0.9em",
-                                color: "rgba(0, 0, 0, 0.5)",
+                                color: SHADOW_MEDIUM,
                                 fontWeight: 400,
                                 ml: 3
                             }}
@@ -67,7 +68,7 @@ export default function NavSearchBar({
                     <SearchIcon
                         sx={{
                             color: "#D3D3D3",
-                            backgroundColor: "rgba(242, 245, 244, 1)",
+                            backgroundColor: SURFACE_OFFWHITE,
                             borderRadius: "4px",
                             padding: "0.25em"
                         }}

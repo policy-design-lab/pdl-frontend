@@ -10,6 +10,7 @@ import CountyCommodityMap from "../../../components/ProposalAnalysis/CountyCommo
 import CountyCommodityTable from "../../../components/ProposalAnalysis/CountyCommodityTable";
 import PolicyComparisonSection from "../../../components/ProposalAnalysis/PolicyComparisonSection";
 import { HorizontalMenu } from "./HorizontalMenu";
+import { BRAND_GREEN, SURFACE_MINT } from "../../../components/shared/colors";
 
 export default function HouseProjectionSubPageProps({
     v,
@@ -238,7 +239,7 @@ export default function HouseProjectionSubPageProps({
                         <Grid item xs={12} md={10}>
                             <Box
                                 sx={{
-                                    backgroundColor: "#ECF0EE",
+                                    backgroundColor: SURFACE_MINT,
                                     borderRadius: 1,
                                     mb: 4,
                                     px: 3,
@@ -255,12 +256,12 @@ export default function HouseProjectionSubPageProps({
                                 </Box>
                                 {showHouseAgCommittee && (
                                     <Box sx={{ mt: 4 }}>
-                                        <Typography variant="h5" sx={{ mb: 3, color: "#2F7164", fontWeight: 600 }}>
+                                        <Typography variant="h5" sx={{ mb: 3, color: BRAND_GREEN, fontWeight: 600 }}>
                                             Introduction: Proposal Analysis
                                         </Typography>
                                         <Box
                                             sx={{
-                                                backgroundColor: "#2F7164",
+                                                backgroundColor: BRAND_GREEN,
                                                 color: "white",
                                                 borderRadius: 1,
                                                 mb: 2,
@@ -283,7 +284,7 @@ export default function HouseProjectionSubPageProps({
                                             </Typography>
                                         </Box>
                                         <Box sx={{ mt: 4, p: 3, backgroundColor: "white", borderRadius: 1 }}>
-                                            <Typography variant="h6" sx={{ mb: 2, color: "#2F7164" }}>
+                                            <Typography variant="h6" sx={{ mb: 2, color: BRAND_GREEN }}>
                                                 The visualizations of policy designs are grouped relative to the timing
                                                 and authorship of proposed changes to policies. Each visualization will
                                                 include background information on the modeling and data, as well as
@@ -368,7 +369,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2024/08/policy-design-case-study-eqip-and-the-inflation-reduction-act.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     August 1, 2024
                                                 </a>
@@ -377,7 +378,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2024/08/back-to-policy-design-the-inflation-reduction-acts-conservation-assistance.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     August 29, 2024
                                                 </a>
@@ -386,7 +387,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2024/10/conservation-tradeoff-eqip-in-the-inflation-reduction-act-and-the-house-farm-bill.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     October 10, 2024
                                                 </a>
@@ -395,7 +396,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2024/11/taking-a-closer-look-at-the-conservation-tradeoff-issues.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     November 7, 2024
                                                 </a>
@@ -420,7 +421,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2025/05/reviewing-the-house-agriculture-committees-reconciliation-bill.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     May 14, 2025
                                                 </a>
@@ -429,7 +430,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2025/05/spending-impacts-of-plc-and-arc-co-in-house-agriculture-reconciliation-bill.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     May 20, 2025
                                                 </a>
@@ -438,7 +439,7 @@ export default function HouseProjectionSubPageProps({
                                                     href="https://farmdocdaily.illinois.edu/2025/05/reviewing-the-cbo-score-of-the-house-reconciliation-bill.html"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    style={{ color: "#2F7164" }}
+                                                    style={{ color: BRAND_GREEN }}
                                                 >
                                                     May 22, 2025
                                                 </a>
@@ -528,7 +529,7 @@ export default function HouseProjectionSubPageProps({
                                                         sx={{
                                                             fontWeight: 600,
                                                             fontSize: "1.5rem",
-                                                            color: "#2F7164",
+                                                            color: BRAND_GREEN,
                                                             mb: 0,
                                                             textAlign: "center"
                                                         }}

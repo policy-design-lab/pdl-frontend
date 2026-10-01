@@ -10,6 +10,7 @@ import "../../styles/map.css";
 import DrawLegend from "../shared/DrawLegend";
 import legendConfig from "../../utils/legendConfig.json";
 import { ShortFormat } from "../shared/ConvertionFormats";
+import { ACCENT_BLUE, TEXT_DARKER, TEXT_FAINT, WHITE } from "../shared/colors";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -131,21 +132,21 @@ const MapChart = ({ setReactTooltipContent, statePerformance, stateCodes, allSta
                                         geography={geo}
                                         onMouseEnter={() => setReactTooltipContent(hoverContent)}
                                         onMouseLeave={() => setReactTooltipContent("")}
-                                        fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
+                                        fill={programPayment === 0 ? TEXT_FAINT : colorScale(programPayment)}
                                         stroke="#FFF"
                                         style={{
                                             default: {
-                                                stroke: "#FFFFFF",
+                                                stroke: WHITE,
                                                 strokeWidth: 0.75,
                                                 outline: "none"
                                             },
                                             hover: {
-                                                stroke: "#232323",
+                                                stroke: TEXT_DARKER,
                                                 strokeWidth: 2,
                                                 outline: "none"
                                             },
                                             pressed: {
-                                                fill: "#345feb",
+                                                fill: ACCENT_BLUE,
                                                 outline: "none"
                                             }
                                         }}
