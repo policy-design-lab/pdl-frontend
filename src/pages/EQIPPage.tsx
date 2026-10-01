@@ -17,14 +17,25 @@ import EQIPCountyMap from "../components/eqip/EQIPCountyMap";
 import EQIPCountyTable from "../components/eqip/EQIPCountyTable";
 import { EQIP_CATEGORIES, EQIP_TOTAL_CATEGORY, formatPracticeSelection } from "../components/eqip/EQIPCategoryMethods";
 import FullPageLoadingOverlay from "../components/shared/FullPageLoadingOverlay";
+import { useMapUrlState } from "../utils/useMapUrlState";
+import { eqipMapIdByChecked } from "../utils/linkUtil";
 import PracticeSelector from "../components/shared/titleii/PracticeSelector";
 import { getPracticeCategories } from "../components/shared/titleii/PracticeMethods";
 import useEQIPCountyPractices from "../components/eqip/useEQIPCountyPractices";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
-export default function EQIPPage(): JSX.Element {
-    const [checked, setChecked] = React.useState(0);
+const eqipCheckedByMapId = Object.entries(eqipMapIdByChecked).reduce(
+    (acc, [checkedValue, id]) => {
+        acc[id] = Number(checkedValue);
+        return acc;
+    },
+    {} as Record<string, number>
+);
 
+const eqipMapIds = Object.values(eqipMapIdByChecked);
+const eqipDefaultMapId = eqipMapIdByChecked[0];
+
+export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
     let structuralTotal = 0;
     let landManagementTotal = 0;
@@ -59,7 +70,18 @@ export default function EQIPPage(): JSX.Element {
     };
     const eqip_year = "2014-2023";
 
-    const [level, setLevel] = React.useState<"state" | "county">("state");
+    const { mapId, level, setMapId, setLevel } = useMapUrlState({
+        mapIds: eqipMapIds,
+        defaultMapId: eqipDefaultMapId,
+        defaultLevel: "state"
+    });
+    const checked = eqipCheckedByMapId[mapId] ?? 0;
+    const setChecked = React.useCallback(
+        (value: number) => {
+            setMapId(eqipMapIdByChecked[value] ?? eqipDefaultMapId);
+        },
+        [setMapId]
+    );
     const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
     const {
         selectedPractices: selectedCountyPractices,
