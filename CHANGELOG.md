@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Updated site-wide color constants to used the shared value [#472](https://github.com/policy-design-lab/pdl-frontend/issues/472)
 
+### Fixed
+- Eliminated the unfunctioned "assigned a value but never used" warnings [#474](https://github.com/policy-design-lab/pdl-frontend/issues/474)
+
 ## [1.19.0] - 2026-09-17
 
 ### Added

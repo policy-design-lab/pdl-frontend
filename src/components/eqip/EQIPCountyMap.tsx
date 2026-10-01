@@ -26,7 +26,10 @@ const computeQuantileThresholds = (quantizeArray: number[], countyPercentiles: n
         const lo = Math.floor(idx);
         const hi = Math.ceil(idx);
         if (lo === hi) return arr[lo];
-        return arr[lo] * (1 - (idx - lo)) + arr[hi] * (idx - lo);
+        const weight = idx - lo;
+        const lower = arr[lo] * (1 - weight);
+        const upper = arr[hi] * weight;
+        return lower + upper;
     };
     return countyPercentiles.map((pct) => p(sorted, pct));
 };

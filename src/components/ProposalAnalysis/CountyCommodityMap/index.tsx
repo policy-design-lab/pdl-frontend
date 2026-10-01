@@ -231,18 +231,6 @@ const CountyCommodityMap = ({
 
     useEffect(() => {
         let mounted = true;
-        return () => {
-            mounted = false;
-        };
-    }, [selectedCommodities]);
-    useEffect(() => {
-        let mounted = true;
-        return () => {
-            mounted = false;
-        };
-    }, [selectedPrograms]);
-    useEffect(() => {
-        let mounted = true;
         if (mounted) {
             if (yearRange.length > 1 && !aggregationEnabled) {
                 setAggregationEnabled(true);
