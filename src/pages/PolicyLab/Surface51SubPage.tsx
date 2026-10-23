@@ -2,6 +2,7 @@ import { Box, Typography, Grid } from "@mui/material";
 import * as React from "react";
 import { ClassNameMap } from "@mui/styles";
 import AleskiThesis from "../../files/Aleski_Thesis.pdf";
+import { BRAND_GREEN, SURFACE_MINT, TEXT_DARK } from "../../components/shared/colors";
 
 export default function Surface51SubPage({
     styleClass,
@@ -39,7 +40,7 @@ export default function Surface51SubPage({
                     sx={{
                         fontWeight: 400,
                         fontSize: "1.5rem",
-                        color: "#242424",
+                        color: TEXT_DARK,
                         mt: 4.5,
                         textAlign: "center"
                     }}
@@ -65,7 +66,7 @@ export default function Surface51SubPage({
                         item
                         xs={12}
                         md={10}
-                        sx={{ backgroundColor: "#2F7164", color: "white", borderRadius: 1, mb: 4.5 }}
+                        sx={{ backgroundColor: BRAND_GREEN, color: "white", borderRadius: 1, mb: 4.5 }}
                     >
                         <Typography sx={{ fontWeight: 500, fontSize: "1.25rem", px: 3, py: 0.5 }}>
                             Demonstrating the potential impacts of changes to farm policy design
@@ -88,7 +89,7 @@ export default function Surface51SubPage({
                         md={10}
                         sx={{
                             color: "#000000B2 !important",
-                            backgroundColor: "#ECF0EE",
+                            backgroundColor: SURFACE_MINT,
                             borderRadius: 1,
                             mb: 4.5,
                             px: 3,
@@ -142,12 +143,12 @@ export default function Surface51SubPage({
                             </Typography>
                             <Typography sx={{ fontSize: "1.125rem", px: 3, py: 0.5 }}>
                                 Guarantee = <b>90%</b> of Benchmark{" "}
-                                <TrendIcon bkColor="#2F7164" fontColor="white" text="Increased" />
+                                <TrendIcon bkColor={BRAND_GREEN} fontColor="white" text="Increased" />
                             </Typography>
                             <Typography sx={{ fontSize: "1.125rem", px: 3, py: 0.5 }}>
                                 Payment Rate = Difference between actual revenue in the year (national average prices X
                                 county average yields) and the Guarantee; not to exceed <b>15%</b> of benchmark{" "}
-                                <TrendIcon bkColor="#2F7164" fontColor="white" text="Increased" />
+                                <TrendIcon bkColor={BRAND_GREEN} fontColor="white" text="Increased" />
                             </Typography>
                         </Grid>
                     </Grid>
@@ -163,7 +164,7 @@ export default function Surface51SubPage({
                     </Grid>
                 </Grid>
                 {/* prevent the overlapping between the iframe and footer */}
-                <Grid container spacing={2} sx={{ backgroundColor: "#ECF0EE", mt: 0.01 }}>
+                <Grid container spacing={2} sx={{ backgroundColor: SURFACE_MINT, mt: 0.01 }}>
                     <Grid
                         item
                         xs={12}
@@ -172,7 +173,7 @@ export default function Surface51SubPage({
                             py: "1rem"
                         }}
                     >
-                        <Typography sx={{ fontWeight: 700, fontSize: "1.125rem", px: 3, py: 0.5, color: "#2F7164" }}>
+                        <Typography sx={{ fontWeight: 700, fontSize: "1.125rem", px: 3, py: 0.5, color: BRAND_GREEN }}>
                             Related Paper:
                         </Typography>
 

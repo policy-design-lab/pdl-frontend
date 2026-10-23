@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { CSVLink } from "react-csv";
+import { BRAND_GREEN } from "./colors";
 
 interface ExportCsvButtonProps {
     data: string | any[];
@@ -20,7 +21,7 @@ const ExportCsvButton = ({
         data={data}
         filename={filename}
         sx={{
-            backgroundColor: "rgba(47, 113, 100, 1)",
+            backgroundColor: BRAND_GREEN,
             padding: "8px 16px",
             borderRadius: "4px",
             color: "#fff",

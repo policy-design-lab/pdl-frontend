@@ -7,6 +7,7 @@ import "../../styles/table.css";
 import { Typography, Grid, TableContainer } from "@mui/material";
 import { compareWithDollarSign } from "../shared/TableCompareFunctions";
 import { formatCurrency } from "../shared/ConvertionFormats";
+import { BLACK_TEXT } from "../shared/colors";
 
 const Styles = styled.div`
     padding: 0;
@@ -281,7 +282,7 @@ function Title2TotalTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     marginBottom: 4,
                                     paddingTop: 0.6
                                 }}

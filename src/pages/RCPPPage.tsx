@@ -9,6 +9,7 @@ import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import { formatCurrency } from "../components/shared/ConvertionFormats";
+import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function RCPPPage(): JSX.Element {
     const year = "2014-2023";
@@ -72,7 +73,7 @@ export default function RCPPPage(): JSX.Element {
             Object.keys(stateDistributionData).length > 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                        <NavBar bkColor="rgba(255, 255, 255, 1)" ftColor="rgba(47, 113, 100, 1)" logo="light" />
+                        <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
                         <NavSearchBar
                             text="Conservation Programs (Title II)"
                             subtext="Regional Conservation Partnership Program (RCPP)"

@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import TabPanel from "../components/ira/TabPanel";
 import { CustomTab } from "../components/shared/CustomTab";
 import IRAModal from "../components/ira/IRAModal";
+import { BRAND_GREEN, SURFACE_MINT, WHITE } from "../components/shared/colors";
 
 export default function IRAPage(): JSX.Element {
     const [isModalOpen, setModalOpen] = React.useState(false);
@@ -88,7 +89,7 @@ export default function IRAPage(): JSX.Element {
     return (
         <Box sx={{ width: "100%" }}>
             <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
-                <NavBar bkColor="rgba(47, 113, 100, 1)" ftColor="rgba(255, 255, 255, 1)" logo="dark" />
+                <NavBar bkColor={BRAND_GREEN} ftColor={WHITE} logo="dark" />
             </Box>
             <Box sx={{ height: "64px" }} />
             <Box>
@@ -97,7 +98,12 @@ export default function IRAPage(): JSX.Element {
                         <Box sx={{ width: "100%", mt: 10 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={2} />
-                                <Grid item xs={12} md={8} sx={{ backgroundColor: "#ECF0EE", borderRadius: 1, mb: 4.5 }}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    md={8}
+                                    sx={{ backgroundColor: SURFACE_MINT, borderRadius: 1, mb: 4.5 }}
+                                >
                                     <Typography
                                         sx={{
                                             fontWeight: 500,
@@ -157,7 +163,7 @@ export default function IRAPage(): JSX.Element {
                                         <Button onClick={handleOpen} sx={{ padding: 0, ml: "1rem" }}>
                                             <Typography
                                                 sx={{
-                                                    color: "#2F7164"
+                                                    color: BRAND_GREEN
                                                 }}
                                             >
                                                 Learn More

@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import PolicyBarChart from "./PolicyBarChart";
 import InfoTooltip from "./CountyCommodityMap/InfoTooltip";
+import { BRAND_GREEN } from "../shared/colors";
 
 interface PolicyComparisonSectionProps {
     currentData: any;
@@ -40,7 +41,7 @@ export default function PolicyComparisonSection({
                 sx={{
                     fontWeight: 600,
                     fontSize: "1.5rem",
-                    color: "#2F7164",
+                    color: BRAND_GREEN,
                     mb: 1,
                     textAlign: "center"
                 }}
@@ -53,7 +54,7 @@ export default function PolicyComparisonSection({
                     <Typography
                         sx={{
                             fontSize: "0.875rem",
-                            color: "#2F7164",
+                            color: BRAND_GREEN,
                             fontWeight: "bold",
                             mb: 1,
                             textAlign: "center"

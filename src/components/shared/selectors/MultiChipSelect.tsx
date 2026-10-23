@@ -13,6 +13,7 @@ import {
     menuItemStyle,
     selectStyle
 } from "./selectorStyles";
+import { BRAND_GREEN_10 } from "../colors";
 
 interface MultiChipSelectProps {
     label: string;
@@ -91,7 +92,7 @@ const MultiChipSelect: React.FC<MultiChipSelectProps> = ({
                     sx={{
                         ...menuItemStyle,
                         fontWeight: "bold",
-                        bgcolor: selected[0] !== allSentinel ? "rgba(47, 113, 100, 0.1)" : "inherit"
+                        bgcolor: selected[0] !== allSentinel ? BRAND_GREEN_10 : "inherit"
                     }}
                 >
                     {allSentinelLabel ?? allSentinel}
@@ -104,7 +105,7 @@ const MultiChipSelect: React.FC<MultiChipSelectProps> = ({
                         sx={{
                             ...menuItemStyle,
                             ...(selected.includes(option) && {
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                backgroundColor: BRAND_GREEN_10
                             })
                         }}
                     >
