@@ -1,10 +1,11 @@
 import { CSSProperties } from "react";
+import { BRAND_GREEN, BRAND_GREEN_08, BRAND_GREEN_10, BRAND_GREEN_12 } from "./colors";
 
 const BREAKDOWN_TEXT_COLOR = "#00000099";
 
 export const tooltipSectionHeaderStyle: CSSProperties = {
-    backgroundColor: "rgba(47, 113, 100, 0.1)",
-    color: "#2F7164",
+    backgroundColor: BRAND_GREEN_10,
+    color: BRAND_GREEN,
     fontWeight: "bold",
     textAlign: "center",
     padding: "6px 8px",
@@ -12,8 +13,8 @@ export const tooltipSectionHeaderStyle: CSSProperties = {
 };
 
 export const tooltipTableHeaderStyle: CSSProperties = {
-    backgroundColor: "rgba(47, 113, 100, 0.08)",
-    color: "#2F7164",
+    backgroundColor: BRAND_GREEN_08,
+    color: BRAND_GREEN,
     fontWeight: "bold",
     textAlign: "center",
     padding: "6px 4px",
@@ -22,12 +23,12 @@ export const tooltipTableHeaderStyle: CSSProperties = {
 };
 
 export const tooltipRowHeaderStyle: CSSProperties = {
-    backgroundColor: "rgba(47, 113, 100, 0.12)",
+    backgroundColor: BRAND_GREEN_12,
     fontWeight: "bold",
     textAlign: "left",
     padding: "5px 8px",
     border: "1px solid rgba(47, 113, 100, 0.2)",
-    color: "#2F7164",
+    color: BRAND_GREEN,
     whiteSpace: "nowrap"
 };
 

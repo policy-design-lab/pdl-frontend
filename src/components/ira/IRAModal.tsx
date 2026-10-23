@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Box, Typography, Button } from "@mui/material";
+import { BRAND_GREEN_90, TEXT_FAINT } from "../shared/colors";
 
 const style = {
     "color": "white",
@@ -9,13 +10,13 @@ const style = {
     "transform": "translate(-50%, -50%)",
     "width": "60vw",
     "overflowY": "auto",
-    "bgcolor": "rgba(47, 113, 100, 0.9)",
+    "bgcolor": BRAND_GREEN_90,
     "border": "none",
     "boxShadow": 24,
     "p": 4,
     "outline": "none",
     "& a": {
-        color: "#CCC"
+        color: TEXT_FAINT
     },
     "@media (max-width: 1280px)": {
         maxWidth: "600px",
@@ -140,7 +141,7 @@ const IRAModal = ({ open, handleClose }) => {
                     onClick={handleClose}
                     sx={{
                         "mt": 2,
-                        "color": "rgba(47, 113, 100, 0.9)",
+                        "color": BRAND_GREEN_90,
                         "backgroundColor": "white ",
                         "&:hover": {
                             backgroundColor: "lightgray"

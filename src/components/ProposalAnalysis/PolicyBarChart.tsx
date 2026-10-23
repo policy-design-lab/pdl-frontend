@@ -15,6 +15,7 @@ import {
 import { ShortFormatInteger } from "../shared/ConvertionFormats";
 import { transformYearDataForward } from "./utils";
 import InfoTooltip from "./CountyCommodityMap/InfoTooltip";
+import { ACCENT_PURPLE, BRAND_GREEN, INFO_BLUE, SURFACE_MINT, WHITE_30 } from "../shared/colors";
 
 interface CommodityData {
     commodityName: string;
@@ -127,7 +128,7 @@ const StyledContainer = styled.div`
 `;
 
 const predefinedCommodityColors = {
-    "Corn": "#2F7164",
+    "Corn": BRAND_GREEN,
     "Wheat": "#8B4513",
     "Soybeans": "#ebe288",
     "Seed Cotton": "#4a4a4a",
@@ -141,10 +142,10 @@ const predefinedCommodityColors = {
 const generateColorPalette = (commodities: string[]): Record<string, string> => {
     const colors: Record<string, string> = {};
     const defaultColors = [
-        "#2F7164",
+        BRAND_GREEN,
         "#8B4513",
         "#ebe288",
-        "#ECF0EE",
+        SURFACE_MINT,
         "#DEB887",
         "#F5DEB3",
         "#4a148c",
@@ -255,7 +256,7 @@ const CommoditySummaryTable: React.FC<{
                 sx={{
                     fontWeight: 600,
                     fontSize: "1.2rem",
-                    color: "#2F7164",
+                    color: BRAND_GREEN,
                     mb: 2,
                     textAlign: "center"
                 }}
@@ -286,7 +287,7 @@ const CommoditySummaryTable: React.FC<{
                                 </TableCell>
                                 <TableCell
                                     align="right"
-                                    sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: "rgb(1, 87, 155)" }}
+                                    sx={{ fontWeight: 600, backgroundColor: "#f5f5f5", color: INFO_BLUE }}
                                 >
                                     {proposedLabel}
                                     {proposedLabelExplain && (
@@ -338,14 +339,14 @@ const CommoditySummaryTable: React.FC<{
                                         </TableCell>
                                         <TableCell
                                             align="right"
-                                            sx={{ color: "rgb(1, 87, 155)", fontWeight: isSelected ? 600 : 400 }}
+                                            sx={{ color: INFO_BLUE, fontWeight: isSelected ? 600 : 400 }}
                                         >
                                             ${Math.round(commodity.proposedTotal).toLocaleString()}
                                         </TableCell>
                                         <TableCell
                                             align="right"
                                             sx={{
-                                                color: "rgb(156, 39, 176)",
+                                                color: ACCENT_PURPLE,
                                                 fontWeight: isSelected ? 600 : 500
                                             }}
                                         >
@@ -364,22 +365,19 @@ const CommoditySummaryTable: React.FC<{
                                     </TableRow>
                                 );
                             })}
-                            <TableRow sx={{ borderTop: 2, borderColor: "#2F7164" }}>
+                            <TableRow sx={{ borderTop: 2, borderColor: BRAND_GREEN }}>
                                 <TableCell sx={{ fontWeight: 700, fontSize: "1rem" }}>Overall Total</TableCell>
                                 <TableCell align="right" sx={{ fontWeight: 700, color: "#FF8C00", fontSize: "1rem" }}>
                                     ${Math.round(overallTotals.currentTotal).toLocaleString()}
                                 </TableCell>
-                                <TableCell
-                                    align="right"
-                                    sx={{ fontWeight: 700, color: "rgb(1, 87, 155)", fontSize: "1rem" }}
-                                >
+                                <TableCell align="right" sx={{ fontWeight: 700, color: INFO_BLUE, fontSize: "1rem" }}>
                                     ${Math.round(overallTotals.proposedTotal).toLocaleString()}
                                 </TableCell>
                                 <TableCell
                                     align="right"
                                     sx={{
                                         fontWeight: 700,
-                                        color: "rgb(156, 39, 176)",
+                                        color: ACCENT_PURPLE,
                                         fontSize: "1rem"
                                     }}
                                 >
@@ -557,7 +555,7 @@ export default function PolicyBarChart({
             .attr("patternUnits", "userSpaceOnUse")
             .attr("width", 4)
             .attr("height", 4);
-        pattern.append("rect").attr("width", 4).attr("height", 4).attr("fill", "rgba(255,255,255,0.3)");
+        pattern.append("rect").attr("width", 4).attr("height", 4).attr("fill", WHITE_30);
         pattern
             .append("path")
             .attr("d", "M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2")
@@ -683,7 +681,7 @@ export default function PolicyBarChart({
             .attr("transform", `translate(0, ${graphHeight})`)
             .call(xAxis)
             .selectAll("text")
-            .style("fill", "#2F7164")
+            .style("fill", BRAND_GREEN)
             .style("font-family", "Roboto, sans-serif")
             .style("font-weight", "bold");
 
@@ -691,7 +689,7 @@ export default function PolicyBarChart({
             .append("text")
             .attr("transform", `translate(${graphWidth / 2}, ${graphHeight + margin.bottom - 10})`)
             .style("text-anchor", "middle")
-            .style("fill", "#2F7164")
+            .style("fill", BRAND_GREEN)
             .style("font-size", "0.85rem")
             .style("font-family", "Roboto, sans-serif")
             .text("Fiscal Year");
@@ -747,7 +745,7 @@ export default function PolicyBarChart({
                     .attr("text-anchor", "middle")
                     .style("font-size", "0.7rem")
                     .style("font-family", "Roboto, sans-serif")
-                    .style("fill", type === "current" ? "#FF8C00" : "rgb(1, 87, 155)")
+                    .style("fill", type === "current" ? "#FF8C00" : INFO_BLUE)
                     .style("font-weight", "600")
                     .style("opacity", 1)
                     .text(`$${ShortFormatInteger(totalPayment)}`);
@@ -801,7 +799,7 @@ export default function PolicyBarChart({
             });
         };
         drawStackedBars(processedData, "current", "#FF8C00", 0, yScaleChart);
-        drawStackedBars(processedData, "proposed", "rgb(1, 87, 155)", barWidth + barGap, yScaleChart);
+        drawStackedBars(processedData, "proposed", INFO_BLUE, barWidth + barGap, yScaleChart);
         processedData.forEach((yearData) => {
             chartGroup
                 .append("text")
@@ -820,7 +818,7 @@ export default function PolicyBarChart({
                 .attr("text-anchor", "middle")
                 .style("font-size", "0.5rem")
                 .style("font-family", "Roboto, sans-serif")
-                .style("fill", "rgb(1, 87, 155)")
+                .style("fill", INFO_BLUE)
                 .style("font-weight", "700")
                 .text(chartProposedLabel);
         });

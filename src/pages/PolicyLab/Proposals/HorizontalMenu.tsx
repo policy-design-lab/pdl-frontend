@@ -3,10 +3,11 @@ import { Box, Button, Menu, MenuItem } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { MenuItem as MenuItemType } from "./Menu";
+import { BRAND_GREEN, BRAND_GREEN_10 } from "../../../components/shared/colors";
 
 const buttonBaseStyle = {
     transition: "all 0.2s ease-in-out",
-    borderColor: "#2F7164",
+    borderColor: BRAND_GREEN,
     transform: "translateZ(0)",
     willChange: "transform, background-color, color"
 };
@@ -73,10 +74,10 @@ export function HorizontalMenu({
                         variant="outlined"
                         sx={{
                             ...buttonBaseStyle,
-                            "color": "#2F7164",
+                            "color": BRAND_GREEN,
                             "backgroundColor": "transparent",
                             "&:hover": {
-                                backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                backgroundColor: BRAND_GREEN_10
                             },
                             "fontWeight": 600,
                             "mr": 1,
@@ -84,7 +85,7 @@ export function HorizontalMenu({
                             "alignItems": "center"
                         }}
                         onClick={handleDropdownClick}
-                        endIcon={<ArrowDropDownIcon sx={{ color: "#2F7164", ml: 0.5, fontSize: 28 }} />}
+                        endIcon={<ArrowDropDownIcon sx={{ color: BRAND_GREEN, ml: 0.5, fontSize: 28 }} />}
                     >
                         {menu[0].title}
                     </Button>
@@ -95,7 +96,7 @@ export function HorizontalMenu({
                                 sx={{
                                     px: 2,
                                     py: 1,
-                                    backgroundColor: "#2F7164",
+                                    backgroundColor: BRAND_GREEN,
                                     color: "white",
                                     borderRadius: 1,
                                     fontWeight: 600,
@@ -121,7 +122,7 @@ export function HorizontalMenu({
                                     onClick={() => handleDropdownSelect(subIndex)}
                                     sx={{
                                         fontWeight: topLevel === 0 && midLevel === subIndex ? 600 : 400,
-                                        color: "#2F7164"
+                                        color: BRAND_GREEN
                                     }}
                                 >
                                     {getMenuItemTitle(subIndex, item.title)}

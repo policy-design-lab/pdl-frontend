@@ -25,6 +25,7 @@ import {
 } from "./PracticeMethods";
 import { PracticeMapProps } from "./Interface";
 import PracticeNameMatch from "./PracticeNameMatch";
+import { ACCENT_BLUE, BRAND_GREEN, NO_DATA_GRAY, TEXT_DARKER, TEXT_DIM, TEXT_FAINT, WHITE } from "../colors";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -89,14 +90,14 @@ const MapChart = ({
                                         onMouseLeave={handleMouseLeave}
                                         fill={
                                             !practiceTotal || practiceTotal === 0
-                                                ? "#D2D2D2"
+                                                ? NO_DATA_GRAY
                                                 : colorScale(practiceTotal)
                                         }
                                         stroke="#FFF"
                                         style={{
-                                            default: { stroke: "#FFFFFF", strokeWidth: 0.75, outline: "none" },
-                                            hover: { stroke: "#232323", strokeWidth: 2, outline: "none" },
-                                            pressed: { fill: "#345feb", outline: "none" }
+                                            default: { stroke: WHITE, strokeWidth: 0.75, outline: "none" },
+                                            hover: { stroke: TEXT_DARKER, strokeWidth: 2, outline: "none" },
+                                            pressed: { fill: ACCENT_BLUE, outline: "none" }
                                         }}
                                     />
                                 );
@@ -325,7 +326,7 @@ const TitleIIPracticeMap = ({
                     <div>
                         {titleElement(programName, selectedPractices, year)}
                         <Box display="flex" justifyContent="center">
-                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                            <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
                                 Please select at least one practice category.
                             </Typography>
                         </Box>
@@ -341,7 +342,7 @@ const TitleIIPracticeMap = ({
                             "minWidth": "5em",
                             "fontWeight": "bold",
                             "fontSize": "1.25rem",
-                            "color": "rgba(47, 113, 100, 1)",
+                            "color": BRAND_GREEN,
                             "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
                         }}
                     >
@@ -364,7 +365,7 @@ const TitleIIPracticeMap = ({
                                         sx={{
                                             borderRadius: 1,
                                             borderColor: "lightgray",
-                                            color: "rgba(47, 113, 100, 1)"
+                                            color: BRAND_GREEN
                                         }}
                                     />
                                 ))}
@@ -432,7 +433,7 @@ const titleElement = (programName, practices: string[], year: string): JSX.Eleme
                 <strong>{practiceLabel === "All Practices" ? `Total ${programName}` : "Selected Practices"}</strong>{" "}
                 Benefits from <strong>{year}</strong>
             </Typography>
-            <Typography style={{ fontSize: "0.5em", color: "#AAA", textAlign: "center" }}>
+            <Typography style={{ fontSize: "0.5em", color: TEXT_DIM, textAlign: "center" }}>
                 <i>Gray states indicate no available data</i>
             </Typography>
         </Box>

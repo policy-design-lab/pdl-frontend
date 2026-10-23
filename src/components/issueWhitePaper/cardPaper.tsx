@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import * as React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
+import { BRAND_GREEN } from "../shared/colors";
 
 export default function CardPaper({ id, title, description, author, date, link }): JSX.Element {
     const useStyles = makeStyles(() => ({
@@ -40,7 +41,7 @@ export default function CardPaper({ id, title, description, author, date, link }
                                     sx={{
                                         border: "2px solid #2F7164",
                                         backgroundColor: "transparent",
-                                        color: "#2F7164",
+                                        color: BRAND_GREEN,
                                         minWidth: 15,
                                         minHeight: 4,
                                         borderRadius: 0
