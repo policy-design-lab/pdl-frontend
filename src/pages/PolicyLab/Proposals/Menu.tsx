@@ -1,5 +1,6 @@
 import { ListItemButton, Box, ListItemText, Collapse, List } from "@mui/material";
 import React, { useState } from "react";
+import { BRAND_GREEN, SURFACE_MINT } from "../../../components/shared/colors";
 
 export interface MenuItem {
     title: string;
@@ -62,13 +63,13 @@ export function MenuItem({
     };
 
     const getTextColor = () => {
-        if (isSelected || hasSelectedChild) return "#2F7164";
+        if (isSelected || hasSelectedChild) return BRAND_GREEN;
         return "#666666";
     };
 
     const getBackgroundColor = () => {
         if (level > 0) return "#F5F7F6";
-        return "#ECF0EE";
+        return SURFACE_MINT;
     };
 
     const getHoverBackgroundColor = () => {
@@ -110,7 +111,7 @@ export function MenuItem({
                                 fontWeight: level === 0 ? 600 : 500,
                                 fontSize: level === 0 ? "inherit" : "0.95em",
                                 borderLeft: showBorder
-                                    ? `4px solid ${isSelected || hasSelectedChild ? "#2F7164" : "#ccd7d1"}`
+                                    ? `4px solid ${isSelected || hasSelectedChild ? BRAND_GREEN : "#ccd7d1"}`
                                     : "none",
                                 paddingLeft: showBorder ? 2 : 0,
                                 color: "inherit"

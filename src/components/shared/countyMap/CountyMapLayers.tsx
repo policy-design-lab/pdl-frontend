@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Geography, Marker } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
+import { TEXT_DARKER, WHITE } from "../colors";
 
 interface CountyGeographyLayerProps {
     geographies: any[];
@@ -23,7 +24,7 @@ const CountyGeographyLayerComponent = ({
     onMouseEnter,
     onMouseLeave,
     onGeographiesReady,
-    stroke = "#FFFFFF",
+    stroke = WHITE,
     strokeWidth = 0.15,
     defaultStyle,
     hoverStyle,
@@ -63,7 +64,7 @@ const CountyGeographyLayerComponent = ({
                         style={{
                             default: defaultStyle || { outline: "none" },
                             hover: hoverStyle || {
-                                stroke: "#232323",
+                                stroke: TEXT_DARKER,
                                 strokeWidth: 0.5,
                                 outline: "none"
                             },

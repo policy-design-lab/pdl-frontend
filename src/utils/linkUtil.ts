@@ -12,6 +12,22 @@ export const cropInsuranceMapIdByChecked: Record<string, string> = {
     "4": "average-insured-area"
 };
 
+export const eqipMapIdByChecked: Record<string, string> = {
+    0: "total-eqip-benefits",
+    1: "land-management",
+    2: "forest-management",
+    3: "structural",
+    4: "soil-remediation",
+    5: "vegetative",
+    6: "other-improvements",
+    7: "soil-testing",
+    8: "other-planning",
+    9: "conservation-planning-assessment",
+    10: "resource-conserving-crop-rotation",
+    11: "soil-health",
+    12: "comprehensive-nutrient-mgt"
+};
+
 export const title1MapIdByChecked: Record<string, string> = {
     0: "total-commodities-programs",
     1: "subtitle-a-total",

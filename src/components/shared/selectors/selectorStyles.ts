@@ -1,9 +1,10 @@
 import { SxProps, Theme } from "@mui/material";
+import { BRAND_GREEN, BRAND_GREEN_05, BRAND_GREEN_10, BRAND_GREEN_50 } from "../colors";
 
-export const PDL_GREEN = "rgba(47, 113, 100, 1)";
-export const PDL_GREEN_BORDER = "rgba(47, 113, 100, 0.5)";
-export const PDL_GREEN_ACTIVE_BG = "rgba(47, 113, 100, 0.1)";
-export const PDL_GREEN_HOVER_BG = "rgba(47, 113, 100, 0.05)";
+export const PDL_GREEN = BRAND_GREEN;
+export const PDL_GREEN_BORDER = BRAND_GREEN_50;
+export const PDL_GREEN_ACTIVE_BG = BRAND_GREEN_10;
+export const PDL_GREEN_HOVER_BG = BRAND_GREEN_05;
 export const SELECTOR_HEIGHT = "44px";
 export const CHIP_CONTAINER_HEIGHT = "36px";
 export const menuItemStyle: SxProps<Theme> = {

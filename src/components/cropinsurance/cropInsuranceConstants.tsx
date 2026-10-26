@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { BRAND_GREEN, BRAND_GREEN_12, TEXT_DIM } from "../shared/colors";
 
 export const LOSS_RATIO_THRESHOLDS = [0.6, 0.8, 1.0001, 1.5]; // PI requests the loss ratio to have specific thresholds that are different from the value-based attributes
 
@@ -22,8 +23,8 @@ export const LOSS_RATIO_NOTE = "Loss Ratio = Total Indemnities / Total Premium";
 export const PRF_ACRES_NOTE = "(Average acres includes acres insured by Pasture, Rangeland, and Forage (PRF) policies)";
 
 export const getHighlightPillSx = (fontWeight = 400): Record<string, unknown> => ({
-    color: "#2F7164",
-    backgroundColor: "rgba(47, 113, 100, 0.12)",
+    color: BRAND_GREEN,
+    backgroundColor: BRAND_GREEN_12,
     border: "1px solid rgba(47, 113, 100, 0.28)",
     borderRadius: "999px",
     px: 1.25,
@@ -54,7 +55,7 @@ export const NetFarmerBenefitNote = (): JSX.Element => (
 
 export const PrfAcresCaption = (): JSX.Element => (
     <Box display="flex" justifyContent="center">
-        <Typography noWrap variant="subtitle2" sx={{ color: "#AAA" }}>
+        <Typography noWrap variant="subtitle2" sx={{ color: TEXT_DIM }}>
             {PRF_ACRES_NOTE}
         </Typography>
     </Box>

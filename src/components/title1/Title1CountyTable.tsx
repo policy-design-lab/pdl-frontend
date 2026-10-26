@@ -30,6 +30,7 @@ import {
     Title1CountyColumnConfig,
     Title1CountySelector
 } from "./title1County";
+import { BLACK_TEXT } from "../shared/colors";
 
 interface Title1CountyTableProps {
     tableTitle: string;
@@ -250,7 +251,7 @@ function Title1CountyTable({
                                     fontWeight: 400,
                                     paddingLeft: 0,
                                     fontSize: "1.2em",
-                                    color: "#212121",
+                                    color: BLACK_TEXT,
                                     paddingTop: 0.6
                                 }}
                             >

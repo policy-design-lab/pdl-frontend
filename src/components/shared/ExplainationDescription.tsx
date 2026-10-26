@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import { ChevronUp, ChevronDown } from "react-bootstrap-icons";
+import { BRAND_GREEN, BRAND_GREEN_10, SURFACE_MINT } from "./colors";
 
 const ExpandableDescription = ({ shortDescription, longDescription }) => {
     const [expanded, setExpanded] = useState(false);
@@ -10,7 +11,7 @@ const ExpandableDescription = ({ shortDescription, longDescription }) => {
     return (
         <Box
             sx={{
-                backgroundColor: "#ECF0EE",
+                backgroundColor: SURFACE_MINT,
                 borderRadius: 1,
                 mb: 2,
                 pt: 1,
@@ -72,9 +73,9 @@ const ExpandableDescription = ({ shortDescription, longDescription }) => {
                     sx={{
                         "mt": -0.5,
                         "flexShrink": 0,
-                        "color": "#2F7164",
+                        "color": BRAND_GREEN,
                         "&:hover": {
-                            backgroundColor: "rgba(47, 113, 100, 0.1)"
+                            backgroundColor: BRAND_GREEN_10
                         }
                     }}
                 >

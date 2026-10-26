@@ -22,6 +22,7 @@ import {
     PrfAcresCaption,
     getLossRatioColors
 } from "./cropInsuranceConstants";
+import { ACCENT_BLUE, TEXT_DARKER, TEXT_FAINT, WHITE } from "../shared/colors";
 
 const lossRatioThresholds = LOSS_RATIO_THRESHOLDS;
 
@@ -126,21 +127,21 @@ const MapChart = ({
                                         onMouseLeave={() => {
                                             setReactTooltipContent("");
                                         }}
-                                        fill={programPayment === 0 ? "#CCC" : colorScale(programPayment)}
+                                        fill={programPayment === 0 ? TEXT_FAINT : colorScale(programPayment)}
                                         stroke="#FFF"
                                         style={{
                                             default: {
-                                                stroke: "#FFFFFF",
+                                                stroke: WHITE,
                                                 strokeWidth: 0.75,
                                                 outline: "none"
                                             },
                                             hover: {
-                                                stroke: "#232323",
+                                                stroke: TEXT_DARKER,
                                                 strokeWidth: 2,
                                                 outline: "none"
                                             },
                                             pressed: {
-                                                fill: "#345feb",
+                                                fill: ACCENT_BLUE,
                                                 outline: "none"
                                             }
                                         }}

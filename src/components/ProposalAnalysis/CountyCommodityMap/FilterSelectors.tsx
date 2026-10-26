@@ -13,6 +13,7 @@ import {
     menuItemStyle,
     selectStyle
 } from "../../shared/selectors/selectorStyles";
+import { BRAND_GREEN_10 } from "../../shared/colors";
 
 interface FilterSelectorsProps {
     availableCommodities: string[];
@@ -99,7 +100,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             sx={{
                                 ...menuItemStyle,
                                 fontWeight: "bold",
-                                bgcolor: selectedState !== "All States" ? "rgba(47, 113, 100, 0.1)" : "inherit"
+                                bgcolor: selectedState !== "All States" ? BRAND_GREEN_10 : "inherit"
                             }}
                         >
                             All States (US Map)
@@ -163,7 +164,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                             sx={{
                                 ...menuItemStyle,
                                 fontWeight: "bold",
-                                bgcolor: selectedPrograms[0] !== "All Programs" ? "rgba(47, 113, 100, 0.1)" : "inherit"
+                                bgcolor: selectedPrograms[0] !== "All Programs" ? BRAND_GREEN_10 : "inherit"
                             }}
                         >
                             All Programs
@@ -176,7 +177,7 @@ const FilterSelectors: React.FC<FilterSelectorsProps> = ({
                                 sx={{
                                     ...menuItemStyle,
                                     ...(selectedPrograms.includes(program) && {
-                                        backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                        backgroundColor: BRAND_GREEN_10
                                     })
                                 }}
                             >

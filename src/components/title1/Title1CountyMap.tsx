@@ -26,6 +26,7 @@ import {
     Title1CountyColumnConfig,
     Title1CountySelector
 } from "./title1County";
+import { BRAND_GREEN, BRAND_GREEN_10, BRAND_GREEN_50, BRAND_GREEN_90, TEXT_FAINT, WHITE_90 } from "../shared/colors";
 
 interface Title1CountyMapProps {
     title: string;
@@ -341,7 +342,7 @@ const Title1CountyMap = ({
                 return "#EEE";
             }
             if (value === 0) {
-                return "#CCC";
+                return TEXT_FAINT;
             }
             return colorScale(value);
         },
@@ -434,7 +435,7 @@ const Title1CountyMap = ({
                     <div>
                         {titleElement()}
                         <Box display="flex" justifyContent="center">
-                            <Typography sx={{ color: "#CCC", fontWeight: 700 }}>
+                            <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
                                 County payment data in {year} is unavailable.
                             </Typography>
                         </Box>
@@ -450,12 +451,12 @@ const Title1CountyMap = ({
                             variant="contained"
                             startIcon={<CloseIcon />}
                             sx={{
-                                "bgcolor": "rgba(47, 113, 100, 0.9)",
+                                "bgcolor": BRAND_GREEN_90,
                                 "color": "white",
                                 "border": "2px solid white",
                                 "boxShadow": "0 2px 10px rgba(0,0,0,0.2)",
                                 "&:hover": {
-                                    bgcolor: "rgba(47, 113, 100, 1)",
+                                    bgcolor: BRAND_GREEN,
                                     transform: "scale(1.05)"
                                 }
                             }}
@@ -472,7 +473,7 @@ const Title1CountyMap = ({
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            backgroundColor: WHITE_90,
                             zIndex: 1600,
                             display: "flex",
                             flexDirection: "column",
@@ -482,7 +483,7 @@ const Title1CountyMap = ({
                         }}
                     >
                         <CircularProgress size={36} />
-                        <Typography variant="body2" sx={{ color: "#2F7164" }}>
+                        <Typography variant="body2" sx={{ color: BRAND_GREEN }}>
                             Rendering county map...
                         </Typography>
                     </Box>
@@ -550,7 +551,7 @@ const Title1CountyMap = ({
                         sx={{
                             fontSize: "11px",
                             color: "#666",
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            backgroundColor: WHITE_90,
                             padding: "4px 8px",
                             borderRadius: "4px",
                             boxShadow: "0 1px 4px rgba(0,0,0,0.1)"
@@ -562,7 +563,7 @@ const Title1CountyMap = ({
                         sx={{
                             display: "flex",
                             gap: 1,
-                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            backgroundColor: WHITE_90,
                             borderRadius: "8px",
                             padding: "8px",
                             boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
@@ -576,11 +577,11 @@ const Title1CountyMap = ({
                                 "minWidth": "auto",
                                 "width": "32px",
                                 "height": "32px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >
@@ -592,11 +593,11 @@ const Title1CountyMap = ({
                             variant="outlined"
                             sx={{
                                 "fontSize": "11px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >
@@ -610,11 +611,11 @@ const Title1CountyMap = ({
                                 "minWidth": "auto",
                                 "width": "32px",
                                 "height": "32px",
-                                "borderColor": "rgba(47, 113, 100, 0.5)",
-                                "color": "#2F7164",
+                                "borderColor": BRAND_GREEN_50,
+                                "color": BRAND_GREEN,
                                 "&:hover": {
-                                    borderColor: "#2F7164",
-                                    backgroundColor: "rgba(47, 113, 100, 0.1)"
+                                    borderColor: BRAND_GREEN,
+                                    backgroundColor: BRAND_GREEN_10
                                 }
                             }}
                         >
