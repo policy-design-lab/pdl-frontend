@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [unreleased]
 
 ### Added
+- Added county-level visualizations for CSP [477](https://github.com/policy-design-lab/pdl-frontend/issues/477)
+- Improve caching mechanism for county-level data for EQIP and CSP [#478](https://github.com/policy-design-lab/pdl-frontend/issues/478)
+
+## [1.20.0] - 2026-10-23
+
+### Added
 - Added county-level visualizations for EQIP [#469](https://github.com/policy-design-lab/pdl-frontend/issues/469)
 
 ### Changed
@@ -83,7 +89,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed the wrong base acre for the Policy Analysis model when user select a single program [#419](https://github.com/policy-design-lab/pdl-frontend/issues/419)
-
 - Add comma to separate integer columns in Title I [#418](https://github.com/policy-design-lab/pdl-frontend/issues/418)
 - Reduced bottom marge for issue briefs on the Issue/White Paper page [#425](https://github.com/policy-design-lab/pdl-frontend/issues/425)
 - Change All Programs Total key format [#421](https://github.com/policy-design-lab/pdl-frontend/issues/421)
@@ -471,6 +476,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map data json [#12](https://github.com/policy-design-lab/pdl-frontend/issues/12)
 - Final landing page changes for initial milestone [#15](https://github.com/policy-design-lab/pdl-frontend/issues/15)
 
+[1.20.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.19.0...1.20.0
 [1.19.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.18.0...1.19.0
 [1.18.0]: https://github.com/policy-design-lab/pdl-frontend/compare/1.17.1...1.18.0
 [1.17.1]: https://github.com/policy-design-lab/pdl-frontend/compare/1.17.0...1.17.1
