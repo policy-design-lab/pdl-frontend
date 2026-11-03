@@ -3,7 +3,6 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ComposableMap, Geographies, ZoomableGroup } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
-import * as d3 from "d3";
 import DrawLegend from "../shared/DrawLegend";
 import { formatCurrency, formatNumericValue } from "../shared/ConvertionFormats";
 import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
@@ -19,6 +18,8 @@ import {
     STATE_TOPOJSON_URL
 } from "../../utils/countyGeo";
 import { getCountyPercentiles } from "../../utils/countyLegendConfig";
+import { buildCountyColorScale, getSparseCountyEntries } from "../../utils/countyColorScale";
+import SparseCountyLegend from "../shared/countyMap/SparseCountyLegend";
 import {
     formatTitle1Percent,
     getTitle1CountyMetricValue,
@@ -110,31 +111,10 @@ const Title1CountyMap = ({
     }, [countyPerformance, year, selectedState, selector, stateCodes]);
 
     const countyPercentiles = getCountyPercentiles("default");
-    const quantileScale = useMemo(() => {
-        if (quantizeArray.length === 0) {
-            return null;
-        }
-        const nonZeroData = quantizeArray.filter((value) => value !== 0);
-        if (nonZeroData.length < 5) {
-            return null;
-        }
-        const sorted = [...nonZeroData].sort((a, b) => a - b);
-        const percentile = (values: number[], pct: number) => {
-            const index = (pct / 100) * (values.length - 1);
-            const low = Math.floor(index);
-            const high = Math.ceil(index);
-            if (low === high) {
-                return values[low];
-            }
-            const lowValue = values[low] * (1 - (index - low));
-            const highValue = values[high] * (index - low);
-            return lowValue + highValue;
-        };
-        return countyPercentiles.map((pct) => percentile(sorted, pct));
-    }, [countyPercentiles, quantizeArray]);
-
-    const customScale = quantileScale || [0, 1000000, 5000000, 10000000];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const { mode, colorScale, highlightColor } = useMemo(
+        () => buildCountyColorScale(quantizeArray, countyPercentiles, mapColor),
+        [quantizeArray, countyPercentiles, mapColor]
+    );
     const countyGeographySource = countyTopology || (topologyLoadAttempted ? COUNTY_TOPOJSON_URL : null);
     const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
     const mapIsReady =
@@ -420,7 +400,7 @@ const Title1CountyMap = ({
     return (
         <div>
             <Box display="flex" justifyContent="center">
-                {quantizeArray.length > 0 ? (
+                {mode === "quantile" ? (
                     <DrawLegend
                         isRatio={false}
                         colorScale={colorScale}
@@ -432,14 +412,14 @@ const Title1CountyMap = ({
                         quantilePercentiles={countyPercentiles}
                     />
                 ) : (
-                    <div>
-                        {titleElement()}
-                        <Box display="flex" justifyContent="center">
-                            <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
-                                County payment data in {year} is unavailable.
-                            </Typography>
-                        </Box>
-                    </div>
+                    <SparseCountyLegend
+                        title={titleElement()}
+                        entries={
+                            mode === "sparse" ? getSparseCountyEntries(countyValueMap, countyDataMap, stateCodes) : []
+                        }
+                        highlightColor={highlightColor}
+                        emptyMessage={`County payment data in ${year} is unavailable.`}
+                    />
                 )}
             </Box>
             <Box sx={{ position: "relative", width: "100%" }}>

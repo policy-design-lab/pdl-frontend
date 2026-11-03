@@ -26,6 +26,13 @@ export interface CountyTooltipContext {
     classes: Record<string, string>;
 }
 
+export interface CountyLegendContext {
+    quantizeArray: number[];
+    zeroPoints: string[];
+    countyDataMap: Record<string, any>;
+    countyValueMap: Record<string, number>;
+}
+
 interface CountyChoroplethMapProps {
     countyData: any;
     year: string;
@@ -36,7 +43,7 @@ interface CountyChoroplethMapProps {
     valueAccessor: (county: any) => number;
     colorScale: (value: number) => string;
     renderTooltip: (context: CountyTooltipContext) => React.ReactNode;
-    legendComponent: (context: { quantizeArray: number[]; zeroPoints: string[] }) => React.ReactNode;
+    legendComponent: (context: CountyLegendContext) => React.ReactNode;
     controlsComponent?: React.ReactNode;
     tooltipId?: string;
     loadingLabel?: string;
@@ -338,7 +345,7 @@ const CountyChoroplethMap = ({
     return (
         <div>
             <Box display="flex" justifyContent="center">
-                {legendComponent({ quantizeArray, zeroPoints })}
+                {legendComponent({ quantizeArray, zeroPoints, countyDataMap, countyValueMap })}
             </Box>
             {controlsComponent}
             <Box
