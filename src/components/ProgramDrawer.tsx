@@ -113,8 +113,8 @@ ProgramDrawer.propTypes = {
 let currentChecked = 0;
 const menuHeight = window.innerHeight < 900 ? "38%" : "40%";
 
-function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
-    const [checked, setChecked] = React.useState(currentChecked);
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory, initialChecked }) {
+    const [checked, setChecked] = React.useState(initialChecked ?? currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
@@ -272,8 +272,8 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     );
 }
 
-function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
-    const [checked, setChecked] = React.useState(currentChecked);
+function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory, initialChecked }) {
+    const [checked, setChecked] = React.useState(initialChecked ?? currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
@@ -561,6 +561,8 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
 interface ProgramDrawerProps {
     setEQIPChecked?: (value: number) => void;
     setCSPChecked?: (value: number) => void;
+    eqipChecked?: number;
+    cspChecked?: number;
     setCRPChecked?: (value: number) => void;
     setRCPPChecked?: (value: number) => void;
     zeroCategories?: string[];
@@ -569,6 +571,8 @@ interface ProgramDrawerProps {
 export default function ProgramDrawer({
     setEQIPChecked,
     setCSPChecked,
+    eqipChecked,
+    cspChecked,
     setCRPChecked,
     setRCPPChecked,
     zeroCategories // different page will pass different zeroCategories
@@ -768,6 +772,7 @@ export default function ProgramDrawer({
                             setEQIPChecked={setEQIPChecked}
                             setShowPopUp={setEqipOpen}
                             zeroCategory={zeroCategory}
+                            initialChecked={eqipChecked}
                         />
                     </Box>
                 </Popper>
@@ -817,6 +822,7 @@ export default function ProgramDrawer({
                             setCSPChecked={setCSPChecked}
                             setShowPopUp={setCspOpen}
                             zeroCategory={zeroCategory}
+                            initialChecked={cspChecked}
                         />
                     </Box>
                 </Popper>

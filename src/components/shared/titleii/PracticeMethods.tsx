@@ -1,8 +1,7 @@
-import legendConfig from "../../../utils/legendConfig.json";
 import { ShortFormat } from "../ConvertionFormats";
 import PracticeNameMatch from "./PracticeNameMatch";
 
-export const getPracticeData = (statePerformance, year, selectedPractices) => {
+export const getStatePracticeTotals = (statePerformance, year, selectedPractices) => {
     if (!statePerformance[year]) return [];
 
     return statePerformance[year]
@@ -34,9 +33,9 @@ export const getPracticeData = (statePerformance, year, selectedPractices) => {
                     });
                 });
             }
-            return total;
+            return { state: state.state, value: total };
         })
-        .filter((value) => value > 0);
+        .filter(({ value }) => value > 0);
 };
 
 export const getPracticeCategories = (practiceNames) => {
@@ -100,20 +99,6 @@ export const getPracticeTotal = (record, practiceName) => {
 
     return total;
 };
-export const getCustomScale = (practiceData, configName) => {
-    if (practiceData.length === 0) return legendConfig[configName];
-
-    const sortedData = [...practiceData].sort((a, b) => a - b);
-    const quintileSize = Math.ceil(sortedData.length / 5);
-
-    return [
-        sortedData[quintileSize],
-        sortedData[quintileSize * 2],
-        sortedData[quintileSize * 3],
-        sortedData[quintileSize * 4]
-    ];
-};
-
 export const computeTooltipContent = (geo, record, selectedPractices, classes, getNationalTotal) => {
     if (!record) return "";
     let tooltipContent = `

@@ -19,6 +19,7 @@ import { useCheckedMapUrlState } from "../utils/useMapUrlState";
 import { eqipMapIdByChecked } from "../utils/linkUtil";
 import { getPracticeCategories } from "../components/shared/titleii/PracticeMethods";
 import useTitleIICountyData from "../components/shared/titleii/useTitleIICountyData";
+import usePracticeUrlSelection from "../components/shared/titleii/usePracticeUrlSelection";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function EQIPPage(): JSX.Element {
@@ -49,16 +50,16 @@ export default function EQIPPage(): JSX.Element {
     const [zeroCategories, setZeroCategories] = React.useState<string[]>([]);
     const [isDataReady, setIsDataReady] = React.useState(false);
 
-    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState<PracticeName[]>([]);
-    const handlePracticeChange = (practices: string[]) => {
-        setSelectedPractices(practices);
-    };
     const eqip_year = "2014-2023";
 
     const { checked, setChecked, level, setLevel } = useCheckedMapUrlState(eqipMapIdByChecked);
     const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
     const county = useTitleIICountyData(EQIP_COUNTY_PROGRAM);
+    const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
+        eqipPracticeNames[eqip_year],
+        EQIP_CATEGORIES[checked] === EQIP_TOTAL_CATEGORY
+    );
 
     const countyPracticeOptions = React.useMemo(
         () => getPracticeCategories(eqipPracticeNames[eqip_year]),
@@ -81,7 +82,8 @@ export default function EQIPPage(): JSX.Element {
                         year={eqip_year}
                         stateCodes={stateCodesData}
                         practiceNames={eqipPracticeNames[eqip_year]}
-                        onPracticeChange={handlePracticeChange}
+                        selectedPractices={selectedPractices}
+                        onPracticeChange={setSelectedPractices}
                     />
                 ) : (
                     <CategoryMap
@@ -95,6 +97,8 @@ export default function EQIPPage(): JSX.Element {
             }
             county={county}
             countyPracticeOptions={countyPracticeOptions}
+            selectedPractices={selectedPractices}
+            onPracticeChange={setSelectedPractices}
             stateCodes={stateCodesData}
             allStates={Array.isArray(allStates) ? allStates : []}
             selectedCountyState={selectedCountyState}
@@ -238,7 +242,12 @@ export default function EQIPPage(): JSX.Element {
                         />
                     </Box>
                     <Box sx={{ height: "64px" }} />
-                    <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} zeroCategories={zeroCategories} />
+                    <Drawer
+                        setEQIPChecked={setChecked}
+                        eqipChecked={checked}
+                        setCSPChecked={undefined}
+                        zeroCategories={zeroCategories}
+                    />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         {EQIP_CATEGORIES.map((category, index) => renderCategorySection(category, index))}
                         <Box

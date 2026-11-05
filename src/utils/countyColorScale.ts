@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 
 export const MIN_COUNTIES_FOR_QUANTILES = 5;
+export const QUINTILE_PERCENTILES = [20, 40, 60, 80];
 
 export type CountyScaleMode = "quantile" | "sparse" | "empty";
 
@@ -11,8 +12,13 @@ export interface CountyColorScale {
 }
 
 export interface SparseCountyEntry {
-    fips: string;
+    id: string;
     label: string;
+    value: number;
+}
+
+export interface StateValue {
+    state: string;
     value: number;
 }
 
@@ -74,6 +80,19 @@ export const buildCountyColorScale = (
     return { mode, colorScale: d3.scaleThreshold<number, string>(thresholds, [...colors]), highlightColor };
 };
 
+export const buildFixedColorScale = (
+    values: number[],
+    thresholds: number[],
+    colors: readonly string[]
+): CountyColorScale => {
+    const mode = getCountyScaleMode(values);
+    const highlightColor = colors[colors.length - 1];
+    if (mode !== "quantile") {
+        return { mode, colorScale: d3.scaleThreshold<number, string>([], [highlightColor]), highlightColor };
+    }
+    return { mode, colorScale: d3.scaleThreshold<number, string>(thresholds, [...colors]), highlightColor };
+};
+
 export const getSparseCountyEntries = (
     countyValueMap: Record<string, number>,
     countyDataMap: Record<string, any>,
@@ -86,5 +105,14 @@ export const getSparseCountyEntries = (
             const record = countyDataMap[fips] ?? {};
             const stateName = stateCodes[record.state] || record.state;
             const label = [record.countyName, stateName].filter(Boolean).join(", ") || fips;
-            return { fips, label, value };
+            return { id: fips, label, value };
         });
+
+export const getSparseStateEntries = (
+    stateValues: StateValue[],
+    stateCodes: Record<string, string>
+): SparseCountyEntry[] =>
+    stateValues
+        .filter(({ value }) => value !== 0)
+        .sort((first, second) => Math.abs(second.value) - Math.abs(first.value))
+        .map(({ state, value }) => ({ id: state, label: stateCodes[state] || state, value }));

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getJsonDataFromUrl } from "../../../utils/apiutil";
-import { ALL_PRACTICES } from "./PracticeSelector";
 import { TitleIICountyProgram } from "./TitleIICountyMethods";
 import { TitleIICountyDistribution } from "./Interface";
 
@@ -31,8 +30,6 @@ const fetchCountyData = (url: string): Promise<TitleIICountyDistribution> => {
 };
 
 export interface UseTitleIICountyDataResult {
-    selectedPractices: string[];
-    setSelectedPractices: (practices: string[]) => void;
     countyData: TitleIICountyDistribution;
     isLoading: boolean;
     hasLoaded: boolean;
@@ -40,7 +37,6 @@ export interface UseTitleIICountyDataResult {
 }
 
 export default function useTitleIICountyData(program: TitleIICountyProgram): UseTitleIICountyDataResult {
-    const [selectedPractices, setSelectedPracticesState] = useState<string[]>([ALL_PRACTICES]);
     const [countyData, setCountyData] = useState<TitleIICountyDistribution>({});
     const [isLoading, setIsLoading] = useState(false);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -87,9 +83,5 @@ export default function useTitleIICountyData(program: TitleIICountyProgram): Use
         load();
     }, [load]);
 
-    const setSelectedPractices = useCallback((practices: string[]) => {
-        setSelectedPracticesState(practices);
-    }, []);
-
-    return { selectedPractices, setSelectedPractices, countyData, isLoading, hasLoaded, requestCountyData };
+    return { countyData, isLoading, hasLoaded, requestCountyData };
 }

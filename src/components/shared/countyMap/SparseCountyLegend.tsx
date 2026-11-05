@@ -4,12 +4,18 @@ import { ShortFormat } from "../ConvertionFormats";
 import { SparseCountyEntry } from "../../../utils/countyColorScale";
 import { TEXT_DIM, TEXT_FAINT } from "../colors";
 
+const REGION_LABELS = {
+    county: { singular: "county", plural: "counties" },
+    state: { singular: "state", plural: "states" }
+};
+
 interface SparseCountyLegendProps {
     title: React.ReactNode;
     entries: SparseCountyEntry[];
     highlightColor: string;
     emptyMessage: string;
     notDollar?: boolean;
+    region?: keyof typeof REGION_LABELS;
 }
 
 const formatValue = (value: number, notDollar: boolean): string => {
@@ -23,9 +29,12 @@ const SparseCountyLegend = ({
     entries,
     highlightColor,
     emptyMessage,
-    notDollar = false
+    notDollar = false,
+    region = "county"
 }: SparseCountyLegendProps): JSX.Element => {
-    const countLabel = entries.length === 1 ? "Only 1 county has data" : `Only ${entries.length} counties have data`;
+    const { singular, plural } = REGION_LABELS[region];
+    const countLabel =
+        entries.length === 1 ? `Only 1 ${singular} has data` : `Only ${entries.length} ${plural} have data`;
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minWidth: 560 }}>
             <Box display="flex" justifyContent="center">
@@ -44,7 +53,7 @@ const SparseCountyLegend = ({
                         <Typography sx={{ fontSize: "0.9em" }}>
                             {countLabel}:{" "}
                             {entries.map((entry, index) => (
-                                <span key={entry.fips}>
+                                <span key={entry.id}>
                                     {index > 0 && "; "}
                                     <strong>{entry.label}</strong> ({formatValue(entry.value, notDollar)})
                                 </span>
@@ -52,7 +61,7 @@ const SparseCountyLegend = ({
                         </Typography>
                     </Box>
                     <Typography sx={{ fontSize: "0.8em", color: TEXT_DIM }}>
-                        Too few counties to build a color scale. Gray areas indicate data is not visible or available.
+                        Too few {plural} to build a color scale. Gray areas indicate data is not visible or available.
                         Search in the table for details.
                     </Typography>
                 </Box>

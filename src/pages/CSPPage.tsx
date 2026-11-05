@@ -19,6 +19,7 @@ import { useCheckedMapUrlState } from "../utils/useMapUrlState";
 import { cspMapIdByChecked } from "../utils/linkUtil";
 import { getPracticeCategories } from "../components/shared/titleii/PracticeMethods";
 import useTitleIICountyData from "../components/shared/titleii/useTitleIICountyData";
+import usePracticeUrlSelection from "../components/shared/titleii/usePracticeUrlSelection";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CSPPage(): JSX.Element {
@@ -39,11 +40,7 @@ export default function CSPPage(): JSX.Element {
     const [isDataReady, setIsDataReady] = React.useState(false);
 
     // connect to selector endpoint
-    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
     const [cspPracticeNames, setCspPracticeNames] = React.useState<PracticeName[]>([]);
-    const handlePracticeChange = (practices: string[]) => {
-        setSelectedPractices(practices);
-    };
 
     const defaultTheme = createTheme();
     let landManagementTotal = 0;
@@ -70,6 +67,10 @@ export default function CSPPage(): JSX.Element {
 
     const csp_year = "2014-2023";
     const county = useTitleIICountyData(CSP_COUNTY_PROGRAM);
+    const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
+        cspPracticeNames[csp_year],
+        CSP_CATEGORIES[checked] === CSP_TOTAL_CATEGORY
+    );
 
     const countyPracticeOptions = React.useMemo(
         () => getPracticeCategories(cspPracticeNames[csp_year]),
@@ -92,7 +93,8 @@ export default function CSPPage(): JSX.Element {
                         year={csp_year}
                         stateCodes={stateCodesData}
                         practiceNames={cspPracticeNames[csp_year]}
-                        onPracticeChange={handlePracticeChange}
+                        selectedPractices={selectedPractices}
+                        onPracticeChange={setSelectedPractices}
                     />
                 ) : (
                     <CategoryMap
@@ -106,6 +108,8 @@ export default function CSPPage(): JSX.Element {
             }
             county={county}
             countyPracticeOptions={countyPracticeOptions}
+            selectedPractices={selectedPractices}
+            onPracticeChange={setSelectedPractices}
             stateCodes={stateCodesData}
             allStates={allStates}
             selectedCountyState={selectedCountyState}
@@ -278,7 +282,8 @@ export default function CSPPage(): JSX.Element {
                     detail="This may take longer the first time. Subsequent loads will be faster."
                 />
             )}
-            {allStates.length > 0 &&
+            {isDataReady &&
+            allStates.length > 0 &&
             statePerformance[csp_year] !== undefined &&
             zeroCategories.length > 0 &&
             stateCodesArray.length > 0 ? (
@@ -291,7 +296,12 @@ export default function CSPPage(): JSX.Element {
                         />
                     </Box>
                     <Box sx={{ height: "64px" }} />
-                    <Drawer setCSPChecked={setChecked} setEQIPChecked={undefined} zeroCategories={zeroCategories} />
+                    <Drawer
+                        setCSPChecked={setChecked}
+                        cspChecked={checked}
+                        setEQIPChecked={undefined}
+                        zeroCategories={zeroCategories}
+                    />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         {CSP_CATEGORIES.map((category, index) => renderCategorySection(category, index))}
                         <Box

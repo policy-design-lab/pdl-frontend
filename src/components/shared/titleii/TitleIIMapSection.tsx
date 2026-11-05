@@ -16,6 +16,8 @@ interface TitleIIMapSectionProps {
     stateMapComponent: React.ReactNode;
     county: UseTitleIICountyDataResult;
     countyPracticeOptions: string[];
+    selectedPractices: string[];
+    onPracticeChange: (practices: string[]) => void;
     stateCodes: Record<string, string>;
     allStates: any[];
     selectedCountyState: string;
@@ -32,6 +34,8 @@ const TitleIIMapSection = ({
     stateMapComponent,
     county,
     countyPracticeOptions,
+    selectedPractices,
+    onPracticeChange,
     stateCodes,
     allStates,
     selectedCountyState,
@@ -40,7 +44,7 @@ const TitleIIMapSection = ({
     onLevelChange
 }: TitleIIMapSectionProps): JSX.Element => {
     const isTotal = isTotalCategory(program, category);
-    const selectedPractices = isTotal ? county.selectedPractices : [];
+    const activePractices = isTotal ? selectedPractices : [];
     return (
         <Box component="div" sx={{ width: "100%", m: "auto", display: visible ? "block" : "none" }}>
             <MapTableWithLevelSwitch
@@ -56,13 +60,13 @@ const TitleIIMapSection = ({
                             allStates={allStates}
                             selectedState={selectedCountyState}
                             onStateChange={onCountyStateChange}
-                            selectedPractices={selectedPractices}
+                            selectedPractices={activePractices}
                             controlsComponent={
                                 isTotal ? (
                                     <PracticeSelector
                                         practices={countyPracticeOptions}
-                                        selected={county.selectedPractices}
-                                        onChange={county.setSelectedPractices}
+                                        selected={selectedPractices}
+                                        onChange={onPracticeChange}
                                         disabled={county.isLoading}
                                     />
                                 ) : null
@@ -76,13 +80,13 @@ const TitleIIMapSection = ({
                         <TitleIICountyTable
                             program={program}
                             category={category}
-                            tableTitle={getCountyTableTitle(program, category, year, county.selectedPractices)}
+                            tableTitle={getCountyTableTitle(program, category, year, selectedPractices)}
                             stateCodes={stateCodes}
                             countyData={county.countyData}
                             year={year}
                             selectedState={selectedCountyState}
                             onStateChange={onCountyStateChange}
-                            selectedPractices={selectedPractices}
+                            selectedPractices={activePractices}
                         />
                     ) : null
                 }

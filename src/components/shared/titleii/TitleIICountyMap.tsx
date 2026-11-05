@@ -18,7 +18,7 @@ import {
     TitleIICountyProgram
 } from "./TitleIICountyMethods";
 import { TitleIICountyDistribution, TitleIICountyRecord } from "./Interface";
-import { TITLE_II_MAP_COLOR, TEXT_DIM } from "../colors";
+import { TITLE_II_MAP_COLOR } from "../colors";
 
 interface TitleIICountyMapProps {
     program: TitleIICountyProgram;
@@ -98,9 +98,6 @@ const TitleIICountyMap = ({
                 )}
                 {selectedState !== "All States" && <span> - {selectedState}</span>}
             </Typography>
-            <Typography noWrap style={{ fontSize: "0.5em", color: TEXT_DIM, textAlign: "center" }}>
-                <i>In any county that appears in gray, there is no available data</i>
-            </Typography>
         </Box>
     );
 
@@ -115,7 +112,9 @@ const TitleIICountyMap = ({
                         <table className={classes.tooltip_table}>
                             <tbody>
                                 <tr>
-                                    <td className={classes.tooltip_topcell_left}>No data available</td>
+                                    <td className={classes.tooltip_topcell_left}>
+                                        Data is not visible or available. Search in the table for details.
+                                    </td>
                                     <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                 </tr>
                             </tbody>
