@@ -12,28 +12,15 @@ import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import { PracticeName } from "../components/shared/titleii/Interface";
 import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
-import MapTableWithLevelSwitch from "../components/shared/MapTableWithLevelSwitch";
-import EQIPCountyMap from "../components/eqip/EQIPCountyMap";
-import EQIPCountyTable from "../components/eqip/EQIPCountyTable";
-import { EQIP_CATEGORIES, EQIP_TOTAL_CATEGORY, formatPracticeSelection } from "../components/eqip/EQIPCategoryMethods";
+import TitleIIMapSection from "../components/shared/titleii/TitleIIMapSection";
+import { EQIP_CATEGORIES, EQIP_COUNTY_PROGRAM, EQIP_TOTAL_CATEGORY } from "../components/eqip/EQIPCategoryMethods";
 import FullPageLoadingOverlay from "../components/shared/FullPageLoadingOverlay";
-import { useMapUrlState } from "../utils/useMapUrlState";
+import { useCheckedMapUrlState } from "../utils/useMapUrlState";
 import { eqipMapIdByChecked } from "../utils/linkUtil";
-import PracticeSelector from "../components/shared/titleii/PracticeSelector";
 import { getPracticeCategories } from "../components/shared/titleii/PracticeMethods";
-import useEQIPCountyPractices from "../components/eqip/useEQIPCountyPractices";
+import useTitleIICountyData from "../components/shared/titleii/useTitleIICountyData";
+import usePracticeUrlSelection from "../components/shared/titleii/usePracticeUrlSelection";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
-
-const eqipCheckedByMapId = Object.entries(eqipMapIdByChecked).reduce(
-    (acc, [checkedValue, id]) => {
-        acc[id] = Number(checkedValue);
-        return acc;
-    },
-    {} as Record<string, number>
-);
-
-const eqipMapIds = Object.values(eqipMapIdByChecked);
-const eqipDefaultMapId = eqipMapIdByChecked[0];
 
 export default function EQIPPage(): JSX.Element {
     const defaultTheme = createTheme();
@@ -63,119 +50,63 @@ export default function EQIPPage(): JSX.Element {
     const [zeroCategories, setZeroCategories] = React.useState<string[]>([]);
     const [isDataReady, setIsDataReady] = React.useState(false);
 
-    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState<PracticeName[]>([]);
-    const handlePracticeChange = (practices: string[]) => {
-        setSelectedPractices(practices);
-    };
     const eqip_year = "2014-2023";
 
-    const { mapId, level, setMapId, setLevel } = useMapUrlState({
-        mapIds: eqipMapIds,
-        defaultMapId: eqipDefaultMapId,
-        defaultLevel: "state"
-    });
-    const checked = eqipCheckedByMapId[mapId] ?? 0;
-    const setChecked = React.useCallback(
-        (value: number) => {
-            setMapId(eqipMapIdByChecked[value] ?? eqipDefaultMapId);
-        },
-        [setMapId]
-    );
+    const { checked, setChecked, level, setLevel } = useCheckedMapUrlState(eqipMapIdByChecked);
     const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
-    const {
-        selectedPractices: selectedCountyPractices,
-        setSelectedPractices: setSelectedCountyPractices,
-        countyData: countyDistributionData,
-        isLoading: countyDataLoading,
-        hasLoaded: countyDataLoaded,
-        requestCountyData: fetchCountyData
-    } = useEQIPCountyPractices(`eqip_countyData_${eqip_year}::`);
+    const county = useTitleIICountyData(EQIP_COUNTY_PROGRAM);
+    const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
+        eqipPracticeNames[eqip_year],
+        EQIP_CATEGORIES[checked] === EQIP_TOTAL_CATEGORY
+    );
 
     const countyPracticeOptions = React.useMemo(
         () => getPracticeCategories(eqipPracticeNames[eqip_year]),
         [eqipPracticeNames]
     );
 
-    const renderCategorySection = (category: string, index: number) => {
-        const isTotal = category === EQIP_TOTAL_CATEGORY;
-        return (
-            <Box
-                key={category}
-                component="div"
-                sx={{ width: "100%", m: "auto", display: checked !== index ? "none" : "block" }}
-            >
-                <MapTableWithLevelSwitch
-                    stateMapComponent={
-                        isTotal ? (
-                            <TitleIIPracticeMap
-                                programName="EQIP"
-                                initialStatePerformance={statePerformance}
-                                allStates={allStates}
-                                year={eqip_year}
-                                stateCodes={stateCodesData}
-                                practiceNames={eqipPracticeNames[eqip_year]}
-                                onPracticeChange={handlePracticeChange}
-                            />
-                        ) : (
-                            <CategoryMap
-                                category={category}
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={eqip_year}
-                                stateCodes={stateCodesData}
-                            />
-                        )
-                    }
-                    countyMapComponent={
-                        <EQIPCountyMap
-                            category={category}
-                            year={eqip_year}
-                            countyData={countyDistributionData}
-                            stateCodes={stateCodesData}
-                            allStates={Array.isArray(allStates) ? allStates : []}
-                            selectedState={selectedCountyState}
-                            onStateChange={setSelectedCountyState}
-                            selectedPractices={isTotal ? selectedCountyPractices : []}
-                            controlsComponent={
-                                isTotal ? (
-                                    <PracticeSelector
-                                        practices={countyPracticeOptions}
-                                        selected={selectedCountyPractices}
-                                        onChange={setSelectedCountyPractices}
-                                        disabled={countyDataLoading}
-                                    />
-                                ) : null
-                            }
-                        />
-                    }
-                    stateContentComponent={null}
-                    countyTableComponent={
-                        <EQIPCountyTable
-                            category={category}
-                            tableTitle={`${isTotal ? "Total EQIP" : category} Benefits by County (${eqip_year})${
-                                isTotal && formatPracticeSelection(selectedCountyPractices)
-                                    ? ` - ${formatPracticeSelection(selectedCountyPractices)}`
-                                    : ""
-                            }`}
-                            stateCodes={stateCodesData}
-                            countyData={countyDistributionData}
-                            year={eqip_year}
-                            selectedState={selectedCountyState}
-                            onStateChange={setSelectedCountyState}
-                            selectedPractices={isTotal ? selectedCountyPractices : []}
-                        />
-                    }
-                    countyDataLoading={countyDataLoading}
-                    onCountyDataRequest={fetchCountyData}
-                    hasCountyData={countyDataLoaded}
-                    level={level}
-                    onLevelChange={setLevel}
-                    mapAreaWidth="100%"
-                />
-            </Box>
-        );
-    };
+    const renderCategorySection = (category: string, index: number) => (
+        <TitleIIMapSection
+            key={category}
+            program={EQIP_COUNTY_PROGRAM}
+            category={category}
+            year={eqip_year}
+            visible={checked === index}
+            stateMapComponent={
+                category === EQIP_TOTAL_CATEGORY ? (
+                    <TitleIIPracticeMap
+                        programName="EQIP"
+                        initialStatePerformance={statePerformance}
+                        allStates={allStates}
+                        year={eqip_year}
+                        stateCodes={stateCodesData}
+                        practiceNames={eqipPracticeNames[eqip_year]}
+                        selectedPractices={selectedPractices}
+                        onPracticeChange={setSelectedPractices}
+                    />
+                ) : (
+                    <CategoryMap
+                        category={category}
+                        statePerformance={statePerformance}
+                        allStates={allStates}
+                        year={eqip_year}
+                        stateCodes={stateCodesData}
+                    />
+                )
+            }
+            county={county}
+            countyPracticeOptions={countyPracticeOptions}
+            selectedPractices={selectedPractices}
+            onPracticeChange={setSelectedPractices}
+            stateCodes={stateCodesData}
+            allStates={Array.isArray(allStates) ? allStates : []}
+            selectedCountyState={selectedCountyState}
+            onCountyStateChange={setSelectedCountyState}
+            level={level}
+            onLevelChange={setLevel}
+        />
+    );
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -295,7 +226,7 @@ export default function EQIPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {countyDataLoading && (
+            {county.isLoading && (
                 <FullPageLoadingOverlay
                     label="Loading county data..."
                     detail="This may take longer the first time. Subsequent loads will be faster."
@@ -311,7 +242,12 @@ export default function EQIPPage(): JSX.Element {
                         />
                     </Box>
                     <Box sx={{ height: "64px" }} />
-                    <Drawer setEQIPChecked={setChecked} setCSPChecked={undefined} zeroCategories={zeroCategories} />
+                    <Drawer
+                        setEQIPChecked={setChecked}
+                        eqipChecked={checked}
+                        setCSPChecked={undefined}
+                        zeroCategories={zeroCategories}
+                    />
                     <Box sx={{ pl: 50, pr: 20 }}>
                         {EQIP_CATEGORIES.map((category, index) => renderCategorySection(category, index))}
                         <Box

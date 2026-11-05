@@ -5,11 +5,11 @@ import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import * as d3 from "d3";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
-import DrawLegend from "../shared/DrawLegend";
+import StateMapLegend from "../shared/StateMapLegend";
+import { buildFixedColorScale, StateValue } from "../../utils/countyColorScale";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { ACCENT_BLUE, NO_DATA_GRAY, TEXT_DARKER, TEXT_DIM, TEXT_FAINT, WHITE } from "../shared/colors";
 
@@ -184,7 +184,7 @@ const CategoryMap = ({
     const [content, setContent] = useState("");
 
     const title = `${category} Benefits from ${year}`;
-    const quantizeArray: number[] = [];
+    const stateValues: StateValue[] = [];
     statePerformance[year].map((value) => {
         let categoryRecord = {};
         const statuteRecord = value.statutes;
@@ -204,9 +204,12 @@ const CategoryMap = ({
         } else {
             categoryRecord = TotalArray.find((s) => s.practiceCategoryName === category);
         }
-        if (categoryRecord !== undefined) quantizeArray.push(categoryRecord.totalPaymentInDollars);
+        if (categoryRecord !== undefined) {
+            stateValues.push({ state: value.state, value: categoryRecord.totalPaymentInDollars });
+        }
         return null;
     });
+    const quantizeArray = stateValues.map(({ value }) => value);
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     let legendCategory = category;
@@ -217,20 +220,20 @@ const CategoryMap = ({
     if (category === "Soil testing") legendCategory = "Soil testing-CSP";
     if (category === "Other improvements") legendCategory = "Other improvements-CSP";
     const customScale = legendConfig[legendCategory];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const { colorScale, highlightColor } = buildFixedColorScale(quantizeArray, customScale, mapColor);
     const classes = useStyles();
     return (
         <div>
             {maxValue !== 0 ? (
                 <Box display="flex" justifyContent="center" sx={{ pt: 24 }}>
                     {maxValue !== 0 ? (
-                        <DrawLegend
+                        <StateMapLegend
+                            stateValues={stateValues}
+                            stateCodes={stateCodes}
+                            highlightColor={highlightColor}
                             colorScale={colorScale}
                             title={titleElement(category, year)}
-                            programData={quantizeArray}
                             prepColor={mapColor}
-                            isRatio={false}
-                            notDollar={false}
                             emptyState={[]}
                         />
                     ) : (

@@ -1,41 +1,27 @@
 import React, { useCallback, useMemo } from "react";
 import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import * as d3 from "d3";
-import { ShortFormat } from "../shared/ConvertionFormats";
-import DrawLegend from "../shared/DrawLegend";
-import { getCountyPercentiles } from "../../utils/countyLegendConfig";
-import CountyChoroplethMap, { CountyTooltipContext } from "../shared/countyMap/CountyChoroplethMap";
-import { getPracticeTotal } from "../shared/titleii/PracticeMethods";
+import { ShortFormat } from "../ConvertionFormats";
+import DrawLegend from "../DrawLegend";
+import { getCountyPercentiles } from "../../../utils/countyLegendConfig";
+import CountyChoroplethMap, { CountyLegendContext, CountyTooltipContext } from "../countyMap/CountyChoroplethMap";
+import SparseCountyLegend from "../countyMap/SparseCountyLegend";
+import { buildCountyColorScale, getSparseCountyEntries } from "../../../utils/countyColorScale";
+import { getPracticeTotal } from "./PracticeMethods";
 import {
-    EQIP_MAP_COLOR,
     formatPracticeSelection,
+    getActivePractices,
+    getCategoryLabel,
     getCategoryPayment,
     getCategoryPercentageNationwide,
-    getCategoryThresholds,
-    isTotalCategory
-} from "./EQIPCategoryMethods";
-import { TEXT_DIM, TEXT_FAINT } from "../shared/colors";
-import { TitleIICountyDistribution, TitleIICountyRecord } from "../shared/titleii/Interface";
+    stripPracticeCode,
+    TitleIICountyProgram
+} from "./TitleIICountyMethods";
+import { TitleIICountyDistribution, TitleIICountyRecord } from "./Interface";
+import { TITLE_II_MAP_COLOR } from "../colors";
 
-const computeQuantileThresholds = (quantizeArray: number[], countyPercentiles: number[]): number[] | null => {
-    const nonZeroData = quantizeArray.filter((v) => v !== 0);
-    if (nonZeroData.length < 5) return null;
-    const sorted = [...nonZeroData].sort((a, b) => a - b);
-    const p = (arr: number[], pct: number) => {
-        const idx = (pct / 100) * (arr.length - 1);
-        const lo = Math.floor(idx);
-        const hi = Math.ceil(idx);
-        if (lo === hi) return arr[lo];
-        const weight = idx - lo;
-        const lower = arr[lo] * (1 - weight);
-        const upper = arr[hi] * weight;
-        return lower + upper;
-    };
-    return countyPercentiles.map((pct) => p(sorted, pct));
-};
-
-interface EQIPCountyMapProps {
+interface TitleIICountyMapProps {
+    program: TitleIICountyProgram;
     category: string;
     year: string;
     countyData: TitleIICountyDistribution;
@@ -48,7 +34,8 @@ interface EQIPCountyMapProps {
     controlsComponent?: React.ReactNode;
 }
 
-const EQIPCountyMap = ({
+const TitleIICountyMap = ({
+    program,
     category,
     year,
     countyData,
@@ -59,22 +46,20 @@ const EQIPCountyMap = ({
     selectedPractices = [],
     legendPaddingTop = 24,
     controlsComponent = null
-}: EQIPCountyMapProps): JSX.Element => {
+}: TitleIICountyMapProps): JSX.Element => {
     const countyPercentiles = getCountyPercentiles("default");
+    const categoryLabel = getCategoryLabel(program, category);
 
-    const activePractices = useMemo(
-        () => selectedPractices.filter((practice) => practice && practice !== "All Practices"),
-        [selectedPractices]
-    );
+    const activePractices = useMemo(() => getActivePractices(selectedPractices), [selectedPractices]);
 
     const valueAccessor = useCallback(
         (county: TitleIICountyRecord) => {
             if (!activePractices.length) {
-                return getCategoryPayment(county, category);
+                return getCategoryPayment(program, county, category);
             }
             return activePractices.reduce((total, practice) => total + getPracticeTotal(county, practice), 0);
         },
-        [category, activePractices]
+        [program, category, activePractices]
     );
 
     const quantizeArrayForScale = useMemo(() => {
@@ -94,19 +79,17 @@ const EQIPCountyMap = ({
         return values;
     }, [countyData, year, selectedState, stateCodes, valueAccessor]);
 
-    const colorScale = useMemo(() => {
-        const quantileScale = computeQuantileThresholds(quantizeArrayForScale, countyPercentiles);
-        const customScale = quantileScale || getCategoryThresholds(category);
-        return d3.scaleThreshold(customScale, EQIP_MAP_COLOR);
-    }, [quantizeArrayForScale, countyPercentiles, category]);
+    const { mode, colorScale, highlightColor } = useMemo(
+        () => buildCountyColorScale(quantizeArrayForScale, countyPercentiles, TITLE_II_MAP_COLOR),
+        [quantizeArrayForScale, countyPercentiles]
+    );
 
     const practiceSummary = formatPracticeSelection(selectedPractices);
 
     const titleElement = (): JSX.Element => (
         <Box>
             <Typography noWrap variant="h6">
-                <strong>{isTotalCategory(category) ? "Total EQIP" : category}</strong> Benefits from{" "}
-                <strong>{year}</strong>
+                <strong>{categoryLabel}</strong> Benefits from <strong>{year}</strong>
                 {practiceSummary && (
                     <span>
                         {" - "}
@@ -114,9 +97,6 @@ const EQIPCountyMap = ({
                     </span>
                 )}
                 {selectedState !== "All States" && <span> - {selectedState}</span>}
-            </Typography>
-            <Typography noWrap style={{ fontSize: "0.5em", color: TEXT_DIM, textAlign: "center" }}>
-                <i>In any county that appears in gray, there is no available data</i>
             </Typography>
         </Box>
     );
@@ -132,7 +112,9 @@ const EQIPCountyMap = ({
                         <table className={classes.tooltip_table}>
                             <tbody>
                                 <tr>
-                                    <td className={classes.tooltip_topcell_left}>No data available</td>
+                                    <td className={classes.tooltip_topcell_left}>
+                                        Data is not visible or available. Search in the table for details.
+                                    </td>
                                     <td className={classes.tooltip_topcell_right}>&nbsp;</td>
                                 </tr>
                             </tbody>
@@ -142,7 +124,7 @@ const EQIPCountyMap = ({
             }
 
             const stateName = stateCodes[record.state] || record.state;
-            const nationwidePercentage = getCategoryPercentageNationwide(record, category);
+            const nationwidePercentage = getCategoryPercentageNationwide(program, record, category);
 
             return (
                 <div className="map_tooltip">
@@ -173,7 +155,7 @@ const EQIPCountyMap = ({
                                 {activePractices.map((practice) => (
                                     <tr key={practice}>
                                         <td className={classes.tooltip_regularcell_left}>
-                                            {practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "")}:
+                                            {stripPracticeCode(practice)}:
                                         </td>
                                         <td className={classes.tooltip_regularcell_right}>
                                             ${ShortFormat(getPracticeTotal(record, practice), undefined, 2)}
@@ -186,21 +168,24 @@ const EQIPCountyMap = ({
                 </div>
             );
         },
-        [stateCodes, category, activePractices]
+        [stateCodes, program, category, activePractices]
     );
 
     const legendComponent = useCallback(
-        ({ quantizeArray, zeroPoints }: { quantizeArray: number[]; zeroPoints: any }) => {
-            if (quantizeArray.length === 0) {
+        ({ quantizeArray, zeroPoints, countyDataMap, countyValueMap }: CountyLegendContext) => {
+            if (mode !== "quantile") {
                 return (
                     <Box sx={{ pt: legendPaddingTop, width: "100%" }}>
-                        {titleElement()}
-                        <Box display="flex" justifyContent="center">
-                            <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
-                                {isTotalCategory(category) ? "Total EQIP" : category} county data in {year} is
-                                unavailable.
-                            </Typography>
-                        </Box>
+                        <SparseCountyLegend
+                            title={titleElement()}
+                            entries={
+                                mode === "sparse"
+                                    ? getSparseCountyEntries(countyValueMap, countyDataMap, stateCodes)
+                                    : []
+                            }
+                            highlightColor={highlightColor}
+                            emptyMessage={`${categoryLabel} county data in ${year} is unavailable.`}
+                        />
                     </Box>
                 );
             }
@@ -212,7 +197,7 @@ const EQIPCountyMap = ({
                         colorScale={colorScale}
                         title={titleElement()}
                         programData={quantizeArray}
-                        prepColor={EQIP_MAP_COLOR}
+                        prepColor={TITLE_II_MAP_COLOR}
                         emptyState={zeroPoints}
                         useQuantileSpread
                         quantilePercentiles={countyPercentiles}
@@ -220,7 +205,7 @@ const EQIPCountyMap = ({
                 </Box>
             );
         },
-        [category, colorScale, countyPercentiles, year, selectedState]
+        [mode, highlightColor, categoryLabel, colorScale, countyPercentiles, year, selectedState, stateCodes]
     );
 
     return (
@@ -236,9 +221,9 @@ const EQIPCountyMap = ({
             renderTooltip={renderTooltip}
             legendComponent={legendComponent}
             controlsComponent={controlsComponent}
-            tooltipId="eqip-county-map-tooltip"
+            tooltipId={`${program.name.toLowerCase()}-county-map-tooltip`}
         />
     );
 };
 
-export default React.memo(EQIPCountyMap);
+export default React.memo(TitleIICountyMap);
