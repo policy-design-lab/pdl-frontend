@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - The map color legend shows the state info directly in color legend bar area when there's not enough state data for EQIP and CSP [#481](https://github.com/policy-design-lab/pdl-frontend/issues/481)
-
+- Fixed the issue that the production site connect to the development data api [#482](https://github.com/policy-design-lab/pdl-frontend/issues/482)
 
 ## [1.20.0] - 2026-10-23
 
