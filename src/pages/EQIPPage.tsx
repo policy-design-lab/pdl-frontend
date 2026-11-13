@@ -10,6 +10,11 @@ import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    NRCS_FINANCIAL_ASSISTANCE_SOURCE,
+    NRCS_FINANCIAL_ASSISTANCE_URL
+} from "../components/shared/dataSourceConstants";
 import { PracticeName } from "../components/shared/titleii/Interface";
 import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
 import TitleIIMapSection from "../components/shared/titleii/TitleIIMapSection";
@@ -412,6 +417,10 @@ export default function EQIPPage(): JSX.Element {
                                 />
                             </Box>
                         </Box>
+                        <DataSourceNote
+                            source={NRCS_FINANCIAL_ASSISTANCE_SOURCE}
+                            href={NRCS_FINANCIAL_ASSISTANCE_URL}
+                        />
                     </Box>
                 </Box>
             ) : (

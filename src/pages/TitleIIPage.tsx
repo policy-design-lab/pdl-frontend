@@ -6,6 +6,13 @@ import Drawer from "../components/ProgramDrawer";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    NRCS_FINANCIAL_ASSISTANCE_SOURCE,
+    NRCS_FINANCIAL_ASSISTANCE_URL,
+    FSA_CRP_STATISTICS_SOURCE,
+    FSA_CRP_STATISTICS_URL
+} from "../components/shared/dataSourceConstants";
 import Title2TotalMap from "../components/title2/Title2TotalMap";
 import DataTable from "../components/title2/Title2TotalTable";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
@@ -18,8 +25,8 @@ export default function TitleIIPage(): JSX.Element {
     const [allPrograms, setAllPrograms] = React.useState([]);
     const [summary, setSummary] = React.useState([]);
     const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const [totalYear, setTotalYear] = React.useState("");
 
-    const total_year = "2014-2023";
     React.useEffect(() => {
         // For landing page map only.
         const allprograms_url = `${config.apiUrl}/allprograms`;
@@ -47,17 +54,19 @@ export default function TitleIIPage(): JSX.Element {
 
         const statedistribution_url = `${config.apiUrl}/titles/title-ii/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
-            const transformed = transformStatePerformance(response);
-            setStateDistributionData(transformed);
+            const yearRange = Object.keys(response).find((key) => /^\d{4}-\d{4}$/.test(key)) ?? "";
+            setTotalYear(yearRange);
+            setStateDistributionData(transformStatePerformance(response, yearRange));
         });
     }, []);
-    const transformStatePerformance = (rawData) => {
+    const transformStatePerformance = (rawData, yearRange) => {
+        const [startYear, endYear] = yearRange.split("-").map(Number);
         const years = Object.keys(rawData).filter(
-            (key) => /^\d{4}$/.test(key) && Number(key) >= 2014 && Number(key) <= 2023
+            (key) => /^\d{4}$/.test(key) && Number(key) >= startYear && Number(key) <= endYear
         );
 
-        const summaryArray = rawData[total_year];
-        if (!Array.isArray(summaryArray)) return { [total_year]: [] };
+        const summaryArray = rawData[yearRange];
+        if (!Array.isArray(summaryArray)) return { [yearRange]: [] };
 
         const stateMap = {};
         // Initialize with the summary data
@@ -84,7 +93,7 @@ export default function TitleIIPage(): JSX.Element {
         });
 
         return {
-            [total_year]: Object.values(stateMap)
+            [yearRange]: Object.values(stateMap)
         };
     };
 
@@ -116,7 +125,7 @@ export default function TitleIIPage(): JSX.Element {
                             <Title2TotalMap
                                 program="Title II: Conservation"
                                 attribute="payments"
-                                year={total_year}
+                                year={totalYear}
                                 statePerformance={stateDistributionData}
                                 stateCodes={stateCodesData}
                                 allStates={allStates}
@@ -145,12 +154,17 @@ export default function TitleIIPage(): JSX.Element {
                         </Box>
                         <Box display="flex" justifyContent="center" component="div" sx={{ mt: 10, mb: 2 }}>
                             <DataTable
-                                TableTitle={`Total Conservation Programs (Title II) from ${total_year}`}
+                                TableTitle={`Total Conservation Programs (Title II) from ${totalYear}`}
                                 statePerformance={stateDistributionData}
-                                year={total_year}
+                                year={totalYear}
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+                        <DataSourceNote
+                            source={NRCS_FINANCIAL_ASSISTANCE_SOURCE}
+                            href={NRCS_FINANCIAL_ASSISTANCE_URL}
+                        />
+                        <DataSourceNote source={FSA_CRP_STATISTICS_SOURCE} href={FSA_CRP_STATISTICS_URL} />
                     </Box>
                 </Box>
             ) : (

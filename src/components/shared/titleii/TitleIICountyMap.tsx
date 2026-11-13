@@ -3,6 +3,8 @@ import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { ShortFormat } from "../ConvertionFormats";
 import DrawLegend from "../DrawLegend";
+import InfoTooltip from "../InfoTooltip";
+import { STATE_COUNTY_DISCREPANCY_NOTE } from "../dataSourceConstants";
 import { getCountyPercentiles } from "../../../utils/countyLegendConfig";
 import CountyChoroplethMap, { CountyLegendContext, CountyTooltipContext } from "../countyMap/CountyChoroplethMap";
 import SparseCountyLegend from "../countyMap/SparseCountyLegend";
@@ -97,6 +99,7 @@ const TitleIICountyMap = ({
                     </span>
                 )}
                 {selectedState !== "All States" && <span> - {selectedState}</span>}
+                <InfoTooltip title={STATE_COUNTY_DISCREPANCY_NOTE} />
             </Typography>
         </Box>
     );

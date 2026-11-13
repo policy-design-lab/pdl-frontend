@@ -14,6 +14,13 @@ import {
 import NavBar from "../components/NavBar";
 import Title1SubtitleMap from "../components/title1/Title1SubtitleMap";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    FSA_ARC_PLC_DATA_SOURCE,
+    FSA_ARC_PLC_DATA_URL,
+    FSA_RESOURCES_SOURCE,
+    FSA_RESOURCES_URL
+} from "../components/shared/dataSourceConstants";
 import Title1TreeMap from "../components/title1/Title1TreeMap";
 import Title1ProgramTable from "../components/title1/Title1ProgramTable";
 import SideBar from "../components/title1/sideBar/SideBar";
@@ -1212,6 +1219,8 @@ export default function TitleIPage(): JSX.Element {
                             />
                         )
                     )}
+                    <DataSourceNote source={FSA_ARC_PLC_DATA_SOURCE} href={FSA_ARC_PLC_DATA_URL} />
+                    <DataSourceNote source={FSA_RESOURCES_SOURCE} href={FSA_RESOURCES_URL} />
                 </Box>
             ) : (
                 <div className="dataLoading">
