@@ -65,6 +65,21 @@ interface Title1CountyViewConfig extends Title1CountySelector {
 const avgBaseAcresTooltip = "calculated using 2019-2023 data";
 const avgRecipientsTooltip = "including years with 0 recipients";
 
+const arcPlcDataSource = { source: FSA_ARC_PLC_DATA_SOURCE, href: FSA_ARC_PLC_DATA_URL };
+const fsaResourcesSource = { source: FSA_RESOURCES_SOURCE, href: FSA_RESOURCES_URL };
+const dataSourceByChecked: Record<string, { source: string; href: string }> = {
+    2: arcPlcDataSource,
+    20: arcPlcDataSource,
+    21: arcPlcDataSource,
+    3: arcPlcDataSource,
+    4: fsaResourcesSource,
+    5: fsaResourcesSource,
+    50: fsaResourcesSource,
+    51: fsaResourcesSource,
+    52: fsaResourcesSource,
+    53: fsaResourcesSource
+};
+
 const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
     0: [{ accessor: "totalPaymentInDollars", header: "TOTAL TITLE I BENEFITS", type: "currency" }],
     1: [
@@ -776,6 +791,7 @@ export default function TitleIPage(): JSX.Element {
                         setMapAndLevel(title1MapIdByChecked[checkedValue] ?? title1DefaultMapId, nextLevel)
                     }
                 />
+                {dataSourceByChecked[checkedValue] && <DataSourceNote {...dataSourceByChecked[checkedValue]} />}
             </Box>
         );
     };
@@ -1219,8 +1235,6 @@ export default function TitleIPage(): JSX.Element {
                             />
                         )
                     )}
-                    <DataSourceNote source={FSA_ARC_PLC_DATA_SOURCE} href={FSA_ARC_PLC_DATA_URL} />
-                    <DataSourceNote source={FSA_RESOURCES_SOURCE} href={FSA_RESOURCES_URL} />
                 </Box>
             ) : (
                 <div className="dataLoading">
