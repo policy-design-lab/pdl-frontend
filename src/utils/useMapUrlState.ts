@@ -76,3 +76,25 @@ export const useMapUrlState = ({
 
     return { mapId, level, setMapId, setLevel, setMapAndLevel };
 };
+
+export const useCheckedMapUrlState = (mapIdByChecked: Record<string, string>, defaultLevel: MapLevel = "state") => {
+    const { mapIds, defaultMapId, checkedByMapId } = useMemo(
+        () => ({
+            mapIds: Object.values(mapIdByChecked),
+            defaultMapId: mapIdByChecked[0],
+            checkedByMapId: Object.fromEntries(
+                Object.entries(mapIdByChecked).map(([checkedValue, id]) => [id, Number(checkedValue)])
+            ) as Record<string, number>
+        }),
+        [mapIdByChecked]
+    );
+    const { mapId, level, setMapId, setLevel } = useMapUrlState({ mapIds, defaultMapId, defaultLevel });
+    const checked = checkedByMapId[mapId] ?? 0;
+    const setChecked = useCallback(
+        (value: number) => {
+            setMapId(mapIdByChecked[value] ?? defaultMapId);
+        },
+        [setMapId, mapIdByChecked, defaultMapId]
+    );
+    return { checked, setChecked, level, setLevel };
+};

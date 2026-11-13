@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+- Added county-level visualizations for CSP [477](https://github.com/policy-design-lab/pdl-frontend/issues/477)
+- Improve caching mechanism for county-level data for EQIP and CSP [#478](https://github.com/policy-design-lab/pdl-frontend/issues/478)
+- Added the practice code selection to URL for EQIP and CSP county-level visualizations [#480](https://github.com/policy-design-lab/pdl-frontend/issues/480)
+- Added source file links and explanation to county map title [#483](https://github.com/policy-design-lab/pdl-frontend/issues/483)
+
+### Fixed
+- The map color legend shows the state info directly in color legend bar area when there's not enough state data for EQIP and CSP [#481](https://github.com/policy-design-lab/pdl-frontend/issues/481)
+- Fixed the issue that the production site connect to the development data api [#482](https://github.com/policy-design-lab/pdl-frontend/issues/482)
+
 ## [1.20.0] - 2026-10-23
 
 ### Added
@@ -83,7 +95,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed the wrong base acre for the Policy Analysis model when user select a single program [#419](https://github.com/policy-design-lab/pdl-frontend/issues/419)
-
 - Add comma to separate integer columns in Title I [#418](https://github.com/policy-design-lab/pdl-frontend/issues/418)
 - Reduced bottom marge for issue briefs on the Issue/White Paper page [#425](https://github.com/policy-design-lab/pdl-frontend/issues/425)
 - Change All Programs Total key format [#421](https://github.com/policy-design-lab/pdl-frontend/issues/421)

@@ -28,6 +28,29 @@ export const eqipMapIdByChecked: Record<string, string> = {
     12: "comprehensive-nutrient-mgt"
 };
 
+export const cspMapIdByChecked: Record<string, string> = {
+    0: "total-csp-benefits",
+    1: "2018-practices",
+    2: "structural",
+    3: "vegetative",
+    4: "land-management",
+    5: "forest-management",
+    6: "soil-remediation",
+    7: "existing-activity-payments",
+    8: "soil-testing",
+    9: "other-improvements",
+    10: "2014-eligible-land",
+    11: "cropland",
+    12: "grassland",
+    13: "rangeland",
+    14: "pastureland",
+    15: "nipf",
+    16: "other-csp",
+    17: "miscellaneous",
+    18: "bundles",
+    19: "6b-planning"
+};
+
 export const title1MapIdByChecked: Record<string, string> = {
     0: "total-commodities-programs",
     1: "subtitle-a-total",

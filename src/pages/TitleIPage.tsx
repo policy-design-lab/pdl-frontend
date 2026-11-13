@@ -14,6 +14,13 @@ import {
 import NavBar from "../components/NavBar";
 import Title1SubtitleMap from "../components/title1/Title1SubtitleMap";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    FSA_ARC_PLC_DATA_SOURCE,
+    FSA_ARC_PLC_DATA_URL,
+    FSA_RESOURCES_SOURCE,
+    FSA_RESOURCES_URL
+} from "../components/shared/dataSourceConstants";
 import Title1TreeMap from "../components/title1/Title1TreeMap";
 import Title1ProgramTable from "../components/title1/Title1ProgramTable";
 import SideBar from "../components/title1/sideBar/SideBar";
@@ -57,6 +64,21 @@ interface Title1CountyViewConfig extends Title1CountySelector {
 
 const avgBaseAcresTooltip = "calculated using 2019-2023 data";
 const avgRecipientsTooltip = "including years with 0 recipients";
+
+const arcPlcDataSource = { source: FSA_ARC_PLC_DATA_SOURCE, href: FSA_ARC_PLC_DATA_URL };
+const fsaResourcesSource = { source: FSA_RESOURCES_SOURCE, href: FSA_RESOURCES_URL };
+const dataSourceByChecked: Record<string, { source: string; href: string }> = {
+    2: arcPlcDataSource,
+    20: arcPlcDataSource,
+    21: arcPlcDataSource,
+    3: arcPlcDataSource,
+    4: fsaResourcesSource,
+    5: fsaResourcesSource,
+    50: fsaResourcesSource,
+    51: fsaResourcesSource,
+    52: fsaResourcesSource,
+    53: fsaResourcesSource
+};
 
 const countyColumnsByChecked: Record<string, Title1CountyColumnConfig[]> = {
     0: [{ accessor: "totalPaymentInDollars", header: "TOTAL TITLE I BENEFITS", type: "currency" }],
@@ -769,6 +791,7 @@ export default function TitleIPage(): JSX.Element {
                         setMapAndLevel(title1MapIdByChecked[checkedValue] ?? title1DefaultMapId, nextLevel)
                     }
                 />
+                {dataSourceByChecked[checkedValue] && <DataSourceNote {...dataSourceByChecked[checkedValue]} />}
             </Box>
         );
     };

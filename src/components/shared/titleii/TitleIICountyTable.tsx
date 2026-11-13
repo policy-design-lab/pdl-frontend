@@ -1,17 +1,22 @@
 import React from "react";
-import { compareWithDollarSign, compareWithPercentSign } from "../shared/TableCompareFunctions";
-import { formatCurrency } from "../shared/ConvertionFormats";
-import CountyDataTable, { CountyTableColumn } from "../shared/countyMap/CountyDataTable";
-import { getPracticeTotal } from "../shared/titleii/PracticeMethods";
+import { compareWithDollarSign, compareWithPercentSign } from "../TableCompareFunctions";
+import { formatCurrency } from "../ConvertionFormats";
+import CountyDataTable, { CountyTableColumn } from "../countyMap/CountyDataTable";
+import { getPracticeTotal } from "./PracticeMethods";
 import {
+    getActivePractices,
+    getCategoryLabel,
     getCategoryPayment,
     getCategoryPercentageNationwide,
     getCategoryPercentageWithinState,
-    isTotalCategory
-} from "./EQIPCategoryMethods";
-import { TitleIICountyDistribution, TitleIICountyRecord } from "../shared/titleii/Interface";
+    isTotalCategory,
+    stripPracticeCode,
+    TitleIICountyProgram
+} from "./TitleIICountyMethods";
+import { TitleIICountyDistribution, TitleIICountyRecord } from "./Interface";
 
-interface EQIPCountyTableProps {
+interface TitleIICountyTableProps {
+    program: TitleIICountyProgram;
     category: string;
     tableTitle: string;
     stateCodes: Record<string, string>;
@@ -22,7 +27,8 @@ interface EQIPCountyTableProps {
     selectedPractices?: string[];
 }
 
-function EQIPCountyTable({
+function TitleIICountyTable({
+    program,
     category,
     tableTitle,
     stateCodes,
@@ -31,32 +37,31 @@ function EQIPCountyTable({
     selectedState,
     onStateChange,
     selectedPractices = []
-}: EQIPCountyTableProps): JSX.Element {
-    const activePractices = React.useMemo(
-        () => selectedPractices.filter((practice) => practice && practice !== "All Practices"),
-        [selectedPractices]
-    );
+}: TitleIICountyTableProps): JSX.Element {
+    const activePractices = React.useMemo(() => getActivePractices(selectedPractices), [selectedPractices]);
 
     const columns: CountyTableColumn[] = React.useMemo(() => {
-        const categoryLabel = isTotalCategory(category) ? "Total EQIP" : category;
+        const categoryLabel = getCategoryLabel(program, category);
         const columnPrep: CountyTableColumn[] = [
             {
                 key: "categoryBenefit",
                 header: `${categoryLabel} Benefit`.toUpperCase(),
-                format: (county: TitleIICountyRecord) => formatCurrency(getCategoryPayment(county, category), 0),
+                format: (county: TitleIICountyRecord) =>
+                    formatCurrency(getCategoryPayment(program, county, category), 0),
                 sortType: compareWithDollarSign
             }
         ];
-        if (!isTotalCategory(category)) {
+        if (!isTotalCategory(program, category)) {
             columnPrep.push({
                 key: "categoryPercentage",
                 header: `${categoryLabel} Percentage Within County`.toUpperCase(),
-                format: (county: TitleIICountyRecord) => `${getCategoryPercentageWithinState(county, category)}%`,
+                format: (county: TitleIICountyRecord) =>
+                    `${getCategoryPercentageWithinState(program, county, category)}%`,
                 sortType: compareWithPercentSign
             });
             columnPrep.push({
-                key: "eqipBenefit",
-                header: "EQIP BENEFITS",
+                key: "programBenefit",
+                header: `${program.name} BENEFITS`,
                 format: (county: TitleIICountyRecord) => formatCurrency(Number(county.totalPaymentInDollars) || 0, 0),
                 sortType: compareWithDollarSign
             });
@@ -64,19 +69,19 @@ function EQIPCountyTable({
         columnPrep.push({
             key: "percentage",
             header: "PCT. NATIONWIDE",
-            format: (county: TitleIICountyRecord) => `${getCategoryPercentageNationwide(county, category)}%`,
+            format: (county: TitleIICountyRecord) => `${getCategoryPercentageNationwide(program, county, category)}%`,
             sortType: compareWithPercentSign
         });
         activePractices.forEach((practice) => {
             columnPrep.push({
                 key: `practice_${practice}`,
-                header: practice.replace(/\s*\([a-zA-Z0-9]+\)$/, "").toUpperCase(),
+                header: stripPracticeCode(practice).toUpperCase(),
                 format: (county: TitleIICountyRecord) => formatCurrency(getPracticeTotal(county, practice), 0),
                 sortType: compareWithDollarSign
             });
         });
         return columnPrep;
-    }, [category, activePractices]);
+    }, [program, category, activePractices]);
 
     return (
         <CountyDataTable
@@ -91,4 +96,4 @@ function EQIPCountyTable({
     );
 }
 
-export default EQIPCountyTable;
+export default TitleIICountyTable;

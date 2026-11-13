@@ -6,6 +6,7 @@ import FormLabel from "@mui/material/FormLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { BRAND_GREEN } from "../colors";
+import { reconcileAllSentinel, removeWithSentinelFallback } from "../selectors/multiSelectUtils";
 
 export const ALL_PRACTICES = "All Practices";
 
@@ -26,31 +27,14 @@ const PracticeSelector = ({
     disabled = false,
     pt = 4
 }: PracticeSelectorProps): JSX.Element => {
-    const normalizeSelection = (next: string[]): string[] => {
-        if (next.includes(ALL_PRACTICES) && !selected.includes(ALL_PRACTICES)) {
-            return [ALL_PRACTICES];
-        }
-        if (next.length > 1 && next.includes(ALL_PRACTICES)) {
-            return next.filter((practice) => practice !== ALL_PRACTICES);
-        }
-        if (next.length === 0) {
-            return [ALL_PRACTICES];
-        }
-        return next;
-    };
-
     const handleChange = (event) => {
         const { value } = event.target;
         const next = typeof value === "string" ? value.split(",") : value;
-        onChange(normalizeSelection(next));
+        onChange(reconcileAllSentinel(next, selected, ALL_PRACTICES));
     };
 
     const handleChipDelete = (practiceToDelete: string) => {
-        if (selected.length === 1) {
-            onChange([ALL_PRACTICES]);
-            return;
-        }
-        onChange(selected.filter((practice) => practice !== practiceToDelete));
+        onChange(removeWithSentinelFallback(selected, practiceToDelete, ALL_PRACTICES));
     };
 
     return (

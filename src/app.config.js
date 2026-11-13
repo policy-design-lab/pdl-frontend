@@ -3,7 +3,7 @@ const baseConfig = {
 };
 
 const deployConfig = {
-    apiUrl: "https://policydesignlab-dev.ncsa.illinois.edu/pdl",
+    apiUrl: "/pdl",
     ga_tracking_id: "G-GFR8PTXMDM",
     ...baseConfig
 };
