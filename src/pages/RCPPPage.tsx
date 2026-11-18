@@ -8,6 +8,11 @@ import RCPPTotalMap from "../components/rcpp/RCPPTotalMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    NRCS_FINANCIAL_ASSISTANCE_SOURCE,
+    NRCS_FINANCIAL_ASSISTANCE_URL
+} from "../components/shared/dataSourceConstants";
 import { formatCurrency } from "../components/shared/ConvertionFormats";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
@@ -144,6 +149,10 @@ export default function RCPPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+                        <DataSourceNote
+                            source={NRCS_FINANCIAL_ASSISTANCE_SOURCE}
+                            href={NRCS_FINANCIAL_ASSISTANCE_URL}
+                        />
                     </Box>
                 </Box>
             ) : (

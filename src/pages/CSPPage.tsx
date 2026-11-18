@@ -10,12 +10,26 @@ import CategoryMap from "../components/csp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    NRCS_FINANCIAL_ASSISTANCE_SOURCE,
+    NRCS_FINANCIAL_ASSISTANCE_URL
+} from "../components/shared/dataSourceConstants";
 import { PracticeName } from "../components/shared/titleii/Interface";
 import TitleIIPracticeMap from "../components/shared/titleii/TitleIIPracticeMap";
+import TitleIIMapSection from "../components/shared/titleii/TitleIIMapSection";
+import { CSP_CATEGORIES, CSP_COUNTY_PROGRAM, CSP_TOTAL_CATEGORY } from "../components/csp/CSPCategoryMethods";
+import FullPageLoadingOverlay from "../components/shared/FullPageLoadingOverlay";
+import { useCheckedMapUrlState } from "../utils/useMapUrlState";
+import { cspMapIdByChecked } from "../utils/linkUtil";
+import { getPracticeCategories } from "../components/shared/titleii/PracticeMethods";
+import useTitleIICountyData from "../components/shared/titleii/useTitleIICountyData";
+import usePracticeUrlSelection from "../components/shared/titleii/usePracticeUrlSelection";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CSPPage(): JSX.Element {
-    const [checked, setChecked] = React.useState(0);
+    const { checked, setChecked, level, setLevel } = useCheckedMapUrlState(cspMapIdByChecked);
+    const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
     const [statePerformance, setStatePerformance] = React.useState({});
     const [allStates, setAllStates] = React.useState([]);
     const [stateCodesData, setStateCodesData] = React.useState({});
@@ -31,11 +45,7 @@ export default function CSPPage(): JSX.Element {
     const [isDataReady, setIsDataReady] = React.useState(false);
 
     // connect to selector endpoint
-    const [selectedPractices, setSelectedPractices] = React.useState<string[]>(["All Practices"]);
     const [cspPracticeNames, setCspPracticeNames] = React.useState<PracticeName[]>([]);
-    const handlePracticeChange = (practices: string[]) => {
-        setSelectedPractices(practices);
-    };
 
     const defaultTheme = createTheme();
     let landManagementTotal = 0;
@@ -61,6 +71,58 @@ export default function CSPPage(): JSX.Element {
     const zeroCategory = [];
 
     const csp_year = "2014-2023";
+    const county = useTitleIICountyData(CSP_COUNTY_PROGRAM);
+    const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
+        cspPracticeNames[csp_year],
+        CSP_CATEGORIES[checked] === CSP_TOTAL_CATEGORY
+    );
+
+    const countyPracticeOptions = React.useMemo(
+        () => getPracticeCategories(cspPracticeNames[csp_year]),
+        [cspPracticeNames]
+    );
+
+    const renderCategorySection = (category: string, index: number) => (
+        <TitleIIMapSection
+            key={category}
+            program={CSP_COUNTY_PROGRAM}
+            category={category}
+            year={csp_year}
+            visible={checked === index}
+            stateMapComponent={
+                category === CSP_TOTAL_CATEGORY ? (
+                    <TitleIIPracticeMap
+                        programName="CSP"
+                        initialStatePerformance={statePerformance}
+                        allStates={allStates}
+                        year={csp_year}
+                        stateCodes={stateCodesData}
+                        practiceNames={cspPracticeNames[csp_year]}
+                        selectedPractices={selectedPractices}
+                        onPracticeChange={setSelectedPractices}
+                    />
+                ) : (
+                    <CategoryMap
+                        category={category}
+                        statePerformance={statePerformance}
+                        allStates={allStates}
+                        year={csp_year}
+                        stateCodes={stateCodesData}
+                    />
+                )
+            }
+            county={county}
+            countyPracticeOptions={countyPracticeOptions}
+            selectedPractices={selectedPractices}
+            onPracticeChange={setSelectedPractices}
+            stateCodes={stateCodesData}
+            allStates={allStates}
+            selectedCountyState={selectedCountyState}
+            onCountyStateChange={setSelectedCountyState}
+            level={level}
+            onLevelChange={setLevel}
+        />
+    );
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -219,7 +281,14 @@ export default function CSPPage(): JSX.Element {
     };
     return (
         <ThemeProvider theme={defaultTheme}>
-            {allStates.length > 0 &&
+            {county.isLoading && (
+                <FullPageLoadingOverlay
+                    label="Loading county data..."
+                    detail="This may take longer the first time. Subsequent loads will be faster."
+                />
+            )}
+            {isDataReady &&
+            allStates.length > 0 &&
             statePerformance[csp_year] !== undefined &&
             zeroCategories.length > 0 &&
             stateCodesArray.length > 0 ? (
@@ -231,334 +300,21 @@ export default function CSPPage(): JSX.Element {
                             subtext="Conversation Stewardship Program (CSP)"
                         />
                     </Box>
-                    <Drawer setCSPChecked={setChecked} setEQIPChecked={undefined} zeroCategories={zeroCategories} />
+                    <Box sx={{ height: "64px" }} />
+                    <Drawer
+                        setCSPChecked={setChecked}
+                        cspChecked={checked}
+                        setEQIPChecked={undefined}
+                        zeroCategories={zeroCategories}
+                    />
                     <Box sx={{ pl: 50, pr: 20 }}>
+                        {CSP_CATEGORIES.map((category, index) => renderCategorySection(category, index))}
                         <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 0 ? "none" : "block"
-                            }}
+                            display={level === "county" ? "none" : "flex"}
+                            justifyContent="center"
+                            flexDirection="column"
+                            sx={{ mt: 10, mb: 2 }}
                         >
-                            <TitleIIPracticeMap
-                                programName="CSP"
-                                initialStatePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                                practiceNames={cspPracticeNames[csp_year]}
-                                onPracticeChange={handlePracticeChange}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 1 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="2018 Practices"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 2 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Structural"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 3 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Vegetative"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 4 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Land management"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 5 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Forest management"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 6 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Soil remediation"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 7 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Existing activity payments"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 8 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Soil testing"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 9 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Other improvements"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 10 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="2014 Eligible Land"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 11 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Cropland"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 12 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Grassland"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 13 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Rangeland"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 14 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Pastureland"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 15 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Non-Industrial Private Forestland (NIPF)"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 16 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Other CSP"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 17 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Miscellaneous"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 18 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="Bundles"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box
-                            component="div"
-                            sx={{
-                                width: "85%",
-                                m: "auto",
-                                display: checked !== 19 ? "none" : "block"
-                            }}
-                        >
-                            <CategoryMap
-                                category="(6)(B) Planning"
-                                statePerformance={statePerformance}
-                                allStates={allStates}
-                                year={csp_year}
-                                stateCodes={stateCodesData}
-                            />
-                        </Box>
-                        <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
                                     <strong>CSP: State Performance by Category</strong>
@@ -570,7 +326,7 @@ export default function CSPPage(): JSX.Element {
                             </Typography>
                         </Box>
 
-                        {firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0 ? (
+                        {(firstTotal >= 0 || secondTotal >= 0 || thirdTotal >= 0) && level !== "county" ? (
                             <div>
                                 <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
                                     <SemiDonutChart
@@ -608,175 +364,181 @@ export default function CSPPage(): JSX.Element {
                             </div>
                         ) : null}
 
-                        <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
-                            <Typography variant="h5">
-                                <strong>Performance by States</strong>
-                            </Typography>
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
-                            <DataTable
-                                programName="CSP"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                                selectedPractices={selectedPractices}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="2018 Practices"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Structural"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Vegetative"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Land management"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Forest management"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Soil remediation"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 7 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Existing activity payments"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
+                        <Box sx={{ display: level === "county" ? "none" : "block" }}>
+                            <Box display="flex" justifyContent="center" sx={{ mt: 10, mb: 2 }}>
+                                <Typography variant="h5">
+                                    <strong>Performance by States</strong>
+                                </Typography>
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 0 ? "none" : "block" }}>
+                                <DataTable
+                                    programName="CSP"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                    selectedPractices={selectedPractices}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 1 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="2018 Practices"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 2 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Structural"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 3 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Vegetative"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 4 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Land management"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 5 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Forest management"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 6 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Soil remediation"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 7 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Existing activity payments"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
 
-                        <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Soil testing"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Other improvements"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
+                            <Box component="div" sx={{ display: checked !== 8 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Soil testing"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 9 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Other improvements"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
 
-                        <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="2014 Eligible Land"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Cropland"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
+                            <Box component="div" sx={{ display: checked !== 10 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="2014 Eligible Land"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 11 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Cropland"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
 
-                        <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Grassland"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
+                            <Box component="div" sx={{ display: checked !== 12 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Grassland"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Rangeland"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Pastureland"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 15 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Non-Industrial Private Forestland (NIPF)"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 16 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Other CSP"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 17 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Miscellaneous"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 18 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="Bundles"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
+                            <Box component="div" sx={{ display: checked !== 19 ? "none" : "block" }}>
+                                <CategoryTable
+                                    category="(6)(B) Planning"
+                                    statePerformance={statePerformance}
+                                    year={csp_year}
+                                    stateCodes={stateCodesArray}
+                                />
+                            </Box>
                         </Box>
-                        <Box component="div" sx={{ display: checked !== 13 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Rangeland"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 14 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Pastureland"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 15 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Non-Industrial Private Forestland (NIPF)"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 16 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Other CSP"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 17 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Miscellaneous"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 18 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="Bundles"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
-                        <Box component="div" sx={{ display: checked !== 19 ? "none" : "block" }}>
-                            <CategoryTable
-                                category="(6)(B) Planning"
-                                statePerformance={statePerformance}
-                                year={csp_year}
-                                stateCodes={stateCodesArray}
-                            />
-                        </Box>
+                        <DataSourceNote
+                            source={NRCS_FINANCIAL_ASSISTANCE_SOURCE}
+                            href={NRCS_FINANCIAL_ASSISTANCE_URL}
+                        />
                     </Box>
                 </Box>
             ) : (

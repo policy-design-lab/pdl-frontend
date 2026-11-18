@@ -11,6 +11,8 @@ import CategoryMap from "../components/crp/CategoryMap";
 import { config } from "../app.config";
 import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import { FSA_CRP_STATISTICS_SOURCE, FSA_CRP_STATISTICS_URL } from "../components/shared/dataSourceConstants";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CRPPage(): JSX.Element {
@@ -371,6 +373,7 @@ export default function CRPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+                        <DataSourceNote source={FSA_CRP_STATISTICS_SOURCE} href={FSA_CRP_STATISTICS_URL} />
                     </Box>
                 </Box>
             ) : (

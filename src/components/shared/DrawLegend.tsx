@@ -12,7 +12,7 @@ export default function DrawLegend({
     title,
     programData,
     prepColor,
-    emptyState = [],
+    emptyState = [] as string[],
     useQuantiles = false,
     useQuantileSpread = false,
     quantilePercentiles = [20, 40, 60, 80],
@@ -275,7 +275,9 @@ export default function DrawLegend({
                         .attr("class", "legendTextSide")
                         .attr("x", width / 2 - 150)
                         .attr("y", 80)
-                        .text(`Gray areas indicate no available data${grayAreasSuffix ? ` ${grayAreasSuffix}` : ""}`);
+                        .text(
+                            `Gray areas indicate data is not visible or available. Search in the table for details. ${grayAreasSuffix ? ` ${grayAreasSuffix}` : ""}`
+                        );
                 } else {
                     baseSVG.attr("height", 90);
                     baseSVG

@@ -35,7 +35,8 @@ export interface PracticeMapProps {
         practiceName: string;
         practiceCode: string;
     }>;
-    onPracticeChange?: (practices: string[]) => void;
+    selectedPractices: string[];
+    onPracticeChange: (practices: string[]) => void;
 }
 
 export interface TitleIICountyPractice {
