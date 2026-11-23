@@ -8,7 +8,7 @@ import DataTable from "../components/shared/titleii/TitleIIPracticeTable";
 import CategoryTable from "../components/eqip/CategoryTable";
 import CategoryMap from "../components/eqip/CategoryMap";
 import { config } from "../app.config";
-import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl, getYearRangeKey } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import DataSourceNote from "../components/shared/DataSourceNote";
 import {
@@ -56,27 +56,24 @@ export default function EQIPPage(): JSX.Element {
     const [isDataReady, setIsDataReady] = React.useState(false);
 
     const [eqipPracticeNames, setEqipPracticeNames] = React.useState<PracticeName[]>([]);
-    const eqip_year = "2014-2023";
+    const eqip_year = getYearRangeKey(statePerformance);
+    const eqipPracticeList = eqipPracticeNames[getYearRangeKey(eqipPracticeNames)];
 
     const { checked, setChecked, level, setLevel } = useCheckedMapUrlState(eqipMapIdByChecked);
     const [selectedCountyState, setSelectedCountyState] = React.useState("All States");
     const county = useTitleIICountyData(EQIP_COUNTY_PROGRAM);
     const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
-        eqipPracticeNames[eqip_year],
+        eqipPracticeList,
         EQIP_CATEGORIES[checked] === EQIP_TOTAL_CATEGORY
     );
 
-    const countyPracticeOptions = React.useMemo(
-        () => getPracticeCategories(eqipPracticeNames[eqip_year]),
-        [eqipPracticeNames]
-    );
+    const countyPracticeOptions = React.useMemo(() => getPracticeCategories(eqipPracticeList), [eqipPracticeList]);
 
     const renderCategorySection = (category: string, index: number) => (
         <TitleIIMapSection
             key={category}
             program={EQIP_COUNTY_PROGRAM}
             category={category}
-            year={eqip_year}
             visible={checked === index}
             stateMapComponent={
                 category === EQIP_TOTAL_CATEGORY ? (
@@ -86,7 +83,7 @@ export default function EQIPPage(): JSX.Element {
                         allStates={allStates}
                         year={eqip_year}
                         stateCodes={stateCodesData}
-                        practiceNames={eqipPracticeNames[eqip_year]}
+                        practiceNames={eqipPracticeList}
                         selectedPractices={selectedPractices}
                         onPracticeChange={setSelectedPractices}
                     />
@@ -237,7 +234,7 @@ export default function EQIPPage(): JSX.Element {
                     detail="This may take longer the first time. Subsequent loads will be faster."
                 />
             )}
-            {isDataReady ? (
+            {isDataReady && eqip_year ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />

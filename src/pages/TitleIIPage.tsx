@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import NavBar from "../components/NavBar";
 import Drawer from "../components/ProgramDrawer";
 import { config } from "../app.config";
-import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl, getYearRangeKey } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import DataSourceNote from "../components/shared/DataSourceNote";
 import {
@@ -54,7 +54,7 @@ export default function TitleIIPage(): JSX.Element {
 
         const statedistribution_url = `${config.apiUrl}/titles/title-ii/state-distribution`;
         getJsonDataFromUrl(statedistribution_url).then((response) => {
-            const yearRange = Object.keys(response).find((key) => /^\d{4}-\d{4}$/.test(key)) ?? "";
+            const yearRange = getYearRangeKey(response);
             setTotalYear(yearRange);
             setStateDistributionData(transformStatePerformance(response, yearRange));
         });

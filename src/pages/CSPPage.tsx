@@ -8,7 +8,7 @@ import DataTable from "../components/shared/titleii/TitleIIPracticeTable";
 import CategoryTable from "../components/csp/CategoryTable";
 import CategoryMap from "../components/csp/CategoryMap";
 import { config } from "../app.config";
-import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl, getYearRangeKey } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import DataSourceNote from "../components/shared/DataSourceNote";
 import {
@@ -70,24 +70,21 @@ export default function CSPPage(): JSX.Element {
     let otherCSPTotal = 0;
     const zeroCategory = [];
 
-    const csp_year = "2014-2023";
+    const csp_year = getYearRangeKey(statePerformance);
+    const cspPracticeList = cspPracticeNames[getYearRangeKey(cspPracticeNames)];
     const county = useTitleIICountyData(CSP_COUNTY_PROGRAM);
     const [selectedPractices, setSelectedPractices] = usePracticeUrlSelection(
-        cspPracticeNames[csp_year],
+        cspPracticeList,
         CSP_CATEGORIES[checked] === CSP_TOTAL_CATEGORY
     );
 
-    const countyPracticeOptions = React.useMemo(
-        () => getPracticeCategories(cspPracticeNames[csp_year]),
-        [cspPracticeNames]
-    );
+    const countyPracticeOptions = React.useMemo(() => getPracticeCategories(cspPracticeList), [cspPracticeList]);
 
     const renderCategorySection = (category: string, index: number) => (
         <TitleIIMapSection
             key={category}
             program={CSP_COUNTY_PROGRAM}
             category={category}
-            year={csp_year}
             visible={checked === index}
             stateMapComponent={
                 category === CSP_TOTAL_CATEGORY ? (
@@ -97,7 +94,7 @@ export default function CSPPage(): JSX.Element {
                         allStates={allStates}
                         year={csp_year}
                         stateCodes={stateCodesData}
-                        practiceNames={cspPracticeNames[csp_year]}
+                        practiceNames={cspPracticeList}
                         selectedPractices={selectedPractices}
                         onPracticeChange={setSelectedPractices}
                     />

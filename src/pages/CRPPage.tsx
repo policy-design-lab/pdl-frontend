@@ -9,18 +9,18 @@ import CRPTotalMap from "../components/crp/CRPTotalMap";
 import CategoryTable from "../components/crp/CategoryTable";
 import CategoryMap from "../components/crp/CategoryMap";
 import { config } from "../app.config";
-import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl, getYearRangeKey } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
 import DataSourceNote from "../components/shared/DataSourceNote";
 import { FSA_CRP_STATISTICS_SOURCE, FSA_CRP_STATISTICS_URL } from "../components/shared/dataSourceConstants";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function CRPPage(): JSX.Element {
-    const year = "2014-2023";
     const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const year = getYearRangeKey(stateDistributionData);
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
@@ -123,7 +123,7 @@ export default function CRPPage(): JSX.Element {
         <ThemeProvider theme={defaultTheme}>
             {Object.keys(stateCodesData).length > 0 &&
             Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 &&
+            year &&
             zeroCategories.length >= 0 ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>

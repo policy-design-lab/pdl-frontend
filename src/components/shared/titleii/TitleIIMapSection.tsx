@@ -11,7 +11,6 @@ import { UseTitleIICountyDataResult } from "./useTitleIICountyData";
 interface TitleIIMapSectionProps {
     program: TitleIICountyProgram;
     category: string;
-    year: string;
     visible: boolean;
     stateMapComponent: React.ReactNode;
     county: UseTitleIICountyDataResult;
@@ -29,7 +28,6 @@ interface TitleIIMapSectionProps {
 const TitleIIMapSection = ({
     program,
     category,
-    year,
     visible,
     stateMapComponent,
     county,
@@ -54,7 +52,7 @@ const TitleIIMapSection = ({
                         <TitleIICountyMap
                             program={program}
                             category={category}
-                            year={year}
+                            year={county.year}
                             countyData={county.countyData}
                             stateCodes={stateCodes}
                             allStates={allStates}
@@ -80,10 +78,10 @@ const TitleIIMapSection = ({
                         <TitleIICountyTable
                             program={program}
                             category={category}
-                            tableTitle={getCountyTableTitle(program, category, year, selectedPractices)}
+                            tableTitle={getCountyTableTitle(program, category, county.year, selectedPractices)}
                             stateCodes={stateCodes}
                             countyData={county.countyData}
-                            year={year}
+                            year={county.year}
                             selectedState={selectedCountyState}
                             onStateChange={onCountyStateChange}
                             selectedPractices={activePractices}

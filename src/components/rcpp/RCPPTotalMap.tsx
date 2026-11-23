@@ -183,7 +183,6 @@ const RCPPTotalMap = ({
         return null;
     });
     const category = "Total RCPP";
-    const years = "2014-2023";
     const maxValue = Math.max(...quantizeArray);
     const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
     const customScale = legendConfig[category];
@@ -196,7 +195,7 @@ const RCPPTotalMap = ({
                     {maxValue !== 0 ? (
                         <DrawLegend
                             colorScale={colorScale}
-                            title={titleElement(category, years)}
+                            title={titleElement(category, year)}
                             programData={quantizeArray}
                             prepColor={mapColor}
                             isRatio={false}
@@ -205,10 +204,10 @@ const RCPPTotalMap = ({
                         />
                     ) : (
                         <div>
-                            {titleElement(category, years)}
+                            {titleElement(category, year)}
                             <Box display="flex" justifyContent="center">
                                 <Typography sx={{ color: TEXT_FAINT, fontWeight: 700 }}>
-                                    {category} data in {years} is unavailable for all states.
+                                    {category} data in {year} is unavailable for all states.
                                 </Typography>
                             </Box>
                         </div>

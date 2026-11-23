@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improve caching mechanism for county-level data for EQIP and CSP [#478](https://github.com/policy-design-lab/pdl-frontend/issues/478)
 - Added the practice code selection to URL for EQIP and CSP county-level visualizations [#480](https://github.com/policy-design-lab/pdl-frontend/issues/480)
 - Added source file links and explanation to county map title [#483](https://github.com/policy-design-lab/pdl-frontend/issues/483)
+- Updated the Title II years to 2025 with latest data and automatic updates with api keys [#484](https://github.com/policy-design-lab/pdl-frontend/issues/484)
 
 ### Fixed
 - The map color legend shows the state info directly in color legend bar area when there's not enough state data for EQIP and CSP [#481](https://github.com/policy-design-lab/pdl-frontend/issues/481)

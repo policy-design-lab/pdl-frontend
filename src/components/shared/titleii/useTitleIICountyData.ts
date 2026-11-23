@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getJsonDataFromUrl } from "../../../utils/apiutil";
+import { getJsonDataFromUrl, getYearRangeKey } from "../../../utils/apiutil";
 import { TitleIICountyProgram } from "./TitleIICountyMethods";
 import { TitleIICountyDistribution } from "./Interface";
 
@@ -31,6 +31,7 @@ const fetchCountyData = (url: string): Promise<TitleIICountyDistribution> => {
 
 export interface UseTitleIICountyDataResult {
     countyData: TitleIICountyDistribution;
+    year: string;
     isLoading: boolean;
     hasLoaded: boolean;
     requestCountyData: () => void;
@@ -83,5 +84,5 @@ export default function useTitleIICountyData(program: TitleIICountyProgram): Use
         load();
     }, [load]);
 
-    return { countyData, isLoading, hasLoaded, requestCountyData };
+    return { countyData, year: getYearRangeKey(countyData), isLoading, hasLoaded, requestCountyData };
 }
