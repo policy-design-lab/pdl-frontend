@@ -134,11 +134,11 @@ export default function TitleIIPage(): JSX.Element {
                         <Box display="flex" justifyContent="center" flexDirection="column" sx={{ mt: 10, mb: 2 }}>
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h5">
-                                    <strong>TitleII: State Performance by Category of Practices</strong>
+                                    <strong>Title II: State Performance by Category of Practices</strong>
                                 </Typography>
                             </Box>
                             <Typography sx={{ mt: 2 }}>
-                                TitleII provides cost-share assistance for improvements to eligible land. In the
+                                Title II provides cost-share assistance for improvements to eligible land. In the
                                 statute, Congress defined seven categories of conservation practices: (1) structural
                                 practices, such as for irrigation and livestock manure management or abatement; (2) land
                                 management practices, such as for fencing, drainage water management, grazing,
