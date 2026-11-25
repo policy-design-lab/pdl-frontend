@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import "../../styles/map.css";
 import legendConfig from "../../utils/legendConfig.json";
 import DrawLegend from "../shared/DrawLegend";
+import InfoTooltip from "../shared/InfoTooltip";
 import { getValueFromAttrDollar } from "../../utils/apiutil";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import { useStyles, tooltipBkgColor, topTipStyle } from "../shared/MapTooltip";
@@ -239,6 +240,7 @@ const titleElement = (attribute, year): JSX.Element => {
         <Box>
             <Typography noWrap variant="h6">
                 <strong>{attribute}</strong> Benefits from <strong>{year}</strong>
+                <InfoTooltip title="Actual data displayed is for the fiscal years 2014 to 2024, pending updated data reported by USDA." />
             </Typography>{" "}
             <Typography noWrap style={{ fontSize: "0.5em", color: TEXT_DIM, textAlign: "center" }}>
                 <i>In any state that appears in gray, there is no available data</i>
