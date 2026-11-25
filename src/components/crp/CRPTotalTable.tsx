@@ -137,6 +137,7 @@ function App({
     stateCodes: any;
 }): JSX.Element {
     const crpTableData: any[] = [];
+    const endYear = year.split("-")[1];
 
     statePerformance[year].forEach((value) => {
         const totalCrp = value;
@@ -200,7 +201,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        PCT. NATIONWIDE <br /> (as of Sep. 2023)
+                        PCT. NATIONWIDE <br /> (as of Sep. {endYear})
                     </Box>
                 ),
                 accessor: "percentage",
@@ -220,7 +221,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        NO. OF CONTRACTS <br /> (as of Sep. 2023)
+                        NO. OF CONTRACTS <br /> (as of Sep. {endYear})
                     </Box>
                 ),
                 accessor: "noContract",
@@ -240,7 +241,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        NO. OF FARMS <br /> (as of Sep. 2023)
+                        NO. OF FARMS <br /> (as of Sep. {endYear})
                     </Box>
                 ),
                 accessor: "noFarm",
@@ -260,7 +261,7 @@ function App({
                             justifyContent: "center"
                         }}
                     >
-                        ACRES <br /> (as of Sep. 2023)
+                        ACRES <br /> (as of Sep. {endYear})
                     </Box>
                 ),
                 accessor: "totAcre",
@@ -270,7 +271,7 @@ function App({
                 }
             }
         ],
-        []
+        [endYear]
     );
 
     return (

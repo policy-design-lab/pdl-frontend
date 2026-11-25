@@ -8,6 +8,8 @@ import { useStyles, tooltipBkgColor } from "../shared/MapTooltip";
 import { ShortFormat } from "../shared/ConvertionFormats";
 import DrawLegend from "../shared/DrawLegend";
 import { getCountyPercentiles } from "../../utils/countyLegendConfig";
+import { buildCountyColorScale, getSparseCountyEntries } from "../../utils/countyColorScale";
+import SparseCountyLegend from "../shared/countyMap/SparseCountyLegend";
 import { CountyGeographyLayer, StateBoundaryLayer, StateLabelLayer } from "../shared/countyMap/CountyMapLayers";
 import MapLoadingOverlay from "../shared/MapLoadingOverlay";
 import {
@@ -144,50 +146,17 @@ const CropInsuranceCountyMap = ({
 
     const countyPercentiles = getCountyPercentiles(attribute);
 
-    const quantileScale = useMemo(() => {
-        if (quantizeArray.length === 0) return null;
-        const nonZeroData = quantizeArray.filter((v) => v !== 0);
-        if (nonZeroData.length < 5) return null;
-        const sorted = [...nonZeroData].sort((a, b) => a - b);
-        const p = (arr: number[], pct: number) => {
-            const idx = (pct / 100) * (arr.length - 1);
-            const lo = Math.floor(idx);
-            const hi = Math.ceil(idx);
-            if (lo === hi) return arr[lo];
-            return arr[lo] * (1 - (idx - lo)) + arr[hi] * (idx - lo);
-        };
-        const thresholds = countyPercentiles.map((pct) => p(sorted, pct));
-        const hasNeg = quantizeArray.some((d) => d < 0);
-        const hasPos = quantizeArray.some((d) => d > 0);
-        if (hasNeg && hasPos && !thresholds.includes(0)) {
-            const negThresholds = thresholds.filter((v) => v < 0);
-            const posThresholds = thresholds.filter((v) => v > 0);
-            if (negThresholds.length > 0 && posThresholds.length > 0) {
-                const closestNegIdx = thresholds.indexOf(Math.max(...negThresholds));
-                const closestPosIdx = thresholds.indexOf(Math.min(...posThresholds));
-                const closestNeg = Math.abs(thresholds[closestNegIdx]);
-                const closestPos = Math.abs(thresholds[closestPosIdx]);
-                if (closestNeg <= closestPos) {
-                    thresholds[closestNegIdx] = 0;
-                } else {
-                    thresholds[closestPosIdx] = 0;
-                }
-            } else if (negThresholds.length > 0) {
-                thresholds[thresholds.indexOf(Math.max(...negThresholds))] = 0;
-            } else {
-                thresholds[thresholds.indexOf(Math.min(...posThresholds))] = 0;
-            }
-        }
-        return thresholds;
-    }, [quantizeArray, countyPercentiles]);
-
     const isLossRatio = attribute === "lossRatio";
+    const isCountAttribute = attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium";
     const lossRatioColors = getLossRatioColors(mapColor);
-    const customScale = quantileScale || [0, 1000000, 5000000, 10000000];
-    const colorScale = d3.scaleThreshold(
-        isLossRatio ? lossRatioThresholds : customScale,
-        isLossRatio ? lossRatioColors : mapColor
+    const quantileColorScale = useMemo(
+        () => buildCountyColorScale(quantizeArray, countyPercentiles, mapColor),
+        [quantizeArray, countyPercentiles, mapColor]
     );
+    const mode = isLossRatio ? "quantile" : quantileColorScale.mode;
+    const colorScale = isLossRatio
+        ? d3.scaleThreshold(lossRatioThresholds, lossRatioColors)
+        : quantileColorScale.colorScale;
     const countyGeographySource = countyTopology || (topologyLoadAttempted ? COUNTY_TOPOJSON_URL : null);
     const stateGeographySource = stateTopology || (topologyLoadAttempted ? STATE_TOPOJSON_URL : null);
     const mapIsReady =
@@ -570,7 +539,7 @@ const CropInsuranceCountyMap = ({
     return (
         <div>
             <Box display="flex" justifyContent="center">
-                {attribute === "lossRatio" ? (
+                {isLossRatio && (
                     <DrawLegend
                         isRatio
                         ratioAsPercent={false}
@@ -581,35 +550,31 @@ const CropInsuranceCountyMap = ({
                         emptyState={zeroPoints}
                         grayAreasSuffix="for acreage-based policies"
                     />
-                ) : (
-                    <div>
-                        {attribute === "averageInsuredAreaInAcres" || attribute === "totalPoliciesEarningPremium" ? (
-                            <DrawLegend
-                                isRatio={false}
-                                notDollar
-                                colorScale={colorScale}
-                                title={titleElement()}
-                                programData={quantizeArray}
-                                prepColor={mapColor}
-                                emptyState={zeroPoints}
-                                useQuantileSpread
-                                quantilePercentiles={countyPercentiles}
-                                grayAreasSuffix="for acreage-based policies"
-                            />
-                        ) : (
-                            <DrawLegend
-                                isRatio={false}
-                                colorScale={colorScale}
-                                title={titleElement()}
-                                programData={quantizeArray}
-                                prepColor={mapColor}
-                                emptyState={zeroPoints}
-                                useQuantileSpread
-                                quantilePercentiles={countyPercentiles}
-                                grayAreasSuffix="for acreage-based policies"
-                            />
-                        )}
-                    </div>
+                )}
+                {!isLossRatio && mode === "quantile" && (
+                    <DrawLegend
+                        isRatio={false}
+                        notDollar={isCountAttribute}
+                        colorScale={colorScale}
+                        title={titleElement()}
+                        programData={quantizeArray}
+                        prepColor={mapColor}
+                        emptyState={zeroPoints}
+                        useQuantileSpread
+                        quantilePercentiles={countyPercentiles}
+                        grayAreasSuffix="for acreage-based policies"
+                    />
+                )}
+                {!isLossRatio && mode !== "quantile" && (
+                    <SparseCountyLegend
+                        title={titleElement()}
+                        entries={
+                            mode === "sparse" ? getSparseCountyEntries(countyValueMap, countyDataMap, stateCodes) : []
+                        }
+                        highlightColor={quantileColorScale.highlightColor}
+                        emptyMessage={`County data in ${year} is unavailable.`}
+                        notDollar={isCountAttribute}
+                    />
                 )}
             </Box>
             <Box

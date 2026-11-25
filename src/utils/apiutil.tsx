@@ -6,6 +6,9 @@ export async function getJsonDataFromUrl(url) {
     return [];
 }
 
+export const getYearRangeKey = (payload): string =>
+    Object.keys(payload ?? {}).find((key) => /^\d{4}-\d{4}$/.test(key)) ?? "";
+
 export function convertAllState(inlist) {
     // create a json looking string out of the Json list
     let conv_str = inlist.reduce((result, element) => {

@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { makeStyles } from "@mui/styles";
 import { EQIP_CATEGORIES } from "./eqip/EQIPCategoryMethods";
+import { CSP_CATEGORIES } from "./csp/CSPCategoryMethods";
 
 /** ALL MENUs */
 const drawerWidth = 240;
@@ -112,8 +113,8 @@ ProgramDrawer.propTypes = {
 let currentChecked = 0;
 const menuHeight = window.innerHeight < 900 ? "38%" : "40%";
 
-function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
-    const [checked, setChecked] = React.useState(currentChecked);
+function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory, initialChecked }) {
+    const [checked, setChecked] = React.useState(initialChecked ?? currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
@@ -271,8 +272,8 @@ function EQIPCheckboxList({ setEQIPChecked, setShowPopUp, zeroCategory }) {
     );
 }
 
-function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
-    const [checked, setChecked] = React.useState(currentChecked);
+function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory, initialChecked }) {
+    const [checked, setChecked] = React.useState(initialChecked ?? currentChecked);
 
     const handleToggle = (value: number) => () => {
         setChecked(value);
@@ -281,32 +282,7 @@ function CSPCheckboxList({ setCSPChecked, setShowPopUp, zeroCategory }) {
         setShowPopUp(false);
     };
 
-    // Match PR89 suggestions
-    const CSPList = [
-        "Total CSP Benefits",
-
-        "2018 Practices",
-        "Structural",
-        "Vegetative",
-        "Land management",
-        "Forest management",
-        "Soil remediation",
-        "Existing activity payments",
-        "Soil testing",
-        "Other improvements",
-
-        "2014 Eligible Land",
-        "Cropland",
-        "Grassland",
-        "Rangeland",
-        "Pastureland",
-        "Non-Industrial Private Forestland (NIPF)",
-
-        "Other CSP",
-        "Miscellaneous",
-        "Bundles",
-        "(6)(B) Planning"
-    ];
+    const CSPList = CSP_CATEGORIES;
     const classes = useStyles();
     return (
         <List sx={{ width: "100%", maxWidth: 360, bgcolor: "#ecf0ee" }}>
@@ -585,6 +561,8 @@ function CRPCheckboxList({ setCRPChecked, setShowPopUp, zeroCategory }) {
 interface ProgramDrawerProps {
     setEQIPChecked?: (value: number) => void;
     setCSPChecked?: (value: number) => void;
+    eqipChecked?: number;
+    cspChecked?: number;
     setCRPChecked?: (value: number) => void;
     setRCPPChecked?: (value: number) => void;
     zeroCategories?: string[];
@@ -593,6 +571,8 @@ interface ProgramDrawerProps {
 export default function ProgramDrawer({
     setEQIPChecked,
     setCSPChecked,
+    eqipChecked,
+    cspChecked,
     setCRPChecked,
     setRCPPChecked,
     zeroCategories // different page will pass different zeroCategories
@@ -792,6 +772,7 @@ export default function ProgramDrawer({
                             setEQIPChecked={setEQIPChecked}
                             setShowPopUp={setEqipOpen}
                             zeroCategory={zeroCategory}
+                            initialChecked={eqipChecked}
                         />
                     </Box>
                 </Popper>
@@ -841,6 +822,7 @@ export default function ProgramDrawer({
                             setCSPChecked={setCSPChecked}
                             setShowPopUp={setCspOpen}
                             zeroCategory={zeroCategory}
+                            initialChecked={cspChecked}
                         />
                     </Box>
                 </Popper>

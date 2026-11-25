@@ -5,27 +5,22 @@ import { ComposableMap, Geographies, Geography, Marker, Annotation } from "react
 import ReactTooltip from "react-tooltip";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import Chip from "@mui/material/Chip";
-import * as d3 from "d3";
 import { config } from "../../../app.config";
 import { useStyles, tooltipBkgColor } from "../MapTooltip";
 import "../../../styles/map.css";
-import DrawLegend from "../DrawLegend";
+import StateMapLegend from "../StateMapLegend";
+import { buildCountyColorScale, QUINTILE_PERCENTILES } from "../../../utils/countyColorScale";
 import {
     getPracticeTotal,
     calculateNationalTotalMap,
     getPracticeCategories,
-    getPracticeData,
-    getCustomScale,
+    getStatePracticeTotals,
     computeTooltipContent
 } from "./PracticeMethods";
 import { PracticeMapProps } from "./Interface";
 import PracticeNameMatch from "./PracticeNameMatch";
-import { ACCENT_BLUE, BRAND_GREEN, NO_DATA_GRAY, TEXT_DARKER, TEXT_DIM, TEXT_FAINT, WHITE } from "../colors";
+import PracticeSelector, { ALL_PRACTICES } from "./PracticeSelector";
+import { ACCENT_BLUE, NO_DATA_GRAY, TEXT_DARKER, TEXT_DIM, TEXT_FAINT, TITLE_II_MAP_COLOR, WHITE } from "../colors";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
@@ -144,12 +139,12 @@ const TitleIIPracticeMap = ({
     year,
     stateCodes,
     practiceNames,
+    selectedPractices,
     onPracticeChange
 }: PracticeMapProps) => {
     const [content, setContent] = useState("");
     const [statePerformance, setStatePerformance] = useState(initialStatePerformance);
     const classes = useStyles();
-    const [selectedPractices, setSelectedPractices] = useState<string[]>(["All Practices"]);
     const [isLoading, setIsLoading] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     // help tooltip style to load without lag
@@ -187,86 +182,72 @@ const TitleIIPracticeMap = ({
     const practiceCategories = useMemo(() => {
         return getPracticeCategories(practiceNames);
     }, [practiceNames]);
-    const fetchStatePerformanceData = async (selectedPracticeNames: string[]) => {
-        if (selectedPracticeNames.includes("All Practices")) {
-            setStatePerformance(initialStatePerformance);
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const selectedCodes = selectedPracticeNames
-                .map((practiceName) => {
-                    const match = PracticeNameMatch(practiceName);
-                    if (match === null) {
-                        console.error(`Could not match practice name: ${practiceName}`);
-                        return null;
-                    }
-                    return match;
-                })
-                .filter((code) => code !== null);
-            if (selectedCodes.length === 0) {
+    React.useEffect(() => {
+        let isCurrent = true;
+        const fetchStatePerformanceData = async () => {
+            if (selectedPractices.includes(ALL_PRACTICES)) {
                 setStatePerformance(initialStatePerformance);
+                setIsLoading(false);
                 return;
             }
-            const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join("|");
-            const url = `${
-                config.apiUrl
-            }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${encodedCodes}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            setStatePerformance(data);
-        } catch (error) {
-            console.error("Error fetching state performance data:", error);
-            setStatePerformance(initialStatePerformance);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    const handlePracticeChange = (event) => {
-        const value = event.target.value;
-        let newSelected = typeof value === "string" ? value.split(",") : value;
-        if (newSelected.includes("All Practices") && !selectedPractices.includes("All Practices")) {
-            newSelected = ["All Practices"];
-        } else if (newSelected.length > 1 && newSelected.includes("All Practices")) {
-            newSelected = newSelected.filter((p) => p !== "All Practices");
-        } else if (newSelected.length === 0) {
-            newSelected = ["All Practices"];
-        }
-
-        setSelectedPractices(newSelected);
-        if (onPracticeChange) {
-            onPracticeChange(newSelected);
-        }
-        fetchStatePerformanceData(newSelected);
-    };
-    const practiceData = useMemo(() => {
-        return getPracticeData(statePerformance, year, selectedPractices);
+            setIsLoading(true);
+            try {
+                const selectedCodes = selectedPractices
+                    .map((practiceName) => {
+                        const match = PracticeNameMatch(practiceName);
+                        if (match === null) {
+                            console.error(`Could not match practice name: ${practiceName}`);
+                            return null;
+                        }
+                        return match;
+                    })
+                    .filter((code) => code !== null);
+                if (selectedCodes.length === 0) {
+                    setStatePerformance(initialStatePerformance);
+                    return;
+                }
+                const encodedCodes = selectedCodes.map((code) => encodeURIComponent(code)).join("|");
+                const url = `${
+                    config.apiUrl
+                }/titles/title-ii/programs/${programName.toLowerCase()}/state-distribution?practice_code=${encodedCodes}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (isCurrent) {
+                    setStatePerformance(data);
+                }
+            } catch (error) {
+                console.error("Error fetching state performance data:", error);
+                if (isCurrent) {
+                    setStatePerformance(initialStatePerformance);
+                }
+            } finally {
+                if (isCurrent) {
+                    setIsLoading(false);
+                }
+            }
+        };
+        fetchStatePerformanceData();
+        return () => {
+            isCurrent = false;
+        };
+    }, [selectedPractices, initialStatePerformance, programName]);
+    const stateValues = useMemo(() => {
+        return getStatePracticeTotals(statePerformance, year, selectedPractices);
     }, [statePerformance, year, selectedPractices]);
-    const maxValue = useMemo(() => Math.max(...practiceData, 0), [practiceData]);
-    const customScale = useMemo(() => {
-        return getCustomScale(practiceData, `Total ${programName}`);
-    }, [practiceData]);
-    const mapColor = ["#F0F9E8", "#BAE4BC", "#7BCCC4", "#43A2CA", "#0868AC"];
-    const colorScale = d3.scaleThreshold(customScale, mapColor);
+    const maxValue = useMemo(() => Math.max(...stateValues.map(({ value }) => value), 0), [stateValues]);
+    const { colorScale, highlightColor } = useMemo(() => {
+        return buildCountyColorScale(
+            stateValues.map(({ value }) => value),
+            QUINTILE_PERCENTILES,
+            TITLE_II_MAP_COLOR
+        );
+    }, [stateValues]);
     const getNationalTotal = React.useCallback(
         (practices: string[]) => {
             return calculateNationalTotalMap(statePerformance, practices, year);
         },
         [statePerformance, year]
     );
-    const handleChipDelete = (practiceToDelete) => {
-        let newSelected;
-        if (selectedPractices.length === 1) {
-            newSelected = ["All Practices"];
-        } else {
-            newSelected = selectedPractices.filter((p) => p !== practiceToDelete);
-        }
-        setSelectedPractices(newSelected);
-        if (onPracticeChange) {
-            onPracticeChange(newSelected);
-        }
-        fetchStatePerformanceData(newSelected);
-    };
     const tooltipComponent = useMemo(
         () => (
             <ReactTooltip
@@ -312,14 +293,14 @@ const TitleIIPracticeMap = ({
         <Box>
             <Box display="flex" justifyContent="center" sx={{ pt: 30 }}>
                 {selectedPractices.length > 0 ? (
-                    <DrawLegend
+                    <StateMapLegend
                         key={selectedPractices.join(",")}
+                        stateValues={stateValues}
+                        stateCodes={stateCodes}
+                        highlightColor={highlightColor}
                         colorScale={colorScale}
                         title={titleElement(programName, selectedPractices, year)}
-                        programData={practiceData}
-                        prepColor={mapColor}
-                        isRatio={false}
-                        notDollar={false}
+                        prepColor={TITLE_II_MAP_COLOR}
                         emptyState={[]}
                     />
                 ) : (
@@ -333,70 +314,7 @@ const TitleIIPracticeMap = ({
                     </div>
                 )}
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center" pt={4}>
-                <FormControl sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                    <FormLabel
-                        component="legend"
-                        sx={{
-                            "mr": 2,
-                            "minWidth": "5em",
-                            "fontWeight": "bold",
-                            "fontSize": "1.25rem",
-                            "color": BRAND_GREEN,
-                            "&.Mui-focused": { color: "rgba(47, 113, 100, 1) !important" }
-                        }}
-                    >
-                        Select Practice
-                    </FormLabel>
-                    <Select
-                        multiple
-                        value={selectedPractices}
-                        onChange={handlePracticeChange}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip
-                                        key={value}
-                                        label={value}
-                                        onDelete={() => handleChipDelete(value)}
-                                        onMouseDown={(event) => {
-                                            event.stopPropagation();
-                                        }}
-                                        sx={{
-                                            borderRadius: 1,
-                                            borderColor: "lightgray",
-                                            color: BRAND_GREEN
-                                        }}
-                                    />
-                                ))}
-                            </Box>
-                        )}
-                        sx={{ minWidth: 300 }}
-                        MenuProps={{
-                            PaperProps: {
-                                sx: {
-                                    maxHeight: 500,
-                                    overflowY: "auto",
-                                    position: "absolute",
-                                    border: "1px solid lightgray",
-                                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                                    bgcolor: "background.paper"
-                                    // extra style for menu since the length of the list is long
-                                }
-                            }
-                        }}
-                    >
-                        {practiceCategories.map((practice) => (
-                            <MenuItem
-                                key={typeof practice === "string" ? practice : practice.practiceCode}
-                                value={practice}
-                            >
-                                {typeof practice === "string" ? practice : practice.practiceName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
+            <PracticeSelector practices={practiceCategories} selected={selectedPractices} onChange={onPracticeChange} />
 
             {shouldShowLoading ? (
                 <Box display="flex" justifyContent="center" mt={4}>

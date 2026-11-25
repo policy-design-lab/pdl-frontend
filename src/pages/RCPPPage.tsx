@@ -6,17 +6,22 @@ import Drawer from "../components/ProgramDrawer";
 import DataTable from "../components/rcpp/RCPPTotalTable";
 import RCPPTotalMap from "../components/rcpp/RCPPTotalMap";
 import { config } from "../app.config";
-import { convertAllState, getJsonDataFromUrl } from "../utils/apiutil";
+import { convertAllState, getJsonDataFromUrl, getYearRangeKey } from "../utils/apiutil";
 import NavSearchBar from "../components/shared/NavSearchBar";
+import DataSourceNote from "../components/shared/DataSourceNote";
+import {
+    NRCS_FINANCIAL_ASSISTANCE_SOURCE,
+    NRCS_FINANCIAL_ASSISTANCE_URL
+} from "../components/shared/dataSourceConstants";
 import { formatCurrency } from "../components/shared/ConvertionFormats";
 import { BRAND_GREEN, WHITE } from "../components/shared/colors";
 
 export default function RCPPPage(): JSX.Element {
-    const year = "2014-2023";
     const attribute = "totalPaymentInDollars";
     const [checked, setChecked] = React.useState(0);
 
     const [stateDistributionData, setStateDistributionData] = React.useState({});
+    const year = getYearRangeKey(stateDistributionData);
     const [stateCodesData, setStateCodesData] = React.useState({});
     const [stateCodesArray, setStateCodesArray] = React.useState({});
     const [allStatesData, setAllStatesData] = React.useState([]);
@@ -68,9 +73,7 @@ export default function RCPPPage(): JSX.Element {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            {Object.keys(stateCodesData).length > 0 &&
-            Object.keys(allStatesData).length > 0 &&
-            Object.keys(stateDistributionData).length > 0 ? (
+            {Object.keys(stateCodesData).length > 0 && Object.keys(allStatesData).length > 0 && year ? (
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ position: "fixed", zIndex: 1400, width: "100%" }}>
                         <NavBar bkColor={WHITE} ftColor={BRAND_GREEN} logo="light" />
@@ -144,6 +147,10 @@ export default function RCPPPage(): JSX.Element {
                                 stateCodes={stateCodesArray}
                             />
                         </Box>
+                        <DataSourceNote
+                            source={NRCS_FINANCIAL_ASSISTANCE_SOURCE}
+                            href={NRCS_FINANCIAL_ASSISTANCE_URL}
+                        />
                     </Box>
                 </Box>
             ) : (
